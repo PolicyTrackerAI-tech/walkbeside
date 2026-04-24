@@ -65,14 +65,16 @@ html, body {
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3 {
-  font-family: var(--font-serif-stack, ui-serif, Georgia, "Iowan Old Style", "Apple Garamond", serif);
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
+@layer base {
+  h1, h2, h3 {
+    font-family: var(--font-serif-stack, ui-serif, Georgia, "Iowan Old Style", "Apple Garamond", serif);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
 
-a { color: var(--primary-deep); text-underline-offset: 3px; }
-a:hover { text-decoration: underline; }
+  a { color: var(--primary-deep); text-underline-offset: 3px; }
+  a:hover { text-decoration: underline; }
+}
 
 /* Keyboard focus ring for everything focusable */
 *:focus-visible {
