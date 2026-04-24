@@ -113,9 +113,11 @@ export default function RightsPage() {
               begin?&rdquo;
             </blockquote>
             <p className="text-sm text-ink-soft">
-              The FTC Funeral Rule requires every funeral home to give you a
-              printed, itemized price list on request &mdash; over the phone or
-              in person. Ask for it before you agree to anything.
+              Under the FTC Funeral Rule, every funeral home must give you a
+              printed General Price List when you ask in person, and must give
+              accurate price information over the phone. Asking tells the
+              director you know your rights &mdash; and the prices quoted
+              after that are usually more honest.
             </p>
           </Card>
 
