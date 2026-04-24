@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Brand } from "@/components/Brand";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -21,7 +20,7 @@ export default async function DashboardPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login?next=/dashboard");
+  if (!user) return <AnonymousDashboard />;
 
   const [
     { data: profile },
@@ -145,6 +144,76 @@ export default async function DashboardPage() {
               Notifications hub · Benefits checker · Document vault · Family
               collaboration · Estate settlement guide
             </p>
+          </Card>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function AnonymousDashboard() {
+  return (
+    <main className="flex-1 flex flex-col">
+      <header className="border-b border-border bg-surface/70">
+        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
+          <Brand />
+          <div className="flex items-center gap-4 text-sm text-ink-muted">
+            <Link href="/prep">Prep kit</Link>
+            <Link href="/prices">Prices</Link>
+            <Link href="/login?next=/dashboard">Sign in</Link>
+          </div>
+        </div>
+      </header>
+      <section className="flex-1">
+        <div className="max-w-3xl mx-auto px-5 py-8 space-y-6">
+          <div>
+            <CardEyebrow>Dashboard</CardEyebrow>
+            <h1 className="font-serif text-3xl text-ink">
+              Your plan &mdash; saved in this browser
+            </h1>
+            <p className="text-ink-soft mt-2">
+              We&rsquo;re holding your progress so you don&rsquo;t lose it if
+              you close this tab. To keep it safe across devices, save it to an
+              account (email only &mdash; takes 30 seconds).
+            </p>
+          </div>
+
+          <Card tone="primary">
+            <CardTitle>Start where it helps the most</CardTitle>
+            <p className="text-ink-soft mb-4">
+              No account needed to use any of these.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <LinkButton href="/where">What&rsquo;s happening now</LinkButton>
+              <LinkButton href="/prices" variant="secondary">
+                Fair price lookup
+              </LinkButton>
+              <LinkButton href="/prep" variant="secondary">
+                Arrangement prep kit
+              </LinkButton>
+              <LinkButton href="/certificates" variant="secondary">
+                Certificate calculator
+              </LinkButton>
+              <LinkButton href="/obituary" variant="secondary">
+                Obituary helper
+              </LinkButton>
+            </div>
+          </Card>
+
+          <Card tone="soft">
+            <CardTitle>Save your place</CardTitle>
+            <p className="text-ink-soft mb-4">
+              An account lets us hold your work between devices and remember
+              where you were. Email only. No password. Takes 30 seconds.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <LinkButton href="/login?next=/dashboard">
+                Save progress to an account
+              </LinkButton>
+              <LinkButton href="/where" variant="ghost">
+                Keep going without an account
+              </LinkButton>
+            </div>
           </Card>
         </div>
       </section>
