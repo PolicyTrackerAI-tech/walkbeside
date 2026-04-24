@@ -129,8 +129,8 @@ export default function HomePage() {
             How we help
           </h2>
           <p className="text-center text-ink-soft mb-10 max-w-xl mx-auto">
-            Most of what we do is free. The paid parts only apply if they
-            save you money.
+            Most of what we do is free. The flat $249 advocate fee only
+            applies if you choose a home we present to you.
           </p>
           <div className="grid gap-5 sm:grid-cols-3">
             <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">

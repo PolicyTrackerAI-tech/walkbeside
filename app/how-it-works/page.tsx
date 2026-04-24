@@ -7,7 +7,7 @@ import { LinkButton } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "How Funerose helps families",
   description:
-    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and advocate outreach. Flat $249 only if we save you money.",
+    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and advocate outreach. Flat $249 only if you choose a home we present to you.",
 };
 
 const STEPS: { n: number; title: string; body: string }[] = [
