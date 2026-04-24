@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Brand } from "@/components/Brand";
 import { Card } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { CrisisResources } from "@/components/CrisisResources";
 import type { GuidanceStep } from "@/lib/scenarios";
 
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
   priceGateText?: string;
   /** null = suppress all commercial CTAs (used by home-unexpected variant). */
   showCta?: boolean;
+  /** Show 988 block. True for scenarios with elevated survivor suicide risk. */
+  showCrisisResources?: boolean;
 }
 
 const STEP_TONE_CLASS: Record<NonNullable<GuidanceStep["tone"]>, string> = {
@@ -33,6 +36,7 @@ export function StepList({
   showPriceCompareGate,
   priceGateText,
   showCta = true,
+  showCrisisResources = false,
 }: Props) {
   return (
     <main className="flex-1 flex flex-col">
@@ -56,6 +60,12 @@ export function StepList({
           </h1>
           <p className="text-lg text-ink-soft mb-2">{subhead}</p>
           <p className="text-sm text-ink-muted italic mb-8">{tone}</p>
+
+          {showCrisisResources && (
+            <div className="mb-8">
+              <CrisisResources />
+            </div>
+          )}
 
           {pullQuote && (
             <blockquote className="my-8 border-l-4 border-primary-deep pl-5 py-1 text-ink font-serif text-xl leading-snug">

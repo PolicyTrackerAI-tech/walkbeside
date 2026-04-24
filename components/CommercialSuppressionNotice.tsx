@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CrisisResources } from "@/components/CrisisResources";
 
 /**
  * Soft interstitial shown on /prices and /negotiate when the commercial
@@ -17,20 +18,7 @@ export function CommercialSuppressionNotice({ returnTo }: { returnTo: string }) 
             When you&rsquo;re ready, the pricing tool will be here. There&rsquo;s
             nothing you have to do right now.
           </p>
-          <div className="rounded-2xl border-2 border-primary-deep bg-primary-soft p-6 space-y-2">
-            <p className="text-ink">
-              <a
-                href="tel:988"
-                className="font-semibold text-primary-deep underline underline-offset-2"
-              >
-                988
-              </a>{" "}
-              &mdash; call or text, 24/7, free, confidential.
-            </p>
-            <p className="text-ink-soft text-sm">
-              If you&rsquo;re struggling right now, reach out.
-            </p>
-          </div>
+          <CrisisResources />
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center pt-2">
             <Link
               href="/guidance/home-unexpected"

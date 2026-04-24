@@ -1,3 +1,5 @@
+import { CrisisResources } from "@/components/CrisisResources";
+
 /**
  * Unexpected-death-at-home crisis screen. Full commercial suppression:
  * no pricing, no funeral home listings, no comparison, no account prompts.
@@ -20,24 +22,7 @@ export function CrisisUnexpected() {
             </p>
           </div>
 
-          <div className="rounded-2xl border-2 border-primary-deep bg-primary-soft p-6 space-y-3">
-            <h2 className="font-serif text-xl text-primary-deep">
-              If you&rsquo;re struggling right now
-            </h2>
-            <p className="text-ink">
-              <a
-                href="tel:988"
-                className="font-semibold text-primary-deep underline underline-offset-2"
-              >
-                988
-              </a>{" "}
-              &mdash; call or text, 24/7, free, confidential.
-            </p>
-            <p className="text-ink-soft">
-              This is a moment many people don&rsquo;t get through alone. Reach
-              out.
-            </p>
-          </div>
+          <CrisisResources />
 
           <ol className="space-y-5">
             <li className="rounded-2xl border border-border bg-surface p-6">

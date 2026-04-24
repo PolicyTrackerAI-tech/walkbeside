@@ -61,6 +61,7 @@ export default async function GuidancePage({
       pullQuote={g.pullQuote}
       showPriceCompareGate={g.showPriceCompareGate}
       priceGateText={g.priceGateText}
+      showCrisisResources={scenario === "elsewhere"}
     />
   );
 }
