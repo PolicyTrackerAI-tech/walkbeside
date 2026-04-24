@@ -139,6 +139,22 @@ export default async function DashboardPage() {
           )}
 
           <Card tone="soft">
+            <CardEyebrow>After the funeral</CardEyebrow>
+            <CardTitle>Death certificates, accounts, and estate basics.</CardTitle>
+            <p className="text-ink-soft text-sm mb-3">
+              Paperwork for the next thirty days, in the order that makes
+              the most sense. Certificates first, accounts second,
+              estate work third.
+            </p>
+            <Link
+              href="/after"
+              className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+            >
+              Open the after-funeral checklist &rarr;
+            </Link>
+          </Card>
+
+          <Card tone="soft">
             <CardEyebrow>Coming soon (Phase 2)</CardEyebrow>
             <p className="text-ink-soft text-sm">
               Notifications hub · Benefits checker · Document vault · Family

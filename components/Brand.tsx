@@ -122,6 +122,9 @@ export function Footer() {
           <Link href="/faq" className="hover:text-ink-soft">
             FAQ
           </Link>
+          <Link href="/after" className="hover:text-ink-soft">
+            After the funeral
+          </Link>
           <Link href="/terms" className="hover:text-ink-soft">
             Terms of Service
           </Link>
