@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Brand } from "@/components/Brand";
 import { LinkButton } from "@/components/ui/Button";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
   title: "Questions families ask — Funerose FAQ",
@@ -9,9 +10,11 @@ export const metadata: Metadata = {
     "Straight answers about how Funerose works, how we make money, whether we're affiliated with funeral homes, and what the $249 fee covers.",
 };
 
-export const FAQ: { q: string; a: React.ReactNode }[] = [
+export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Funerose actually do?",
+    plain:
+      "We help families who've just lost someone make better funeral decisions under pressure. Three things: a free fair-price lookup that shows what funeral services should cost in your zip code; a $19 prep kit of questions to ask and upsells to decline; and advocate outreach — we contact funeral homes on your behalf as your named advocate and collect comparison quotes, for a flat $249 only if you pick a home we presented.",
     a: (
       <>
         <p>
@@ -45,6 +48,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "How do you make money?",
+    plain:
+      "We charge a flat $249 when a family chooses a funeral home we presented to them. That's it. No commissions from funeral homes. No referral fees for insurance or financing unless we disclose it on the same screen where the referral appears. If you never use advocate outreach, or you choose a home we didn't present, you pay nothing. The $19 prep kit is the only other thing we sell.",
     a: (
       <>
         <p>
@@ -72,6 +77,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Are you affiliated with any funeral homes?",
+    plain:
+      "No. Funerose is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. We were built by a licensed funeral director and her brother, a software engineer — the incentives point at the family, not the home.",
     a: (
       <>
         <p>
@@ -89,6 +96,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What if I\u2019ve already picked a funeral home?",
+    plain:
+      "You can still use the fair-price lookup (free) to rate the quote they gave you against local data. If the quote is within the fair range for your zip, you're done. If it's above the range, you can go back and ask about lower-priced packages, ask the home to match a comparable quote, or let us reach out to 3–5 other homes for comparison quotes before you sign.",
     a: (
       <>
         <p>
@@ -108,6 +117,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Does the $249 apply to cremation-only arrangements?",
+    plain:
+      "Yes — the flat $249 covers advocate outreach regardless of whether the family chooses burial, cremation, direct cremation, or a hybrid service. We charge it once, per family, only when you pick a home we presented. Direct cremation is where families often overpay the most; comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
     a: (
       <>
         <p>
@@ -127,6 +138,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What if you don\u2019t have price data for my area?",
+    plain:
+      "Our fair-price lookup works for most US zip codes. If we don't have enough local data to show a range, we'll say so plainly on the results page — we won't make up numbers. Advocate outreach still works in any zip with at least a few funeral homes: we send the request, homes respond under the FTC Funeral Rule, and you see whatever comes back.",
     a: (
       <>
         <p>
@@ -145,6 +158,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What happens after I submit my zip code?",
+    plain:
+      "For the fair-price lookup: you see a results page with the regional range for each line item, and — if you entered a home's quote — a rating of that quote against the range. Nothing is saved. No account, no email collected. For advocate outreach: we show you the homes in your zip and ask for your authorization before anything goes out. You approve the list. We send the emails. Homes respond. We summarize in your dashboard.",
     a: (
       <>
         <p>
@@ -164,6 +179,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Will funeral homes know I used Funerose?",
+    plain:
+      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. For advocate outreach: yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Funerose differently than to a grieving family, and that's exactly why this works.",
     a: (
       <>
         <p>
@@ -190,6 +207,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What is \u201Cadvocate outreach\u201D and is it anonymous?",
+    plain:
+      "Advocate outreach is the paid feature: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Funerose is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
     a: (
       <>
         <p>
@@ -209,6 +228,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Is this legal advice?",
+    plain:
+      "No. Funerose is not a law firm, not a funeral home, and not a medical or financial advisor. The information on this site is general consumer guidance, not legal, medical, or financial advice. We reference the FTC Funeral Rule because it governs how funeral homes must disclose prices — but if you have a complex estate or legal question, you should talk to a licensed attorney in your state.",
     a: (
       <>
         <p>
@@ -228,6 +249,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "Can I trust your price data?",
+    plain:
+      "Our regional ranges are based on General Price Lists collected from funeral homes, FTC Funeral Rule disclosures, and industry reports. We update them regularly. We'll always show you a range, not a single number — because real prices vary by neighborhood, by home, and by what's included in each package. The range tells you whether a quote is reasonable, not whether it's the lowest possible price. If you ever see a price estimate on this site that you think is wrong, email us and we'll look at it.",
     a: (
       <>
         <p>
@@ -251,6 +274,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What if I\u2019m not sure I need your help?",
+    plain:
+      "Then don't pay us anything. Run the fair-price lookup for free. Read the 72-hour guidance for free. Use the obituary helper for free. Families routinely overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the free tools tell you the quote you've been given is already in range, you're done. Nothing else to do.",
     a: (
       <>
         <p>
@@ -270,6 +295,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What do I do if the funeral home won\u2019t honor their quote?",
+    plain:
+      "For quotes we collected through advocate outreach: tell us within 14 days of service and we'll refund your $249. We also escalate with the home — a written GPL quote is a binding representation under the FTC Funeral Rule. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
     a: (
       <>
         <p>
@@ -289,6 +316,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "How long does this whole process take?",
+    plain:
+      "Fair-price lookup: under three minutes. No account, no email. Advocate outreach: most homes respond within 24–72 hours. Start to finish (authorize, quotes, choose a home) typically takes 3–5 days. Families tell us this is worth waiting for — the savings on a single funeral arrangement often cover a year of living expenses for someone on a fixed income.",
     a: (
       <>
         <p>Fair-price lookup: under three minutes. No account, no email.</p>
@@ -305,6 +334,8 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
   },
   {
     q: "What if I need help after the funeral?",
+    plain:
+      "The first 30 days after a death involve a lot of paperwork — death certificates, Social Security, closing accounts, estate filings. Your dashboard includes a checklist with the right order and scripts for the calls you'll need to make. If something specific comes up (a disputed bill, a missing death certificate, an insurance claim that's been denied), email us — we'll point you at the right resource or office, even if it's not something we can handle directly.",
     a: (
       <>
         <p>
@@ -325,8 +356,22 @@ export const FAQ: { q: string; a: React.ReactNode }[] = [
 ];
 
 export default function FaqPage() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.map(({ q, plain }) => ({
+      "@type": "Question",
+      name: q.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"'),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: plain,
+      },
+    })),
+  };
+
   return (
     <main className="flex-1 flex flex-col">
+      <JsonLd data={faqSchema} />
       <header className="border-b border-border bg-surface/70">
         <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
           <Brand />

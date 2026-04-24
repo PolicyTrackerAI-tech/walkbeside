@@ -1,4 +1,24 @@
 import { CrisisResources } from "@/components/CrisisResources";
+import { JsonLd } from "@/components/seo/JsonLd";
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "What to do after an unexpected death at home",
+  description:
+    "You're not in trouble. Here's what happens when 911 comes, and what you can and can't do while you wait.",
+  datePublished: "2026-01-01",
+  author: {
+    "@type": "Organization",
+    name: "Funerose",
+    url: "https://funerose.com",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Funerose",
+    url: "https://funerose.com",
+  },
+};
 
 /**
  * Unexpected-death-at-home crisis screen. Full commercial suppression:
@@ -8,6 +28,7 @@ import { CrisisResources } from "@/components/CrisisResources";
 export function CrisisUnexpected() {
   return (
     <main className="flex-1 flex flex-col bg-bg">
+      <JsonLd data={schema} />
       <section className="flex-1">
         <div className="max-w-xl mx-auto px-5 py-10 space-y-7">
           <div>

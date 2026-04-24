@@ -8,6 +8,7 @@ import {
 import { SCENARIO_LANDING_TONE } from "@/lib/content";
 import { StepList } from "@/components/guidance/StepList";
 import { CrisisUnexpected } from "./CrisisUnexpected";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const VALID: Scenario[] = ["hospital", "home-expected", "home-unexpected", "elsewhere"];
 
@@ -58,17 +59,38 @@ export default async function GuidancePage({
 
   const g = SCENARIO_GUIDANCE[scenario];
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: SCENARIO_SEO_TITLES[scenario],
+    description: SCENARIO_DESCRIPTIONS[scenario],
+    datePublished: "2026-01-01",
+    author: {
+      "@type": "Organization",
+      name: "Funerose",
+      url: "https://funerose.com",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Funerose",
+      url: "https://funerose.com",
+    },
+  };
+
   return (
-    <StepList
-      label={SCENARIO_LABELS[scenario]}
-      headline={g.headline}
-      subhead={g.subhead}
-      tone={SCENARIO_LANDING_TONE[scenario]}
-      steps={g.steps}
-      pullQuote={g.pullQuote}
-      showPriceCompareGate={g.showPriceCompareGate}
-      priceGateText={g.priceGateText}
-      showCrisisResources={scenario === "elsewhere"}
-    />
+    <>
+      <JsonLd data={articleSchema} />
+      <StepList
+        label={SCENARIO_LABELS[scenario]}
+        headline={g.headline}
+        subhead={g.subhead}
+        tone={SCENARIO_LANDING_TONE[scenario]}
+        steps={g.steps}
+        pullQuote={g.pullQuote}
+        showPriceCompareGate={g.showPriceCompareGate}
+        priceGateText={g.priceGateText}
+        showCrisisResources={scenario === "elsewhere"}
+      />
+    </>
   );
 }

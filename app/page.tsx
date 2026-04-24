@@ -2,6 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LinkButton } from "@/components/ui/Button";
 import { Brand } from "@/components/Brand";
+import { JsonLd } from "@/components/seo/JsonLd";
+
+const ORG_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Funerose",
+  url: "https://funerose.com",
+  description:
+    "A consumer advocate for families making funeral decisions under pressure. Built by a licensed funeral director. Free fair-price lookup, $19 prep kit, and flat $249 advocate outreach — only on success.",
+  foundingLocation: "United States",
+  knowsAbout: [
+    "funeral pricing",
+    "FTC Funeral Rule",
+    "General Price List",
+    "cremation",
+    "burial",
+    "obituary writing",
+    "death certificates",
+  ],
+};
 
 export const metadata: Metadata = {
   title: "Funerose — quiet help after a loss",
@@ -34,6 +54,7 @@ const STEPS: { n: string; title: string; body: string }[] = [
 export default function HomePage() {
   return (
     <main className="flex-1 flex flex-col">
+      <JsonLd data={ORG_SCHEMA} />
       <div className="px-5 pt-6">
         <Brand />
       </div>
