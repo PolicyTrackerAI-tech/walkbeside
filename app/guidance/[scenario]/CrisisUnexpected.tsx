@@ -44,6 +44,11 @@ export function CrisisUnexpected() {
             </p>
           </div>
 
+          <blockquote className="my-8 border-l-4 border-primary-deep pl-5 py-1 text-ink font-serif text-xl leading-snug">
+            &ldquo;You don&rsquo;t have to figure this out alone, and you
+            don&rsquo;t have to figure it out right now.&rdquo;
+          </blockquote>
+
           <CrisisResources />
 
           <ol className="space-y-5">
