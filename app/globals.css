@@ -1,26 +1,90 @@
 @import "tailwindcss";
 
+/*
+  Walk Beside — design system
+  Warm neutrals + deep forest green primary.
+  Calm, steady, generous whitespace.
+*/
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Warm neutrals */
+  --bg: #fbf9f5;
+  --surface: #ffffff;
+  --surface-soft: #f4efe7;
+  --border: #e6dfd2;
+  --ink: #1d2b22;
+  --ink-soft: #4a5750;
+  --ink-muted: #6f7d75;
+
+  /* Deep forest green primary */
+  --primary: #2f5d4f;
+  --primary-deep: #20453a;
+  --primary-soft: #e8efe9;
+  --on-primary: #f8faf6;
+
+  /* Status */
+  --good: #2f7a55;
+  --good-soft: #e3efe6;
+  --warn: #b15a1a;
+  --warn-soft: #f7eadc;
+  --bad: #a4332a;
+  --bad-soft: #f7e1de;
+
+  --shadow: 0 1px 2px rgba(20, 35, 28, 0.04), 0 6px 24px rgba(20, 35, 28, 0.06);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-soft: var(--surface-soft);
+  --color-border: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-primary: var(--primary);
+  --color-primary-deep: var(--primary-deep);
+  --color-primary-soft: var(--primary-soft);
+  --color-on-primary: var(--on-primary);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --font-sans: var(--font-sans-stack);
+  --font-serif: var(--font-serif-stack);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans-stack, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif-stack, ui-serif, Georgia, "Iowan Old Style", "Apple Garamond", serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+a { color: var(--primary-deep); text-underline-offset: 3px; }
+a:hover { text-decoration: underline; }
+
+/* Print styles for cheat sheet */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; font-size: 12pt; }
+  .print-page { padding: 0.5in; }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
