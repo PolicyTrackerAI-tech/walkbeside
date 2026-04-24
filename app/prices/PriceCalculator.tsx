@@ -11,6 +11,9 @@ import {
   fmtRange,
   adjustedRange,
   fmtUSD,
+  PRICING_LAST_UPDATED,
+  DATA_SOURCE_LABEL,
+  dataSourceForZip,
   type LineItem,
   type ServiceType,
 } from "@/lib/pricing-data";
@@ -190,6 +193,10 @@ export function PriceCalculator() {
               quote of {fmtUSD(totals.predatoryLow)}&ndash;
               {fmtUSD(totals.predatoryHigh)} is what predatory pricing looks
               like for this service type.
+            </p>
+            <p className="text-xs text-ink-muted mt-4">
+              {DATA_SOURCE_LABEL[dataSourceForZip(zip)]} &middot; Last
+              updated {PRICING_LAST_UPDATED}
             </p>
           </Card>
 

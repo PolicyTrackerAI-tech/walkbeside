@@ -377,3 +377,30 @@ export function adjustedRange(
   const m = regionMultiplier(zip ?? "");
   return [Math.round(low * m), Math.round(high * m)];
 }
+
+/**
+ * ISO date of the last pricing-data validation pass.
+ * Sister updates this when she refreshes national benchmarks or launch-metro GPL data.
+ */
+export const PRICING_LAST_UPDATED = "2026-04-01";
+
+export type PriceDataSource =
+  | "validated" // GPL-validated per-zip data (≥20 data points / line item)
+  | "metro-average" // Metro-level validated average
+  | "national-adjusted"; // National benchmark with coarse regional multiplier
+
+/**
+ * Returns the source quality of pricing data for a given zip.
+ * V1: all zips return "national-adjusted" — sister's per-metro validation
+ * work (launch city first) upgrades specific zips to "validated" over time.
+ */
+export function dataSourceForZip(_zip: string): PriceDataSource {
+  return "national-adjusted";
+}
+
+export const DATA_SOURCE_LABEL: Record<PriceDataSource, string> = {
+  validated: "Validated against local General Price Lists",
+  "metro-average": "Based on your metro's validated average",
+  "national-adjusted":
+    "Based on national benchmarks adjusted for your region",
+};
