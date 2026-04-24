@@ -42,7 +42,7 @@ export default function HomePage() {
         <div className="max-w-2xl mx-auto px-5 py-16 text-center">
           <h1 className="font-serif text-3xl sm:text-5xl leading-tight text-ink mb-6">
             <span className="block whitespace-nowrap">
-              Someone important has died.
+              Someone important just died.
             </span>
             <span className="block text-primary-deep">
               You&rsquo;re not alone.

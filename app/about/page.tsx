@@ -89,7 +89,7 @@ export default function AboutPage() {
           <Card tone="primary">
             <CardTitle>The founding promise</CardTitle>
             <p className="text-ink font-serif text-lg italic mb-3">
-              &ldquo;When someone you love dies, you should not have to figure
+              &ldquo;When someone important dies, you should not have to figure
               this out alone. We walk beside you from the first phone call to
               the last account closed.&rdquo;
             </p>
