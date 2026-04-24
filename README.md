@@ -67,6 +67,7 @@ npm run build       # production build
 npm run start       # serve the production build
 npm run typecheck   # tsc --noEmit
 npm run lint        # eslint
+npm run seed:demo   # seed the demo account (see supabase/seed/README.md)
 ```
 
 ---
