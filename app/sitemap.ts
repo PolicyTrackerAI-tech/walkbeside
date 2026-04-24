@@ -18,20 +18,22 @@ const AFTER_TOPICS = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${SITE}/`, priority: 1.0, changeFrequency: "weekly" },
-    { url: `${SITE}/where`, priority: 0.9, changeFrequency: "monthly" },
-    { url: `${SITE}/prices`, priority: 0.9, changeFrequency: "weekly" },
-    { url: `${SITE}/planning`, priority: 0.8, changeFrequency: "monthly" },
-    { url: `${SITE}/how-it-works`, priority: 0.8, changeFrequency: "monthly" },
-    { url: `${SITE}/faq`, priority: 0.8, changeFrequency: "monthly" },
-    { url: `${SITE}/about`, priority: 0.7, changeFrequency: "monthly" },
-    { url: `${SITE}/prep`, priority: 0.6, changeFrequency: "monthly" },
-    { url: `${SITE}/obituary`, priority: 0.6, changeFrequency: "monthly" },
-    { url: `${SITE}/after`, priority: 0.6, changeFrequency: "monthly" },
-    { url: `${SITE}/terms`, priority: 0.3, changeFrequency: "yearly" },
-    { url: `${SITE}/privacy`, priority: 0.3, changeFrequency: "yearly" },
-  ].map((r) => ({ ...r, lastModified: now }));
+  const staticRoutes: MetadataRoute.Sitemap = (
+    [
+      { url: `${SITE}/`, priority: 1.0, changeFrequency: "weekly" },
+      { url: `${SITE}/where`, priority: 0.9, changeFrequency: "monthly" },
+      { url: `${SITE}/prices`, priority: 0.9, changeFrequency: "weekly" },
+      { url: `${SITE}/planning`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/how-it-works`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/faq`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/about`, priority: 0.7, changeFrequency: "monthly" },
+      { url: `${SITE}/prep`, priority: 0.6, changeFrequency: "monthly" },
+      { url: `${SITE}/obituary`, priority: 0.6, changeFrequency: "monthly" },
+      { url: `${SITE}/after`, priority: 0.6, changeFrequency: "monthly" },
+      { url: `${SITE}/terms`, priority: 0.3, changeFrequency: "yearly" },
+      { url: `${SITE}/privacy`, priority: 0.3, changeFrequency: "yearly" },
+    ] as const
+  ).map((r) => ({ ...r, lastModified: now }));
 
   const scenarioRoutes: MetadataRoute.Sitemap = SCENARIOS.map((s) => ({
     url: `${SITE}/guidance/${s}`,
