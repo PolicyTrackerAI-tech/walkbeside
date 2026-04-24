@@ -130,8 +130,8 @@ export default function WherePage() {
                   I&rsquo;m planning ahead &mdash; nobody has died.
                 </div>
                 <div className="text-sm text-ink-soft">
-                  Learn what to expect and what fair prices look like in your
-                  area.
+                  Learn what funerals should cost in your area and how to avoid
+                  the worst traps.
                 </div>
               </div>
               <div className="text-ink-muted text-xl pt-1" aria-hidden>
@@ -139,6 +139,15 @@ export default function WherePage() {
               </div>
             </div>
           </Link>
+
+          <p className="mt-6 text-center text-sm text-ink-muted">
+            <Link
+              href="/prices"
+              className="underline underline-offset-2 hover:text-ink-soft"
+            >
+              Already know what you need? Skip to fair price lookup →
+            </Link>
+          </p>
         </div>
       </section>
     </main>
