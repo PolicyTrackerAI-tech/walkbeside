@@ -110,6 +110,9 @@ export function Footer() {
           based on regional data; actual prices vary.
         </p>
         <div className="flex flex-wrap gap-4 text-xs pt-2">
+          <Link href="/" className="hover:text-ink-soft">
+            Home
+          </Link>
           <Link href="/how-it-works" className="hover:text-ink-soft">
             How it works
           </Link>
@@ -132,6 +135,7 @@ export function Footer() {
             Privacy Policy
           </Link>
         </div>
+        <p className="text-xs pt-2">&copy; 2026 Funerose</p>
       </div>
     </footer>
   );
