@@ -111,14 +111,34 @@ export default function WherePage() {
             ))}
           </div>
 
-          <div className="mt-10 pt-6 border-t border-border text-center">
-            <Link
-              href={PLANNING_HREF}
-              className="text-sm text-ink-muted hover:text-ink-soft underline-offset-2 hover:underline"
-            >
-              I&rsquo;m planning ahead &mdash; nobody has died
-            </Link>
+          <div
+            className="mt-10 flex items-center gap-4 text-xs uppercase tracking-wider text-ink-muted"
+            aria-hidden
+          >
+            <span className="h-px flex-1 bg-border" />
+            <span>Or &mdash;</span>
+            <span className="h-px flex-1 bg-border" />
           </div>
+
+          <Link
+            href={PLANNING_HREF}
+            className="mt-5 block bg-surface-soft border border-dashed border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
+                  I&rsquo;m planning ahead &mdash; nobody has died.
+                </div>
+                <div className="text-sm text-ink-soft">
+                  Learn what to expect and what fair prices look like in your
+                  area.
+                </div>
+              </div>
+              <div className="text-ink-muted text-xl pt-1" aria-hidden>
+                →
+              </div>
+            </div>
+          </Link>
         </div>
       </section>
     </main>
