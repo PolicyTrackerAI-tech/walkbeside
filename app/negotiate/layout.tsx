@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { isCommercialSuppressed } from "@/lib/suppression";
+import { CommercialSuppressionNotice } from "@/components/CommercialSuppressionNotice";
 
 export const metadata: Metadata = {
   title: "Advocate outreach",
@@ -13,6 +13,8 @@ export default async function NegotiateLayout({
 }: {
   children: React.ReactNode;
 }) {
-  if (await isCommercialSuppressed()) redirect("/guidance/home-unexpected");
+  if (await isCommercialSuppressed()) {
+    return <CommercialSuppressionNotice returnTo="/negotiate/start" />;
+  }
   return children;
 }
