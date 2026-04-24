@@ -37,11 +37,13 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
     showPriceCompareGate: true,
     priceGateText:
       "Before you call anyone, spend three minutes here. It could save you thousands.",
+    pullQuote:
+      "The hospital is legally required to release the body when you're ready — not when they're ready. You are not causing a problem by taking a few hours.",
     steps: [
       {
         title: "Tell the hospital you'll be back to them within a few hours.",
         body:
-          "You don't have to choose a funeral home in the next 30 minutes. Hospitals have temporary holding for exactly this reason. Saying \"I need a few hours\" is normal and they will accept it.",
+          "You don't have to choose a funeral home in the next 30 minutes. Hospitals have temporary holding for exactly this reason. The hospital is legally required to release the body when you're ready — not when they're ready. Saying \"I need a few hours\" is normal and they will accept it.",
         tone: "calm",
       },
       {
