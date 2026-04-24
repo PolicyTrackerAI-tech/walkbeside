@@ -4,13 +4,18 @@ export function Label({
   children,
   htmlFor,
   hint,
+  className = "mb-2",
 }: {
   children: React.ReactNode;
   htmlFor: string;
   hint?: string;
+  className?: string;
 }) {
   return (
-    <label htmlFor={htmlFor} className="block text-sm text-ink mb-2 font-medium">
+    <label
+      htmlFor={htmlFor}
+      className={`block text-sm text-ink font-medium ${className}`}
+    >
       {children}
       {hint && (
         <span className="block text-ink-muted font-normal mt-0.5">{hint}</span>

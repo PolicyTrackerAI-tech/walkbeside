@@ -82,7 +82,7 @@ export async function POST(req: Request) {
           currency: "usd",
           unit_amount: fee,
           product_data: {
-            name: `Walk Beside negotiation fee — ${pick.home_name}`,
+            name: `Funerose negotiation fee — ${pick.home_name}`,
             description: `20% of $${(savings / 100).toFixed(0)} savings, capped at $500.`,
           },
         },

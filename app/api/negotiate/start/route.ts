@@ -7,7 +7,7 @@ import {
   initialEmailSystem,
   initialEmailUser,
 } from "@/lib/negotiation/prompts";
-import { findHomes } from "@/lib/negotiation/sample-homes";
+import { findHomes, homesForRadius } from "@/lib/negotiation/sample-homes";
 import type { ServiceType } from "@/lib/pricing-data";
 
 const Body = z.object({
@@ -24,6 +24,7 @@ const Body = z.object({
   senderLastName: z.string().max(60).optional(),
   timing: z.string().max(120).default("within the next week"),
   extras: z.string().max(400).optional(),
+  radiusMiles: z.number().int().min(5).max(100).default(25),
 });
 
 export async function POST(req: Request) {
@@ -55,7 +56,7 @@ export async function POST(req: Request) {
   if (negErr || !neg)
     return NextResponse.json({ error: negErr?.message ?? "db" }, { status: 500 });
 
-  const homes = findHomes(ctx.zip, 4);
+  const homes = findHomes(ctx.zip, homesForRadius(ctx.radiusMiles));
 
   for (const home of homes) {
     let body = defaultEmailBody(home.name, ctx.senderFirstName);
@@ -90,7 +91,7 @@ export async function POST(req: Request) {
       subject,
       text: body,
       fromName: `${ctx.senderFirstName}${ctx.senderLastName ? " " + ctx.senderLastName : ""}`,
-      replyTo: `negotiation+${neg.id}@walkbeside.example`,
+      replyTo: `negotiation+${neg.id}@funerose.com`,
     });
 
     await supabase.from("negotiation_outreach").insert({

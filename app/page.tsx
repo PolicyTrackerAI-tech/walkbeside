@@ -16,13 +16,13 @@ export default function HomePage() {
       <section className="flex-1 flex items-center">
         <div className="max-w-2xl mx-auto px-5 py-16 text-center">
           <h1 className="font-serif text-4xl sm:text-5xl leading-tight text-ink mb-6">
-            Someone you love just died.
+            Someone you love has passed.
             <br />
-            <span className="text-primary-deep">We&rsquo;re here.</span>
+            <span className="text-primary-deep">You&rsquo;re not alone.</span>
           </h1>
           <p className="text-lg text-ink-soft max-w-md mx-auto mb-10">
-            Let&rsquo;s take this one step at a time. The first thing matters more
-            than you think.
+            Take a breath. We&rsquo;ll walk through this with you, one step at a
+            time. The first one matters more than you think.
           </p>
 
           <LinkButton href="/where" size="lg" className="w-full sm:w-auto">

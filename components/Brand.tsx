@@ -1,18 +1,79 @@
 import Link from "next/link";
 
+export function RoseMark({
+  className = "",
+  size = 28,
+}: {
+  className?: string;
+  size?: number;
+}) {
+  return (
+    <svg
+      viewBox="0 0 32 36"
+      width={size}
+      height={(size * 36) / 32}
+      aria-hidden="true"
+      className={className}
+    >
+      {/* Outer petals */}
+      <path
+        d="M16 4
+           C 21.5 4 25 7 25 11
+           C 25 14.5 22.5 17 19 17.5
+           L 19 18 L 13 18 L 13 17.5
+           C 9.5 17 7 14.5 7 11
+           C 7 7 10.5 4 16 4 Z"
+        fill="var(--primary-deep)"
+      />
+      {/* Inner spiral suggesting petal layers */}
+      <path
+        d="M16 7
+           C 19 7 20.5 9 20.5 11
+           C 20.5 13 18.5 14.5 16 14.5
+           C 14 14.5 12.8 13.3 13 11.5
+           C 13.2 10 14.5 9.5 15.7 10
+           C 16.7 10.4 17 11 17 11.8"
+        stroke="var(--primary-soft)"
+        strokeWidth="0.9"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Stem */}
+      <path
+        d="M16 18 L 16 33"
+        stroke="var(--primary)"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+      {/* Right leaf (upper) */}
+      <path
+        d="M16 21
+           C 19 19.5 22 20.5 23 23
+           C 20.5 24 17.5 23 16 21 Z"
+        fill="var(--primary)"
+      />
+      {/* Left leaf (lower) */}
+      <path
+        d="M16 26
+           C 12.5 24.5 9.5 25.5 8.5 28
+           C 11.5 29 14.5 28 16 26 Z"
+        fill="var(--primary)"
+      />
+    </svg>
+  );
+}
+
 export function Brand({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const dim =
+  const text =
     size === "lg" ? "text-2xl" : size === "sm" ? "text-base" : "text-lg";
+  const mark = size === "lg" ? 34 : size === "sm" ? 22 : 28;
   return (
     <Link
       href="/"
-      className={`inline-flex items-center gap-2 font-serif ${dim} text-ink hover:no-underline`}
+      className={`inline-flex items-center gap-2 font-serif ${text} text-ink hover:no-underline`}
     >
-      <span
-        aria-hidden
-        className="inline-block w-3 h-3 rounded-full bg-primary"
-      />
-      Walk Beside
+      <RoseMark size={mark} />
+      <span className="leading-none">Funerose</span>
     </Link>
   );
 }
@@ -43,7 +104,7 @@ export function Footer() {
           start. We only earn if we save you money.
         </p>
         <p className="text-xs">
-          Walk Beside is not a law firm or a funeral home. The information here
+          Funerose is not a law firm or a funeral home. The information here
           is general guidance, not legal or medical advice.
         </p>
       </div>

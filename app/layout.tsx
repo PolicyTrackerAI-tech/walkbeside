@@ -15,10 +15,10 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "Walk Beside — when someone you love dies",
+  title: "Funerose — quiet help after a loss",
   description:
     "Built by a licensed funeral director. We walk with families through the hardest week, from the first phone call to the last account closed.",
-  metadataBase: new URL("https://walkbeside.example"),
+  metadataBase: new URL("https://www.funerose.com"),
 };
 
 export default function RootLayout({

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  Walk Beside — design system
+  Funerose — design system
   Warm neutrals + deep forest green primary.
   Calm, steady, generous whitespace.
 */
@@ -20,7 +20,7 @@
   --primary: #2f5d4f;
   --primary-deep: #20453a;
   --primary-soft: #e8efe9;
-  --on-primary: #f8faf6;
+  --on-primary: #ffffff;
 
   /* Status */
   --good: #2f7a55;
