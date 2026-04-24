@@ -109,7 +109,13 @@ export function Footer() {
           medical, or financial advice. Price estimates are informational and
           based on regional data; actual prices vary.
         </p>
-        <div className="flex gap-4 text-xs pt-2">
+        <div className="flex flex-wrap gap-4 text-xs pt-2">
+          <Link href="/how-it-works" className="hover:text-ink-soft">
+            How it works
+          </Link>
+          <Link href="/about" className="hover:text-ink-soft">
+            About
+          </Link>
           <Link href="/terms" className="hover:text-ink-soft">
             Terms of Service
           </Link>

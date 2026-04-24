@@ -101,6 +101,78 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      <section className="border-t border-border">
+        <div className="max-w-3xl mx-auto px-5 py-14">
+          <h2 className="font-serif text-2xl sm:text-3xl text-ink text-center mb-2">
+            How we help
+          </h2>
+          <p className="text-center text-ink-soft mb-10 max-w-xl mx-auto">
+            Most of what we do is free. The paid parts only apply if they
+            save you money.
+          </p>
+          <div className="grid gap-5 sm:grid-cols-3">
+            <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
+              <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
+                Free
+              </div>
+              <h3 className="font-serif text-xl text-ink mb-2">
+                Fair price lookup
+              </h3>
+              <p className="text-sm text-ink-soft mb-5 flex-1">
+                In three minutes, see what funeral services should cost in
+                your zip code. Rate any home&rsquo;s quote against local
+                data.
+              </p>
+              <Link
+                href="/prices"
+                className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+              >
+                Look up fair prices →
+              </Link>
+            </article>
+
+            <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
+              <div className="text-xs uppercase tracking-wider text-ink-muted font-semibold mb-2">
+                $19 &middot; one-time
+              </div>
+              <h3 className="font-serif text-xl text-ink mb-2">Prep kit</h3>
+              <p className="text-sm text-ink-soft mb-5 flex-1">
+                The questions to ask. The upsells to decline. The rights
+                families don&rsquo;t know they have. A one-page printable
+                cheat sheet.
+              </p>
+              <Link
+                href="/prep"
+                className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+              >
+                See the prep kit →
+              </Link>
+            </article>
+
+            <article className="bg-primary-soft border-2 border-primary rounded-2xl p-6 flex flex-col">
+              <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
+                $249 &middot; only if you pick a home we found
+              </div>
+              <h3 className="font-serif text-xl text-ink mb-2">
+                Advocate outreach
+              </h3>
+              <p className="text-sm text-ink-soft mb-5 flex-1">
+                We contact funeral homes on your behalf &mdash; transparently,
+                as your advocate &mdash; and collect comparison quotes. You
+                make the final call. Pay only if you choose a home we
+                presented.
+              </p>
+              <Link
+                href="/how-it-works"
+                className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+              >
+                How advocate outreach works →
+              </Link>
+            </article>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

@@ -235,16 +235,33 @@ export default function PricesPage() {
                     current prices can only be verified by their printed GPL.
                   </p>
                   {dealRating.tone !== "good" && (
-                    <div className="mt-5">
-                      <LinkButton
-                        href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}&home=${encodeURIComponent(quotedHome)}&q=${encodeURIComponent(String(quotedNum))}`}
-                      >
-                        Request comparison quotes on your behalf →
-                      </LinkButton>
-                      <p className="text-xs text-ink-muted mt-2">
-                        We contact funeral homes as your authorized advocate.
-                        Flat $249 only if you choose a home we present to you.
+                    <div className="mt-5 rounded-xl border border-primary-deep/20 bg-surface p-5">
+                      <h3 className="font-serif text-lg text-ink mb-2">
+                        {dealRating.tone === "bad"
+                          ? "This home's quote is above the regional range."
+                          : "This quote is at the high end of the regional range."}
+                      </h3>
+                      <p className="text-sm text-ink-soft mb-3">
+                        Want us to reach out to 3&ndash;5 other homes in your
+                        zip for comparison quotes? We&rsquo;ll identify
+                        ourselves as your advocate, request their General
+                        Price Lists under your FTC rights, and summarize what
+                        comes back.
                       </p>
+                      <p className="text-sm text-ink-soft mb-4">
+                        Flat $249 &mdash; charged only if you choose a home we
+                        find. Nothing if you don&rsquo;t.
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        <LinkButton
+                          href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}&home=${encodeURIComponent(quotedHome)}&q=${encodeURIComponent(String(quotedNum))}`}
+                        >
+                          Start advocate outreach →
+                        </LinkButton>
+                        <LinkButton href="/how-it-works" variant="ghost">
+                          How this works
+                        </LinkButton>
+                      </div>
                     </div>
                   )}
                 </Card>
