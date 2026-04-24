@@ -185,12 +185,11 @@ function AnonymousDashboard() {
           <div>
             <CardEyebrow>Dashboard</CardEyebrow>
             <h1 className="font-serif text-3xl text-ink">
-              Your plan &mdash; saved in this browser
+              Welcome &mdash; we&rsquo;re here to help.
             </h1>
             <p className="text-ink-soft mt-2">
-              We&rsquo;re holding your progress so you don&rsquo;t lose it if
-              you close this tab. To keep it safe across devices, save it to an
-              account (email only &mdash; takes 30 seconds).
+              You haven&rsquo;t started a case yet. Where would you like to
+              begin?
             </p>
           </div>
 
@@ -200,9 +199,14 @@ function AnonymousDashboard() {
               No account needed to use any of these.
             </p>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href="/where">What&rsquo;s happening now</LinkButton>
+              <LinkButton href="/where">
+                Tell us what happened &rarr;
+              </LinkButton>
               <LinkButton href="/prices" variant="secondary">
                 Fair price lookup
+              </LinkButton>
+              <LinkButton href="/how-it-works" variant="secondary">
+                How we can help
               </LinkButton>
               <LinkButton href="/prep" variant="secondary">
                 Arrangement prep kit
@@ -219,8 +223,8 @@ function AnonymousDashboard() {
           <Card tone="soft">
             <CardTitle>Save your place</CardTitle>
             <p className="text-ink-soft mb-4">
-              An account lets us hold your work between devices and remember
-              where you were. Email only. No password. Takes 30 seconds.
+              When you&rsquo;re ready, save your progress to an account (email
+              only, takes 30 seconds) so nothing gets lost.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/login?next=/dashboard">
