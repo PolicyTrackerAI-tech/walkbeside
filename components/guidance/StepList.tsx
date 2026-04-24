@@ -10,9 +10,11 @@ interface Props {
   subhead: string;
   tone: string;
   steps: GuidanceStep[];
+  pullQuote?: string;
   showPriceCompareGate: boolean;
   priceGateText?: string;
-  showFtcScript?: boolean;
+  /** null = suppress all commercial CTAs (used by home-unexpected variant). */
+  showCta?: boolean;
 }
 
 const STEP_TONE_CLASS: Record<NonNullable<GuidanceStep["tone"]>, string> = {
@@ -21,15 +23,16 @@ const STEP_TONE_CLASS: Record<NonNullable<GuidanceStep["tone"]>, string> = {
   calm: "border-border bg-surface",
 };
 
-export function GuidanceStepper({
+export function StepList({
   label,
   headline,
   subhead,
   tone,
   steps,
+  pullQuote,
   showPriceCompareGate,
   priceGateText,
-  showFtcScript,
+  showCta = true,
 }: Props) {
   return (
     <main className="flex-1 flex flex-col">
@@ -52,7 +55,13 @@ export function GuidanceStepper({
             {headline}
           </h1>
           <p className="text-lg text-ink-soft mb-2">{subhead}</p>
-          <p className="text-sm text-ink-muted italic mb-10">{tone}</p>
+          <p className="text-sm text-ink-muted italic mb-8">{tone}</p>
+
+          {pullQuote && (
+            <blockquote className="my-8 border-l-4 border-primary-deep pl-5 py-1 text-ink font-serif text-xl leading-snug">
+              &ldquo;{pullQuote}&rdquo;
+            </blockquote>
+          )}
 
           <ol className="space-y-4">
             {steps.map((step, i) => {
@@ -81,54 +90,34 @@ export function GuidanceStepper({
             })}
           </ol>
 
-          {showFtcScript && (
-            <Card tone="soft" className="mt-6">
-              <div className="text-xs uppercase tracking-wider text-ink-muted mb-2">
-                Bring this to the first call
-              </div>
-              <h2 className="font-serif text-xl text-ink mb-2">
-                The one question that changes the entire conversation.
-              </h2>
-              <blockquote className="my-4 border-l-4 border-primary-deep pl-4 text-ink italic">
-                &ldquo;Can I see your itemized General Price List before we
-                begin?&rdquo;
-              </blockquote>
-              <p className="text-sm text-ink-soft">
-                Under the FTC Funeral Rule, every funeral home has to give you
-                an itemized price list on request &mdash; over the phone, in
-                person, or by email. Asking for it tells the director you know
-                your rights. The prices quoted after that are usually more
-                honest.
-              </p>
-            </Card>
+          {showCta && (
+            <div className="mt-8">
+              {showPriceCompareGate ? (
+                <Card tone="primary">
+                  <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
+                    When you&rsquo;re ready
+                  </div>
+                  <h2 className="font-serif text-2xl text-ink mb-2">
+                    See what funerals should cost in your area.
+                  </h2>
+                  <p className="text-ink-soft mb-5">{priceGateText}</p>
+                  <LinkButton href="/prices" size="lg">
+                    Look up fair prices →
+                  </LinkButton>
+                </Card>
+              ) : (
+                <Card tone="soft">
+                  <p className="text-ink-soft mb-4">
+                    When you&rsquo;re ready, the next step is comparing funeral
+                    homes. There&rsquo;s no rush.
+                  </p>
+                  <LinkButton href="/prices" variant="secondary">
+                    When you&rsquo;re ready →
+                  </LinkButton>
+                </Card>
+              )}
+            </div>
           )}
-
-          <div className="mt-8">
-            {showPriceCompareGate ? (
-              <Card tone="primary">
-                <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
-                  When you&rsquo;re ready
-                </div>
-                <h2 className="font-serif text-2xl text-ink mb-2">
-                  See what funerals should cost in your area.
-                </h2>
-                <p className="text-ink-soft mb-5">{priceGateText}</p>
-                <LinkButton href="/prices" size="lg">
-                  Look up fair prices →
-                </LinkButton>
-              </Card>
-            ) : (
-              <Card tone="soft">
-                <p className="text-ink-soft mb-4">
-                  When you&rsquo;re ready, the next step is comparing funeral
-                  homes. There&rsquo;s no rush.
-                </p>
-                <LinkButton href="/prices" variant="secondary">
-                  When you&rsquo;re ready →
-                </LinkButton>
-              </Card>
-            )}
-          </div>
         </div>
       </section>
     </main>

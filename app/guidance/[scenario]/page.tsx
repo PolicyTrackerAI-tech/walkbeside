@@ -6,7 +6,7 @@ import {
   SCENARIO_LABELS,
 } from "@/lib/scenarios";
 import { SCENARIO_LANDING_TONE } from "@/lib/content";
-import { GuidanceStepper } from "./Stepper";
+import { StepList } from "@/components/guidance/StepList";
 import { CrisisUnexpected } from "./CrisisUnexpected";
 
 const VALID: Scenario[] = ["hospital", "home-expected", "home-unexpected", "elsewhere"];
@@ -51,18 +51,16 @@ export default async function GuidancePage({
 
   const g = SCENARIO_GUIDANCE[scenario];
 
-  const showFtcScript = scenario === "hospital" || scenario === "home-expected";
-
   return (
-    <GuidanceStepper
+    <StepList
       label={SCENARIO_LABELS[scenario]}
       headline={g.headline}
       subhead={g.subhead}
       tone={SCENARIO_LANDING_TONE[scenario]}
       steps={g.steps}
+      pullQuote={g.pullQuote}
       showPriceCompareGate={g.showPriceCompareGate}
       priceGateText={g.priceGateText}
-      showFtcScript={showFtcScript}
     />
   );
 }

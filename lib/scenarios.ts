@@ -25,6 +25,8 @@ export interface ScenarioGuidance {
   /** True if we should aggressively gate them to the price comparison before they call any funeral home. */
   showPriceCompareGate: boolean;
   priceGateText?: string;
+  /** Single sentence the scenario should anchor around. Rendered as pull-quote. */
+  pullQuote?: string;
 }
 
 export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
@@ -63,6 +65,8 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
     showPriceCompareGate: true,
     priceGateText:
       "While you're waiting on the hospice nurse, take three minutes to see what funeral costs should look like in your area.",
+    pullQuote:
+      "Can I see your itemized General Price List before we begin? Under the FTC Funeral Rule, every home has to give you one on request.",
     steps: [
       {
         title: "Call hospice (if they aren't already on their way).",
@@ -117,6 +121,8 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
     showPriceCompareGate: true,
     priceGateText:
       "Whatever the situation, knowing fair funeral prices in your area is a five-minute investment that often saves thousands.",
+    pullQuote:
+      "Slow down before calling a funeral home. The first call starts the sales process.",
     steps: [
       {
         title: "Make sure death has been legally pronounced.",
