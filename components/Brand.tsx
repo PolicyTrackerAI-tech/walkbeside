@@ -116,6 +116,9 @@ export function Footer() {
           <Link href="/about" className="hover:text-ink-soft">
             About
           </Link>
+          <Link href="/obituary" className="hover:text-ink-soft">
+            Obituary helper
+          </Link>
           <Link href="/terms" className="hover:text-ink-soft">
             Terms of Service
           </Link>

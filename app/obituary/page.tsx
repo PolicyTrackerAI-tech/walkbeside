@@ -64,11 +64,18 @@ export default function ObituaryPage() {
               <div>
                 <CardEyebrow>Obituary helper</CardEyebrow>
                 <h1 className="font-serif text-3xl text-ink mb-3">
-                  Let&rsquo;s write it together.
+                  Writing an obituary when you&rsquo;re exhausted.
                 </h1>
                 <p className="text-ink-soft">
-                  A few short questions. We&rsquo;ll write a warm first draft you can
-                  edit. You don&rsquo;t have to answer every one.
+                  Tell us about the person who died &mdash; a few sentences
+                  about their life, their people, what mattered to them.
+                  We&rsquo;ll produce a draft you can edit, verify, and share
+                  with family before anything gets published.
+                </p>
+                <p className="text-sm text-ink-muted mt-3">
+                  We never auto-publish. We never guess at family members.
+                  Every name and date is yours to confirm before anything
+                  leaves your dashboard.
                 </p>
               </div>
 
@@ -150,6 +157,14 @@ export default function ObituaryPage() {
             <>
               <Card tone="primary">
                 <CardEyebrow>Your draft</CardEyebrow>
+                <div className="mb-4 rounded-xl border border-primary/40 bg-white px-4 py-3 text-sm text-ink-soft">
+                  This is a draft. Please verify every name, date, and
+                  relationship before publishing. We don&rsquo;t guess at
+                  facts &mdash; if something is missing from what you told
+                  us, you&rsquo;ll see{" "}
+                  <span className="font-mono text-ink">[TO VERIFY]</span>{" "}
+                  in the draft. Fill those in before sharing.
+                </div>
                 <Textarea
                   rows={10}
                   value={draft}
