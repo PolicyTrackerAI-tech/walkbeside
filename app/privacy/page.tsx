@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { Brand, Footer } from "@/components/Brand";
+import { Brand } from "@/components/Brand";
 
 export const metadata = {
-  title: "Privacy Policy — Funerose",
+  title: "Privacy",
+  description:
+    "How Funerose handles your data. Short version: we don't sell it, we don't share it with funeral homes without your permission, and we delete it if you ask.",
 };
 
 export default function PrivacyPage() {
@@ -158,7 +160,6 @@ export default function PrivacyPage() {
         </article>
       </section>
 
-      <Footer />
     </main>
   );
 }

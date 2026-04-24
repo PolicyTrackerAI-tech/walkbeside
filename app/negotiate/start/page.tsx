@@ -127,10 +127,17 @@ function NegotiateStartForm() {
           </Card>
 
           <Card>
+            <div className="mb-5 text-xs text-ink-muted bg-surface-soft rounded-xl px-4 py-3 border border-border">
+              We never sell or share your information. Your name and contact
+              details go only to the funeral homes you authorize &mdash; nowhere
+              else.
+            </div>
             <form onSubmit={start} className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
-                  <Label htmlFor="zip">Your zip code</Label>
+                  <Label htmlFor="zip" hint="Used to find nearby homes. Never sold.">
+                    Your zip code
+                  </Label>
                   <Input
                     id="zip"
                     inputMode="numeric"
@@ -189,7 +196,9 @@ function NegotiateStartForm() {
                 </div>
 
                 <div>
-                  <Label htmlFor="first">Your first name</Label>
+                  <Label htmlFor="first" hint="Used in the outreach emails only.">
+                    Your first name
+                  </Label>
                   <Input
                     id="first"
                     required
@@ -198,7 +207,9 @@ function NegotiateStartForm() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="last">Last name (optional)</Label>
+                  <Label htmlFor="last" hint="Optional. Makes the outreach feel more personal.">
+                    Last name
+                  </Label>
                   <Input
                     id="last"
                     value={senderLastName}

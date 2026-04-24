@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { Brand, Footer } from "@/components/Brand";
+import { Brand } from "@/components/Brand";
 
 export const metadata = {
-  title: "Terms of Service — Funerose",
+  title: "Terms",
+  description:
+    "The terms for using Funerose. Free tools are free. The flat $249 advocate fee only applies if you choose a funeral home we present.",
 };
 
 export default function TermsPage() {
@@ -162,7 +164,6 @@ export default function TermsPage() {
         </article>
       </section>
 
-      <Footer />
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
+import { Footer } from "@/components/Brand";
 
 const sans = Inter({
   variable: "--font-sans-stack",
@@ -15,10 +16,28 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "Funerose — quiet help after a loss",
+  metadataBase: new URL("https://www.funerose.com"),
+  title: {
+    default: "Funerose — quiet help after a loss",
+    template: "%s — Funerose",
+  },
   description:
     "Built by a licensed funeral director. We walk with families through the hardest week, from the first phone call to the last account closed.",
-  metadataBase: new URL("https://www.funerose.com"),
+  openGraph: {
+    type: "website",
+    siteName: "Funerose",
+    title: "Funerose — quiet help after a loss",
+    description:
+      "Built by a licensed funeral director. Fair prices, family advocacy, and the checklist for the next 30 days.",
+    url: "https://www.funerose.com",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Funerose — quiet help after a loss",
+    description:
+      "Built by a licensed funeral director. Fair prices, family advocacy, and the checklist for the next 30 days.",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -31,6 +50,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-bg text-ink">
         {children}
+        <Footer />
       </body>
     </html>
   );

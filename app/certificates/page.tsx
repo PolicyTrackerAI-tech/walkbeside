@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Brand, Footer } from "@/components/Brand";
+import { Brand } from "@/components/Brand";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Input, Label } from "@/components/ui/Field";
 import { CERT_BUCKETS, calcCertificates, CERT_BASELINE } from "@/lib/content";
@@ -126,7 +126,6 @@ export default function CertificatesPage() {
           </Card>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

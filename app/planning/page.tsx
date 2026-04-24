@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { Brand, Footer } from "@/components/Brand";
+import { Brand } from "@/components/Brand";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+
+export const metadata: Metadata = {
+  title: "Plan ahead",
+  description:
+    "Most families meet funeral costs for the first time on the worst day of their life. Learn the cheat sheet and fair prices before you need them.",
+};
 
 /**
  * Planning-ahead escape hatch. For researchers, journalists, adult children
@@ -75,8 +82,6 @@ export default function PlanningPage() {
           </p>
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }

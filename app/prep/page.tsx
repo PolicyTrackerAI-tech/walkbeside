@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Brand, Footer } from "@/components/Brand";
+import { Brand } from "@/components/Brand";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Field";
@@ -154,7 +154,6 @@ export default function PrepPage() {
           </div>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

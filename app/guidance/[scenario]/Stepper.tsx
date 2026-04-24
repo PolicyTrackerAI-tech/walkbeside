@@ -1,10 +1,7 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import { Brand } from "@/components/Brand";
 import { Card } from "@/components/ui/Card";
-import { Button, LinkButton } from "@/components/ui/Button";
+import { LinkButton } from "@/components/ui/Button";
 import type { GuidanceStep } from "@/lib/scenarios";
 
 interface Props {
@@ -15,7 +12,14 @@ interface Props {
   steps: GuidanceStep[];
   showPriceCompareGate: boolean;
   priceGateText?: string;
+  showFtcScript?: boolean;
 }
+
+const STEP_TONE_CLASS: Record<NonNullable<GuidanceStep["tone"]>, string> = {
+  urgent: "border-warn/30 bg-warn-soft",
+  info: "border-border bg-surface-soft",
+  calm: "border-border bg-surface",
+};
 
 export function GuidanceStepper({
   label,
@@ -25,24 +29,8 @@ export function GuidanceStepper({
   steps,
   showPriceCompareGate,
   priceGateText,
+  showFtcScript,
 }: Props) {
-  const [active, setActive] = useState(0);
-  const [done, setDone] = useState<boolean[]>(() => steps.map(() => false));
-  const allDone = done.every(Boolean);
-  const step = steps[active];
-
-  function go(idx: number) {
-    if (idx < 0 || idx >= steps.length) return;
-    setActive(idx);
-  }
-
-  function markDoneAndAdvance() {
-    const next = done.slice();
-    next[active] = true;
-    setDone(next);
-    if (active < steps.length - 1) setActive(active + 1);
-  }
-
   return (
     <main className="flex-1 flex flex-col">
       <div className="px-5 pt-6 flex items-center justify-between">
@@ -64,97 +52,58 @@ export function GuidanceStepper({
             {headline}
           </h1>
           <p className="text-lg text-ink-soft mb-2">{subhead}</p>
-          <p className="text-sm text-ink-muted italic mb-8">{tone}</p>
+          <p className="text-sm text-ink-muted italic mb-10">{tone}</p>
 
-          {/* Progress indicator */}
-          <div
-            role="tablist"
-            aria-label="Steps"
-            className="flex items-center gap-3 mb-6"
-          >
-            {steps.map((s, i) => {
-              const isActive = i === active;
-              const isDone = done[i];
+          <ol className="space-y-4">
+            {steps.map((step, i) => {
+              const toneClass =
+                STEP_TONE_CLASS[step.tone ?? "calm"] ?? STEP_TONE_CLASS.calm;
               return (
-                <button
+                <li
                   key={i}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-label={`Step ${i + 1}: ${s.title}`}
-                  onClick={() => go(i)}
-                  className={`flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full ${
-                    isActive ? "" : "opacity-60 hover:opacity-100"
-                  }`}
+                  className={`rounded-2xl border p-6 ${toneClass}`}
                 >
-                  <span
-                    className={`flex items-center justify-center w-8 h-8 rounded-full font-serif text-sm border-2 transition-colors ${
-                      isActive
-                        ? "bg-primary-deep text-white border-primary-deep"
-                        : isDone
-                          ? "bg-good text-white border-good"
-                          : "bg-surface text-ink-soft border-border"
-                    }`}
-                  >
-                    {isDone && !isActive ? "✓" : i + 1}
-                  </span>
-                  {i < steps.length - 1 && (
-                    <span
-                      aria-hidden
-                      className={`h-0.5 w-6 sm:w-10 transition-colors ${
-                        done[i] ? "bg-good" : "bg-border"
-                      }`}
-                    />
-                  )}
-                </button>
+                  <div className="flex items-start gap-4">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-deep text-white font-serif text-sm shrink-0">
+                      {i + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h2 className="font-serif text-xl text-ink mb-2">
+                        {step.title}
+                      </h2>
+                      <p className="text-ink-soft leading-relaxed">
+                        {step.body}
+                      </p>
+                    </div>
+                  </div>
+                </li>
               );
             })}
-          </div>
+          </ol>
 
-          {/* Active step card */}
-          <Card
-            tone={
-              step.tone === "urgent"
-                ? "warn"
-                : step.tone === "info"
-                  ? "soft"
-                  : "surface"
-            }
-          >
-            <div className="text-xs uppercase tracking-wider text-ink-muted mb-2">
-              Step {active + 1} of {steps.length}
-            </div>
-            <h2 className="font-serif text-2xl text-ink mb-3">{step.title}</h2>
-            <p className="text-ink-soft leading-relaxed">{step.body}</p>
+          {showFtcScript && (
+            <Card tone="soft" className="mt-6">
+              <div className="text-xs uppercase tracking-wider text-ink-muted mb-2">
+                Bring this to the first call
+              </div>
+              <h2 className="font-serif text-xl text-ink mb-2">
+                The one question that changes the entire conversation.
+              </h2>
+              <blockquote className="my-4 border-l-4 border-primary-deep pl-4 text-ink italic">
+                &ldquo;Can I see your itemized General Price List before we
+                begin?&rdquo;
+              </blockquote>
+              <p className="text-sm text-ink-soft">
+                Under the FTC Funeral Rule, every funeral home has to give you
+                an itemized price list on request &mdash; over the phone, in
+                person, or by email. Asking for it tells the director you know
+                your rights. The prices quoted after that are usually more
+                honest.
+              </p>
+            </Card>
+          )}
 
-            <div className="flex items-center justify-between gap-3 mt-6 pt-5 border-t border-border">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => go(active - 1)}
-                disabled={active === 0}
-              >
-                ← Back
-              </Button>
-              <Button
-                type="button"
-                onClick={markDoneAndAdvance}
-                disabled={done[active] && active === steps.length - 1}
-              >
-                {active < steps.length - 1
-                  ? done[active]
-                    ? "Next step →"
-                    : "Got it, next →"
-                  : done[active]
-                    ? "Done"
-                    : "Got it"}
-              </Button>
-            </div>
-          </Card>
-
-          {/* Price gate / next-step card appears after all steps acknowledged */}
-          <div
-            className={`mt-8 transition-opacity ${allDone ? "opacity-100" : "opacity-50"}`}
-          >
+          <div className="mt-8">
             {showPriceCompareGate ? (
               <Card tone="primary">
                 <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">

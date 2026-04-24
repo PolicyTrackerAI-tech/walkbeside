@@ -74,9 +74,16 @@ function LoginForm() {
             </CardTitle>
             <p className="text-ink-soft mb-6 text-[15px]">
               {mode === "signup"
-                ? "An account lets us hold your work while you step away. No credit card. We'll only ask for one if you choose AI negotiation, and only charge you if we save you money."
+                ? "An account lets us hold your work while you step away. No credit card. Our flat $249 fee only applies if you go through with advocate outreach and choose a home we present."
                 : "Sign in to pick up where you left off."}
             </p>
+            {mode === "signup" && (
+              <div className="mb-5 text-xs text-ink-muted bg-surface-soft rounded-xl px-4 py-3 border border-border">
+                We use your email to save your progress and send you updates on
+                any advocate outreach you start. We don&rsquo;t sell email
+                addresses. Ever.
+              </div>
+            )}
 
             {!supabaseSet && (
               <div className="mb-5 p-4 rounded-xl bg-warn-soft border border-warn/30 text-sm text-ink">

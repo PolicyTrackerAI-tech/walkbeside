@@ -13,8 +13,8 @@
   --surface-soft: #f4efe7;
   --border: #e6dfd2;
   --ink: #1d2b22;
-  --ink-soft: #4a5750;
-  --ink-muted: #6f7d75;
+  --ink-soft: #3f4a44;
+  --ink-muted: #5c6a62;
 
   /* Deep forest green primary */
   --primary: #2f5d4f;
@@ -73,6 +73,13 @@ h1, h2, h3 {
 
 a { color: var(--primary-deep); text-underline-offset: 3px; }
 a:hover { text-decoration: underline; }
+
+/* Keyboard focus ring for everything focusable */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 /* Print styles for cheat sheet */
 @media print {

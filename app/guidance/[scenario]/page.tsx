@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   SCENARIO_GUIDANCE,
@@ -9,6 +10,31 @@ import { GuidanceStepper } from "./Stepper";
 import { CrisisUnexpected } from "./CrisisUnexpected";
 
 const VALID: Scenario[] = ["hospital", "home-expected", "home-unexpected", "elsewhere"];
+
+const SCENARIO_DESCRIPTIONS: Record<Scenario, string> = {
+  hospital:
+    "They'll ask you to pick a funeral home soon. Here's what to do in the next two hours — and what to know before you call anyone.",
+  "home-expected":
+    "Hospice or an expected death at home. Here's exactly what happens next and what you have time to do right.",
+  "home-unexpected":
+    "You're not in trouble. Here's what happens when 911 comes, and what you can and can't do while you wait.",
+  elsewhere:
+    "A workplace, a public place, somewhere away from home. Here are the next steps — and who takes the body from here.",
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ scenario: string }>;
+}): Promise<Metadata> {
+  const { scenario: raw } = await params;
+  if (!VALID.includes(raw as Scenario)) return {};
+  const scenario = raw as Scenario;
+  return {
+    title: SCENARIO_LABELS[scenario],
+    description: SCENARIO_DESCRIPTIONS[scenario],
+  };
+}
 
 export default async function GuidancePage({
   params,
@@ -25,6 +51,8 @@ export default async function GuidancePage({
 
   const g = SCENARIO_GUIDANCE[scenario];
 
+  const showFtcScript = scenario === "hospital" || scenario === "home-expected";
+
   return (
     <GuidanceStepper
       label={SCENARIO_LABELS[scenario]}
@@ -34,6 +62,7 @@ export default async function GuidancePage({
       steps={g.steps}
       showPriceCompareGate={g.showPriceCompareGate}
       priceGateText={g.priceGateText}
+      showFtcScript={showFtcScript}
     />
   );
 }

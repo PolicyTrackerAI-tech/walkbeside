@@ -1,17 +1,56 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Brand } from "@/components/Brand";
 import { SCENARIO_LABELS, type Scenario } from "@/lib/scenarios";
+
+export const metadata: Metadata = {
+  title: "Where did they pass away?",
+  description:
+    "Tell us where the death occurred. We give you the right first steps for your situation — no wrong answer.",
+};
 
 /**
  * Screen 2 — Where did they pass away?
  * Four crisis options plus a de-emphasized planning-ahead escape hatch.
  * No nav, no login.
  */
-const OPTIONS: { key: Scenario; sub: string }[] = [
-  { key: "hospital", sub: "Death has been pronounced or is about to be." },
-  { key: "home-expected", sub: "Hospice was involved or it was anticipated." },
-  { key: "home-unexpected", sub: "It just happened. You may not have called 911 yet." },
-  { key: "elsewhere", sub: "Workplace, public space, away from home." },
+const OPTIONS: { key: Scenario; sub: React.ReactNode }[] = [
+  {
+    key: "hospital",
+    sub: (
+      <>
+        Death has been <strong className="text-ink">pronounced</strong> or is
+        about to be.
+      </>
+    ),
+  },
+  {
+    key: "home-expected",
+    sub: (
+      <>
+        <strong className="text-ink">Hospice</strong> was involved or it was
+        anticipated.
+      </>
+    ),
+  },
+  {
+    key: "home-unexpected",
+    sub: (
+      <>
+        It just happened. You may not have called{" "}
+        <strong className="text-ink">911</strong> yet.
+      </>
+    ),
+  },
+  {
+    key: "elsewhere",
+    sub: (
+      <>
+        <strong className="text-ink">Workplace</strong>, public space, away
+        from home.
+      </>
+    ),
+  },
 ];
 
 const PLANNING_HREF = "/planning";
@@ -28,9 +67,27 @@ export default function WherePage() {
           <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-3">
             Where did they pass away?
           </h1>
-          <p className="text-ink-soft mb-10">
+          <p className="text-ink-soft mb-6">
             This tells us what to help with first. There&rsquo;s no wrong answer.
           </p>
+
+          <div className="mb-8 rounded-2xl border border-border bg-surface-soft px-5 py-4">
+            <p className="text-sm text-ink mb-2">
+              <strong>
+                Has a medical professional pronounced them yet?
+              </strong>
+            </p>
+            <p className="text-sm text-ink-soft mb-3">
+              A nurse, paramedic, doctor, or hospice worker. Pronouncement is a
+              legal step. Nothing official starts until it happens.
+            </p>
+            <Link
+              href="/guidance/home-unexpected"
+              className="inline-block text-sm font-medium text-primary-deep underline underline-offset-2 hover:no-underline"
+            >
+              Not yet, or I&rsquo;m not sure → start here
+            </Link>
+          </div>
 
           <div className="grid gap-4">
             {OPTIONS.map((opt) => (

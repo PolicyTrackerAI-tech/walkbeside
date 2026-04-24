@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Brand, Footer } from "@/components/Brand";
+import { Brand } from "@/components/Brand";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -148,7 +148,6 @@ export default async function DashboardPage() {
           </Card>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }
@@ -186,7 +185,6 @@ function UnconfiguredDashboard() {
           </Card>
         </div>
       </section>
-      <Footer />
     </main>
   );
 }

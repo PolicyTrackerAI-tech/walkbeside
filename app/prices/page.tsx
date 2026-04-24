@@ -2,26 +2,34 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Brand, Footer } from "@/components/Brand";
+import { Brand } from "@/components/Brand";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
 import {
+  LINE_ITEMS,
   SERVICE_TOTALS,
   SERVICE_LABELS,
   fmtRange,
   adjustedRange,
   fmtUSD,
+  type LineItem,
   type ServiceType,
 } from "@/lib/pricing-data";
 import { FIVE_QUESTIONS } from "@/lib/scenarios";
 
-/**
- * Screen 4 — Fair price lookup.
- * Free tier. Family enters zip + (optional) the home + price they were quoted.
- * Returns fair range + deal rating + 5 questions + CTA into AI negotiation.
- */
+type Mode = "no-quote" | "has-quote";
+
+const REQUIRED_LABEL: Record<LineItem["required"], string> = {
+  yes: "Required",
+  no: "Optional",
+  burial: "Required for burial",
+  cemetery: "Cemetery requires",
+  cremation: "Required for cremation",
+};
+
 export default function PricesPage() {
+  const [mode, setMode] = useState<Mode>("no-quote");
   const [zip, setZip] = useState("");
   const [serviceType, setServiceType] = useState<ServiceType>("traditional-burial");
   const [quotedHome, setQuotedHome] = useState("");
@@ -32,7 +40,17 @@ export default function PricesPage() {
   const [low, high] = adjustedRange(totals.fairLow, totals.fairHigh, zip);
 
   const quotedNum = Number(quotedPrice.replace(/[^0-9.]/g, ""));
-  const dealRating = computeOverall(quotedNum, low, high, totals.predatoryHigh);
+  const dealRating =
+    mode === "has-quote"
+      ? computeOverall(quotedNum, low, high, totals.predatoryHigh)
+      : null;
+
+  const lineItems = LINE_ITEMS.filter((li) => li.categories.includes(serviceType));
+
+  const canSubmit =
+    mode === "no-quote"
+      ? zip.length === 5
+      : zip.length === 5 && quotedHome.trim().length > 0 && quotedNum > 0;
 
   return (
     <main className="flex-1 flex flex-col">
@@ -55,15 +73,39 @@ export default function PricesPage() {
               See what you should expect to pay.
             </h1>
             <p className="text-lg text-ink-soft">
-              Three minutes here can save thousands. We don&rsquo;t collect anything
-              we don&rsquo;t need.
+              Three minutes here can save thousands. No account, no email.
             </p>
+          </div>
+
+          <div
+            role="tablist"
+            aria-label="How can we help?"
+            className="grid grid-cols-2 gap-2 rounded-2xl border border-border bg-surface-soft p-1"
+          >
+            <ModeTab
+              active={mode === "no-quote"}
+              onClick={() => {
+                setMode("no-quote");
+                setSubmitted(false);
+              }}
+              title="I’m just looking"
+              sub="No quote in hand yet"
+            />
+            <ModeTab
+              active={mode === "has-quote"}
+              onClick={() => {
+                setMode("has-quote");
+                setSubmitted(false);
+              }}
+              title="I have a quote"
+              sub="Is this price fair?"
+            />
           </div>
 
           <Card>
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
-                <Label htmlFor="zip" hint="Used to adjust prices for your region.">
+                <Label htmlFor="zip" hint="Used only to adjust the numbers for your region. Never saved.">
                   Your zip code
                 </Label>
                 <Input
@@ -91,33 +133,37 @@ export default function PricesPage() {
                   ))}
                 </Select>
               </div>
-              <div>
-                <Label htmlFor="home" hint="Optional. We&rsquo;ll rate their quote.">
-                  Funeral home you&rsquo;re considering
-                </Label>
-                <Input
-                  id="home"
-                  placeholder="e.g. Smith & Sons"
-                  value={quotedHome}
-                  onChange={(e) => setQuotedHome(e.target.value)}
-                />
-              </div>
-              <div>
-                <Label htmlFor="quote" hint="Optional. The all-in number they gave you.">
-                  Price they quoted (USD)
-                </Label>
-                <Input
-                  id="quote"
-                  inputMode="decimal"
-                  placeholder="9500"
-                  value={quotedPrice}
-                  onChange={(e) => setQuotedPrice(e.target.value)}
-                />
-              </div>
+              {mode === "has-quote" && (
+                <>
+                  <div>
+                    <Label htmlFor="home" hint="Whoever quoted you. Stays on your device.">
+                      Funeral home name
+                    </Label>
+                    <Input
+                      id="home"
+                      placeholder="e.g. Smith & Sons"
+                      value={quotedHome}
+                      onChange={(e) => setQuotedHome(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="quote" hint="The all-in total they gave you.">
+                      Price they quoted (USD)
+                    </Label>
+                    <Input
+                      id="quote"
+                      inputMode="decimal"
+                      placeholder="9500"
+                      value={quotedPrice}
+                      onChange={(e) => setQuotedPrice(e.target.value)}
+                    />
+                  </div>
+                </>
+              )}
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button onClick={() => setSubmitted(true)} disabled={!zip}>
-                Show fair prices
+              <Button onClick={() => setSubmitted(true)} disabled={!canSubmit}>
+                {mode === "no-quote" ? "Show fair prices" : "Check the quote"}
               </Button>
               {submitted && (
                 <span className="text-sm text-ink-muted self-center">
@@ -135,18 +181,18 @@ export default function PricesPage() {
                   {fmtRange(low, high)}
                 </h2>
                 <p className="text-ink-soft">
-                  This is what most families with no special circumstances pay
-                  for a {SERVICE_LABELS[serviceType].toLowerCase()} in your
-                  area. Anywhere from {fmtUSD(totals.predatoryLow)} to{" "}
-                  {fmtUSD(totals.predatoryHigh)} is what predatory pricing
-                  looks like.
+                  This is what most families pay for a{" "}
+                  {SERVICE_LABELS[serviceType].toLowerCase()} in your area. A
+                  quote of {fmtUSD(totals.predatoryLow)}–
+                  {fmtUSD(totals.predatoryHigh)} is what predatory pricing looks
+                  like for this service type.
                 </p>
               </Card>
 
-              {quotedHome && quotedNum > 0 && (
+              {mode === "has-quote" && dealRating && quotedNum > 0 && (
                 <Card tone={dealRating.tone}>
                   <CardEyebrow>
-                    {quotedHome} &mdash; quoted price compared to regional range
+                    {quotedHome} &mdash; how this quote compares
                   </CardEyebrow>
                   <div className="flex items-baseline gap-3 flex-wrap">
                     <h2 className="font-serif text-3xl text-ink">
@@ -175,29 +221,46 @@ export default function PricesPage() {
                 </Card>
               )}
 
-              <Card tone="soft">
-                <CardEyebrow>Arrangement Kit &middot; $19 one-time</CardEyebrow>
-                <CardTitle>See every line item fair price, not just the total.</CardTitle>
-                <p className="text-ink-soft mb-4">
-                  The regional total above tells you whether you&rsquo;re in the
-                  right neighborhood. The paid Arrangement Kit breaks every
-                  line item down &mdash; basic services fee, casket, embalming,
-                  cemetery charges &mdash; so you know exactly which lines to
-                  push back on when you&rsquo;re in the arrangement meeting.
+              <Card>
+                <CardEyebrow>Line-by-line fair prices</CardEyebrow>
+                <CardTitle>What each line on their price list should cost.</CardTitle>
+                <p className="text-ink-soft mb-5 text-sm">
+                  Ranges are adjusted for your zip. Required vs optional is
+                  tagged &mdash; anything marked optional, you can decline.
                 </p>
-                <ul className="text-sm text-ink-soft space-y-1 mb-5 list-disc list-inside">
-                  <li>Line-item fair-price breakdown, adjusted for your zip</li>
-                  <li>The printable one-page cheat sheet for the meeting</li>
-                  <li>Scripts for declining specific upsells without guilt</li>
-                  <li>Price list analyzer &mdash; upload their GPL, get each line flagged</li>
+                <ul className="divide-y divide-border">
+                  {lineItems.map((item) => {
+                    const [lo, hi] = adjustedRange(item.fairLow, item.fairHigh, zip);
+                    return (
+                      <li key={item.id} className="py-4 flex gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-medium text-ink">
+                              {item.name}
+                            </span>
+                            <RequiredPill value={item.required} />
+                            {item.highMarkup && (
+                              <span className="text-xs uppercase tracking-wide bg-warn-soft text-warn px-2 py-0.5 rounded-full">
+                                High markup
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-ink-soft mt-1">
+                            {item.notes}
+                          </p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <div className="font-serif text-ink">
+                            {fmtRange(lo, hi)}
+                          </div>
+                          <div className="text-xs text-ink-muted">
+                            over {fmtUSD(item.predatoryAt)} = overpriced
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
-                <LinkButton href="/prep" variant="primary">
-                  Unlock the Arrangement Kit
-                </LinkButton>
-                <p className="text-xs text-ink-muted mt-3">
-                  One-time $19. No subscription. Included free if you use our
-                  advocate outreach.
-                </p>
               </Card>
 
               <Card tone="soft">
@@ -215,6 +278,33 @@ export default function PricesPage() {
                     </li>
                   ))}
                 </ol>
+              </Card>
+
+              <Card tone="soft">
+                <CardEyebrow>Arrangement Kit &middot; $19 one-time</CardEyebrow>
+                <CardTitle>
+                  The printable cheat sheet, decline scripts, and GPL analyzer.
+                </CardTitle>
+                <p className="text-ink-soft mb-4">
+                  You have the fair ranges above. The Kit is what you bring
+                  into the meeting: one printable page, word-for-word scripts
+                  for declining specific upsells, and the tool that reads a
+                  funeral home&rsquo;s itemized price list and flags every line
+                  above fair market.
+                </p>
+                <ul className="text-sm text-ink-soft space-y-1 mb-5 list-disc list-inside">
+                  <li>Printable one-page cheat sheet for the arrangement meeting</li>
+                  <li>Word-for-word scripts for declining specific upsells</li>
+                  <li>GPL analyzer &mdash; upload their price list, get each line flagged</li>
+                  <li>What&rsquo;s still negotiable even after signing</li>
+                </ul>
+                <LinkButton href="/prep" variant="primary">
+                  Unlock the Arrangement Kit
+                </LinkButton>
+                <p className="text-xs text-ink-muted mt-3">
+                  One-time $19. No subscription. Included free if you use our
+                  advocate outreach.
+                </p>
               </Card>
 
               <Card tone="primary">
@@ -237,9 +327,55 @@ export default function PricesPage() {
           )}
         </div>
       </section>
-
-      <Footer />
     </main>
+  );
+}
+
+function ModeTab({
+  active,
+  onClick,
+  title,
+  sub,
+}: {
+  active: boolean;
+  onClick: () => void;
+  title: string;
+  sub: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={`rounded-xl px-4 py-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+        active
+          ? "bg-surface border border-border shadow-sm"
+          : "hover:bg-surface/60"
+      }`}
+    >
+      <div
+        className={`font-medium ${active ? "text-primary-deep" : "text-ink-soft"}`}
+      >
+        {title}
+      </div>
+      <div className="text-xs text-ink-muted mt-0.5">{sub}</div>
+    </button>
+  );
+}
+
+function RequiredPill({ value }: { value: LineItem["required"] }) {
+  const label = REQUIRED_LABEL[value];
+  const isOptional = value === "no";
+  const cls = isOptional
+    ? "bg-good-soft text-primary-deep"
+    : "bg-surface-soft text-ink-muted border border-border";
+  return (
+    <span
+      className={`text-xs uppercase tracking-wide px-2 py-0.5 rounded-full ${cls}`}
+    >
+      {label}
+    </span>
   );
 }
 
@@ -280,4 +416,3 @@ function computeOverall(
     message: `This quote is approximately ${deltaPct}% above the regional median of ${fmtUSD(median)}. Regional fair range is ${fmtUSD(fairLow)}–${fmtUSD(fairHigh)}. Comparing to other firms in your area is likely to materially change the price.`,
   };
 }
-
