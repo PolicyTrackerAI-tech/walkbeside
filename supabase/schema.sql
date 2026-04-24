@@ -168,6 +168,27 @@ create policy "obits_owner" on public.obituaries
   for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- ---------------------------------------------------------------------------
+-- Planning-ahead email list (cheat sheet signups, pre-need lead capture)
+-- Segmented marketing list — never mixed with case / at-need emails.
+-- ---------------------------------------------------------------------------
+create table if not exists public.planning_signups (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  source text not null default 'cheatsheet',
+  zip text,
+  ip_hash text,
+  user_agent text,
+  created_at timestamptz not null default now(),
+  unique (email, source)
+);
+
+alter table public.planning_signups enable row level security;
+-- Anonymous inserts only (no select, no update, no delete from the client).
+drop policy if exists "planning_signups_insert_anon" on public.planning_signups;
+create policy "planning_signups_insert_anon" on public.planning_signups
+  for insert to anon, authenticated with check (true);
+
+-- ---------------------------------------------------------------------------
 -- Storage bucket for uploaded price lists (create manually in Dashboard or via this hint)
 -- ---------------------------------------------------------------------------
 -- In Supabase: Storage → New bucket → name "price-lists", private.
