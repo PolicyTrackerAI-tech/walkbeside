@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Brand } from "@/components/Brand";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
-import { calcFeeCents, fmtCents } from "@/lib/stripe";
+import { FLAT_FEE_CENTS, fmtCents } from "@/lib/stripe";
 
 export default async function NegotiationResultsPage({
   params,
@@ -61,52 +61,44 @@ export default async function NegotiationResultsPage({
             <p className="text-ink-soft mt-2">
               {replies.length === 0
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
-                : "Pick the home you want. We&rsquo;ll release contact info, and only charge our fee after the deal closes."}
+                : `Pick the home you want. We release contact info and charge a flat ${fmtCents(FLAT_FEE_CENTS)} only when you confirm.`}
             </p>
           </div>
 
           {baseline !== null && (
             <Card tone="soft">
               <div className="text-sm text-ink-soft">
-                Baseline you started with
+                Quote you originally received
               </div>
               <div className="font-serif text-2xl text-ink">
                 {fmtCents(baseline)}
               </div>
+              <p className="text-xs text-ink-muted mt-2">
+                Shown for your reference only. You pay the selected home
+                directly at their quoted price.
+              </p>
             </Card>
           )}
 
           <ul className="space-y-3">
             {replies.map((r, i) => {
-              const savings =
-                baseline != null && r.quote_cents != null && baseline > r.quote_cents
-                  ? baseline - r.quote_cents
-                  : null;
-              const fee = savings != null ? calcFeeCents(savings) : null;
               return (
                 <li key={r.id}>
                   <Card tone={i === 0 ? "good" : "surface"}>
                     <div className="flex items-start justify-between gap-3 flex-wrap">
                       <div>
                         <div className="text-xs uppercase tracking-wider text-ink-muted mb-1">
-                          {i === 0 ? "Best price" : `Option ${i + 1}`}
+                          {i === 0 ? "Lowest quote" : `Option ${i + 1}`}
                         </div>
                         <CardTitle>{r.home_name}</CardTitle>
                         <div className="font-serif text-2xl text-ink">
                           {fmtCents(r.quote_cents!)}
                         </div>
-                        {savings != null && savings > 0 && (
-                          <div className="text-sm text-good mt-1">
-                            You save {fmtCents(savings)} vs your baseline.
-                          </div>
-                        )}
                       </div>
                       <div className="text-right">
-                        {fee != null && fee > 0 && (
-                          <div className="text-xs text-ink-muted mb-2">
-                            Our fee if you take this: {fmtCents(fee)}
-                          </div>
-                        )}
+                        <div className="text-xs text-ink-muted mb-2">
+                          Our fee if you choose this home: {fmtCents(FLAT_FEE_CENTS)}
+                        </div>
                         <form action="/api/stripe/checkout" method="post">
                           <input type="hidden" name="negotiationId" value={id} />
                           <input type="hidden" name="outreachId" value={r.id} />

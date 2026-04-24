@@ -41,34 +41,20 @@ export default async function NegotiationClosedPage({
       </header>
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-12 space-y-6">
-          <CardEyebrow>You did it</CardEyebrow>
+          <CardEyebrow>Confirmed</CardEyebrow>
           <h1 className="font-serif text-3xl text-ink">
-            You just made one of the hardest decisions. That took strength.
+            That decision is made. Take a breath.
           </h1>
-          {neg.savings_cents ? (
-            <p className="text-lg text-ink-soft">
-              We saved you {fmtCents(neg.savings_cents)} on this arrangement.
-              Our fee was{" "}
-              {neg.fee_cents ? fmtCents(neg.fee_cents) : "$0"}.
-            </p>
-          ) : (
-            <p className="text-lg text-ink-soft">
-              The home you chose is committed at the price they quoted. You
-              can pull up the prep kit before your arrangement meeting.
-            </p>
-          )}
+          <p className="text-lg text-ink-soft">
+            The home you chose has been released to you with the price they
+            quoted in writing. Our flat fee was{" "}
+            {neg.fee_cents ? fmtCents(neg.fee_cents) : "$0"}.
+          </p>
 
           {sp.dryrun && (
             <Card tone="warn">
               <strong>Dev mode:</strong> Stripe isn&rsquo;t configured, so this
               completed without a real payment.
-            </Card>
-          )}
-          {sp.free && (
-            <Card tone="soft">
-              <strong>Free deal:</strong> You didn&rsquo;t save money on this one,
-              so we didn&rsquo;t charge anything. Worth pulling up the prep kit
-              regardless.
             </Card>
           )}
 

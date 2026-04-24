@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 
   const { data: neg } = await supabase
     .from("negotiations")
-    .select("id, user_id, target_home_estimate_cents, best_quote_cents")
+    .select("id, user_id")
     .eq("id", negotiationId)
     .eq("user_id", user.id)
     .single();
@@ -31,27 +31,14 @@ export async function POST(req: Request) {
 
   const { data: pick } = await supabase
     .from("negotiation_outreach")
-    .select("id, quote_cents, home_name, home_email")
+    .select("id, home_name, home_email")
     .eq("id", outreachId)
     .eq("negotiation_id", negotiationId)
     .single();
-  if (!pick || !pick.quote_cents)
-    return NextResponse.json({ error: "no_quote" }, { status: 400 });
+  if (!pick)
+    return NextResponse.json({ error: "not_found" }, { status: 404 });
 
-  const baseline = neg.target_home_estimate_cents ?? 0;
-  const savings = Math.max(baseline - pick.quote_cents, 0);
-  const fee = calcFeeCents(savings);
-
-  // If we didn't save any money, skip Stripe entirely and release the home.
-  if (fee === 0) {
-    await supabase
-      .from("negotiations")
-      .update({ status: "closed", fee_cents: 0, savings_cents: savings })
-      .eq("id", negotiationId);
-    return NextResponse.redirect(
-      new URL(`/negotiate/${negotiationId}/closed?free=1`, req.url),
-    );
-  }
+  const fee = calcFeeCents();
 
   if (!stripeAvailable()) {
     // Stripe not configured — mark closed in dev so the flow stays exercisable.
@@ -60,7 +47,6 @@ export async function POST(req: Request) {
       .update({
         status: "closed",
         fee_cents: fee,
-        savings_cents: savings,
       })
       .eq("id", negotiationId);
     return NextResponse.redirect(
@@ -82,8 +68,9 @@ export async function POST(req: Request) {
           currency: "usd",
           unit_amount: fee,
           product_data: {
-            name: `Funerose negotiation fee — ${pick.home_name}`,
-            description: `20% of $${(savings / 100).toFixed(0)} savings, capped at $500.`,
+            name: `Funerose advocacy fee — ${pick.home_name}`,
+            description:
+              "Flat success fee for presenting funeral homes that responded to your authorized outreach. Refundable if the selected home refuses to honor their quote within 14 days.",
           },
         },
         quantity: 1,
@@ -91,7 +78,7 @@ export async function POST(req: Request) {
     ],
     success_url: `${origin}/negotiate/${negotiationId}/closed?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/negotiate/${negotiationId}/results`,
-    metadata: { negotiationId, outreachId, savings: String(savings) },
+    metadata: { negotiationId, outreachId },
   });
 
   await supabase
@@ -99,7 +86,6 @@ export async function POST(req: Request) {
     .update({
       stripe_payment_intent_id: session.id,
       fee_cents: fee,
-      savings_cents: savings,
     })
     .eq("id", negotiationId);
 

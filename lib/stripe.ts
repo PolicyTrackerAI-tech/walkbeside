@@ -12,11 +12,13 @@ export function stripe(): Stripe {
 export const stripeAvailable = FEATURES.stripe;
 
 /**
- * Pricing model: 20% of savings, capped at $500 per closed deal.
+ * Pricing model: flat success fee, charged only when the family signs with a
+ * home we presented to them. No counterfactual baseline required.
  */
-export function calcFeeCents(savingsCents: number): number {
-  const raw = Math.round(savingsCents * 0.2);
-  return Math.min(raw, 500_00);
+export const FLAT_FEE_CENTS = 249_00;
+
+export function calcFeeCents(): number {
+  return FLAT_FEE_CENTS;
 }
 
 export function fmtCents(cents: number): string {

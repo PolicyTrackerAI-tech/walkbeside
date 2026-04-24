@@ -6,6 +6,8 @@ import {
 } from "@/lib/scenarios";
 import { SCENARIO_LANDING_TONE } from "@/lib/content";
 import { GuidanceStepper } from "./Stepper";
+import { CrisisUnexpected } from "./CrisisUnexpected";
+import { setCommercialSuppression } from "@/lib/suppression";
 
 const VALID: Scenario[] = ["hospital", "home-expected", "home-unexpected", "elsewhere"];
 
@@ -17,6 +19,12 @@ export default async function GuidancePage({
   const { scenario: raw } = await params;
   if (!VALID.includes(raw as Scenario)) notFound();
   const scenario = raw as Scenario;
+
+  if (scenario === "home-unexpected") {
+    await setCommercialSuppression();
+    return <CrisisUnexpected />;
+  }
+
   const g = SCENARIO_GUIDANCE[scenario];
 
   return (

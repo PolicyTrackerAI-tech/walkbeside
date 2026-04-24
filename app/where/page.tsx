@@ -4,7 +4,8 @@ import { SCENARIO_LABELS, type Scenario } from "@/lib/scenarios";
 
 /**
  * Screen 2 — Where did they pass away?
- * Four large cards. Nothing else. No nav, no login.
+ * Four crisis options plus a de-emphasized planning-ahead escape hatch.
+ * No nav, no login.
  */
 const OPTIONS: { key: Scenario; sub: string }[] = [
   { key: "hospital", sub: "Death has been pronounced or is about to be." },
@@ -12,6 +13,8 @@ const OPTIONS: { key: Scenario; sub: string }[] = [
   { key: "home-unexpected", sub: "It just happened. You may not have called 911 yet." },
   { key: "elsewhere", sub: "Workplace, public space, away from home." },
 ];
+
+const PLANNING_HREF = "/planning";
 
 export default function WherePage() {
   return (
@@ -49,6 +52,15 @@ export default function WherePage() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          <div className="mt-10 pt-6 border-t border-border text-center">
+            <Link
+              href={PLANNING_HREF}
+              className="text-sm text-ink-muted hover:text-ink-soft underline-offset-2 hover:underline"
+            >
+              I&rsquo;m planning ahead &mdash; nobody has died
+            </Link>
           </div>
         </div>
       </section>

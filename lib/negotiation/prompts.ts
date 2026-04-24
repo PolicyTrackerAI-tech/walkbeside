@@ -1,11 +1,12 @@
 /**
- * Prompts and post-processing for AI negotiation outreach.
+ * Prompts and post-processing for the transparent-intermediary outreach.
  *
- * Tone rules (from sister): emails must read like a real grieving family member.
- * - First-person, slightly informal
- * - References the FTC General Price List (federal right) without legal posturing
- * - Asks one or two specific questions, not a list
- * - Never reveals AI authorship
+ * Voice rules:
+ * - The email is sent BY Funerose ON BEHALF OF a named family (never pretending to be the family).
+ * - Invokes the FTC Funeral Rule to request the General Price List — which is a legal right, not aggression.
+ * - Warm, brief, professional. Clear signature identifying Funerose as the sender.
+ * - Never impersonates the family, never claims to be the family, never hides AI involvement where the
+ *   content is material (the advocacy relationship itself is disclosed).
  */
 
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
@@ -14,41 +15,54 @@ export interface OutreachContext {
   scenarioCity?: string;
   zip: string;
   serviceType: ServiceType;
-  /** First name we're using for the outreach persona (sender). */
+  /** First name of the family member we're representing — used only in body text, not as a persona. */
   senderFirstName: string;
-  /** Optional last name. */
+  /** Optional family last name for identification. */
   senderLastName?: string;
   /** Approximate timing — "this week", "in the next 10 days", etc. */
   timing: string;
   /** Anything else: pre-existing arrangement, relationship to deceased, etc. */
   extras?: string;
+  /** Name of the Funerose advocate signing the email. */
+  advocateName?: string;
+  /** Short authorization reference ID the family signed. */
+  authorizationId?: string;
 }
 
 export function initialEmailSystem(): string {
   return [
-    "You are helping a real family member email funeral homes for price information after the death of a loved one.",
-    "Your job is to write a warm, brief, first-person email that requests an itemized General Price List (their right under the FTC Funeral Rule).",
-    "Voice: a grieving but composed family member. Slightly informal. American English. No legal posturing, no buzzwords, no marketing language.",
+    "You are drafting a professional email sent BY Funerose (a consumer advocacy service) to a funeral home, ON BEHALF OF a family that has engaged Funerose.",
+    "You are NOT the family. You are writing from the Funerose advocate's perspective.",
+    "Voice: warm, professional, respectful of the recipient. American English. Not legalistic. Not aggressive.",
     "Requirements:",
-    "- One short paragraph of context (loss, timing).",
-    "- Ask for an itemized General Price List for the requested service type.",
-    "- Ask one specific question about basic services fee.",
-    "- Sign off with first name.",
-    "- 90-140 words total.",
-    "- Do not mention AI, comparison shopping, or price negotiation. Just request information.",
+    "- Identify clearly that the email is from Funerose, representing a family who is considering this firm.",
+    "- Request the firm's current itemized General Price List under the FTC Funeral Rule — frame it as a routine request, not a demand.",
+    "- Name the service type and rough timing.",
+    "- State that the family will review responses and contact the selected home directly.",
+    "- Invite the firm to reply with GPL and any service-specific quote.",
+    "- Sign off as the Funerose advocate, not as the family.",
+    "- Include the authorization reference ID if provided.",
+    "- 110-170 words total.",
+    "- Never claim to BE the family. Never say 'I'm reaching out after my loved one died.' The sender is Funerose.",
+    "- Never use deceptive language or imply the message is from a grieving individual directly.",
   ].join("\n");
 }
 
 export function initialEmailUser(home: string, ctx: OutreachContext): string {
+  const familyName = ctx.senderLastName
+    ? `the ${ctx.senderLastName} family`
+    : `${ctx.senderFirstName}'s family`;
   return [
     `Funeral home: ${home}`,
     `Service type: ${SERVICE_LABELS[ctx.serviceType]}`,
     `Region: zip ${ctx.zip}${ctx.scenarioCity ? ` (${ctx.scenarioCity})` : ""}`,
-    `Family contact name: ${ctx.senderFirstName}${ctx.senderLastName ? " " + ctx.senderLastName : ""}`,
+    `Family: ${familyName}`,
     `Timing: ${ctx.timing}`,
+    ctx.authorizationId ? `Authorization reference: ${ctx.authorizationId}` : "",
+    ctx.advocateName ? `Advocate signing the email: ${ctx.advocateName}` : "Advocate signing the email: the Funerose team",
     ctx.extras ? `Other context: ${ctx.extras}` : "",
     "",
-    "Write the email body only — no subject line. Start with 'Hello,' and end with the sender's first name.",
+    "Write the email body only — no subject line. Start with 'Hello,' and end with a Funerose advocate signature block.",
   ]
     .filter(Boolean)
     .join("\n");
@@ -56,10 +70,11 @@ export function initialEmailUser(home: string, ctx: OutreachContext): string {
 
 export function followUpSystem(): string {
   return [
-    "You are continuing the same outreach thread, replying after the funeral home sent prices.",
-    "Goal: politely push back on any line items that are above fair-market range using the supplied benchmarks, and ask if they can adjust.",
-    "Voice: warm, family-member voice. Avoid 'as a customer' or other distancing language.",
-    "Constraints: 80-130 words. One ask. Reference one or two specific items. Never reveal AI.",
+    "You are continuing the same outreach thread from Funerose, replying after the funeral home sent prices.",
+    "You represent a family as their consumer advocate. You are not the family.",
+    "Goal: acknowledge the quote, politely note any line items that are above the regional fair range (using supplied benchmarks), and ask if the firm can clarify or adjust.",
+    "Voice: warm, professional, plain. No legalistic posturing. Reference one or two specific items, not all of them.",
+    "Constraints: 90-140 words. Sign off as the Funerose advocate. Never pretend to be the family.",
   ].join("\n");
 }
 
@@ -84,9 +99,11 @@ export function priceListAnalysisSystem(): string {
 
 export function obituarySystem(): string {
   return [
-    "You are a warm, careful obituary writer helping a family member.",
+    "You are a warm, careful obituary drafting assistant helping a family member. The output is a DRAFT only — the family will verify every factual claim before publishing.",
     "Write a single-paragraph obituary in natural American English.",
     "Tone: dignified, warm, specific. Short sentences. Avoid clichés like 'passed away peacefully surrounded by loved ones' unless explicitly told to include them.",
+    "Never invent family member names, dates, or relationships. If a detail is missing or ambiguous, write [TO VERIFY] in place of the detail rather than guessing.",
+    "If the death involved suicide, overdose, or violence, do not use war or battle metaphors (no 'lost a battle', 'fought bravely'). Use plain language.",
     "Length: 120-180 words for the standard version.",
     "Format: plain text, no Markdown.",
     "If service details are provided, mention them in the closing sentence.",

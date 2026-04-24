@@ -98,15 +98,25 @@ export function Header({ minimal = false }: { minimal?: boolean }) {
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-border bg-surface-soft">
-      <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-2">
+      <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
           Built by a licensed funeral director and her brother. Always free to
-          start. We only earn if we save you money.
+          start. Flat $249 only if you choose a home we present to you.
         </p>
         <p className="text-xs">
-          Funerose is not a law firm or a funeral home. The information here
-          is general guidance, not legal or medical advice.
+          Funerose is not a law firm, not a funeral home, and not a medical or
+          financial advisor. Information here is general guidance, not legal,
+          medical, or financial advice. Price estimates are informational and
+          based on regional data; actual prices vary.
         </p>
+        <div className="flex gap-4 text-xs pt-2">
+          <Link href="/terms" className="hover:text-ink-soft">
+            Terms of Service
+          </Link>
+          <Link href="/privacy" className="hover:text-ink-soft">
+            Privacy Policy
+          </Link>
+        </div>
       </div>
     </footer>
   );

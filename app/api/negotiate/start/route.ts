@@ -25,6 +25,7 @@ const Body = z.object({
   timing: z.string().max(120).default("within the next week"),
   extras: z.string().max(400).optional(),
   radiusMiles: z.number().int().min(5).max(100).default(25),
+  authorizationAccepted: z.boolean().default(false),
 });
 
 export async function POST(req: Request) {
@@ -39,6 +40,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
   const ctx = parsed.data;
+
+  // Require the family's written authorization — advocacy is gated behind consent.
+  if (!ctx.authorizationAccepted) {
+    return NextResponse.json(
+      { error: "authorization_required" },
+      { status: 400 },
+    );
+  }
 
   // Create the negotiation row
   const { data: neg, error: negErr } = await supabase
@@ -56,10 +65,22 @@ export async function POST(req: Request) {
   if (negErr || !neg)
     return NextResponse.json({ error: negErr?.message ?? "db" }, { status: 500 });
 
+  const authorizationId = `WB-${neg.id.slice(0, 8).toUpperCase()}`;
+  const advocateName = "The Funerose Advocate Team";
+  const familyLabel = ctx.senderLastName
+    ? `the ${ctx.senderLastName} family`
+    : `${ctx.senderFirstName}'s family`;
+
   const homes = findHomes(ctx.zip, homesForRadius(ctx.radiusMiles));
 
   for (const home of homes) {
-    let body = defaultEmailBody(home.name, ctx.senderFirstName);
+    let body = defaultEmailBody(
+      home.name,
+      familyLabel,
+      authorizationId,
+      advocateName,
+      ctx.timing,
+    );
     if (claudeAvailable()) {
       try {
         const msg = await anthropic().messages.create({
@@ -76,6 +97,8 @@ export async function POST(req: Request) {
                 senderLastName: ctx.senderLastName,
                 timing: ctx.timing,
                 extras: ctx.extras,
+                advocateName,
+                authorizationId,
               }),
             },
           ],
@@ -85,13 +108,13 @@ export async function POST(req: Request) {
         // fall through to default body
       }
     }
-    const subject = `Funeral pricing inquiry — ${ctx.senderFirstName}`;
+    const subject = `GPL request on behalf of ${familyLabel} — ref ${authorizationId}`;
     const sent = await sendEmail({
       to: home.email,
       subject,
       text: body,
-      fromName: `${ctx.senderFirstName}${ctx.senderLastName ? " " + ctx.senderLastName : ""}`,
-      replyTo: `negotiation+${neg.id}@funerose.com`,
+      fromName: "Funerose Advocacy",
+      replyTo: `advocate+${neg.id}@funerose.com`,
     });
 
     await supabase.from("negotiation_outreach").insert({
@@ -107,16 +130,25 @@ export async function POST(req: Request) {
   return NextResponse.json({ id: neg.id });
 }
 
-function defaultEmailBody(home: string, sender: string): string {
+function defaultEmailBody(
+  home: string,
+  familyLabel: string,
+  authorizationId: string,
+  advocateName: string,
+  timing: string,
+): string {
   return `Hello,
 
-We just lost a family member and I'm reaching out to a few funeral homes in the area to get a sense of what to expect. Could you send me your itemized General Price List?
+I'm writing on behalf of ${familyLabel}, who has engaged Funerose (funerose.com) as a consumer advocate to gather General Price Lists and service quotes from funeral homes in your area before choosing where to arrange services.
 
-Specifically, I'd like to understand your basic services fee and which line items would apply for a simple service. We're hoping to make decisions in the next few days.
+Under the FTC Funeral Rule, we are requesting your current itemized General Price List. The family is evaluating arrangements within ${timing} and would appreciate your reply with the GPL and any service-specific quote you can share.
 
-Thank you very much for your time.
+The family will review the responses and contact your firm directly if they select you. You will not need to negotiate through us; we just collect the price information on their behalf.
 
-${sender}
+Thank you for your time.
 
-(Sent on behalf of ${home})`;
+${advocateName}
+Funerose — Consumer Advocacy for Families
+Authorization reference: ${authorizationId}
+${home}`;
 }

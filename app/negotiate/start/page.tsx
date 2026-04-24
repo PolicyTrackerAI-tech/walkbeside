@@ -30,6 +30,7 @@ function NegotiateStartForm() {
   const [showOptional, setShowOptional] = useState(
     Boolean(sp.get("home") || sp.get("q")),
   );
+  const [authorized, setAuthorized] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,6 +56,7 @@ function NegotiateStartForm() {
           senderLastName: senderLastName || undefined,
           timing,
           extras: extras || undefined,
+          authorizationAccepted: authorized,
         }),
       });
       if (r.status === 401) {
@@ -90,29 +92,36 @@ function NegotiateStartForm() {
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           <div>
             <h1 className="font-serif text-3xl text-ink mb-3">
-              Let us negotiate for you.
+              Let us advocate for you.
             </h1>
             <p className="text-lg text-ink-soft">
-              We&rsquo;ll quietly contact funeral homes near you on your behalf
-              and bring back the best options to compare side by side.
+              With your written authorization, we contact funeral homes near
+              you as your advocate, request their itemized prices under the
+              FTC Funeral Rule, and bring back the options to compare side by
+              side.
             </p>
           </div>
 
           <Card tone="primary">
             <CardEyebrow>How this works</CardEyebrow>
             <ol className="space-y-2 list-decimal list-inside text-ink">
-              <li>You give us your zip and what kind of service you want.</li>
+              <li>You tell us your zip and what kind of service you want.</li>
               <li>
-                We email funeral homes asking for itemized prices — no
-                pressure, no commitment.
+                You authorize us (below) to contact homes on your behalf.
+                Every email identifies Funerose as the sender and names the
+                family we represent.
               </li>
               <li>
-                As replies come in, we put them side-by-side. You pick the
-                home you want.
+                We request each home&rsquo;s itemized General Price List &mdash;
+                a family&rsquo;s right under the FTC Funeral Rule.
               </li>
               <li>
-                If we save you money, you pay 20% of the savings — capped at
-                $500. If we don&rsquo;t, you pay nothing.
+                As replies come in, we put them side by side. You review,
+                pick a home, and contact them directly.
+              </li>
+              <li>
+                Flat $249 only if you choose a home we presented to you.
+                Free otherwise.
               </li>
             </ol>
           </Card>
@@ -283,18 +292,44 @@ function NegotiateStartForm() {
                 )}
               </div>
 
+              <div className="rounded-2xl border-2 border-primary bg-primary-soft p-5 space-y-3">
+                <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold">
+                  Required &middot; Your authorization
+                </div>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={authorized}
+                    onChange={(e) => setAuthorized(e.target.checked)}
+                    className="mt-1 w-5 h-5 accent-[var(--primary-deep)] shrink-0"
+                    required
+                  />
+                  <span className="text-sm text-ink leading-relaxed">
+                    I authorize Funerose to contact funeral homes on my
+                    behalf and request their itemized General Price Lists.
+                    I understand that Funerose will identify itself as my
+                    advocate (not impersonate me), that I make the final
+                    decision on which home to use, and that I will contact
+                    the selected home directly.
+                  </span>
+                </label>
+              </div>
+
               {error && (
                 <div className="text-sm text-bad bg-bad-soft border border-bad/30 rounded-xl px-4 py-3">
                   {error}
                 </div>
               )}
 
-              <Button type="submit" disabled={busy} size="lg">
-                {busy ? "Reaching out…" : `Start outreach to ${homesCount} homes`}
+              <Button type="submit" disabled={busy || !authorized} size="lg">
+                {busy
+                  ? "Reaching out…"
+                  : `Start outreach to ${homesCount} homes`}
               </Button>
               <p className="text-xs text-ink-muted">
-                We don&rsquo;t share your real email with any funeral home. Replies
-                come to us; we summarize them for you.
+                Every email is sent from a Funerose address, clearly
+                identifying us as the sender and you as the family we
+                represent. Replies come to us; we summarize them for you.
               </p>
             </form>
           </Card>

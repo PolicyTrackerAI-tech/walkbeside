@@ -6,12 +6,12 @@
 import type { Scenario } from "./scenarios";
 
 export const PROMISE =
-  "When someone you love dies, you should not have to figure this out alone. We walk beside you from the first phone call to the last account closed.";
+  "When someone important to you dies, you should not have to figure this out alone. We walk beside you from the first phone call to the last account closed.";
 
 export const PROGRESS_PHRASES: Record<string, string[]> = {
   "chose-funeral-home": [
-    "You just made one of the hardest decisions. That took strength.",
-    "That was a real decision in a hard moment. Take a breath.",
+    "Done. Next step below.",
+    "That decision is made. Take a breath.",
   ],
   "uploaded-price-list": [
     "We found a few items above fair market price. Here's what you can still change.",

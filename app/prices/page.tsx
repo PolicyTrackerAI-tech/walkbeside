@@ -6,14 +6,11 @@ import { Brand, Footer } from "@/components/Brand";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
-import { PriceTable } from "@/components/PriceTable";
 import {
   SERVICE_TOTALS,
   SERVICE_LABELS,
   fmtRange,
   adjustedRange,
-  classifyPrice,
-  LINE_ITEMS,
   fmtUSD,
   type ServiceType,
 } from "@/lib/pricing-data";
@@ -148,47 +145,60 @@ export default function PricesPage() {
 
               {quotedHome && quotedNum > 0 && (
                 <Card tone={dealRating.tone}>
-                  <CardEyebrow>{quotedHome}&rsquo;s quote</CardEyebrow>
+                  <CardEyebrow>
+                    {quotedHome} &mdash; quoted price compared to regional range
+                  </CardEyebrow>
                   <div className="flex items-baseline gap-3 flex-wrap">
                     <h2 className="font-serif text-3xl text-ink">
                       {fmtUSD(quotedNum)}
                     </h2>
-                    <span className="text-base font-medium uppercase tracking-wider">
-                      {dealRating.label}
-                    </span>
                   </div>
                   <p className="text-ink-soft mt-2">{dealRating.message}</p>
+                  <p className="text-xs text-ink-muted mt-3">
+                    Regional ranges are based on aggregated General Price Lists
+                    and public pricing data. A specific firm&rsquo;s actual
+                    current prices can only be verified by their printed GPL.
+                  </p>
                   {dealRating.tone !== "good" && (
                     <div className="mt-5">
                       <LinkButton
                         href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}&home=${encodeURIComponent(quotedHome)}&q=${encodeURIComponent(String(quotedNum))}`}
                       >
-                        Get us a better price →
+                        Request comparison quotes on your behalf →
                       </LinkButton>
                       <p className="text-xs text-ink-muted mt-2">
-                        We contact 3–5 homes anonymously. You pay nothing
-                        unless we save you money.
+                        We contact funeral homes as your authorized advocate.
+                        Flat $249 only if you choose a home we present to you.
                       </p>
                     </div>
                   )}
                 </Card>
               )}
 
-              <div>
-                <h2 className="font-serif text-2xl text-ink mb-3">
-                  Line item by line item
-                </h2>
+              <Card tone="soft">
+                <CardEyebrow>Arrangement Kit &middot; $19 one-time</CardEyebrow>
+                <CardTitle>See every line item fair price, not just the total.</CardTitle>
                 <p className="text-ink-soft mb-4">
-                  This is what every funeral home charges for, what&rsquo;s fair, and
-                  what&rsquo;s required. The shaded rows are the highest-markup items
-                  to watch.
+                  The regional total above tells you whether you&rsquo;re in the
+                  right neighborhood. The paid Arrangement Kit breaks every
+                  line item down &mdash; basic services fee, casket, embalming,
+                  cemetery charges &mdash; so you know exactly which lines to
+                  push back on when you&rsquo;re in the arrangement meeting.
                 </p>
-                <PriceTable
-                  zip={zip}
-                  filterService={serviceType}
-                  highlightHighMarkup
-                />
-              </div>
+                <ul className="text-sm text-ink-soft space-y-1 mb-5 list-disc list-inside">
+                  <li>Line-item fair-price breakdown, adjusted for your zip</li>
+                  <li>The printable one-page cheat sheet for the meeting</li>
+                  <li>Scripts for declining specific upsells without guilt</li>
+                  <li>Price list analyzer &mdash; upload their GPL, get each line flagged</li>
+                </ul>
+                <LinkButton href="/prep" variant="primary">
+                  Unlock the Arrangement Kit
+                </LinkButton>
+                <p className="text-xs text-ink-muted mt-3">
+                  One-time $19. No subscription. Included free if you use our
+                  advocate outreach.
+                </p>
+              </Card>
 
               <Card tone="soft">
                 <CardTitle>Five questions to ask any funeral home</CardTitle>
@@ -210,16 +220,17 @@ export default function PricesPage() {
               <Card tone="primary">
                 <CardTitle>Want us to do the calling for you?</CardTitle>
                 <p className="text-ink-soft mb-4">
-                  Our AI contacts 3–5 funeral homes in your area anonymously,
-                  asks for itemized prices, and negotiates on your behalf. You
-                  only pay 20% of what we save you, capped at $500 — and only
-                  if you actually take the deal.
+                  With your written authorization, we contact funeral homes in
+                  your area as your advocate, request their itemized General
+                  Price Lists, and return side-by-side comparisons. You review
+                  the responses and choose. Flat $249 only if you select a home
+                  we present to you &mdash; free otherwise.
                 </p>
                 <LinkButton
                   href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}`}
                   size="lg"
                 >
-                  Start AI negotiation
+                  Start advocate outreach
                 </LinkButton>
               </Card>
             </>
@@ -245,27 +256,28 @@ function computeOverall(
       message: "Enter the price they quoted to see how it compares.",
     };
   }
+  const median = Math.round((fairLow + fairHigh) / 2);
+  const deltaPct = Math.round(((quoted - median) / median) * 100);
+
   if (quoted <= fairHigh) {
+    const position = deltaPct <= 0 ? "within" : "in the upper portion of";
     return {
-      label: "Good deal",
+      label: `${fmtUSD(quoted)}`,
       tone: "good",
-      message: `That&rsquo;s within fair range (${fmtUSD(fairLow)}–${fmtUSD(fairHigh)}). Worth still asking for the itemized General Price List to confirm.`,
+      message: `This quote is ${position} the regional fair range (${fmtUSD(fairLow)}–${fmtUSD(fairHigh)}). The regional median is ${fmtUSD(median)}. Ask for the itemized General Price List to verify each line.`,
     };
   }
   if (quoted <= (fairHigh + predatoryHigh) / 2) {
     return {
-      label: "High",
+      label: `${fmtUSD(quoted)}`,
       tone: "warn",
-      message: `That&rsquo;s above fair range. You could likely save $${(quoted - fairHigh).toLocaleString()}–$${(quoted - fairLow).toLocaleString()} by comparing to other homes.`,
+      message: `This quote is approximately ${deltaPct}% above the regional median of ${fmtUSD(median)}. Regional fair range is ${fmtUSD(fairLow)}–${fmtUSD(fairHigh)}. You may want to request itemized prices from other firms for comparison.`,
     };
   }
   return {
-    label: "Overpriced",
+    label: `${fmtUSD(quoted)}`,
     tone: "bad",
-    message: `That&rsquo;s in predatory territory. Most families in your area pay $${fairLow.toLocaleString()}–$${fairHigh.toLocaleString()} for the same service. You should walk away or compare immediately.`,
+    message: `This quote is approximately ${deltaPct}% above the regional median of ${fmtUSD(median)}. Regional fair range is ${fmtUSD(fairLow)}–${fmtUSD(fairHigh)}. Comparing to other firms in your area is likely to materially change the price.`,
   };
 }
 
-// classifyPrice + LINE_ITEMS imported for completeness (reserved for line-item view)
-void classifyPrice;
-void LINE_ITEMS;

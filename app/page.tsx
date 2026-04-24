@@ -15,10 +15,13 @@ export default function HomePage() {
 
       <section className="flex-1 flex items-center">
         <div className="max-w-2xl mx-auto px-5 py-16 text-center">
-          <h1 className="font-serif text-4xl sm:text-5xl leading-tight text-ink mb-6">
-            Someone you love has passed.
-            <br />
-            <span className="text-primary-deep">You&rsquo;re not alone.</span>
+          <h1 className="font-serif text-3xl sm:text-5xl leading-tight text-ink mb-6">
+            <span className="block whitespace-nowrap">
+              Someone important has died.
+            </span>
+            <span className="block text-primary-deep">
+              You&rsquo;re not alone.
+            </span>
           </h1>
           <p className="text-lg text-ink-soft max-w-md mx-auto mb-10">
             Take a breath. We&rsquo;ll walk through this with you, one step at a
