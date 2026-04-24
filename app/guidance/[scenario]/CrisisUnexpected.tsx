@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CrisisResources } from "@/components/CrisisResources";
 import { JsonLd } from "@/components/seo/JsonLd";
 
@@ -88,13 +89,40 @@ export function CrisisUnexpected() {
             </li>
           </ol>
 
-          <div className="rounded-2xl border border-border bg-surface-soft p-6 space-y-2">
+          <div className="rounded-2xl border border-border bg-surface-soft p-6 space-y-3">
             <h2 className="font-serif text-xl text-ink">
-              We&rsquo;ll be here whenever you&rsquo;re ready.
+              We&rsquo;ll be here when you&rsquo;re ready.
             </h2>
             <p className="text-ink-soft">
-              Nothing on this page expires. Close the tab, put the phone down,
-              sit with someone. Come back when the house is quiet.
+              First responders will take one to four hours. During that time,
+              you don&rsquo;t have to do anything on this site. We&rsquo;ve
+              saved your place &mdash; everything you see here will be here
+              when you come back.
+            </p>
+            <p className="text-ink-soft">
+              If you want something to do with your hands while you wait, you
+              could read about what comes after:
+            </p>
+            <ul className="space-y-1 text-ink-soft">
+              <li>
+                <Link
+                  href="/rights"
+                  className="text-primary-deep underline-offset-2 hover:underline"
+                >
+                  &rarr; The rights families have that most never hear about
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/after"
+                  className="text-primary-deep underline-offset-2 hover:underline"
+                >
+                  &rarr; The paperwork that will matter in the next week
+                </Link>
+              </li>
+            </ul>
+            <p className="text-ink-soft text-sm pt-1">
+              None of it is urgent. Come back when you&rsquo;re ready.
             </p>
           </div>
         </div>
