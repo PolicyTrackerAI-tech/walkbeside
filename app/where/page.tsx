@@ -4,7 +4,7 @@ import { Brand } from "@/components/Brand";
 import { SCENARIO_LABELS, type Scenario } from "@/lib/scenarios";
 
 export const metadata: Metadata = {
-  title: "Where did they pass away?",
+  title: "What to do right now",
   description:
     "Tell us where the death occurred. We give you the right first steps for your situation — no wrong answer.",
 };

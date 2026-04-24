@@ -11,6 +11,13 @@ import { CrisisUnexpected } from "./CrisisUnexpected";
 
 const VALID: Scenario[] = ["hospital", "home-expected", "home-unexpected", "elsewhere"];
 
+const SCENARIO_SEO_TITLES: Record<Scenario, string> = {
+  hospital: "What to do when someone dies in the hospital",
+  "home-expected": "What to do when hospice calls",
+  "home-unexpected": "What to do after an unexpected death at home",
+  elsewhere: "What to do after an unexpected death",
+};
+
 const SCENARIO_DESCRIPTIONS: Record<Scenario, string> = {
   hospital:
     "They'll ask you to pick a funeral home soon. Here's what to do in the next two hours — and what to know before you call anyone.",
@@ -31,7 +38,7 @@ export async function generateMetadata({
   if (!VALID.includes(raw as Scenario)) return {};
   const scenario = raw as Scenario;
   return {
-    title: SCENARIO_LABELS[scenario],
+    title: SCENARIO_SEO_TITLES[scenario],
     description: SCENARIO_DESCRIPTIONS[scenario],
   };
 }

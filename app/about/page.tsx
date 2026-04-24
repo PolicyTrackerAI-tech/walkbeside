@@ -5,9 +5,9 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "About Funerose",
+  title: "About Funerose — built by a licensed funeral director",
   description:
-    "Built by a licensed funeral director and her brother. Everything here is the tool she wishes every family walked into the arrangement meeting holding.",
+    "Funerose was built by a licensed funeral director and her brother. A consumer advocate, not a funeral home. We take no money from the industry.",
 };
 
 /*

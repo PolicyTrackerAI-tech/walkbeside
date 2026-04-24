@@ -5,9 +5,9 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "Plan ahead",
+  title: "Planning a funeral in advance",
   description:
-    "Most families meet funeral costs for the first time on the worst day of their life. Learn the cheat sheet and fair prices before you need them.",
+    "Most families meet funeral costs for the first time on the worst day of their life. Learn fair prices, what to ask, and what to skip — before you need to know.",
 };
 
 /**
