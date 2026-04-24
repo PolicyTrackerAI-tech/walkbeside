@@ -161,9 +161,32 @@ export default function PricesPage() {
                 </>
               )}
             </div>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft space-y-1">
+              <p className="text-ink font-medium">
+                What happens when you submit:
+              </p>
+              <ul className="space-y-0.5">
+                <li>
+                  &bull; You&rsquo;ll see a fair-price range for your zip code.
+                </li>
+                {mode === "has-quote" && (
+                  <li>
+                    &bull; You&rsquo;ll see a rating for the quote you
+                    entered.
+                  </li>
+                )}
+                <li>
+                  &bull; No one gets contacted. No sales calls. Nothing gets
+                  emailed.
+                </li>
+                <li>
+                  &bull; Nothing is saved unless you choose to save it.
+                </li>
+              </ul>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-3">
               <Button onClick={() => setSubmitted(true)} disabled={!canSubmit}>
-                {mode === "no-quote" ? "Show fair prices" : "Check the quote"}
+                {mode === "no-quote" ? "Show me fair prices" : "Rate this quote"}
               </Button>
               {submitted && (
                 <span className="text-sm text-ink-muted self-center">
@@ -175,6 +198,12 @@ export default function PricesPage() {
 
           {submitted && (
             <>
+              <p className="text-sm text-ink-muted italic">
+                This is just between us. We didn&rsquo;t email anyone, we
+                didn&rsquo;t contact the funeral home, and we didn&rsquo;t save
+                your information unless you asked us to.
+              </p>
+
               <Card tone="primary">
                 <CardEyebrow>Fair total range for your area</CardEyebrow>
                 <h2 className="font-serif text-3xl text-primary-deep mb-2">
