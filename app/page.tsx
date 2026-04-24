@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LinkButton } from "@/components/ui/Button";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 const ORG_SCHEMA = {
@@ -55,9 +55,7 @@ export default function HomePage() {
   return (
     <main className="flex-1 flex flex-col">
       <JsonLd data={ORG_SCHEMA} />
-      <div className="px-5 pt-6">
-        <Brand />
-      </div>
+      <SiteHeader showBack={false} />
 
       <section className="flex-1 flex items-center">
         <div className="max-w-2xl mx-auto px-5 py-16 text-center">

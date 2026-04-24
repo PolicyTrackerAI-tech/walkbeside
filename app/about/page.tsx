@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
@@ -21,17 +21,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-          <Link
-            href="/"
-            className="text-sm text-ink-muted hover:text-ink-soft"
-          >
-            Home
-          </Link>
-        </div>
-      </header>
+      <SiteHeader backLabel="Home" />
 
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-8">

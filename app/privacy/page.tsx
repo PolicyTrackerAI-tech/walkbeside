@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata = {
   title: "Privacy",
@@ -10,14 +9,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-          <Link href="/" className="text-sm text-ink-muted hover:text-ink-soft">
-            Home
-          </Link>
-        </div>
-      </header>
+      <SiteHeader backLabel="Home" />
 
       <section className="flex-1">
         <article className="max-w-2xl mx-auto px-5 py-10 space-y-6 text-ink-soft">

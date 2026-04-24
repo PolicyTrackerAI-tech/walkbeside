@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
 
 interface Task {
@@ -172,17 +171,7 @@ export function NextThirtyDays() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-          <Link
-            href="/dashboard"
-            className="text-sm text-ink-muted hover:text-ink-soft"
-          >
-            Dashboard
-          </Link>
-        </div>
-      </header>
+      <SiteHeader backHref="/dashboard" backLabel="Dashboard" />
 
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-8">

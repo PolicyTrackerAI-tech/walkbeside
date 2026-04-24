@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { PriceCalculator } from "./PriceCalculator";
 
 /**
@@ -13,17 +12,7 @@ import { PriceCalculator } from "./PriceCalculator";
 export default function PricesPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-          <Link
-            href="/where"
-            className="text-sm text-ink-muted hover:text-ink-soft"
-          >
-            ← Back
-          </Link>
-        </div>
-      </header>
+      <SiteHeader backHref="/where" backLabel="← Back" />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-8">

@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { CrisisResources } from "@/components/CrisisResources";
@@ -40,15 +39,7 @@ export function StepList({
 }: Props) {
   return (
     <main className="flex-1 flex flex-col">
-      <div className="px-5 pt-6 flex items-center justify-between">
-        <Brand />
-        <Link
-          href="/where"
-          className="text-sm text-ink-muted hover:text-ink-soft"
-        >
-          ← Change answer
-        </Link>
-      </div>
+      <SiteHeader backHref="/where" backLabel="← Change answer" />
 
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-12">

@@ -1,9 +1,8 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
@@ -77,17 +76,7 @@ function NegotiateStartForm() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-          <Link
-            href="/prices"
-            className="text-sm text-ink-muted hover:text-ink-soft"
-          >
-            ← Back to prices
-          </Link>
-        </div>
-      </header>
+      <SiteHeader backHref="/prices" backLabel="← Back to prices" />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           <div>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { FLAT_FEE_CENTS, fmtCents } from "@/lib/stripe";
@@ -39,17 +39,10 @@ export default async function NegotiationResultsPage({
 
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-          <Link
-            href={`/negotiate/${id}/status`}
-            className="text-sm text-ink-muted hover:text-ink-soft"
-          >
-            ← Back to status
-          </Link>
-        </div>
-      </header>
+      <SiteHeader
+        backHref={`/negotiate/${id}/status`}
+        backLabel="← Back to status"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">

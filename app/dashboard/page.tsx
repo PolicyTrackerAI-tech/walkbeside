@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -72,20 +72,23 @@ export default async function DashboardPage() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
+      <SiteHeader
+        rightSlot={
           <div className="flex items-center gap-4 text-sm text-ink-muted">
-            <Link href="/prep">Prep kit</Link>
-            <Link href="/analyzer">Analyzer</Link>
+            <Link href="/prep" className="hover:text-ink-soft">
+              Prep kit
+            </Link>
+            <Link href="/analyzer" className="hover:text-ink-soft">
+              Analyzer
+            </Link>
             <form action="/auth/signout" method="post">
               <button className="hover:text-ink-soft" type="submit">
                 Sign out
               </button>
             </form>
           </div>
-        </div>
-      </header>
+        }
+      />
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-8 space-y-6">
           <div>
@@ -170,16 +173,24 @@ export default async function DashboardPage() {
 function AnonymousDashboard() {
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
+      <SiteHeader
+        rightSlot={
           <div className="flex items-center gap-4 text-sm text-ink-muted">
-            <Link href="/prep">Prep kit</Link>
-            <Link href="/prices">Prices</Link>
-            <Link href="/login?next=/dashboard">Sign in</Link>
+            <Link href="/prep" className="hover:text-ink-soft">
+              Prep kit
+            </Link>
+            <Link href="/prices" className="hover:text-ink-soft">
+              Prices
+            </Link>
+            <Link
+              href="/login?next=/dashboard"
+              className="hover:text-ink-soft"
+            >
+              Sign in
+            </Link>
           </div>
-        </div>
-      </header>
+        }
+      />
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-8 space-y-6">
           <div>
@@ -244,11 +255,7 @@ function AnonymousDashboard() {
 function UnconfiguredDashboard() {
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-        </div>
-      </header>
+      <SiteHeader showBack={false} />
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
           <h1 className="font-serif text-3xl text-ink">Dashboard</h1>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 
 export const metadata: Metadata = {
@@ -112,17 +112,7 @@ const PHASES: {
 export default function AccountsToClosePage() {
   return (
     <main className="flex-1 flex flex-col">
-      <header className="border-b border-border bg-surface/70">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <Brand />
-          <Link
-            href="/after"
-            className="text-sm text-ink-muted hover:text-ink-soft"
-          >
-            ← After the funeral
-          </Link>
-        </div>
-      </header>
+      <SiteHeader backHref="/after" backLabel="← After the funeral" />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-8">

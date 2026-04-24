@@ -3,7 +3,7 @@
 import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Field";
@@ -63,9 +63,7 @@ function LoginForm() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <div className="px-5 pt-6">
-        <Brand />
-      </div>
+      <SiteHeader showBack={false} />
       <section className="flex-1 flex items-center">
         <div className="max-w-md mx-auto w-full px-5 py-12">
           <Card>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Brand } from "@/components/Brand";
+import { SiteHeader } from "@/components/SiteHeader";
 import { SCENARIO_LABELS, type Scenario } from "@/lib/scenarios";
 
 export const metadata: Metadata = {
@@ -58,9 +58,7 @@ const PLANNING_HREF = "/planning";
 export default function WherePage() {
   return (
     <main className="flex-1 flex flex-col">
-      <div className="px-5 pt-6">
-        <Brand />
-      </div>
+      <SiteHeader showBack={false} />
 
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-12">
