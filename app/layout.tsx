@@ -16,24 +16,24 @@ const serif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.funerose.com"),
+  metadataBase: new URL("https://honestfuneral.co"),
   title: {
-    default: "Funerose — quiet help after a loss",
-    template: "%s — Funerose",
+    default: "Honest Funeral — quiet help after a loss",
+    template: "%s — Honest Funeral",
   },
   description:
     "Built by a licensed funeral director. We walk with families through the hardest week, from the first phone call to the last account closed.",
   openGraph: {
     type: "website",
-    siteName: "Funerose",
-    title: "Funerose — quiet help after a loss",
+    siteName: "Honest Funeral",
+    title: "Honest Funeral — quiet help after a loss",
     description:
       "Built by a licensed funeral director. Fair prices, family advocacy, and the checklist for the next 30 days.",
-    url: "https://www.funerose.com",
+    url: "https://honestfuneral.co",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Funerose — quiet help after a loss",
+    title: "Honest Funeral — quiet help after a loss",
     description:
       "Built by a licensed funeral director. Fair prices, family advocacy, and the checklist for the next 30 days.",
   },

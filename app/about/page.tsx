@@ -5,9 +5,9 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "About Funerose — built by a licensed funeral director",
+  title: "About Honest Funeral — built by a licensed funeral director",
   description:
-    "Funerose was built by a licensed funeral director and her brother. A consumer advocate, not a funeral home. We take no money from the industry.",
+    "Honest Funeral was built by a licensed funeral director and her brother. A consumer advocate, not a funeral home. We take no money from the industry.",
 };
 
 /*
@@ -33,7 +33,7 @@ export default function AboutPage() {
               A funeral director and her brother built this.
             </h1>
             <p className="text-lg text-ink-soft">
-              Every feature on Funerose comes from one specific observation: the
+              Every feature on Honest Funeral comes from one specific observation: the
               average family walks into the worst day of their life with no
               information, and the industry is built around that. This is the
               tool she wishes every family walked in with.
@@ -70,7 +70,7 @@ export default function AboutPage() {
             <p className="text-ink-soft">
               {/* TODO: replace with Ryan's short bio */}
               Ryan builds the product and handles everything on the technical
-              side. Funerose is the project of his sister&rsquo;s decade of
+              side. Honest Funeral is the project of his sister&rsquo;s decade of
               domain knowledge and his job is to make sure that knowledge ends
               up in front of families at the exact moment they need it.
             </p>

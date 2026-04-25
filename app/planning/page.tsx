@@ -51,7 +51,7 @@ export default function PlanningPage() {
 
           <Card tone="primary">
             <CardEyebrow>The acquisition asset</CardEyebrow>
-            <CardTitle>The Funerose arrangement cheat sheet.</CardTitle>
+            <CardTitle>The Honest Funeral arrangement cheat sheet.</CardTitle>
             <p className="text-ink-soft mb-5">
               One page. The nine things to ask any funeral home. The five
               upsells to decline. The FTC rights most families don&rsquo;t

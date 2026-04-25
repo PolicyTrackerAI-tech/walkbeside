@@ -68,7 +68,7 @@ export async function POST(req: Request) {
           currency: "usd",
           unit_amount: fee,
           product_data: {
-            name: `Funerose advocacy fee — ${pick.home_name}`,
+            name: `Honest Funeral advocacy fee — ${pick.home_name}`,
             description:
               "Flat success fee for presenting funeral homes that responded to your authorized outreach. Refundable if the selected home refuses to honor their quote within 14 days.",
           },

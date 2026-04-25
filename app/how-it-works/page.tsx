@@ -4,7 +4,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "How Funerose helps families",
+  title: "How Honest Funeral helps families",
   description:
     "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and advocate outreach. Flat $249 only if you choose a home we present to you.",
 };
@@ -113,7 +113,7 @@ export default function HowItWorksPage() {
           <Card tone="soft">
             <CardTitle>Why it works</CardTitle>
             <p className="text-ink-soft">
-              Funeral homes respond to Funerose differently than they respond
+              Funeral homes respond to Honest Funeral differently than they respond
               to a grieving family. Every email signals we know the FTC
               Funeral Rule and we&rsquo;re comparing. The prices we get back
               tend to reflect that.

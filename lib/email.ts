@@ -10,7 +10,7 @@ function resend(): Resend {
 }
 
 export const FROM_DEFAULT =
-  process.env.RESEND_FROM ?? "Funerose <hello@funerose.com>";
+  process.env.RESEND_FROM ?? "Honest Funeral <hello@honestfuneral.co>";
 
 export interface OutboundEmail {
   to: string;
@@ -35,7 +35,7 @@ export async function sendEmail(msg: OutboundEmail): Promise<{ id: string }> {
     });
     return { id };
   }
-  const from = msg.fromName ? `${msg.fromName} <hello@funerose.com>` : FROM_DEFAULT;
+  const from = msg.fromName ? `${msg.fromName} <hello@honestfuneral.co>` : FROM_DEFAULT;
   const result = await resend().emails.send({
     from,
     to: msg.to,

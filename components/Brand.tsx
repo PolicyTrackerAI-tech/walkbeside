@@ -73,7 +73,7 @@ export function Brand({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       className={`inline-flex items-center gap-2 font-serif ${text} text-ink hover:no-underline`}
     >
       <RoseMark size={mark} />
-      <span className="leading-none">Funerose</span>
+      <span className="leading-none">Honest Funeral</span>
     </Link>
   );
 }
@@ -104,7 +104,7 @@ export function Footer() {
           start. Flat $249 only if you choose a home we present to you.
         </p>
         <p className="text-xs">
-          Funerose is not a law firm, not a funeral home, and not a medical or
+          Honest Funeral is not a law firm, not a funeral home, and not a medical or
           financial advisor. Information here is general guidance, not legal,
           medical, or financial advice. Price estimates are informational and
           based on regional data; actual prices vary.
@@ -135,7 +135,7 @@ export function Footer() {
             Privacy Policy
           </Link>
         </div>
-        <p className="text-xs pt-2">&copy; 2026 Funerose</p>
+        <p className="text-xs pt-2">&copy; 2026 Honest Funeral</p>
       </div>
     </footer>
   );

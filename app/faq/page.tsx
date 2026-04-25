@@ -4,14 +4,14 @@ import { LinkButton } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 export const metadata: Metadata = {
-  title: "Questions families ask — Funerose FAQ",
+  title: "Questions families ask — Honest Funeral FAQ",
   description:
-    "Straight answers about how Funerose works, how we make money, whether we're affiliated with funeral homes, and what the $249 fee covers.",
+    "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and what the $249 fee covers.",
 };
 
 export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
-    q: "What does Funerose actually do?",
+    q: "What does Honest Funeral actually do?",
     plain:
       "We help families who've just lost someone make better funeral decisions under pressure. Three things: a free fair-price lookup that shows what funeral services should cost in your zip code; a $19 prep kit of questions to ask and upsells to decline; and advocate outreach — we contact funeral homes on your behalf as your named advocate and collect comparison quotes, for a flat $249 only if you pick a home we presented.",
     a: (
@@ -77,11 +77,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Are you affiliated with any funeral homes?",
     plain:
-      "No. Funerose is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. We were built by a licensed funeral director and her brother, a software engineer — the incentives point at the family, not the home.",
+      "No. Honest Funeral is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. We were built by a licensed funeral director and her brother, a software engineer — the incentives point at the family, not the home.",
     a: (
       <>
         <p>
-          No. Funerose is a consumer advocate, not a directory or a broker.
+          No. Honest Funeral is a consumer advocate, not a directory or a broker.
           We don&rsquo;t take commissions or kickbacks from funeral homes.
         </p>
         <p>
@@ -177,9 +177,9 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "Will funeral homes know I used Funerose?",
+    q: "Will funeral homes know I used Honest Funeral?",
     plain:
-      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. For advocate outreach: yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Funerose differently than to a grieving family, and that's exactly why this works.",
+      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. For advocate outreach: yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
     a: (
       <>
         <p>
@@ -198,7 +198,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
         </p>
         <p>
           We don&rsquo;t impersonate families. We don&rsquo;t send secret
-          shoppers. Homes respond to Funerose differently than to a grieving
+          shoppers. Homes respond to Honest Funeral differently than to a grieving
           family, and that&rsquo;s exactly why this works.
         </p>
       </>
@@ -207,7 +207,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What is \u201Cadvocate outreach\u201D and is it anonymous?",
     plain:
-      "Advocate outreach is the paid feature: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Funerose is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
+      "Advocate outreach is the paid feature: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Honest Funeral is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
     a: (
       <>
         <p>
@@ -216,7 +216,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           <strong>not anonymous</strong> &mdash; it&rsquo;s transparent.
         </p>
         <p>
-          The homes know Funerose is asking, they know we&rsquo;re a
+          The homes know Honest Funeral is asking, they know we&rsquo;re a
           consumer advocate, and they know the FTC Funeral Rule gives them a
           legal obligation to provide a price list on request. We don&rsquo;t
           hide who we are; we rely on the fact that homes respond differently
@@ -228,11 +228,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Is this legal advice?",
     plain:
-      "No. Funerose is not a law firm, not a funeral home, and not a medical or financial advisor. The information on this site is general consumer guidance, not legal, medical, or financial advice. We reference the FTC Funeral Rule because it governs how funeral homes must disclose prices — but if you have a complex estate or legal question, you should talk to a licensed attorney in your state.",
+      "No. Honest Funeral is not a law firm, not a funeral home, and not a medical or financial advisor. The information on this site is general consumer guidance, not legal, medical, or financial advice. We reference the FTC Funeral Rule because it governs how funeral homes must disclose prices — but if you have a complex estate or legal question, you should talk to a licensed attorney in your state.",
     a: (
       <>
         <p>
-          No. Funerose is not a law firm, not a funeral home, and not a
+          No. Honest Funeral is not a law firm, not a funeral home, and not a
           medical or financial advisor. The information on this site is
           general consumer guidance, not legal, medical, or financial
           advice.

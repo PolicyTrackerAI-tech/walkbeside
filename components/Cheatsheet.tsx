@@ -15,7 +15,7 @@ export function Cheatsheet({ zip }: { zip?: string }) {
           Arrangement meeting cheat sheet
         </h2>
         <span className="text-xs text-ink-muted">
-          funerose.com
+          honestfuneral.co
         </span>
       </div>
 

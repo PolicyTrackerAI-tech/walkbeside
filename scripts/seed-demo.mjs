@@ -1,5 +1,5 @@
 /**
- * Seed the Funerose demo account — a fictional "Johnson family" case used
+ * Seed the Honest Funeral demo account — a fictional "Johnson family" case used
  * for investor/sister/press walkthroughs. Idempotent: running twice leaves
  * the account in the same state.
  *
@@ -10,7 +10,7 @@
  *
  * Requires: DEMO_PASSWORD, DEMO_ZIP (5-digit US ZIP in launch metro),
  * NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
- * Optional: DEMO_EMAIL (defaults to demo@funerose.com).
+ * Optional: DEMO_EMAIL (defaults to demo@honestfuneral.co).
  */
 
 import { createClient } from "@supabase/supabase-js";
@@ -18,7 +18,7 @@ import { createClient } from "@supabase/supabase-js";
 const {
   NEXT_PUBLIC_SUPABASE_URL: SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY,
-  DEMO_EMAIL = "demo@funerose.com",
+  DEMO_EMAIL = "demo@honestfuneral.co",
   DEMO_PASSWORD,
   DEMO_ZIP,
 } = process.env;
@@ -177,7 +177,7 @@ async function seed(userId) {
     {
       user_id: userId,
       phase: "funeral",
-      title: "Authorize Funerose to contact funeral homes on our behalf",
+      title: "Authorize Honest Funeral to contact funeral homes on our behalf",
       status: "done",
       position: 2,
       completed_at: new Date().toISOString(),

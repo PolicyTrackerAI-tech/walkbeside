@@ -3,7 +3,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 export const metadata = {
   title: "Privacy",
   description:
-    "How Funerose handles your data. Short version: we don't sell it, we don't share it with funeral homes without your permission, and we delete it if you ask.",
+    "How Honest Funeral handles your data. Short version: we don't sell it, we don't share it with funeral homes without your permission, and we delete it if you ask.",
 };
 
 export default function PrivacyPage() {
@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <p className="text-sm text-ink-muted">Last updated: April 2026</p>
 
           <p>
-            This policy describes how Funerose collects, uses, and protects
+            This policy describes how Honest Funeral collects, uses, and protects
             your information. We treat information you share with us &mdash;
             including anything you volunteer about a deceased person &mdash;
             as sensitive, even where health-privacy laws do not technically
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
             1. We never sell your data
           </h2>
           <p>
-            Funerose does not sell, rent, or trade your personal information
+            Honest Funeral does not sell, rent, or trade your personal information
             or any information about the deceased to third parties. This is
             a commitment, not just a legal statement.
           </p>
@@ -76,7 +76,7 @@ export default function PrivacyPage() {
           </h2>
           <p>
             When you authorize our advocate outreach feature, the emails we
-            send to funeral homes identify Funerose as the sender and name
+            send to funeral homes identify Honest Funeral as the sender and name
             the family we represent (e.g., &ldquo;the Smith family&rdquo; or
             first name plus city). Funeral homes will see this identifying
             information about your family. Your email address is not shared
@@ -103,7 +103,7 @@ export default function PrivacyPage() {
             information we hold about you, request correction, request
             deletion, or request a portable export. California and European
             residents have additional statutory rights under CCPA and GDPR,
-            which we honor. Email privacy@funerose.com to exercise any
+            which we honor. Email privacy@honestfuneral.co to exercise any
             right.
           </p>
 
@@ -133,7 +133,7 @@ export default function PrivacyPage() {
             9. Children
           </h2>
           <p>
-            Funerose is not directed to children under 16. If we learn we
+            Honest Funeral is not directed to children under 16. If we learn we
             have collected information from a child, we will delete it.
           </p>
 
@@ -148,7 +148,7 @@ export default function PrivacyPage() {
           <h2 className="font-serif text-xl text-ink pt-4">
             11. Contact
           </h2>
-          <p>Privacy questions: privacy@funerose.com.</p>
+          <p>Privacy questions: privacy@honestfuneral.co.</p>
         </article>
       </section>
 

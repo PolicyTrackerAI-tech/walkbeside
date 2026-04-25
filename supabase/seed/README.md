@@ -1,4 +1,4 @@
-# Funerose demo account
+# Honest Funeral demo account
 
 For investor pitches, sister walkthroughs, and press demos.
 
@@ -8,7 +8,7 @@ with real data. No real family information is used.
 
 ## What gets seeded
 
-- **Auth user**: `demo@funerose.com` (password set by you via env)
+- **Auth user**: `demo@honestfuneral.co` (password set by you via env)
 - **Family**: Sarah Johnson (surviving spouse) → profile `display_name`
 - **Deceased**: Robert Johnson (fictional)
 - **Scenario**: hospital, with launch-metro ZIP
@@ -42,7 +42,7 @@ Takes < 10 seconds against a local Supabase project.
 ### Option B — SQL only (if you prefer the Supabase SQL editor)
 
 1. In Supabase **Authentication → Users**, create the user manually
-   (email `demo@funerose.com`, password of your choice, mark email
+   (email `demo@honestfuneral.co`, password of your choice, mark email
    confirmed).
 2. Copy the resulting UUID.
 3. Open `supabase/seed/demo-account.sql`, edit the two `\set` lines
@@ -54,7 +54,7 @@ Takes < 10 seconds against a local Supabase project.
 Once seeded, tell the reviewer:
 
 > Sign in at `https://<your-domain>/login` with
-> `demo@funerose.com` / `<the password you set>`.
+> `demo@honestfuneral.co` / `<the password you set>`.
 
 ## Resetting the demo
 

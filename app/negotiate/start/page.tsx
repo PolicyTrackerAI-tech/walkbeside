@@ -97,7 +97,7 @@ function NegotiateStartForm() {
               <li>You tell us your zip and what kind of service you want.</li>
               <li>
                 You authorize us (below) to contact homes on your behalf.
-                Every email identifies Funerose as the sender and names the
+                Every email identifies Honest Funeral as the sender and names the
                 family we represent.
               </li>
               <li>
@@ -305,9 +305,9 @@ function NegotiateStartForm() {
                     required
                   />
                   <span className="text-sm text-ink leading-relaxed">
-                    I authorize Funerose to contact funeral homes on my
+                    I authorize Honest Funeral to contact funeral homes on my
                     behalf and request their itemized General Price Lists.
-                    I understand that Funerose will identify itself as my
+                    I understand that Honest Funeral will identify itself as my
                     advocate (not impersonate me), that I make the final
                     decision on which home to use, and that I will contact
                     the selected home directly.
@@ -327,7 +327,7 @@ function NegotiateStartForm() {
                   : `Start outreach to ${homesCount} homes`}
               </Button>
               <p className="text-xs text-ink-muted">
-                Every email is sent from a Funerose address, clearly
+                Every email is sent from a Honest Funeral address, clearly
                 identifying us as the sender and you as the family we
                 represent. Replies come to us; we summarize them for you.
               </p>

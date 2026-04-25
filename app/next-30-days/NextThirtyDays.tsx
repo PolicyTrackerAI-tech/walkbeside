@@ -138,7 +138,7 @@ const PHASES: Phase[] = [
   },
 ];
 
-const STORAGE_KEY = "funerose.next30.v1";
+const STORAGE_KEY = "honestfuneral.next30.v1";
 
 export function NextThirtyDays() {
   const [done, setDone] = useState<Record<string, boolean>>({});

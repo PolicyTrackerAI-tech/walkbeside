@@ -1,4 +1,4 @@
--- Funerose demo account seed — fictional Johnson-family case.
+-- Honest Funeral demo account seed — fictional Johnson-family case.
 -- For founders who prefer to run seeds from the Supabase SQL editor
 -- rather than the Node script (scripts/seed-demo.mjs). Both produce
 -- the same final state; either is fine.
@@ -10,7 +10,7 @@
 --      Easiest path: run `node scripts/seed-demo.mjs` instead, which
 --      handles the auth user for you.
 --   2. If you must use SQL only, create the user in the Supabase
---      Auth Users UI (email demo@funerose.com, password of your
+--      Auth Users UI (email demo@honestfuneral.co, password of your
 --      choice, confirm email manually), then copy the resulting
 --      UUID into :demo_user_id below.
 --   3. Set your launch-metro ZIP into :demo_zip below.
@@ -97,7 +97,7 @@ insert into public.tasks (user_id, phase, title, status, position, completed_at)
 values
   (:demo_user_id, 'first-steps', 'Look up fair funeral prices for your zip code',          'done', 0, now()),
   (:demo_user_id, 'first-steps', 'Call hospice and get pronouncement paperwork started',   'done', 1, now()),
-  (:demo_user_id, 'funeral',     'Authorize Funerose to contact funeral homes on our behalf', 'done', 2, now());
+  (:demo_user_id, 'funeral',     'Authorize Honest Funeral to contact funeral homes on our behalf', 'done', 2, now());
 
 insert into public.tasks (user_id, phase, title, href, status, position)
 values

@@ -11,13 +11,13 @@ const schema = {
   datePublished: "2026-01-01",
   author: {
     "@type": "Organization",
-    name: "Funerose",
-    url: "https://funerose.com",
+    name: "Honest Funeral",
+    url: "https://honestfuneral.co",
   },
   publisher: {
     "@type": "Organization",
-    name: "Funerose",
-    url: "https://funerose.com",
+    name: "Honest Funeral",
+    url: "https://honestfuneral.co",
   },
 };
 

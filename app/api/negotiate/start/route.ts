@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: negErr?.message ?? "db" }, { status: 500 });
 
   const authorizationId = `WB-${neg.id.slice(0, 8).toUpperCase()}`;
-  const advocateName = "The Funerose Advocate Team";
+  const advocateName = "The Honest Funeral Advocate Team";
   const familyLabel = ctx.senderLastName
     ? `the ${ctx.senderLastName} family`
     : `${ctx.senderFirstName}'s family`;
@@ -113,8 +113,8 @@ export async function POST(req: Request) {
       to: home.email,
       subject,
       text: body,
-      fromName: "Funerose Advocacy",
-      replyTo: `advocate+${neg.id}@funerose.com`,
+      fromName: "Honest Funeral Advocacy",
+      replyTo: `advocate+${neg.id}@honestfuneral.co`,
     });
 
     await supabase.from("negotiation_outreach").insert({
@@ -139,7 +139,7 @@ function defaultEmailBody(
 ): string {
   return `Hello,
 
-I'm writing on behalf of ${familyLabel}, who has engaged Funerose (funerose.com) as a consumer advocate to gather General Price Lists and service quotes from funeral homes in your area before choosing where to arrange services.
+I'm writing on behalf of ${familyLabel}, who has engaged Honest Funeral (honestfuneral.co) as a consumer advocate to gather General Price Lists and service quotes from funeral homes in your area before choosing where to arrange services.
 
 Under the FTC Funeral Rule, we are requesting your current itemized General Price List. The family is evaluating arrangements within ${timing} and would appreciate your reply with the GPL and any service-specific quote you can share.
 
@@ -148,7 +148,7 @@ The family will review the responses and contact your firm directly if they sele
 Thank you for your time.
 
 ${advocateName}
-Funerose — Consumer Advocacy for Families
+Honest Funeral — Consumer Advocacy for Families
 Authorization reference: ${authorizationId}
 ${home}`;
 }

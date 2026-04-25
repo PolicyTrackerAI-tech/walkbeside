@@ -7,8 +7,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 const ORG_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Funerose",
-  url: "https://funerose.com",
+  name: "Honest Funeral",
+  url: "https://honestfuneral.co",
   description:
     "A consumer advocate for families making funeral decisions under pressure. Built by a licensed funeral director. Free fair-price lookup, $19 prep kit, and flat $249 advocate outreach — only on success.",
   foundingLocation: "United States",
@@ -24,7 +24,7 @@ const ORG_SCHEMA = {
 };
 
 export const metadata: Metadata = {
-  title: "Funerose — quiet help after a loss",
+  title: "Honest Funeral — quiet help after a loss",
   description:
     "Built by a licensed funeral director. Free help with the first 72 hours: fair prices, what to decline, and the checklist for the next 30 days.",
 };

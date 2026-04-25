@@ -44,7 +44,7 @@ function HowFairRangesWork() {
   return (
     <div className="rounded-2xl border border-border bg-surface-soft p-6 space-y-4">
       <h2 className="font-serif text-xl text-ink">
-        How Funerose fair-price ranges work.
+        How Honest Funeral fair-price ranges work.
       </h2>
       <ul className="space-y-3 text-[15px] text-ink-soft">
         <li>
