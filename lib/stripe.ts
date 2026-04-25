@@ -15,7 +15,7 @@ export const stripeAvailable = FEATURES.stripe;
  * Pricing model: flat success fee, charged only when the family signs with a
  * home we presented to them. No counterfactual baseline required.
  */
-export const FLAT_FEE_CENTS = 249_00;
+export const FLAT_FEE_CENTS = 49_00;
 
 export function calcFeeCents(): number {
   return FLAT_FEE_CENTS;

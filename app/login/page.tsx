@@ -72,7 +72,7 @@ function LoginForm() {
             </CardTitle>
             <p className="text-ink-soft mb-6 text-[15px]">
               {mode === "signup"
-                ? "An account lets us hold your work while you step away. No credit card. Our flat $249 fee only applies if you go through with advocate outreach and choose a home we present."
+                ? "An account lets us hold your work while you step away. No credit card. Our flat $49 fee only applies if you go through with advocate outreach and choose a home we present."
                 : "Sign in to pick up where you left off."}
             </p>
             {mode === "signup" && (

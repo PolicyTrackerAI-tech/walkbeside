@@ -38,7 +38,7 @@ as "coming soon" on the dashboard.
 - **Supabase** (Postgres + auth + storage)
 - **Anthropic Claude** (`claude-sonnet-4-6`) for negotiation, price-list
   parsing, obituary drafting
-- **Stripe** for the advocate fee (flat $249, only on family selecting a home we presented)
+- **Stripe** for the advocate fee (flat $49, only on family selecting a home we presented)
 - **Resend** for outbound funeral-home email
 
 ---
@@ -163,7 +163,7 @@ lib/
   dashboard.ts           # Three-tasks-at-a-time logic
   claude.ts              # Anthropic SDK wrapper
   email.ts               # Resend (or dryrun in dev)
-  stripe.ts              # Flat $249 advocate fee (success-only)
+  stripe.ts              # Flat $49 advocate fee (success-only)
   env.ts                 # Centralised env access + feature flags
   negotiation/
     prompts.ts           # System/user prompts for each Claude task

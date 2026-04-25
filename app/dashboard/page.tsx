@@ -7,14 +7,25 @@ import { SetupBanner } from "@/components/SetupBanner";
 import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
 import { deriveTasks } from "@/lib/dashboard";
+import {
+  AdvocateOutreachCard,
+  type OutreachRow,
+} from "@/components/dashboard/AdvocateOutreachCard";
 
 /**
  * Screen 8 — The dashboard. Three tasks. Never more.
  */
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ started?: string }>;
+}) {
   if (!FEATURES.supabase()) {
     return <UnconfiguredDashboard />;
   }
+
+  const sp = await searchParams;
+  const justStartedId = sp.started;
 
   const supabase = await createClient();
   const {
@@ -32,7 +43,7 @@ export default async function DashboardPage() {
     supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
     supabase
       .from("negotiations")
-      .select("id, status")
+      .select("id, status, stripe_payment_intent_id, unlocked_at, created_at")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false }),
     supabase
@@ -57,6 +68,21 @@ export default async function DashboardPage() {
   const hasUploadedPriceList = (analyses?.length ?? 0) > 0;
   const hasCertCount = (cert?.length ?? 0) > 0;
   const hasObituary = (obit?.length ?? 0) > 0;
+
+  // Pick the active negotiation to feature: just-started > most recent non-cancelled.
+  const activeNeg =
+    (negs ?? []).find((n) => n.id === justStartedId) ??
+    (negs ?? []).find((n) => n.status !== "cancelled") ??
+    null;
+  let outreach: OutreachRow[] = [];
+  if (activeNeg) {
+    const { data } = await supabase
+      .from("negotiation_outreach")
+      .select("id, home_name, status, quote_cents")
+      .eq("negotiation_id", activeNeg.id)
+      .order("created_at", { ascending: true });
+    outreach = (data ?? []) as OutreachRow[];
+  }
 
   const { phase, tasks } = deriveTasks({
     hasNegotiation,
@@ -102,6 +128,19 @@ export default async function DashboardPage() {
           <SetupBanner />
 
           <ProgressBar phase={phase} />
+
+          {activeNeg && outreach.length > 0 && (
+            <AdvocateOutreachCard
+              negotiationId={activeNeg.id}
+              status={activeNeg.status}
+              unlocked={
+                activeNeg.status === "closed" ||
+                Boolean(activeNeg.unlocked_at)
+              }
+              justStarted={activeNeg.id === justStartedId}
+              outreach={outreach}
+            />
+          )}
 
           {tasks.length > 0 ? (
             <ol className="space-y-3">

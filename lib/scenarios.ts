@@ -52,6 +52,38 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
           "Hospitals sometimes have informal partnerships. Once a body is moved to a funeral home, you are practically committed to that home. Compare prices first.",
         tone: "info",
       },
+      // {{TODO_SARAH_REVIEW}} — please redline the medical/legal specifics
+      // in the next four steps before this content ships.
+      {
+        title: "Who pronounces the death.",
+        body:
+          "In a hospital, the attending physician (or in some circumstances the medical examiner or coroner) makes the legal pronouncement. Until that happens, the death isn't yet official and no funeral home can take possession.",
+        tone: "info",
+      },
+      {
+        title: "The hospital does not choose your funeral home — you do.",
+        body:
+          "Hospital staff can answer practical questions, but they are not allowed to pressure you toward a specific funeral home. Transport from the hospital to the funeral home of your choice is your decision, not theirs.",
+        tone: "info",
+      },
+      {
+        title: "Release of remains paperwork.",
+        body:
+          "The hospital will ask for a signed release before transferring the body. The funeral home you choose handles most of this with the hospital directly. Read what you sign — you are authorizing transfer to a specific home, and that decision is hard to reverse.",
+        tone: "info",
+      },
+      {
+        title: "The first three calls to make.",
+        body:
+          "(1) Immediate family. (2) The funeral home you've actually chosen — only after you've compared. (3) Your employer if relevant for bereavement leave. The hospital social worker or case manager can help with practicalities, but is not a substitute for a funeral home.",
+        tone: "calm",
+      },
+      {
+        title: "When the death certificate gets signed.",
+        body:
+          "The attending physician typically signs the death certificate within 24–72 hours. The funeral home you choose orders certified copies through the state vital records office. Most families need 5–10 copies to start.",
+        tone: "info",
+      },
       {
         title: "Notify your closest family members — but slow down.",
         body:
@@ -64,28 +96,50 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
     headline: "You're in the at-home, expected scenario.",
     subhead:
       "If hospice was involved, a hospice nurse will pronounce death. You have a little more time than the hospital scenario, but body removal is still same-day.",
-    showPriceCompareGate: true,
-    priceGateText:
-      "While you're waiting on the hospice nurse, take three minutes to see what funeral costs should look like in your area.",
-    pullQuote:
-      "Can I see your itemized General Price List before we begin? Under the FTC Funeral Rule, every home has to give you one on request.",
+    showPriceCompareGate: false,
     steps: [
+      // {{TODO_SARAH_REVIEW}} — please redline the hospice / pronouncement /
+      // physician procedure specifics below before this content ships.
       {
-        title: "Call hospice (if they aren't already on their way).",
+        title: "Confirm what you're seeing.",
         body:
-          "The hospice nurse will pronounce death officially and handle the immediate paperwork. You don't need to call 911 in this scenario.",
+          "For an expected death under hospice, no medical intervention is needed — no chest compressions, no 911. If hospice is not involved, look for no pulse and no breathing for several minutes before you call the next person.",
+        tone: "calm",
+      },
+      {
+        title: "Call hospice first — not 911.",
+        body:
+          "If hospice is involved, call the hospice nurse line. Hospice handles pronouncement and the next several hours. Calling 911 will trigger an EMS response that isn't needed in this scenario and can complicate the home transfer.",
+        tone: "info",
+      },
+      {
+        title: "If hospice is not involved.",
+        body:
+          "Call the attending physician's office or the patient's primary care doctor. They can guide you on whether the death can be pronounced at home or whether the medical examiner needs to be called. In most expected-death scenarios at home, EMS and police are not required.",
+        tone: "info",
+      },
+      {
+        title: "Who comes to the home and in what order.",
+        body:
+          "Hospice nurse arrives and pronounces. The funeral home you've chosen sends transport when you're ready. Police and the coroner are typically not involved in an expected at-home death.",
+        tone: "info",
+      },
+      {
+        title: "There is genuinely time. Sit with them.",
+        body:
+          "With an expected death at home, the family does not need to rush. Hospice will not pressure you. Take the hour you need before transport. There are people who deeply regret hurrying through this part.",
+        tone: "calm",
+      },
+      {
+        title: "When the funeral home arrives.",
+        body:
+          "They will ask for a transport authorization to take the body to their facility. That is the only document you are obligated to sign at this stage. Anything about caskets, services, urns, or pricing can wait until the arrangement meeting in a day or two.",
         tone: "info",
       },
       {
         title: "You don't have to choose a funeral home until hospice asks.",
         body:
           "When hospice asks which funeral home to call for transport, that's the moment that matters. Be ready with one you've actually compared — not just the first name on Google.",
-        tone: "calm",
-      },
-      {
-        title: "Sit with them as long as you need.",
-        body:
-          "There is no rush in this scenario. Hospice will not pressure you. If you want time before the funeral home arrives, ask for it.",
         tone: "calm",
       },
     ],

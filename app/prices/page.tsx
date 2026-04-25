@@ -34,7 +34,7 @@ export default function PricesPage() {
             <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
             <CardTitle>Want us to call homes for you?</CardTitle>
             <p className="text-ink-soft mb-4">
-              Flat $249 only if you choose a home we present to you. Free
+              Flat $49 only if you choose a home we present to you. Free
               otherwise.
             </p>
             <LinkButton href="/negotiate/start">

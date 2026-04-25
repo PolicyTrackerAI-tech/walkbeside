@@ -37,16 +37,16 @@ export default function PlanningPage() {
 
           <section className="grid gap-4 sm:grid-cols-3">
             <Stat
-              number="$2,000\u2013$5,000"
+              number="$2,000–$5,000"
               label="Typical overpayment when a family shops under crisis, without a reference range."
             />
             <Stat
-              number="3\u00D7"
+              number="3×"
               label="Price variation between funeral homes in the same zip code for the same services."
             />
             <Stat
               number="30 min"
-              label="A conversation this weekend about preferences. It\u2019s the highest-leverage thing you can do."
+              label="A conversation this weekend about preferences. It’s the highest-leverage thing you can do."
             />
           </section>
 
@@ -111,6 +111,31 @@ export default function PlanningPage() {
             <p className="text-xs text-ink-muted">
               This is general guidance, not legal or financial advice.
             </p>
+          </Card>
+
+          <Card tone="primary">
+            <CardEyebrow>When the time comes</CardEyebrow>
+            <CardTitle>We can do the calling for you.</CardTitle>
+            <p className="text-ink-soft mb-3">
+              Planning ahead means your family won&rsquo;t be making cold
+              calls in the worst week of their life. For a flat $49 &mdash;
+              only if they choose a home we present &mdash; we contact
+              funeral homes near them, pull written itemized quotes, and put
+              the options side by side in their dashboard. They make the
+              call. We make sure they don&rsquo;t miss anything.
+            </p>
+            <p className="text-sm text-ink-muted mb-4">
+              Save this site to an account now. When the time comes, your
+              family logs in and the process is already half-done.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <LinkButton href="/login?next=/planning">
+                Save to an account
+              </LinkButton>
+              <LinkButton href="/how-it-works" variant="secondary">
+                How advocate outreach works
+              </LinkButton>
+            </div>
           </Card>
 
           <Card tone="soft">

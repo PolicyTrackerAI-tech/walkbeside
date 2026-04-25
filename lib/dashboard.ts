@@ -41,7 +41,7 @@ export function deriveTasks(s: DashboardState): { phase: Phase; tasks: Task[] } 
       id: "negotiate",
       phase: "funeral",
       title: "Get us to negotiate with funeral homes for you",
-      detail: "We contact 3–5 as your named advocate. Flat $249 only if you pick a home we present.",
+      detail: "We contact 3–5 as your named advocate. Flat $49 only if you pick a home we present.",
       href: "/negotiate/start",
     });
   }

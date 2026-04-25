@@ -7,7 +7,7 @@ import {
   initialEmailSystem,
   initialEmailUser,
 } from "@/lib/negotiation/prompts";
-import { findHomes, homesForRadius } from "@/lib/negotiation/sample-homes";
+import { findHomesFromDirectory, homesForRadius } from "@/lib/negotiation/sample-homes";
 import type { ServiceType } from "@/lib/pricing-data";
 
 const Body = z.object({
@@ -23,6 +23,7 @@ const Body = z.object({
   senderFirstName: z.string().min(1).max(60),
   senderLastName: z.string().max(60).optional(),
   timing: z.string().max(120).default("within the next week"),
+  notes: z.string().max(800).optional(),
   extras: z.string().max(400).optional(),
   radiusMiles: z.number().int().min(5).max(100).default(25),
   authorizationAccepted: z.boolean().default(false),
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
     ? `the ${ctx.senderLastName} family`
     : `${ctx.senderFirstName}'s family`;
 
-  const homes = findHomes(ctx.zip, homesForRadius(ctx.radiusMiles));
+  const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
   for (const home of homes) {
     let body = defaultEmailBody(
@@ -96,6 +97,7 @@ export async function POST(req: Request) {
                 senderFirstName: ctx.senderFirstName,
                 senderLastName: ctx.senderLastName,
                 timing: ctx.timing,
+                notes: ctx.notes,
                 extras: ctx.extras,
                 advocateName,
                 authorizationId,

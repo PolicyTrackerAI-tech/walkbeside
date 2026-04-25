@@ -82,7 +82,7 @@ export default function AboutPage() {
             <p className="text-sm text-ink-soft">
               We will never earn money from funeral homes, never sell lead data,
               and never recommend a provider we wouldn&rsquo;t recommend to our
-              own family. Our only revenue is the flat $249 advocate fee, paid
+              own family. Our only revenue is the flat $49 advocate fee, paid
               by the family, only when we bring them a home they choose.
             </p>
           </Card>

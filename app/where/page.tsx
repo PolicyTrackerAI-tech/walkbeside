@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 import { SCENARIO_LABELS, type Scenario } from "@/lib/scenarios";
 
 export const metadata: Metadata = {
@@ -58,7 +59,7 @@ const PLANNING_HREF = "/planning";
 export default function WherePage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader showBack={false} />
+      <SiteHeader rightSlot={<BackLink defaultHref="/" defaultLabel="← Home" />} />
 
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-12">
@@ -107,6 +108,25 @@ export default function WherePage() {
                 </div>
               </Link>
             ))}
+            <Link
+              href="/guidance/elsewhere"
+              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-6 transition-colors group"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <div className="font-serif text-xl text-ink group-hover:text-primary-deep mb-1">
+                    Somewhere else / not listed
+                  </div>
+                  <div className="text-sm text-ink-soft">
+                    Assisted living, in transit, or another setting that
+                    doesn&rsquo;t fit the categories above. We can still help.
+                  </div>
+                </div>
+                <div className="text-primary text-xl pt-1" aria-hidden>
+                  →
+                </div>
+              </div>
+            </Link>
           </div>
 
           <div

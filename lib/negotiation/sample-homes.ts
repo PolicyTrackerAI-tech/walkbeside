@@ -1,10 +1,12 @@
 /**
- * V1 fallback funeral home directory — realistic-sounding placeholder names
- * used when a real provider lookup isn't available.
- *
- * In production, this is replaced by a Google Places / NPI / state board lookup
- * keyed by zip code + radius. The schema and the `findHomes()` shape stay the same.
+ * Funeral home lookup. Production source is the `funeral_homes` table in
+ * Supabase (sister-curated for launch city). When the table is empty or
+ * Supabase is unavailable we fall back to these placeholder names so dev
+ * and demo flows still work.
  */
+
+import { createClient } from "@/lib/supabase/server";
+import { FEATURES } from "@/lib/env";
 
 export interface FuneralHome {
   name: string;
@@ -52,4 +54,40 @@ export function findHomes(zip: string, n = 4): FuneralHome[] {
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr.slice(0, Math.min(n, arr.length));
+}
+
+/**
+ * DB-backed lookup. Returns up to `n` active homes, preferring exact zip,
+ * then 3-digit zip prefix, then any active home. Falls back to placeholder
+ * `findHomes()` if Supabase is unconfigured or the directory is empty.
+ */
+export async function findHomesFromDirectory(
+  zip: string,
+  n = 4,
+): Promise<FuneralHome[]> {
+  if (!FEATURES.supabase()) return findHomes(zip, n);
+
+  const supabase = await createClient();
+  const zip3 = zip.slice(0, 3);
+
+  const { data, error } = await supabase
+    .from("funeral_homes")
+    .select("name, email, zip")
+    .eq("active", true)
+    .not("email", "is", null);
+
+  if (error || !data || data.length === 0) return findHomes(zip, n);
+
+  const exact = data.filter((h) => h.zip === zip);
+  const prefix = data.filter((h) => h.zip?.startsWith(zip3) && h.zip !== zip);
+  const rest = data.filter((h) => !h.zip?.startsWith(zip3));
+
+  const ordered = [...exact, ...prefix, ...rest]
+    .filter((h): h is { name: string; email: string; zip: string | null } =>
+      typeof h.email === "string" && h.email.length > 0,
+    )
+    .slice(0, n)
+    .map((h) => ({ name: h.name, email: h.email }));
+
+  return ordered.length > 0 ? ordered : findHomes(zip, n);
 }

@@ -48,11 +48,6 @@ export function CrisisUnexpected() {
             </p>
           </div>
 
-          <blockquote className="my-8 border-l-4 border-primary-deep pl-5 py-1 text-ink font-serif text-xl leading-snug">
-            &ldquo;You don&rsquo;t have to figure this out alone, and you
-            don&rsquo;t have to figure it out right now.&rdquo;
-          </blockquote>
-
           <CrisisResources />
 
           <ol className="space-y-5">
@@ -119,6 +114,41 @@ export function CrisisUnexpected() {
                 hours or days &mdash; not minutes.
               </p>
             </li>
+            <li className="rounded-2xl border border-border bg-surface p-6">
+              <div className="flex items-baseline gap-3 mb-2">
+                <span className="text-ink-muted text-sm font-semibold">5.</span>
+                <h3 className="font-serif text-xl text-ink">
+                  What happens when EMS, police, or the medical examiner
+                  arrive.
+                </h3>
+              </div>
+              {/* {{TODO_SARAH_REVIEW}} — please redline the medical-examiner
+                  and coroner specifics below before this ships. */}
+              <ul className="text-ink-soft list-disc pl-5 space-y-2">
+                <li>
+                  Police will arrive. They will ask questions. This is
+                  procedural for any unexpected at-home death &mdash; not
+                  accusatory.
+                </li>
+                <li>
+                  The medical examiner or coroner is called. They decide
+                  whether the death needs an investigation or can be
+                  released directly to a funeral home of your choosing.
+                </li>
+                <li>
+                  You do not have to choose a funeral home in the first
+                  hour. If asked &ldquo;which funeral home do you want?&rdquo;
+                  it is okay to say &ldquo;I need to make a call&rdquo; or
+                  &ldquo;I haven&rsquo;t decided yet.&rdquo;
+                </li>
+                <li>
+                  If you feel pressured to decide on the spot, you can
+                  request the body be transported to the medical
+                  examiner&rsquo;s office or the local hospital morgue
+                  while you decide. You do not have to commit on the spot.
+                </li>
+              </ul>
+            </li>
           </ol>
 
           <div className="rounded-2xl border border-border bg-surface-soft p-6 space-y-3">
@@ -146,6 +176,27 @@ export function CrisisUnexpected() {
             <p className="text-ink-soft text-sm pt-1">
               None of it is urgent. Come back when you&rsquo;re ready.
             </p>
+          </div>
+
+          <div className="rounded-2xl border-2 border-primary bg-primary-soft p-6 space-y-4">
+            <h2 className="font-serif text-2xl text-ink">
+              When you&rsquo;re ready, let us handle the heavy lifting.
+            </h2>
+            <p className="text-ink-soft">
+              You don&rsquo;t have to make these calls yourself. For a flat
+              $49 &mdash; only if you pick a home we bring you &mdash; we
+              contact funeral homes near you, request their itemized prices
+              under the FTC Funeral Rule, and put the options side by side
+              in your dashboard. You read it when you have a quiet minute.
+            </p>
+            <div className="flex flex-wrap gap-3 pt-1">
+              <LinkButton href="/negotiate/start">
+                Start advocate outreach
+              </LinkButton>
+              <LinkButton href="/how-it-works" variant="secondary">
+                How it works
+              </LinkButton>
+            </div>
           </div>
         </div>
       </section>

@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
   description:
-    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and advocate outreach. Flat $249 only if you choose a home we present to you.",
+    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and advocate outreach. Flat $49 only if you choose a home we present to you.",
 };
 
 const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
@@ -56,7 +56,7 @@ const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
   },
   {
     n: 6,
-    title: "Flat $249, via Stripe — only if you pick a home we presented.",
+    title: "Flat $49, via Stripe — only if you pick a home we presented.",
     body:
       "If the home won't honor its quote within 14 days, we refund you. If you don't pick any of them, you owe us nothing.",
   },
@@ -107,9 +107,9 @@ export default function HowItWorksPage() {
 
           <Card tone="primary">
             <CardEyebrow>The money part</CardEyebrow>
-            <CardTitle>Flat $249 &mdash; only on success.</CardTitle>
+            <CardTitle>Flat $49 &mdash; only on success.</CardTitle>
             <p className="text-ink-soft mb-4">
-              We charge a flat $249 when you pick a home we presented. That&rsquo;s
+              We charge a flat $49 when you pick a home we presented. That&rsquo;s
               it. No commissions from funeral homes. No referral fees. If you
               never use advocate outreach, or you choose a home we didn&rsquo;t
               present, you pay nothing.

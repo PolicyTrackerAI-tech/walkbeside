@@ -25,7 +25,8 @@ function NegotiateStartForm() {
   const [targetEstimate, setTargetEstimate] = useState(sp.get("q") ?? "");
   const [senderFirstName, setSenderFirstName] = useState("");
   const [senderLastName, setSenderLastName] = useState("");
-  const [timing, setTiming] = useState("within the next week");
+  const [timing, setTiming] = useState("");
+  const [notes, setNotes] = useState("");
   const [extras, setExtras] = useState("");
   const [showOptional, setShowOptional] = useState(
     Boolean(sp.get("home") || sp.get("q")),
@@ -55,6 +56,7 @@ function NegotiateStartForm() {
           senderFirstName,
           senderLastName: senderLastName || undefined,
           timing,
+          notes: notes || undefined,
           extras: extras || undefined,
           authorizationAccepted: authorized,
         }),
@@ -67,7 +69,7 @@ function NegotiateStartForm() {
       }
       const data = await r.json();
       if (!r.ok) throw new Error(JSON.stringify(data.error));
-      router.push(`/negotiate/${data.id}/status`);
+      router.push(`/dashboard?started=${data.id}`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not start.");
     } finally {
@@ -122,7 +124,7 @@ function NegotiateStartForm() {
                 pick a home, and contact them directly.
               </li>
               <li>
-                Flat $249 only if you choose a home we presented to you.
+                Flat $49 only if you choose a home we presented to you.
                 Free otherwise.
               </li>
             </ol>
@@ -228,10 +230,37 @@ function NegotiateStartForm() {
                   >
                     When does this need to happen?
                   </Label>
-                  <Input
+                  <Select
                     id="timing"
                     value={timing}
                     onChange={(e) => setTiming(e.target.value)}
+                    required
+                  >
+                    <option value="" disabled>
+                      When do you need this?
+                    </option>
+                    <option value="today">Today / within 24 hours</option>
+                    <option value="this-week">This week (1–7 days)</option>
+                    <option value="this-month">This month (within 30 days)</option>
+                    <option value="planning-ahead">
+                      I&rsquo;m planning ahead (more than 30 days out)
+                    </option>
+                    <option value="not-sure">Not sure yet</option>
+                  </Select>
+                </div>
+                <div className="sm:col-span-2">
+                  <Label
+                    htmlFor="notes"
+                    hint="Optional. Anything that would help Sarah personalize the outreach."
+                  >
+                    Anything else we should know?
+                  </Label>
+                  <Textarea
+                    id="notes"
+                    rows={3}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Religious tradition, language preference, special accommodation, etc."
                   />
                 </div>
               </div>

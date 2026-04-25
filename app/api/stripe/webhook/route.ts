@@ -32,17 +32,26 @@ export async function POST(req: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const negotiationId = session.metadata?.negotiationId;
+    const kind = session.metadata?.kind;
     if (negotiationId) {
       const admin = createClient(
         PUBLIC.supabaseUrl,
         requireServer("SUPABASE_SERVICE_ROLE_KEY"),
       );
+      // 'unlock' = pure $49 to reveal homes (V2 flow). Sets unlocked_at, leaves status alone.
+      // anything else = legacy per-home checkout that closes the deal.
+      const update: Record<string, unknown> = {
+        stripe_payment_intent_id: session.payment_intent as string,
+      };
+      if (kind === "unlock") {
+        update.unlocked_at = new Date().toISOString();
+      } else {
+        update.status = "closed";
+        update.unlocked_at = new Date().toISOString();
+      }
       await admin
         .from("negotiations")
-        .update({
-          status: "closed",
-          stripe_payment_intent_id: session.payment_intent as string,
-        })
+        .update(update)
         .eq("id", negotiationId);
     }
   }

@@ -23,6 +23,8 @@ export interface OutreachContext {
   timing: string;
   /** Anything else: pre-existing arrangement, relationship to deceased, etc. */
   extras?: string;
+  /** Free-text notes from the family (religious tradition, language, accommodations). */
+  notes?: string;
   /** Name of the Honest Funeral advocate signing the email. */
   advocateName?: string;
   /** Short authorization reference ID the family signed. */
@@ -61,6 +63,7 @@ export function initialEmailUser(home: string, ctx: OutreachContext): string {
     ctx.authorizationId ? `Authorization reference: ${ctx.authorizationId}` : "",
     ctx.advocateName ? `Advocate signing the email: ${ctx.advocateName}` : "Advocate signing the email: the Honest Funeral team",
     ctx.extras ? `Other context: ${ctx.extras}` : "",
+    ctx.notes ? `Family notes: ${ctx.notes}` : "",
     "",
     "Write the email body only — no subject line. Start with 'Hello,' and end with a Honest Funeral advocate signature block.",
   ]

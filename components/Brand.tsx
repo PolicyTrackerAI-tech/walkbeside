@@ -101,7 +101,7 @@ export function Footer() {
       <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
           Built by a licensed funeral director and her brother. Free to use.
-          Flat $249 only if you choose a home we present to you through
+          Flat $49 only if you choose a home we present to you through
           advocate outreach.
         </p>
         <p className="text-xs">

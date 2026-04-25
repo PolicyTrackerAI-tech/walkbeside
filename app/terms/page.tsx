@@ -9,7 +9,7 @@ import { BackLink } from "@/components/ui/BackLink";
 export const metadata = {
   title: "Terms",
   description:
-    "The terms for using Honest Funeral. Free tools are free. The flat $249 advocate fee only applies if you choose a funeral home we present.",
+    "The terms for using Honest Funeral. Free tools are free. The flat $49 advocate fee only applies if you choose a funeral home we present.",
 };
 
 export default function TermsPage() {
@@ -68,7 +68,7 @@ export default function TermsPage() {
             whether they honor any quote they provide.
           </p>
           <p>
-            The advocate fee is a flat $249, charged via Stripe only when you
+            The advocate fee is a flat $49, charged via Stripe only when you
             affirmatively select a funeral home that Honest Funeral presented to
             you as part of this outreach. If you do not select a presented
             home, you are not charged. If the selected home refuses to

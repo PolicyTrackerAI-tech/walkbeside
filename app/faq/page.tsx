@@ -16,14 +16,14 @@ function slugify(s: string): string {
 export const metadata: Metadata = {
   title: "Questions families ask — Honest Funeral FAQ",
   description:
-    "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and what the $249 fee covers.",
+    "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and what the $49 fee covers.",
 };
 
 export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Three things: a free fair-price lookup that shows what funeral services should cost in your zip code; a free prep kit of questions to ask and upsells to decline; and advocate outreach — we contact funeral homes on your behalf as your named advocate and collect comparison quotes, for a flat $249 only if you pick a home we presented.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Three things: a free fair-price lookup that shows what funeral services should cost in your zip code; a free prep kit of questions to ask and upsells to decline; and advocate outreach — we contact funeral homes on your behalf as your named advocate and collect comparison quotes, for a flat $49 only if you pick a home we presented.",
     a: (
       <>
         <p>
@@ -42,7 +42,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
             have.
           </li>
           <li>
-            <strong>Advocate outreach</strong> ($249 flat, only on success)
+            <strong>Advocate outreach</strong> ($49 flat, only on success)
             &mdash; we contact funeral homes on your behalf, as your named
             advocate, and collect comparison quotes. You make the final call.
           </li>
@@ -58,11 +58,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "We charge a flat $249 when a family chooses a funeral home we presented to them through our advocate outreach feature. That is the only thing we charge for. No commissions from funeral homes. No referral fees for insurance, financing, or other services unless we disclose it on the same screen where the referral appears. If you never use advocate outreach, or you use it but choose a home we didn't present, you pay nothing. Every other tool on this site — fair-price lookup, scenario guidance, prep kit, obituary helper, price list analyzer, post-funeral checklist — is free.",
+      "We charge a flat $49 when a family chooses a funeral home we presented to them through our advocate outreach feature. That is the only thing we charge for. No commissions from funeral homes. No referral fees for insurance, financing, or other services unless we disclose it on the same screen where the referral appears. If you never use advocate outreach, or you use it but choose a home we didn't present, you pay nothing. Every other tool on this site — fair-price lookup, scenario guidance, prep kit, obituary helper, price list analyzer, post-funeral checklist — is free.",
     a: (
       <>
         <p>
-          We charge a flat <strong>$249</strong> when a family chooses a
+          We charge a flat <strong>$49</strong> when a family chooses a
           funeral home we presented to them through our advocate outreach
           feature. That is the only thing we charge for.
         </p>
@@ -127,13 +127,13 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "Does the $249 apply to cremation-only arrangements?",
+    q: "Does the $49 apply to cremation-only arrangements?",
     plain:
-      "Yes — the flat $249 covers advocate outreach regardless of whether the family chooses burial, cremation, direct cremation, or a hybrid service. We charge it once, per family, only when you pick a home we presented. Direct cremation is where families often overpay the most; comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
+      "Yes — the flat $49 covers advocate outreach regardless of whether the family chooses burial, cremation, direct cremation, or a hybrid service. We charge it once, per family, only when you pick a home we presented. Direct cremation is where families often overpay the most; comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
     a: (
       <>
         <p>
-          Yes &mdash; the flat $249 covers advocate outreach regardless of
+          Yes &mdash; the flat $49 covers advocate outreach regardless of
           whether the family chooses burial, cremation, direct cremation, or
           a hybrid service. We charge it once, per family, only when you pick
           a home we presented.
@@ -307,12 +307,12 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What do I do if the funeral home won\u2019t honor their quote?",
     plain:
-      "For quotes we collected through advocate outreach: tell us within 14 days of service and we'll refund your $249. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
+      "For quotes we collected through advocate outreach: tell us within 14 days of service and we'll refund your $49. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
     a: (
       <>
         <p>
           For quotes we collected through advocate outreach: tell us within
-          14 days of service and we&rsquo;ll refund your $249. We also
+          14 days of service and we&rsquo;ll refund your $49. We also
           escalate with the home &mdash; a written, itemized GPL quote is
           what the Funeral Rule requires homes to provide, and homes that
           fail to honor a written quote can be reported to the FTC and to
