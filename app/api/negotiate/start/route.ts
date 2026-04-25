@@ -7,7 +7,8 @@ import {
   initialEmailSystem,
   initialEmailUser,
 } from "@/lib/negotiation/prompts";
-import { findHomesFromDirectory, homesForRadius } from "@/lib/negotiation/sample-homes";
+import { homesForRadius } from "@/lib/negotiation/sample-homes";
+import { findHomesFromDirectory } from "@/lib/negotiation/directory";
 import type { ServiceType } from "@/lib/pricing-data";
 
 const Body = z.object({
