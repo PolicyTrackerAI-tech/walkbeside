@@ -23,7 +23,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Three things: a free fair-price lookup that shows what funeral services should cost in your zip code; a $19 prep kit of questions to ask and upsells to decline; and advocate outreach — we contact funeral homes on your behalf as your named advocate and collect comparison quotes, for a flat $249 only if you pick a home we presented.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Three things: a free fair-price lookup that shows what funeral services should cost in your zip code; a free prep kit of questions to ask and upsells to decline; and advocate outreach — we contact funeral homes on your behalf as your named advocate and collect comparison quotes, for a flat $249 only if you pick a home we presented.",
     a: (
       <>
         <p>
@@ -37,7 +37,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
             rate any home&rsquo;s quote against local data.
           </li>
           <li>
-            <strong>Prep kit</strong> ($19) &mdash; the questions to ask, the
+            <strong>Prep kit</strong> (free) &mdash; the questions to ask, the
             upsells to decline, and the rights families don&rsquo;t know they
             have.
           </li>
@@ -58,28 +58,30 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "We charge a flat $249 when a family chooses a funeral home we presented to them. That's it. No commissions from funeral homes. No referral fees for insurance or financing unless we disclose it on the same screen where the referral appears. If you never use advocate outreach, or you choose a home we didn't present, you pay nothing. The $19 prep kit is the only other thing we sell.",
+      "We charge a flat $249 when a family chooses a funeral home we presented to them through our advocate outreach feature. That is the only thing we charge for. No commissions from funeral homes. No referral fees for insurance, financing, or other services unless we disclose it on the same screen where the referral appears. If you never use advocate outreach, or you use it but choose a home we didn't present, you pay nothing. Every other tool on this site — fair-price lookup, scenario guidance, prep kit, obituary helper, price list analyzer, post-funeral checklist — is free.",
     a: (
       <>
         <p>
           We charge a flat <strong>$249</strong> when a family chooses a
-          funeral home we presented to them. That&rsquo;s it.
+          funeral home we presented to them through our advocate outreach
+          feature. That is the only thing we charge for.
         </p>
         <ul>
           <li>No commissions from funeral homes.</li>
           <li>
-            No referral fees for insurance or financing unless we disclose it
-            on the same screen where the referral appears.
+            No referral fees for insurance, financing, or other services
+            unless we disclose it on the same screen where the referral
+            appears.
           </li>
           <li>
-            If you never use advocate outreach, or you choose a home we
-            didn&rsquo;t present, you pay nothing.
+            If you never use advocate outreach, or you use it but choose a
+            home we didn&rsquo;t present, you pay nothing.
           </li>
         </ul>
         <p>
-          The $19 prep kit is the only other thing we sell. Everything else
-          &mdash; fair-price lookup, 72-hour guidance, obituary helper
-          &mdash; is free.
+          Every other tool on this site &mdash; fair-price lookup, scenario
+          guidance, prep kit, obituary helper, price list analyzer,
+          post-funeral checklist &mdash; is free.
         </p>
       </>
     ),
@@ -305,14 +307,16 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What do I do if the funeral home won\u2019t honor their quote?",
     plain:
-      "For quotes we collected through advocate outreach: tell us within 14 days of service and we'll refund your $249. We also escalate with the home — a written GPL quote is a binding representation under the FTC Funeral Rule. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
+      "For quotes we collected through advocate outreach: tell us within 14 days of service and we'll refund your $249. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
     a: (
       <>
         <p>
           For quotes we collected through advocate outreach: tell us within
           14 days of service and we&rsquo;ll refund your $249. We also
-          escalate with the home &mdash; a written GPL quote is a binding
-          representation under the FTC Funeral Rule.
+          escalate with the home &mdash; a written, itemized GPL quote is
+          what the Funeral Rule requires homes to provide, and homes that
+          fail to honor a written quote can be reported to the FTC and to
+          your state attorney general.
         </p>
         <p>
           For quotes you collected on your own: keep every written

@@ -74,6 +74,29 @@ export function CrisisUnexpected() {
               <div className="flex items-baseline gap-3 mb-2">
                 <span className="text-ink-muted text-sm font-semibold">2.</span>
                 <h3 className="font-serif text-xl text-ink">
+                  While you wait for them to arrive.
+                </h3>
+              </div>
+              <ul className="text-ink-soft list-disc pl-5 space-y-2">
+                <li>
+                  Don&rsquo;t move the body. Until pronouncement, this is a
+                  death scene &mdash; not because anything is wrong, but
+                  because that&rsquo;s the procedure.
+                </li>
+                <li>
+                  Unlock the door if you can, so EMS doesn&rsquo;t have to
+                  break it.
+                </li>
+                <li>
+                  You don&rsquo;t have to stay in the room. Step outside, sit
+                  on the porch, call someone. None of it changes anything.
+                </li>
+              </ul>
+            </li>
+            <li className="rounded-2xl border border-border bg-surface p-6">
+              <div className="flex items-baseline gap-3 mb-2">
+                <span className="text-ink-muted text-sm font-semibold">3.</span>
+                <h3 className="font-serif text-xl text-ink">
                   You are not in trouble.
                 </h3>
               </div>
@@ -86,7 +109,7 @@ export function CrisisUnexpected() {
             </li>
             <li className="rounded-2xl border border-border bg-surface p-6">
               <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-ink-muted text-sm font-semibold">3.</span>
+                <span className="text-ink-muted text-sm font-semibold">4.</span>
                 <h3 className="font-serif text-xl text-ink">
                   There is nothing you have to do on the internet right now.
                 </h3>

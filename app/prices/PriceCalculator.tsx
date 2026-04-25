@@ -309,7 +309,7 @@ export function PriceCalculator() {
           </Card>
 
           <Card tone="soft">
-            <CardEyebrow>Arrangement Kit &middot; $19 one-time</CardEyebrow>
+            <CardEyebrow>Arrangement Kit &middot; Free</CardEyebrow>
             <CardTitle>
               The printable cheat sheet, decline scripts, and GPL analyzer.
             </CardTitle>
@@ -327,11 +327,10 @@ export function PriceCalculator() {
               <li>What&rsquo;s still negotiable even after signing</li>
             </ul>
             <LinkButton href="/prep" variant="primary">
-              Unlock the Arrangement Kit
+              Open the Arrangement Kit
             </LinkButton>
             <p className="text-xs text-ink-muted mt-3">
-              One-time $19. No subscription. Included free if you use our
-              advocate outreach.
+              Free. No account, no email required.
             </p>
           </Card>
 

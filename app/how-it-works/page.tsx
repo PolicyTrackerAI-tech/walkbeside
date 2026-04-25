@@ -17,7 +17,7 @@ const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
     n: 1,
     title: "You authorize us to contact funeral homes on your behalf.",
     body:
-      "We'll email up to five homes in your zip. You approve the list before anything goes out.",
+      "We'll email up to nine homes near you. You approve the list before anything goes out.",
   },
   {
     n: 2,

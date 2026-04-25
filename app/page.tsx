@@ -10,7 +10,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "A consumer advocate for families making funeral decisions under pressure. Built by a licensed funeral director. Free fair-price lookup, $19 prep kit, and flat $249 advocate outreach — only on success.",
+    "A consumer advocate for families making funeral decisions under pressure. Built by a licensed funeral director. Free fair-price lookup, free prep kit, and flat $249 advocate outreach — only on success.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -150,8 +150,8 @@ export default function HomePage() {
             </article>
 
             <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
-              <div className="text-xs uppercase tracking-wider text-ink-muted font-semibold mb-2">
-                $19 &middot; one-time
+              <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
+                Free
               </div>
               <h3 className="font-serif text-xl text-ink mb-2">Prep kit</h3>
               <p className="text-sm text-ink-soft mb-5 flex-1">

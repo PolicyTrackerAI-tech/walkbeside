@@ -6,7 +6,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 export const metadata: Metadata = {
   title: "Death certificates — how many to order and what they cost",
   description:
-    "Most families need eight to twelve certified copies. Order through the funeral home in the first week — ordering later is slower and costs more per copy. Here's the full breakdown.",
+    "Most families need 5–10 certified copies to start. Order through the funeral home at the time of death — it's faster and most homes pass through the state's base fee. Here's the full breakdown.",
 };
 
 export default function DeathCertificatesPage() {
@@ -34,13 +34,14 @@ export default function DeathCertificatesPage() {
 
           <Card tone="primary">
             <CardEyebrow>The short answer</CardEyebrow>
-            <CardTitle>Order eight to twelve certified copies.</CardTitle>
+            <CardTitle>Order 5–10 certified copies to start.</CardTitle>
             <p className="text-ink-soft">
               If the deceased owned a home, had retirement accounts, or
-              held multiple insurance policies, aim for twelve. For a
-              simpler estate, eight is usually enough. Extras are
-              inexpensive when ordered with the funeral home; painful to
-              order one at a time later.
+              held multiple insurance policies, lean toward 10. For a
+              simpler estate, 5 is usually enough to start. Extras are
+              inexpensive when ordered with the funeral home; you can
+              always order more from your state vital records office later
+              if needed.
             </p>
           </Card>
 

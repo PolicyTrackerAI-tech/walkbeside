@@ -59,7 +59,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 1200,
     required: "no",
     notes:
-      "NOT legally required in most US states. Only needed for an open-casket viewing with a delay between death and service. Decline unless you have a specific reason.",
+      "Not legally required in any US state. About 15 states require embalming OR refrigeration after 24–48 hours — refrigeration is always a legal alternative. Decline unless you have a specific reason and the funeral home has confirmed in writing why it is needed.",
     categories: ["traditional-burial"],
     highMarkup: true,
   },
@@ -110,7 +110,7 @@ export const LINE_ITEMS: LineItem[] = [
     fairHigh: 400,
     predatoryAt: 700,
     required: "burial",
-    notes: "Required for burial. Not required for cremation.",
+    notes: "The funeral home's hearse is the default for transport to the cemetery, but you can ask about lower-cost transport options. Not required for cremation.",
     categories: ["traditional-burial", "graveside-burial"],
   },
   {
@@ -146,7 +146,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 50,
     required: "yes",
     notes:
-      "Order 10–15 copies. Funeral home may mark up — you can order direct from your state vital records office for the base fee.",
+      "Most families need 5–10 copies to start. Order through the funeral home at the time of death — it's faster, and most homes pass through the state's base fee. Ask whether they're charging a markup. You can order more later directly from your state vital records office.",
     categories: [
       "direct-cremation",
       "cremation-with-service",
@@ -186,7 +186,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 1500,
     required: "cremation",
     notes:
-      "Must be combustible — but cardboard or unfinished plywood qualifies. You do NOT need an expensive casket for cremation.",
+      "Must be combustible — cardboard or unfinished plywood qualifies. The funeral home is legally required under the FTC Funeral Rule to make a low-cost alternative container available and to tell you it exists. If they don't show you one, that's a violation. You never need an expensive casket for cremation.",
     categories: ["direct-cremation", "cremation-with-service"],
   },
   {

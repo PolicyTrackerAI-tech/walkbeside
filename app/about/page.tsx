@@ -46,19 +46,15 @@ export default function AboutPage() {
             </div>
             <CardTitle>Sarah &mdash; licensed funeral director</CardTitle>
             <p className="text-ink-soft mb-3">
-              {/* TODO: replace with Sarah's short bio */}
-              Licensed funeral director with years of hands-on experience in
-              arrangement meetings. Sarah writes every piece of content on this
-              site, validates every price in the database against what she
-              actually sees on General Price Lists, and tests every feature
-              against the question she asks before anything ships:{" "}
+              Sarah is a licensed funeral director in {"{{TODO_SARAH_STATE}}"}{" "}
+              with {"{{TODO_SARAH_YEARS}}"} years of arrangement-meeting
+              experience. She writes every piece of content on this site,
+              validates every price in the database against the General Price
+              Lists she sees in the field, and tests every feature against one
+              question before anything ships:{" "}
               <em>
                 would this have helped the last family I sat across from?
               </em>
-            </p>
-            <p className="text-sm text-ink-muted">
-              Sarah&rsquo;s full bio, state of licensure, and firm history will
-              appear here as the business grows.
             </p>
           </Card>
 

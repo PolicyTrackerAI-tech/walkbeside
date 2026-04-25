@@ -222,7 +222,7 @@ export default function EstateBasicsPage() {
                 &mdash; you&rsquo;ll need them to inventory assets.
               </li>
               <li>
-                Collect at least eight certified death certificates (see{" "}
+                Collect at least 5 certified death certificates to start (see{" "}
                 <Link
                   href="/after/death-certificates"
                   className="underline-offset-2 hover:underline text-primary-deep"

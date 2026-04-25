@@ -24,8 +24,8 @@ interface Right {
 const RIGHTS: Right[] = [
   {
     title: "Embalming, in most states",
-    law: "FTC Funeral Rule · 16 CFR 453",
-    body: "Embalming is not legally required for a direct cremation, a burial within 24–48 hours, a graveside service, or a closed-casket viewing. It is only typically required for an open-casket service with a multi-day delay, and even that depends on your state.",
+    law: "FTC Funeral Rule · 16 CFR 453.3 and 453.5",
+    body: "No US state requires embalming for every death. About 15 states require either embalming or refrigeration after 24–48 hours, and a few require embalming for cross-state transport or for certain communicable diseases. Refrigeration is a legal alternative in every state. If a funeral home tells you state law requires embalming, that is almost always false — and itself an FTC Funeral Rule violation.",
     tellThem: "We’re not having embalming. We understand it isn’t legally required for the service we’re planning.",
   },
   {
@@ -42,7 +42,7 @@ const RIGHTS: Right[] = [
   {
     title: "A ‘protective’ casket seal",
     law: "Consumer protection — no legal basis for protection claims",
-    body: "A sealed or ‘protective’ casket does not meaningfully preserve remains or extend anything. The FTC has warned funeral providers about making protection claims. You are paying purely for the name.",
+    body: "A sealed or ‘protective’ casket does not preserve remains or extend anything beyond what a standard casket does. The FTC Funeral Rule prohibits funeral homes from making preservation or protection claims about caskets that the casket cannot deliver. You’re paying for the name, not for any actual added preservation.",
     tellThem: "We’re not interested in the protective seal. A standard casket is fine.",
   },
   {
@@ -139,6 +139,35 @@ export default function RightsPage() {
               </li>
             ))}
           </ol>
+
+          <Card>
+            <CardTitle>One thing the FTC Funeral Rule does not cover</CardTitle>
+            <p className="text-ink-soft leading-relaxed">
+              The Funeral Rule applies to funeral homes. It does not apply to
+              cemeteries, crematories, or third-party sellers. Many of the
+              upsells families face at burial &mdash; vaults, opening and
+              closing, headstones, plot fees &mdash; come from the cemetery,
+              not the funeral home. Those are governed by state law and the
+              cemetery&rsquo;s own contract. Ask the cemetery for its written
+              rules in writing before you sign anything.
+            </p>
+          </Card>
+
+          <Card tone="warn">
+            <CardTitle>What to do if a funeral home refuses to honor any of these rights</CardTitle>
+            <p className="text-ink-soft leading-relaxed">
+              File a complaint at{" "}
+              <a
+                href="https://reportfraud.ftc.gov"
+                className="text-primary-deep underline-offset-2 hover:underline"
+              >
+                reportfraud.ftc.gov
+              </a>
+              , and with your state attorney general or state funeral board.
+              Funeral homes face real penalties for Funeral Rule violations
+              &mdash; but only if families report them.
+            </p>
+          </Card>
 
           <Card tone="soft">
             <CardTitle>Bring this into the meeting, not just into your head.</CardTitle>

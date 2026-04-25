@@ -22,7 +22,7 @@ const TOPICS: {
     eyebrow: "Week 1",
     title: "Death certificates — how many, where from, what they cost",
     body:
-      "You'll need more of these than you think. Order them through the funeral home; ordering later is slower and costs more per copy. Most families need eight to twelve certified copies.",
+      "Order them through the funeral home at the time of death — it's faster than ordering later, and most homes pass through the state's base fee. Most families need 5–10 to start. You can always order more from your state vital records office later if needed.",
     when: "Order within the first week.",
   },
   {

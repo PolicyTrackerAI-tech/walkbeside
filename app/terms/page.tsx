@@ -1,6 +1,11 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 
+// TODO: Ryan to discuss with counsel — clause 8 (binding arbitration with class
+// waiver) is in tension with the consumer-protection brand positioning.
+// Consider carving out small claims court (claims under $10,000) at minimum.
+// Do not change without legal sign-off.
+
 export const metadata = {
   title: "Terms",
   description:

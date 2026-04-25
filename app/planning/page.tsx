@@ -93,6 +93,13 @@ export default function PlanningPage() {
                 If the funeral home closes, is acquired, or changes
                 ownership, honoring the original plan can get complicated.
               </li>
+              <li>
+                In some states, a portion of prepaid funds is not protected
+                by trust or insurance. If the funeral home closes or is
+                acquired before the death, recovery may be partial or zero.
+                The Funeral Consumer Alliance maintains state-by-state
+                guidance on prepaid plan protections.
+              </li>
             </ul>
             <p className="text-ink-soft mb-3">
               For most families, a will, a recorded conversation about

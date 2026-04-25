@@ -164,7 +164,7 @@ export const FIVE_QUESTIONS: { q: string; why: string }[] = [
   },
   {
     q: "Is embalming required for the type of service I want?",
-    why: "Embalming is NOT legally required in most states. If they say it is, ask them to point to the law. They cannot.",
+    why: "Embalming is not legally required in any state. Some states require embalming OR refrigeration after a time window. If a home says state law requires embalming with no alternative, ask them to point to the specific statute — they cannot, because no such statute exists.",
   },
   {
     q: "What is the total all-in cost in writing, with every fee included?",
