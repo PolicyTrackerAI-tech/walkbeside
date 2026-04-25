@@ -127,10 +127,21 @@ export default function NegotiationStatusPage({
               ))}
               {outreach.length === 0 && (
                 <p className="text-ink-muted text-sm">
-                  No outreach sent yet — refresh in a moment.
+                  We&rsquo;re contacting funeral homes now. First responses
+                  usually arrive within 4&ndash;24 hours. This page refreshes
+                  automatically every few seconds.
                 </p>
               )}
             </ul>
+            {outreach.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-3 text-xs text-ink-muted">
+                <LegendDot label="Sent" className="bg-ink-muted" />
+                <LegendDot label="Read" className="bg-primary" />
+                <LegendDot label="Replied" className="bg-primary-deep" />
+                <LegendDot label="Quoted" className="bg-good" />
+                <LegendDot label="Declined" className="bg-bad" />
+              </div>
+            )}
           </div>
 
           {someReplied && (
@@ -148,6 +159,15 @@ export default function NegotiationStatusPage({
         </div>
       </section>
     </main>
+  );
+}
+
+function LegendDot({ label, className }: { label: string; className: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span className={`inline-block w-2.5 h-2.5 rounded-full ${className}`} />
+      {label}
+    </span>
   );
 }
 

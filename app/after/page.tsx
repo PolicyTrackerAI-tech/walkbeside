@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
+import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "After the funeral — what happens in the next 30 days",
@@ -98,6 +99,27 @@ export default function AfterIndexPage() {
               and institutions on the other end of these calls deal with
               this every day. They are not in a hurry.
             </p>
+          </Card>
+
+          <Card tone="soft">
+            <CardTitle>Tools you might still need</CardTitle>
+            <p className="text-ink-soft mb-4 text-sm">
+              Free tools that pair well with the checklists above.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <LinkButton href="/prep" variant="secondary">
+                Arrangement prep kit
+              </LinkButton>
+              <LinkButton href="/analyzer" variant="secondary">
+                Price list analyzer
+              </LinkButton>
+              <LinkButton href="/certificates" variant="secondary">
+                Certificate calculator
+              </LinkButton>
+              <LinkButton href="/obituary" variant="secondary">
+                Obituary helper
+              </LinkButton>
+            </div>
           </Card>
 
           <p className="text-xs text-ink-muted">

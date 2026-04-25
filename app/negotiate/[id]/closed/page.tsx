@@ -43,7 +43,7 @@ export default async function NegotiationClosedPage({
             {neg.fee_cents ? fmtCents(neg.fee_cents) : "$0"}.
           </p>
 
-          {sp.dryrun && (
+          {process.env.NODE_ENV !== "production" && sp.dryrun && (
             <Card tone="warn">
               <strong>Dev mode:</strong> Stripe isn&rsquo;t configured, so this
               completed without a real payment.

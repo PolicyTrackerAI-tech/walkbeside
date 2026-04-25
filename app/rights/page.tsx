@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
@@ -77,7 +78,7 @@ const RIGHTS: Right[] = [
 export default function RightsPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backHref="/where" backLabel="← Back" />
+      <SiteHeader rightSlot={<BackLink defaultHref="/where" />} />
 
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-8">
@@ -110,33 +111,30 @@ export default function RightsPage() {
             </p>
           </Card>
 
-          <ol className="space-y-4">
+          <ol
+            className="space-y-4 list-none [counter-reset:right]"
+          >
             {RIGHTS.map((r, i) => (
               <li
                 key={i}
-                className="rounded-2xl border border-border bg-surface p-6"
+                className="rounded-2xl border border-border bg-surface p-6 [counter-increment:right] flex items-start gap-4 before:flex before:items-center before:justify-center before:w-8 before:h-8 before:rounded-full before:bg-primary-deep before:text-white before:font-serif before:text-sm before:shrink-0 before:content-[counter(right)]"
               >
-                <div className="flex items-start gap-4">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-deep text-white font-serif text-sm shrink-0">
-                    {i + 1}
+                <div className="flex-1">
+                  <h2 className="font-serif text-xl text-ink mb-1">
+                    {r.title}
+                  </h2>
+                  <div className="text-xs uppercase tracking-wider text-ink-muted mb-3">
+                    {r.law}
                   </div>
-                  <div className="flex-1">
-                    <h2 className="font-serif text-xl text-ink mb-1">
-                      {r.title}
-                    </h2>
-                    <div className="text-xs uppercase tracking-wider text-ink-muted mb-3">
-                      {r.law}
-                    </div>
-                    <p className="text-ink-soft leading-relaxed">{r.body}</p>
-                    {r.tellThem && (
-                      <div className="mt-4 rounded-xl bg-surface-soft px-4 py-3 border-l-4 border-primary">
-                        <div className="text-xs uppercase tracking-wider text-ink-muted mb-1">
-                          What to say
-                        </div>
-                        <p className="text-ink italic">&ldquo;{r.tellThem}&rdquo;</p>
+                  <p className="text-ink-soft leading-relaxed">{r.body}</p>
+                  {r.tellThem && (
+                    <div className="mt-4 rounded-xl bg-surface-soft px-4 py-3 border-l-4 border-primary">
+                      <div className="text-xs uppercase tracking-wider text-ink-muted mb-1">
+                        What to say
                       </div>
-                    )}
-                  </div>
+                      <p className="text-ink italic">&ldquo;{r.tellThem}&rdquo;</p>
+                    </div>
+                  )}
                 </div>
               </li>
             ))}

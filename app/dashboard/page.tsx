@@ -134,8 +134,8 @@ export default async function DashboardPage() {
             <Card tone="good">
               <CardTitle>You&rsquo;re through the hardest week.</CardTitle>
               <p className="text-ink-soft">
-                Estate settlement and benefits are coming soon — we&rsquo;ll email
-                you when those open up. Meanwhile, keep this tab handy for the
+                We&rsquo;re building these next. Check back, or follow updates
+                from the homepage. Meanwhile, keep this tab handy for the
                 document vault and prep kit.
               </p>
             </Card>
@@ -196,11 +196,10 @@ function AnonymousDashboard() {
           <div>
             <CardEyebrow>Dashboard</CardEyebrow>
             <h1 className="font-serif text-3xl text-ink">
-              Welcome &mdash; we&rsquo;re here to help.
+              Welcome back.
             </h1>
             <p className="text-ink-soft mt-2">
-              You haven&rsquo;t started a case yet. Where would you like to
-              begin?
+              Sign in to pick up where you left off, or keep going as a guest.
             </p>
           </div>
 

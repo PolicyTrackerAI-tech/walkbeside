@@ -86,7 +86,7 @@ export default function HomePage() {
           </p>
 
           <p className="mt-2 text-xs text-ink-muted">
-            <Link href="/dashboard" className="underline-offset-2 hover:underline">
+            <Link href="/login?next=/dashboard" className="underline-offset-2 hover:underline">
               Already have an account? Sign in
             </Link>
           </p>

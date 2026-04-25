@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Field";
 import { createClient } from "@/lib/supabase/client";
 import { FEATURES } from "@/lib/env";
@@ -83,16 +83,20 @@ function LoginForm() {
               </div>
             )}
 
-            {!supabaseSet && (
-              <div className="mb-5 p-4 rounded-xl bg-warn-soft border border-warn/30 text-sm text-ink">
-                <strong className="block mb-1">Setup required</strong>
-                Add your Supabase URL and anon key to{" "}
-                <code className="text-xs">.env.local</code> to enable accounts.
-                The free tier (price lookup, prep kit, calculators) works
-                without an account.
-              </div>
-            )}
-
+            {!supabaseSet ? (
+              <>
+                <div className="mb-5 p-4 rounded-xl bg-warn-soft border border-warn/30 text-sm text-ink">
+                  <strong className="block mb-1">Setup required</strong>
+                  Add your Supabase URL and anon key to{" "}
+                  <code className="text-xs">.env.local</code> to enable accounts.
+                  The free tier (price lookup, prep kit, calculators) works
+                  without an account.
+                </div>
+                <LinkButton href="/where" className="w-full">
+                  Continue without an account →
+                </LinkButton>
+              </>
+            ) : (
             <form onSubmit={handle} className="space-y-4">
               <div>
                 <Label htmlFor="email">Email</Label>
@@ -106,7 +110,9 @@ function LoginForm() {
                 />
               </div>
               <div>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" hint="At least 8 characters.">
+                  Password
+                </Label>
                 <Input
                   id="password"
                   type="password"
@@ -139,36 +145,41 @@ function LoginForm() {
                     : "Sign in"}
               </Button>
             </form>
+            )}
 
-            <p className="mt-6 text-sm text-ink-muted text-center">
-              {mode === "signup" ? (
-                <>
-                  Already have an account?{" "}
-                  <button
-                    type="button"
-                    onClick={() => setMode("signin")}
-                    className="text-primary-deep underline"
-                  >
-                    Sign in
-                  </button>
-                </>
-              ) : (
-                <>
-                  New here?{" "}
-                  <button
-                    type="button"
-                    onClick={() => setMode("signup")}
-                    className="text-primary-deep underline"
-                  >
-                    Create an account
-                  </button>
-                </>
-              )}
-            </p>
+            {supabaseSet && (
+              <>
+                <p className="mt-6 text-sm text-ink-muted text-center">
+                  {mode === "signup" ? (
+                    <>
+                      Already have an account?{" "}
+                      <button
+                        type="button"
+                        onClick={() => setMode("signin")}
+                        className="text-primary-deep underline"
+                      >
+                        Sign in
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      New here?{" "}
+                      <button
+                        type="button"
+                        onClick={() => setMode("signup")}
+                        className="text-primary-deep underline"
+                      >
+                        Create an account
+                      </button>
+                    </>
+                  )}
+                </p>
 
-            <p className="mt-3 text-xs text-ink-muted text-center">
-              <Link href="/prices">Continue without an account →</Link>
-            </p>
+                <p className="mt-3 text-xs text-ink-muted text-center">
+                  <Link href="/prices">Continue without an account →</Link>
+                </p>
+              </>
+            )}
           </Card>
         </div>
       </section>

@@ -1,4 +1,7 @@
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
+import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
+import { LinkButton } from "@/components/ui/Button";
 import { PriceCalculator } from "./PriceCalculator";
 
 /**
@@ -12,7 +15,7 @@ import { PriceCalculator } from "./PriceCalculator";
 export default function PricesPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backHref="/where" backLabel="← Back" />
+      <SiteHeader rightSlot={<BackLink defaultHref="/where" />} />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-8">
@@ -26,6 +29,18 @@ export default function PricesPage() {
           </div>
 
           <PriceCalculator />
+
+          <Card tone="primary">
+            <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
+            <CardTitle>Want us to call homes for you?</CardTitle>
+            <p className="text-ink-soft mb-4">
+              Flat $249 only if you choose a home we present to you. Free
+              otherwise.
+            </p>
+            <LinkButton href="/negotiate/start">
+              Start advocate outreach
+            </LinkButton>
+          </Card>
 
           <HowFairRangesWork />
         </div>

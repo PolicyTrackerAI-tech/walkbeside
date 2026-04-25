@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LinkButton } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { HashOpenDetails } from "@/components/ui/HashOpenDetails";
+
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[\u2018\u2019\u201C\u201D]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 60);
+}
 
 export const metadata: Metadata = {
   title: "Questions families ask — Honest Funeral FAQ",
@@ -371,6 +381,7 @@ export default function FaqPage() {
   return (
     <main className="flex-1 flex flex-col">
       <JsonLd data={faqSchema} />
+      <HashOpenDetails />
       <SiteHeader />
 
       <section className="flex-1">
@@ -394,7 +405,9 @@ export default function FaqPage() {
             {FAQ.map((item, i) => (
               <details
                 key={i}
-                className="group px-5 py-4 open:bg-surface-soft"
+                id={slugify(item.q)}
+                open={i < 3}
+                className="group px-5 py-4 open:bg-surface-soft scroll-mt-20"
               >
                 <summary className="flex cursor-pointer items-center justify-between gap-4 font-serif text-lg text-ink list-none">
                   <span className="flex-1">{item.q}</span>

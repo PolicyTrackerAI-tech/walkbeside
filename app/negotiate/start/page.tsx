@@ -3,8 +3,9 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
@@ -76,7 +77,7 @@ function NegotiateStartForm() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backHref="/prices" backLabel="← Back to prices" />
+      <SiteHeader rightSlot={<BackLink defaultHref="/prices" defaultLabel="← Back to prices" />} />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           <div>
@@ -90,6 +91,18 @@ function NegotiateStartForm() {
               side.
             </p>
           </div>
+
+          <Card tone="soft">
+            <p className="text-ink-soft mb-4">
+              Save your progress so nothing gets lost.
+            </p>
+            <LinkButton
+              variant="secondary"
+              href="/login?next=/negotiate/start"
+            >
+              Save to an account →
+            </LinkButton>
+          </Card>
 
           <Card tone="primary">
             <CardEyebrow>How this works</CardEyebrow>
@@ -182,6 +195,9 @@ function NegotiateStartForm() {
                     <span>50 mi</span>
                     <span>100 mi</span>
                   </div>
+                  <p className="text-xs text-ink-muted mt-2">
+                    We&rsquo;ll search funeral homes within this distance.
+                  </p>
                 </div>
 
                 <div>
@@ -296,6 +312,33 @@ function NegotiateStartForm() {
                 <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold">
                   Required &middot; Your authorization
                 </div>
+                <ul className="text-sm text-ink space-y-2 list-disc pl-5">
+                  <li>
+                    Honest Funeral may contact funeral homes on your behalf
+                    and request itemized General Price Lists.
+                  </li>
+                  <li>
+                    We identify ourselves as your advocate &mdash; we never
+                    impersonate you.
+                  </li>
+                  <li>
+                    You make the final decision and contact the selected home
+                    yourself.
+                  </li>
+                </ul>
+                <details className="text-sm text-ink-soft">
+                  <summary className="cursor-pointer text-primary-deep hover:underline">
+                    Read the full authorization terms
+                  </summary>
+                  <p className="mt-2 leading-relaxed">
+                    I authorize Honest Funeral to contact funeral homes on my
+                    behalf and request their itemized General Price Lists.
+                    I understand that Honest Funeral will identify itself as my
+                    advocate (not impersonate me), that I make the final
+                    decision on which home to use, and that I will contact
+                    the selected home directly.
+                  </p>
+                </details>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -305,12 +348,7 @@ function NegotiateStartForm() {
                     required
                   />
                   <span className="text-sm text-ink leading-relaxed">
-                    I authorize Honest Funeral to contact funeral homes on my
-                    behalf and request their itemized General Price Lists.
-                    I understand that Honest Funeral will identify itself as my
-                    advocate (not impersonate me), that I make the final
-                    decision on which home to use, and that I will contact
-                    the selected home directly.
+                    I authorize Honest Funeral on the terms above.
                   </span>
                 </label>
               </div>

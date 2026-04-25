@@ -1,6 +1,7 @@
-import Link from "next/link";
+import { SiteHeader } from "@/components/SiteHeader";
 import { CrisisResources } from "@/components/CrisisResources";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { LinkButton } from "@/components/ui/Button";
 
 const schema = {
   "@context": "https://schema.org",
@@ -24,12 +25,15 @@ const schema = {
 /**
  * Unexpected-death-at-home crisis screen. Full commercial suppression:
  * no pricing, no funeral home listings, no comparison, no account prompts.
- * 988 is above the fold. Brand header intentionally omitted on this route.
+ * 988 is above the fold. Minimal brand header so the wordmark click-back
+ * to home is the one escape hatch a crisis user can rely on without a
+ * busy nav distracting them.
  */
 export function CrisisUnexpected() {
   return (
     <main className="flex-1 flex flex-col bg-bg">
       <JsonLd data={schema} />
+      <SiteHeader showBack={false} />
       <section className="flex-1">
         <div className="max-w-xl mx-auto px-5 py-10 space-y-7">
           <div>
@@ -108,24 +112,14 @@ export function CrisisUnexpected() {
               If you want something to do with your hands while you wait, you
               could read about what comes after:
             </p>
-            <ul className="space-y-1 text-ink-soft">
-              <li>
-                <Link
-                  href="/rights"
-                  className="text-primary-deep underline-offset-2 hover:underline"
-                >
-                  &rarr; The rights families have that most never hear about
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/after"
-                  className="text-primary-deep underline-offset-2 hover:underline"
-                >
-                  &rarr; The paperwork that will matter in the next week
-                </Link>
-              </li>
-            </ul>
+            <div className="flex flex-col sm:flex-row gap-3 pt-1">
+              <LinkButton href="/rights" variant="secondary">
+                The rights families have that most never hear about →
+              </LinkButton>
+              <LinkButton href="/after" variant="secondary">
+                The paperwork that will matter in the next week →
+              </LinkButton>
+            </div>
             <p className="text-ink-soft text-sm pt-1">
               None of it is urgent. Come back when you&rsquo;re ready.
             </p>

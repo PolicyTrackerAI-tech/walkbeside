@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
+import { CopyButton } from "@/components/ui/CopyButton";
 
 export const metadata: Metadata = {
   title: "Accounts to close after a death — the full checklist",
@@ -10,11 +11,13 @@ export const metadata: Metadata = {
 };
 
 const PHASES: {
+  id: string;
   title: string;
   when: string;
   items: { name: string; detail: string }[];
 }[] = [
   {
+    id: "first-two-weeks",
     title: "First — within two weeks",
     when: "These are time-sensitive or block other steps.",
     items: [
@@ -41,6 +44,7 @@ const PHASES: {
     ],
   },
   {
+    id: "weeks-2-to-4",
     title: "Second — weeks 2 to 4",
     when: "Do these once certified copies are in hand.",
     items: [
@@ -77,6 +81,7 @@ const PHASES: {
     ],
   },
   {
+    id: "when-you-have-energy",
     title: "Third — when you have the energy",
     when: "Lower stakes. Do them in any order.",
     items: [
@@ -131,9 +136,33 @@ export default function AccountsToClosePage() {
             </p>
           </div>
 
+          <nav
+            aria-label="Phases"
+            className="sticky top-0 z-10 -mx-5 px-5 py-3 bg-bg/95 backdrop-blur border-b border-border"
+          >
+            <ul className="flex gap-2 overflow-x-auto whitespace-nowrap text-sm">
+              {PHASES.map((p) => (
+                <li key={p.id}>
+                  <a
+                    href={`#${p.id}`}
+                    className="inline-block px-3 py-1.5 rounded-full border border-border bg-surface text-ink-soft hover:text-ink hover:border-primary"
+                  >
+                    {p.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           {PHASES.map((phase, pi) => (
-            <Card key={pi} tone={pi === 0 ? "primary" : undefined}>
-              <CardEyebrow>{phase.title}</CardEyebrow>
+            <Card key={phase.id} tone={pi === 0 ? "primary" : undefined}>
+              <h2
+                id={phase.id}
+                className="font-serif text-xl text-ink mb-2 scroll-mt-20"
+              >
+                {phase.title}
+              </h2>
+              <CardEyebrow>Phase {pi + 1}</CardEyebrow>
               <p className="text-ink-soft text-sm mb-5">{phase.when}</p>
               <ul className="space-y-4">
                 {phase.items.map((item, i) => (
@@ -154,7 +183,12 @@ export default function AccountsToClosePage() {
           ))}
 
           <Card tone="soft">
-            <CardTitle>A script for the hard calls.</CardTitle>
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <CardTitle>A script for the hard calls.</CardTitle>
+              <CopyButton
+                text={`I'm calling to report the death of [name]. I'm the [relationship]. The account number is [number] if you have it handy. Please tell me what documents you need to close the account, and confirm the best way to send them to you.`}
+              />
+            </div>
             <p className="text-ink-soft mb-3">
               Most of the people on the other end of these phone calls do
               this every day. They are not emotional about it and they

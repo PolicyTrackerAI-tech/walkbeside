@@ -54,6 +54,10 @@ export default function CertificatesPage() {
                 </div>
               ))}
             </div>
+            <p className="text-xs text-ink-muted mt-4">
+              Most families need 10&ndash;15. We cap at 50 &mdash; call us if
+              you need more.
+            </p>
           </Card>
 
           <Card tone="primary">

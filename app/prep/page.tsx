@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Field";
@@ -27,8 +28,7 @@ export default function PrepPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader
-        backHref="/dashboard"
-        backLabel="Dashboard"
+        rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />}
         className="no-print"
       />
 
@@ -61,8 +61,16 @@ export default function PrepPage() {
                   }
                 />
               </div>
-              <Button onClick={print}>Print cheat sheet</Button>
+              <Button onClick={print} disabled={!zip}>
+                Print cheat sheet
+              </Button>
             </div>
+            {!zip && (
+              <p className="text-xs text-ink-muted mt-3">
+                Enter your zip first so the cheat sheet is calibrated to your
+                area.
+              </p>
+            )}
           </Card>
 
           <Cheatsheet zip={zip} />

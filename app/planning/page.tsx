@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { CheatSheetForm } from "@/components/planning/CheatSheetForm";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Planning a funeral in advance",
@@ -113,6 +114,25 @@ export default function PlanningPage() {
               conversation now routinely saves families thousands later.
             </p>
           </Card>
+
+          <Card tone="soft">
+            <CardTitle>Want to come back to this?</CardTitle>
+            <p className="text-ink-soft mb-4">
+              Save it to an account so you don&rsquo;t lose your place.
+            </p>
+            <LinkButton href="/login?next=/planning" variant="secondary">
+              Save to an account →
+            </LinkButton>
+          </Card>
+
+          <p className="text-sm text-ink-muted">
+            <Link
+              href="/where"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              If something just happened, start here →
+            </Link>
+          </p>
         </div>
       </section>
     </main>

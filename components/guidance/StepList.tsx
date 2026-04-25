@@ -92,7 +92,18 @@ export function StepList({
           </ol>
 
           {showCta && (
-            <div className="mt-8">
+            <div className="mt-8 space-y-4">
+              <Card tone="soft">
+                <p className="text-ink-soft mb-4">
+                  Save your progress so nothing gets lost.
+                </p>
+                <LinkButton
+                  variant="secondary"
+                  href="/login?next=/dashboard"
+                >
+                  Save to an account →
+                </LinkButton>
+              </Card>
               {showPriceCompareGate ? (
                 <Card tone="primary">
                   <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">

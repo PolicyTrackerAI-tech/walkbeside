@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 
 export const metadata = {
   title: "Terms",
@@ -9,7 +10,7 @@ export const metadata = {
 export default function TermsPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backLabel="Home" />
+      <SiteHeader rightSlot={<BackLink defaultHref="/" defaultLabel="← Home" />} />
 
       <section className="flex-1">
         <article className="max-w-2xl mx-auto px-5 py-10 space-y-6 text-ink-soft">

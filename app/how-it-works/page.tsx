@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import * as React from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
     "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and advocate outreach. Flat $249 only if you choose a home we present to you.",
 };
 
-const STEPS: { n: number; title: string; body: string }[] = [
+const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
   {
     n: 1,
     title: "You authorize us to contact funeral homes on your behalf.",
@@ -31,8 +34,19 @@ const STEPS: { n: number; title: string; body: string }[] = [
   {
     n: 4,
     title: "We summarize the responses for you — real prices, line by line.",
-    body:
-      "In your dashboard. Side-by-side comparison, with the outliers flagged. You read it when you have a quiet minute.",
+    body: (
+      <>
+        In your{" "}
+        <Link
+          href="/login?next=/dashboard"
+          className="text-primary-deep underline-offset-2 hover:underline"
+        >
+          account dashboard
+        </Link>{" "}
+        (free to create &mdash; no credit card). Side-by-side comparison, with
+        the outliers flagged. You read it when you have a quiet minute.
+      </>
+    ),
   },
   {
     n: 5,
@@ -51,7 +65,7 @@ const STEPS: { n: number; title: string; body: string }[] = [
 export default function HowItWorksPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader />
+      <SiteHeader rightSlot={<BackLink defaultHref="/" />} />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-8">

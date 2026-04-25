@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
 import { OBITUARY_PROMPTS } from "@/lib/content";
+
+const OBIT_STORAGE_KEY = "honestfuneral.obituary.draft.v1";
 
 /** Screen 12 — Obituary helper. Question by question. */
 export default function ObituaryPage() {
@@ -14,6 +17,39 @@ export default function ObituaryPage() {
   const [busy, setBusy] = useState(false);
   const [draft, setDraft] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [savedAt, setSavedAt] = useState<number | null>(null);
+  const hydratedRef = useRef(false);
+
+  // Hydrate persisted answers on mount.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(OBIT_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (parsed && typeof parsed === "object") setAnswers(parsed);
+      }
+    } catch (e) {
+      console.error("Could not hydrate obituary draft from storage:", e);
+    } finally {
+      hydratedRef.current = true;
+    }
+  }, []);
+
+  // Debounced persistence on answers change.
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+    const t = setTimeout(() => {
+      try {
+        localStorage.setItem(OBIT_STORAGE_KEY, JSON.stringify(answers));
+        setSavedAt(Date.now());
+      } catch (e) {
+        // Storage quota or private mode — silent failure is OK.
+        console.error("Could not persist obituary draft:", e);
+      }
+    }, 500);
+    return () => clearTimeout(t);
+  }, [answers]);
 
   const at = step;
   const total = OBITUARY_PROMPTS.length;
@@ -36,7 +72,16 @@ export default function ObituaryPage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ inputs: answers }),
       });
-      if (!r.ok) throw new Error("Could not draft.");
+      if (!r.ok) {
+        let msg =
+          "Drafting failed. This is usually a temporary issue with our AI provider. Wait 30 seconds and try again.";
+        try {
+          const e = await r.json();
+          if (e?.error?.message) msg = e.error.message;
+          else if (typeof e?.error === "string") msg = e.error;
+        } catch {}
+        throw new Error(msg);
+      }
       const d = await r.json();
       setDraft(d.draft);
     } catch (e: unknown) {
@@ -48,7 +93,7 @@ export default function ObituaryPage() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backHref="/dashboard" backLabel="Dashboard" />
+      <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           {!draft && (
@@ -142,6 +187,12 @@ export default function ObituaryPage() {
                   </div>
                 )}
               </Card>
+
+              {savedAt && (
+                <p className="text-xs text-ink-muted">
+                  Saved
+                </p>
+              )}
             </>
           )}
 

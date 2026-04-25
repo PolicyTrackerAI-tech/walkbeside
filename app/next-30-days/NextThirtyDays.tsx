@@ -143,6 +143,7 @@ const STORAGE_KEY = "honestfuneral.next30.v1";
 export function NextThirtyDays() {
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [hydrated, setHydrated] = useState(false);
+  const [saveError, setSaveError] = useState(false);
 
   useEffect(() => {
     try {
@@ -156,7 +157,10 @@ export function NextThirtyDays() {
     if (!hydrated) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(done));
-    } catch {}
+    } catch {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSaveError(true);
+    }
   }, [done, hydrated]);
 
   const total = useMemo(
@@ -184,13 +188,28 @@ export function NextThirtyDays() {
             </h1>
             <p className="text-lg text-ink-soft">
               Three phases. Don&rsquo;t try to finish the whole list in one
-              sitting. Check things off as you go &mdash; progress saves on this
-              device.
+              sitting.
             </p>
             {hydrated && (
-              <p className="mt-4 text-sm text-ink-muted">
-                {completed} of {total} done.
-              </p>
+              <div className="mt-4 space-y-3">
+                <p className="text-sm text-ink-muted">
+                  {completed} of {total} done.
+                </p>
+                <Card tone="soft" className="!p-4">
+                  <p className="text-sm text-ink-soft">
+                    Check things off as you go &mdash; progress saves on this
+                    device.
+                  </p>
+                </Card>
+                {saveError && (
+                  <Card tone="warn" className="!p-4">
+                    <p className="text-sm text-ink">
+                      Your browser blocked saving progress to this device. We
+                      won&rsquo;t remember it next session.
+                    </p>
+                  </Card>
+                )}
+              </div>
             )}
           </div>
 

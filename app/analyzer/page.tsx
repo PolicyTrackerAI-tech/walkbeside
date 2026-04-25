@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
@@ -48,7 +49,12 @@ export default function AnalyzerPage() {
       });
       if (!r.ok) {
         const e = await r.json();
-        throw new Error(JSON.stringify(e.error ?? "error"));
+        const msg =
+          e?.error?.message ??
+          e?.message ??
+          (typeof e?.error === "string" ? e.error : null) ??
+          "Something went wrong analyzing this list. Try again, or paste the items as plain text.";
+        throw new Error(msg);
       }
       setResult(await r.json());
     } catch (e: unknown) {
@@ -60,7 +66,7 @@ export default function AnalyzerPage() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backHref="/dashboard" backLabel="Dashboard" />
+      <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
           <div>
@@ -114,10 +120,10 @@ export default function AnalyzerPage() {
               <Button onClick={analyze} disabled={busy || text.length < 20}>
                 {busy ? "Analyzing…" : "Analyze price list"}
               </Button>
-              <p className="text-xs text-ink-muted">
+              <div className="rounded-xl bg-surface-soft border border-border px-4 py-3 text-sm text-ink-soft">
                 Photo upload &amp; OCR is the next iteration. For now, type or
-                paste — it works just as well.
-              </p>
+                paste &mdash; it works just as well.
+              </div>
             </div>
           </Card>
 
@@ -147,39 +153,41 @@ export default function AnalyzerPage() {
                 )}
               </Card>
 
-              <div className="rounded-2xl border border-border bg-surface overflow-hidden">
-                <div className="grid grid-cols-12 px-5 py-3 border-b border-border bg-surface-soft text-xs uppercase tracking-wider text-ink-muted">
-                  <div className="col-span-6">Item</div>
-                  <div className="col-span-2 text-right">Quoted</div>
-                  <div className="col-span-2 text-right">Fair range</div>
-                  <div className="col-span-2 text-right">Verdict</div>
+              <div className="overflow-x-auto">
+                <div className="rounded-2xl border border-border bg-surface overflow-hidden min-w-[560px]">
+                  <div className="grid grid-cols-12 px-5 py-3 border-b border-border bg-surface-soft text-xs uppercase tracking-wider text-ink-muted">
+                    <div className="col-span-6">Item</div>
+                    <div className="col-span-2 text-right">Quoted</div>
+                    <div className="col-span-2 text-right">Fair range</div>
+                    <div className="col-span-2 text-right">Verdict</div>
+                  </div>
+                  <ul>
+                    {result.items.map((it, i) => {
+                      const tone = it.classification
+                        ? TONES[it.classification]
+                        : { label: "—", tone: "text-ink-muted" };
+                      return (
+                        <li
+                          key={i}
+                          className="grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0"
+                        >
+                          <div className="col-span-6 text-ink">{it.name}</div>
+                          <div className="col-span-2 text-right text-ink">
+                            {fmtUSD(it.cents / 100)}
+                          </div>
+                          <div className="col-span-2 text-right text-ink-soft">
+                            {it.fairCentsLow != null && it.fairCentsHigh != null
+                              ? `${fmtUSD(it.fairCentsLow / 100)}–${fmtUSD(it.fairCentsHigh / 100)}`
+                              : "—"}
+                          </div>
+                          <div className={`col-span-2 text-right font-medium ${tone.tone}`}>
+                            {tone.label}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
-                <ul>
-                  {result.items.map((it, i) => {
-                    const tone = it.classification
-                      ? TONES[it.classification]
-                      : { label: "—", tone: "text-ink-muted" };
-                    return (
-                      <li
-                        key={i}
-                        className="grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0"
-                      >
-                        <div className="col-span-6 text-ink">{it.name}</div>
-                        <div className="col-span-2 text-right text-ink">
-                          {fmtUSD(it.cents / 100)}
-                        </div>
-                        <div className="col-span-2 text-right text-ink-soft">
-                          {it.fairCentsLow != null && it.fairCentsHigh != null
-                            ? `${fmtUSD(it.fairCentsLow / 100)}–${fmtUSD(it.fairCentsHigh / 100)}`
-                            : "—"}
-                        </div>
-                        <div className={`col-span-2 text-right font-medium ${tone.tone}`}>
-                          {tone.label}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
               </div>
             </>
           )}
