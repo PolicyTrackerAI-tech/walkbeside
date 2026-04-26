@@ -73,6 +73,18 @@ export default function PlanningPage() {
             </LinkButton>
           </Card>
 
+          <Card tone="soft">
+            <CardTitle>Not sure what type of service fits?</CardTitle>
+            <p className="text-ink-soft mb-4">
+              Four short questions about faith, body, and budget. We&rsquo;ll
+              recommend a service type so you can move on to comparing prices
+              with confidence.
+            </p>
+            <LinkButton href="/decide" variant="secondary">
+              Help me decide →
+            </LinkButton>
+          </Card>
+
           <Card>
             <CardEyebrow>A note from the funeral director</CardEyebrow>
             <CardTitle>On prepaid funeral plans.</CardTitle>
