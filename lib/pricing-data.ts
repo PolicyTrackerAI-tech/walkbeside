@@ -25,13 +25,21 @@ export type ServiceType =
   | "direct-cremation"
   | "cremation-with-service"
   | "traditional-burial"
-  | "graveside-burial";
+  | "graveside-burial"
+  | "green-burial"
+  | "aquamation"
+  | "body-donation"
+  | "memorial-no-body";
 
 export const SERVICE_LABELS: Record<ServiceType, string> = {
   "direct-cremation": "Direct cremation (no service)",
   "cremation-with-service": "Cremation with memorial",
   "traditional-burial": "Traditional burial with viewing",
   "graveside-burial": "Graveside burial (no viewing)",
+  "green-burial": "Green / natural burial",
+  "aquamation": "Aquamation (water-based cremation)",
+  "body-donation": "Whole-body donation to science",
+  "memorial-no-body": "Memorial service (no body present)",
 };
 
 export const LINE_ITEMS: LineItem[] = [
@@ -49,6 +57,10 @@ export const LINE_ITEMS: LineItem[] = [
       "cremation-with-service",
       "traditional-burial",
       "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
     ],
   },
   {
@@ -71,7 +83,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 600,
     required: "no",
     notes: "Dressing, hair, makeup. Optional. Decline if no viewing.",
-    categories: ["traditional-burial", "cremation-with-service"],
+    categories: ["traditional-burial", "cremation-with-service", "green-burial"],
   },
   {
     id: "viewing",
@@ -91,7 +103,12 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 1000,
     required: "no",
     notes: "Chapel use. A church, park, or home is often free.",
-    categories: ["traditional-burial", "cremation-with-service"],
+    categories: [
+      "traditional-burial",
+      "cremation-with-service",
+      "green-burial",
+      "memorial-no-body",
+    ],
   },
   {
     id: "graveside",
@@ -101,7 +118,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 700,
     required: "no",
     notes: "Funeral home staff present at the cemetery. Optional.",
-    categories: ["traditional-burial", "graveside-burial"],
+    categories: ["traditional-burial", "graveside-burial", "green-burial"],
   },
   {
     id: "hearse",
@@ -111,7 +128,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 700,
     required: "burial",
     notes: "The funeral home's hearse is the default for transport to the cemetery, but you can ask about lower-cost transport options. Not required for cremation.",
-    categories: ["traditional-burial", "graveside-burial"],
+    categories: ["traditional-burial", "graveside-burial", "green-burial"],
   },
   {
     id: "limo",
@@ -136,6 +153,9 @@ export const LINE_ITEMS: LineItem[] = [
       "cremation-with-service",
       "traditional-burial",
       "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
     ],
   },
   {
@@ -152,6 +172,10 @@ export const LINE_ITEMS: LineItem[] = [
       "cremation-with-service",
       "traditional-burial",
       "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
     ],
   },
   {
@@ -187,7 +211,7 @@ export const LINE_ITEMS: LineItem[] = [
     required: "cremation",
     notes:
       "Must be combustible — cardboard or unfinished plywood qualifies. The funeral home is legally required under the FTC Funeral Rule to make a low-cost alternative container available and to tell you it exists. If they don't show you one, that's a violation. You never need an expensive casket for cremation.",
-    categories: ["direct-cremation", "cremation-with-service"],
+    categories: ["direct-cremation", "cremation-with-service", "aquamation"],
   },
   {
     id: "urn",
@@ -198,7 +222,12 @@ export const LINE_ITEMS: LineItem[] = [
     required: "no",
     notes:
       "Remains are returned in a temporary container if no urn is selected. You can decide later — no rush.",
-    categories: ["direct-cremation", "cremation-with-service"],
+    categories: [
+      "direct-cremation",
+      "cremation-with-service",
+      "aquamation",
+      "body-donation",
+    ],
   },
   {
     id: "vault",
@@ -221,7 +250,7 @@ export const LINE_ITEMS: LineItem[] = [
     required: "burial",
     notes:
       "Compare cemeteries independently. Funeral home referrals often involve referral fees baked into the price.",
-    categories: ["traditional-burial", "graveside-burial"],
+    categories: ["traditional-burial", "graveside-burial", "green-burial"],
   },
   {
     id: "open-close",
@@ -231,7 +260,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 2500,
     required: "burial",
     notes: "Cemetery fee. Limited room to negotiate, but cemeteries vary.",
-    categories: ["traditional-burial", "graveside-burial"],
+    categories: ["traditional-burial", "graveside-burial", "green-burial"],
   },
   {
     id: "headstone",
@@ -242,7 +271,7 @@ export const LINE_ITEMS: LineItem[] = [
     required: "no",
     notes:
       "Buy DIRECT from a monument company. Funeral home markup on stone is massive.",
-    categories: ["traditional-burial", "graveside-burial"],
+    categories: ["traditional-burial", "graveside-burial", "green-burial"],
     highMarkup: true,
   },
   {
@@ -259,6 +288,9 @@ export const LINE_ITEMS: LineItem[] = [
       "cremation-with-service",
       "traditional-burial",
       "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "memorial-no-body",
     ],
   },
   {
@@ -269,7 +301,12 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 400,
     required: "no",
     notes: "Print locally or at home. Canva templates are free.",
-    categories: ["traditional-burial", "cremation-with-service"],
+    categories: [
+      "traditional-burial",
+      "cremation-with-service",
+      "green-burial",
+      "memorial-no-body",
+    ],
   },
   {
     id: "flowers-fh",
@@ -279,7 +316,13 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 1500,
     required: "no",
     notes: "Direct from a florist is 40–60% cheaper. Never order through the funeral home.",
-    categories: ["traditional-burial", "cremation-with-service", "graveside-burial"],
+    categories: [
+      "traditional-burial",
+      "cremation-with-service",
+      "graveside-burial",
+      "green-burial",
+      "memorial-no-body",
+    ],
     highMarkup: true,
   },
 ];
@@ -330,6 +373,42 @@ export const SERVICE_TOTALS: ServiceTotal[] = [
     predatoryLow: 12000,
     predatoryHigh: 18000,
     maxSavings: 7000,
+  },
+  {
+    type: "green-burial",
+    label: SERVICE_LABELS["green-burial"],
+    fairLow: 3000,
+    fairHigh: 5500,
+    predatoryLow: 7000,
+    predatoryHigh: 11000,
+    maxSavings: 5000,
+  },
+  {
+    type: "aquamation",
+    label: SERVICE_LABELS["aquamation"],
+    fairLow: 2000,
+    fairHigh: 3500,
+    predatoryLow: 4500,
+    predatoryHigh: 7000,
+    maxSavings: 3000,
+  },
+  {
+    type: "body-donation",
+    label: SERVICE_LABELS["body-donation"],
+    fairLow: 0,
+    fairHigh: 500,
+    predatoryLow: 1500,
+    predatoryHigh: 2500,
+    maxSavings: 2000,
+  },
+  {
+    type: "memorial-no-body",
+    label: SERVICE_LABELS["memorial-no-body"],
+    fairLow: 500,
+    fairHigh: 1500,
+    predatoryLow: 3000,
+    predatoryHigh: 5000,
+    maxSavings: 3000,
   },
 ];
 
