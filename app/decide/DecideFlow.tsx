@@ -158,6 +158,9 @@ export function DecideFlow() {
               >
                 Get quotes from local homes →
               </LinkButton>
+              <LinkButton variant="ghost" href="/worksheet">
+                Pre-meeting worksheet →
+              </LinkButton>
             </div>
           </Card>
 
