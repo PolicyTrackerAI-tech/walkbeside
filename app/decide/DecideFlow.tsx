@@ -165,7 +165,7 @@ export function DecideFlow() {
             <Card tone="soft">
               <CardEyebrow>{faithProfile.label} — what to expect</CardEyebrow>
               <p className="text-sm text-ink-soft mb-3">{faithProfile.notes}</p>
-              <dl className="grid sm:grid-cols-2 gap-3 text-sm">
+              <dl className="grid sm:grid-cols-2 gap-3 text-sm mb-4">
                 <div>
                   <dt className="text-ink-muted text-xs uppercase tracking-wider mb-1">Timeline</dt>
                   <dd className="text-ink">{faithProfile.timelineNorm}</dd>
@@ -175,6 +175,9 @@ export function DecideFlow() {
                   <dd className="text-ink">{embalmingLabel(faithProfile.embalmingNorm)}</dd>
                 </div>
               </dl>
+              <LinkButton href={`/faith/${faithProfile.key}`} variant="secondary">
+                Full guide for {faithProfile.label} →
+              </LinkButton>
             </Card>
           )}
 
