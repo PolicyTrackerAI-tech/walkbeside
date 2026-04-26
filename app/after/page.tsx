@@ -41,6 +41,14 @@ const TOPICS: {
       "What a will actually does, when probate applies and when it doesn't, what \"executor\" means in practice, and the specific situations where calling an estate attorney saves you money instead of costing it.",
     when: "Start once the certificates are in hand.",
   },
+  {
+    href: "/veterans",
+    eyebrow: "If they served",
+    title: "Veterans burial benefits — what your family can claim",
+    body:
+      "VA burial allowance, plot allowance, free national cemetery burial, government headstone, burial flag. Most families miss at least one. A 5-question checker and links to the right VA forms.",
+    when: "File within 2 years of burial — most families do it in the first month.",
+  },
 ];
 
 export default function AfterIndexPage() {
@@ -118,6 +126,9 @@ export default function AfterIndexPage() {
               </LinkButton>
               <LinkButton href="/obituary" variant="secondary">
                 Obituary helper
+              </LinkButton>
+              <LinkButton href="/veterans" variant="secondary">
+                Veterans benefits checker
               </LinkButton>
             </div>
           </Card>
