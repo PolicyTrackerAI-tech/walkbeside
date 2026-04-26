@@ -1,11 +1,20 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
-import { Label, Select } from "@/components/ui/Field";
-import { FAITH_TRADITIONS, type FaithKey, getFaith } from "@/lib/faith-traditions";
+import { Input, Label, Select } from "@/components/ui/Field";
+import {
+  denominationsFor,
+  type FaithKey,
+  getFaith,
+} from "@/lib/faith-traditions";
 import { SERVICE_LABELS, SERVICE_TOTALS, fmtRange } from "@/lib/pricing-data";
+import {
+  DECIDE_STORAGE_KEYS,
+  readDecide,
+  writeDecide,
+} from "@/lib/faith-storage";
 import {
   recommend,
   type BodyAtService,
@@ -13,13 +22,65 @@ import {
   type DispositionPreference,
 } from "@/lib/decide-engine";
 
+/**
+ * Top-level dropdown order per Session B spec. Catholic listed first because
+ * it's the largest single denomination in the US. "Other (please specify)"
+ * is last and reveals a free-text input.
+ */
+const FAITH_DROPDOWN: { value: FaithKey; label: string }[] = [
+  { value: "christian-catholic", label: "Catholic" },
+  { value: "christian-protestant", label: "Protestant" },
+  { value: "christian-orthodox", label: "Eastern Orthodox" },
+  { value: "lds-mormon", label: "LDS / Mormon" },
+  { value: "jewish", label: "Jewish" },
+  { value: "muslim", label: "Muslim" },
+  { value: "hindu", label: "Hindu" },
+  { value: "buddhist", label: "Buddhist" },
+  { value: "sikh", label: "Sikh" },
+  { value: "secular", label: "Secular / None of the above" },
+  { value: "other", label: "Other (please specify)" },
+];
+
 export function DecideFlow() {
   const [faith, setFaith] = useState<FaithKey>("secular");
+  const [customFaith, setCustomFaith] = useState<string>("");
+  const [faithDenomination, setFaithDenomination] = useState<string>("");
   const [bodyAtService, setBodyAtService] = useState<BodyAtService>("unsure");
   const [dispositionPreference, setDispositionPreference] =
     useState<DispositionPreference>("no-preference");
   const [costPriority, setCostPriority] = useState<CostPriority>("balanced");
   const [submitted, setSubmitted] = useState(false);
+
+  // Hydrate from sessionStorage on mount.
+  useEffect(() => {
+    const f = readDecide(DECIDE_STORAGE_KEYS.faith);
+    if (f && FAITH_DROPDOWN.some((o) => o.value === f)) {
+      setFaith(f as FaithKey);
+    }
+    const c = readDecide(DECIDE_STORAGE_KEYS.customFaith);
+    if (c) setCustomFaith(c);
+    const d = readDecide(DECIDE_STORAGE_KEYS.faithDenomination);
+    if (d) setFaithDenomination(d);
+  }, []);
+
+  // Persist changes.
+  useEffect(() => {
+    writeDecide(DECIDE_STORAGE_KEYS.faith, faith);
+    // Clear sibling keys when they no longer apply.
+    if (faith !== "other") writeDecide(DECIDE_STORAGE_KEYS.customFaith, "");
+    if (!denominationsFor(faith))
+      writeDecide(DECIDE_STORAGE_KEYS.faithDenomination, "");
+  }, [faith]);
+
+  useEffect(() => {
+    writeDecide(DECIDE_STORAGE_KEYS.customFaith, customFaith);
+  }, [customFaith]);
+
+  useEffect(() => {
+    writeDecide(DECIDE_STORAGE_KEYS.faithDenomination, faithDenomination);
+  }, [faithDenomination]);
+
+  const denominationOptions = denominationsFor(faith);
 
   const recommendation = useMemo(
     () =>
@@ -40,7 +101,7 @@ export function DecideFlow() {
       <Card>
         <div className="space-y-5">
           <div>
-            <Label htmlFor="faith" hint="Pick what guides decisions in your family. Pick 'secular' if no tradition is in play.">
+            <Label htmlFor="faith" hint="Pick what guides decisions in your family. Pick 'Secular' if no tradition is in play.">
               Faith tradition
             </Label>
             <Select
@@ -48,12 +109,49 @@ export function DecideFlow() {
               value={faith}
               onChange={(e) => setFaith(e.target.value as FaithKey)}
             >
-              {FAITH_TRADITIONS.map((t) => (
-                <option key={t.key} value={t.key}>
-                  {t.label}
+              {FAITH_DROPDOWN.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
                 </option>
               ))}
             </Select>
+
+            {faith === "other" && (
+              <div className="mt-3">
+                <Label htmlFor="customFaith">What tradition?</Label>
+                <Input
+                  id="customFaith"
+                  type="text"
+                  value={customFaith}
+                  onChange={(e) => setCustomFaith(e.target.value)}
+                  placeholder="e.g. Bahá'í, Jain, Quaker, Native American spiritual practice…"
+                  autoComplete="off"
+                />
+              </div>
+            )}
+
+            {denominationOptions && (
+              <div className="mt-3">
+                <Label
+                  htmlFor="denomination"
+                  hint="Practice within this tradition varies by denomination. Pick the closest — or 'Not sure' if you don't know."
+                >
+                  Which tradition?
+                </Label>
+                <Select
+                  id="denomination"
+                  value={faithDenomination}
+                  onChange={(e) => setFaithDenomination(e.target.value)}
+                >
+                  <option value="">Select one…</option>
+                  {denominationOptions.map((d) => (
+                    <option key={d.value} value={d.value}>
+                      {d.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            )}
           </div>
 
           <div>
