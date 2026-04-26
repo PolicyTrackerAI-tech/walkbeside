@@ -56,6 +56,16 @@ export default async function NegotiationResultsPage({
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
                 : `Pick the home you want. We release contact info and charge a flat ${fmtCents(FLAT_FEE_CENTS)} only when you confirm.`}
             </p>
+            {replies.length >= 2 && (
+              <div className="mt-3">
+                <Link
+                  href={`/negotiate/${id}/compare`}
+                  className="inline-flex items-center gap-1 text-sm text-primary-deep underline-offset-2 hover:underline"
+                >
+                  See line-by-line comparison →
+                </Link>
+              </div>
+            )}
           </div>
 
           {baseline !== null && (
