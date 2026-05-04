@@ -37,6 +37,7 @@ const FAITH_DROPDOWN: { value: FaithKey; label: string }[] = [
   { value: "hindu", label: "Hindu" },
   { value: "buddhist", label: "Buddhist" },
   { value: "sikh", label: "Sikh" },
+  { value: "atheist", label: "Atheist" },
   { value: "secular", label: "Secular / None of the above" },
   { value: "other", label: "Other (please specify)" },
 ];
