@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
@@ -81,6 +81,19 @@ export function DecideFlow() {
   }, [faithDenomination]);
 
   const denominationOptions = denominationsFor(faith);
+
+  // Scroll the recommendation into view when the user taps "See recommendation".
+  // Without this, the recommendation card renders below the form on mobile and
+  // users miss it — they tap the button and feel like nothing happened.
+  const recommendationRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (submitted && recommendationRef.current) {
+      recommendationRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [submitted]);
 
   const recommendation = useMemo(
     () =>
@@ -212,10 +225,12 @@ export function DecideFlow() {
           </ul>
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Button onClick={() => setSubmitted(true)}>See recommendation</Button>
+        <div className="mt-4 flex flex-wrap gap-3 items-center">
+          <Button size="lg" onClick={() => setSubmitted(true)}>
+            See recommendation →
+          </Button>
           {submitted && (
-            <span className="text-sm text-ink-muted self-center">
+            <span className="text-sm text-ink-muted">
               Updated — adjust answers above to refine.
             </span>
           )}
@@ -223,7 +238,7 @@ export function DecideFlow() {
       </Card>
 
       {submitted && (
-        <>
+        <div ref={recommendationRef} className="space-y-6 scroll-mt-4">
           <Card tone="primary">
             <CardEyebrow>Recommendation</CardEyebrow>
             <h2 className="font-serif text-3xl text-primary-deep mb-2">
@@ -295,7 +310,7 @@ export function DecideFlow() {
               </p>
             </Card>
           )}
-        </>
+        </div>
       )}
     </div>
   );
