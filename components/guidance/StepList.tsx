@@ -130,23 +130,24 @@ export function StepList({
               )}
 
               <Card tone="primary">
+                <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
+                  Next step
+                </div>
                 <h2 className="font-serif text-2xl text-ink mb-2">
-                  Let us handle the heavy lifting.
+                  Decide what kind of service fits.
                 </h2>
                 <p className="text-ink-soft mb-5">
-                  You don&rsquo;t have to make these calls yourself. For a
-                  flat $49 &mdash; only if you pick a home we bring you
-                  &mdash; we contact funeral homes near you, request their
-                  itemized prices under the FTC Funeral Rule, and put the
-                  options side by side in your dashboard. You read it when
-                  you have a quiet minute.
+                  Four short questions. We&rsquo;ll recommend a service type
+                  that fits your faith, your family, and your budget &mdash;
+                  so you know exactly what to compare. No account, nothing
+                  saved.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <LinkButton href="/negotiate/start" size="lg">
-                    Start advocate outreach
+                  <LinkButton href="/decide" size="lg">
+                    Start the four questions →
                   </LinkButton>
                   <LinkButton href="/how-it-works" variant="secondary">
-                    How it works
+                    How we help
                   </LinkButton>
                 </div>
               </Card>

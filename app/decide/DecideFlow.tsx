@@ -247,14 +247,17 @@ export function DecideFlow() {
               ))}
             </ul>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href={`/prices?svc=${recommendation.serviceType}`}>
-                See fair prices for my zip →
+              <LinkButton
+                href={`/negotiate/start?svc=${recommendation.serviceType}`}
+                size="lg"
+              >
+                Let us advocate for you →
               </LinkButton>
               <LinkButton
                 variant="secondary"
-                href={`/negotiate/start?svc=${recommendation.serviceType}`}
+                href={`/prices?svc=${recommendation.serviceType}`}
               >
-                Get quotes from local homes →
+                See fair prices first →
               </LinkButton>
               <LinkButton variant="ghost" href="/worksheet">
                 Pre-meeting worksheet →

@@ -180,21 +180,19 @@ export function CrisisUnexpected() {
 
           <div className="rounded-2xl border-2 border-primary bg-primary-soft p-6 space-y-4">
             <h2 className="font-serif text-2xl text-ink">
-              When you&rsquo;re ready, let us handle the heavy lifting.
+              When you&rsquo;re ready, decide what kind of service fits.
             </h2>
             <p className="text-ink-soft">
-              You don&rsquo;t have to make these calls yourself. For a flat
-              $49 &mdash; only if you pick a home we bring you &mdash; we
-              contact funeral homes near you, request their itemized prices
-              under the FTC Funeral Rule, and put the options side by side
-              in your dashboard. You read it when you have a quiet minute.
+              Four short questions. We&rsquo;ll recommend a service type that
+              fits your faith, your family, and your budget &mdash; so you
+              know exactly what to compare. No account, nothing saved.
             </p>
             <div className="flex flex-wrap gap-3 pt-1">
-              <LinkButton href="/negotiate/start">
-                Start advocate outreach
+              <LinkButton href="/decide">
+                Start the four questions →
               </LinkButton>
               <LinkButton href="/how-it-works" variant="secondary">
-                How it works
+                How we help
               </LinkButton>
             </div>
           </div>
