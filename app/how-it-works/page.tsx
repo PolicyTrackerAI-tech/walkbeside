@@ -116,7 +116,7 @@ export default function HowItWorksPage() {
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/negotiate/start">
-                Start advocate outreach
+                Let us advocate for you
               </LinkButton>
               <LinkButton href="/prices" variant="secondary">
                 Or look up fair prices first

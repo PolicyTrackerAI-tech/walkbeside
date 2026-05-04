@@ -87,8 +87,6 @@ export default async function GuidancePage({
         tone={SCENARIO_LANDING_TONE[scenario]}
         steps={g.steps}
         pullQuote={g.pullQuote}
-        showPriceCompareGate={g.showPriceCompareGate}
-        priceGateText={g.priceGateText}
         showCrisisResources={scenario === "elsewhere"}
       />
     </>

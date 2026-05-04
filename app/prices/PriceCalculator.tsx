@@ -238,7 +238,7 @@ export function PriceCalculator() {
                     <LinkButton
                       href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}&home=${encodeURIComponent(quotedHome)}&q=${encodeURIComponent(String(quotedNum))}`}
                     >
-                      Start advocate outreach &rarr;
+                      Let us advocate for you &rarr;
                     </LinkButton>
                     <LinkButton href="/how-it-works" variant="ghost">
                       How this works
@@ -347,7 +347,7 @@ export function PriceCalculator() {
               href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}`}
               size="lg"
             >
-              Start advocate outreach
+              Let us advocate for you
             </LinkButton>
           </Card>
         </>

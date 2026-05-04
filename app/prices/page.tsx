@@ -38,7 +38,7 @@ export default function PricesPage() {
               otherwise.
             </p>
             <LinkButton href="/negotiate/start">
-              Start advocate outreach
+              Let us advocate for you
             </LinkButton>
           </Card>
 

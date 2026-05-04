@@ -172,7 +172,7 @@ export default function HomePage() {
                 $49 &middot; only if you pick a home we found
               </div>
               <h3 className="font-serif text-xl text-ink mb-2">
-                Advocate outreach
+                Let us advocate for you
               </h3>
               <p className="text-sm text-ink-soft mb-5 flex-1">
                 We contact funeral homes on your behalf &mdash; transparently,
@@ -184,7 +184,7 @@ export default function HomePage() {
                 href="/how-it-works"
                 className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
               >
-                How advocate outreach works →
+                How we work for you →
               </Link>
             </article>
           </div>

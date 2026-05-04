@@ -11,8 +11,6 @@ interface Props {
   tone: string;
   steps: GuidanceStep[];
   pullQuote?: string;
-  showPriceCompareGate: boolean;
-  priceGateText?: string;
   /** null = suppress all commercial CTAs (used by home-unexpected variant). */
   showCta?: boolean;
   /** Show 988 block. True for scenarios with elevated survivor suicide risk. */
@@ -32,8 +30,6 @@ export function StepList({
   tone,
   steps,
   pullQuote,
-  showPriceCompareGate,
-  priceGateText,
   showCta = true,
   showCrisisResources = false,
 }: Props) {
@@ -92,63 +88,23 @@ export function StepList({
           </ol>
 
           {showCta && (
-            <div className="mt-8 space-y-4">
-              <Card tone="soft">
-                <p className="text-ink-soft mb-4">
-                  Save your progress so nothing gets lost.
-                </p>
-                <LinkButton
-                  variant="secondary"
-                  href="/login?next=/dashboard"
-                >
-                  Save to an account →
-                </LinkButton>
-              </Card>
-              {showPriceCompareGate ? (
-                <Card tone="primary">
-                  <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
-                    When you&rsquo;re ready
-                  </div>
-                  <h2 className="font-serif text-2xl text-ink mb-2">
-                    See what funerals should cost in your area.
-                  </h2>
-                  <p className="text-ink-soft mb-5">{priceGateText}</p>
-                  <LinkButton href="/prices" size="lg">
-                    Look up fair prices →
-                  </LinkButton>
-                </Card>
-              ) : (
-                <Card tone="soft">
-                  <p className="text-ink-soft mb-4">
-                    When you&rsquo;re ready, the next step is comparing funeral
-                    homes. There&rsquo;s no rush.
-                  </p>
-                  <LinkButton href="/prices" variant="secondary">
-                    When you&rsquo;re ready →
-                  </LinkButton>
-                </Card>
-              )}
-
+            <div className="mt-8">
               <Card tone="primary">
+                <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
+                  Next step
+                </div>
                 <h2 className="font-serif text-2xl text-ink mb-2">
-                  Let us handle the heavy lifting.
+                  Decide what kind of service fits.
                 </h2>
                 <p className="text-ink-soft mb-5">
-                  You don&rsquo;t have to make these calls yourself. For a
-                  flat $49 &mdash; only if you pick a home we bring you
-                  &mdash; we contact funeral homes near you, request their
-                  itemized prices under the FTC Funeral Rule, and put the
-                  options side by side in your dashboard. You read it when
-                  you have a quiet minute.
+                  Four short questions. We&rsquo;ll recommend a service type
+                  that fits your faith, your family, and your budget &mdash;
+                  so you know exactly what to compare. No account, nothing
+                  saved.
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <LinkButton href="/negotiate/start" size="lg">
-                    Start advocate outreach
-                  </LinkButton>
-                  <LinkButton href="/how-it-works" variant="secondary">
-                    How it works
-                  </LinkButton>
-                </div>
+                <LinkButton href="/decide" size="lg">
+                  Start the four questions →
+                </LinkButton>
               </Card>
             </div>
           )}
