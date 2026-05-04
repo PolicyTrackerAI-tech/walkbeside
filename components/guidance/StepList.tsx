@@ -88,18 +88,7 @@ export function StepList({
           </ol>
 
           {showCta && (
-            <div className="mt-8 space-y-4">
-              <Card tone="soft">
-                <p className="text-ink-soft mb-4">
-                  Save your progress so nothing gets lost.
-                </p>
-                <LinkButton
-                  variant="secondary"
-                  href="/login?next=/dashboard"
-                >
-                  Save to an account →
-                </LinkButton>
-              </Card>
+            <div className="mt-8">
               <Card tone="primary">
                 <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
                   Next step
@@ -113,14 +102,9 @@ export function StepList({
                   so you know exactly what to compare. No account, nothing
                   saved.
                 </p>
-                <div className="flex flex-wrap gap-3">
-                  <LinkButton href="/decide" size="lg">
-                    Start the four questions →
-                  </LinkButton>
-                  <LinkButton href="/how-it-works" variant="secondary">
-                    How we help
-                  </LinkButton>
-                </div>
+                <LinkButton href="/decide" size="lg">
+                  Start the four questions →
+                </LinkButton>
               </Card>
             </div>
           )}
