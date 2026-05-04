@@ -11,8 +11,6 @@ interface Props {
   tone: string;
   steps: GuidanceStep[];
   pullQuote?: string;
-  showPriceCompareGate: boolean;
-  priceGateText?: string;
   /** null = suppress all commercial CTAs (used by home-unexpected variant). */
   showCta?: boolean;
   /** Show 988 block. True for scenarios with elevated survivor suicide risk. */
@@ -32,8 +30,6 @@ export function StepList({
   tone,
   steps,
   pullQuote,
-  showPriceCompareGate,
-  priceGateText,
   showCta = true,
   showCrisisResources = false,
 }: Props) {
@@ -104,31 +100,6 @@ export function StepList({
                   Save to an account →
                 </LinkButton>
               </Card>
-              {showPriceCompareGate ? (
-                <Card tone="primary">
-                  <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
-                    When you&rsquo;re ready
-                  </div>
-                  <h2 className="font-serif text-2xl text-ink mb-2">
-                    See what funerals should cost in your area.
-                  </h2>
-                  <p className="text-ink-soft mb-5">{priceGateText}</p>
-                  <LinkButton href="/prices" size="lg">
-                    Look up fair prices →
-                  </LinkButton>
-                </Card>
-              ) : (
-                <Card tone="soft">
-                  <p className="text-ink-soft mb-4">
-                    When you&rsquo;re ready, the next step is comparing funeral
-                    homes. There&rsquo;s no rush.
-                  </p>
-                  <LinkButton href="/prices" variant="secondary">
-                    When you&rsquo;re ready →
-                  </LinkButton>
-                </Card>
-              )}
-
               <Card tone="primary">
                 <div className="text-sm uppercase tracking-wider text-primary-deep mb-2">
                   Next step
