@@ -18,6 +18,7 @@ import type { ServiceType } from "./pricing-data";
 /** Top-level dropdown options shown on /decide Q2. */
 export type FaithKey =
   | "secular"
+  | "atheist"
   | "christian-protestant"
   | "christian-catholic"
   | "christian-orthodox"
@@ -133,6 +134,53 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
     notes:
       "No tradition is dictating the choice — it's about what the family wants and can afford. Direct cremation is the lowest-cost path; a memorial service can happen weeks later wherever you want.",
     defaultServiceType: "direct-cremation",
+    sources: [],
+  },
+
+  // -------------------------------------------------------------------------
+  // TODO-FD: verify atheist content. Identical funeral-practice implications
+  // to secular, but distinct identity — atheist families often want their
+  // identity reflected, not lumped under "none of the above."
+  // -------------------------------------------------------------------------
+  {
+    key: "atheist",
+    label: "Atheist",
+    dispositionNorm: "either",
+    dispositionAllowed: [
+      "direct-cremation",
+      "cremation-with-service",
+      "traditional-burial",
+      "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
+    ],
+    timelineNorm: "Whatever timeline works for the family. Most families hold a service within 1–2 weeks.",
+    embalmingNorm: "uncommon",
+    notes:
+      "No religious framework is dictating the choice. A celebration of life — at home, a park, a restaurant, a club — is the most common form. Direct cremation is the lowest-cost path; a memorial can happen anywhere, anytime. Be explicit with the funeral home that you don't want religious language, prayers, or chaplain involvement at the service unless you ask for it.",
+    defaultServiceType: "direct-cremation",
+    cheatsheet: {
+      extraQuestions: [
+        "Will any of your staff or vendors include religious language by default? We want a fully secular service.",
+        "Can we hold the service somewhere other than the funeral home — a park, a home, a restaurant?",
+      ],
+      extraDeclines: [
+        {
+          upsell: "Default chaplain or clergy honorarium",
+          script:
+            "We don't want a chaplain or clergy. Please remove any line item for officiant or clergy fee — we'll handle the speaking ourselves.",
+        },
+        {
+          upsell: "Religious music or prayer cards",
+          script:
+            "We're not having religious music or prayer cards. Please remove those from the package.",
+        },
+      ],
+      communityNotes:
+        "There is no clergy to coordinate with. The family runs the service themselves or asks a friend / celebrant to lead. Most secular celebrants charge $200–$500 for a personalized service.",
+    },
     sources: [],
   },
 
