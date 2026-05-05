@@ -83,7 +83,7 @@ export function DecideFlow() {
 
   const denominationOptions = denominationsFor(faith);
 
-  // Scroll the recommendation into view when the user taps "See recommendation".
+  // Scroll the recommendation into view when the user taps "Show me what fits".
   // Without this, the recommendation card renders below the form on mobile and
   // users miss it — they tap the button and feel like nothing happened.
   const recommendationRef = useRef<HTMLDivElement>(null);
@@ -218,7 +218,7 @@ export function DecideFlow() {
         </div>
 
         <div className="mt-6 rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft space-y-1">
-          <p className="text-ink font-medium">What happens when you submit:</p>
+          <p className="text-ink font-medium">What we&rsquo;ll do with your answers:</p>
           <ul className="space-y-0.5">
             <li>&bull; We recommend a service type that fits your answers.</li>
             <li>&bull; You&rsquo;ll see what fair pricing looks like for it.</li>
@@ -228,7 +228,7 @@ export function DecideFlow() {
 
         <div className="mt-4 flex flex-wrap gap-3 items-center">
           <Button size="lg" onClick={() => setSubmitted(true)}>
-            See recommendation →
+            Show me what fits →
           </Button>
           {submitted && (
             <span className="text-sm text-ink-muted">
@@ -267,16 +267,16 @@ export function DecideFlow() {
                 href={`/negotiate/start?svc=${recommendation.serviceType}`}
                 size="lg"
               >
-                Let us advocate for you →
+                Have us call funeral homes for you →
               </LinkButton>
               <LinkButton
                 variant="secondary"
                 href={`/prices?svc=${recommendation.serviceType}`}
               >
-                See fair prices first →
+                Or look up fair prices first
               </LinkButton>
               <LinkButton variant="ghost" href="/worksheet">
-                Pre-meeting worksheet →
+                Or open the meeting worksheet
               </LinkButton>
             </div>
           </Card>

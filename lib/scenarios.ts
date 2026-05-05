@@ -52,8 +52,8 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
           "Hospitals sometimes have informal partnerships. Once a body is moved to a funeral home, you are practically committed to that home. Compare prices first.",
         tone: "info",
       },
-      // {{TODO_SARAH_REVIEW}} — please redline the medical/legal specifics
-      // in the next four steps before this content ships.
+      // TODO-FD: please redline the medical/legal specifics in the next
+      // four steps before this content ships.
       {
         title: "Who pronounces the death.",
         body:
@@ -98,8 +98,8 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
       "If hospice was involved, a hospice nurse will pronounce death. You have a little more time than the hospital scenario, but body removal is still same-day.",
     showPriceCompareGate: false,
     steps: [
-      // {{TODO_SARAH_REVIEW}} — please redline the hospice / pronouncement /
-      // physician procedure specifics below before this content ships.
+      // TODO-FD: please redline the hospice / pronouncement / physician
+      // procedure specifics below before this content ships.
       {
         title: "Confirm what you're seeing.",
         body:

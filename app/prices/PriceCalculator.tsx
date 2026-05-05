@@ -141,7 +141,7 @@ export function PriceCalculator() {
         </div>
         <div className="mt-6 rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft space-y-1">
           <p className="text-ink font-medium">
-            What happens when you submit:
+            What we&rsquo;ll do with your answers:
           </p>
           <ul className="space-y-0.5">
             <li>
@@ -238,7 +238,7 @@ export function PriceCalculator() {
                     <LinkButton
                       href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}&home=${encodeURIComponent(quotedHome)}&q=${encodeURIComponent(String(quotedNum))}`}
                     >
-                      Let us advocate for you &rarr;
+                      Have us call funeral homes for you &rarr;
                     </LinkButton>
                     <LinkButton href="/how-it-works" variant="ghost">
                       How this works
@@ -347,7 +347,7 @@ export function PriceCalculator() {
               href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}`}
               size="lg"
             >
-              Let us advocate for you
+              Have us call funeral homes for you
             </LinkButton>
           </Card>
         </>

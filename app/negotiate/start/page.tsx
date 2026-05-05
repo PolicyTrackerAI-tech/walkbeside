@@ -84,7 +84,7 @@ function NegotiateStartForm() {
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           <div>
             <h1 className="font-serif text-3xl text-ink mb-3">
-              Let us advocate for you.
+              Have us call funeral homes for you.
             </h1>
             <p className="text-lg text-ink-soft">
               With your written authorization, we contact funeral homes near
@@ -96,7 +96,7 @@ function NegotiateStartForm() {
 
           <Card tone="soft">
             <p className="text-ink-soft mb-4">
-              Save your progress so nothing gets lost.
+              Save this so your family can pick up where you left off.
             </p>
             <LinkButton
               variant="secondary"

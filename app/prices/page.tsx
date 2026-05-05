@@ -24,7 +24,7 @@ export default function PricesPage() {
               See what you should expect to pay.
             </h1>
             <p className="text-lg text-ink-soft">
-              Three minutes here can save thousands. No account, no email.
+              Most families who do this save more than a year of groceries. No account, no email.
             </p>
           </div>
 
@@ -38,7 +38,7 @@ export default function PricesPage() {
               otherwise.
             </p>
             <LinkButton href="/negotiate/start">
-              Let us advocate for you
+              Have us call funeral homes for you
             </LinkButton>
           </Card>
 

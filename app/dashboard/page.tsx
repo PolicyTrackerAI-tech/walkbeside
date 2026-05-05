@@ -238,7 +238,7 @@ function AnonymousDashboard() {
               Welcome back.
             </h1>
             <p className="text-ink-soft mt-2">
-              Sign in to pick up where you left off, or keep going as a guest.
+              You&rsquo;re saved on this device. Sign in if you want to use this from somewhere else too.
             </p>
           </div>
 

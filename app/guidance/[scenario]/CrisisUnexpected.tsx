@@ -122,8 +122,8 @@ export function CrisisUnexpected() {
                   arrive.
                 </h3>
               </div>
-              {/* {{TODO_SARAH_REVIEW}} — please redline the medical-examiner
-                  and coroner specifics below before this ships. */}
+              {/* TODO-FD: please redline the medical-examiner and coroner
+                  specifics below before this ships. */}
               <ul className="text-ink-soft list-disc pl-5 space-y-2">
                 <li>
                   Police will arrive. They will ask questions. This is
