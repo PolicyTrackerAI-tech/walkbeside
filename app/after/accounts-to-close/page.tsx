@@ -117,7 +117,7 @@ const PHASES: {
 export default function AccountsToClosePage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backHref="/after" backLabel="← After the funeral" />
+      <SiteHeader backHref="/next-30-days" backLabel="← Back to checklist" />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-8">
@@ -228,7 +228,7 @@ export default function AccountsToClosePage() {
               ← Death certificates
             </Link>
             <Link
-              href="/after"
+              href="/next-30-days"
               className="text-ink-muted hover:text-ink-soft"
             >
               After the funeral (index)

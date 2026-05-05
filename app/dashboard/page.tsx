@@ -183,17 +183,17 @@ export default async function DashboardPage({
 
           <Card tone="soft">
             <CardEyebrow>After the funeral</CardEyebrow>
-            <CardTitle>Death certificates, accounts, and estate basics.</CardTitle>
+            <CardTitle>The next 30 days, one task at a time.</CardTitle>
             <p className="text-ink-soft text-sm mb-3">
-              Paperwork for the next thirty days, in the order that makes
-              the most sense. Certificates first, accounts second,
-              estate work third.
+              Death certificates, Social Security, banks, life insurance,
+              estate basics. Check off as you go. Progress saves on this
+              device.
             </p>
             <Link
-              href="/after"
+              href="/next-30-days"
               className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
             >
-              Open the after-funeral checklist &rarr;
+              Open the next-30-days checklist &rarr;
             </Link>
           </Card>
 
