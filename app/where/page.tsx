@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
+import { HelpFooter } from "@/components/HelpFooter";
 import { SCENARIO_LABELS, type Scenario } from "@/lib/scenarios";
 
 export const metadata: Metadata = {
@@ -166,6 +167,8 @@ export default function WherePage() {
               Already know what you need? Skip to fair price lookup →
             </Link>
           </p>
+
+          <HelpFooter />
         </div>
       </section>
     </main>
