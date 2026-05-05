@@ -3,13 +3,27 @@
  * saying "need a person? call us." Older users freeze when they feel
  * trapped in software. The escape hatch matters more than the app.
  *
- * Phone number is currently a placeholder. Wire in the real number
- * via NEXT_PUBLIC_HELP_PHONE before launch.
+ * Phone number reads from NEXT_PUBLIC_HELP_PHONE. Set that env var
+ * (in Vercel → Project Settings → Environment Variables) to your
+ * real number in E.164 format, e.g. +15551234567. If the env var is
+ * missing, falls back to a placeholder so dev/preview doesn't break.
+ *
+ * Hours read from NEXT_PUBLIC_HELP_HOURS. Optional. Defaults to a
+ * sensible range when missing.
  */
+
+function formatDisplay(e164: string): string {
+  // Format US numbers as (XXX) XXX-XXXX. Anything else, return as-is.
+  const m = e164.match(/^\+1(\d{3})(\d{3})(\d{4})$/);
+  if (m) return `(${m[1]}) ${m[2]}-${m[3]}`;
+  return e164;
+}
+
 export function HelpFooter() {
-  // TODO-margaret: replace with real number from process.env.NEXT_PUBLIC_HELP_PHONE
-  const phoneDisplay = "(555) 555-5555";
-  const phoneHref = "tel:+15555555555";
+  const rawPhone = process.env.NEXT_PUBLIC_HELP_PHONE ?? "+15555555555";
+  const hours = process.env.NEXT_PUBLIC_HELP_HOURS ?? "9am–9pm ET, every day.";
+  const phoneDisplay = formatDisplay(rawPhone);
+  const phoneHref = `tel:${rawPhone}`;
 
   return (
     <div className="mt-12 mb-6 text-center print:hidden">
@@ -22,9 +36,7 @@ export function HelpFooter() {
       >
         Call {phoneDisplay}
       </a>
-      <p className="mt-1 text-xs text-ink-muted">
-        9am&ndash;9pm ET, every day.
-      </p>
+      <p className="mt-1 text-xs text-ink-muted">{hours}</p>
     </div>
   );
 }
