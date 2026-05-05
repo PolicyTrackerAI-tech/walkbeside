@@ -21,6 +21,45 @@ interface Phase {
 
 const PHASES: Phase[] = [
   {
+    id: "phase-0",
+    label: "Funeral week",
+    heading: "Between the death and the service",
+    intro:
+      "The funeral hasn't happened yet. You're holding it together. These are the only things that need to happen before the service — everything else can wait.",
+    tasks: [
+      {
+        id: "p0-certs-count",
+        title: "Tell the funeral home how many death certificates you'll need",
+        body: "Most families need 10–15. Order through the home at the time of death — the home usually passes through the state's base fee, and ordering later is slower and pricier. Need help estimating? The certificate calculator at /certificates walks you through who'll ask for one.",
+      },
+      {
+        id: "p0-bereavement",
+        title: "Tell the deceased's employer (if applicable)",
+        body: "Even one phone call to HR triggers final-paycheck rules, employer-provided life-insurance claims, and bereavement-leave coordination for surviving family members who work there. Ask HR for a written list of every benefit and how to claim it.",
+      },
+      {
+        id: "p0-obit",
+        title: "Draft the obituary",
+        body: "Newspaper and online obituaries can take 24–72 hours to publish. The funeral home needs the final text to coordinate with the local paper. Our obituary helper at /obituary asks a few questions and writes a first draft you can edit.",
+      },
+      {
+        id: "p0-clothes",
+        title: "Pick out clothes and personal effects",
+        body: "If there will be a viewing or open casket, the funeral home needs an outfit. If cremation, the body is usually dressed simply or wrapped. Glasses, jewelry, and dentures are family decisions — they can be returned or buried/cremated with the body. There is no wrong answer.",
+      },
+      {
+        id: "p0-notification-list",
+        title: "Make a list of who needs to be told",
+        body: "Two people, three people, ten — start small. Give the list to a friend or family member who's not too close to the loss to help make calls. You don't have to be the one telling everyone.",
+      },
+      {
+        id: "p0-officiant",
+        title: "Confirm who will lead the service",
+        body: "Clergy, celebrant, family member, or no one at all — pick early so they can prepare. If you don't have someone, the funeral home can usually recommend a non-denominational celebrant for $200–$500.",
+      },
+    ],
+  },
+  {
     id: "week-1",
     label: "Week 1",
     heading: "The first seven days",

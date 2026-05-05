@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function EstateBasicsPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader backHref="/after" backLabel="← After the funeral" />
+      <SiteHeader backHref="/next-30-days" backLabel="← Back to checklist" />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-8">
@@ -253,7 +253,7 @@ export default function EstateBasicsPage() {
 
           <div className="flex flex-wrap gap-4 pt-4 border-t border-border text-sm">
             <Link
-              href="/after"
+              href="/next-30-days"
               className="font-medium text-primary-deep hover:underline"
             >
               Back to After the funeral (index)
