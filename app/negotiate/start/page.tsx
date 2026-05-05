@@ -1,75 +1,129 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow } from "@/components/ui/Card";
-import { Button, LinkButton } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { HelpFooter } from "@/components/HelpFooter";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
+import {
+  DEFAULT_STATE,
+  readState,
+  writeState,
+  clearState,
+  hasMeaningfulProgress,
+  type WizardState,
+} from "@/lib/negotiate-wizard-state";
 
-function NegotiateStartForm() {
+const TOTAL_STEPS = 8;
+
+function NegotiateStartWizard() {
   const router = useRouter();
   const sp = useSearchParams();
 
-  const [zip, setZip] = useState(sp.get("zip") ?? "");
-  const [serviceType, setServiceType] = useState<ServiceType>(
-    (sp.get("svc") as ServiceType) ?? "traditional-burial",
-  );
-  const [radiusMiles, setRadiusMiles] = useState(
-    Number(sp.get("r") ?? "25") || 25,
-  );
-  const [targetHomeName, setTargetHomeName] = useState(sp.get("home") ?? "");
-  const [targetEstimate, setTargetEstimate] = useState(sp.get("q") ?? "");
-  const [senderFirstName, setSenderFirstName] = useState("");
-  const [senderLastName, setSenderLastName] = useState("");
-  const [timing, setTiming] = useState("");
-  const [notes, setNotes] = useState("");
-  const [extras, setExtras] = useState("");
-  const [showOptional, setShowOptional] = useState(
-    Boolean(sp.get("home") || sp.get("q")),
-  );
+  // Wizard state — persisted in sessionStorage between renders.
+  const [state, setState] = useState<WizardState>(DEFAULT_STATE);
+  const [step, setStep] = useState(1);
+  const [hydrated, setHydrated] = useState(false);
+  const [showResumePrompt, setShowResumePrompt] = useState(false);
   const [authorized, setAuthorized] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const homesCount = homesForRadius(radiusMiles);
+  // Hydrate from sessionStorage + query params.
+  useEffect(() => {
+    const fromStorage = readState();
+    const fromQuery: Partial<WizardState> = {
+      zip: sp.get("zip") ?? undefined,
+      serviceType: (sp.get("svc") as ServiceType) ?? undefined,
+      targetHomeName: sp.get("home") ?? undefined,
+      targetEstimate: sp.get("q") ?? undefined,
+    };
+    // Filter out undefineds so they don't blow away storage values.
+    const cleanQuery = Object.fromEntries(
+      Object.entries(fromQuery).filter(([, v]) => v != null && v !== ""),
+    );
+    if (fromStorage && hasMeaningfulProgress(fromStorage)) {
+      setState({ ...fromStorage, ...cleanQuery });
+      setShowResumePrompt(true);
+    } else {
+      setState({ ...DEFAULT_STATE, ...fromStorage, ...cleanQuery });
+    }
+    setHydrated(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  async function start(e: React.FormEvent) {
-    e.preventDefault();
+  // Persist on change.
+  useEffect(() => {
+    if (!hydrated) return;
+    writeState(state);
+  }, [state, hydrated]);
+
+  function update<K extends keyof WizardState>(key: K, value: WizardState[K]) {
+    setState((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function next() {
+    setStep((s) => Math.min(s + 1, TOTAL_STEPS));
+  }
+  function back() {
+    setStep((s) => Math.max(s - 1, 1));
+  }
+  function autoNext(delayMs = 1200) {
+    window.setTimeout(next, delayMs);
+  }
+
+  // Step 4 conditional sub-screen — if hasQuote === "no", skip 4b.
+  // Encoded by treating "step 5" as the "next after 4 + 4b" depending
+  // on hasQuote.
+  function nextFromQuoteStep() {
+    if (state.hasQuote === "yes") {
+      setStep(5); // proceed to "how soon"
+    } else {
+      setStep(5); // same — 4b is rendered inline when yes
+    }
+  }
+
+  async function submit() {
     setBusy(true);
     setError(null);
     try {
+      const targetEstimateNum = state.targetEstimate
+        ? Number(state.targetEstimate.replace(/[^0-9.]/g, ""))
+        : 0;
       const r = await fetch("/api/negotiate/start", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          zip,
-          serviceType,
-          radiusMiles,
-          targetHomeName: targetHomeName || undefined,
-          targetEstimateCents: targetEstimate
-            ? Math.round(Number(targetEstimate) * 100)
-            : undefined,
-          senderFirstName,
-          senderLastName: senderLastName || undefined,
-          timing,
-          notes: notes || undefined,
-          extras: extras || undefined,
+          zip: state.zip,
+          serviceType: state.serviceType,
+          radiusMiles: state.radiusMiles,
+          targetHomeName: state.targetHomeName || undefined,
+          targetEstimateCents:
+            targetEstimateNum > 0
+              ? Math.round(targetEstimateNum * 100)
+              : undefined,
+          senderFirstName: state.senderFirstName,
+          senderLastName: state.senderLastName || undefined,
+          timing: state.timing,
+          notes: state.notes || undefined,
+          extras: state.extras || undefined,
           authorizationAccepted: authorized,
         }),
       });
       if (r.status === 401) {
         router.push(
-          `/login?next=${encodeURIComponent(`/negotiate/start?${sp.toString()}`)}`,
+          `/login?next=${encodeURIComponent(`/negotiate/start`)}`,
         );
         return;
       }
       const data = await r.json();
       if (!r.ok) throw new Error(JSON.stringify(data.error));
+      clearState();
       router.push(`/dashboard?started=${data.id}`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not start.");
@@ -78,90 +132,125 @@ function NegotiateStartForm() {
     }
   }
 
+  const homesCount = homesForRadius(state.radiusMiles);
+
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader rightSlot={<BackLink defaultHref="/prices" defaultLabel="← Back to prices" />} />
+      <SiteHeader
+        rightSlot={<BackLink defaultHref="/decide" defaultLabel="← Decide" />}
+      />
       <section className="flex-1">
-        <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
+        <div className="max-w-xl mx-auto px-5 py-10 space-y-6">
           <div>
             <h1 className="font-serif text-3xl text-ink mb-3">
               Have us call funeral homes for you.
             </h1>
-            <p className="text-lg text-ink-soft">
-              With your written authorization, we contact funeral homes near
-              you as your advocate, request their itemized prices under the
-              FTC Funeral Rule, and bring back the options to compare side by
-              side.
+            <p className="text-ink-soft">
+              We&rsquo;ll contact 3&ndash;5 homes near you as your advocate,
+              request itemized prices, and bring back the options to compare.
+              Flat $49 only if you pick one we found.
             </p>
           </div>
 
-          <Card tone="soft">
-            <p className="text-ink-soft mb-4">
-              Save this so your family can pick up where you left off.
-            </p>
-            <LinkButton
-              variant="secondary"
-              href="/login?next=/negotiate/start"
-            >
-              Save to an account →
-            </LinkButton>
-          </Card>
+          {/* Resume prompt */}
+          {hydrated && showResumePrompt && (
+            <Card tone="soft">
+              <p className="text-sm text-ink-soft mb-3">
+                We saved your last answers. Continue, or start fresh?
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowResumePrompt(false)}
+                >
+                  Continue where I left off
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    clearState();
+                    setState(DEFAULT_STATE);
+                    setStep(1);
+                    setShowResumePrompt(false);
+                  }}
+                >
+                  Start fresh
+                </Button>
+              </div>
+            </Card>
+          )}
 
-          <Card tone="primary">
-            <CardEyebrow>How this works</CardEyebrow>
-            <ol className="space-y-2 list-decimal list-inside text-ink">
-              <li>You tell us your zip and what kind of service you want.</li>
-              <li>
-                You authorize us (below) to contact homes on your behalf.
-                Every email identifies Honest Funeral as the sender and names the
-                family we represent.
-              </li>
-              <li>
-                We request each home&rsquo;s itemized General Price List &mdash;
-                a family&rsquo;s right under the FTC Funeral Rule.
-              </li>
-              <li>
-                As replies come in, we put them side by side. You review,
-                pick a home, and contact them directly.
-              </li>
-              <li>
-                Flat $49 only if you choose a home we presented to you.
-                Free otherwise.
-              </li>
-            </ol>
-          </Card>
+          {!showResumePrompt && hydrated && (
+            <>
+              {/* Progress bar */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs uppercase tracking-wider text-ink-muted font-medium">
+                    Step {step} of {TOTAL_STEPS}
+                  </span>
+                  {step > 1 && (
+                    <button
+                      onClick={back}
+                      className="text-xs text-ink-muted hover:text-ink-soft underline-offset-2 hover:underline"
+                    >
+                      ← Back
+                    </button>
+                  )}
+                </div>
+                <div
+                  className="h-1.5 bg-surface-soft rounded-full overflow-hidden"
+                  role="progressbar"
+                  aria-valuenow={step}
+                  aria-valuemin={1}
+                  aria-valuemax={TOTAL_STEPS}
+                >
+                  <div
+                    className="h-full bg-primary-deep transition-all duration-500"
+                    style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
+                  />
+                </div>
+              </div>
 
-          <Card>
-            <div className="mb-5 text-xs text-ink-muted bg-surface-soft rounded-xl px-4 py-3 border border-border">
-              We never sell or share your information. Your name and contact
-              details go only to the funeral homes you authorize &mdash; nowhere
-              else.
-            </div>
-            <form onSubmit={start} className="space-y-6">
-              <div className="grid sm:grid-cols-2 gap-5">
-                <div>
+              {/* Steps */}
+              {step === 1 && (
+                <Card>
                   <Label htmlFor="zip" hint="Used to find nearby homes. Never sold.">
-                    Your zip code
+                    What zip code?
                   </Label>
                   <Input
                     id="zip"
                     inputMode="numeric"
                     maxLength={5}
-                    required
-                    value={zip}
+                    value={state.zip}
                     onChange={(e) =>
-                      setZip(e.target.value.replace(/[^0-9]/g, ""))
+                      update("zip", e.target.value.replace(/[^0-9]/g, ""))
                     }
+                    placeholder="44106"
+                    autoFocus
                   />
-                </div>
-                <div>
-                  <Label htmlFor="svc">Type of service</Label>
+                  <Button
+                    size="lg"
+                    onClick={next}
+                    disabled={state.zip.length !== 5}
+                    className="mt-5"
+                  >
+                    Continue →
+                  </Button>
+                </Card>
+              )}
+
+              {step === 2 && (
+                <Card>
+                  <Label htmlFor="svc" hint="If you came from /decide, this is already set.">
+                    What kind of service?
+                  </Label>
                   <Select
                     id="svc"
-                    value={serviceType}
-                    onChange={(e) =>
-                      setServiceType(e.target.value as ServiceType)
-                    }
+                    value={state.serviceType}
+                    onChange={(e) => {
+                      update("serviceType", e.target.value as ServiceType);
+                      autoNext();
+                    }}
                   >
                     {Object.entries(SERVICE_LABELS).map(([k, v]) => (
                       <option key={k} value={k}>
@@ -169,238 +258,275 @@ function NegotiateStartForm() {
                       </option>
                     ))}
                   </Select>
-                </div>
-
-                <div className="sm:col-span-2">
-                  <div className="flex items-baseline justify-between mb-2">
-                    <Label htmlFor="radius" className="mb-0">
-                      How far should we look?
-                    </Label>
-                    <span className="text-sm text-ink-soft">
-                      <strong className="text-ink">{radiusMiles} miles</strong>{" "}
-                      &middot; up to{" "}
-                      <strong className="text-ink">{homesCount}</strong> homes
-                    </span>
-                  </div>
-                  <input
-                    id="radius"
-                    type="range"
-                    min={5}
-                    max={100}
-                    step={5}
-                    value={radiusMiles}
-                    onChange={(e) => setRadiusMiles(Number(e.target.value))}
-                    className="w-full accent-[var(--primary)]"
-                  />
-                  <div className="flex justify-between text-xs text-ink-muted mt-1">
-                    <span>5 mi</span>
-                    <span>25 mi</span>
-                    <span>50 mi</span>
-                    <span>100 mi</span>
-                  </div>
-                  <p className="text-xs text-ink-muted mt-2">
-                    We&rsquo;ll search funeral homes within this distance.
-                  </p>
-                </div>
-
-                <div>
-                  <Label htmlFor="first" hint="Used in the outreach emails only.">
-                    Your first name
-                  </Label>
-                  <Input
-                    id="first"
-                    required
-                    value={senderFirstName}
-                    onChange={(e) => setSenderFirstName(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="last" hint="Optional. Makes the outreach feel more personal.">
-                    Last name
-                  </Label>
-                  <Input
-                    id="last"
-                    value={senderLastName}
-                    onChange={(e) => setSenderLastName(e.target.value)}
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <Label
-                    htmlFor="timing"
-                    hint="So we can mention urgency in the outreach."
-                  >
-                    When does this need to happen?
-                  </Label>
-                  <Select
-                    id="timing"
-                    value={timing}
-                    onChange={(e) => setTiming(e.target.value)}
-                    required
-                  >
-                    <option value="" disabled>
-                      When do you need this?
-                    </option>
-                    <option value="today">Today / within 24 hours</option>
-                    <option value="this-week">This week (1–7 days)</option>
-                    <option value="this-month">This month (within 30 days)</option>
-                    <option value="planning-ahead">
-                      I&rsquo;m planning ahead (more than 30 days out)
-                    </option>
-                    <option value="not-sure">Not sure yet</option>
-                  </Select>
-                </div>
-                <div className="sm:col-span-2">
-                  <Label
-                    htmlFor="notes"
-                    hint="Optional. Anything that would help Sarah personalize the outreach."
-                  >
-                    Anything else we should know?
-                  </Label>
-                  <Textarea
-                    id="notes"
-                    rows={3}
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Religious tradition, language preference, special accommodation, etc."
-                  />
-                </div>
-              </div>
-
-              {/* Optional section — visually separate so people don't feel they need it */}
-              <div className="rounded-2xl border border-dashed border-border bg-surface-soft/60 p-5">
-                <button
-                  type="button"
-                  onClick={() => setShowOptional((v) => !v)}
-                  className="w-full flex items-center justify-between text-left"
-                >
-                  <div>
-                    <div className="text-xs uppercase tracking-wider text-ink-muted mb-1">
-                      Optional &middot; skip if you don&rsquo;t have these yet
-                    </div>
-                    <div className="font-serif text-ink">
-                      Have a funeral home or quote in mind already?
-                    </div>
-                  </div>
-                  <span
-                    aria-hidden
-                    className="text-ink-muted text-lg leading-none ml-4"
-                  >
-                    {showOptional ? "−" : "+"}
-                  </span>
-                </button>
-
-                {showOptional && (
-                  <div className="grid sm:grid-cols-2 gap-5 mt-5">
-                    <div>
-                      <Label
-                        htmlFor="home"
-                        hint="If they already gave you a name."
-                      >
-                        Funeral home you&rsquo;re considering
-                      </Label>
-                      <Input
-                        id="home"
-                        placeholder="e.g. Brookside Funeral Home"
-                        value={targetHomeName}
-                        onChange={(e) => setTargetHomeName(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor="q"
-                        hint="The all-in number, so we can baseline savings."
-                      >
-                        Their quoted price (USD)
-                      </Label>
-                      <Input
-                        id="q"
-                        inputMode="decimal"
-                        placeholder="e.g. 8500"
-                        value={targetEstimate}
-                        onChange={(e) => setTargetEstimate(e.target.value)}
-                      />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <Label
-                        htmlFor="extras"
-                        hint="Anything that affects the situation. We'll mention it gently."
-                      >
-                        Other context
-                      </Label>
-                      <Textarea
-                        id="extras"
-                        value={extras}
-                        onChange={(e) => setExtras(e.target.value)}
-                        placeholder="Pre-paid plan with a different home; veteran; cremation already chosen…"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="rounded-2xl border-2 border-primary bg-primary-soft p-5 space-y-3">
-                <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold">
-                  Required &middot; Your authorization
-                </div>
-                <ul className="text-sm text-ink space-y-2 list-disc pl-5">
-                  <li>
-                    Honest Funeral may contact funeral homes on your behalf
-                    and request itemized General Price Lists.
-                  </li>
-                  <li>
-                    We identify ourselves as your advocate &mdash; we never
-                    impersonate you.
-                  </li>
-                  <li>
-                    You make the final decision and contact the selected home
-                    yourself.
-                  </li>
-                </ul>
-                <details className="text-sm text-ink-soft">
-                  <summary className="cursor-pointer text-primary-deep hover:underline">
-                    Read the full authorization terms
-                  </summary>
-                  <p className="mt-2 leading-relaxed">
-                    I authorize Honest Funeral to contact funeral homes on my
-                    behalf and request their itemized General Price Lists.
-                    I understand that Honest Funeral will identify itself as my
-                    advocate (not impersonate me), that I make the final
-                    decision on which home to use, and that I will contact
-                    the selected home directly.
-                  </p>
-                </details>
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={authorized}
-                    onChange={(e) => setAuthorized(e.target.checked)}
-                    className="mt-1 w-5 h-5 accent-[var(--primary-deep)] shrink-0"
-                    required
-                  />
-                  <span className="text-sm text-ink leading-relaxed">
-                    I authorize Honest Funeral on the terms above.
-                  </span>
-                </label>
-              </div>
-
-              {error && (
-                <div className="text-sm text-bad bg-bad-soft border border-bad/30 rounded-xl px-4 py-3">
-                  {error}
-                </div>
+                  <Button size="lg" onClick={next} className="mt-5">
+                    Continue →
+                  </Button>
+                </Card>
               )}
 
-              <Button type="submit" disabled={busy || !authorized} size="lg">
-                {busy
-                  ? "Reaching out…"
-                  : `Start outreach to ${homesCount} homes`}
-              </Button>
-              <p className="text-xs text-ink-muted">
-                Every email is sent from a Honest Funeral address, clearly
-                identifying us as the sender and you as the family we
-                represent. Replies come to us; we summarize them for you.
+              {step === 3 && (
+                <Card>
+                  <h2 className="font-serif text-xl text-ink mb-3">
+                    How far are you willing to drive?
+                  </h2>
+                  <div className="grid sm:grid-cols-3 gap-3 mt-3">
+                    {[10, 25, 50].map((mi) => (
+                      <button
+                        key={mi}
+                        onClick={() => {
+                          update("radiusMiles", mi);
+                          autoNext();
+                        }}
+                        className={`rounded-2xl border-2 p-4 text-left transition-colors ${
+                          state.radiusMiles === mi
+                            ? "border-primary bg-primary-soft"
+                            : "border-border bg-surface hover:border-primary"
+                        }`}
+                      >
+                        <div className="font-serif text-xl text-ink">
+                          {mi} miles
+                        </div>
+                        <div className="text-sm text-ink-soft mt-1">
+                          ~{homesForRadius(mi)} homes
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </Card>
+              )}
+
+              {step === 4 && (
+                <Card>
+                  <h2 className="font-serif text-xl text-ink mb-2">
+                    Already have a quote from a funeral home?
+                  </h2>
+                  <p className="text-sm text-ink-muted mb-3">
+                    If yes, we&rsquo;ll baseline savings against it. If no,
+                    we just go gather options.
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {[
+                      { value: "yes" as const, label: "Yes, I have one" },
+                      { value: "no" as const, label: "No, not yet" },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => {
+                          update("hasQuote", opt.value);
+                          if (opt.value === "no") {
+                            // Clear any leftover quote details and skip 4b.
+                            update("targetHomeName", "");
+                            update("targetEstimate", "");
+                          }
+                          autoNext();
+                        }}
+                        className={`rounded-2xl border-2 p-4 text-left transition-colors ${
+                          state.hasQuote === opt.value
+                            ? "border-primary bg-primary-soft"
+                            : "border-border bg-surface hover:border-primary"
+                        }`}
+                      >
+                        <div className="font-serif text-lg text-ink">
+                          {opt.label}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  {state.hasQuote === "yes" && (
+                    <div className="mt-6 space-y-4">
+                      <div>
+                        <Label htmlFor="home">
+                          Which funeral home gave you the quote?
+                        </Label>
+                        <Input
+                          id="home"
+                          value={state.targetHomeName}
+                          onChange={(e) =>
+                            update("targetHomeName", e.target.value)
+                          }
+                          placeholder="e.g. Brookside Funeral Home"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="q">
+                          How much was their all-in quote?
+                        </Label>
+                        <Input
+                          id="q"
+                          inputMode="decimal"
+                          value={state.targetEstimate}
+                          onChange={(e) =>
+                            update("targetEstimate", e.target.value)
+                          }
+                          placeholder="8500"
+                        />
+                      </div>
+                      <Button size="lg" onClick={nextFromQuoteStep}>
+                        Continue →
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+              )}
+
+              {step === 5 && (
+                <Card>
+                  <h2 className="font-serif text-xl text-ink mb-3">
+                    How soon does this need to happen?
+                  </h2>
+                  <div className="grid gap-3 mt-3">
+                    {[
+                      { value: "today", label: "Today / within 24 hours" },
+                      { value: "this-week", label: "This week (1–7 days)" },
+                      { value: "this-month", label: "This month" },
+                      {
+                        value: "planning-ahead",
+                        label: "Planning ahead (more than 30 days)",
+                      },
+                      { value: "not-sure", label: "Not sure yet" },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => {
+                          update("timing", opt.value);
+                          autoNext();
+                        }}
+                        className={`rounded-2xl border-2 p-4 text-left transition-colors ${
+                          state.timing === opt.value
+                            ? "border-primary bg-primary-soft"
+                            : "border-border bg-surface hover:border-primary"
+                        }`}
+                      >
+                        <div className="font-serif text-base text-ink">
+                          {opt.label}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </Card>
+              )}
+
+              {step === 6 && (
+                <Card>
+                  <Label htmlFor="first" hint="So the funeral home knows who to write back to.">
+                    Your name?
+                  </Label>
+                  <div className="grid sm:grid-cols-2 gap-3 mt-2">
+                    <Input
+                      id="first"
+                      value={state.senderFirstName}
+                      onChange={(e) => update("senderFirstName", e.target.value)}
+                      placeholder="First"
+                      autoFocus
+                    />
+                    <Input
+                      id="last"
+                      value={state.senderLastName}
+                      onChange={(e) => update("senderLastName", e.target.value)}
+                      placeholder="Last (optional)"
+                    />
+                  </div>
+                  <Button
+                    size="lg"
+                    onClick={next}
+                    disabled={state.senderFirstName.length === 0}
+                    className="mt-5"
+                  >
+                    Continue →
+                  </Button>
+                </Card>
+              )}
+
+              {step === 7 && (
+                <Card>
+                  <Label htmlFor="notes">
+                    Anything specific to mention?
+                  </Label>
+                  <p className="text-sm text-ink-muted mb-2">
+                    Religious tradition, language preference, special
+                    accommodation. Optional.
+                  </p>
+                  <Textarea
+                    id="notes"
+                    rows={4}
+                    value={state.notes}
+                    onChange={(e) => update("notes", e.target.value)}
+                    placeholder="e.g. Catholic funeral, Spanish-speaking, veteran (DD-214 ready)…"
+                  />
+                  <div className="flex flex-wrap gap-3 mt-5">
+                    <Button size="lg" onClick={next}>
+                      Continue →
+                    </Button>
+                    <Button variant="ghost" onClick={next}>
+                      Skip
+                    </Button>
+                  </div>
+                </Card>
+              )}
+
+              {step === 8 && (
+                <Card tone="primary">
+                  <CardEyebrow>One last thing</CardEyebrow>
+                  <h2 className="font-serif text-2xl text-ink mb-3">
+                    Authorize us to reach out for you.
+                  </h2>
+                  <p className="text-ink-soft mb-4">
+                    By checking the box below, you tell us we can contact
+                    funeral homes near you on your behalf.
+                  </p>
+                  <ul className="text-sm text-ink space-y-2 list-disc pl-5 mb-5">
+                    <li>
+                      We identify ourselves as your advocate — never as
+                      you.
+                    </li>
+                    <li>
+                      We request itemized prices, which is your right under
+                      the FTC Funeral Rule.
+                    </li>
+                    <li>
+                      You make the final pick. You contact the home you
+                      choose.
+                    </li>
+                    <li>
+                      Flat $49 only if you choose a home we presented to
+                      you. Free otherwise.
+                    </li>
+                  </ul>
+                  <label className="flex items-start gap-3 cursor-pointer mb-5">
+                    <input
+                      type="checkbox"
+                      checked={authorized}
+                      onChange={(e) => setAuthorized(e.target.checked)}
+                      className="mt-1 w-5 h-5 accent-[var(--primary-deep)] shrink-0"
+                    />
+                    <span className="text-sm text-ink leading-relaxed">
+                      I authorize Honest Funeral on the terms above.
+                    </span>
+                  </label>
+                  {error && (
+                    <div className="text-sm text-bad bg-bad-soft border border-bad/30 rounded-xl px-4 py-3 mb-4">
+                      {error}
+                    </div>
+                  )}
+                  <Button
+                    onClick={submit}
+                    disabled={busy || !authorized}
+                    size="lg"
+                  >
+                    {busy
+                      ? "Reaching out…"
+                      : `Reach out to ${homesCount} homes →`}
+                  </Button>
+                </Card>
+              )}
+
+              <p className="text-center text-sm text-ink-soft">
+                You can close this and come back later. Your answers are
+                saved on this device.
               </p>
-            </form>
-          </Card>
+            </>
+          )}
 
           <HelpFooter />
         </div>
@@ -418,7 +544,7 @@ export default function Page() {
         </div>
       }
     >
-      <NegotiateStartForm />
+      <NegotiateStartWizard />
     </Suspense>
   );
 }
