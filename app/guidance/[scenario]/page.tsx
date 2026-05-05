@@ -81,6 +81,7 @@ export default async function GuidancePage({
     <>
       <JsonLd data={articleSchema} />
       <StepList
+        scenario={scenario}
         label={SCENARIO_LABELS[scenario]}
         headline={g.headline}
         subhead={g.subhead}
