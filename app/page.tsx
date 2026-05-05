@@ -145,7 +145,7 @@ export default function HomePage() {
                 href="/prices"
                 className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
               >
-                Look up fair prices →
+                See what funerals should cost in your zip →
               </Link>
             </article>
 
@@ -172,7 +172,7 @@ export default function HomePage() {
                 $49 &middot; only if you pick a home we found
               </div>
               <h3 className="font-serif text-xl text-ink mb-2">
-                Let us advocate for you
+                Have us call funeral homes for you
               </h3>
               <p className="text-sm text-ink-soft mb-5 flex-1">
                 We contact funeral homes on your behalf &mdash; transparently,

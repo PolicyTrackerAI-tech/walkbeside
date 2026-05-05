@@ -94,7 +94,7 @@ export function StepList({
                   Next step
                 </div>
                 <h2 className="font-serif text-2xl text-ink mb-2">
-                  Decide what kind of service fits.
+                  Let&rsquo;s figure out what kind of service fits.
                 </h2>
                 <p className="text-ink-soft mb-5">
                   Four short questions. We&rsquo;ll recommend a service type
