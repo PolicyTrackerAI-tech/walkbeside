@@ -12,6 +12,7 @@ import {
   AdvocateOutreachCard,
   type OutreachRow,
 } from "@/components/dashboard/AdvocateOutreachCard";
+import { DashboardActions } from "@/components/dashboard/DashboardActions";
 
 /**
  * Screen 8 — The dashboard. Three tasks. Never more.
@@ -101,7 +102,7 @@ export default async function DashboardPage({
     <main className="flex-1 flex flex-col">
       <SiteHeader
         rightSlot={
-          <div className="flex items-center gap-4 text-sm text-ink-muted">
+          <div className="flex items-center gap-4 text-sm text-ink-muted print:hidden">
             <Link href="/prep" className="hover:text-ink-soft">
               Prep kit
             </Link>
@@ -124,7 +125,12 @@ export default async function DashboardPage({
             <p className="text-ink-soft mt-2">
               Three tasks at a time. Finish one, the next will appear.
             </p>
+            <p className="text-xs text-ink-muted mt-1 print:hidden">
+              Saved on this device. We never email you unless you sign in.
+            </p>
           </div>
+
+          <DashboardActions />
 
           <SetupBanner />
 
@@ -195,14 +201,6 @@ export default async function DashboardPage({
             >
               Open the next-30-days checklist &rarr;
             </Link>
-          </Card>
-
-          <Card tone="soft">
-            <CardEyebrow>Coming soon (Phase 2)</CardEyebrow>
-            <p className="text-ink-soft text-sm">
-              Notifications hub · Benefits checker · Document vault · Family
-              collaboration · Estate settlement guide
-            </p>
           </Card>
 
           <HelpFooter />

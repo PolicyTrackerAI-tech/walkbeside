@@ -40,8 +40,8 @@ export function deriveTasks(s: DashboardState): { phase: Phase; tasks: Task[] } 
     tasks.push({
       id: "negotiate",
       phase: "funeral",
-      title: "Get us to negotiate with funeral homes for you",
-      detail: "We contact 3–5 as your named advocate. Flat $49 only if you pick a home we present.",
+      title: "Have us call funeral homes for you",
+      detail: "We reach 3–5 as your named advocate. Flat $49 only if you pick a home we present.",
       href: "/negotiate/start",
     });
   }
@@ -50,9 +50,9 @@ export function deriveTasks(s: DashboardState): { phase: Phase; tasks: Task[] } 
     tasks.push({
       id: "analyze-list",
       phase: "funeral",
-      title: "Photograph your itemized price list and we&rsquo;ll flag overcharges",
+      title: "Send us your price list and we&rsquo;ll flag every overcharge",
       detail:
-        "After your arrangement meeting, send us the price list and we&rsquo;ll show you what to push back on.",
+        "After your meeting, send the price list. We&rsquo;ll mark every line that&rsquo;s above fair range and show you what to push back on.",
       href: "/analyzer",
     });
   }
