@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Brand";
+import { PhaseProvider } from "@/components/PhaseContext";
 
 const sans = Inter({
   variable: "--font-sans-stack",
@@ -49,8 +50,10 @@ export default function RootLayout({
       className={`${sans.variable} ${serif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-ink">
-        {children}
-        <Footer />
+        <PhaseProvider>
+          {children}
+          <Footer />
+        </PhaseProvider>
       </body>
     </html>
   );
