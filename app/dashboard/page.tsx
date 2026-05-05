@@ -4,6 +4,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ProgressBar";
 import { SetupBanner } from "@/components/SetupBanner";
+import { HelpFooter } from "@/components/HelpFooter";
 import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
 import { deriveTasks } from "@/lib/dashboard";
@@ -203,6 +204,8 @@ export default async function DashboardPage({
               collaboration · Estate settlement guide
             </p>
           </Card>
+
+          <HelpFooter />
         </div>
       </section>
     </main>
@@ -284,6 +287,8 @@ function AnonymousDashboard() {
               </LinkButton>
             </div>
           </Card>
+
+          <HelpFooter />
         </div>
       </section>
     </main>

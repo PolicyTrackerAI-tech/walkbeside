@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { CrisisResources } from "@/components/CrisisResources";
+import { HelpFooter } from "@/components/HelpFooter";
 import type { GuidanceStep, Scenario } from "@/lib/scenarios";
 
 type StepStatus = "hidden" | "current" | "done" | "skipped";
@@ -336,6 +337,8 @@ export function StepList({
               You have time. You can close this and come back later.
             </p>
           </div>
+
+          <HelpFooter />
         </div>
       </section>
     </main>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CrisisResources } from "@/components/CrisisResources";
+import { HelpFooter } from "@/components/HelpFooter";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Card } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
@@ -375,6 +376,8 @@ export function CrisisUnexpected() {
               You have time. You can close this and come back later.
             </p>
           </div>
+
+          <HelpFooter />
         </div>
       </section>
     </main>

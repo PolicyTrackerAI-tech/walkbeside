@@ -7,6 +7,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
+import { HelpFooter } from "@/components/HelpFooter";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
 
@@ -400,6 +401,8 @@ function NegotiateStartForm() {
               </p>
             </form>
           </Card>
+
+          <HelpFooter />
         </div>
       </section>
     </main>

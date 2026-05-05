@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
+import { HelpFooter } from "@/components/HelpFooter";
 
 interface Task {
   id: string;
@@ -277,6 +278,8 @@ export function NextThirtyDays() {
               first month cleanly.
             </p>
           </Card>
+
+          <HelpFooter />
         </div>
       </section>
     </main>

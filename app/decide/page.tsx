@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
+import { HelpFooter } from "@/components/HelpFooter";
 import { DecideFlow } from "./DecideFlow";
 
 export const metadata: Metadata = {
@@ -25,6 +26,8 @@ export default function DecidePage() {
           </p>
 
           <DecideFlow />
+
+          <HelpFooter />
         </div>
       </section>
     </main>
