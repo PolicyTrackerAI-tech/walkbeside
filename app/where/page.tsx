@@ -65,10 +65,90 @@ export default function WherePage() {
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-12">
           <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-3">
-            Where did they pass away?
+            Where are you in this?
           </h1>
           <p className="text-ink-soft mb-6">
-            This tells us what to help with first. There&rsquo;s no wrong answer.
+            We can help at any stage. Pick what fits best.
+          </p>
+
+          {/* Mid-journey routes — for users who don't fit the
+              just-happened path. They navigate directly to the right
+              destination. */}
+          <div className="grid gap-3 mb-10">
+            <Link
+              href="/decide"
+              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
+                    Funeral is being planned
+                  </div>
+                  <div className="text-sm text-ink-soft">
+                    Decisions need to be made in the next few days.
+                    We&rsquo;ll help you figure out what kind of service
+                    fits.
+                  </div>
+                </div>
+                <div className="text-primary text-lg pt-1" aria-hidden>
+                  →
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/next-30-days"
+              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
+                    Funeral happened — now there&rsquo;s paperwork
+                  </div>
+                  <div className="text-sm text-ink-soft">
+                    Death certificates, accounts to close, insurance,
+                    estate. We&rsquo;ll walk through it in order.
+                  </div>
+                </div>
+                <div className="text-primary text-lg pt-1" aria-hidden>
+                  →
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/planning"
+              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
+            >
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
+                    Looking ahead — no death yet
+                  </div>
+                  <div className="text-sm text-ink-soft">
+                    Planning ahead for someone, or for yourself.
+                    Free fair-price lookup, prep kit, and what to know.
+                  </div>
+                </div>
+                <div className="text-primary text-lg pt-1" aria-hidden>
+                  →
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          <div
+            className="mb-8 flex items-center gap-4 text-xs uppercase tracking-wider text-ink-muted"
+            aria-hidden
+          >
+            <span className="h-px flex-1 bg-border" />
+            <span>It just happened</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+
+          <h2 className="font-serif text-2xl text-ink mb-2">
+            Where did they pass away?
+          </h2>
+          <p className="text-ink-soft mb-6">
+            This tells us what to help with in the next few hours.
           </p>
 
           <div className="mb-8 rounded-2xl border border-border bg-surface-soft px-5 py-4">
