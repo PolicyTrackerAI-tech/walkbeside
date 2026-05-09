@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { requirePaid } from "@/lib/require-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -12,6 +13,7 @@ export default async function NegotiationResultsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  await requirePaid(`/negotiate/${id}/results`);
   const supabase = await createClient();
   const {
     data: { user },

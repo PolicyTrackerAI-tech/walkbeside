@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
+import { requirePaid } from "@/lib/require-paid";
 import { Worksheet } from "./Worksheet";
 
 export const metadata: Metadata = {
@@ -9,7 +10,12 @@ export const metadata: Metadata = {
     "Walk into the funeral home knowing what you want. Print this and bring it. The director sees you brought it and the meeting changes.",
 };
 
-export default function WorksheetPage() {
+export default async function WorksheetPage() {
+  await requirePaid("/worksheet");
+  return <WorksheetView />;
+}
+
+function WorksheetView() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader

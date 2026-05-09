@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { isPaidUser } from "@/lib/auth-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -34,6 +36,13 @@ export default async function DashboardPage({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return <AnonymousDashboard />;
+
+  // Logged in but not paid → send to paywall. Once paid, all dashboard
+  // features (negotiations, after-funeral checklist, etc.) work without
+  // per-feature unlock screens.
+  if (!(await isPaidUser(supabase, user))) {
+    redirect("/paywall?next=/dashboard");
+  }
 
   const [
     { data: profile },

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { requirePaid } from "@/lib/require-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -13,6 +14,7 @@ export default async function NegotiationClosedPage({
   searchParams: Promise<{ dryrun?: string; free?: string; session_id?: string }>;
 }) {
   const { id } = await params;
+  await requirePaid(`/negotiate/${id}/closed`);
   const sp = await searchParams;
   const supabase = await createClient();
   const {
