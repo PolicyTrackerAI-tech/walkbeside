@@ -12,6 +12,12 @@ export const DECIDE_STORAGE_KEYS = {
   faith: "hf-decide:faith",
   customFaith: "hf-decide:customFaith",
   faithDenomination: "hf-decide:faithDenomination",
+  bodyAtService: "hf-decide:bodyAtService",
+  dispositionPreference: "hf-decide:dispositionPreference",
+  costPriority: "hf-decide:costPriority",
+  isVeteran: "hf-decide:isVeteran",
+  /** Persisted from the recommendation engine output so other pages can read what we suggested. */
+  recommendedServiceType: "hf-decide:recommendedServiceType",
 } as const;
 
 export type DecideStorageKey =

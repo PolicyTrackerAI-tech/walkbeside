@@ -42,6 +42,8 @@ const FAITH_DROPDOWN: { value: FaithKey; label: string }[] = [
   { value: "other", label: "Other (please specify)" },
 ];
 
+export type IsVeteran = "yes" | "no" | "unsure";
+
 export function DecideFlow() {
   const [faith, setFaith] = useState<FaithKey>("secular");
   const [customFaith, setCustomFaith] = useState<string>("");
@@ -50,6 +52,7 @@ export function DecideFlow() {
   const [dispositionPreference, setDispositionPreference] =
     useState<DispositionPreference>("no-preference");
   const [costPriority, setCostPriority] = useState<CostPriority>("balanced");
+  const [isVeteran, setIsVeteran] = useState<IsVeteran>("unsure");
   const [submitted, setSubmitted] = useState(false);
 
   // Hydrate from sessionStorage on mount.
@@ -62,6 +65,16 @@ export function DecideFlow() {
     if (c) setCustomFaith(c);
     const d = readDecide(DECIDE_STORAGE_KEYS.faithDenomination);
     if (d) setFaithDenomination(d);
+    const b = readDecide(DECIDE_STORAGE_KEYS.bodyAtService);
+    if (b === "yes" || b === "no" || b === "unsure") setBodyAtService(b);
+    const dp = readDecide(DECIDE_STORAGE_KEYS.dispositionPreference);
+    if (dp === "burial" || dp === "cremation" || dp === "donation" || dp === "no-preference") {
+      setDispositionPreference(dp);
+    }
+    const cp = readDecide(DECIDE_STORAGE_KEYS.costPriority);
+    if (cp === "lowest" || cp === "balanced" || cp === "tradition") setCostPriority(cp);
+    const v = readDecide(DECIDE_STORAGE_KEYS.isVeteran);
+    if (v === "yes" || v === "no" || v === "unsure") setIsVeteran(v);
   }, []);
 
   // Persist changes.
@@ -80,6 +93,22 @@ export function DecideFlow() {
   useEffect(() => {
     writeDecide(DECIDE_STORAGE_KEYS.faithDenomination, faithDenomination);
   }, [faithDenomination]);
+
+  useEffect(() => {
+    writeDecide(DECIDE_STORAGE_KEYS.bodyAtService, bodyAtService);
+  }, [bodyAtService]);
+
+  useEffect(() => {
+    writeDecide(DECIDE_STORAGE_KEYS.dispositionPreference, dispositionPreference);
+  }, [dispositionPreference]);
+
+  useEffect(() => {
+    writeDecide(DECIDE_STORAGE_KEYS.costPriority, costPriority);
+  }, [costPriority]);
+
+  useEffect(() => {
+    writeDecide(DECIDE_STORAGE_KEYS.isVeteran, isVeteran);
+  }, [isVeteran]);
 
   const denominationOptions = denominationsFor(faith);
 
@@ -106,6 +135,17 @@ export function DecideFlow() {
       }),
     [faith, bodyAtService, dispositionPreference, costPriority],
   );
+
+  // Persist the recommended service type so other pages (/next-30-days,
+  // /negotiate/start, etc.) can filter content by it without re-asking.
+  useEffect(() => {
+    if (submitted) {
+      writeDecide(
+        DECIDE_STORAGE_KEYS.recommendedServiceType,
+        recommendation.serviceType,
+      );
+    }
+  }, [submitted, recommendation.serviceType]);
 
   const faithProfile = getFaith(faith);
   const totals = SERVICE_TOTALS.find((t) => t.type === recommendation.serviceType);
@@ -213,6 +253,21 @@ export function DecideFlow() {
               <option value="lowest">Lowest cost — strip to essentials</option>
               <option value="balanced">Balanced — fair price for what we want</option>
               <option value="tradition">Tradition matters more than cost</option>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="veteran" hint="Veterans qualify for free national cemetery burial, a burial allowance, and a flag — most families miss at least one. We'll surface them automatically if you answer yes.">
+              Did the deceased serve in the military?
+            </Label>
+            <Select
+              id="veteran"
+              value={isVeteran}
+              onChange={(e) => setIsVeteran(e.target.value as IsVeteran)}
+            >
+              <option value="unsure">Not sure</option>
+              <option value="yes">Yes — they were a veteran</option>
+              <option value="no">No</option>
             </Select>
           </div>
         </div>
