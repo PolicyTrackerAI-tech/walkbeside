@@ -3,7 +3,6 @@ import Link from "next/link";
 import { LinkButton } from "@/components/ui/Button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { HomepageHeroCta } from "@/components/HomepageHeroCta";
 
 const ORG_SCHEMA = {
   "@context": "https://schema.org",
@@ -71,7 +70,9 @@ export default function HomePage() {
             time. The first one matters more than you think.
           </p>
 
-          <HomepageHeroCta />
+          <LinkButton href="/where" size="lg" className="w-full sm:w-auto">
+            Get started — it&rsquo;s free to start
+          </LinkButton>
 
           <p className="mt-6 text-sm text-ink-soft max-w-md mx-auto">
             Families routinely overpay by{" "}
