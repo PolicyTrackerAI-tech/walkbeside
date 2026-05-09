@@ -66,17 +66,17 @@ export default function PrivacyPage() {
             3. How we use it
           </h2>
           <ul className="list-disc list-inside space-y-2">
-            <li>To provide the features you use (lookups, prep kit, advocate outreach, obituary drafts).</li>
+            <li>To provide the features you use (lookups, prep kit, the funeral-home outreach, obituary drafts).</li>
             <li>To communicate with you about your account and your active cases.</li>
             <li>To improve the Service, including improving regional price benchmarks (always in aggregated form).</li>
             <li>To meet legal and accounting obligations.</li>
           </ul>
 
           <h2 className="font-serif text-xl text-ink pt-4">
-            4. Advocate outreach &mdash; what funeral homes see
+            4. The funeral-home outreach &mdash; what funeral homes see
           </h2>
           <p>
-            When you authorize our advocate outreach feature, the emails we
+            When you authorize our the funeral-home outreach feature, the emails we
             send to funeral homes identify Honest Funeral as the sender and name
             the family we represent (e.g., &ldquo;the Smith family&rdquo; or
             first name plus city). Funeral homes will see this identifying

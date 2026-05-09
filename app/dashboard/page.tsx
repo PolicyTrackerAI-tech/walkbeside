@@ -189,11 +189,17 @@ export default async function DashboardPage({
           ) : (
             <Card tone="good">
               <CardTitle>You&rsquo;re through the hardest week.</CardTitle>
-              <p className="text-ink-soft">
-                We&rsquo;re building these next. Check back, or follow updates
-                from the homepage. Meanwhile, keep this tab handy for the
-                document vault and prep kit.
+              <p className="text-ink-soft mb-3">
+                The active to-do list is empty. The post-funeral
+                checklist and the rest of the toolkit stay open
+                whenever you need them.
               </p>
+              <Link
+                href="/next-30-days"
+                className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+              >
+                Open the 30-day checklist &rarr;
+              </Link>
             </Card>
           )}
 

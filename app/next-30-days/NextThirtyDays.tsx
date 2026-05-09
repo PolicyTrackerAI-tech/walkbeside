@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Card, CardTitle } from "@/components/ui/Card";
+import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { DECIDE_STORAGE_KEYS, readDecide } from "@/lib/faith-storage";
@@ -224,14 +224,36 @@ export function NextThirtyDays() {
             })}
           </div>
 
-          <Card tone="soft">
-            <CardTitle>When you&rsquo;re ready, the estate side.</CardTitle>
-            <p className="text-ink-soft">
-              The full estate-settlement workflow &mdash; probate by state,
-              inherited IRA playbooks, unclaimed property searches &mdash; is
-              on the near-term roadmap. For now, this checklist covers the
-              first month cleanly.
+          <Card tone="primary">
+            <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
+            <CardTitle>The estate side.</CardTitle>
+            <p className="text-ink-soft mt-3 mb-5">
+              Probate basics, inherited IRA rules, the final tax
+              return, unclaimed property, digital-account legacy
+              contacts. Most families settle in 6&ndash;18 months;
+              this is the long-tail piece.
             </p>
+            <Link
+              href="/estate"
+              className="inline-block text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+            >
+              Open the estate guide &rarr;
+            </Link>
+          </Card>
+
+          <Card tone="soft">
+            <CardEyebrow>Other tools that stay open</CardEyebrow>
+            <p className="text-ink-soft text-sm">
+              Need to find a missing document, draft a eulogy, or
+              hand the work to a family member? Open the dashboard to
+              jump to any tool in the toolkit.
+            </p>
+            <Link
+              href="/dashboard"
+              className="inline-block mt-3 text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+            >
+              Open the dashboard &rarr;
+            </Link>
           </Card>
 
           <HelpFooter />

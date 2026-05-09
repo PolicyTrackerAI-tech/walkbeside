@@ -55,10 +55,10 @@ export default function TermsPage() {
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
-            3. The advocate outreach service
+            3. The the funeral-home outreach service
           </h2>
           <p>
-            If you authorize our advocate outreach feature, Honest Funeral will
+            If you authorize our the funeral-home outreach feature, Honest Funeral will
             contact funeral homes on your behalf and identify itself as your
             authorized advocate. We do not impersonate you. We collect
             General Price Lists and quotes from homes that respond and
@@ -104,7 +104,7 @@ export default function TermsPage() {
           <p>
             You agree not to misuse the Service, including by submitting
             false information, attempting to circumvent security, or using
-            the advocate outreach feature for any purpose other than
+            the the funeral-home outreach feature for any purpose other than
             arranging services for a specific deceased person (or
             preplanning for yourself or an identified individual). You are
             responsible for activity under your account.
