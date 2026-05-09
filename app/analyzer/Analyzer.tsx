@@ -71,7 +71,7 @@ export function Analyzer() {
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
           <div>
             <CardEyebrow>Price list analyzer</CardEyebrow>
-            <h1 className="font-serif text-3xl text-ink mb-3">
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               Paste their itemized price list. We&rsquo;ll flag the overcharges.
             </h1>
             <p className="text-ink-soft">

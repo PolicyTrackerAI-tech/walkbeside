@@ -36,7 +36,7 @@ export default function PrepPage() {
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
           <div className="no-print">
             <CardEyebrow>Arrangement meeting prep kit</CardEyebrow>
-            <h1 className="font-serif text-3xl text-ink mb-3">
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               The cheat sheet you bring to the meeting.
             </h1>
             <p className="text-ink-soft">

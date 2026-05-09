@@ -10,13 +10,10 @@ export const metadata: Metadata = {
     "Honest Funeral was built by a licensed funeral director and her brother. A consumer advocate, not a funeral home. We take no money from the industry.",
 };
 
-/*
- * TODO: Sarah / Ryan — replace placeholder lines marked below with:
- *   - Sarah's full name and state of licensure
- *   - Years in practice, firms worked at (or the level she's comfortable with)
- *   - Press / advisory board mentions once they land
- *   - Ryan's founder bio if desired
- */
+// TODO-FD: Sarah, replace with your full name + state once you're
+// comfortable. Currently we just say "a licensed funeral director."
+// TODO-margaret: when press lands (NYT, ProPublica, podcast), add an
+// "as featured in" card here.
 
 export default function AboutPage() {
   return (
@@ -46,12 +43,12 @@ export default function AboutPage() {
             </div>
             <CardTitle>Sarah &mdash; licensed funeral director</CardTitle>
             <p className="text-ink-soft mb-3">
-              Sarah is a licensed funeral director in {"{{TODO_SARAH_STATE}}"}{" "}
-              with {"{{TODO_SARAH_YEARS}}"} years of arrangement-meeting
-              experience. She writes every piece of content on this site,
-              validates every price in the database against the General Price
-              Lists she sees in the field, and tests every feature against one
-              question before anything ships:{" "}
+              Sarah is a licensed funeral director who has spent her
+              career in arrangement meetings. She writes every piece of
+              content on this site, validates every price in the
+              database against the General Price Lists she sees in the
+              field, and tests every feature against one question
+              before anything ships:{" "}
               <em>
                 would this have helped the last family I sat across from?
               </em>
@@ -64,11 +61,11 @@ export default function AboutPage() {
             </div>
             <CardTitle>Ryan &mdash; founder, product, engineering</CardTitle>
             <p className="text-ink-soft">
-              {/* TODO: replace with Ryan's short bio */}
-              Ryan builds the product and handles everything on the technical
-              side. Honest Funeral is the project of his sister&rsquo;s decade of
-              domain knowledge and his job is to make sure that knowledge ends
-              up in front of families at the exact moment they need it.
+              Ryan builds the product and handles everything on the
+              technical side. Honest Funeral is the project of his
+              sister&rsquo;s years of domain knowledge, and his job is
+              to make sure that knowledge ends up in front of families
+              at the exact moment they need it.
             </p>
           </Card>
 
@@ -80,10 +77,12 @@ export default function AboutPage() {
               the last account closed.&rdquo;
             </p>
             <p className="text-sm text-ink-soft">
-              We will never earn money from funeral homes, never sell lead data,
-              and never recommend a provider we wouldn&rsquo;t recommend to our
-              own family. Our only revenue is the flat $49 advocate fee, paid
-              by the family, only when we bring them a home they choose.
+              We will never earn money from funeral homes, never sell
+              lead data, and never recommend a provider we wouldn&rsquo;t
+              recommend to our own family. Our only revenue is the flat
+              $49 paid by the family up front to unlock the full
+              toolkit &mdash; refundable in 14 days if we didn&rsquo;t
+              save you anything.
             </p>
           </Card>
 
@@ -95,7 +94,11 @@ export default function AboutPage() {
                 Not a marketplace funded by the funeral homes it lists. (Ours
                 isn&rsquo;t.)
               </li>
-              <li>Not a subscription. Free tools are free forever.</li>
+              <li>
+                Not a subscription. Two tools stay free forever (price
+                lookup and prep kit); the rest unlock for one $49
+                charge.
+              </li>
               <li>
                 Not a substitute for a conversation with your own attorney or
                 financial professional for complex estate decisions.

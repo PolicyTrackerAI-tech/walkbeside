@@ -74,7 +74,7 @@ export async function POST(req: Request) {
           product_data: {
             name: "Honest Funeral — full toolkit unlock",
             description:
-              "One-time $49. Unlocks the full toolkit: advocate outreach to local funeral homes, side-by-side comparisons, the 30-day post-funeral checklist, the pre-meeting worksheet, the obituary helper, and more. Money-back if we don't save you anything documentable in 14 days.",
+              "One-time $49. Unlocks the full toolkit: outreach to local funeral homes, side-by-side comparisons, the 30-day post-funeral checklist, the pre-meeting worksheet, the obituary helper, and more. Money-back if we don't save you anything documentable in 14 days.",
           },
         },
         quantity: 1,

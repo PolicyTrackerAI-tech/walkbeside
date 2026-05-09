@@ -25,17 +25,19 @@ function WorksheetView() {
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12">
           <div className="no-print mb-8">
-            <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-3">
-              Pre-meeting preferences worksheet
+            <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
+              Pre-meeting worksheet
+            </p>
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
+              Walk into the meeting with decisions made.
             </h1>
             <p className="text-lg text-ink-soft mb-2">
-              Fill this out before you walk into the funeral home. Print it.
-              Bring it. The director will see you brought it &mdash; and that
-              alone changes the meeting.
+              Fill this out before you go to the funeral home. Print
+              it. Bring it. The director will see you brought it
+              &mdash; and that alone changes the meeting.
             </p>
             <p className="text-sm text-ink-muted">
-              Your answers save to this browser only. Nothing is sent. No
-              account needed.
+              Your answers save to this browser only. Nothing is sent.
             </p>
           </div>
 

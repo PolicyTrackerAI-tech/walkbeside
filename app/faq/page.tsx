@@ -148,22 +148,22 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "Does the $49 apply to cremation-only arrangements?",
+    q: "Does the $49 toolkit work for cremation-only arrangements?",
     plain:
-      "Yes — the flat $49 covers advocate outreach regardless of whether the family chooses burial, cremation, direct cremation, or a hybrid service. We charge it once, per family, only when you pick a home we presented. Direct cremation is where families often overpay the most; comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
+      "Yes — the $49 toolkit covers every service type: burial, cremation, direct cremation, green burial, body donation. One charge, per family, paid once when you start. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
     a: (
       <>
         <p>
-          Yes &mdash; the flat $49 covers advocate outreach regardless of
-          whether the family chooses burial, cremation, direct cremation, or
-          a hybrid service. We charge it once, per family, only when you pick
-          a home we presented.
+          Yes. The $49 unlocks the full toolkit regardless of whether
+          the family chooses burial, cremation, direct cremation,
+          green burial, or whole-body donation. One charge per family,
+          paid once when you start.
         </p>
         <p>
-          Direct cremation in particular is where families often overpay the
-          most, because traditional homes quote it as if it were a full
-          service. Comparison quotes typically save $1,500&ndash;$3,000 on
-          direct cremation alone.
+          Direct cremation in particular is where families often
+          overpay the most, because traditional homes quote it as if
+          it were a full service. Our comparison quotes typically save{" "}
+          $1,500&ndash;$3,000 on direct cremation alone.
         </p>
       </>
     ),
@@ -171,7 +171,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What if you don\u2019t have price data for my area?",
     plain:
-      "Our fair-price lookup works for most US zip codes. If we don't have enough local data to show a range, we'll say so plainly on the results page — we won't make up numbers. Advocate outreach still works in any zip with at least a few funeral homes: we send the request, homes respond under the FTC Funeral Rule, and you see whatever comes back.",
+      "Our fair-price lookup works for most US zip codes. If we don't have enough local data, we say so plainly — we don't make up numbers. The funeral-home outreach in the toolkit still works in any zip with at least a few funeral homes: we send the request, homes respond under the FTC Funeral Rule, and you see whatever comes back.",
     a: (
       <>
         <p>
@@ -181,7 +181,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           numbers.
         </p>
         <p>
-          Advocate outreach still works in any zip with at least a few
+          The funeral-home outreach in the toolkit still works in any zip with at least a few
           funeral homes: we send the request, homes respond under the FTC
           Funeral Rule, and you see whatever comes back.
         </p>
@@ -191,20 +191,21 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What happens after I submit my zip code?",
     plain:
-      "For the fair-price lookup: you see a results page with the regional range for each line item, and — if you entered a home's quote — a rating of that quote against the range. Nothing is saved. No account, no email collected. For advocate outreach: we show you the homes in your zip and ask for your authorization before anything goes out. You approve the list. We send the emails. Homes respond. We summarize in your dashboard.",
+      "For the fair-price lookup: you see a results page with the regional range for each line item, and — if you entered a home's quote — a rating of that quote against the range. Nothing is saved. No account, no email collected. For the funeral-home outreach in the toolkit: we show you the homes in your zip and ask for your written authorization before anything goes out. You approve the list. We send the emails. Homes respond. We summarize in your dashboard.",
     a: (
       <>
         <p>
-          For the fair-price lookup: you see a results page with the regional
-          range for each line item, and &mdash; if you entered a home&rsquo;s
-          quote &mdash; a rating of that quote against the range. Nothing is
-          saved. No account, no email collected.
+          For the fair-price lookup: you see a results page with the
+          regional range for each line item, and &mdash; if you
+          entered a home&rsquo;s quote &mdash; a rating of that quote
+          against the range. Nothing is saved. No account, no email
+          collected.
         </p>
         <p>
-          For advocate outreach: we show you the homes in your zip and ask
-          for your authorization before anything goes out. You approve the
-          list. We send the emails. Homes respond. We summarize in your
-          dashboard.
+          For the funeral-home outreach in the toolkit: we show you
+          the homes in your zip and ask for your written authorization
+          before anything goes out. You approve the list. We send the
+          emails. Homes respond. We summarize in your dashboard.
         </p>
       </>
     ),
@@ -212,40 +213,42 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Will funeral homes know I used Honest Funeral?",
     plain:
-      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. For advocate outreach: yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
+      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. When you have us call funeral homes for you (in the toolkit): yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
     a: (
       <>
         <p>
-          For the fair-price lookup: no. That happens entirely on our side,
-          and no home is contacted.
+          For the fair-price lookup: no. That happens entirely on our
+          side, and no home is contacted.
         </p>
         <p>
-          For advocate outreach: yes, and that&rsquo;s the point.{" "}
+          When you have us call funeral homes for you (in the
+          toolkit): yes, and that&rsquo;s the point.{" "}
           <strong>
             We identify ourselves, by name, in every email.
           </strong>{" "}
-          We invoke your rights under the FTC Funeral Rule to request a
-          General Price List. Your surname is mentioned so the home knows
-          who the inquiry is for; nothing else about you unless you tell us
-          to share it.
+          We invoke your rights under the FTC Funeral Rule to request
+          a General Price List. Your surname is mentioned so the home
+          knows who the inquiry is for; nothing else about you unless
+          you tell us to share it.
         </p>
         <p>
-          We don&rsquo;t impersonate families. We don&rsquo;t send secret
-          shoppers. Homes respond to Honest Funeral differently than to a grieving
-          family, and that&rsquo;s exactly why this works.
+          We don&rsquo;t impersonate families. We don&rsquo;t send
+          secret shoppers. Homes respond to Honest Funeral differently
+          than to a grieving family, and that&rsquo;s exactly why this
+          works.
         </p>
       </>
     ),
   },
   {
-    q: "What is \u201Cadvocate outreach\u201D and is it anonymous?",
+    q: "What does the toolkit do, and is it anonymous?",
     plain:
-      "Advocate outreach is the paid feature: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Honest Funeral is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
+      "The toolkit's funeral-home outreach: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Honest Funeral is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
     a: (
       <>
         <p>
-          Advocate outreach is the paid feature: we contact funeral homes on
-          your behalf and collect comparison quotes. It is{" "}
+          The toolkit&rsquo;s funeral-home outreach contacts funeral
+          homes on your behalf and collects comparison quotes. It is{" "}
           <strong>not anonymous</strong> &mdash; it&rsquo;s transparent.
         </p>
         <p>
@@ -328,11 +331,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What do I do if the funeral home won\u2019t honor their quote?",
     plain:
-      "For quotes we collected through advocate outreach: tell us within 14 days of service and we'll refund your $49. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
+      "For quotes collected through our outreach: tell us within 14 days of service and we'll refund your $49. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
     a: (
       <>
         <p>
-          For quotes we collected through advocate outreach: tell us within
+          For quotes collected through our outreach: tell us within
           14 days of service and we&rsquo;ll refund your $49. We also
           escalate with the home &mdash; a written, itemized GPL quote is
           what the Funeral Rule requires homes to provide, and homes that
@@ -351,12 +354,12 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How long does this whole process take?",
     plain:
-      "Fair-price lookup: under three minutes. No account, no email. Advocate outreach: most homes respond within 24–72 hours. Start to finish (authorize, quotes, choose a home) typically takes 3–5 days. Families tell us this is worth waiting for — the savings on a single funeral arrangement often cover a year of living expenses for someone on a fixed income.",
+      "Fair-price lookup: under three minutes. No account, no email. The funeral-home outreach: most homes respond within 24–72 hours. Start to finish (authorize, quotes, choose a home) typically takes 3–5 days. Families tell us this is worth waiting for — the savings on a single funeral arrangement often cover a year of living expenses for someone on a fixed income.",
     a: (
       <>
         <p>Fair-price lookup: under three minutes. No account, no email.</p>
         <p>
-          Advocate outreach: most homes respond within 24&ndash;72 hours.
+          The funeral-home outreach: most homes respond within 24&ndash;72 hours.
           Start to finish (authorize &rarr; quotes &rarr; choose a home)
           typically takes 3&ndash;5 days. Families tell us this is worth
           waiting for &mdash; the savings on a single funeral arrangement
@@ -462,7 +465,7 @@ export default function FaqPage() {
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/prices">Look up fair prices</LinkButton>
               <LinkButton href="/how-it-works" variant="secondary">
-                How advocate outreach works
+                How the toolkit works
               </LinkButton>
             </div>
           </div>

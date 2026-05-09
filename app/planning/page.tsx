@@ -157,7 +157,7 @@ export default function PlanningPage() {
                 Save to an account
               </LinkButton>
               <LinkButton href="/how-it-works" variant="secondary">
-                How advocate outreach works
+                How the funeral-home outreach works
               </LinkButton>
             </div>
           </Card>
