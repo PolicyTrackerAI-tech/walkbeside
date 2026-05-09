@@ -239,6 +239,18 @@ export default async function DashboardPage({
                 blurb="Twelve questions. We draft the obituary you can edit and hand to the home."
               />
               <ToolTile
+                href="/memorial"
+                eyebrow="Service"
+                title="Memorial program"
+                blurb="Build the print-ready service program — readings, music, processional, reception."
+              />
+              <ToolTile
+                href="/timeline"
+                eyebrow="Service"
+                title="Service-day timeline"
+                blurb="The day, hour by hour. Print it for the officiant, pallbearers, family."
+              />
+              <ToolTile
                 href="/worksheet"
                 eyebrow="Before the meeting"
                 title="Pre-meeting worksheet"
