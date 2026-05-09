@@ -6,6 +6,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
+import { StatusPill } from "@/components/ui/StatusPill";
 import { HelpFooter } from "@/components/HelpFooter";
 
 const STORAGE_KEY = "honestfuneral.vault.v1";
@@ -190,16 +191,16 @@ export function Vault() {
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
               Document vault
             </p>
-            <h1 className="font-serif text-3xl text-ink leading-tight mb-3">
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               Track every document the family needs.
             </h1>
-            <p className="text-ink-soft">
+            <p className="text-lg text-ink-soft">
               Note where each one is, what&rsquo;s missing, what&rsquo;s
               been ordered. Saves the &ldquo;wait, where&rsquo;s
               their...&rdquo; conversation a week from now.
             </p>
             {hydrated && docs.length > 0 && (
-              <p className="mt-3 text-sm text-ink-muted">
+              <p className="mt-4 text-sm text-ink-muted">
                 {haveCount} on hand · {needCount} still to find
               </p>
             )}
@@ -270,14 +271,13 @@ export function Vault() {
                       <div className="mt-3 flex flex-wrap gap-2">
                         {(["have-it", "need-to-find", "ordered", "lost"] as DocStatus[]).map(
                           (s) => (
-                            <Button
+                            <StatusPill
                               key={s}
-                              size="md"
-                              variant={d.status === s ? "primary" : "ghost"}
+                              active={d.status === s}
                               onClick={() => setStatus(d.id, s)}
                             >
                               {STATUS_LABEL[s]}
-                            </Button>
+                            </StatusPill>
                           ),
                         )}
                       </div>

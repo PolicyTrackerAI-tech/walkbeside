@@ -145,10 +145,10 @@ export function Eulogy() {
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
               Eulogy helper
             </p>
-            <h1 className="font-serif text-3xl text-ink leading-tight mb-3">
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               We&rsquo;ll draft a eulogy in your voice.
             </h1>
-            <p className="text-ink-soft">
+            <p className="text-lg text-ink-soft">
               Eight short questions. We turn your answers into a
               ready-to-read eulogy you can edit, time, and bring to
               the service.

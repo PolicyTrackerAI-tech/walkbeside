@@ -110,10 +110,10 @@ export function Family() {
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
               Family collaboration
             </p>
-            <h1 className="font-serif text-3xl text-ink leading-tight mb-3">
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               Hand the work to your family.
             </h1>
-            <p className="text-ink-soft">
+            <p className="text-lg text-ink-soft">
               You don&rsquo;t have to do all of this alone. Send your
               progress to a sibling, an adult child, or a trusted
               friend. They pick up where you left off — no account or
