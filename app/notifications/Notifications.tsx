@@ -6,6 +6,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
+import { StatusPill } from "@/components/ui/StatusPill";
 import { HelpFooter } from "@/components/HelpFooter";
 
 const STORAGE_KEY = "honestfuneral.notifications.v1";
@@ -119,6 +120,57 @@ export function Notifications() {
   ).length;
 
   return (
+    <NotificationsView
+      contacts={contacts}
+      hydrated={hydrated}
+      doneCount={doneCount}
+      todoCount={todoCount}
+      draftName={draftName}
+      setDraftName={setDraftName}
+      draftRelationship={draftRelationship}
+      setDraftRelationship={setDraftRelationship}
+      draftChannel={draftChannel}
+      setDraftChannel={setDraftChannel}
+      handleSubmit={handleSubmit}
+      quickAdd={quickAdd}
+      setStatus={setStatus}
+      remove={remove}
+    />
+  );
+}
+
+function NotificationsView({
+  contacts,
+  hydrated,
+  doneCount,
+  todoCount,
+  draftName,
+  setDraftName,
+  draftRelationship,
+  setDraftRelationship,
+  draftChannel,
+  setDraftChannel,
+  handleSubmit,
+  quickAdd,
+  setStatus,
+  remove,
+}: {
+  contacts: Contact[];
+  hydrated: boolean;
+  doneCount: number;
+  todoCount: number;
+  draftName: string;
+  setDraftName: (s: string) => void;
+  draftRelationship: string;
+  setDraftRelationship: (s: string) => void;
+  draftChannel: string;
+  setDraftChannel: (s: string) => void;
+  handleSubmit: (e: React.FormEvent) => void;
+  quickAdd: (cat: { name: string; relationship: string }) => void;
+  setStatus: (id: string, status: Status) => void;
+  remove: (id: string) => void;
+}) {
+  return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" />} />
       <section className="flex-1">
@@ -127,16 +179,16 @@ export function Notifications() {
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
               Notifications hub
             </p>
-            <h1 className="font-serif text-3xl text-ink leading-tight mb-3">
+            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               Who&rsquo;s been told, and who still needs to be.
             </h1>
-            <p className="text-ink-soft">
+            <p className="text-lg text-ink-soft">
               Hand the list to a friend or family member. They make
               the calls. You don&rsquo;t have to be the one telling
               everyone.
             </p>
             {hydrated && contacts.length > 0 && (
-              <p className="mt-3 text-sm text-ink-muted">
+              <p className="mt-4 text-sm text-ink-muted">
                 {doneCount} done · {todoCount} to go
               </p>
             )}
@@ -197,35 +249,31 @@ export function Notifications() {
                         </button>
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <Button
-                          size="md"
-                          variant={c.status === "called" ? "primary" : "ghost"}
+                        <StatusPill
+                          active={c.status === "called"}
                           onClick={() => setStatus(c.id, "called")}
                         >
                           Called
-                        </Button>
-                        <Button
-                          size="md"
-                          variant={c.status === "emailed" ? "primary" : "ghost"}
+                        </StatusPill>
+                        <StatusPill
+                          active={c.status === "emailed"}
                           onClick={() => setStatus(c.id, "emailed")}
                         >
                           Emailed
-                        </Button>
-                        <Button
-                          size="md"
-                          variant={c.status === "in-person" ? "primary" : "ghost"}
+                        </StatusPill>
+                        <StatusPill
+                          active={c.status === "in-person"}
                           onClick={() => setStatus(c.id, "in-person")}
                         >
                           In person
-                        </Button>
+                        </StatusPill>
                         {c.status !== "todo" && (
-                          <Button
-                            size="md"
-                            variant="ghost"
+                          <button
                             onClick={() => setStatus(c.id, "todo")}
+                            className="text-xs text-ink-muted hover:text-ink underline-offset-2 hover:underline ml-auto"
                           >
                             Reset
-                          </Button>
+                          </button>
                         )}
                       </div>
                     </div>

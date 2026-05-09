@@ -15,6 +15,7 @@ import {
   type OutreachRow,
 } from "@/components/dashboard/AdvocateOutreachCard";
 import { DashboardActions } from "@/components/dashboard/DashboardActions";
+import { ToolTile } from "@/components/dashboard/ToolTile";
 
 /**
  * Screen 8 — The dashboard. Three tasks. Never more.
@@ -213,61 +214,77 @@ export default async function DashboardPage({
           </Card>
 
           <div>
-            <CardEyebrow>The full toolkit</CardEyebrow>
-            <p className="text-ink-soft text-sm mt-2 mb-4">
-              Open any of these whenever you need them. They stay
-              available across the whole arc.
-            </p>
+            <div className="mb-5">
+              <CardEyebrow>The full toolkit</CardEyebrow>
+              <h2 className="font-serif text-2xl text-ink leading-tight">
+                Every tool, all unlocked.
+              </h2>
+              <p className="text-ink-soft text-sm mt-1">
+                Open any of these whenever you need them. They stay
+                available across the whole arc.
+              </p>
+            </div>
+
             <div className="grid sm:grid-cols-2 gap-3">
-              <ToolLink
+              <ToolTile
                 href="/eulogy"
+                eyebrow="Service"
                 title="Eulogy helper"
-                blurb="Eight questions, drafted eulogy."
+                blurb="Eight short questions. We draft a ready-to-read eulogy in your voice."
               />
-              <ToolLink
-                href="/notifications"
-                title="Notifications hub"
-                blurb="Track who&rsquo;s been told."
-              />
-              <ToolLink
-                href="/vault"
-                title="Document vault"
-                blurb="Track every document the family needs."
-              />
-              <ToolLink
-                href="/family"
-                title="Family collaboration"
-                blurb="Hand the work to a sibling or adult child."
-              />
-              <ToolLink
-                href="/estate"
-                title="Estate settlement"
-                blurb="Probate, inherited IRAs, unclaimed property."
-              />
-              <ToolLink
-                href="/worksheet"
-                title="Pre-meeting worksheet"
-                blurb="Bring decisions, not questions."
-              />
-              <ToolLink
+              <ToolTile
                 href="/obituary"
+                eyebrow="Service"
                 title="Obituary helper"
-                blurb="Drafted from your answers."
+                blurb="Twelve questions. We draft the obituary you can edit and hand to the home."
               />
-              <ToolLink
-                href="/certificates"
-                title="Certificate calculator"
-                blurb="Order the right number, save rush fees."
+              <ToolTile
+                href="/worksheet"
+                eyebrow="Before the meeting"
+                title="Pre-meeting worksheet"
+                blurb="Walk in with decisions made. The director sees you brought it."
               />
-              <ToolLink
+              <ToolTile
                 href="/analyzer"
+                eyebrow="At the meeting"
                 title="Price-list analyzer"
-                blurb="Flag every overcharge on a quote."
+                blurb="Paste the quote. We flag every overcharge."
               />
-              <ToolLink
+              <ToolTile
+                href="/certificates"
+                eyebrow="After"
+                title="Certificate calculator"
+                blurb="Order the right number. Avoid rush fees later."
+              />
+              <ToolTile
                 href="/veterans"
+                eyebrow="After"
                 title="Veterans benefits"
-                blurb="What the family qualifies for."
+                blurb="What the family qualifies for. Most families miss at least one."
+              />
+              <ToolTile
+                href="/notifications"
+                eyebrow="After"
+                title="Notifications hub"
+                blurb="Track who&rsquo;s been told. Hand the list to a friend."
+              />
+              <ToolTile
+                href="/vault"
+                eyebrow="After"
+                title="Document vault"
+                blurb="Track every document. Where each one is, what&rsquo;s missing."
+              />
+              <ToolTile
+                href="/family"
+                eyebrow="Anytime"
+                title="Family collaboration"
+                blurb="Hand the work to a sibling or adult child. No account needed."
+              />
+              <ToolTile
+                href="/estate"
+                eyebrow="Long term"
+                title="Estate settlement"
+                blurb="Probate, inherited IRAs, unclaimed property, digital accounts."
               />
             </div>
           </div>
@@ -395,27 +412,3 @@ function UnconfiguredDashboard() {
   );
 }
 
-function ToolLink({
-  href,
-  title,
-  blurb,
-}: {
-  href: string;
-  title: string;
-  blurb: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="block rounded-2xl border border-border bg-surface hover:border-primary hover:bg-primary-soft p-4 transition-colors group"
-    >
-      <div className="font-medium text-ink group-hover:text-primary-deep">
-        {title}
-      </div>
-      <div
-        className="text-sm text-ink-soft mt-1"
-        dangerouslySetInnerHTML={{ __html: blurb }}
-      />
-    </Link>
-  );
-}
