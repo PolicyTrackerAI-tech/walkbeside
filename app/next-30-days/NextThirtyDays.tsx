@@ -1,225 +1,99 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
-
-interface Task {
-  id: string;
-  title: string;
-  body: string;
-}
-
-interface Phase {
-  id: string;
-  label: string;
-  /** One-liner shown when the phase is collapsed — sets expectations without listing tasks. */
-  whenLabel: string;
-  heading: string;
-  intro: string;
-  tasks: Task[];
-}
-
-const PHASES: Phase[] = [
-  {
-    id: "phase-0",
-    label: "Funeral week",
-    whenLabel: "Right now, before the service",
-    heading: "Between the death and the service",
-    intro:
-      "The funeral hasn't happened yet. You're holding it together. These are the only things that need to happen before the service — everything else can wait.",
-    tasks: [
-      {
-        id: "p0-certs-count",
-        title: "Tell the funeral home how many death certificates you'll need",
-        body: "Most families need 10–15. Order through the home at the time of death — the home usually passes through the state's base fee, and ordering later is slower and pricier. Need help estimating? The certificate calculator at /certificates walks you through who'll ask for one.",
-      },
-      {
-        id: "p0-bereavement",
-        title: "Tell the deceased's employer (if applicable)",
-        body: "Even one phone call to HR triggers final-paycheck rules, employer-provided life-insurance claims, and bereavement-leave coordination for surviving family members who work there. Ask HR for a written list of every benefit and how to claim it.",
-      },
-      {
-        id: "p0-obit",
-        title: "Draft the obituary",
-        body: "Newspaper and online obituaries can take 24–72 hours to publish. The funeral home needs the final text to coordinate with the local paper. Our obituary helper at /obituary asks a few questions and writes a first draft you can edit.",
-      },
-      {
-        id: "p0-clothes",
-        title: "Pick out clothes and personal effects",
-        body: "If there will be a viewing or open casket, the funeral home needs an outfit. If cremation, the body is usually dressed simply or wrapped. Glasses, jewelry, and dentures are family decisions — they can be returned or buried/cremated with the body. There is no wrong answer.",
-      },
-      {
-        id: "p0-notification-list",
-        title: "Make a list of who needs to be told",
-        body: "Two people, three people, ten — start small. Give the list to a friend or family member who's not too close to the loss to help make calls. You don't have to be the one telling everyone.",
-      },
-      {
-        id: "p0-officiant",
-        title: "Confirm who will lead the service",
-        body: "Clergy, celebrant, family member, or no one at all — pick early so they can prepare. If you don't have someone, the funeral home can usually recommend a non-denominational celebrant for $200–$500.",
-      },
-    ],
-  },
-  {
-    id: "week-1",
-    label: "Week 1",
-    whenLabel: "After the service, the first seven days",
-    heading: "The first seven days",
-    intro:
-      "The funeral is either imminent or just happened. Two goals this week: stop the financial bleeding, and order enough death certificates.",
-    tasks: [
-      {
-        id: "w1-certs",
-        title: "Order 10–15 certified death certificates",
-        body: "Every bank, insurer, and government agency wants a certified copy. Ten to fifteen covers almost every family. Order through the funeral home or direct from your state's vital records office — vital records is usually cheaper.",
-      },
-      {
-        id: "w1-ss",
-        title: "Notify Social Security",
-        body: "Call 1-800-772-1213 or have the funeral home report it. Social Security may need to claw back the last payment received after the date of death. Any dependents may be entitled to survivor benefits — we flag that again in week 2.",
-      },
-      {
-        id: "w1-freeze",
-        title: "Freeze credit at all three bureaus",
-        body: "Experian, Equifax, TransUnion. This prevents identity theft, which spikes around publicly-posted obituaries. Free and takes about 20 minutes online.",
-      },
-      {
-        id: "w1-employer",
-        title: "Notify their employer (if applicable)",
-        body: "Final paycheck, any unused PTO payout, life-insurance-through-work payout. Ask HR for a written list of all employer-provided benefits and how to claim each one.",
-      },
-      {
-        id: "w1-will",
-        title: "Find the will, trust documents, and advance directives",
-        body: "Look in their filing cabinet, safe, safe deposit box, or with their attorney. If there's no will, the estate goes through probate under state intestate rules. Don't panic if you can't find it immediately — you have time.",
-      },
-    ],
-  },
-  {
-    id: "weeks-2-4",
-    label: "Weeks 2–4",
-    whenLabel: "The quiet admin middle",
-    heading: "The quiet admin middle",
-    intro:
-      "Most of the phone calls happen here. Pace yourself — nothing on this list is emergency-urgent, but it all adds up.",
-    tasks: [
-      {
-        id: "w2-life-insurance",
-        title: "File every life insurance claim you know about",
-        body: "Each policy has its own claim form. You'll need a certified death certificate per policy. If you don't know which policies existed, use the free NAIC Life Insurance Policy Locator — most families have no idea it exists.",
-      },
-      {
-        id: "w2-banks",
-        title: "Notify banks and investment firms",
-        body: "They will freeze accounts as soon as notified. Transfer anything you'll need for funeral expenses before you notify — then notify. For jointly-held accounts with a survivor, this is straightforward. For individually-held, probate rules apply.",
-      },
-      {
-        id: "w2-va",
-        title: "Claim VA burial benefits if they were a veteran",
-        body: "Up to $2,000 for service-connected death, several hundred otherwise. Consistently unclaimed. File VA Form 21P-530 within two years of death.",
-      },
-      {
-        id: "w2-medicare",
-        title: "Cancel Medicare and Medicaid",
-        body: "Reported to Medicare via Social Security automatically, but confirm. If they had Medicare Advantage or a Part D plan, cancel that separately — those plans keep billing otherwise.",
-      },
-      {
-        id: "w2-subs",
-        title: "Cancel recurring subscriptions",
-        body: "Streaming services, gym memberships, subscription boxes, software subscriptions. Check their email and bank statements for anything charging monthly.",
-      },
-      {
-        id: "w2-mail",
-        title: "Forward their mail",
-        body: "USPS mail forwarding prevents an empty-house signal and helps surface accounts you didn't know existed. Set up for six months.",
-      },
-      {
-        id: "w2-dmv",
-        title: "Notify the DMV and cancel auto insurance (if applicable)",
-        body: "If they had a vehicle registered in their name, the DMV needs to be told. Auto insurance can be cancelled or transferred depending on who owned the car.",
-      },
-    ],
-  },
-  {
-    id: "month-2-plus",
-    label: "Month 2+",
-    whenLabel: "Estate work and long-tail items",
-    heading: "What comes after the paperwork",
-    intro:
-      "Estate work stretches out. This list is shorter but higher-stakes. Most families settle in 6–18 months.",
-    tasks: [
-      {
-        id: "m2-probate",
-        title: "Start probate, or confirm you don't need to",
-        body: "If there's a revocable living trust holding the assets, probate is usually not required. If there's only a will or no will, probate is. Every state has different rules. An estate attorney consult is usually worth an hour of their time.",
-      },
-      {
-        id: "m2-tax",
-        title: "File their final income tax return",
-        body: "A final 1040 is due for the portion of the year they were alive. If the estate earns income after death (investment dividends, for example), that's a separate 1041 estate return.",
-      },
-      {
-        id: "m2-retirement",
-        title: "Handle inherited retirement accounts carefully",
-        body: "Inherited IRA rules changed in 2020. Most non-spouse beneficiaries must drain the account within 10 years. Getting this wrong is expensive. Talk to a CPA or the retirement plan administrator before moving the money.",
-      },
-      {
-        id: "m2-unclaimed",
-        title: "Check state unclaimed property databases",
-        body: "Every state has a database of dormant accounts, uncashed checks, safe deposit box contents, and abandoned property. Search each state they lived in. Free — and commonly produces a few hundred to a few thousand dollars.",
-      },
-      {
-        id: "m2-digital",
-        title: "Close or memorialize digital accounts",
-        body: "Email, social media, cloud storage, password managers. Facebook and Instagram can be memorialized. Apple and Google have legacy-contact options. Close anything that could be hijacked.",
-      },
-      {
-        id: "m2-headstone",
-        title: "Order the headstone directly, not through the funeral home",
-        body: "Funeral home markup on stones is among the highest in the industry. Buy from a monument company that services your cemetery — same stone, typically half the price.",
-      },
-    ],
-  },
-];
+import { DECIDE_STORAGE_KEYS, readDecide } from "@/lib/faith-storage";
+import type { ServiceType } from "@/lib/pricing-data";
+import {
+  PHASES,
+  type Phase,
+  type Task,
+  type UserContext,
+  type HelpAction,
+  type IsVeteran,
+} from "./tasks";
 
 const STORAGE_KEY = "honestfuneral.next30.v1";
 const EXPANDED_KEY = "honestfuneral.next30.expanded.v1";
 
-type DoneMap = Record<string, boolean>;
+type Status = "todo" | "done" | "skipped";
+type StatusMap = Record<string, Status>;
 type ExpandedOverrides = Record<string, boolean>;
+type HelpOpenMap = Record<string, boolean>;
 
-/** A phase counts as complete only if every task is done. (Skipping isn't a concept here — checkbox only.) */
-function phaseCompletedCount(phase: Phase, done: DoneMap): number {
-  return phase.tasks.filter((t) => done[t.id]).length;
+function applicableTasks(phase: Phase, ctx: UserContext): Task[] {
+  return phase.tasks.filter((t) => !t.applicableWhen || t.applicableWhen(ctx));
 }
 
-function phaseIsComplete(phase: Phase, done: DoneMap): boolean {
-  return phaseCompletedCount(phase, done) === phase.tasks.length;
+function phaseDoneCount(phase: Phase, statuses: StatusMap, ctx: UserContext): number {
+  return applicableTasks(phase, ctx).filter(
+    (t) => statuses[t.id] === "done" || statuses[t.id] === "skipped",
+  ).length;
 }
 
-/** Current phase = first phase that's not yet fully complete. */
-function deriveCurrentPhaseId(done: DoneMap): string {
+function phaseIsComplete(phase: Phase, statuses: StatusMap, ctx: UserContext): boolean {
+  const apps = applicableTasks(phase, ctx);
+  if (apps.length === 0) return true;
+  return phaseDoneCount(phase, statuses, ctx) === apps.length;
+}
+
+function deriveCurrentPhaseId(statuses: StatusMap, ctx: UserContext): string {
   for (const p of PHASES) {
-    if (!phaseIsComplete(p, done)) return p.id;
+    if (!phaseIsComplete(p, statuses, ctx)) return p.id;
   }
   return PHASES[PHASES.length - 1].id;
 }
 
+function readUserContext(): UserContext {
+  return {
+    serviceType:
+      (readDecide(DECIDE_STORAGE_KEYS.recommendedServiceType) as
+        | ServiceType
+        | null) ?? undefined,
+    bodyAtService:
+      (readDecide(DECIDE_STORAGE_KEYS.bodyAtService) as
+        | "yes"
+        | "no"
+        | "unsure"
+        | null) ?? undefined,
+    isVeteran:
+      (readDecide(DECIDE_STORAGE_KEYS.isVeteran) as IsVeteran | null) ??
+      undefined,
+  };
+}
+
 export function NextThirtyDays() {
-  const [done, setDone] = useState<DoneMap>({});
+  const [statuses, setStatuses] = useState<StatusMap>({});
   const [expandedOverrides, setExpandedOverrides] = useState<ExpandedOverrides>(
     {},
   );
+  const [helpOpen, setHelpOpen] = useState<HelpOpenMap>({});
+  const [ctx, setCtx] = useState<UserContext>({});
   const [hydrated, setHydrated] = useState(false);
-  const [saveError, setSaveError] = useState(false);
 
-  // Hydrate from localStorage.
+  // Hydrate.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setDone(JSON.parse(raw));
+      if (raw) {
+        // Migrate the old shape (Record<string, boolean>) to the new
+        // Status enum so existing users don't lose progress.
+        const parsed = JSON.parse(raw) as
+          | Record<string, boolean>
+          | Record<string, Status>;
+        const migrated: StatusMap = {};
+        for (const [k, v] of Object.entries(parsed)) {
+          if (v === true) migrated[k] = "done";
+          else if (v === "done" || v === "skipped" || v === "todo") {
+            migrated[k] = v;
+          }
+        }
+        setStatuses(migrated);
+      }
     } catch {
       // ignore
     }
@@ -229,21 +103,19 @@ export function NextThirtyDays() {
     } catch {
       // ignore
     }
+    setCtx(readUserContext());
     setHydrated(true);
   }, []);
 
-  // Persist done state.
   useEffect(() => {
     if (!hydrated) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(done));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(statuses));
     } catch {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSaveError(true);
+      // ignore
     }
-  }, [done, hydrated]);
+  }, [statuses, hydrated]);
 
-  // Persist expanded overrides.
   useEffect(() => {
     if (!hydrated) return;
     try {
@@ -253,15 +125,26 @@ export function NextThirtyDays() {
     }
   }, [expandedOverrides, hydrated]);
 
-  const total = useMemo(
-    () => PHASES.reduce((sum, p) => sum + p.tasks.length, 0),
-    [],
+  const totalApplicable = useMemo(
+    () => PHASES.reduce((sum, p) => sum + applicableTasks(p, ctx).length, 0),
+    [ctx],
   );
-  const completed = Object.values(done).filter(Boolean).length;
-  const currentPhaseId = useMemo(() => deriveCurrentPhaseId(done), [done]);
+  const completedApplicable = useMemo(() => {
+    let n = 0;
+    for (const p of PHASES) {
+      n += phaseDoneCount(p, statuses, ctx);
+    }
+    return n;
+  }, [statuses, ctx]);
+  const currentPhaseId = useMemo(
+    () => deriveCurrentPhaseId(statuses, ctx),
+    [statuses, ctx],
+  );
 
-  function toggleTask(id: string) {
-    setDone((prev) => ({ ...prev, [id]: !prev[id] }));
+  function setStatus(taskId: string, status: Status) {
+    setStatuses((prev) => ({ ...prev, [taskId]: status }));
+    // Closing help when user advances keeps the next task clean.
+    setHelpOpen((prev) => ({ ...prev, [taskId]: false }));
   }
 
   function togglePhase(phaseId: string, currentlyExpanded: boolean) {
@@ -271,10 +154,13 @@ export function NextThirtyDays() {
     }));
   }
 
-  function isExpanded(phaseId: string): boolean {
+  function isPhaseExpanded(phaseId: string): boolean {
     if (phaseId in expandedOverrides) return expandedOverrides[phaseId];
-    // Default: only the current phase is expanded.
     return phaseId === currentPhaseId;
+  }
+
+  function toggleHelp(taskId: string) {
+    setHelpOpen((prev) => ({ ...prev, [taskId]: !prev[taskId] }));
   }
 
   return (
@@ -296,47 +182,43 @@ export function NextThirtyDays() {
             </p>
             {hydrated && (
               <p className="mt-4 text-sm text-ink-muted">
-                {completed} of {total} done so far.
+                {completedApplicable} of {totalApplicable} done so far.
               </p>
-            )}
-            {hydrated && saveError && (
-              <Card tone="warn" className="!p-4 mt-3">
-                <p className="text-sm text-ink">
-                  Your browser blocked saving progress to this device. We
-                  won&rsquo;t remember it next session.
-                </p>
-              </Card>
             )}
           </div>
 
-          {/* Timeline stepper — visual orientation across the four phases. */}
           <Timeline
             phases={PHASES}
             currentPhaseId={currentPhaseId}
-            done={done}
+            statuses={statuses}
+            ctx={ctx}
             hydrated={hydrated}
           />
 
-          {/* Phase accordion. */}
           <div className="space-y-3">
             {PHASES.map((phase) => {
-              const phaseDone = phaseCompletedCount(phase, done);
-              const phaseTotal = phase.tasks.length;
-              const isComplete = phaseDone === phaseTotal;
+              const apps = applicableTasks(phase, ctx);
+              const phaseDone = phaseDoneCount(phase, statuses, ctx);
+              const phaseTotal = apps.length;
+              const isComplete = phaseTotal > 0 && phaseDone === phaseTotal;
               const isCurrent = phase.id === currentPhaseId;
-              const expanded = isExpanded(phase.id);
+              const expanded = isPhaseExpanded(phase.id);
               return (
                 <PhaseCard
                   key={phase.id}
                   phase={phase}
+                  applicableTasks={apps}
                   expanded={expanded}
                   isCurrent={isCurrent}
                   isComplete={isComplete}
                   doneCount={phaseDone}
                   totalCount={phaseTotal}
-                  done={done}
-                  onToggleTask={toggleTask}
+                  statuses={statuses}
+                  helpOpen={helpOpen}
+                  ctx={ctx}
+                  onSetStatus={setStatus}
                   onTogglePhase={() => togglePhase(phase.id, expanded)}
+                  onToggleHelp={toggleHelp}
                 />
               );
             })}
@@ -364,12 +246,14 @@ export function NextThirtyDays() {
 function Timeline({
   phases,
   currentPhaseId,
-  done,
+  statuses,
+  ctx,
   hydrated,
 }: {
   phases: Phase[];
   currentPhaseId: string;
-  done: DoneMap;
+  statuses: StatusMap;
+  ctx: UserContext;
   hydrated: boolean;
 }) {
   return (
@@ -379,7 +263,7 @@ function Timeline({
       </div>
       <ol className="flex items-start gap-2">
         {phases.map((phase, i) => {
-          const complete = phaseIsComplete(phase, done);
+          const complete = phaseIsComplete(phase, statuses, ctx);
           const isCurrent = hydrated && phase.id === currentPhaseId;
           const isLast = i === phases.length - 1;
           return (
@@ -427,30 +311,43 @@ function Timeline({
 
 function PhaseCard({
   phase,
+  applicableTasks,
   expanded,
   isCurrent,
   isComplete,
   doneCount,
   totalCount,
-  done,
-  onToggleTask,
+  statuses,
+  helpOpen,
+  ctx,
+  onSetStatus,
   onTogglePhase,
+  onToggleHelp,
 }: {
   phase: Phase;
+  applicableTasks: Task[];
   expanded: boolean;
   isCurrent: boolean;
   isComplete: boolean;
   doneCount: number;
   totalCount: number;
-  done: DoneMap;
-  onToggleTask: (id: string) => void;
+  statuses: StatusMap;
+  helpOpen: HelpOpenMap;
+  ctx: UserContext;
+  onSetStatus: (taskId: string, status: Status) => void;
   onTogglePhase: () => void;
+  onToggleHelp: (taskId: string) => void;
 }) {
   const headerTone = isComplete
     ? "bg-good-soft border-good/30"
     : isCurrent
       ? "bg-primary-soft border-primary"
       : "bg-surface border-border";
+
+  // Find the first task that's not done/skipped — that's the "current task" within this phase.
+  const currentTaskIndex = applicableTasks.findIndex(
+    (t) => statuses[t.id] !== "done" && statuses[t.id] !== "skipped",
+  );
 
   return (
     <div className={`rounded-2xl border-2 overflow-hidden ${headerTone}`}>
@@ -491,60 +388,244 @@ function PhaseCard({
       </button>
 
       {expanded && (
-        <div className="border-t border-border bg-surface px-5 py-5 space-y-4">
+        <div className="border-t border-border bg-surface px-5 py-5 space-y-3">
           <p className="text-ink-soft">{phase.intro}</p>
-          <ul className="space-y-3">
-            {phase.tasks.map((task) => {
-              const checked = !!done[task.id];
-              return (
-                <li key={task.id}>
-                  <label
-                    className={`flex gap-4 items-start rounded-2xl border p-4 cursor-pointer transition-colors ${
-                      checked
-                        ? "bg-good-soft border-good/30"
-                        : "bg-surface border-border hover:border-primary"
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => onToggleTask(task.id)}
-                      className="mt-1 w-5 h-5 accent-primary-deep shrink-0"
-                    />
-                    <div className="flex-1">
-                      <div
-                        className={`font-medium ${
-                          checked
-                            ? "text-ink-muted line-through"
-                            : "text-ink"
-                        }`}
-                      >
-                        {task.title}
-                      </div>
-                      <p
-                        className={`text-sm mt-1 ${
-                          checked ? "text-ink-muted" : "text-ink-soft"
-                        }`}
-                      >
-                        {task.body}
-                      </p>
-                    </div>
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
+
+          {applicableTasks.length === 0 ? (
+            <p className="text-sm text-ink-muted italic">
+              Based on your earlier answers, nothing in this phase applies
+              to your situation.
+            </p>
+          ) : (
+            <ol className="space-y-2.5">
+              {applicableTasks.map((task, i) => {
+                const status = statuses[task.id] ?? "todo";
+                const isCurrentTask = i === currentTaskIndex && !isComplete;
+                if (status === "done" || status === "skipped") {
+                  return (
+                    <li key={task.id}>
+                      <CompletedTaskRow
+                        task={task}
+                        status={status}
+                        onUndo={() => onSetStatus(task.id, "todo")}
+                      />
+                    </li>
+                  );
+                }
+                if (isCurrentTask) {
+                  return (
+                    <li key={task.id}>
+                      <CurrentTaskCard
+                        task={task}
+                        ctx={ctx}
+                        helpOpen={!!helpOpen[task.id]}
+                        onDone={() => onSetStatus(task.id, "done")}
+                        onSkip={() => onSetStatus(task.id, "skipped")}
+                        onToggleHelp={() => onToggleHelp(task.id)}
+                      />
+                    </li>
+                  );
+                }
+                // Not-yet-current todo task within this phase: collapsed preview.
+                return (
+                  <li key={task.id}>
+                    <UpcomingTaskRow task={task} />
+                  </li>
+                );
+              })}
+            </ol>
+          )}
         </div>
       )}
 
       {!expanded && !isCurrent && !isComplete && (
         <div className="border-t border-border px-5 py-3 bg-surface-soft/50">
           <p className="text-xs text-ink-muted italic">
-            Don&rsquo;t worry about this yet — it&rsquo;s for later. We&rsquo;ll
-            open it automatically when you&rsquo;re ready.
+            Don&rsquo;t worry about this yet — it&rsquo;s for later.
+            We&rsquo;ll open it automatically when you&rsquo;re ready.
           </p>
         </div>
       )}
     </div>
+  );
+}
+
+/* --- Per-task UI variants ------------------------------------------------- */
+
+function CurrentTaskCard({
+  task,
+  ctx,
+  helpOpen,
+  onDone,
+  onSkip,
+  onToggleHelp,
+}: {
+  task: Task;
+  ctx: UserContext;
+  helpOpen: boolean;
+  onDone: () => void;
+  onSkip: () => void;
+  onToggleHelp: () => void;
+}) {
+  const note = task.contextNote?.(ctx) ?? null;
+  const help = task.help;
+
+  return (
+    <div className="rounded-2xl border-2 border-primary/40 bg-surface p-5">
+      <h3 className="font-serif text-lg text-ink mb-2">{task.title}</h3>
+      {note && (
+        <p className="text-xs uppercase tracking-wider text-primary-deep font-medium mb-2">
+          {note}
+        </p>
+      )}
+      <p className="text-sm text-ink-soft leading-relaxed mb-4">{task.body}</p>
+
+      {help && (
+        <div className="mb-4">
+          <button
+            onClick={onToggleHelp}
+            className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+            aria-expanded={helpOpen}
+          >
+            {helpOpen ? "Hide help" : help.label}
+          </button>
+          {helpOpen && (
+            <div className="mt-3 rounded-xl bg-primary-soft/40 border border-primary/20 px-4 py-3">
+              <HelpActionRenderer help={help} />
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-2">
+        <Button onClick={onDone}>✓ Mark done</Button>
+        <Button variant="ghost" onClick={onSkip}>
+          Skip — doesn&rsquo;t apply to us
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function CompletedTaskRow({
+  task,
+  status,
+  onUndo,
+}: {
+  task: Task;
+  status: "done" | "skipped";
+  onUndo: () => void;
+}) {
+  const isDone = status === "done";
+  return (
+    <div
+      className={`flex items-center gap-3 rounded-xl border p-3 ${
+        isDone ? "bg-good-soft/60 border-good/30" : "bg-surface-soft border-border"
+      }`}
+    >
+      <span
+        className={`text-base font-bold ${
+          isDone ? "text-good" : "text-ink-muted"
+        }`}
+        aria-hidden
+      >
+        ✓
+      </span>
+      <span
+        className={`text-sm flex-1 ${
+          isDone ? "text-ink" : "text-ink-muted"
+        }`}
+      >
+        {task.title}
+      </span>
+      {!isDone && (
+        <span className="text-xs text-ink-muted">(skipped)</span>
+      )}
+      <button
+        onClick={onUndo}
+        className="text-xs text-ink-muted hover:text-ink-soft underline-offset-2 hover:underline"
+      >
+        Undo
+      </button>
+    </div>
+  );
+}
+
+function UpcomingTaskRow({ task }: { task: Task }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface-soft/50 px-4 py-3">
+      <p className="text-sm text-ink-muted">
+        <span className="font-medium text-ink-soft">Next up:</span>{" "}
+        {task.title}
+      </p>
+    </div>
+  );
+}
+
+/* --- Help action renderer ------------------------------------------------- */
+
+function HelpActionRenderer({ help }: { help: HelpAction }) {
+  if (help.kind === "internal-link") {
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-ink leading-relaxed">{help.description}</p>
+        <Link
+          href={help.href}
+          className="inline-block text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+        >
+          Open →
+        </Link>
+      </div>
+    );
+  }
+
+  if (help.kind === "external-link") {
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-ink leading-relaxed">{help.description}</p>
+        <a
+          href={help.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
+        >
+          Open →
+        </a>
+      </div>
+    );
+  }
+
+  if (help.kind === "phone") {
+    return (
+      <div className="space-y-2">
+        <a
+          href={`tel:${help.number}`}
+          className="block text-base font-semibold text-primary-deep underline-offset-2 hover:underline"
+        >
+          {help.label}
+        </a>
+        <p className="text-sm text-ink leading-relaxed whitespace-pre-line">
+          {help.description}
+        </p>
+      </div>
+    );
+  }
+
+  if (help.kind === "expander") {
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-ink leading-relaxed">{help.description}</p>
+        <pre className="text-sm text-ink leading-relaxed whitespace-pre-wrap font-sans bg-surface rounded-lg border border-border p-3">
+          {help.details}
+        </pre>
+      </div>
+    );
+  }
+
+  // coming-soon
+  return (
+    <p className="text-sm text-ink-soft italic leading-relaxed">
+      {help.description}
+    </p>
   );
 }
