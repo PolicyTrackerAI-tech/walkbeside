@@ -23,34 +23,53 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Three things: a free fair-price lookup that shows what funeral services should cost in your zip code; a free prep kit of questions to ask and upsells to decline; and advocate outreach — we contact funeral homes on your behalf as your named advocate and collect comparison quotes, for a flat $49 only if you pick a home we presented.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Two things stay free forever: a fair-price lookup that shows what funeral services should cost in your zip, and a prep kit of questions to ask. Everything else — advocacy outreach to local funeral homes, side-by-side comparison, the 30-day post-funeral checklist, the obituary helper, the price-list analyzer, the veterans benefits checker — is part of one $49 toolkit. Money-back in 14 days.",
     a: (
       <>
         <p>
-          We help families who&rsquo;ve just lost someone make better funeral
-          decisions under pressure. Three things, specifically:
+          We help families who&rsquo;ve just lost someone make better
+          funeral decisions under pressure. Two things stay free forever:
         </p>
         <ul>
           <li>
-            <strong>Fair price lookup</strong> (free) &mdash; see what funeral
-            services should cost in your zip code, by line item, so you can
-            rate any home&rsquo;s quote against local data.
+            <strong>Fair price lookup</strong> (free) &mdash; see what
+            funeral services should cost in your zip code, by line item.
           </li>
           <li>
-            <strong>Prep kit</strong> (free) &mdash; the questions to ask, the
-            upsells to decline, and the rights families don&rsquo;t know they
-            have.
-          </li>
-          <li>
-            <strong>Advocate outreach</strong> ($49 flat, only on success)
-            &mdash; we contact funeral homes on your behalf, as your named
-            advocate, and collect comparison quotes. You make the final call.
+            <strong>Prep kit</strong> (free) &mdash; the questions to
+            ask, the upsells to decline, the rights families
+            don&rsquo;t know they have.
           </li>
         </ul>
         <p>
-          We&rsquo;re not a funeral home. We don&rsquo;t take possession of
-          anyone. We don&rsquo;t sell caskets or urns. We help you{" "}
-          <em>compare</em>.
+          Everything else is in the <strong>$49 toolkit</strong> &mdash;
+          one charge, all of it unlocks at once:
+        </p>
+        <ul>
+          <li>
+            <strong>Advocacy outreach</strong> &mdash; we contact funeral
+            homes on your behalf and collect comparison quotes.
+          </li>
+          <li>
+            <strong>Side-by-side comparison</strong> with line-item fair-
+            price ratings.
+          </li>
+          <li>
+            <strong>30-day post-funeral checklist</strong> &mdash; with
+            help on every step (death certificates, Social Security,
+            credit freeze, life insurance locator, VA benefits, accounts
+            to close, estate basics).
+          </li>
+          <li>
+            <strong>Pre-meeting worksheet, obituary helper,
+            certificate calculator, price-list analyzer, veterans
+            benefits checker.</strong>
+          </li>
+        </ul>
+        <p>
+          One $49 charge. No subscriptions. Money-back if we don&rsquo;t
+          save you anything in 14 days. We&rsquo;re not a funeral home;
+          we help you <em>compare</em>.
         </p>
       </>
     ),
@@ -58,30 +77,32 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "We charge a flat $49 when a family chooses a funeral home we presented to them through our advocate outreach feature. That is the only thing we charge for. No commissions from funeral homes. No referral fees for insurance, financing, or other services unless we disclose it on the same screen where the referral appears. If you never use advocate outreach, or you use it but choose a home we didn't present, you pay nothing. Every other tool on this site — fair-price lookup, scenario guidance, prep kit, obituary helper, price list analyzer, post-funeral checklist — is free.",
+      "One flat $49 charge per family, charged when you start the toolkit (after the four-question intake). Nothing else. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days if we don't save you anything documentable.",
     a: (
       <>
         <p>
-          We charge a flat <strong>$49</strong> when a family chooses a
-          funeral home we presented to them through our advocate outreach
-          feature. That is the only thing we charge for.
+          One flat <strong>$49</strong> charge per family, charged when
+          you start the toolkit (after the four-question intake at{" "}
+          <em>/decide</em>). That is the only thing we charge for, ever.
         </p>
         <ul>
-          <li>No commissions from funeral homes.</li>
+          <li>No commissions from funeral homes. Ever.</li>
           <li>
-            No referral fees for insurance, financing, or other services
-            unless we disclose it on the same screen where the referral
-            appears.
+            No referral fees from insurance companies, financing
+            services, or anyone else.
           </li>
           <li>
-            If you never use advocate outreach, or you use it but choose a
-            home we didn&rsquo;t present, you pay nothing.
+            14-day money-back: if we didn&rsquo;t save you anything
+            documentable, email us and we refund the full $49.
           </li>
         </ul>
         <p>
-          Every other tool on this site &mdash; fair-price lookup, scenario
-          guidance, prep kit, obituary helper, price list analyzer,
-          post-funeral checklist &mdash; is free.
+          Charging the family directly is the only way to stay
+          accountable to the family. Every "free" service in this
+          industry runs on commissions or kickbacks from funeral homes
+          &mdash; which is why most of them route grieving families
+          to whichever home paid for the placement. We don&rsquo;t
+          play that game.
         </p>
       </>
     ),

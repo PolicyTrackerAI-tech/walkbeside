@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
   description:
-    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and advocate outreach. Flat $49 only if you choose a home we present to you.",
+    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and the full toolkit. One flat $49 charge unlocks everything; money-back in 14 days.",
 };
 
 const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
@@ -56,9 +56,9 @@ const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
   },
   {
     n: 6,
-    title: "Flat $49, via Stripe — only if you pick a home we presented.",
+    title: "Flat $49 upfront, via Stripe.",
     body:
-      "If the home won't honor its quote within 14 days, we refund you. If you don't pick any of them, you owe us nothing.",
+      "Charged when you start the toolkit. No subscription, no commissions from funeral homes, money-back in 14 days if we don't save you anything documentable.",
   },
 ];
 
@@ -71,16 +71,17 @@ export default function HowItWorksPage() {
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-8">
           <div>
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
-              Advocate outreach
+              How the toolkit works
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-4">
-              What advocate outreach actually does.
+              What the $49 toolkit actually does.
             </h1>
             <p className="text-lg text-ink-soft">
-              If a home&rsquo;s quote is above the regional range &mdash; or you
-              just want more options without making the calls yourself &mdash;
-              we do the outreach for you. Here&rsquo;s every step, start to
-              finish.
+              One charge, the whole arc. We contact funeral homes for
+              you, compare quotes side by side, walk you through the
+              30-day post-funeral checklist, draft the obituary, file
+              VA benefits — everything unlocks at once. Here&rsquo;s
+              every step, start to finish.
             </p>
           </div>
 
@@ -107,19 +108,20 @@ export default function HowItWorksPage() {
 
           <Card tone="primary">
             <CardEyebrow>The money part</CardEyebrow>
-            <CardTitle>Flat $49 &mdash; only on success.</CardTitle>
+            <CardTitle>Flat $49 once. Money-back in 14 days.</CardTitle>
             <p className="text-ink-soft mb-4">
-              We charge a flat $49 when you pick a home we presented. That&rsquo;s
-              it. No commissions from funeral homes. No referral fees. If you
-              never use advocate outreach, or you choose a home we didn&rsquo;t
-              present, you pay nothing.
+              One $49 charge unlocks the full toolkit for your account.
+              No subscriptions. No commissions from any funeral home.
+              No referral fees. If we don&rsquo;t save you anything
+              documentable in 14 days, email us and we refund you in
+              full &mdash; no questions, no form.
             </p>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href="/negotiate/start">
-                Have us call funeral homes for you
+              <LinkButton href="/decide">
+                Start with the four questions
               </LinkButton>
               <LinkButton href="/prices" variant="secondary">
-                Or look up fair prices first
+                Or look up fair prices first (free)
               </LinkButton>
             </div>
           </Card>

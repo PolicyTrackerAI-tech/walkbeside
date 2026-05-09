@@ -31,13 +31,28 @@ export async function POST(req: Request) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    const negotiationId = session.metadata?.negotiationId;
     const kind = session.metadata?.kind;
-    if (negotiationId) {
-      const admin = createClient(
-        PUBLIC.supabaseUrl,
-        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
-      );
+    const userId = session.metadata?.userId;
+    const negotiationId = session.metadata?.negotiationId;
+
+    const admin = createClient(
+      PUBLIC.supabaseUrl,
+      requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+    );
+
+    if (kind === "account-paywall" && userId) {
+      // Margaret-section-12: account-level paywall. Flip paid_at on the
+      // user's profile and stash the Stripe customer for refund handling.
+      const customerId =
+        typeof session.customer === "string" ? session.customer : undefined;
+      const update: Record<string, unknown> = {
+        paid_at: new Date().toISOString(),
+      };
+      if (customerId) update.stripe_customer_id = customerId;
+      await admin.from("profiles").update(update).eq("id", userId);
+    } else if (negotiationId) {
+      // Legacy per-negotiation flow (still works for in-flight rows
+      // before the section-12 cutover).
       // 'unlock' = pure $49 to reveal homes (V2 flow). Sets unlocked_at, leaves status alone.
       // anything else = legacy per-home checkout that closes the deal.
       const update: Record<string, unknown> = {

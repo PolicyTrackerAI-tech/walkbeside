@@ -319,21 +319,25 @@ export function DecideFlow() {
             </ul>
             <div className="flex flex-wrap gap-3">
               <LinkButton
-                href={`/negotiate/start?svc=${recommendation.serviceType}`}
+                href={`/paywall?next=${encodeURIComponent(
+                  `/negotiate/start?svc=${recommendation.serviceType}`,
+                )}`}
                 size="lg"
               >
-                Have us call funeral homes for you →
+                Continue → unlock the full toolkit ($49)
               </LinkButton>
               <LinkButton
                 variant="secondary"
                 href={`/prices?svc=${recommendation.serviceType}`}
               >
-                Or look up fair prices first
-              </LinkButton>
-              <LinkButton variant="ghost" href="/worksheet">
-                Or open the meeting worksheet
+                Or look up fair prices first (free)
               </LinkButton>
             </div>
+            <p className="mt-3 text-xs text-ink-muted">
+              The toolkit unlocks for one $49 charge — no subscriptions,
+              no commissions from funeral homes, money-back in 14 days
+              if we don&rsquo;t save you anything.
+            </p>
           </Card>
 
           {faithProfile.key !== "secular" && faithProfile.key !== "other" && (
