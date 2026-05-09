@@ -148,32 +148,62 @@ export function StepList({
           <p className="text-lg text-ink-soft mb-2">{subhead}</p>
           <p className="text-sm text-ink-muted italic mb-6">{tone}</p>
 
-          {/* Progress bar — visible until everything is done. */}
+          {/* Sticky stepper — every step's state at a glance, visible as
+              the user scrolls or advances. Replaces the simple percentage
+              bar so the user never loses sight of what they've answered. */}
           {hydrated && !allComplete && currentIndex !== -1 && (
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs uppercase tracking-wider text-ink-muted font-medium">
+            <div
+              className="sticky top-0 z-20 -mx-5 px-5 py-3 bg-bg/95 backdrop-blur-md border-b border-border mb-6"
+              role="progressbar"
+              aria-valuenow={completedSteps}
+              aria-valuemin={0}
+              aria-valuemax={totalSteps}
+            >
+              <div className="flex items-center gap-1">
+                {statuses.map((status, i) => {
+                  const isDone = status === "done";
+                  const isSkipped = status === "skipped";
+                  const isCurrent = status === "current";
+                  const isLast = i === statuses.length - 1;
+                  return (
+                    <div
+                      key={i}
+                      className="flex-1 flex items-center min-w-0"
+                    >
+                      <div
+                        className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold ${
+                          isDone
+                            ? "bg-good text-white"
+                            : isSkipped
+                              ? "bg-ink-muted/40 text-white"
+                              : isCurrent
+                                ? "bg-primary-deep text-white ring-2 ring-primary/30"
+                                : "bg-surface-soft text-ink-muted border border-border"
+                        }`}
+                        title={`Step ${i + 1}: ${steps[i]?.title ?? ""}`}
+                      >
+                        {isDone || isSkipped ? "✓" : i + 1}
+                      </div>
+                      {!isLast && (
+                        <div
+                          className={`flex-1 h-0.5 mx-1 ${
+                            isDone || isSkipped
+                              ? "bg-good/40"
+                              : "bg-border"
+                          }`}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-1.5 flex items-center justify-between text-[11px] text-ink-muted">
+                <span className="font-medium">
                   Step {currentIndex + 1} of {totalSteps}
                 </span>
                 {completedSteps > 0 && (
-                  <span className="text-xs text-ink-muted">
-                    {completedSteps} done
-                  </span>
+                  <span>{completedSteps} answered</span>
                 )}
-              </div>
-              <div
-                className="h-1.5 bg-surface-soft rounded-full overflow-hidden"
-                role="progressbar"
-                aria-valuenow={completedSteps}
-                aria-valuemin={0}
-                aria-valuemax={totalSteps}
-              >
-                <div
-                  className="h-full bg-primary-deep transition-all duration-500"
-                  style={{
-                    width: `${(completedSteps / totalSteps) * 100}%`,
-                  }}
-                />
               </div>
             </div>
           )}
@@ -209,7 +239,7 @@ export function StepList({
                 return (
                   <li key={i} ref={currentStepRef}>
                     <div
-                      className={`rounded-2xl border-2 p-6 scroll-mt-4 ${toneClass}`}
+                      className={`rounded-2xl border-2 p-6 scroll-mt-28 ${toneClass}`}
                     >
                       <div className="flex items-start gap-4 mb-4">
                         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-deep text-white font-serif text-base shrink-0">
