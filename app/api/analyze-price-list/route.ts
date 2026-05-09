@@ -4,11 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 import { client as anthropic, MODEL, claudeAvailable } from "@/lib/claude";
 import { priceListAnalysisSystem } from "@/lib/negotiation/prompts";
 import { LINE_ITEMS, classifyPrice, adjustedRange } from "@/lib/pricing-data";
+import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES } from "@/lib/env";
 
 const Body = z.object({
   text: z.string().min(20).max(20000),
   zip: z.string().min(3).max(10).optional(),
+  serviceTypeHint: z.string().max(64).optional(),
 });
 
 interface ItemOut {
@@ -25,7 +27,7 @@ export async function POST(req: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
-  const { text, zip } = parsed.data;
+  const { text, zip, serviceTypeHint } = parsed.data;
 
   let extracted: { items: { name: string; cents: number }[]; total_cents?: number } = {
     items: [],
@@ -80,6 +82,16 @@ export async function POST(req: Request) {
   const totalFairMid = Math.round((totalFairLow + totalFairHigh) / 2);
   const potentialSavings = Math.max(totalQuoted - totalFairMid, 0);
 
+  // Run the bundling-detection rules engine against the raw text + parsed
+  // items. Returns FTC violations, suspicious upsells, and informational
+  // flags. Margaret refactor — the moat.
+  const violations = runRules({
+    rawText: text,
+    items,
+    serviceTypeHint,
+    totalCents: totalQuoted,
+  });
+
   // Optional: persist if logged in
   if (FEATURES.supabase()) {
     const supabase = await createClient();
@@ -105,6 +117,7 @@ export async function POST(req: Request) {
     totalFairHigh,
     totalFairMid,
     potentialSavings,
+    violations,
   });
 }
 
