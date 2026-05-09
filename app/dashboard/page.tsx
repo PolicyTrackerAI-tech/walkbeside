@@ -212,6 +212,66 @@ export default async function DashboardPage({
             </Link>
           </Card>
 
+          <div>
+            <CardEyebrow>The full toolkit</CardEyebrow>
+            <p className="text-ink-soft text-sm mt-2 mb-4">
+              Open any of these whenever you need them. They stay
+              available across the whole arc.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <ToolLink
+                href="/eulogy"
+                title="Eulogy helper"
+                blurb="Eight questions, drafted eulogy."
+              />
+              <ToolLink
+                href="/notifications"
+                title="Notifications hub"
+                blurb="Track who&rsquo;s been told."
+              />
+              <ToolLink
+                href="/vault"
+                title="Document vault"
+                blurb="Track every document the family needs."
+              />
+              <ToolLink
+                href="/family"
+                title="Family collaboration"
+                blurb="Hand the work to a sibling or adult child."
+              />
+              <ToolLink
+                href="/estate"
+                title="Estate settlement"
+                blurb="Probate, inherited IRAs, unclaimed property."
+              />
+              <ToolLink
+                href="/worksheet"
+                title="Pre-meeting worksheet"
+                blurb="Bring decisions, not questions."
+              />
+              <ToolLink
+                href="/obituary"
+                title="Obituary helper"
+                blurb="Drafted from your answers."
+              />
+              <ToolLink
+                href="/certificates"
+                title="Certificate calculator"
+                blurb="Order the right number, save rush fees."
+              />
+              <ToolLink
+                href="/analyzer"
+                title="Price-list analyzer"
+                blurb="Flag every overcharge on a quote."
+              />
+              <ToolLink
+                href="/veterans"
+                title="Veterans benefits"
+                blurb="What the family qualifies for."
+              />
+            </div>
+          </div>
+
           <HelpFooter />
         </div>
       </section>
@@ -332,5 +392,30 @@ function UnconfiguredDashboard() {
         </div>
       </section>
     </main>
+  );
+}
+
+function ToolLink({
+  href,
+  title,
+  blurb,
+}: {
+  href: string;
+  title: string;
+  blurb: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="block rounded-2xl border border-border bg-surface hover:border-primary hover:bg-primary-soft p-4 transition-colors group"
+    >
+      <div className="font-medium text-ink group-hover:text-primary-deep">
+        {title}
+      </div>
+      <div
+        className="text-sm text-ink-soft mt-1"
+        dangerouslySetInnerHTML={{ __html: blurb }}
+      />
+    </Link>
   );
 }
