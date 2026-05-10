@@ -29,6 +29,19 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
+  // Kill-switch: when OUTREACH_NOTIFICATIONS_ENABLED is anything other
+  // than "true", the cron short-circuits without reading the database
+  // or sending email. Lets us deploy the route + register the schedule
+  // without risking a real send while the flow is still being tested.
+  // Default = disabled. Flip to "true" in Vercel env when ready to go
+  // live.
+  if (process.env.OUTREACH_NOTIFICATIONS_ENABLED !== "true") {
+    return NextResponse.json({
+      disabled: true,
+      reason: "OUTREACH_NOTIFICATIONS_ENABLED is not set to 'true'",
+    });
+  }
+
   const admin = createClient(
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
