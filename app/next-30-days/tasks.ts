@@ -357,12 +357,11 @@ export const PHASES: Phase[] = [
         title: "Order the headstone",
         body: "Headstone markup at funeral homes is among the highest in the industry. We can probably save you 30–60% on this one — or, if buying through the funeral home is easier and the price is fair, that's a fine choice too.",
         help: {
-          kind: "expander",
-          label: "How we'd help you save →",
+          kind: "internal-link",
+          label: "Open the monument company directory →",
+          href: "/headstone-vendors",
           description:
-            "What we'll do, and what you'd do yourself. Decide which is easier.",
-          details:
-            "What we can help with:\n- Tell us your cemetery's name. We confirm their stone requirements (size, material, mounting) and tell you what the funeral home is likely upcharging.\n- Direct-from-monument-company quote: monument companies that service your cemetery sell the same stones for ~half what funeral homes charge. We'll list 2–3 reputable ones in your area.\n- Comparison: we'll show you the funeral home's quote against the direct quote. If the funeral home is within ~15% of direct, the convenience may be worth it. If they're 30–60% above, you're probably overpaying.\n\nWhen the funeral home option is fine:\n- The cemetery has tight installation rules and the funeral home has a working relationship with them.\n- You don't want to coordinate a separate vendor in the middle of grief.\n- The funeral home's quote is within ~15% of direct pricing — that's a fair convenience premium.\n\nWhen direct is better:\n- Funeral home quote is 30%+ above what a monument company would charge.\n- You're comfortable making one extra phone call.\n\nThis is the one purchase where shopping around almost always pays off — but no judgment if you don't have the energy. Either way is okay.",
+            "Vetted monument companies by metro. Direct purchase, same product as the funeral home offers, typically 30–60% less. Plus a 4-step decision flow on when buying from the funeral home is fine and when to go direct.",
         },
       },
     ],

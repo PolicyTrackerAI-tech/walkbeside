@@ -310,6 +310,12 @@ export default async function DashboardPage({
                 title="Estate settlement"
                 blurb="Probate, inherited IRAs, unclaimed property, digital accounts."
               />
+              <ToolTile
+                href="/headstone-vendors"
+                eyebrow="Long term"
+                title="Monument company directory"
+                blurb="Buy the headstone direct. Typically 30&ndash;60% less than funeral-home pricing."
+              />
             </div>
           </div>
 
