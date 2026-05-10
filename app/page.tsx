@@ -144,7 +144,7 @@ export default function HomePage() {
                 data.
               </p>
               <Link
-                href="/prices"
+                href="/funeral-homes"
                 className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
               >
                 See what funerals should cost in your zip →
