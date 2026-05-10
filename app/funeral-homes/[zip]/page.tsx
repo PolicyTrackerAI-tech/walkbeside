@@ -19,6 +19,7 @@ import {
   totalsForService,
   FEATURED_SERVICES,
 } from "@/lib/funeral-homes-pricing";
+import { regionForZip } from "@/lib/zip-regions";
 import { fmtCents } from "@/lib/stripe";
 import { FIVE_QUESTIONS } from "@/lib/scenarios";
 
@@ -30,9 +31,13 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { zip } = await params;
+  const region = regionForZip(zip);
+  const locationLabel = region
+    ? `${region.metro}, ${region.state} (zip ${zip})`
+    : `zip ${zip}`;
   return {
-    title: `Funeral home prices in zip ${zip} — fair-range data`,
-    description: `Honest fair-price ranges for direct cremation, traditional burial, and cremation with memorial in zip code ${zip}. Built by a licensed funeral director. No commissions, no kickbacks.`,
+    title: `Funeral home prices in ${locationLabel} — fair-range data`,
+    description: `Honest fair-price ranges for direct cremation, traditional burial, and cremation with memorial in ${locationLabel}. Built by a licensed funeral director. No commissions, no kickbacks.`,
   };
 }
 
@@ -57,6 +62,7 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
   if (!/^\d{5}$/.test(zip)) notFound();
 
   const dataSource = dataSourceForZip(zip);
+  const region = regionForZip(zip);
 
   return (
     <main className="flex-1 flex flex-col">
@@ -73,13 +79,21 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
                 Funeral home pricing
               </Link>{" "}
               · zip {zip}
+              {region && (
+                <>
+                  {" "}
+                  · <span className="text-ink-soft">{region.metro}, {region.state}</span>
+                </>
+              )}
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              Fair funeral pricing in zip {zip}.
+              {region
+                ? `Fair funeral pricing in ${region.metro}.`
+                : `Fair funeral pricing in zip ${zip}.`}
             </h1>
             <p className="text-lg text-ink-soft">
               Below is what a fair quote looks like for the three most
-              common service types in your region. {""}
+              common service types in {region ? `${region.metro}, ${region.state}` : "your region"}.{" "}
               {DATA_SOURCE_LABEL[dataSource]}.
             </p>
             <p className="text-xs text-ink-muted mt-2">

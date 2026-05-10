@@ -435,17 +435,33 @@ export function fmtRange(low: number, high: number): string {
 }
 
 /**
- * Coarse regional cost-of-living adjustment by zip prefix.
- * V1 placeholder. Sister's per-city validation replaces this in V2.
+ * Regional cost-of-living adjustment by zip prefix.
+ *
+ * Two-tier lookup:
+ * 1. Try the 3-digit metro table in lib/zip-regions.ts (~250 entries
+ *    covering most US metros) — gives city-level precision
+ * 2. Fall back to 1-digit prefix bucket for zips not in the table
+ *
+ * Range: ~0.75 (rural Mississippi / Appalachia) to ~1.50 (Manhattan,
+ * SF, Honolulu).
+ *
+ * Note: this lib file is imported by client and server code, so we
+ * inline the fallback rather than importing zip-regions (which is
+ * isomorphic but kept narrow). regionForZip() lives there.
  */
+import { regionForZip } from "./zip-regions";
+
 export function regionMultiplier(zip: string): number {
   if (!zip || zip.length < 1) return 1;
+
+  const region = regionForZip(zip);
+  if (region) return region.multiplier;
+
+  // Fallback: coarse 1-digit prefix bucket for zips not in the table.
   const prefix = zip[0];
-  // High COL coastal (NY, NJ, MA / CA): bump 25%
-  if (["0", "1", "9"].includes(prefix)) return 1.25;
-  // Lower COL midwest/south: trim 10%
-  if (["3", "4", "5", "6", "7"].includes(prefix)) return 0.9;
-  return 1;
+  if (["0", "1", "9"].includes(prefix)) return 1.10; // coastal default
+  if (["3", "4", "5", "6", "7"].includes(prefix)) return 0.85; // mid/south default
+  return 0.95;
 }
 
 export function adjustedRange(
