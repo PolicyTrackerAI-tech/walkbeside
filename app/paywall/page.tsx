@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isPaidUser } from "@/lib/auth-paid";
 import { FEATURES } from "@/lib/env";
 import { fmtCents, FLAT_FEE_CENTS } from "@/lib/stripe";
+import { SavingsPreview } from "@/components/paywall/SavingsPreview";
 
 export const metadata: Metadata = {
   title: "Unlock the full toolkit",
@@ -99,6 +100,8 @@ export default async function PaywallPage({
               </Bullet>
             </ul>
           </Card>
+
+          <SavingsPreview />
 
           <Card>
             <CardEyebrow>Why we charge upfront, not after</CardEyebrow>
