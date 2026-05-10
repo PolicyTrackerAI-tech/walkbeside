@@ -83,11 +83,99 @@ html, body {
   border-radius: 4px;
 }
 
-/* Print styles for cheat sheet */
+/* ---------------------------------------------------------------------------
+ * Print styles
+ * ---------------------------------------------------------------------------
+ * Goal: when a user hits Cmd-P or "Save as PDF", they get a clean,
+ * professional document — not a screenshot of the web page. Everything
+ * here optimizes for paper, not screen.
+ * --------------------------------------------------------------------------- */
 @media print {
-  .no-print { display: none !important; }
-  body { background: white; font-size: 12pt; }
-  .print-page { padding: 0.5in; }
+  /* Page setup — letter size, generous margins for binding/holes. */
+  @page {
+    size: letter;
+    margin: 0.6in 0.5in;
+  }
+
+  /* Reset background, ensure black ink. */
+  html, body {
+    background: white !important;
+    color: #111 !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  /* Universal hide-when-printing helpers. */
+  .no-print,
+  .print\:hidden,
+  nav,
+  header,
+  footer,
+  [data-print="hide"],
+  button,
+  [role="button"]:not([data-print="show"]) { display: none !important; }
+
+  /* Force-show helpers (override print:hidden for specific cases). */
+  [data-print="show"] { display: block !important; }
+
+  /* Inputs and forms are useless on paper — show their values as text. */
+  input, textarea, select {
+    border: none !important;
+    background: transparent !important;
+    color: #111 !important;
+    padding: 0 !important;
+  }
+
+  /* Reasonable container padding for non-print-page content. */
+  main, article, .print-page {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Typography — readable, no shadows, no weird colors. */
+  h1 { font-size: 20pt; margin-top: 0; page-break-after: avoid; }
+  h2 { font-size: 14pt; page-break-after: avoid; }
+  h3 { font-size: 12pt; page-break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+
+  /* Don't split important blocks across pages. */
+  .print-keep-together,
+  blockquote,
+  pre,
+  table {
+    page-break-inside: avoid;
+  }
+
+  /* Force a page break before/after when needed. */
+  .print-break-before { page-break-before: always; }
+  .print-break-after  { page-break-after: always; }
+
+  /* Show URL after every external link — helps when reading on paper. */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555;
+    font-weight: normal;
+  }
+  /* Don't expand internal links — the user already has them. */
+  a[href^="/"]::after,
+  a[href^="#"]::after,
+  a[href^="mailto:"]::after { content: ""; }
+
+  /* Cards / boxes — strip shadows + heavy borders, keep structure. */
+  [class*="rounded"],
+  [class*="shadow"] {
+    box-shadow: none !important;
+  }
+
+  /* Cost figures — bold so they stand out on paper. */
+  [data-print-emphasis] { font-weight: 700; }
+}
+
+/* Always-visible print helpers (rendered at print time only). */
+.print-only { display: none; }
+@media print {
+  .print-only { display: block !important; }
 }
 
 /* Reduce motion */

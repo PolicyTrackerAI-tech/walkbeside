@@ -116,21 +116,32 @@ export async function POST(req: Request) {
       }
     }
     const subject = `GPL request on behalf of ${familyLabel} — ref ${authorizationId}`;
-    const sent = await sendEmail({
-      to: home.email,
-      subject,
-      text: body,
-      fromName: "Honest Funeral Advocacy",
-      replyTo: `advocate+${neg.id}@honestfuneral.co`,
-    });
+
+    // Kill-switch: when OUTREACH_LIVE is not "true", we record what
+    // WOULD have been sent (so the user can review the generated body)
+    // but we don't actually email the funeral home. Default = dry-run.
+    // Flip OUTREACH_LIVE=true in Vercel env to start real sends.
+    const outreachLive = process.env.OUTREACH_LIVE === "true";
+
+    let sentId: string | null = null;
+    if (outreachLive) {
+      const sent = await sendEmail({
+        to: home.email,
+        subject,
+        text: body,
+        fromName: "Honest Funeral Advocacy",
+        replyTo: `advocate+${neg.id}@honestfuneral.co`,
+      });
+      sentId = sent.id;
+    }
 
     await supabase.from("negotiation_outreach").insert({
       negotiation_id: neg.id,
       home_name: home.name,
       home_email: home.email,
-      initial_email_id: sent.id,
+      initial_email_id: sentId,
       initial_email_body: body,
-      status: "sent",
+      status: outreachLive ? "sent" : "dry_run",
     });
   }
 

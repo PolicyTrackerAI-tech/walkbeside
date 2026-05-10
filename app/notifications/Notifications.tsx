@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { HelpFooter } from "@/components/HelpFooter";
+import { PrintHeader, PrintFooter } from "@/components/print/PrintHeader";
 
 const STORAGE_KEY = "honestfuneral.notifications.v1";
 
@@ -173,7 +174,53 @@ function NotificationsView({
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" />} />
-      <section className="flex-1">
+
+      {/* Print-only clean rendering. Renders a real-document version
+          of the contact list with letterhead, hand-off-friendly
+          layout, and a checkbox column to mark calls as done with a
+          pen. The on-screen UI below is hidden when printing. */}
+      <div className="print-only" style={{ padding: "0.5in" }}>
+        <PrintHeader
+          title="Who needs to be told"
+          subtitle="A list to hand off to a friend or family member."
+        />
+        <p style={{ fontSize: "11pt", color: "#444", marginBottom: "1em" }}>
+          For each person below: call, email, or visit. Mark the box
+          when it&rsquo;s done. The family doesn&rsquo;t need to be the
+          one telling everyone.
+        </p>
+        {hydrated && contacts.length > 0 ? (
+          <table style={{ width: "100%", fontSize: "11pt", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid #999" }}>
+                <th style={{ textAlign: "left", padding: "6px 8px", width: "20px" }}>✓</th>
+                <th style={{ textAlign: "left", padding: "6px 8px" }}>Name</th>
+                <th style={{ textAlign: "left", padding: "6px 8px" }}>Relationship</th>
+                <th style={{ textAlign: "left", padding: "6px 8px" }}>Best way</th>
+                <th style={{ textAlign: "left", padding: "6px 8px" }}>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {contacts.map((c) => (
+                <tr key={c.id} style={{ borderBottom: "1px solid #ddd", pageBreakInside: "avoid" }}>
+                  <td style={{ padding: "8px", verticalAlign: "top" }}>
+                    <span style={{ display: "inline-block", width: 14, height: 14, border: "1px solid #444", borderRadius: 2 }} />
+                  </td>
+                  <td style={{ padding: "8px", verticalAlign: "top" }}>{c.name}</td>
+                  <td style={{ padding: "8px", verticalAlign: "top", color: "#555" }}>{c.relationship}</td>
+                  <td style={{ padding: "8px", verticalAlign: "top", color: "#555" }}>{c.channel}</td>
+                  <td style={{ padding: "8px", verticalAlign: "top", color: "#555" }}>{c.notes ?? ""}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>(No contacts added yet.)</p>
+        )}
+        <PrintFooter />
+      </div>
+
+      <section className="flex-1 print:hidden">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           <div>
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">

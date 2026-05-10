@@ -38,6 +38,16 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
+  // Kill-switch: when ANNIVERSARY_EMAILS_ENABLED is anything other than
+  // "true", the cron short-circuits — no DB read, no email sent.
+  // Default = disabled. Flip to "true" in Vercel env when ready.
+  if (process.env.ANNIVERSARY_EMAILS_ENABLED !== "true") {
+    return NextResponse.json({
+      disabled: true,
+      reason: "ANNIVERSARY_EMAILS_ENABLED is not set to 'true'",
+    });
+  }
+
   const admin = createClient(
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
