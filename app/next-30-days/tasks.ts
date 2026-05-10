@@ -277,12 +277,13 @@ export const PHASES: Phase[] = [
       {
         id: "w2-subs",
         title: "Cancel recurring subscriptions",
-        body: "Streaming, gym, subscription boxes, software. Check their email and bank statements for monthly charges.",
+        body: "Streaming, gym, subscription boxes, software. Most families turn up $30–$200/mo in charges they didn't know about — sometimes more.",
         help: {
-          kind: "coming-soon",
-          label: "Subscription finder coming soon",
+          kind: "internal-link",
+          label: "Open the subscription finder →",
+          href: "/subscriptions",
           description:
-            "We're building a tool to scan a bank statement upload and auto-flag every recurring charge. For now: pull their last 60 days of statements and look for anything monthly.",
+            "Paste a bank or credit-card statement. We extract every recurring charge and tell you how to cancel each common service. Saved on your device.",
         },
       },
       {
