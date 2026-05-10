@@ -37,6 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/veterans`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/funeral-homes`, priority: 0.9, changeFrequency: "weekly" },
       { url: `${SITE}/home-funeral`, priority: 0.7, changeFrequency: "monthly" },
+      { url: `${SITE}/body-donation`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/estate`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/terms`, priority: 0.3, changeFrequency: "yearly" },
       { url: `${SITE}/privacy`, priority: 0.3, changeFrequency: "yearly" },
