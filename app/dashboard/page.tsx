@@ -257,6 +257,12 @@ export default async function DashboardPage({
                 blurb="The day, hour by hour. Print it for the officiant, pallbearers, family."
               />
               <ToolTile
+                href="/livestream"
+                eyebrow="Service"
+                title="Live-stream coordinator"
+                blurb="One shareable card with platform, URL, dial-in, password, host contact."
+              />
+              <ToolTile
                 href="/worksheet"
                 eyebrow="Before the meeting"
                 title="Pre-meeting worksheet"
