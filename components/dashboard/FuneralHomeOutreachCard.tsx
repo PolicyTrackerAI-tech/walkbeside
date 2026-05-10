@@ -10,7 +10,7 @@ export interface OutreachRow {
   quote_cents: number | null;
 }
 
-export interface AdvocateOutreachCardProps {
+export interface FuneralHomeOutreachCardProps {
   negotiationId: string;
   status: string;
   /** True once the family has paid the $49 placement fee (or the deal is closed). */
@@ -25,21 +25,22 @@ const STATUS_LABEL: Record<string, string> = {
   replied: "Replied",
   "no-reply": "No reply yet",
   declined: "Declined",
+  dry_run: "Dry-run (test mode)",
 };
 
 /**
- * Dashboard card showing the family's active advocate outreach. Home names
+ * Dashboard card showing the family's active funeral-home outreach. Home names
  * are blurred until the placement fee is paid — the family can see how many
  * homes responded and the price spread, but not which home is which until
  * they commit. This is the v2 monetization gate.
  */
-export function AdvocateOutreachCard({
+export function FuneralHomeOutreachCard({
   negotiationId,
   status,
   unlocked,
   justStarted,
   outreach,
-}: AdvocateOutreachCardProps) {
+}: FuneralHomeOutreachCardProps) {
   const replied = outreach.filter((o) => o.status === "replied");
   const quotes = replied
     .map((o) => o.quote_cents)
@@ -49,14 +50,14 @@ export function AdvocateOutreachCard({
 
   const headline =
     status === "closed"
-      ? "Your advocate outreach — placed."
+      ? "Your funeral-home outreach — placed."
       : status === "received" || replied.length > 0
-        ? `Your advocate outreach — ${replied.length} ${replied.length === 1 ? "home has" : "homes have"} replied.`
-        : "Your advocate outreach — in progress.";
+        ? `Your funeral-home outreach — ${replied.length} ${replied.length === 1 ? "home has" : "homes have"} replied.`
+        : "Your funeral-home outreach — in progress.";
 
   return (
     <Card tone={unlocked ? "good" : "primary"}>
-      <CardEyebrow>Advocate outreach</CardEyebrow>
+      <CardEyebrow>Funeral-home outreach</CardEyebrow>
       <CardTitle>{headline}</CardTitle>
 
       {justStarted && (
@@ -69,7 +70,7 @@ export function AdvocateOutreachCard({
 
       <p className="text-ink-soft mb-4">
         We contacted {outreach.length}{" "}
-        {outreach.length === 1 ? "home" : "homes"} as your named advocate and
+        {outreach.length === 1 ? "home" : "homes"} on your behalf and
         requested itemized prices under the FTC Funeral Rule.
         {quotes.length > 0 && lowQuote !== null && highQuote !== null && (
           <>

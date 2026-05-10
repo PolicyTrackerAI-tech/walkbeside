@@ -129,7 +129,7 @@ export async function POST(req: Request) {
         to: home.email,
         subject,
         text: body,
-        fromName: "Honest Funeral Advocacy",
+        fromName: "Honest Funeral",
         replyTo: `advocate+${neg.id}@honestfuneral.co`,
       });
       sentId = sent.id;

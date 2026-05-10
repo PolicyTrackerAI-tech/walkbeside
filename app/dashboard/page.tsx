@@ -11,9 +11,9 @@ import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
 import { deriveTasks } from "@/lib/dashboard";
 import {
-  AdvocateOutreachCard,
+  FuneralHomeOutreachCard,
   type OutreachRow,
-} from "@/components/dashboard/AdvocateOutreachCard";
+} from "@/components/dashboard/FuneralHomeOutreachCard";
 import { DashboardActions } from "@/components/dashboard/DashboardActions";
 import { ToolTile } from "@/components/dashboard/ToolTile";
 
@@ -147,7 +147,7 @@ export default async function DashboardPage({
           <ProgressBar phase={phase} />
 
           {activeNeg && outreach.length > 0 && (
-            <AdvocateOutreachCard
+            <FuneralHomeOutreachCard
               negotiationId={activeNeg.id}
               status={activeNeg.status}
               unlocked={

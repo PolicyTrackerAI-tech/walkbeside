@@ -52,8 +52,8 @@ export default function PrivacyPage() {
               contracts, and other files you upload for analysis.
             </li>
             <li>
-              Communications you send to funeral homes through our advocate
-              outreach feature, and replies we receive.
+              Communications you send to funeral homes through our
+              funeral-home outreach feature, and replies we receive.
             </li>
             <li>
               Basic usage analytics (pages viewed, features used). We use
