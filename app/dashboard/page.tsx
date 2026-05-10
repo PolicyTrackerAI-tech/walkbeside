@@ -287,6 +287,12 @@ export default async function DashboardPage({
                 blurb="Track who&rsquo;s been told. Hand the list to a friend."
               />
               <ToolTile
+                href="/subscriptions"
+                eyebrow="After"
+                title="Subscription finder"
+                blurb="Paste a bank statement. We find recurring charges to cancel."
+              />
+              <ToolTile
                 href="/vault"
                 eyebrow="After"
                 title="Document vault"
