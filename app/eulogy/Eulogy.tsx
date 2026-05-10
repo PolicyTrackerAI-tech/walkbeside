@@ -7,6 +7,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
 import { HelpFooter } from "@/components/HelpFooter";
+import { PrintHeader, PrintFooter } from "@/components/print/PrintHeader";
 
 const STORAGE_KEY = "honestfuneral.eulogy.draft.v1";
 
@@ -235,32 +236,55 @@ export function Eulogy() {
 
           {draft && (
             <>
-              <Card tone="primary">
-                <CardEyebrow>Your draft</CardEyebrow>
-                <CardTitle>Read it aloud — that&rsquo;s the test.</CardTitle>
-                <p className="text-ink-soft mt-3">
-                  Edit anything that doesn&rsquo;t sound like you.
-                  Anything in [brackets] is a placeholder we couldn&rsquo;t
-                  fill from your answers — replace with your own.
-                </p>
-              </Card>
-              <Card>
-                <Textarea
-                  rows={20}
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  className="font-serif text-base"
-                />
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <Button onClick={() => window.print()}>Print</Button>
-                  <Button variant="secondary" onClick={generate} disabled={busy}>
-                    {busy ? "Drafting…" : "Draft again with same answers"}
-                  </Button>
-                  <Button variant="ghost" onClick={reset}>
-                    Start over
-                  </Button>
+              {/* Screen-only editing UI */}
+              <div className="print:hidden space-y-6">
+                <Card tone="primary">
+                  <CardEyebrow>Your draft</CardEyebrow>
+                  <CardTitle>Read it aloud — that&rsquo;s the test.</CardTitle>
+                  <p className="text-ink-soft mt-3">
+                    Edit anything that doesn&rsquo;t sound like you.
+                    Anything in [brackets] is a placeholder we couldn&rsquo;t
+                    fill from your answers — replace with your own.
+                  </p>
+                </Card>
+                <Card>
+                  <Textarea
+                    rows={20}
+                    value={draft}
+                    onChange={(e) => setDraft(e.target.value)}
+                    className="font-serif text-base"
+                  />
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <Button onClick={() => window.print()}>Print</Button>
+                    <Button variant="secondary" onClick={generate} disabled={busy}>
+                      {busy ? "Drafting…" : "Draft again with same answers"}
+                    </Button>
+                    <Button variant="ghost" onClick={reset}>
+                      Start over
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+
+              {/* Print-only clean rendering of the draft. Renders the
+                  current textarea contents as flowing paragraphs with a
+                  letterhead — no UI chrome, no border, looks like a real
+                  document the user can read at a podium. */}
+              <div className="print-only">
+                <PrintHeader title="Eulogy draft" />
+                <div
+                  className="font-serif"
+                  style={{
+                    fontSize: "13pt",
+                    lineHeight: 1.7,
+                    whiteSpace: "pre-wrap",
+                    color: "#111",
+                  }}
+                >
+                  {draft}
                 </div>
-              </Card>
+                <PrintFooter />
+              </div>
             </>
           )}
 

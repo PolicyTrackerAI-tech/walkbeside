@@ -101,8 +101,8 @@ export function Footer() {
       <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
           Built by a licensed funeral director and her brother. Free to use.
-          Flat $49 only if you choose a home we present to you through
-          advocate outreach.
+          Flat $49 only if you choose a funeral home we presented to you
+          through our outreach.
         </p>
         <p className="text-xs">
           Honest Funeral is not a law firm, not a funeral home, and not a medical or
