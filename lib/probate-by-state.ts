@@ -468,6 +468,643 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     ],
     isCommunityPropertyState: false,
   },
+  {
+    slug: "new-jersey",
+    name: "New Jersey",
+    abbr: "NJ",
+    smallEstateThresholdUSD: 50_000,
+    smallEstateProcess:
+      "When the estate is $50,000 or less and there's no will, the surviving spouse or domestic partner can file an Affidavit of Surviving Spouse to collect assets. If there's no spouse, heirs can use a similar affidavit at $20,000 or less. New Jersey has no formal small-estate threshold for testate (with-will) cases — those typically still need probate.",
+    typicalTimelineMonths: { low: 9, high: 14 },
+    informalProbateAvailable: false,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Probate is handled by the County Surrogate's Court — NJ is one of the few states with a dedicated Surrogate.",
+      "New Jersey has an inheritance tax (paid by certain beneficiaries based on relationship to the deceased) — Class A relatives (spouse, children, parents) are exempt; Class C and D pay 11–16%.",
+      "Estate tax was repealed in 2018, but the inheritance tax remains.",
+      "The Surrogate handles informal probate (uncontested wills, no challenges); contested matters go to the Superior Court Chancery Division.",
+    ],
+    keyForms: [
+      {
+        name: "Application for Probate (filed with Surrogate)",
+        description: "Opens probate when there's a will.",
+      },
+      {
+        name: "Affidavit of Surviving Spouse / Domestic Partner",
+        description: "Small-estate path under $50,000 with no will.",
+      },
+      {
+        name: "Inheritance Tax Return (Form IT-R or IT-NR)",
+        description: "Required for non-Class-A beneficiaries within 8 months.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "NJ Courts — Probate",
+        url: "https://www.njcourts.gov/self-help/wills-estates",
+      },
+      {
+        label: "NJ Division of Taxation — Inheritance Tax",
+        url: "https://www.nj.gov/treasury/taxation/inheritance-estate/inheritance.shtml",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "virginia",
+    name: "Virginia",
+    abbr: "VA",
+    smallEstateThresholdUSD: 50_000,
+    smallEstateProcess:
+      "Virginia's Small Estate Affidavit covers personal property up to $50,000 (excluding real estate and certain assets). Wait 60 days after death before filing. The successor presents the affidavit directly to banks, brokerage firms, or whoever holds the assets — no court filing required for the affidavit itself.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Virginia has no state estate tax and no inheritance tax.",
+      "Probate is handled by the Circuit Court Clerk in the county where the deceased lived — clerks often help walk executors through paperwork without an attorney.",
+      "Real estate generally does NOT require probate to transfer if the will is properly recorded; Virginia uses 'probate' in a narrower sense than many states.",
+      "The probate tax is a small percentage of estate value (around $1 per $1,000) — among the lowest in the country.",
+    ],
+    keyForms: [
+      {
+        name: "List of Heirs (Form CC-1611)",
+        description: "Filed at probate to identify all legal heirs.",
+      },
+      {
+        name: "Inventory (Form CC-1670)",
+        description: "Filed within 4 months of qualifying as executor.",
+      },
+      {
+        name: "Small Estate Affidavit (§64.2-601)",
+        description: "Personal-property affidavit up to $50,000.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Virginia Courts — Probate",
+        url: "https://www.vacourts.gov/courts/circuit/probate.html",
+      },
+      {
+        label: "Virginia Code §64.2 — Wills, Trusts, and Fiduciaries",
+        url: "https://law.lis.virginia.gov/vacode/title64.2/",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "washington",
+    name: "Washington",
+    abbr: "WA",
+    smallEstateThresholdUSD: 100_000,
+    smallEstateProcess:
+      "Washington's Small Estate Affidavit (RCW 11.62) covers personal property up to $100,000 — among the highest thresholds in the country. The successor presents the affidavit to whoever holds the assets, 40+ days after death, no court filing required.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Washington is a community-property state — half of all property acquired during marriage automatically belongs to the surviving spouse.",
+      "Probate in Washington is generally faster and cheaper than most states — known for being executor-friendly.",
+      "Most wills include 'nonintervention powers,' which lets the executor handle the estate with minimal court supervision after appointment.",
+      "Washington has its own state estate tax that kicks in at $2.193 million (2024) — separate from the federal threshold.",
+      "Community Property Agreements (CPA) — a Washington-specific document spouses can sign that automatically transfers all community property to the survivor without probate.",
+    ],
+    keyForms: [
+      {
+        name: "Petition for Probate of Will and Letters Testamentary",
+        description: "Opens probate when there's a will.",
+      },
+      {
+        name: "Small Estate Affidavit (RCW 11.62)",
+        description: "Personal property up to $100,000.",
+      },
+      {
+        name: "Notice to Creditors",
+        description: "Published in a county newspaper; cuts the creditor claim window to 4 months.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Washington Courts — Probate",
+        url: "https://www.courts.wa.gov/court_dir/?fa=court_dir.psearch",
+      },
+      {
+        label: "RCW Title 11 — Probate and Trust",
+        url: "https://app.leg.wa.gov/RCW/default.aspx?cite=11",
+      },
+    ],
+    isCommunityPropertyState: true,
+  },
+  {
+    slug: "arizona",
+    name: "Arizona",
+    abbr: "AZ",
+    smallEstateThresholdUSD: 75_000,
+    smallEstateProcess:
+      "Arizona has two small-estate paths. Affidavit for personal property up to $75,000 (wait 30 days after death). Affidavit for real estate up to $100,000 (wait 6 months). Both are filed directly with whoever holds the asset (or recorded with the county for real estate) — no probate court required.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Arizona is a community-property state.",
+      "Arizona has no state estate tax and no inheritance tax.",
+      "Informal probate is the default for uncontested estates — the Registrar (a court clerk) approves the application without a hearing.",
+      "Beneficiary deeds (transfer-on-death) for real estate are recognized — record one before death and the property bypasses probate entirely.",
+    ],
+    keyForms: [
+      {
+        name: "Application for Informal Probate",
+        description: "Standard path for uncontested estates.",
+      },
+      {
+        name: "Affidavit for Collection of Personal Property",
+        description: "Small estate up to $75,000.",
+      },
+      {
+        name: "Affidavit for Transfer of Real Property",
+        description: "Real estate up to $100,000.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Arizona Courts — Probate self-help",
+        url: "https://www.azcourts.gov/selfservicecenter/Self-Service-Forms/Probate-PB",
+      },
+      {
+        label: "Arizona Revised Statutes Title 14 — Probate",
+        url: "https://www.azleg.gov/arsDetail/?title=14",
+      },
+    ],
+    isCommunityPropertyState: true,
+  },
+  {
+    slug: "massachusetts",
+    name: "Massachusetts",
+    abbr: "MA",
+    smallEstateThresholdUSD: 25_000,
+    smallEstateProcess:
+      "Massachusetts Voluntary Administration (G.L. c. 190B §3-1201) is available when the estate (excluding one motor vehicle) is $25,000 or less and there's no real property. Wait 30 days after death. Filed with Probate and Family Court.",
+    typicalTimelineMonths: { low: 9, high: 14 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Massachusetts has its own state estate tax — kicks in at $2 million (2024) with rates up to 16%. Substantially lower threshold than the federal level.",
+      "Probate is handled by the Probate and Family Court (one combined court for both kinds of cases).",
+      "Massachusetts adopted the Uniform Probate Code in 2012 — informal probate (no hearing) is now the default for uncontested cases.",
+      "The 'magistrate's hour' is a longstanding tradition — uncontested matters can often be resolved at a brief magistrate hearing rather than a full judge hearing.",
+    ],
+    keyForms: [
+      {
+        name: "MPC 150 — Petition for Informal Probate",
+        description: "Standard path for uncontested estates with a will.",
+      },
+      {
+        name: "MPC 170 — Voluntary Administration",
+        description: "Small-estate path under $25,000.",
+      },
+      {
+        name: "Estate Tax Return (Form M-706)",
+        description: "Required if estate exceeds $2 million.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Massachusetts Courts — Probate forms",
+        url: "https://www.mass.gov/info-details/probate-and-family-court-departmental-forms",
+      },
+      {
+        label: "MGL Chapter 190B — Massachusetts Uniform Probate Code",
+        url: "https://malegislature.gov/Laws/GeneralLaws/PartII/TitleII/Chapter190B",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "tennessee",
+    name: "Tennessee",
+    abbr: "TN",
+    smallEstateThresholdUSD: 50_000,
+    smallEstateProcess:
+      "Tennessee's Small Estate Affidavit covers personal property up to $50,000 (Tenn. Code §30-4-101). Wait 45 days after death. Filed with the probate court of the county where the deceased lived.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Tennessee has no state estate tax (repealed 2016) and no inheritance tax (repealed 2016).",
+      "Probate is heard by the County Probate Court or Chancery Court depending on the county.",
+      "Most counties have informal procedures for uncontested estates.",
+      "Tennessee allows transfer-on-death (TOD) registration for real estate — recorded deed with TOD designation bypasses probate.",
+    ],
+    keyForms: [
+      {
+        name: "Petition to Probate Will",
+        description: "Opens probate when there's a will.",
+      },
+      {
+        name: "Small Estate Affidavit",
+        description: "Personal property up to $50,000.",
+      },
+      {
+        name: "Notice to Creditors",
+        description: "Published; cuts creditor claim window to 4 months.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "TN Courts — Probate",
+        url: "https://www.tncourts.gov/help-center/legal-forms",
+      },
+      {
+        label: "Tennessee Code Title 30 — Administration of Estates",
+        url: "https://advance.lexis.com/container/?pdmfid=1000516&crid=&config=014CJAA5ZGVhZjA3NS02MmMzLTRlZWQtOGJjNC00YzQ1MmZlNzc2YWYKAFBvZENhdGFsb2e9zYpNUjTRaIWVfyrur9ud&pddocfullpath=%2Fshared%2Fdocument%2Fstatutes-legislation",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "indiana",
+    name: "Indiana",
+    abbr: "IN",
+    smallEstateThresholdUSD: 100_000,
+    smallEstateProcess:
+      "Indiana's Small Estate Affidavit (IC 29-1-8) covers estates of $100,000 or less — raised from $50,000 in 2022. Wait 45 days after death. The successor presents the affidavit directly to whoever holds the asset, no probate court required.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Indiana has no state estate tax (repealed 2013) and no inheritance tax (phased out by 2022).",
+      "Indiana has 'unsupervised administration' as the default for most estates — the executor handles things with minimal court oversight when the will allows it.",
+      "Transfer-on-death deeds are recognized for real estate.",
+      "Indiana's small-estate threshold of $100,000 is among the most generous in the country.",
+    ],
+    keyForms: [
+      {
+        name: "Petition for Probate (with or without will)",
+        description: "Opens probate.",
+      },
+      {
+        name: "Small Estate Affidavit",
+        description: "Personal and real property up to $100,000.",
+      },
+      {
+        name: "Inventory and Appraisement",
+        description: "Filed within 60 days of letters being issued.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Indiana Courts — Probate self-help",
+        url: "https://www.in.gov/courts/iocs/2493.htm",
+      },
+      {
+        label: "Indiana Code Title 29 — Probate",
+        url: "https://iga.in.gov/laws/2024/ic/titles/29",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "maryland",
+    name: "Maryland",
+    abbr: "MD",
+    smallEstateThresholdUSD: 50_000,
+    smallEstateProcess:
+      "Maryland has a Small Estate procedure for estates of $50,000 or less ($100,000 if everything passes to the surviving spouse). It's a formal court process — quicker than regular estate administration but still filed with the Register of Wills.",
+    typicalTimelineMonths: { low: 9, high: 14 },
+    informalProbateAvailable: false,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Maryland has BOTH a state estate tax AND a state inheritance tax — one of the few states with both. Inheritance tax exempts close relatives but charges 10% on others.",
+      "Probate is handled by the Register of Wills in each county — separate from the courts.",
+      "Maryland uses a personal-representative system rather than executor/administrator distinctions.",
+      "Modified Administration is available when all heirs and creditors agree — faster than regular administration.",
+      "The Register of Wills office is unusually helpful with self-represented executors compared to most states.",
+    ],
+    keyForms: [
+      {
+        name: "Regular Estate Petition",
+        description: "Opens probate for estates over $50,000.",
+      },
+      {
+        name: "Small Estate Petition",
+        description: "Estates $50,000 or less ($100k spouse-only).",
+      },
+      {
+        name: "Modified Administration Election",
+        description: "Faster path when heirs and creditors all agree.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Maryland Register of Wills",
+        url: "https://registers.maryland.gov/",
+      },
+      {
+        label: "Maryland Estates and Trusts Code",
+        url: "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=get&section=1-101&enactments=false",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "missouri",
+    name: "Missouri",
+    abbr: "MO",
+    smallEstateThresholdUSD: 40_000,
+    smallEstateProcess:
+      "Missouri's Small Estate Affidavit (R.S.Mo. §473.097) handles estates of $40,000 or less (excluding exempt property). Wait 30 days after death. Filed with the probate division of the circuit court.",
+    typicalTimelineMonths: { low: 9, high: 14 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Missouri has no state estate tax and no inheritance tax.",
+      "Probate is heard by the Probate Division of the Circuit Court in each county.",
+      "Missouri offers 'Refusal of Letters' for very small estates — surviving spouse or unpaid creditors can collect assets directly without opening any administration.",
+      "Independent administration is available when all interested parties consent — minimizes court involvement.",
+      "Beneficiary deeds are valid for real estate (transfer-on-death).",
+    ],
+    keyForms: [
+      {
+        name: "Petition for Letters Testamentary or of Administration",
+        description: "Opens probate.",
+      },
+      {
+        name: "Small Estate Affidavit",
+        description: "Estates up to $40,000.",
+      },
+      {
+        name: "Refusal of Letters",
+        description: "Smallest estates — surviving spouse / creditor path.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Missouri Courts — Probate forms",
+        url: "https://www.courts.mo.gov/page.jsp?id=525",
+      },
+      {
+        label: "Missouri Revised Statutes Chapter 473 — Probate Code",
+        url: "https://revisor.mo.gov/main/OneChapter.aspx?chapter=473",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "wisconsin",
+    name: "Wisconsin",
+    abbr: "WI",
+    smallEstateThresholdUSD: 50_000,
+    smallEstateProcess:
+      "Wisconsin's Transfer by Affidavit (Wis. Stat. §867.03) handles estates of $50,000 or less. Wait 30 days after death. The successor presents the affidavit directly to whoever holds the asset, no court filing required.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Wisconsin is a marital-property state (its version of community property — adopted 1986). Property acquired during marriage is generally split 50/50.",
+      "Wisconsin has no state estate tax and no inheritance tax.",
+      "Wisconsin offers 'Summary Settlement' for estates up to $50,000 in net value when the surviving spouse or minor children inherit — even faster than informal probate.",
+      "Informal probate (uncontested cases handled by court Register in Probate without hearings) is the default.",
+      "Transfer-on-death deeds are recognized for real estate.",
+    ],
+    keyForms: [
+      {
+        name: "PR-1801 — Application for Informal Administration",
+        description: "Opens probate for uncontested estates.",
+      },
+      {
+        name: "Transfer by Affidavit (PR-1831)",
+        description: "Estates up to $50,000.",
+      },
+      {
+        name: "Summary Settlement Petition",
+        description: "Spouse / minor children path under $50,000.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Wisconsin Courts — Probate forms",
+        url: "https://www.wicourts.gov/forms1/circuit/index.htm",
+      },
+      {
+        label: "Wisconsin Statutes Chapters 851–882 — Probate",
+        url: "https://docs.legis.wisconsin.gov/statutes/statutes/",
+      },
+    ],
+    isCommunityPropertyState: true,
+  },
+  {
+    slug: "colorado",
+    name: "Colorado",
+    abbr: "CO",
+    smallEstateThresholdUSD: 80_000,
+    smallEstateProcess:
+      "Colorado's Collection of Personal Property by Affidavit (C.R.S. §15-12-1201) handles estates of $80,000 or less in personal property. Wait 10 days after death. The successor presents the affidavit directly to whoever holds the asset.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Colorado has no state estate tax and no inheritance tax.",
+      "Colorado adopted the Uniform Probate Code — informal probate (no hearing, just paperwork) is the default for uncontested estates with a valid will.",
+      "Independent administration (executor handles things without court supervision) is the norm.",
+      "Beneficiary deeds for real estate are recognized.",
+      "The 10-day waiting period before using a small-estate affidavit is among the shortest in the country.",
+    ],
+    keyForms: [
+      {
+        name: "JDF 906 — Application for Informal Probate",
+        description: "Standard path for uncontested wills.",
+      },
+      {
+        name: "JDF 998 — Collection of Personal Property by Affidavit",
+        description: "Small-estate path under $80,000.",
+      },
+      {
+        name: "JDF 940 — Inventory of Estate",
+        description: "Filed within 3 months of appointment.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Colorado Courts — Probate self-help",
+        url: "https://www.courts.state.co.us/Forms/SubCategory.cfm?Category=Probate",
+      },
+      {
+        label: "Colorado Revised Statutes Title 15 — Probate, Trusts, and Fiduciaries",
+        url: "https://leg.colorado.gov/sites/default/files/images/olls/crs2023-title-15.pdf",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "minnesota",
+    name: "Minnesota",
+    abbr: "MN",
+    smallEstateThresholdUSD: 75_000,
+    smallEstateProcess:
+      "Minnesota's Affidavit for Collection of Personal Property (Minn. Stat. §524.3-1201) handles estates of $75,000 or less in personal property. Wait 30 days after death. The successor presents the affidavit directly to whoever holds the asset, no court filing required.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Minnesota has its own state estate tax — kicks in at $3 million (2024) with rates up to 16%. Lower threshold than federal.",
+      "Minnesota adopted the Uniform Probate Code — informal probate is the default for uncontested cases.",
+      "Probate is handled by district court, but the Registrar (a court clerk) approves informal applications without a judge.",
+      "Transfer-on-death deeds are recognized for real estate.",
+      "Summary closing is available — when small estates are closed quickly without supervised administration.",
+    ],
+    keyForms: [
+      {
+        name: "Application for Informal Probate of Will and Appointment of Personal Representative",
+        description: "Standard path for uncontested wills.",
+      },
+      {
+        name: "Affidavit for Collection of Personal Property",
+        description: "Small-estate path under $75,000.",
+      },
+      {
+        name: "Inventory and Appraisement",
+        description: "Filed within 6 months.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Minnesota Judicial Branch — Probate forms",
+        url: "https://www.mncourts.gov/Help-Topics/Probate.aspx",
+      },
+      {
+        label: "Minnesota Statutes Chapter 524 — Uniform Probate Code",
+        url: "https://www.revisor.mn.gov/statutes/cite/524",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "south-carolina",
+    name: "South Carolina",
+    abbr: "SC",
+    smallEstateThresholdUSD: 25_000,
+    smallEstateProcess:
+      "South Carolina's Small Estate Affidavit handles estates of $25,000 or less in personal property (S.C. Code §62-3-1201). Wait 30 days after death. Filed with the probate court.",
+    typicalTimelineMonths: { low: 9, high: 14 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "South Carolina has no state estate tax (repealed 2005) and no inheritance tax.",
+      "Probate Court is its own court system in SC, separate from Circuit Court.",
+      "Summary administration is available when one heir is the only beneficiary and there are no debts.",
+      "South Carolina's $25,000 threshold is on the lower end nationally — many estates won't qualify for the simplified path.",
+    ],
+    keyForms: [
+      {
+        name: "Application for Informal Probate (Form 300)",
+        description: "Standard path for uncontested wills.",
+      },
+      {
+        name: "Small Estate Affidavit",
+        description: "Personal property up to $25,000.",
+      },
+      {
+        name: "Inventory and Appraisement (Form 350)",
+        description: "Filed within 90 days of appointment.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "South Carolina Probate Court forms",
+        url: "https://www.sccourts.org/forms/indexProbate.cfm",
+      },
+      {
+        label: "South Carolina Code Title 62 — Probate Code",
+        url: "https://www.scstatehouse.gov/code/title62.php",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "alabama",
+    name: "Alabama",
+    abbr: "AL",
+    smallEstateThresholdUSD: 32_071,
+    smallEstateProcess:
+      "Alabama's Summary Distribution (Ala. Code §43-2-690) handles estates of $32,071 or less (the threshold is indexed annually). Wait 30 days after death. Filed with probate court.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: false,
+    notableQuirks: [
+      "Alabama has no state estate tax (repealed 2002) and no inheritance tax.",
+      "Probate is heard by the elected Probate Judge in each county — Alabama is one of the few states with elected probate judges.",
+      "The small-estate threshold is indexed for inflation each year, so it increases over time.",
+      "Letters of administration are typically required even for very small estates with real property.",
+    ],
+    keyForms: [
+      {
+        name: "Petition for Probate of Will",
+        description: "Opens probate when there's a will.",
+      },
+      {
+        name: "Petition for Summary Distribution",
+        description: "Small-estate path under the indexed threshold.",
+      },
+      {
+        name: "Inventory of Estate",
+        description: "Filed within 2 months of letters.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Alabama Courts — Probate (varies by county)",
+        url: "https://judicial.alabama.gov/",
+      },
+      {
+        label: "Alabama Code Title 43 — Wills and Decedents' Estates",
+        url: "https://alison.legislature.state.al.us/code-of-alabama",
+      },
+    ],
+    isCommunityPropertyState: false,
+  },
+  {
+    slug: "louisiana",
+    name: "Louisiana",
+    abbr: "LA",
+    smallEstateThresholdUSD: 125_000,
+    smallEstateProcess:
+      "Louisiana calls it 'Small Succession' (rather than probate). Estates of $125,000 or less can use the Small Succession Affidavit. The process is filed with the district court of the parish where the deceased lived.",
+    typicalTimelineMonths: { low: 6, high: 12 },
+    informalProbateAvailable: true,
+    attorneyRequiredForProbate: true,
+    notableQuirks: [
+      "Louisiana is the ONLY US state that uses civil-law (Napoleonic Code) for probate — everything else uses common law. Terms like 'probate' and 'executor' don't apply; Louisiana uses 'succession' and 'executor of will.'",
+      "Louisiana is a community-property state with strong forced-heirship rules — children under 24 (or with permanent disabilities) are 'forced heirs' who must receive a minimum share of the estate, regardless of what the will says.",
+      "There is no probate court — successions go to district courts.",
+      "Independent administration (no court supervision after appointment) is available when all heirs consent.",
+      "Most successions in Louisiana require an attorney — the procedural rules are specialized and unfamiliar to lawyers from other states.",
+    ],
+    keyForms: [
+      {
+        name: "Petition for Possession",
+        description: "Opens succession for transfer of assets.",
+      },
+      {
+        name: "Small Succession Affidavit",
+        description: "Estates under $125,000.",
+      },
+      {
+        name: "Detailed Descriptive List",
+        description: "Inventory of estate assets and debts.",
+      },
+    ],
+    authoritativeSources: [
+      {
+        label: "Louisiana State Bar Association — Successions",
+        url: "https://www.lsba.org/Public/PamphletInfo.aspx?Article=Wills",
+      },
+      {
+        label: "Louisiana Civil Code — Successions (Books III)",
+        url: "https://www.legis.la.gov/legis/Laws_Toc.aspx?folder=72&title=Civil%20Code",
+      },
+    ],
+    isCommunityPropertyState: true,
+  },
 ];
 
 export function getStateGuide(slug: string): StateProbateGuide | undefined {

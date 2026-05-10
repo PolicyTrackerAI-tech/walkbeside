@@ -42,8 +42,8 @@ export default async function EstatePage() {
             <p className="text-ink-soft mt-3 mb-4">
               Probate rules vary significantly state to state &mdash;
               small-estate thresholds, attorney requirements, timelines,
-              key forms. We have detailed guides for the 10 most
-              populous states.
+              key forms. We have detailed guides for the 25 most
+              populous states (covering ~85% of the US population).
             </p>
             <div className="flex flex-wrap gap-2">
               {STATE_GUIDES.map((s) => (
