@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CrisisResources } from "@/components/CrisisResources";
 import { HelpFooter } from "@/components/HelpFooter";
+import { TimeCriticalBanner } from "@/components/guidance/TimeCriticalBanner";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Card } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
@@ -208,6 +209,8 @@ export function CrisisUnexpected() {
           </div>
 
           <CrisisResources />
+
+          <TimeCriticalBanner />
 
           {/* Sticky stepper — keeps every step's state visible. */}
           {hydrated && !allComplete && currentIndex !== -1 && (

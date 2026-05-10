@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { CrisisResources } from "@/components/CrisisResources";
 import { HelpFooter } from "@/components/HelpFooter";
+import { TimeCriticalBanner } from "@/components/guidance/TimeCriticalBanner";
 import type { GuidanceStep, Scenario } from "@/lib/scenarios";
 
 type StepStatus = "hidden" | "current" | "done" | "skipped";
@@ -147,6 +148,8 @@ export function StepList({
           </h1>
           <p className="text-lg text-ink-soft mb-2">{subhead}</p>
           <p className="text-sm text-ink-muted italic mb-6">{tone}</p>
+
+          <TimeCriticalBanner />
 
           {/* Sticky stepper — every step's state at a glance, visible as
               the user scrolls or advances. Replaces the simple percentage
