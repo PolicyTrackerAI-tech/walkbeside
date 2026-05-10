@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { requirePaid } from "@/lib/require-paid";
+import { STATE_GUIDES } from "@/lib/probate-by-state";
 
 export const metadata: Metadata = {
   title: "Estate settlement — what comes after the paperwork",
@@ -33,6 +35,34 @@ export default async function EstatePage() {
               do one thing at a time.
             </p>
           </div>
+
+          <Card tone="primary">
+            <CardEyebrow>Probate by state</CardEyebrow>
+            <CardTitle>Find the rules where the deceased lived.</CardTitle>
+            <p className="text-ink-soft mt-3 mb-4">
+              Probate rules vary significantly state to state &mdash;
+              small-estate thresholds, attorney requirements, timelines,
+              key forms. We have detailed guides for the 10 most
+              populous states.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {STATE_GUIDES.map((s) => (
+                <Link
+                  key={s.slug}
+                  href={`/estate/${s.slug}`}
+                  className="text-sm px-3 py-1.5 rounded-full border border-border bg-surface hover:border-primary hover:bg-primary-soft transition-colors"
+                >
+                  {s.name}
+                </Link>
+              ))}
+            </div>
+            <p className="text-xs text-ink-muted mt-4">
+              Don&rsquo;t see your state? The general probate basics
+              below apply broadly. For state-specific rules elsewhere,
+              talk to a local estate attorney or check your state&rsquo;s
+              probate-court website.
+            </p>
+          </Card>
 
           <Card tone="warn">
             <CardTitle>Get a one-hour attorney consult.</CardTitle>
