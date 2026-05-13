@@ -28,6 +28,7 @@ const NAV_LINKS: { href: string; label: string }[] = [
   { href: "/about", label: "About" },
   { href: "/obituary", label: "Obituary helper" },
   { href: "/faq", label: "FAQ" },
+  { href: "/glossary", label: "Glossary" },
   { href: "/after", label: "After the funeral" },
 ];
 

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { FAITH_TRADITIONS } from "@/lib/faith-traditions";
 import { listStateSlugs } from "@/lib/probate-by-state";
+import { listSlugs as listGlossarySlugs } from "@/lib/glossary";
 
 const SITE = "https://honestfuneral.co";
 
@@ -38,7 +39,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/funeral-homes`, priority: 0.9, changeFrequency: "weekly" },
       { url: `${SITE}/home-funeral`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/body-donation`, priority: 0.7, changeFrequency: "monthly" },
+      { url: `${SITE}/after-hospice`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/sudden-loss`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/survivor-benefits`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/digital-legacy`, priority: 0.7, changeFrequency: "monthly" },
+      { url: `${SITE}/talking-to-kids`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/how-to-pay`, priority: 0.9, changeFrequency: "monthly" },
       { url: `${SITE}/estate`, priority: 0.7, changeFrequency: "monthly" },
+      { url: `${SITE}/glossary`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/terms`, priority: 0.3, changeFrequency: "yearly" },
       { url: `${SITE}/privacy`, priority: 0.3, changeFrequency: "yearly" },
     ] as const
@@ -72,11 +80,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const glossaryRoutes: MetadataRoute.Sitemap = listGlossarySlugs().map(
+    (slug) => ({
+      url: `${SITE}/glossary/${slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    }),
+  );
+
   return [
     ...staticRoutes,
     ...scenarioRoutes,
     ...afterRoutes,
     ...faithRoutes,
     ...estateRoutes,
+    ...glossaryRoutes,
   ];
 }
