@@ -18,6 +18,7 @@ type GuideCategory =
   | "grief"
   | "money"
   | "vendors"
+  | "plan-ahead"
   | "reference";
 
 interface Guide {
@@ -35,6 +36,7 @@ const CATEGORY_LABELS: Record<GuideCategory, string> = {
   grief: "Grief and family",
   money: "Paying for it",
   vendors: "Buying outside the funeral home",
+  "plan-ahead": "Plan ahead — no death yet",
   reference: "Reference",
 };
 
@@ -46,6 +48,7 @@ const CATEGORY_ORDER: GuideCategory[] = [
   "estate",
   "grief",
   "vendors",
+  "plan-ahead",
   "reference",
 ];
 
@@ -187,6 +190,22 @@ const GUIDES: Guide[] = [
     description:
       "Buy the headstone direct. Typically 30–60% less than funeral-home pricing for the same stone.",
     category: "vendors",
+  },
+
+  // Plan ahead
+  {
+    href: "/plan-ahead",
+    title: "Pre-need planning playbook",
+    description:
+      "Death folder, advance directives, beneficiaries, written funeral preferences. The four-pillar weekend project.",
+    category: "plan-ahead",
+  },
+  {
+    href: "/planning",
+    title: "Planning for yourself or an aging parent",
+    description:
+      "The non-crisis entry point. Free cheat sheet, fair-price lookup, the conversation to have now.",
+    category: "plan-ahead",
   },
 
   // Reference
