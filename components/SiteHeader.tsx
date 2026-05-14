@@ -25,11 +25,9 @@ interface Props {
 const NAV_LINKS: { href: string; label: string }[] = [
   { href: "/", label: "Home" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/guides", label: "Guides" },
   { href: "/about", label: "About" },
-  { href: "/obituary", label: "Obituary helper" },
   { href: "/faq", label: "FAQ" },
-  { href: "/glossary", label: "Glossary" },
-  { href: "/after", label: "After the funeral" },
 ];
 
 export function SiteHeader({
