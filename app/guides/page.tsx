@@ -215,6 +215,13 @@ const GUIDES: Guide[] = [
     category: "plan-ahead",
   },
   {
+    href: "/end-of-life",
+    title: "End of life — when you're the one dying",
+    description:
+      "For people with a terminal diagnosis. Palliative vs hospice, MAID where legal, treatment decisions, what to actually do with the time.",
+    category: "plan-ahead",
+  },
+  {
     href: "/planning",
     title: "Planning for yourself or an aging parent",
     description:

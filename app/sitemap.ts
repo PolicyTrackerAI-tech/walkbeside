@@ -49,6 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/plan-ahead`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/disenfranchised-grief`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/out-of-state-death`, priority: 0.7, changeFrequency: "monthly" },
+      { url: `${SITE}/end-of-life`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/grief`, priority: 0.9, changeFrequency: "monthly" },
       { url: `${SITE}/estate`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/glossary`, priority: 0.7, changeFrequency: "monthly" },
