@@ -112,6 +112,13 @@ const GUIDES: Guide[] = [
     category: "decisions",
   },
   {
+    href: "/funeral-home-tactics",
+    title: "How the funeral industry’s sales floor works",
+    description:
+      "Specific scripts, room layouts, and pricing psychology. Red flags vs green flags. Where to file a complaint.",
+    category: "decisions",
+  },
+  {
     href: "/home-funeral",
     title: "Family-led home funerals",
     description:
