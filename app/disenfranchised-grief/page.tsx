@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Disenfranchised grief — when the world doesn't recognize your loss",
@@ -26,6 +27,12 @@ export default function DisenfranchisedGriefPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="disenfranchised-grief"
+        title="Disenfranchised grief — when the world doesn't recognize your loss"
+        description="Miscarriage, stillbirth, ex-spouses, estranged family, unmarried partners, chosen family, pet loss. The grief that other content silently leaves out."
+        eyebrow="Grief"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

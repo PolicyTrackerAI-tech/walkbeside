@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Plan ahead — pre-need funeral and estate planning for the still-living",
@@ -28,6 +29,12 @@ export default function PlanAheadPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="plan-ahead"
+        title="Plan ahead — pre-need planning playbook"
+        description="The four-pillar weekend project: medical decisions, legal and financial, the death folder, written funeral preferences. With the pre-paid funeral plan trap and a better alternative."
+        eyebrow="Planning"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

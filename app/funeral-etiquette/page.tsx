@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Funeral etiquette — what to say, what to wear, what to bring",
@@ -22,6 +23,12 @@ export default function FuneralEtiquettePage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="funeral-etiquette"
+        title="Funeral etiquette — what to say, what to wear, what to bring"
+        description="For attendees, not the bereaved. What to say (almost nothing), what to wear, whether to bring kids, flowers vs donations, the casserole rules, and how to actually help."
+        eyebrow="Family"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

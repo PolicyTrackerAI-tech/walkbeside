@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Grief, month by month — what to expect, when to get help, where to find it",
@@ -23,6 +24,12 @@ export default function GriefPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="grief"
+        title="Grief, month by month"
+        description="The shape of grief over weeks, months, and years. Why month 6 is often harder than month 1. How to find a grief therapist or support group."
+        eyebrow="Grief"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

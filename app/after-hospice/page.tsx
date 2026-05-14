@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "When someone dies in hospice — what to expect, what to do, what families miss",
@@ -24,6 +25,12 @@ export default function AfterHospicePage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="after-hospice"
+        title="When someone dies in hospice"
+        description="The smoothest kind of death, and the things families still get wrong. Don't call 911. What the final days look like, the hour of death, the hospice handoff to the funeral home."
+        eyebrow="After"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

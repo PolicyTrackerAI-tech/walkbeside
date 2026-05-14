@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Pet loss — the grief is real, the euthanasia decision, what comes after",
@@ -24,6 +25,12 @@ export default function PetLossPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="pet-loss"
+        title="Pet loss — when the animal you loved dies"
+        description="The euthanasia decision, in-home options, disposition paths, the surviving pets and children, and resources for grief that isn't 'just a pet.'"
+        eyebrow="Grief"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

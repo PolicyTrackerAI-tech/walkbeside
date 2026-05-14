@@ -4,6 +4,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Social Security survivor benefits — what families miss after a death",
@@ -22,6 +23,12 @@ export default function SurvivorBenefitsPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="survivor-benefits"
+        title="Social Security survivor benefits"
+        description="$255 lump-sum, monthly survivor benefits for spouses and children, divorced-spouse rules, dependent-parent benefits, and the three traps families fall into."
+        eyebrow="Benefits"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

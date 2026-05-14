@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Death of a child — for bereaved parents",
@@ -28,6 +29,12 @@ export default function DeathOfAChildPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="death-of-a-child"
+        title="Death of a child"
+        description="For bereaved parents of any-age children. The marriage strain reality (the 80% myth is false), surviving siblings, grandparents, The Compassionate Friends."
+        eyebrow="Grief"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

@@ -6,6 +6,7 @@ import { HelpFooter } from "@/components/HelpFooter";
 import { DONATION_PROGRAMS } from "@/lib/body-donation-programs";
 
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Whole-body donation to medical science — what families need to know",
@@ -33,6 +34,12 @@ export default function BodyDonationPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="body-donation"
+        title="Whole-body donation to medical science"
+        description="Free, supports medical research, skips the funeral home entirely. What's involved, where to register, the backup plan when programs decline, and the risks of for-profit body brokers."
+        eyebrow="Options"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

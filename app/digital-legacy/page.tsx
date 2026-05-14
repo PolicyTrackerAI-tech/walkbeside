@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Digital legacy — handling a deceased person's online accounts, passwords, and devices",
@@ -22,6 +23,12 @@ export default function DigitalLegacyPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="digital-legacy"
+        title="Digital legacy — handling online accounts after death"
+        description="Facebook memorialization, Google Inactive Account Manager, Apple Legacy Contact, password managers, crypto, and the subscriptions still billing the dead person's card."
+        eyebrow="After"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

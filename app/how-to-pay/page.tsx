@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "How to pay for a funeral when you can't afford it — every program, in order",
@@ -23,6 +24,12 @@ export default function HowToPayPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="how-to-pay"
+        title="How to pay for a funeral when you can't afford it"
+        description="Every assistance program, charitable aid, and low-cost option, in order. County indigent burial, FEMA, Medicaid burial allowance, crowdfunding, and the floor of legal costs."
+        eyebrow="Money"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

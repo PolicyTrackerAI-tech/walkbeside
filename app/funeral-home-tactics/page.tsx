@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "How the funeral industry actually makes money — and how the sales floor pushes you",
@@ -28,6 +29,12 @@ export default function FuneralHomeTacticsPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="funeral-home-tactics"
+        title="How the funeral industry's sales floor works"
+        description="Specific scripts, room layouts, and pricing psychology. The Selection Room, the 'Protective' word, the three-tier package trick, the 'your loved one deserves' frame. Red flags vs green flags. Where to file complaints."
+        eyebrow="Advocacy"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

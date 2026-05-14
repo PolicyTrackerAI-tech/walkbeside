@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "When someone dies far from home — out-of-state and international",
@@ -23,6 +24,12 @@ export default function OutOfStateDeathPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="out-of-state-death"
+        title="When someone dies far from home"
+        description="Out-of-state, international, at sea. The two-funeral-home model, repatriation costs, and the option most families miss (cremation at the death location)."
+        eyebrow="Logistics"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

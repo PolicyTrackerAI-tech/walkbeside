@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "How to talk to children about death — age-by-age scripts and what not to say",
@@ -23,6 +24,12 @@ export default function TalkingToKidsPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="talking-to-kids"
+        title="Talking to children about death"
+        description="Age-by-age scripts for 3-5, 6-10, 11-15. The euphemisms that backfire. When to get professional help."
+        eyebrow="Family"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

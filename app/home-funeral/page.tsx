@@ -9,6 +9,7 @@ import {
 } from "@/lib/home-funeral";
 
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Home funerals — what they are, where they're legal, and how they work",
@@ -30,6 +31,12 @@ export default function HomeFuneralPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="home-funeral"
+        title="Home funerals — family-led care of the body"
+        description="A home funeral is family-led care of the body — washing, dressing, vigil, transport. Legal in 41 US states. What it is, what it isn't, and how it works."
+        eyebrow="Options"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">

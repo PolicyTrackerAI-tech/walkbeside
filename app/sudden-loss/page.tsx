@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
+import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
 export const metadata: Metadata = {
   title: "Sudden death — what happens in the first 72 hours when there was no warning",
@@ -24,6 +25,12 @@ export default function SuddenLossPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
+      <ArticleSchema
+        slug="sudden-loss"
+        title="Sudden death — the first 72 hours when there was no warning"
+        description="Paramedics, police, the medical examiner. ID-ing the body, autopsy, pending death certificate, body release. Shock and the 6-month wall."
+        eyebrow="After"
+      />
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-7">
