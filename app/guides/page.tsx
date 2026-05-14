@@ -81,6 +81,13 @@ const GUIDES: Guide[] = [
       "Don't call 911. What to expect in the final days and the hour of death.",
     category: "right-now",
   },
+  {
+    href: "/out-of-state-death",
+    title: "Death away from home",
+    description:
+      "Out-of-state, international, at sea. The two-funeral-home model, transport options, and the cheaper option most families miss.",
+    category: "right-now",
+  },
 
   // Decisions and arrangements
   {
