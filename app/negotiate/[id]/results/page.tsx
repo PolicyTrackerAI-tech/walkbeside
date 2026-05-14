@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requirePaid } from "@/lib/require-paid";
+import { isPaidUser } from "@/lib/auth-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -19,6 +20,11 @@ export default async function NegotiationResultsPage({
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=/negotiate/${id}/results`);
+
+  // requirePaid already gated this page on paid_at; if we got here the
+  // user is paid. Read it anyway so the intent is explicit and the
+  // (theoretical) free-email case still routes correctly.
+  const alreadyPaid = await isPaidUser(supabase, user);
 
   const { data: neg } = await supabase
     .from("negotiations")
@@ -56,7 +62,9 @@ export default async function NegotiationResultsPage({
             <p className="text-ink-soft mt-2">
               {replies.length === 0
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
-                : `Pick the home you want. We release contact info and charge a flat ${fmtCents(FLAT_FEE_CENTS)} only when you confirm.`}
+                : alreadyPaid
+                  ? "Pick the home you want. Contact info releases right away — no additional charge, it’s included in what you’ve already paid."
+                  : `Pick the home you want. We release contact info and charge a flat ${fmtCents(FLAT_FEE_CENTS)} only when you confirm.`}
             </p>
             {replies.length >= 2 && (
               <div className="mt-3">
@@ -101,9 +109,11 @@ export default async function NegotiationResultsPage({
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xs text-ink-muted mb-2">
-                          Our fee if you choose this home: {fmtCents(FLAT_FEE_CENTS)}
-                        </div>
+                        {!alreadyPaid && (
+                          <div className="text-xs text-ink-muted mb-2">
+                            Our fee if you choose this home: {fmtCents(FLAT_FEE_CENTS)}
+                          </div>
+                        )}
                         <form action="/api/stripe/checkout" method="post">
                           <input type="hidden" name="negotiationId" value={id} />
                           <input type="hidden" name="outreachId" value={r.id} />

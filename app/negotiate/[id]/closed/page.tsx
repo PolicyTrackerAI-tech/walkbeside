@@ -11,7 +11,12 @@ export default async function NegotiationClosedPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ dryrun?: string; free?: string; session_id?: string }>;
+  searchParams: Promise<{
+    dryrun?: string;
+    free?: string;
+    included?: string;
+    session_id?: string;
+  }>;
 }) {
   const { id } = await params;
   await requirePaid(`/negotiate/${id}/closed`);
@@ -41,8 +46,10 @@ export default async function NegotiationClosedPage({
           </h1>
           <p className="text-lg text-ink-soft">
             The home you chose has been released to you with the price they
-            quoted in writing. Our flat fee was{" "}
-            {neg.fee_cents ? fmtCents(neg.fee_cents) : "$0"}.
+            quoted in writing.{" "}
+            {sp.included
+              ? "No additional charge — it’s included in the toolkit fee you’ve already paid."
+              : `Our flat fee was ${neg.fee_cents ? fmtCents(neg.fee_cents) : "$0"}.`}
           </p>
 
           {process.env.NODE_ENV !== "production" && sp.dryrun && (

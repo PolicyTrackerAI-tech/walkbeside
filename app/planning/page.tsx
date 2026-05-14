@@ -4,6 +4,8 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { CheatSheetForm } from "@/components/planning/CheatSheetForm";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { FEATURES } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: "Planning a funeral in advance",
@@ -11,11 +13,21 @@ export const metadata: Metadata = {
     "A few hours of research now saves your family thousands and hours of decisions at the worst moment of their lives. Free cheat sheet from a licensed funeral director.",
 };
 
+async function getSignedIn(): Promise<boolean> {
+  if (!FEATURES.supabase()) return false;
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return !!user;
+}
+
 /**
  * /planning — the non-crisis entry. For people preparing for themselves or
  * helping aging parents. No crisis copy, no urgency framing.
  */
-export default function PlanningPage() {
+export default async function PlanningPage() {
+  const signedIn = await getSignedIn();
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
@@ -153,9 +165,15 @@ export default function PlanningPage() {
               family logs in and the process is already half-done.
             </p>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href="/login?next=/planning">
-                Save to an account
-              </LinkButton>
+              {signedIn ? (
+                <LinkButton href="/dashboard">
+                  Open your dashboard →
+                </LinkButton>
+              ) : (
+                <LinkButton href="/login?next=/planning">
+                  Save to an account
+                </LinkButton>
+              )}
               <LinkButton href="/how-it-works" variant="secondary">
                 How the funeral-home outreach works
               </LinkButton>
@@ -171,15 +189,17 @@ export default function PlanningPage() {
             </p>
           </Card>
 
-          <Card tone="soft">
-            <CardTitle>Want to come back to this?</CardTitle>
-            <p className="text-ink-soft mb-4">
-              Save it to an account so you don&rsquo;t lose your place.
-            </p>
-            <LinkButton href="/login?next=/planning" variant="secondary">
-              Save to an account →
-            </LinkButton>
-          </Card>
+          {!signedIn && (
+            <Card tone="soft">
+              <CardTitle>Want to come back to this?</CardTitle>
+              <p className="text-ink-soft mb-4">
+                Save it to an account so you don&rsquo;t lose your place.
+              </p>
+              <LinkButton href="/login?next=/planning" variant="secondary">
+                Save to an account →
+              </LinkButton>
+            </Card>
+          )}
 
           <p className="text-sm text-ink-muted">
             <Link

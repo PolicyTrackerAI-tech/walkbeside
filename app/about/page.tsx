@@ -77,12 +77,17 @@ export default function AboutPage() {
               the last account closed.&rdquo;
             </p>
             <p className="text-sm text-ink-soft">
-              We will never earn money from funeral homes, never sell
-              lead data, and never recommend a provider we wouldn&rsquo;t
-              recommend to our own family. Our only revenue is the flat
-              $49 paid by the family up front to unlock the full
-              toolkit &mdash; refundable in 14 days if we didn&rsquo;t
-              save you anything.
+              <strong className="text-ink">
+                We take no commissions, no kickbacks, no referral fees, and
+                no lead-sale revenue from funeral homes, cemeteries, monument
+                companies, or any vendor mentioned anywhere on this site.
+              </strong>{" "}
+              The funeral industry runs on those kickbacks &mdash; which is
+              why almost every &ldquo;free&rdquo; service quietly steers
+              families to the home that paid for the placement. We won&rsquo;t
+              do that. Our only revenue is the flat $49 paid by the family up
+              front to unlock the full toolkit &mdash; refundable in 14 days
+              if we didn&rsquo;t save you anything.
             </p>
           </Card>
 

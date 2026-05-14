@@ -293,14 +293,30 @@ export default function BodyDonationPage() {
             </LinkButton>
           </Card>
 
-          <p className="text-xs text-ink-muted">
-            This page is general consumer information, not medical or
-            legal advice. Donation acceptance criteria, fees, and
-            timelines vary by program and change occasionally.
-            Confirm current rules directly with the program before
-            making decisions. We are not affiliated with any program
-            listed.
-          </p>
+          <div className="text-xs text-ink-muted space-y-2">
+            <p>
+              This page is general consumer information, not medical or
+              legal advice. Donation acceptance criteria, fees, and
+              timelines vary by program and change occasionally.
+              Confirm current rules directly with the program before
+              making decisions. We are not affiliated with any program
+              listed and take no commissions, referral fees, or
+              kickbacks from any program.
+            </p>
+            <p>
+              <strong className="text-ink-soft">Run a program listed here?</strong>{" "}
+              If anything is wrong, out of date, or you&rsquo;d
+              prefer not to be included, email{" "}
+              <a
+                href="mailto:corrections@honestfuneral.co"
+                className="text-primary-deep underline-offset-2 hover:underline"
+              >
+                corrections@honestfuneral.co
+              </a>{" "}
+              and we&rsquo;ll update or remove the listing within 48
+              hours.
+            </p>
+          </div>
 
           <HelpFooter />
         </div>

@@ -84,6 +84,11 @@ export default function HomePage() {
           <p className="mt-10 text-sm text-ink-muted">
             Built by a licensed funeral director to protect families like yours.
           </p>
+          <p className="mt-3 text-sm text-ink-soft max-w-md mx-auto">
+            <strong className="text-ink">No commissions. No kickbacks. No referral fees.</strong>{" "}
+            We take no money from any funeral home, cemetery, or vendor on
+            this site. The flat $49 from the family is our only revenue.
+          </p>
 
           <p className="mt-2 text-xs text-ink-muted">
             <Link href="/login?next=/dashboard" className="underline-offset-2 hover:underline">

@@ -3,59 +3,41 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { HelpFooter } from "@/components/HelpFooter";
-import { SCENARIO_LABELS, type Scenario } from "@/lib/scenarios";
 
 export const metadata: Metadata = {
-  title: "What to do right now",
+  title: "Where are you in this?",
   description:
-    "Tell us where the death occurred. We give you the right first steps for your situation — no wrong answer.",
+    "Three paths. Pick the one that fits. We help families before, during, and after a death.",
 };
 
 /**
- * Screen 2 — Where did they pass away?
- * Four crisis options plus a de-emphasized planning-ahead escape hatch.
- * No nav, no login.
+ * Screen 2 — Three high-level paths. Kept intentionally short.
+ * The "it just happened" path drills into where on the next screen
+ * so this page stays uncluttered for a crying user.
  */
-const OPTIONS: { key: Scenario; sub: React.ReactNode }[] = [
+const PATHS: {
+  href: string;
+  title: string;
+  sub: string;
+  emphasis?: boolean;
+}[] = [
   {
-    key: "hospital",
-    sub: (
-      <>
-        Death has been <strong className="text-ink">pronounced</strong> or is
-        about to be.
-      </>
-    ),
+    href: "/where/just-happened",
+    title: "It just happened",
+    sub: "Death in the last few hours or days. We’ll walk through the next 72 hours.",
+    emphasis: true,
   },
   {
-    key: "home-expected",
-    sub: (
-      <>
-        <strong className="text-ink">Hospice</strong> was involved or it was
-        anticipated.
-      </>
-    ),
+    href: "/decide",
+    title: "We’re arranging the funeral",
+    sub: "Decisions need to be made in the next few days. We help pick the service and avoid being overcharged.",
   },
   {
-    key: "home-unexpected",
-    sub: (
-      <>
-        It just happened. You may not have called{" "}
-        <strong className="text-ink">911</strong> yet.
-      </>
-    ),
-  },
-  {
-    key: "elsewhere",
-    sub: (
-      <>
-        <strong className="text-ink">Workplace</strong>, public space, away
-        from home.
-      </>
-    ),
+    href: "/planning",
+    title: "I’m planning ahead",
+    sub: "Nobody has died. Learning what funerals should cost and how to set things up before the day comes.",
   },
 ];
-
-const PLANNING_HREF = "/planning";
 
 export default function WherePage() {
   return (
@@ -67,186 +49,35 @@ export default function WherePage() {
           <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-3">
             Where are you in this?
           </h1>
-          <p className="text-ink-soft mb-6">
-            We can help at any stage. Pick what fits best.
+          <p className="text-ink-soft mb-8">
+            Pick the one that fits best. We help at every stage.
           </p>
-
-          {/* Mid-journey routes — for users who don't fit the
-              just-happened path. They navigate directly to the right
-              destination. */}
-          <div className="grid gap-3 mb-10">
-            <Link
-              href="/decide"
-              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex-1">
-                  <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
-                    Funeral is being planned
-                  </div>
-                  <div className="text-sm text-ink-soft">
-                    Decisions need to be made in the next few days.
-                    We&rsquo;ll help you figure out what kind of service
-                    fits.
-                  </div>
-                </div>
-                <div className="text-primary text-lg pt-1" aria-hidden>
-                  →
-                </div>
-              </div>
-            </Link>
-            <Link
-              href="/next-30-days"
-              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex-1">
-                  <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
-                    Funeral happened — now there&rsquo;s paperwork
-                  </div>
-                  <div className="text-sm text-ink-soft">
-                    Death certificates, accounts to close, insurance,
-                    estate. We&rsquo;ll walk through it in order.
-                  </div>
-                </div>
-                <div className="text-primary text-lg pt-1" aria-hidden>
-                  →
-                </div>
-              </div>
-            </Link>
-            <Link
-              href="/planning"
-              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex-1">
-                  <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
-                    Looking ahead — no death yet
-                  </div>
-                  <div className="text-sm text-ink-soft">
-                    Planning ahead for someone, or for yourself.
-                    Free fair-price lookup, prep kit, and what to know.
-                  </div>
-                </div>
-                <div className="text-primary text-lg pt-1" aria-hidden>
-                  →
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          <div
-            className="mb-8 flex items-center gap-4 text-xs uppercase tracking-wider text-ink-muted"
-            aria-hidden
-          >
-            <span className="h-px flex-1 bg-border" />
-            <span>It just happened</span>
-            <span className="h-px flex-1 bg-border" />
-          </div>
-
-          <h2 className="font-serif text-2xl text-ink mb-2">
-            Where did they pass away?
-          </h2>
-          <p className="text-ink-soft mb-6">
-            This tells us what to help with in the next few hours.
-          </p>
-
-          <div className="mb-8 rounded-2xl border border-border bg-surface-soft px-5 py-4">
-            <p className="text-sm text-ink mb-2">
-              <strong>
-                Has a medical professional pronounced them yet?
-              </strong>
-            </p>
-            <p className="text-sm text-ink-soft mb-3">
-              A nurse, paramedic, doctor, or hospice worker. Pronouncement is a
-              legal step. Nothing official starts until it happens.
-            </p>
-            <Link
-              href="/guidance/home-unexpected"
-              className="inline-block text-sm font-medium text-primary-deep underline underline-offset-2 hover:no-underline"
-            >
-              Not yet, or I&rsquo;m not sure → start here
-            </Link>
-          </div>
 
           <div className="grid gap-4">
-            {OPTIONS.map((opt) => (
+            {PATHS.map((p) => (
               <Link
-                key={opt.key}
-                href={`/guidance/${opt.key}`}
-                className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-6 transition-colors group"
+                key={p.href}
+                href={p.href}
+                className={`block rounded-2xl p-6 transition-colors group ${
+                  p.emphasis
+                    ? "bg-primary-soft border-2 border-primary hover:border-primary-deep"
+                    : "bg-surface border border-border hover:border-primary hover:bg-primary-soft"
+                }`}
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-1">
-                    <div className="font-serif text-xl text-ink group-hover:text-primary-deep mb-1">
-                      {SCENARIO_LABELS[opt.key]}
+                    <div className="font-serif text-xl text-ink group-hover:text-primary-deep mb-1.5">
+                      {p.title}
                     </div>
-                    <div className="text-sm text-ink-soft">{opt.sub}</div>
+                    <div className="text-sm text-ink-soft">{p.sub}</div>
                   </div>
-                  <div className="text-primary text-xl pt-1" aria-hidden>
+                  <div className="text-primary text-2xl pt-1" aria-hidden>
                     →
                   </div>
                 </div>
               </Link>
             ))}
-            <Link
-              href="/guidance/elsewhere"
-              className="block bg-surface border border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-6 transition-colors group"
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex-1">
-                  <div className="font-serif text-xl text-ink group-hover:text-primary-deep mb-1">
-                    Somewhere else / not listed
-                  </div>
-                  <div className="text-sm text-ink-soft">
-                    Assisted living, in transit, or another setting that
-                    doesn&rsquo;t fit the categories above. We can still help.
-                  </div>
-                </div>
-                <div className="text-primary text-xl pt-1" aria-hidden>
-                  →
-                </div>
-              </div>
-            </Link>
           </div>
-
-          <div
-            className="mt-10 flex items-center gap-4 text-xs uppercase tracking-wider text-ink-muted"
-            aria-hidden
-          >
-            <span className="h-px flex-1 bg-border" />
-            <span>Or &mdash;</span>
-            <span className="h-px flex-1 bg-border" />
-          </div>
-
-          <Link
-            href={PLANNING_HREF}
-            className="mt-5 block bg-surface-soft border border-dashed border-border hover:border-primary hover:bg-primary-soft rounded-2xl p-5 transition-colors group"
-          >
-            <div className="flex items-start gap-4">
-              <div className="flex-1">
-                <div className="font-serif text-lg text-ink group-hover:text-primary-deep mb-1">
-                  I&rsquo;m planning ahead &mdash; nobody has died.
-                </div>
-                <div className="text-sm text-ink-soft">
-                  Learn what funerals should cost in your area and how to avoid
-                  the worst traps.
-                </div>
-              </div>
-              <div className="text-ink-muted text-xl pt-1" aria-hidden>
-                →
-              </div>
-            </div>
-          </Link>
-
-          <p className="mt-6 text-center text-sm text-ink-muted">
-            <Link
-              href="/prices"
-              className="underline underline-offset-2 hover:text-ink-soft"
-            >
-              Already know what you need? Skip to fair price lookup →
-            </Link>
-          </p>
 
           <HelpFooter />
         </div>

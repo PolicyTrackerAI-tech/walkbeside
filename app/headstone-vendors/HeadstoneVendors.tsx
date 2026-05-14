@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
-import { Input, Label } from "@/components/ui/Field";
+import { Label } from "@/components/ui/Field";
+import { StateCombobox } from "@/components/ui/StateCombobox";
 import { HelpFooter } from "@/components/HelpFooter";
 import {
   METROS,
@@ -101,16 +102,14 @@ export function HeadstoneVendors() {
                 </select>
               </div>
               <div>
-                <Label htmlFor="state">Or filter by state (2-letter)</Label>
-                <Input
+                <Label htmlFor="state">Or filter by state</Label>
+                <StateCombobox
                   id="state"
-                  maxLength={2}
                   value={stateFilter}
-                  onChange={(e) => {
-                    setStateFilter(e.target.value.toUpperCase());
-                    setMetro("");
+                  onChange={(abbr) => {
+                    setStateFilter(abbr);
+                    if (abbr) setMetro("");
                   }}
-                  placeholder="e.g. CA, TX, NY"
                 />
               </div>
             </div>
@@ -210,10 +209,32 @@ export function HeadstoneVendors() {
             </ul>
           </Card>
 
-          <p className="text-xs text-ink-muted">
-            We don&rsquo;t take referral fees from any vendor listed
-            above. This is research, not a marketplace.
-          </p>
+          <div className="text-xs text-ink-muted space-y-2">
+            <p>
+              <strong className="text-ink-soft">Not a marketplace.</strong>{" "}
+              We take no commissions, referral fees, or kickbacks from
+              any vendor listed above. We are not affiliated with any
+              of them. Listings are based on public information,
+              independently verified by our team, and reflect our
+              best understanding at the time of publication. Pricing,
+              service area, and availability change &mdash; confirm
+              directly with the vendor before relying on anything
+              here.
+            </p>
+            <p>
+              <strong className="text-ink-soft">Run a monument company listed here?</strong>{" "}
+              If anything is wrong, out of date, or you&rsquo;d
+              prefer not to be included, email{" "}
+              <a
+                href="mailto:corrections@honestfuneral.co"
+                className="text-primary-deep underline-offset-2 hover:underline"
+              >
+                corrections@honestfuneral.co
+              </a>{" "}
+              and we&rsquo;ll update or remove the listing within 48
+              hours.
+            </p>
+          </div>
 
           <HelpFooter />
         </div>

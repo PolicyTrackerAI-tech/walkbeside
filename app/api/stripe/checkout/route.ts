@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { stripe, stripeAvailable, calcFeeCents } from "@/lib/stripe";
+import { isPaidUser } from "@/lib/auth-paid";
 import { PUBLIC } from "@/lib/env";
 
 /**
  * Create a Stripe Checkout session for the negotiation fee on the chosen home.
  * Submitted as a regular form POST from the results page so it works even if JS is disabled.
+ *
+ * Paid users (paid_at set via the upfront $49 toolkit unlock) bypass Stripe
+ * entirely — they've already paid the flat fee and we don't double-charge.
  */
 export async function POST(req: Request) {
   const form = await req.formData();
@@ -39,6 +43,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "not_found" }, { status: 404 });
 
   const fee = calcFeeCents();
+
+  // Already paid via the upfront toolkit unlock → close the negotiation
+  // immediately at zero additional cost. No second charge, no Stripe round-trip.
+  if (await isPaidUser(supabase, user)) {
+    await supabase
+      .from("negotiations")
+      .update({
+        status: "closed",
+        fee_cents: 0,
+      })
+      .eq("id", negotiationId);
+    return NextResponse.redirect(
+      new URL(`/negotiate/${negotiationId}/closed?included=1`, req.url),
+      { status: 303 },
+    );
+  }
 
   if (!stripeAvailable()) {
     // Stripe not configured — mark closed in dev so the flow stays exercisable.

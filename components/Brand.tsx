@@ -104,6 +104,15 @@ export function Footer() {
           Flat $49 only if you choose a funeral home we presented to you
           through our outreach.
         </p>
+        <p>
+          <strong className="text-ink-soft">
+            We accept zero commissions, referral fees, or kickbacks from
+            funeral homes, cemeteries, monument companies, or any vendor we
+            mention.
+          </strong>{" "}
+          The $49 from the family is our only revenue. If we ever change
+          that, you’ll see it here first.
+        </p>
         <p className="text-xs">
           Honest Funeral is not a law firm, not a funeral home, and not a medical or
           financial advisor. Information here is general guidance, not legal,

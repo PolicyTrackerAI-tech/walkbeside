@@ -50,9 +50,9 @@ export function deriveTasks(s: DashboardState): { phase: Phase; tasks: Task[] } 
     tasks.push({
       id: "analyze-list",
       phase: "funeral",
-      title: "Send us your price list and we&rsquo;ll flag every overcharge",
+      title: "Send us your price list and we’ll flag every overcharge",
       detail:
-        "After your meeting, send the price list. We&rsquo;ll mark every line that&rsquo;s above fair range and show you what to push back on.",
+        "After your meeting, send the price list. We’ll mark every line that’s above fair range and show you what to push back on.",
       href: "/analyzer",
     });
   }

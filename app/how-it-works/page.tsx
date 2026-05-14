@@ -5,6 +5,8 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { FEATURES } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
@@ -12,7 +14,19 @@ export const metadata: Metadata = {
     "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and the full toolkit. One flat $49 charge unlocks everything; money-back in 14 days.",
 };
 
-const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
+async function getSignedIn(): Promise<boolean> {
+  if (!FEATURES.supabase()) return false;
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return !!user;
+}
+
+function buildSteps(signedIn: boolean): { n: number; title: string; body: React.ReactNode }[] {
+  const dashHref = signedIn ? "/dashboard" : "/login?next=/dashboard";
+  const dashLabel = signedIn ? "your dashboard" : "your account dashboard";
+  return [
   {
     n: 1,
     title: "You authorize us to contact funeral homes on your behalf.",
@@ -36,15 +50,16 @@ const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
     title: "We summarize the responses for you — real prices, line by line.",
     body: (
       <>
-        In your{" "}
+        In{" "}
         <Link
-          href="/login?next=/dashboard"
+          href={dashHref}
           className="text-primary-deep underline-offset-2 hover:underline"
         >
-          account dashboard
-        </Link>{" "}
-        (free to create &mdash; no credit card). Side-by-side comparison, with
-        the outliers flagged. You read it when you have a quiet minute.
+          {dashLabel}
+        </Link>
+        {signedIn ? "" : " (free to create — no credit card)"}.
+        Side-by-side comparison, with the outliers flagged. You read it
+        when you have a quiet minute.
       </>
     ),
   },
@@ -58,11 +73,14 @@ const STEPS: { n: number; title: string; body: React.ReactNode }[] = [
     n: 6,
     title: "Flat $49 upfront, via Stripe.",
     body:
-      "Charged when you start the toolkit. No subscription, no commissions from funeral homes, money-back in 14 days if we don't save you anything documentable.",
+      "Charged when you start the toolkit. No commissions, no kickbacks, no referral fees from funeral homes. Money-back in 14 days if we don't save you anything documentable.",
   },
-];
+  ];
+}
 
-export default function HowItWorksPage() {
+export default async function HowItWorksPage() {
+  const signedIn = await getSignedIn();
+  const STEPS = buildSteps(signedIn);
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/" />} />

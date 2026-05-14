@@ -565,9 +565,10 @@ function CompletedTaskRow({
       )}
       <button
         onClick={onUndo}
-        className="text-xs text-ink-muted hover:text-ink-soft underline-offset-2 hover:underline"
+        className="text-xs text-primary-deep hover:text-ink underline-offset-2 hover:underline"
+        title="Bring this task back to your active list"
       >
-        Undo
+        Not done yet — bring it back
       </button>
     </div>
   );
