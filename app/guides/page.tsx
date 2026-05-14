@@ -182,6 +182,13 @@ const GUIDES: Guide[] = [
       "Age-by-age scripts (3-5, 6-10, 11-15). The euphemisms that backfire. When to get professional help.",
     category: "grief",
   },
+  {
+    href: "/disenfranchised-grief",
+    title: "When the world doesn't recognize your loss",
+    description:
+      "Miscarriage, ex-spouses, estranged family, unmarried partners, chosen family, pet loss. Grief that other content silently leaves out.",
+    category: "grief",
+  },
 
   // Vendors
   {
