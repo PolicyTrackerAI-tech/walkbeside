@@ -210,6 +210,34 @@ const GUIDES: Guide[] = [
       "The euthanasia decision, in-home options, disposition paths, and resources for grief that isn’t 'just a pet.'",
     category: "grief",
   },
+  {
+    href: "/suicide-loss",
+    title: "Suicide loss",
+    description:
+      "For people grieving someone who died by suicide. Why the grief is its own thing, AFSP and Alliance of Hope, the elevated risk for survivors, 988.",
+    category: "grief",
+  },
+  {
+    href: "/overdose-loss",
+    title: "Overdose loss",
+    description:
+      "Addiction is a disease. GRASP and SAMHSA. The relationship before death, the stigma, the children, the family members who still use.",
+    category: "grief",
+  },
+  {
+    href: "/death-of-a-child",
+    title: "Death of a child",
+    description:
+      "For bereaved parents of any-age children. The marriage strain reality (the 80% myth is false), surviving siblings, grandparents, The Compassionate Friends.",
+    category: "grief",
+  },
+  {
+    href: "/funeral-etiquette",
+    title: "Funeral etiquette for attendees",
+    description:
+      "What to say (almost nothing), what to wear, whether to bring kids, flowers vs donations, the casserole rules, and how to actually help.",
+    category: "grief",
+  },
 
   // Vendors
   {
