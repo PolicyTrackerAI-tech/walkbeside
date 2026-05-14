@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "How to pay for a funeral when you can't afford it — every program, in order",
   description:
     "County indigent burial, FEMA funeral assistance, Medicaid burial allowance, religious aid, free options like body donation, plus the cheapest legal way to handle a death. The full playbook for families with no money for a funeral.",
+  openGraph: { images: [ogImage("How to pay for a funeral when you can't afford it", "Money")] },
 };
 
 /**

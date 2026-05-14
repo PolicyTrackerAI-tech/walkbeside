@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "When someone dies in hospice — what to expect, what to do, what families miss",
   description:
     "An honest guide to a hospice death. What the final days actually look like, what to do in the first 30 minutes after death (don't call 911), the handoff to the funeral home, and the grief specific to long illness.",
+  openGraph: { images: [ogImage("When someone dies in hospice", "After")] },
 };
 
 /**

@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Plan ahead — pre-need funeral and estate planning for the still-living",
   description:
     "The death folder, advance directives, beneficiary designations, written funeral preferences, and what NOT to do (pre-paid funeral contracts). A clear playbook for planning before it's urgent.",
+  openGraph: { images: [ogImage("Plan ahead — the pre-need playbook", "Planning")] },
 };
 
 /**

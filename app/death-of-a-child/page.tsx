@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Death of a child — for bereaved parents",
   description:
     "An honest guide for parents who have lost a child of any age. The unique grief, the marriage strain reality, surviving siblings, grandparent grief, and resources that actually help.",
+  openGraph: { images: [ogImage("Death of a child", "Grief")] },
 };
 
 /**

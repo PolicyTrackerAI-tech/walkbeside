@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Digital legacy — handling a deceased person's online accounts, passwords, and devices",
   description:
     "Facebook memorialization, Google inactive account, Apple legacy contact, password managers, crypto wallets, and the subscriptions still billing the dead person's credit card. The practical checklist most families miss.",
+  openGraph: { images: [ogImage("Digital legacy — handling online accounts after death", "After")] },
 };
 
 /**

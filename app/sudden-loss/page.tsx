@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Sudden death — what happens in the first 72 hours when there was no warning",
   description:
     "When someone dies suddenly — heart attack, accident, unwitnessed death at home — the medical examiner takes custody, the death certificate may say 'pending,' and the family waits. Honest guide to what happens, when, and what to do.",
+  openGraph: { images: [ogImage("Sudden death — the first 72 hours", "After")] },
 };
 
 /**

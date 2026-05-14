@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Disenfranchised grief — when the world doesn't recognize your loss",
   description:
     "Miscarriage, stillbirth, ex-spouses, estranged family, unmarried partners, chosen family, pet loss. Honest guide to the grief that other people dismiss — and the support that does exist for it.",
+  openGraph: { images: [ogImage("When the world doesn't recognize your loss", "Grief")] },
 };
 
 /**

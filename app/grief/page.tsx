@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Grief, month by month — what to expect, when to get help, where to find it",
   description:
     "The shape of grief over weeks, months, and years. Why month 6 is often harder than month 1. How to find a grief therapist or support group. The warning signs that grief has become complicated. Honest, plain-language guide.",
+  openGraph: { images: [ogImage("Grief, month by month", "Grief")] },
 };
 
 /**

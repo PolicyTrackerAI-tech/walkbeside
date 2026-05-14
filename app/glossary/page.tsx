@@ -9,11 +9,13 @@ import {
   groupByCategory,
   type GlossaryCategory,
 } from "@/lib/glossary";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Funeral glossary — plain-language definitions of the words funeral homes use",
   description:
     "What does 'GPL' mean? What is a 'non-declinable basic services fee'? Honest, plain-English definitions of the funeral industry's vocabulary, so families can read a price list without a translator.",
+  openGraph: { images: [ogImage("Funeral glossary — plain-language definitions", "Reference")] },
 };
 
 const CATEGORY_ORDER: GlossaryCategory[] = [

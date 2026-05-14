@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Funeral etiquette — what to say, what to wear, what to bring",
   description:
     "An honest guide for friends and coworkers attending a funeral or supporting a grieving family. What to say, what NOT to say, what to wear, whether to bring kids, how to be useful after the funeral. No corny rules.",
+  openGraph: { images: [ogImage("Funeral etiquette — what to say, what to wear", "Family")] },
 };
 
 /**

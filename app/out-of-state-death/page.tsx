@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "When someone dies far from home — out-of-state and international",
   description:
     "How to transport remains across state lines or back from another country. The two-funeral-home model, typical costs, the cheaper option most families miss, and the paperwork that actually matters.",
+  openGraph: { images: [ogImage("When someone dies far from home", "Logistics")] },
 };
 
 /**

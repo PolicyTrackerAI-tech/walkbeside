@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "How to talk to children about death — age-by-age scripts and what not to say",
   description:
     "Plain words, real answers, age-appropriate scripts for ages 3 through 15. What 'passed away' and 'lost' do to a young child's understanding, why euphemisms backfire, and when to get professional help.",
+  openGraph: { images: [ogImage("Talking to children about death", "Family")] },
 };
 
 /**

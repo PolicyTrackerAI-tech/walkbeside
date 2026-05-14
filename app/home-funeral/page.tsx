@@ -8,10 +8,13 @@ import {
   getAllowingStates,
 } from "@/lib/home-funeral";
 
+import { ogImage } from "@/lib/og";
+
 export const metadata: Metadata = {
   title: "Home funerals — what they are, where they're legal, and how they work",
   description:
     "A home funeral is family-led care of the body after death — washing, dressing, holding a vigil, then transporting to cremation, burial, or donation. Legal in 41 US states. Honest guide from a licensed funeral director.",
+  openGraph: { images: [ogImage("Family-led home funerals", "Options")] },
 };
 
 /**

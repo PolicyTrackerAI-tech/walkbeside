@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Overdose loss — for families bereaved by drug overdose",
   description:
     "An honest guide for people grieving someone who died from a drug overdose. The specific grief, the stigma, the children, GRASP and SAMHSA, and what actually helps. No moralizing.",
+  openGraph: { images: [ogImage("Overdose loss", "Grief")] },
 };
 
 /**

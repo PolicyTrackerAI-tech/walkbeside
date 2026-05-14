@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "How the funeral industry actually makes money — and how the sales floor pushes you",
   description:
     "The specific scripts, room layouts, and psychological framing that move families from a $3,000 cremation to a $12,000 funeral. Sourced from the FTC Funeral Rule, Reuters' multi-year investigation, and Funeral Consumers Alliance reports.",
+  openGraph: { images: [ogImage("How the funeral industry's sales floor works", "Advocacy")] },
 };
 
 /**

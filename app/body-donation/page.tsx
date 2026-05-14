@@ -5,10 +5,13 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { DONATION_PROGRAMS } from "@/lib/body-donation-programs";
 
+import { ogImage } from "@/lib/og";
+
 export const metadata: Metadata = {
   title: "Whole-body donation to medical science — what families need to know",
   description:
     "Whole-body donation is free, supports medical research, and skips the funeral home entirely. Honest guide to what's involved, where to register, and the risks of for-profit body brokers.",
+  openGraph: { images: [ogImage("Whole-body donation to medical science", "Options")] },
 };
 
 /**

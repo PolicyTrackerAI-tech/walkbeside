@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "End of life — when you’re the one dying",
   description:
     "For people with a terminal diagnosis or in the last phase of a long illness. Palliative care vs hospice, advance directives, medical aid in dying where legal, comfort-vs-treatment decisions, and the practical things worth doing.",
+  openGraph: { images: [ogImage("End of life — when you're the one dying", "Planning")] },
 };
 
 /**

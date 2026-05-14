@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "The final days — caring for someone who is dying",
   description:
     "What dying actually looks like in the last two weeks. When to call hospice. What helps and what hurts in the final hours. The before-death companion to our hospice guide.",
+  openGraph: { images: [ogImage("The final days — caring for someone who is dying", "Caregiving")] },
 };
 
 /**

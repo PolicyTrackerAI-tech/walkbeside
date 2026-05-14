@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "All guides — Honest Funeral",
   description:
     "Every guide we've written, organized. Crisis-moment help, arrangement decisions, post-funeral paperwork, estate, grief, and a plain-language glossary of funeral industry terms.",
+  openGraph: { images: [ogImage("Every guide we've written, in one place", "Reference")] },
 };
 
 type GuideCategory =

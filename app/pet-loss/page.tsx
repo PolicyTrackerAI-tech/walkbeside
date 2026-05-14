@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Pet loss — the grief is real, the euthanasia decision, what comes after",
   description:
     "An honest guide to losing an animal companion: how to know when it's time, in-home euthanasia, cremation and burial options, the grief that's not 'just a pet,' and resources that actually help.",
+  openGraph: { images: [ogImage("When the animal you loved dies", "Grief")] },
 };
 
 /**

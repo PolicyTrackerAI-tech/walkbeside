@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Suicide loss — for survivors of suicide loss",
   description:
     "An honest guide for people grieving someone who died by suicide. The unique features of this grief, the resources that actually help, safety information for survivors, and 988.",
+  openGraph: { images: [ogImage("Suicide loss — for survivors", "Grief")] },
 };
 
 /**

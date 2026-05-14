@@ -3,11 +3,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Social Security survivor benefits — what families miss after a death",
   description:
     "A $255 lump-sum payment, monthly survivor benefits for spouses and children, and benefits for divorced spouses — what the Social Security Administration actually pays after a death, and the steps families miss.",
+  openGraph: { images: [ogImage("Social Security survivor benefits", "Benefits")] },
 };
 
 /**
