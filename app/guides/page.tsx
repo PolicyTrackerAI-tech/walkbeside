@@ -58,6 +58,13 @@ const GUIDES: Guide[] = [
     category: "right-now",
   },
   {
+    href: "/final-days",
+    title: "Caring for someone who is dying",
+    description:
+      "The last weeks and the last hours. What dying looks like, what helps, what hurts, care of the caregiver.",
+    category: "right-now",
+  },
+  {
     href: "/sudden-loss",
     title: "Sudden death",
     description:
