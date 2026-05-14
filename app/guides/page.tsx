@@ -203,6 +203,13 @@ const GUIDES: Guide[] = [
       "Miscarriage, ex-spouses, estranged family, unmarried partners, chosen family, pet loss. Grief that other content silently leaves out.",
     category: "grief",
   },
+  {
+    href: "/pet-loss",
+    title: "When the animal you loved dies",
+    description:
+      "The euthanasia decision, in-home options, disposition paths, and resources for grief that isn’t 'just a pet.'",
+    category: "grief",
+  },
 
   // Vendors
   {
