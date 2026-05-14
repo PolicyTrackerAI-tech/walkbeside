@@ -107,7 +107,15 @@ export default function TermsPage() {
             the the funeral-home outreach feature for any purpose other than
             arranging services for a specific deceased person (or
             preplanning for yourself or an identified individual). You are
-            responsible for activity under your account.
+            responsible for activity under your account. Report misuse,
+            harassment, or security concerns to{" "}
+            <a
+              href="mailto:abuse@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              abuse@honestfuneral.co
+            </a>
+            .
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
@@ -131,8 +139,14 @@ export default function TermsPage() {
             the United States, and not in court. You and Honest Funeral waive the
             right to a jury trial and the right to participate in a class
             action. You may opt out of this arbitration clause within 30
-            days of first accepting these terms by emailing
-            legal@honestfuneral.co.
+            days of first accepting these terms by emailing{" "}
+            <a
+              href="mailto:legal@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              legal@honestfuneral.co
+            </a>
+            .
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
@@ -157,7 +171,21 @@ export default function TermsPage() {
             11. Contact
           </h2>
           <p>
-            Questions about these terms: hello@honestfuneral.co.
+            Questions about these terms or other legal notices:{" "}
+            <a
+              href="mailto:legal@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              legal@honestfuneral.co
+            </a>
+            . General questions:{" "}
+            <a
+              href="mailto:hello@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              hello@honestfuneral.co
+            </a>
+            .
           </p>
         </article>
       </section>

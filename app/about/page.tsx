@@ -120,6 +120,29 @@ export default function AboutPage() {
               What you can decline →
             </Link>
           </div>
+
+          <p className="text-sm text-ink-soft pt-2">
+            Want to say hi, ask a question, or tell us what we missed?
+            Email{" "}
+            <a
+              href="mailto:hello@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              hello@honestfuneral.co
+            </a>
+            . Ryan or Sarah reads every one.
+          </p>
+
+          <p className="text-sm text-ink-soft">
+            <strong className="text-ink">Press inquiries:</strong>{" "}
+            <a
+              href="mailto:press@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              press@honestfuneral.co
+            </a>
+            .
+          </p>
         </div>
       </section>
     </main>

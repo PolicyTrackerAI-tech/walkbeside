@@ -37,7 +37,7 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
     n: 2,
     title: "Every email identifies us as your advocate — by name.",
     body:
-      "We don't pretend to be you. The family's surname is mentioned; no other identifying details unless you tell us to.",
+      "Sent from advocate@honestfuneral.co. We don't pretend to be you. The family's surname is mentioned; no other identifying details unless you tell us to.",
   },
   {
     n: 3,

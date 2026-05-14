@@ -104,8 +104,14 @@ export default function PrivacyPage() {
             information we hold about you, request correction, request
             deletion, or request a portable export. California and European
             residents have additional statutory rights under CCPA and GDPR,
-            which we honor. Email privacy@honestfuneral.co to exercise any
-            right.
+            which we honor. Email{" "}
+            <a
+              href="mailto:privacy@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              privacy@honestfuneral.co
+            </a>{" "}
+            to exercise any right.
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
@@ -149,7 +155,23 @@ export default function PrivacyPage() {
           <h2 className="font-serif text-xl text-ink pt-4">
             11. Contact
           </h2>
-          <p>Privacy questions: privacy@honestfuneral.co.</p>
+          <p>
+            Privacy questions:{" "}
+            <a
+              href="mailto:privacy@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              privacy@honestfuneral.co
+            </a>
+            . For misuse of the Service or security reports,{" "}
+            <a
+              href="mailto:abuse@honestfuneral.co"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              abuse@honestfuneral.co
+            </a>
+            .
+          </p>
         </article>
       </section>
 

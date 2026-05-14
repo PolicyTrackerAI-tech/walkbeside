@@ -128,8 +128,15 @@ export default async function PaywallPage({
             <p className="text-ink-soft mt-3">
               If we don&rsquo;t save you any money you can document
               within the first 14 days &mdash; or if you change your
-              mind for any other reason &mdash; email us and we refund
-              the full {fmtCents(FLAT_FEE_CENTS)}. No questions, no form.
+              mind for any other reason &mdash; email{" "}
+              <a
+                href="mailto:support@honestfuneral.co"
+                className="text-primary-deep underline-offset-2 hover:underline"
+              >
+                support@honestfuneral.co
+              </a>{" "}
+              and we refund the full {fmtCents(FLAT_FEE_CENTS)}. No
+              questions, no form.
             </p>
             <p className="text-sm text-ink-muted mt-3">
               The savings are typically{" "}

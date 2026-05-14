@@ -113,6 +113,16 @@ export function Footer() {
           The $49 from the family is our only revenue. If we ever change
           that, you’ll see it here first.
         </p>
+        <p>
+          Questions, feedback, or you’re stuck:{" "}
+          <a
+            href="mailto:hello@honestfuneral.co"
+            className="text-ink-soft underline-offset-2 hover:underline"
+          >
+            hello@honestfuneral.co
+          </a>
+          .
+        </p>
         <p className="text-xs">
           Honest Funeral is not a law firm, not a funeral home, and not a medical or
           financial advisor. Information here is general guidance, not legal,

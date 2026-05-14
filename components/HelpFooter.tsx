@@ -37,6 +37,15 @@ export function HelpFooter() {
         Call {phoneDisplay}
       </a>
       <p className="mt-1 text-xs text-ink-muted">{hours}</p>
+      <p className="mt-3 text-xs text-ink-muted">
+        Prefer email?{" "}
+        <a
+          href="mailto:support@honestfuneral.co"
+          className="text-primary-deep underline-offset-2 hover:underline"
+        >
+          support@honestfuneral.co
+        </a>
+      </p>
     </div>
   );
 }

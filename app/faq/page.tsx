@@ -462,6 +462,16 @@ export default function FaqPage() {
               under pressure and something on this site doesn&rsquo;t add
               up, tell us before you sign anything.
             </p>
+            <p className="text-ink-soft mb-4">
+              Email{" "}
+              <a
+                href="mailto:support@honestfuneral.co"
+                className="text-primary-deep font-medium underline-offset-2 hover:underline"
+              >
+                support@honestfuneral.co
+              </a>
+              . We answer every one.
+            </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/prices">Look up fair prices</LinkButton>
               <LinkButton href="/how-it-works" variant="secondary">
