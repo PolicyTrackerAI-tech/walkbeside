@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import crypto from "node:crypto";
 import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
+import { sendEmail } from "@/lib/email";
+import { buildWelcomeEmail } from "@/lib/welcome-email";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -44,6 +46,22 @@ export async function POST(request: NextRequest) {
       { error: "Couldn't save. Try again in a moment." },
       { status: 500 },
     );
+  }
+
+  // Fire-and-forget welcome email. Don't block the response on send
+  // success/failure; the user's primary signal is the form result.
+  // Failures log but don't break the UX (the address is in the DB
+  // either way and a follow-up can be sent manually).
+  if (FEATURES.email()) {
+    const { subject, html, text } = buildWelcomeEmail(source);
+    sendEmail({ to: email, subject, html, text }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error("[planning-signup] welcome email failed", {
+        email,
+        source,
+        message: err instanceof Error ? err.message : String(err),
+      });
+    });
   }
 
   return NextResponse.json({ ok: true, stored: true });

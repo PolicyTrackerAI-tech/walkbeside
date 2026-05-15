@@ -16,6 +16,8 @@ export interface OutboundEmail {
   to: string;
   subject: string;
   text: string;
+  /** Optional HTML body. If omitted, plain-text is the only body. */
+  html?: string;
   replyTo?: string;
   fromName?: string;
 }
@@ -32,6 +34,7 @@ export async function sendEmail(msg: OutboundEmail): Promise<{ id: string }> {
       to: msg.to,
       subject: msg.subject,
       bodyPreview: msg.text.slice(0, 200),
+      hasHtml: !!msg.html,
     });
     return { id };
   }
@@ -41,6 +44,7 @@ export async function sendEmail(msg: OutboundEmail): Promise<{ id: string }> {
     to: msg.to,
     subject: msg.subject,
     text: msg.text,
+    ...(msg.html ? { html: msg.html } : {}),
     replyTo: msg.replyTo,
   });
   if (result.error) throw new Error(result.error.message);
