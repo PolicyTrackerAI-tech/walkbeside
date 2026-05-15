@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "How to talk to children about death — age-by-age scripts and what not to say",
@@ -470,6 +471,14 @@ export default function TalkingToKidsPage() {
             licensed mental-health professional. In a crisis, call
             or text 988.
           </p>
+
+          <EmailCapture
+            source="talking-to-kids"
+            title="Save this for when you need it."
+            subtitle="Parents come back to this guide multiple times over months. We'll email it so it's one click away."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Take care."
+          />
 
           <HelpFooter />
         </div>

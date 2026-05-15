@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Grief, month by month — what to expect, when to get help, where to find it",
@@ -723,6 +724,14 @@ export default function GriefPage() {
             not endorsement of any specific approach. In a
             mental-health crisis, call or text 988.
           </p>
+
+          <EmailCapture
+            source="grief"
+            title="Want this saved to come back to?"
+            subtitle="Grief comes in waves. We'll email this guide so it's there when you need it again, plus one calm message a month with new resources."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Take your time."
+          />
 
           <HelpFooter />
         </div>

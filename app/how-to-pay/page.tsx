@@ -6,6 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "How to pay for a funeral when you can't afford it — every program, in order",
@@ -455,6 +456,14 @@ export default function HowToPayPage() {
             veterans benefits, or a hospital or hospice social
             worker for guidance through the full menu.
           </p>
+
+          <EmailCapture
+            source="how-to-pay"
+            title="Save this for later."
+            subtitle="Assistance programs change. State funding shifts. We'll email this guide and let you know when something important updates."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Take care."
+          />
 
           <HelpFooter />
         </div>

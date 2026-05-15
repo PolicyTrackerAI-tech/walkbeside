@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Funeral etiquette — what to say, what to wear, what to bring",
@@ -621,6 +622,14 @@ export default function FuneralEtiquettePage() {
             best etiquette is attention to what the specific family
             wants, not adherence to a generic rulebook.
           </p>
+
+          <EmailCapture
+            source="funeral-etiquette"
+            title="Save this for next time."
+            subtitle="Most people come back to a guide like this 2-3 times a year. We'll email it so it's there when you need it."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Thank you for being the kind of friend who looks this up."
+          />
 
           <HelpFooter />
         </div>

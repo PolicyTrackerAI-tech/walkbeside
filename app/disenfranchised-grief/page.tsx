@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Disenfranchised grief — when the world doesn't recognize your loss",
@@ -619,6 +620,14 @@ export default function DisenfranchisedGriefPage() {
             endorsement of a specific therapeutic approach. In a
             mental-health crisis, call or text 988.
           </p>
+
+          <EmailCapture
+            source="disenfranchised-grief"
+            title="Save this."
+            subtitle="Grief that other people don't recognize is often the slowest to integrate. We'll email this so it's there in the months ahead."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Your loss counts."
+          />
 
           <HelpFooter />
         </div>

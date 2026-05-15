@@ -6,6 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "The final days — caring for someone who is dying",
@@ -458,6 +459,14 @@ export default function FinalDaysPage() {
             loved one&rsquo;s comfort or your own ability to cope,
             call the hospice 24-hour line.
           </p>
+
+          <EmailCapture
+            source="final-days"
+            title="Save this for the days ahead."
+            subtitle="What comes next will arrive in waves. We'll email this guide and the post-death companion so they're there when you need them."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Take care."
+          />
 
           <HelpFooter />
         </div>

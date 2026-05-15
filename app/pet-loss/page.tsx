@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Pet loss — the grief is real, the euthanasia decision, what comes after",
@@ -609,6 +610,14 @@ export default function PetLossPage() {
             therapeutic approach. In a mental-health crisis, call
             or text 988.
           </p>
+
+          <EmailCapture
+            source="pet-loss"
+            title="Save this."
+            subtitle="The grief lasts longer than the rituals around it. We'll email this guide so it's there in the weeks ahead."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. We're sorry for your loss."
+          />
 
           <HelpFooter />
         </div>

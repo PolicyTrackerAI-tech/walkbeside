@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Death of a child — for bereaved parents",
@@ -591,6 +592,14 @@ export default function DeathOfAChildPage() {
             beyond what&rsquo;s here. In a mental-health crisis,
             call or text 988.
           </p>
+
+          <EmailCapture
+            source="death-of-a-child"
+            title="Save this."
+            subtitle="There is no urgency to read all of this now. We'll email it so it's there when you want it."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Take whatever time you need."
+          />
 
           <HelpFooter />
         </div>

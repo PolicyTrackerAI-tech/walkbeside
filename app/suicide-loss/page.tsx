@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Suicide loss — for survivors of suicide loss",
@@ -638,6 +639,14 @@ export default function SuicideLossPage() {
             immediate danger of harming yourself, call 911 or go to
             the nearest emergency room.
           </p>
+
+          <EmailCapture
+            source="suicide-loss"
+            title="Save this for later."
+            subtitle="You probably can't absorb all of this right now. We'll email it so it's there when you can."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. You're not alone in this."
+          />
 
           <HelpFooter />
         </div>

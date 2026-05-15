@@ -9,6 +9,10 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
   const zip = typeof body?.zip === "string" ? body.zip.trim().slice(0, 10) : null;
+  // Source identifies which content page or surface captured the email.
+  // Defaults to "cheatsheet" for back-compat with the original CheatSheetForm.
+  const rawSource = typeof body?.source === "string" ? body.source.trim().slice(0, 60) : "";
+  const source = rawSource || "cheatsheet";
 
   if (!EMAIL.test(email) || email.length > 254) {
     return NextResponse.json({ error: "Enter a valid email." }, { status: 400 });
@@ -29,7 +33,7 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const { error } = await supabase.from("planning_signups").insert({
     email,
-    source: "cheatsheet",
+    source,
     zip,
     ip_hash: ipHash,
     user_agent: userAgent,

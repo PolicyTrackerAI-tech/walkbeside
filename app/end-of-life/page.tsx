@@ -6,6 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "End of life — when you’re the one dying",
@@ -677,6 +678,14 @@ export default function EndOfLifePage() {
             &mdash; that is a different situation that deserves
             different support.
           </p>
+
+          <EmailCapture
+            source="end-of-life"
+            title="Save this."
+            subtitle="Whatever you do with the time, we won't ask you to come back here. The guide is yours; we'll just hold it for you."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Be well."
+          />
 
           <HelpFooter />
         </div>

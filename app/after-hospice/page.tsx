@@ -6,6 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "When someone dies in hospice — what to expect, what to do, what families miss",
@@ -376,6 +377,14 @@ export default function AfterHospicePage() {
             the hospice agency, the funeral home, and (for benefits)
             the Social Security Administration directly.
           </p>
+
+          <EmailCapture
+            source="after-hospice"
+            title="Save this for the days ahead."
+            subtitle="The work continues for weeks after the funeral. We'll email this guide so you have it on your phone when you need it."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. Take care."
+          />
 
           <HelpFooter />
         </div>

@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Overdose loss — for families bereaved by drug overdose",
@@ -546,6 +547,14 @@ export default function OverdoseLossPage() {
             for yourself or a family member, call SAMHSA at
             1-800-662-HELP.
           </p>
+
+          <EmailCapture
+            source="overdose-loss"
+            title="Save this for later."
+            subtitle="You probably can't absorb all of this right now. We'll email it so it's there when you can."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. You're not alone in this."
+          />
 
           <HelpFooter />
         </div>

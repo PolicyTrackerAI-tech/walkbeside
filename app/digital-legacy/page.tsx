@@ -6,6 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Digital legacy — handling a deceased person's online accounts, passwords, and devices",
@@ -461,6 +462,14 @@ export default function DigitalLegacyPage() {
             at time of writing. We are not affiliated with any
             platform mentioned.
           </p>
+
+          <EmailCapture
+            source="digital-legacy"
+            title="Save this checklist."
+            subtitle="Working through digital accounts takes weeks. We'll email this guide so you can do it at your own pace."
+            buttonLabel="Email me the checklist"
+            successMessage="It's in your inbox. Take your time."
+          />
 
           <HelpFooter />
         </div>

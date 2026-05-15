@@ -6,6 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
+import { EmailCapture } from "@/components/EmailCapture";
 
 export const metadata: Metadata = {
   title: "Sudden death — what happens in the first 72 hours when there was no warning",
@@ -418,6 +419,14 @@ export default function SuddenLossPage() {
             the medical examiner's office, your insurance company,
             and a local probate attorney as appropriate.
           </p>
+
+          <EmailCapture
+            source="sudden-loss"
+            title="Save this for when you have a minute."
+            subtitle="Right now you may not be able to take it all in. We'll email it so it's there when you're ready."
+            buttonLabel="Email me this guide"
+            successMessage="It's in your inbox. We're sorry for your loss."
+          />
 
           <HelpFooter />
         </div>
