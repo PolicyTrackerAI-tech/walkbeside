@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { FAITH_TRADITIONS } from "@/lib/faith-traditions";
 import { listStateSlugs } from "@/lib/probate-by-state";
 import { listSlugs as listGlossarySlugs } from "@/lib/glossary";
+import { listCitySlugs } from "@/lib/city-pages";
 
 const SITE = "https://honestfuneral.co";
 
@@ -60,6 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/estate`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/glossary`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/guides`, priority: 0.9, changeFrequency: "weekly" },
+      { url: `${SITE}/funeral-costs`, priority: 0.9, changeFrequency: "weekly" },
       { url: `${SITE}/terms`, priority: 0.3, changeFrequency: "yearly" },
       { url: `${SITE}/privacy`, priority: 0.3, changeFrequency: "yearly" },
     ] as const
@@ -102,6 +104,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
+  const cityRoutes: MetadataRoute.Sitemap = listCitySlugs().map((slug) => ({
+    url: `${SITE}/funeral-costs/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.85,
+  }));
+
   return [
     ...staticRoutes,
     ...scenarioRoutes,
@@ -109,5 +118,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...faithRoutes,
     ...estateRoutes,
     ...glossaryRoutes,
+    ...cityRoutes,
   ];
 }

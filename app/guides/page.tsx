@@ -107,6 +107,13 @@ const GUIDES: Guide[] = [
     category: "decisions",
   },
   {
+    href: "/funeral-costs",
+    title: "Funeral costs by city",
+    description:
+      "Fair-price ranges for 28 major US metros. Direct cremation, traditional burial, green burial — what each service type should cost locally.",
+    category: "decisions",
+  },
+  {
     href: "/rights",
     title: "What you can decline",
     description:
