@@ -13,7 +13,7 @@ export interface OutreachRow {
 export interface FuneralHomeOutreachCardProps {
   negotiationId: string;
   status: string;
-  /** True once the family has paid the $49 placement fee (or the deal is closed). */
+  /** True once the family has paid the $199 placement fee (or the deal is closed). */
   unlocked: boolean;
   /** True when this card was just created (renders a confirmation banner). */
   justStarted?: boolean;

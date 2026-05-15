@@ -11,7 +11,7 @@ import { FEATURES } from "@/lib/env";
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
   description:
-    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and the full toolkit. One flat $49 charge unlocks everything; money-back in 14 days.",
+    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and the full toolkit. One flat $199 charge unlocks everything; money-back in 14 days.",
 };
 
 async function getSignedIn(): Promise<boolean> {
@@ -71,7 +71,7 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
   },
   {
     n: 6,
-    title: "Flat $49 upfront, via Stripe.",
+    title: "Flat $199 upfront, via Stripe.",
     body:
       "Charged when you start the toolkit. No commissions, no kickbacks, no referral fees from funeral homes. Money-back in 14 days if we don't save you anything documentable.",
   },
@@ -92,7 +92,7 @@ export default async function HowItWorksPage() {
               How the toolkit works
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-4">
-              What the $49 toolkit actually does.
+              What the $199 toolkit actually does.
             </h1>
             <p className="text-lg text-ink-soft">
               One charge, the whole arc. We contact funeral homes for
@@ -126,9 +126,9 @@ export default async function HowItWorksPage() {
 
           <Card tone="primary">
             <CardEyebrow>The money part</CardEyebrow>
-            <CardTitle>Flat $49 once. Money-back in 14 days.</CardTitle>
+            <CardTitle>Flat $199 once. Money-back in 14 days.</CardTitle>
             <p className="text-ink-soft mb-4">
-              One $49 charge unlocks the full toolkit for your account.
+              One $199 charge unlocks the full toolkit for your account.
               No subscriptions. No commissions from any funeral home.
               No referral fees. If we don&rsquo;t save you anything
               documentable in 14 days, email us and we refund you in

@@ -85,7 +85,7 @@ export default function AboutPage() {
               The funeral industry runs on those kickbacks &mdash; which is
               why almost every &ldquo;free&rdquo; service quietly steers
               families to the home that paid for the placement. We won&rsquo;t
-              do that. Our only revenue is the flat $49 paid by the family up
+              do that. Our only revenue is the flat $199 paid by the family up
               front to unlock the full toolkit &mdash; refundable in 14 days
               if we didn&rsquo;t save you anything.
             </p>
@@ -101,7 +101,7 @@ export default function AboutPage() {
               </li>
               <li>
                 Not a subscription. Two tools stay free forever (price
-                lookup and prep kit); the rest unlock for one $49
+                lookup and prep kit); the rest unlock for one $199
                 charge.
               </li>
               <li>

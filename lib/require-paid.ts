@@ -3,7 +3,7 @@
  * `next` param so the user lands back on the gated page after paying.
  *
  * Margaret refactor section 12. Use at the top of any page.tsx that
- * shouldn't be reachable without the $49 unlock:
+ * shouldn't be reachable without the $199 unlock:
  *
  *   export default async function MyPage() {
  *     await requirePaid("/my-page");

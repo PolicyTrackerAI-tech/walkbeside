@@ -186,11 +186,11 @@ export function SavingsPreview() {
             )}
           </strong>{" "}
           per family. The fee is{" "}
-          <strong className="text-ink">$49.</strong>{" "}
+          <strong className="text-ink">$199.</strong>{" "}
           That&rsquo;s a {Math.round(
             CASES.reduce((s, c) => s + (c.before.total - c.after.total), 0) /
               CASES.length /
-              4900,
+              19900,
           )}
           x return.
         </p>

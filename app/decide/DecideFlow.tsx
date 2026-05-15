@@ -324,7 +324,7 @@ export function DecideFlow() {
                 )}`}
                 size="lg"
               >
-                Continue → unlock the full toolkit ($49)
+                Continue → unlock the full toolkit ($199)
               </LinkButton>
               <LinkButton
                 variant="secondary"
@@ -334,7 +334,7 @@ export function DecideFlow() {
               </LinkButton>
             </div>
             <p className="mt-3 text-xs text-ink-muted">
-              The toolkit unlocks for one $49 charge — no subscriptions,
+              The toolkit unlocks for one $199 charge — no subscriptions,
               no commissions from funeral homes, money-back in 14 days
               if we don&rsquo;t save you anything.
             </p>

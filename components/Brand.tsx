@@ -101,7 +101,7 @@ export function Footer() {
       <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
           Built by a licensed funeral director and her brother. Free to use.
-          Flat $49 only if you choose a funeral home we presented to you
+          Flat $199 only if you choose a funeral home we presented to you
           through our outreach.
         </p>
         <p>
@@ -110,7 +110,7 @@ export function Footer() {
             funeral homes, cemeteries, monument companies, or any vendor we
             mention.
           </strong>{" "}
-          The $49 from the family is our only revenue. If we ever change
+          The $199 from the family is our only revenue. If we ever change
           that, you’ll see it here first.
         </p>
         <p>

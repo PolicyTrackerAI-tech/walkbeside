@@ -8,7 +8,7 @@ import { PUBLIC } from "@/lib/env";
  * Create a Stripe Checkout session for the negotiation fee on the chosen home.
  * Submitted as a regular form POST from the results page so it works even if JS is disabled.
  *
- * Paid users (paid_at set via the upfront $49 toolkit unlock) bypass Stripe
+ * Paid users (paid_at set via the upfront $199 toolkit unlock) bypass Stripe
  * entirely — they've already paid the flat fee and we don't double-charge.
  */
 export async function POST(req: Request) {

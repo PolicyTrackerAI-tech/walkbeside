@@ -42,7 +42,7 @@ This is the single most important non-code task before launch. Without it, our o
    - URL: `https://YOUR-DEPLOYED-URL/api/stripe/webhook` (set after Vercel deploy)
    - Events to listen for: `checkout.session.completed` (just that one)
    - Copy the **Signing secret** (starts with `whsec_…`) → `STRIPE_WEBHOOK_SECRET`
-4. **No Product or Price objects to create.** The app builds line items inline ($49 with description "Honest Funeral advocate fee"). When you change the fee, edit `FLAT_FEE_CENTS` in `lib/stripe.ts` and redeploy.
+4. **No Product or Price objects to create.** The app builds line items inline ($199 with description "Honest Funeral advocate fee"). When you change the fee, edit `FLAT_FEE_CENTS` in `lib/stripe.ts` and redeploy.
 5. To test locally, install the Stripe CLI: `brew install stripe/stripe-cli/stripe`, then `stripe listen --forward-to localhost:3000/api/stripe/webhook`. It prints a `whsec_…` for local use.
 
 ---
@@ -101,7 +101,7 @@ After 10 deals you'll know which features matter and which were guesses. Build V
 ## What's deliberately not done yet (flag, don't fix)
 
 - **Google Places integration** — out of scope for V1. When you're ready to expand beyond the launch city without sister curating each home by hand, that's the swap. Replace the body of `findHomesFromDirectory()` in `lib/negotiation/sample-homes.ts`.
-- **Refund flow** — the $49 is non-refundable in code today even though we tell families it's refundable if no presented home honors their quote. For the first 10 deals, refund manually in Stripe Dashboard. Build the in-product refund button after deal 10.
+- **Refund flow** — the $199 is non-refundable in code today even though we tell families it's refundable if no presented home honors their quote. For the first 10 deals, refund manually in Stripe Dashboard. Build the in-product refund button after deal 10.
 - **Reply parsing** — the `negotiation_outreach.status` only flips when manually updated. Sister marks "replied" / "no-reply" / "declined" in Supabase Table Editor for now. Auto-classifier comes after deal 10.
 
 ---

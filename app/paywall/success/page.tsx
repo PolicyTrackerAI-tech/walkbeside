@@ -62,7 +62,7 @@ export default async function PaywallSuccessPage({
             <ul className="space-y-2 text-sm text-ink-soft mt-3">
               <li>
                 ✓ One {""}
-                <strong className="text-ink">$49</strong> charge. No
+                <strong className="text-ink">$199</strong> charge. No
                 subscription. No renewal.
               </li>
               <li>✓ No commissions, ever, from any funeral home.</li>

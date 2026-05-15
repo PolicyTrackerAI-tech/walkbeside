@@ -13,7 +13,7 @@ import { SavingsPreview } from "@/components/paywall/SavingsPreview";
 export const metadata: Metadata = {
   title: "Unlock the full toolkit",
   description:
-    "$49 once. Funeral home outreach, side-by-side comparison, the 30-day checklist, the obituary helper, and the rest of the toolkit. Money-back if we don't save you anything in 14 days.",
+    "$199 once. Funeral home outreach, side-by-side comparison, the 30-day checklist, the obituary helper, and the rest of the toolkit. Money-back if we don't save you anything in 14 days.",
   robots: { index: false, follow: false },
 };
 
