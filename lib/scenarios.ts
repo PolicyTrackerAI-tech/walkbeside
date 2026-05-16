@@ -30,6 +30,16 @@ export interface GuidanceStep {
     /** Short prose shown above the button to explain context. */
     helperText: string;
   };
+  /**
+   * Optional inline call-to-action rendered inside the step body.
+   * Use when a later step references an action ("call the home you
+   * chose") that requires the user to have started something earlier.
+   */
+  inlineCta?: {
+    label: string;
+    href: string;
+    helperText?: string;
+  };
 }
 
 export interface ScenarioGuidance {
@@ -71,6 +81,12 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         body:
           "Staff might suggest a home or hand you a brochure. They cannot push you toward a specific one. Your loved one goes where you say, when you say. Compare a few homes first — we can call them on your behalf and bring you the prices side by side.",
         tone: "info",
+        inlineCta: {
+          label: "Compare funeral homes in 10 minutes →",
+          href: "/decide",
+          helperText:
+            "Three quick questions about what kind of service fits, then we send the request to a few homes in your area and show their prices side by side. Free until you actually pick one.",
+        },
       },
       {
         title: "The one thing you'll sign before transport.",

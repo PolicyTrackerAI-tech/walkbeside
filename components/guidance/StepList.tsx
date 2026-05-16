@@ -358,6 +358,18 @@ export function StepList({
                               helperText={step.shareAffordance.helperText}
                             />
                           )}
+                          {step.inlineCta && (
+                            <div className="mt-5 rounded-xl bg-primary-soft border border-primary/30 px-4 py-4">
+                              {step.inlineCta.helperText && (
+                                <p className="text-sm text-ink-soft mb-3 leading-relaxed">
+                                  {step.inlineCta.helperText}
+                                </p>
+                              )}
+                              <LinkButton href={step.inlineCta.href} size="lg">
+                                {step.inlineCta.label}
+                              </LinkButton>
+                            </div>
+                          )}
                         </div>
                       </div>
 
