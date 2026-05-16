@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { isPaidUser } from "@/lib/auth-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
@@ -38,12 +37,13 @@ export default async function DashboardPage({
   } = await supabase.auth.getUser();
   if (!user) return <AnonymousDashboard />;
 
-  // Logged in but not paid → send to paywall. Once paid, all dashboard
-  // features (negotiations, after-funeral checklist, etc.) work without
-  // per-feature unlock screens.
-  if (!(await isPaidUser(supabase, user))) {
-    redirect("/paywall?next=/dashboard");
-  }
+  // V2 canonical model: signed-in users can use the dashboard for free.
+  // The paid_at flag determines what's unlocked vs. soft-gated. Active
+  // outreach (started via /decide → /negotiate/start) shows up regardless
+  // of payment status. Paid-only tools render with a "Pay $199 to unlock"
+  // badge for unpaid users; clicking them triggers /paywall via the
+  // route's own requirePaid gate.
+  const isPaid = await isPaidUser(supabase, user);
 
   const [
     { data: profile },
@@ -159,6 +159,24 @@ export default async function DashboardPage({
             />
           )}
 
+          {!isPaid && (
+            <Card tone="primary">
+              <CardEyebrow>The full toolkit</CardEyebrow>
+              <CardTitle>Save $2,000–$5,000. Or your $199 back.</CardTitle>
+              <p className="text-ink-soft mt-3 mb-4">
+                Outreach to funeral homes is free. The 30-day
+                checklist, obituary helper, eulogy helper, price-list
+                analyzer, and the rest of the toolkit unlock for one
+                $199 charge — refundable in 14 days if we didn’t save
+                you anything. No commissions or kickbacks from any
+                funeral home.
+              </p>
+              <LinkButton href="/paywall?next=/dashboard" size="lg">
+                Unlock for $199 →
+              </LinkButton>
+            </Card>
+          )}
+
           {tasks.length > 0 ? (
             <ol className="space-y-3">
               {tasks.map((t, i) => (
@@ -223,11 +241,12 @@ export default async function DashboardPage({
             <div className="mb-5">
               <CardEyebrow>The full toolkit</CardEyebrow>
               <h2 className="font-serif text-2xl text-ink leading-tight">
-                Every tool, all unlocked.
+                {isPaid ? "Every tool, all unlocked." : "What unlocks with the toolkit."}
               </h2>
               <p className="text-ink-soft text-sm mt-1">
-                Open any of these whenever you need them. They stay
-                available across the whole arc.
+                {isPaid
+                  ? "Open any of these whenever you need them. They stay available across the whole arc."
+                  : "Outreach is free. The tools below unlock with the $199 toolkit. Click any to see what they do."}
               </p>
             </div>
 
@@ -237,48 +256,56 @@ export default async function DashboardPage({
                 eyebrow="Service"
                 title="Eulogy helper"
                 blurb="Eight short questions. We draft a ready-to-read eulogy in your voice."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/obituary"
                 eyebrow="Service"
                 title="Obituary helper"
                 blurb="Twelve questions. We draft the obituary you can edit and hand to the home."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/memorial"
                 eyebrow="Service"
                 title="Memorial program"
                 blurb="Build the print-ready service program — readings, music, processional, reception."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/timeline"
                 eyebrow="Service"
                 title="Service-day timeline"
                 blurb="The day, hour by hour. Print it for the officiant, pallbearers, family."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/livestream"
                 eyebrow="Service"
                 title="Live-stream coordinator"
                 blurb="One shareable card with platform, URL, dial-in, password, host contact."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/worksheet"
                 eyebrow="Before the meeting"
                 title="Pre-meeting worksheet"
                 blurb="Walk in with decisions made. The director sees you brought it."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/analyzer"
                 eyebrow="At the meeting"
                 title="Price-list analyzer"
                 blurb="Paste the quote. We flag every overcharge."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/certificates"
                 eyebrow="After"
                 title="Certificate calculator"
                 blurb="Order the right number. Avoid rush fees later."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/veterans"
@@ -291,36 +318,42 @@ export default async function DashboardPage({
                 eyebrow="After"
                 title="Notifications hub"
                 blurb="Track who&rsquo;s been told. Hand the list to a friend."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/subscriptions"
                 eyebrow="After"
                 title="Subscription finder"
                 blurb="Paste a bank statement. We find recurring charges to cancel."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/vault"
                 eyebrow="After"
                 title="Document vault"
                 blurb="Track every document. Where each one is, what&rsquo;s missing."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/family"
                 eyebrow="Anytime"
                 title="Family collaboration"
                 blurb="Hand the work to a sibling or adult child. No account needed."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/estate"
                 eyebrow="Long term"
                 title="Estate settlement"
                 blurb="Probate, inherited IRAs, unclaimed property, digital accounts."
+                locked={!isPaid}
               />
               <ToolTile
                 href="/headstone-vendors"
                 eyebrow="Long term"
                 title="Monument company directory"
                 blurb="Buy the headstone direct. Typically 30&ndash;60% less than funeral-home pricing."
+                locked={!isPaid}
               />
             </div>
           </div>
