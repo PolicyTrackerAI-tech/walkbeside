@@ -377,13 +377,13 @@ export function StepList({
                           size="lg"
                           onClick={() => advance(i, "done")}
                         >
-                          ✓ Done — next step
+                          Next step →
                         </Button>
                         <Button
                           variant="ghost"
                           onClick={() => advance(i, "skipped")}
                         >
-                          Skip — I already did this
+                          Skip — not relevant
                         </Button>
                         <Button
                           variant="ghost"
