@@ -33,6 +33,11 @@ const PATHS: {
     sub: "Decisions need to be made in the next few days. We help pick the service and avoid being overcharged.",
   },
   {
+    href: "/next-30-days",
+    title: "The funeral already happened",
+    sub: "Now the paperwork begins — death certificates, Social Security, accounts to close, estate. We walk through it in order.",
+  },
+  {
     href: "/planning",
     title: "I’m planning ahead",
     sub: "Nobody has died. Learning what funerals should cost and how to set things up before the day comes.",

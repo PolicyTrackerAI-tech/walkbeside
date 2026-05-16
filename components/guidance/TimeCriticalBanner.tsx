@@ -120,6 +120,20 @@ export function TimeCriticalBanner() {
     );
   }
 
-  // Faith picked, but not urgent — render nothing.
-  return null;
+  // Faith picked but not urgent — still keep the affordance visible
+  // so users can update their tradition or remind themselves about
+  // 24-hour timing if circumstances change.
+  return (
+    <div className="rounded-2xl border border-border bg-surface-soft px-5 py-4 mb-6">
+      <p className="text-sm text-ink-soft">
+        <strong className="text-ink">Tradition noted: {faith.label}.</strong>{" "}
+        <Link
+          href="/decide"
+          className="text-primary-deep underline-offset-2 hover:underline font-medium"
+        >
+          Change tradition →
+        </Link>
+      </p>
+    </div>
+  );
 }

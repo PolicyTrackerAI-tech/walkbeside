@@ -17,6 +17,7 @@ function LoginForm() {
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -37,16 +38,45 @@ function LoginForm() {
     try {
       const sb = createClient();
       if (mode === "signup") {
-        const { error } = await sb.auth.signUp({
+        // Try sign-in first. If the email already has an account and
+        // the password matches, log them in instead of bouncing with a
+        // "user already exists" error. Common case: returning user typed
+        // their existing credentials into the create-account form.
+        const trySignIn = await sb.auth.signInWithPassword({ email, password });
+        if (!trySignIn.error && trySignIn.data?.user) {
+          router.push(next);
+          router.refresh();
+          return;
+        }
+
+        // Not an existing user (or password didn't match) — proceed with
+        // signup. If Supabase reports the email already exists, surface
+        // a helpful suggestion to switch to sign in.
+        const { error: signUpError } = await sb.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
           },
         });
-        if (error) throw error;
+        if (signUpError) {
+          const msg = signUpError.message?.toLowerCase() ?? "";
+          if (
+            msg.includes("already registered") ||
+            msg.includes("already exists") ||
+            msg.includes("user already")
+          ) {
+            setError(
+              "That email already has an account. The password you entered doesn't match — try signing in instead.",
+            );
+            setMode("signin");
+          } else {
+            throw signUpError;
+          }
+          return;
+        }
         setInfo(
-          "Check your inbox for a confirmation link. You can close this tab — we'll email you back here.",
+          "Check your inbox for a confirmation link from Honest Funeral. Click it to finish creating your account. You can close this tab — we'll bring you back here.",
         );
       } else {
         const { error } = await sb.auth.signInWithPassword({ email, password });
@@ -110,20 +140,34 @@ function LoginForm() {
                 />
               </div>
               <div>
-                <Label htmlFor="password" hint="At least 8 characters.">
-                  Password
+                <Label
+                  htmlFor="password"
+                  hint={mode === "signup" ? "At least 8 characters." : undefined}
+                >
+                  {mode === "signup" ? "Create password" : "Password"}
                 </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  minLength={8}
-                  autoComplete={
-                    mode === "signup" ? "new-password" : "current-password"
-                  }
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    minLength={8}
+                    autoComplete={
+                      mode === "signup" ? "new-password" : "current-password"
+                    }
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pr-16"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute inset-y-0 right-0 px-3 text-xs text-ink-muted hover:text-ink-soft"
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
               </div>
 
               {error && (

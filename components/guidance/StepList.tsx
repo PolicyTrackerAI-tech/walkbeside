@@ -63,6 +63,11 @@ export function StepList({
   const [hydrated, setHydrated] = useState(false);
   const [confusedSteps, setConfusedSteps] = useState<Record<number, boolean>>({});
   const currentStepRef = useRef<HTMLLIElement>(null);
+  // Suppress the scroll-into-view on initial mount / hydration so the
+  // page lands at the top (where the headline is) instead of jumping
+  // down to step 1. After the user actually advances or reverts a
+  // step, this flag lets the scroll run.
+  const userInitiatedAdvanceRef = useRef(false);
 
   // Hydrate from localStorage on mount.
   useEffect(() => {
@@ -90,11 +95,13 @@ export function StepList({
     }
   }, [statuses, scenario, hydrated]);
 
-  // When the current step changes (after Done/Skip), scroll the new
-  // current step into view. Margaret should never have to hunt for
-  // what's next.
+  // When the user advances or reverts a step, scroll the new current
+  // step into view. Skipped on initial mount / hydration so the page
+  // lands at its headline, not partway down at step 1.
   useEffect(() => {
     if (!hydrated) return;
+    if (!userInitiatedAdvanceRef.current) return;
+    userInitiatedAdvanceRef.current = false;
     if (currentStepRef.current) {
       currentStepRef.current.scrollIntoView({
         behavior: "smooth",
@@ -111,6 +118,7 @@ export function StepList({
   const currentIndex = statuses.findIndex((s) => s === "current");
 
   function advance(index: number, mark: "done" | "skipped") {
+    userInitiatedAdvanceRef.current = true;
     setStatuses((prev) => {
       const next = [...prev];
       next[index] = mark;
@@ -123,6 +131,22 @@ export function StepList({
     });
     // Clear the "I don't understand" expander on advance.
     setConfusedSteps((prev) => ({ ...prev, [index]: false }));
+  }
+
+  // Click a completed step in the stepper or in the collapsed row to
+  // jump back to it. Re-marks it "current" and pushes the previously
+  // current step (and any future-revealed ones) back to hidden.
+  function jumpTo(index: number) {
+    userInitiatedAdvanceRef.current = true;
+    setStatuses((prev) => {
+      const next = prev.map((s, i) => {
+        if (i < index) return s; // keep prior steps as-is
+        if (i === index) return "current" as StepStatus;
+        return "hidden" as StepStatus; // hide everything past target
+      });
+      return next;
+    });
+    setConfusedSteps({});
   }
 
   function toggleConfused(index: number) {
@@ -168,25 +192,44 @@ export function StepList({
                   const isSkipped = status === "skipped";
                   const isCurrent = status === "current";
                   const isLast = i === statuses.length - 1;
+                  const isClickable = isDone || isSkipped;
+                  const dot = (
+                    <div
+                      className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold transition-transform ${
+                        isDone
+                          ? "bg-good text-white"
+                          : isSkipped
+                            ? "bg-ink-muted/40 text-white"
+                            : isCurrent
+                              ? "bg-primary-deep text-white ring-2 ring-primary/30"
+                              : "bg-surface-soft text-ink-muted border border-border"
+                      } ${isClickable ? "cursor-pointer hover:scale-110" : ""}`}
+                      title={
+                        isClickable
+                          ? `Go back to step ${i + 1}: ${steps[i]?.title ?? ""}`
+                          : `Step ${i + 1}: ${steps[i]?.title ?? ""}`
+                      }
+                    >
+                      {isDone || isSkipped ? "✓" : i + 1}
+                    </div>
+                  );
                   return (
                     <div
                       key={i}
                       className="flex-1 flex items-center min-w-0"
                     >
-                      <div
-                        className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-semibold ${
-                          isDone
-                            ? "bg-good text-white"
-                            : isSkipped
-                              ? "bg-ink-muted/40 text-white"
-                              : isCurrent
-                                ? "bg-primary-deep text-white ring-2 ring-primary/30"
-                                : "bg-surface-soft text-ink-muted border border-border"
-                        }`}
-                        title={`Step ${i + 1}: ${steps[i]?.title ?? ""}`}
-                      >
-                        {isDone || isSkipped ? "✓" : i + 1}
-                      </div>
+                      {isClickable ? (
+                        <button
+                          type="button"
+                          onClick={() => jumpTo(i)}
+                          aria-label={`Go back to step ${i + 1}`}
+                          className="contents"
+                        >
+                          {dot}
+                        </button>
+                      ) : (
+                        dot
+                      )}
                       {!isLast && (
                         <div
                           className={`flex-1 h-0.5 mx-1 ${
@@ -294,15 +337,19 @@ export function StepList({
                 );
               }
 
-              // Collapsed (done or skipped) — one-line checkmark.
+              // Collapsed (done or skipped) — one-line clickable row that
+              // jumps back to this step when clicked.
               return (
                 <li key={i}>
-                  <div
-                    className={`rounded-2xl border p-4 flex items-center gap-3 ${
+                  <button
+                    type="button"
+                    onClick={() => jumpTo(i)}
+                    className={`w-full text-left rounded-2xl border p-4 flex items-center gap-3 transition-colors hover:border-primary ${
                       isDone
                         ? "bg-good-soft border-good/30"
                         : "bg-surface-soft border-border"
                     }`}
+                    aria-label={`Go back to step ${i + 1}: ${step.title}`}
                   >
                     <span
                       className={`text-lg font-bold ${
@@ -324,7 +371,10 @@ export function StepList({
                         (skipped)
                       </span>
                     )}
-                  </div>
+                    <span className="text-xs text-ink-muted hidden sm:inline">
+                      Back to this step ↺
+                    </span>
+                  </button>
                 </li>
               );
             })}
