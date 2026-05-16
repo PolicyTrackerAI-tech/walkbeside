@@ -128,14 +128,27 @@ export function StepList({
   // step, this flag lets the scroll run.
   const userInitiatedAdvanceRef = useRef(false);
 
-  // Hydrate from localStorage on mount.
+  // Hydrate from localStorage on mount. Pad/trim if the visible step
+  // count has changed (e.g. pre-pay → paid unlocks additional steps),
+  // so the user doesn't lose their place across the paywall.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(storageKey(scenario));
       if (raw) {
         const parsed = JSON.parse(raw) as StepStatus[];
-        if (Array.isArray(parsed) && parsed.length === steps.length) {
-          setStatuses(parsed);
+        if (Array.isArray(parsed)) {
+          const padded: StepStatus[] = Array.from(
+            { length: steps.length },
+            (_, i) => (parsed[i] as StepStatus | undefined) ?? "hidden",
+          );
+          // After padding, if no step is "current" (because the saved
+          // last step was the pivotal CTA and the user is now paid),
+          // promote the first "hidden" to "current" so they resume.
+          if (!padded.includes("current")) {
+            const firstHidden = padded.findIndex((s) => s === "hidden");
+            if (firstHidden !== -1) padded[firstHidden] = "current";
+          }
+          setStatuses(padded);
         }
       }
     } catch {
@@ -354,6 +367,11 @@ export function StepList({
                           {i + 1}
                         </div>
                         <div className="flex-1">
+                          {step.inlineCta && !isPaid && (
+                            <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
+                              The next move
+                            </div>
+                          )}
                           <h2 className="font-serif text-xl sm:text-2xl text-ink mb-3 leading-tight">
                             {step.title}
                           </h2>
