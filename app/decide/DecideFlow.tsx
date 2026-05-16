@@ -155,7 +155,7 @@ export function DecideFlow() {
       <Card>
         <div className="space-y-5">
           <div>
-            <Label htmlFor="faith" hint="Pick what guides decisions in your family. Pick 'Secular' if no tradition is in play.">
+            <Label htmlFor="faith" hint="Pick what guides decisions in your family. Pick 'No religious tradition' if none is in play.">
               Faith tradition
             </Label>
             <Select
