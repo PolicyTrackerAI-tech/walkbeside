@@ -21,8 +21,12 @@ export type IsVeteran = "yes" | "no" | "unsure";
 export interface UserContext {
   /** Recommended service type from /decide. Undefined if user hasn't run /decide. */
   serviceType?: ServiceType;
-  /** Body present at the service: "yes" | "no" | "unsure". */
-  bodyAtService?: "yes" | "no" | "unsure";
+  /**
+   * Body present at the service. Values are the /decide BodyAtService union.
+   * 'yes' is the legacy single-option value (pre 2026-05-16), kept so old
+   * localStorage values from before the open/closed split don't break here.
+   */
+  bodyAtService?: "open-casket" | "closed-casket" | "yes" | "no" | "unsure";
   /** Veteran status. */
   isVeteran?: IsVeteran;
 }

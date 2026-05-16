@@ -66,7 +66,13 @@ export function DecideFlow() {
     const d = readDecide(DECIDE_STORAGE_KEYS.faithDenomination);
     if (d) setFaithDenomination(d);
     const b = readDecide(DECIDE_STORAGE_KEYS.bodyAtService);
-    if (b === "yes" || b === "no" || b === "unsure") setBodyAtService(b);
+    if (b === "open-casket" || b === "closed-casket" || b === "no" || b === "unsure") {
+      setBodyAtService(b);
+    } else if (b === "yes") {
+      // Migrate legacy stored value (single 'yes' option, pre 2026-05-16).
+      // Default to open-casket since most 'yes' picks historically were viewings.
+      setBodyAtService("open-casket");
+    }
     const dp = readDecide(DECIDE_STORAGE_KEYS.dispositionPreference);
     if (dp === "burial" || dp === "cremation" || dp === "donation" || dp === "no-preference") {
       setDispositionPreference(dp);
@@ -211,7 +217,7 @@ export function DecideFlow() {
           <div>
             <Label
               htmlFor="body"
-              hint="Open casket = people can see them at the service. Closed casket = the casket is there with the lid closed. Memorial = no body present (often used after cremation)."
+              hint="Open casket means people see them at the service (requires embalming). Closed casket means the casket is there with the lid closed (embalming optional). Memorial means no body present — often used after cremation."
             >
               Will the body be at the service?
             </Label>
@@ -220,7 +226,8 @@ export function DecideFlow() {
               value={bodyAtService}
               onChange={(e) => setBodyAtService(e.target.value as BodyAtService)}
             >
-              <option value="yes">Yes — open or closed casket at the service</option>
+              <option value="open-casket">Open casket — visible during the service</option>
+              <option value="closed-casket">Closed casket — present, lid closed</option>
               <option value="no">No — memorial service only (no body)</option>
               <option value="unsure">Not sure yet</option>
             </Select>

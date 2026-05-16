@@ -12,7 +12,12 @@ import type { ServiceType } from "./pricing-data";
 import { getFaith, type FaithKey } from "./faith-traditions";
 
 export type CostPriority = "lowest" | "balanced" | "tradition";
-export type BodyAtService = "yes" | "no" | "unsure";
+export type BodyAtService = "open-casket" | "closed-casket" | "no" | "unsure";
+
+/** True when the body is physically present at the service in any form. */
+export function isBodyPresent(b: BodyAtService): boolean {
+  return b === "open-casket" || b === "closed-casket";
+}
 export type DispositionPreference = "burial" | "cremation" | "donation" | "no-preference";
 
 export interface DecideInputs {
@@ -128,8 +133,12 @@ export function recommend(inputs: DecideInputs): Recommendation {
     if (faith.dispositionNorm === "burial-preferred") {
       reasons.push(`${faith.label} prefers burial.`);
     }
-    if (inputs.bodyAtService === "yes") {
-      reasons.push("Body present at the service is part of what you want.");
+    if (isBodyPresent(inputs.bodyAtService)) {
+      reasons.push(
+        inputs.bodyAtService === "open-casket"
+          ? "Open casket at the service is part of what you want — note that requires embalming."
+          : "Body present at the service is part of what you want.",
+      );
     }
     reasons.push("Traditional burial with viewing is the highest-cost path — make sure each line item is one you actually want.");
     return {
@@ -141,7 +150,7 @@ export function recommend(inputs: DecideInputs): Recommendation {
   }
 
   // Default: cremation with a service.
-  if (inputs.bodyAtService === "yes") {
+  if (isBodyPresent(inputs.bodyAtService)) {
     reasons.push("Body present at the service, then cremation — the middle-cost path.");
     return {
       serviceType: "cremation-with-service",

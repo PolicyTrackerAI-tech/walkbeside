@@ -56,7 +56,9 @@ function readUserContext(): UserContext {
         | null) ?? undefined,
     bodyAtService:
       (readDecide(DECIDE_STORAGE_KEYS.bodyAtService) as
-        | "yes"
+        | "open-casket"
+        | "closed-casket"
+        | "yes" // legacy stored value, kept for back-compat
         | "no"
         | "unsure"
         | null) ?? undefined,
