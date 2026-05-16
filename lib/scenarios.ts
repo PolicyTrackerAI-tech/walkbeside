@@ -16,6 +16,20 @@ export interface GuidanceStep {
   title: string;
   body: string;
   tone?: "calm" | "urgent" | "info";
+  /**
+   * Optional inline affordance for sharing the site with the actual
+   * decision-maker. Renders a copy-link button + helper text inside
+   * the step body. Used on /elsewhere where the person reading may
+   * not be the one who'll plan the funeral.
+   */
+  shareAffordance?: {
+    /** URL the button copies to clipboard. Should be a public crisis-entry page. */
+    copyUrl: string;
+    /** Label on the copy button. */
+    copyLabel: string;
+    /** Short prose shown above the button to explain context. */
+    helperText: string;
+  };
 }
 
 export interface ScenarioGuidance {
@@ -185,10 +199,16 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         tone: "calm",
       },
       {
-        title: "Pause before calling a funeral home.",
+        title: "Are you the one planning, or someone else?",
         body:
-          "The first call to a funeral home starts a sales process that's hard to reverse — once your loved one is moved to a specific home, you're effectively committed to that home. A few minutes preparing — knowing what fair prices look like, knowing what you can decline — routinely saves families thousands. We can help.",
+          "Funeral decisions usually fall to one person — a spouse, an adult child, the executor. If that's you, keep going with us: the next step is comparing funeral home prices before any first call (the first call commits you to that home; the move is hard to undo). If the planning falls to someone else — a sibling, a parent who can't deal with this right now — the most useful thing you can do is send them this site. They can pick it up here and we'll walk them through it.",
         tone: "info",
+        shareAffordance: {
+          copyUrl: "https://honestfuneral.co/where",
+          copyLabel: "Copy link to send",
+          helperText:
+            "If you're not the one planning, share this with whoever is. They can text or email it however works:",
+        },
       },
     ],
   },

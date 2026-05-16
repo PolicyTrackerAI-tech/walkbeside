@@ -31,6 +31,56 @@ const STEP_TONE_CLASS: Record<NonNullable<GuidanceStep["tone"]>, string> = {
   calm: "border-border bg-surface",
 };
 
+function ShareAffordance({
+  copyUrl,
+  copyLabel,
+  helperText,
+}: {
+  copyUrl: string;
+  copyLabel: string;
+  helperText: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy() {
+    try {
+      // Web Share API is the right pattern on phones — opens the
+      // native share sheet (iMessage, WhatsApp, etc.). Falls back to
+      // clipboard everywhere else.
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({
+          title: "Honest Funeral",
+          text: "I think this will help — they walk you through funeral planning step by step.",
+          url: copyUrl,
+        });
+        return;
+      }
+      await navigator.clipboard.writeText(copyUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // User cancelled the share sheet, or clipboard refused. Either way
+      // there's nothing useful to surface.
+    }
+  }
+
+  return (
+    <div className="mt-5 rounded-xl bg-surface border border-border px-4 py-3">
+      <p className="text-sm text-ink-soft mb-3 leading-relaxed">{helperText}</p>
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-deep text-white text-sm font-medium hover:bg-primary-deep/90"
+        >
+          {copied ? "Link copied ✓" : copyLabel}
+        </button>
+        <code className="text-xs text-ink-muted break-all">{copyUrl}</code>
+      </div>
+    </div>
+  );
+}
+
 function storageKey(scenario: Scenario): string {
   return `honestfuneral.guidance.${scenario}.v1`;
 }
@@ -173,7 +223,10 @@ export function StepList({
           <p className="text-lg text-ink-soft mb-2">{subhead}</p>
           <p className="text-sm text-ink-muted italic mb-6">{tone}</p>
 
-          <TimeCriticalBanner />
+          {/* Skip the tradition banner on /elsewhere — that scenario is for
+              chaotic situations (workplace, public, transit) where adding
+              a "is your tradition time-sensitive?" prompt is noise. */}
+          {scenario !== "elsewhere" && <TimeCriticalBanner />}
 
           {/* Sticky stepper — every step's state at a glance, visible as
               the user scrolls or advances. Replaces the simple percentage
@@ -298,6 +351,13 @@ export function StepList({
                           <p className="text-ink-soft leading-relaxed text-base">
                             {step.body}
                           </p>
+                          {step.shareAffordance && (
+                            <ShareAffordance
+                              copyUrl={step.shareAffordance.copyUrl}
+                              copyLabel={step.shareAffordance.copyLabel}
+                              helperText={step.shareAffordance.helperText}
+                            />
+                          )}
                         </div>
                       </div>
 
