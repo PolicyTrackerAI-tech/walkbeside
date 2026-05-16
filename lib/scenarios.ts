@@ -61,8 +61,6 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
     showPriceCompareGate: true,
     priceGateText:
       "Before you call anyone, spend three minutes here. It could save you thousands.",
-    pullQuote:
-      "Hospitals and nursing homes are legally required to release your loved one when you're ready — not when they're ready. You are not causing a problem by taking a few hours.",
     steps: [
       {
         title: "Take a breath. You have more time than they're suggesting.",
