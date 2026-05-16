@@ -65,7 +65,7 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
       {
         title: "Take a breath. You have more time than they're suggesting.",
         body:
-          "They'll ask you to pick a funeral home soon. Sometimes within the hour.\n\nYou don't have to rush.\n\nThey have to keep your loved one until YOU say it's time. There is no law that says otherwise.\n\nIf you feel pushed, say this: \"I need a few hours to make some calls.\" That is normal. They will wait.\n\nThe biggest mistake families make in this first hour is just saying yes to whichever home the staff suggests. Don't. Take ten minutes here first.",
+          "They'll ask you to pick a funeral home soon. You don't have to rush — they have to keep your loved one until you say it's time. If you feel pushed, just say \"I need a few hours.\" That's normal. The biggest mistake families make in this first hour is saying yes to whichever home the staff suggests. Take ten minutes here first.",
         tone: "calm",
       },
       {
