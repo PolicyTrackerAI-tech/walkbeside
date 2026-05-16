@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { requirePaid } from "@/lib/require-paid";
+import { requireSignedIn } from "@/lib/require-signed-in";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -19,7 +19,7 @@ export default async function NegotiationClosedPage({
   }>;
 }) {
   const { id } = await params;
-  await requirePaid(`/negotiate/${id}/closed`);
+  await requireSignedIn(`/negotiate/${id}/closed`);
   const sp = await searchParams;
   const supabase = await createClient();
   const {

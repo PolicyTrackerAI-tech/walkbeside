@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { requirePaid } from "@/lib/require-paid";
+import { requireSignedIn } from "@/lib/require-signed-in";
 import { isPaidUser } from "@/lib/auth-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
@@ -14,16 +14,17 @@ export default async function NegotiationResultsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requirePaid(`/negotiate/${id}/results`);
+  await requireSignedIn(`/negotiate/${id}/results`);
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=/negotiate/${id}/results`);
 
-  // requirePaid already gated this page on paid_at; if we got here the
-  // user is paid. Read it anyway so the intent is explicit and the
-  // (theoretical) free-email case still routes correctly.
+  // Per V2 canonical model: anyone signed in can reach this page;
+  // payment is charged only on home selection. Check paid_at so the UI
+  // can hide the fee for already-paid users (rare under V2, but the
+  // upfront /paywall onramp still exists for the legacy/edge case).
   const alreadyPaid = await isPaidUser(supabase, user);
 
   const { data: neg } = await supabase

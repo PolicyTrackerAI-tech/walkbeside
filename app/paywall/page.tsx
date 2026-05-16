@@ -49,101 +49,93 @@ export default async function PaywallPage({
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           <div>
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
-              Unlock the full toolkit
+              The full toolkit
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              {fmtCents(FLAT_FEE_CENTS)} once. Then everything works.
+              Save $2,000 to $5,000. Or your {fmtCents(FLAT_FEE_CENTS)} back.
             </h1>
             <p className="text-lg text-ink-soft">
-              No subscriptions. No upsells. No commissions from funeral
-              homes. The fee covers the whole arc — from the first call
-              through the last account closed.
+              Families typically save thousands on funeral arrangement
+              when they compare two or three homes with our help. We
+              charge a flat {fmtCents(FLAT_FEE_CENTS)} for the toolkit
+              &mdash; refundable in 14 days if you didn&rsquo;t save
+              anything. We never take a cent from any funeral home.
             </p>
           </div>
 
           {canceled && (
             <Card tone="warn">
               <p className="text-sm text-ink">
-                Checkout was cancelled — no charge. You can try again
-                whenever you&rsquo;re ready.
+                Checkout was cancelled &mdash; no charge. You can try
+                again whenever you&rsquo;re ready.
               </p>
             </Card>
           )}
 
-          <Card tone="primary">
-            <CardEyebrow>What unlocks</CardEyebrow>
-            <ul className="space-y-2.5 text-ink mt-3">
-              <Bullet>
-                <strong>Have us call funeral homes for you.</strong> We
-                contact 3&ndash;5 as your advocate, request itemized
-                prices, and bring back side-by-side comparisons.
-              </Bullet>
-              <Bullet>
-                <strong>The 30-day checklist.</strong> Death certificates,
-                Social Security, banks, insurance, VA, accounts to close
-                &mdash; in order, with help on every step.
-              </Bullet>
-              <Bullet>
-                <strong>The pre-meeting worksheet.</strong> Walk into the
-                funeral home with your family&rsquo;s decisions already
-                made. The director sees you brought it and the meeting
-                changes.
-              </Bullet>
-              <Bullet>
-                <strong>The price-list analyzer.</strong> Paste a quote
-                they gave you. We flag every line above fair range and
-                show you what to push back on.
-              </Bullet>
-              <Bullet>
-                <strong>The obituary helper, certificate calculator,
-                veterans benefits checker.</strong> All unlocked.
-              </Bullet>
-            </ul>
-          </Card>
-
+          {/* Value evidence first — real cases, real savings. */}
           <SavingsPreview />
 
-          <Card>
-            <CardEyebrow>Why we charge upfront, not after</CardEyebrow>
-            <CardTitle>So we stay on your side.</CardTitle>
-            <p className="text-ink-soft mt-3">
-              The funeral industry runs on commissions and kickbacks.
-              Every funeral home pays referral fees to grief therapists,
-              hospitals, and online directories &mdash; which is why most
-              "free" services lead families to homes that paid for the
-              placement. Charging the family directly is the only way to
-              stay accountable to the family.
-            </p>
-            <p className="text-ink-soft mt-3">
-              We don&rsquo;t take a cent from any funeral home, ever.
-              Your {fmtCents(FLAT_FEE_CENTS)} is the only money we make
-              on your case &mdash; which is why you&rsquo;ll always get
-              the most honest read on whether a quote is fair.
-            </p>
-          </Card>
-
+          {/* The reassurance line. */}
           <Card tone="soft">
-            <CardEyebrow>Money-back guarantee</CardEyebrow>
-            <CardTitle>14 days to try the toolkit.</CardTitle>
+            <CardEyebrow>14-day money-back guarantee</CardEyebrow>
+            <CardTitle>If we don&rsquo;t save you money, you don&rsquo;t pay.</CardTitle>
             <p className="text-ink-soft mt-3">
-              If we don&rsquo;t save you any money you can document
-              within the first 14 days &mdash; or if you change your
-              mind for any other reason &mdash; email{" "}
+              Email{" "}
               <a
                 href="mailto:support@honestfuneral.co"
                 className="text-primary-deep underline-offset-2 hover:underline"
               >
                 support@honestfuneral.co
               </a>{" "}
-              and we refund the full {fmtCents(FLAT_FEE_CENTS)}. No
-              questions, no form.
+              within 14 days and we refund the full{" "}
+              {fmtCents(FLAT_FEE_CENTS)}. No form, no questions. That
+              is the entire deal.
             </p>
-            <p className="text-sm text-ink-muted mt-3">
-              The savings are typically{" "}
-              <strong className="text-ink">$1,500&ndash;$5,000</strong>{" "}
-              on the funeral arrangement alone &mdash; about 30&ndash;100x
-              the fee.
+          </Card>
+
+          {/* The trust line. */}
+          <Card>
+            <CardEyebrow>Why we&rsquo;re different</CardEyebrow>
+            <CardTitle>Your {fmtCents(FLAT_FEE_CENTS)} is our only revenue.</CardTitle>
+            <p className="text-ink-soft mt-3">
+              The funeral industry runs on commissions and kickbacks.
+              Every &ldquo;free&rdquo; service that lists homes is
+              taking referral fees from those homes &mdash; which is
+              why their recommendations follow the money, not your
+              best interest.
             </p>
+            <p className="text-ink-soft mt-3">
+              We take zero. No commissions, no referral fees, no
+              kickbacks from any funeral home, cemetery, monument
+              company, or vendor. That&rsquo;s why we can tell you
+              honestly whether the quote you got is fair &mdash; and
+              push back when it isn&rsquo;t.
+            </p>
+          </Card>
+
+          {/* What unlocks — condensed, secondary. */}
+          <Card tone="primary">
+            <CardEyebrow>What the toolkit does</CardEyebrow>
+            <ul className="space-y-2.5 text-ink mt-3">
+              <Bullet>
+                <strong>We call funeral homes for you.</strong> Three
+                to five in your area, as your named advocate. They
+                send written itemized prices. We bring them back to
+                you side by side.
+              </Bullet>
+              <Bullet>
+                <strong>The 30-day checklist after the funeral.</strong>{" "}
+                Death certificates, Social Security, banks, life
+                insurance, the works &mdash; in order, with help on
+                every step.
+              </Bullet>
+              <Bullet>
+                <strong>Plus everything else.</strong> Obituary helper,
+                eulogy helper, price-list analyzer, pre-meeting
+                worksheet, veterans benefits checker, certificate
+                calculator. All unlocked.
+              </Bullet>
+            </ul>
           </Card>
 
           {!user ? (

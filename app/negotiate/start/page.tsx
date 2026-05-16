@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { requirePaid } from "@/lib/require-paid";
+import { requireSignedIn } from "@/lib/require-signed-in";
 import { Wizard } from "./Wizard";
 
 export const metadata: Metadata = {
@@ -8,6 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  await requirePaid("/negotiate/start");
+  // Free to start outreach. V2 canonical model charges $199 only when
+  // the family picks a home we presented.
+  await requireSignedIn("/negotiate/start");
   return <Wizard />;
 }

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { requirePaid } from "@/lib/require-paid";
+import { requireSignedIn } from "@/lib/require-signed-in";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -20,7 +20,7 @@ export default async function NegotiationComparePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requirePaid(`/negotiate/${id}/compare`);
+  await requireSignedIn(`/negotiate/${id}/compare`);
   const supabase = await createClient();
   const {
     data: { user },

@@ -28,6 +28,8 @@ import {
  * is last and reveals a free-text input.
  */
 const FAITH_DROPDOWN: { value: FaithKey; label: string }[] = [
+  { value: "secular", label: "No religious tradition" },
+  { value: "atheist", label: "Atheist" },
   { value: "christian-catholic", label: "Catholic" },
   { value: "christian-protestant", label: "Protestant" },
   { value: "christian-orthodox", label: "Eastern Orthodox" },
@@ -37,8 +39,6 @@ const FAITH_DROPDOWN: { value: FaithKey; label: string }[] = [
   { value: "hindu", label: "Hindu" },
   { value: "buddhist", label: "Buddhist" },
   { value: "sikh", label: "Sikh" },
-  { value: "atheist", label: "Atheist" },
-  { value: "secular", label: "Secular / None of the above" },
   { value: "other", label: "Other (please specify)" },
 ];
 
@@ -209,16 +209,19 @@ export function DecideFlow() {
           </div>
 
           <div>
-            <Label htmlFor="body" hint="Some families want a viewing or open casket; others prefer a memorial without the body present.">
-              Body present at the service?
+            <Label
+              htmlFor="body"
+              hint="Open casket = people can see them at the service. Closed casket = the casket is there with the lid closed. Memorial = no body present (often used after cremation)."
+            >
+              Will the body be at the service?
             </Label>
             <Select
               id="body"
               value={bodyAtService}
               onChange={(e) => setBodyAtService(e.target.value as BodyAtService)}
             >
-              <option value="yes">Yes — viewing or body present</option>
-              <option value="no">No — memorial only</option>
+              <option value="yes">Yes — open or closed casket at the service</option>
+              <option value="no">No — memorial service only (no body)</option>
               <option value="unsure">Not sure yet</option>
             </Select>
           </div>
@@ -317,26 +320,41 @@ export function DecideFlow() {
                 </li>
               ))}
             </ul>
+            {totals && (
+              <div className="mb-5 rounded-xl bg-good-soft border border-good/30 px-4 py-3">
+                <p className="text-sm text-ink">
+                  <strong className="text-ink">
+                    Families like yours typically save $
+                    {Math.round(totals.maxSavings / 100) * 100} to $
+                    {Math.round((totals.maxSavings * 1.5) / 100) * 100}
+                  </strong>{" "}
+                  on the funeral arrangement when they compare two or
+                  three homes with our help — versus walking into the
+                  first home they call.
+                </p>
+              </div>
+            )}
             <div className="flex flex-wrap gap-3">
               <LinkButton
-                href={`/paywall?next=${encodeURIComponent(
-                  `/negotiate/start?svc=${recommendation.serviceType}`,
-                )}`}
+                href={`/negotiate/start?svc=${recommendation.serviceType}`}
                 size="lg"
               >
-                Continue → unlock the full toolkit ($199)
+                Have us compare funeral homes for you →
               </LinkButton>
               <LinkButton
                 variant="secondary"
                 href={`/prices?svc=${recommendation.serviceType}`}
               >
-                Or look up fair prices first (free)
+                Or look up fair prices first
               </LinkButton>
             </div>
             <p className="mt-3 text-xs text-ink-muted">
-              The toolkit unlocks for one $199 charge — no subscriptions,
-              no commissions from funeral homes, money-back in 14 days
-              if we don&rsquo;t save you anything.
+              Free to start. We contact homes on your behalf and bring
+              the quotes back side by side. You only pay our flat $199
+              fee when you choose a home we presented &mdash; not
+              before. Money-back in 14 days if we didn&rsquo;t save
+              you anything. No commissions or kickbacks from any home
+              we contact.
             </p>
           </Card>
 
