@@ -87,13 +87,13 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
       {
         title: "You pick the funeral home — not the hospital or nursing home.",
         body:
-          "Staff might suggest a home or hand you a brochure. They cannot push you toward a specific one. Your loved one goes where you say, when you say. Compare a few homes first — we can call them on your behalf and bring you the prices side by side.",
+          "The staff might hand you a brochure or suggest a name. They cannot push you toward any specific one. Your loved one goes where you say, when you say.",
         tone: "info",
         inlineCta: {
           label: "Compare funeral homes in 10 minutes →",
           href: "/decide",
           helperText:
-            "Three quick questions about what kind of service fits, then we send the request to a few homes in your area and show their prices side by side. Free until you actually pick one.",
+            "Three quick questions about what kind of service fits, then we send the request to a few homes in your area and bring back their prices side by side. Free until you actually pick one.",
         },
       },
       {
@@ -149,13 +149,13 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
       {
         title: "The decision that matters right now: which funeral home.",
         body:
-          "Hospice (or the doctor) will ask which funeral home should come for transport. That's the moment that matters — once your loved one is moved to a specific home, switching after is hard. Be ready with one you've actually compared, not just the first name on Google. Ten minutes here saves families thousands.",
+          "Hospice (or the doctor) will ask which funeral home should come for transport. Once your loved one is moved to a specific home, switching after is hard. Be ready with one you've already compared — not just the first name you remember.",
         tone: "info",
         inlineCta: {
           label: "Compare three homes in 10 minutes →",
           href: "/decide",
           helperText:
-            "Three quick questions about the kind of service that fits, then we send the comparison request to a few homes in your area and bring back their prices side by side. Free until you actually pick one.",
+            "Three quick questions about the kind of service that fits, then we send the comparison request to a few homes in your area and bring back their prices side by side. Families typically save thousands. Free until you actually pick one.",
         },
       },
       {

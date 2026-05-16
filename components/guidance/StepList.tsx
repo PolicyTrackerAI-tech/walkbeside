@@ -505,16 +505,23 @@ export function StepList({
             </div>
           )}
 
-          {/* Hint for pre-pay users that more unlocks after they pick a home. */}
+          {/* Hint for pre-pay users that more unlocks after they pick a home.
+              Pulls the actual gated step titles so the hint matches the
+              scenario instead of describing hospital-specific content. */}
           {!isPaid && allSteps.some((s) => s.gateUntilPaid) && (
             <div className="mt-8 rounded-2xl border border-border bg-surface-soft px-5 py-4">
-              <p className="text-sm text-ink-soft leading-relaxed">
+              <p className="text-sm text-ink-soft leading-relaxed mb-2">
                 <strong className="text-ink">What unlocks next.</strong>{" "}
-                The rest of the timeline — what to sign before transport,
-                the three calls in order, when the doctor finalizes the
-                paperwork — appears here automatically once you&rsquo;ve
-                picked a funeral home with us.
+                The rest of the timeline appears here automatically once
+                you&rsquo;ve picked a funeral home with us:
               </p>
+              <ul className="text-sm text-ink-soft list-disc pl-5 space-y-1">
+                {allSteps
+                  .filter((s) => s.gateUntilPaid)
+                  .map((s, idx) => (
+                    <li key={idx}>{s.title}</li>
+                  ))}
+              </ul>
             </div>
           )}
 
