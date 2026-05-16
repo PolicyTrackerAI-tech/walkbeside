@@ -296,8 +296,8 @@ export function CrisisUnexpected() {
               if (isCurrent) {
                 const isConfused = !!confusedSteps[i];
                 return (
-                  <li key={i} ref={currentStepRef}>
-                    <div className="rounded-2xl border-2 border-border bg-surface p-6 scroll-mt-28">
+                  <li key={i} ref={currentStepRef} className="scroll-mt-32">
+                    <div className="rounded-2xl border-2 border-border bg-surface p-6">
                       <div className="flex items-start gap-4 mb-4">
                         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-deep text-white font-serif text-base shrink-0">
                           {i + 1}
