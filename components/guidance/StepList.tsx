@@ -358,9 +358,9 @@ export function StepList({
                 const isConfused = !!confusedSteps[i];
 
                 return (
-                  <li key={i} ref={currentStepRef}>
+                  <li key={i} ref={currentStepRef} className="scroll-mt-32">
                     <div
-                      className={`rounded-2xl border-2 p-6 scroll-mt-28 ${toneClass}`}
+                      className={`rounded-2xl border-2 p-6 ${toneClass}`}
                     >
                       <div className="flex items-start gap-4 mb-4">
                         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary-deep text-white font-serif text-base shrink-0">
