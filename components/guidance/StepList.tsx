@@ -351,13 +351,6 @@ export function StepList({
                           <p className="text-ink-soft leading-relaxed text-base">
                             {step.body}
                           </p>
-                          {step.shareAffordance && (
-                            <ShareAffordance
-                              copyUrl={step.shareAffordance.copyUrl}
-                              copyLabel={step.shareAffordance.copyLabel}
-                              helperText={step.shareAffordance.helperText}
-                            />
-                          )}
                           {step.inlineCta && (
                             <div className="mt-5 rounded-xl bg-primary-soft border border-primary/30 px-4 py-4">
                               {step.inlineCta.helperText && (
@@ -369,6 +362,13 @@ export function StepList({
                                 {step.inlineCta.label}
                               </LinkButton>
                             </div>
+                          )}
+                          {step.shareAffordance && (
+                            <ShareAffordance
+                              copyUrl={step.shareAffordance.copyUrl}
+                              copyLabel={step.shareAffordance.copyLabel}
+                              helperText={step.shareAffordance.helperText}
+                            />
                           )}
                         </div>
                       </div>

@@ -129,16 +129,22 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         tone: "calm",
       },
       {
-        title: "Call hospice — not 911.",
+        title: "Call hospice — or the doctor if no hospice.",
         body:
-          "If hospice is involved, call the hospice nurse line. Hospice handles the next several hours: confirming the death, paperwork, helping you decide when transport is right. Calling 911 instead brings an ambulance and police you don't need here, and can make the home transfer harder.",
+          "If hospice is involved, call the hospice nurse line — not 911. They handle the next several hours: confirming the death, paperwork, helping you decide when transport is right. Calling 911 brings an ambulance and police you don't need here. If hospice wasn't involved, call the doctor who was treating your loved one — their office line or after-hours number. They can confirm the death and tell you whether the medical examiner needs to be called.",
         tone: "info",
       },
       {
-        title: "If hospice wasn't involved.",
+        title: "The decision that matters right now: which funeral home.",
         body:
-          "Call the doctor who was treating your loved one — their office line or the after-hours number. They can confirm the death and tell you whether the medical examiner needs to be called. In most expected at-home deaths, no police or ambulance is involved.",
+          "Hospice (or the doctor) will ask which funeral home should come for transport. That's the moment that matters — once your loved one is moved to a specific home, switching after is hard. Be ready with one you've actually compared, not just the first name on Google. Ten minutes here saves families thousands.",
         tone: "info",
+        inlineCta: {
+          label: "Compare three homes in 10 minutes →",
+          href: "/decide",
+          helperText:
+            "Three quick questions about the kind of service that fits, then we send the comparison request to a few homes in your area and bring back their prices side by side. Free until you actually pick one.",
+        },
       },
       {
         title: "Who arrives, and in what order.",
@@ -157,12 +163,6 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         body:
           "They'll ask you to sign one thing: a transport authorization letting them take your loved one to their facility. That's the only document you have to sign today. Caskets, services, urns, prices — all of that waits until the arrangement meeting a day or two later.",
         tone: "info",
-      },
-      {
-        title: "About choosing the funeral home.",
-        body:
-          "Hospice will ask which funeral home to call for transport — that's the moment that matters. Be ready with one you've actually compared, not just the first name on Google. We can call two or three for you and bring back their prices in about ten minutes.",
-        tone: "calm",
       },
     ],
   },
@@ -217,13 +217,19 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
       {
         title: "Are you the one planning, or someone else?",
         body:
-          "Funeral decisions usually fall to one person — a spouse, an adult child, the executor. If that's you, keep going with us: the next step is comparing funeral home prices before any first call (the first call commits you to that home; the move is hard to undo). If the planning falls to someone else — a sibling, a parent who can't deal with this right now — the most useful thing you can do is send them this site. They can pick it up here and we'll walk them through it.",
+          "Funeral decisions usually fall to one person — a spouse, an adult child, the executor. If that's you, the next step is comparing funeral home prices before the first call (the first call commits you to that home; the move is hard to undo). If the planning falls to someone else — a sibling, a parent who can't deal with this right now — the most useful thing you can do is send them this site. They'll pick it up there and we'll walk them through it.",
         tone: "info",
+        inlineCta: {
+          label: "I'm the one planning — compare homes →",
+          href: "/decide",
+          helperText:
+            "Three quick questions about the kind of service that fits, then we send the comparison to a few homes in your area. Free until you actually pick one.",
+        },
         shareAffordance: {
           copyUrl: "https://honestfuneral.co/where",
           copyLabel: "Copy link to send",
           helperText:
-            "If you're not the one planning, share this with whoever is. They can text or email it however works:",
+            "Not you? Share with whoever is. They can text or email it however works:",
         },
       },
     ],
