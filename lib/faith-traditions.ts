@@ -117,7 +117,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   // -------------------------------------------------------------------------
   {
     key: "secular",
-    label: "Secular / None of the above",
+    label: "No religious tradition",
     dispositionNorm: "either", // TODO-FD: verify
     dispositionAllowed: [
       "direct-cremation",
