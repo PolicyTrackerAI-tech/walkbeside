@@ -9,6 +9,9 @@ import { SCENARIO_LANDING_TONE } from "@/lib/content";
 import { StepList } from "@/components/guidance/StepList";
 import { CrisisUnexpected } from "./CrisisUnexpected";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { createClient } from "@/lib/supabase/server";
+import { isPaidUser } from "@/lib/auth-paid";
+import { FEATURES } from "@/lib/env";
 
 const VALID: Scenario[] = ["hospital", "home-expected", "home-unexpected", "elsewhere"];
 
@@ -59,6 +62,20 @@ export default async function GuidancePage({
 
   const g = SCENARIO_GUIDANCE[scenario];
 
+  // Post-decision operational steps (gateUntilPaid) only render for
+  // users who've actually picked a home with us. Pre-pay readers see
+  // the calming + pivot-CTA steps only.
+  let isPaid = false;
+  if (FEATURES.supabase()) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      isPaid = await isPaidUser(supabase, user);
+    }
+  }
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -89,6 +106,7 @@ export default async function GuidancePage({
         steps={g.steps}
         pullQuote={g.pullQuote}
         showCrisisResources={scenario === "elsewhere"}
+        isPaid={isPaid}
       />
     </>
   );

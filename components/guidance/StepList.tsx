@@ -23,6 +23,8 @@ interface Props {
   showCta?: boolean;
   /** Show 988 block. True for scenarios with elevated survivor suicide risk. */
   showCrisisResources?: boolean;
+  /** True if the user has paid for the toolkit. Unlocks post-decision steps. */
+  isPaid?: boolean;
 }
 
 const STEP_TONE_CLASS: Record<NonNullable<GuidanceStep["tone"]>, string> = {
@@ -102,11 +104,18 @@ export function StepList({
   headline,
   subhead,
   tone,
-  steps,
+  steps: allSteps,
   pullQuote,
   showCta = true,
   showCrisisResources = false,
+  isPaid = false,
 }: Props) {
+  // Filter out post-decision steps for non-paid users. Paid users see
+  // the whole timeline; pre-pay users only see calming + the pivotal
+  // CTA step.
+  const steps = isPaid
+    ? allSteps
+    : allSteps.filter((s) => !s.gateUntilPaid);
   const [statuses, setStatuses] = useState<StepStatus[]>(() =>
     steps.map((_, i) => (i === 0 ? "current" : "hidden")),
   );
@@ -385,18 +394,22 @@ export function StepList({
                       )}
 
                       <div className="flex flex-wrap gap-3 mt-5">
-                        <Button
-                          size="lg"
-                          onClick={() => advance(i, "done")}
-                        >
-                          Next step →
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          onClick={() => advance(i, "skipped")}
-                        >
-                          Skip — not relevant
-                        </Button>
+                        {!step.inlineCta && (
+                          <>
+                            <Button
+                              size="lg"
+                              onClick={() => advance(i, "done")}
+                            >
+                              Next step →
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              onClick={() => advance(i, "skipped")}
+                            >
+                              Skip — not relevant
+                            </Button>
+                          </>
+                        )}
                         <Button
                           variant="ghost"
                           onClick={() => toggleConfused(i)}
@@ -471,6 +484,19 @@ export function StepList({
                   Continue →
                 </LinkButton>
               </Card>
+            </div>
+          )}
+
+          {/* Hint for pre-pay users that more unlocks after they pick a home. */}
+          {!isPaid && allSteps.some((s) => s.gateUntilPaid) && (
+            <div className="mt-8 rounded-2xl border border-border bg-surface-soft px-5 py-4">
+              <p className="text-sm text-ink-soft leading-relaxed">
+                <strong className="text-ink">What unlocks next.</strong>{" "}
+                The rest of the timeline — what to sign before transport,
+                the three calls in order, when the doctor finalizes the
+                paperwork — appears here automatically once you&rsquo;ve
+                picked a funeral home with us.
+              </p>
             </div>
           )}
 

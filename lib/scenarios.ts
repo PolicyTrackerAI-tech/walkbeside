@@ -34,12 +34,22 @@ export interface GuidanceStep {
    * Optional inline call-to-action rendered inside the step body.
    * Use when a later step references an action ("call the home you
    * chose") that requires the user to have started something earlier.
+   *
+   * Steps with an inlineCta are treated as terminal in the pre-pay
+   * flow: the "Next step / Skip" buttons are suppressed because the
+   * CTA *is* the next action.
    */
   inlineCta?: {
     label: string;
     href: string;
     helperText?: string;
   };
+  /**
+   * If true, this step is hidden from non-paid users. Use for
+   * post-decision operational steps that only matter once the user
+   * has picked a funeral home through us.
+   */
+  gateUntilPaid?: boolean;
 }
 
 export interface ScenarioGuidance {
@@ -91,24 +101,28 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         body:
           "A release form authorizing the funeral home you chose to take the body. Just that. The hospital or nursing home handles the rest with the funeral home directly. Read it carefully — it names one specific funeral home, and switching after is harder than getting it right the first time.",
         tone: "info",
+        gateUntilPaid: true,
       },
       {
         title: "Three calls. In order.",
         body:
           "(1) Two or three immediate family — the ones who need to know first. (2) The funeral home you actually compared and chose. (3) Your employer, if bereavement leave matters. That's it for today. Everything else can wait — we'll help you track who's been told later so nothing falls through.",
         tone: "calm",
+        gateUntilPaid: true,
       },
       {
         title: "When the doctor signs the paperwork.",
         body:
           "The doctor who confirmed the death also signs the official document (the death certificate). This usually happens within 24–72 hours. The funeral home you chose orders certified copies for you through the state vital records office. Most families need 10–15 originals — banks, life insurance, Social Security, and the IRS each want one.",
         tone: "info",
+        gateUntilPaid: true,
       },
       {
         title: "The rest of family — slowly.",
         body:
           "You don't have to call everyone today. Pick two or three close people. Ask them to help with the next round of calls. There's no prize for telling fifty people in twenty-four hours.",
         tone: "calm",
+        gateUntilPaid: true,
       },
     ],
   },
@@ -149,18 +163,21 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         body:
           "Hospice nurse comes first and officially confirms the death. The funeral home you've chosen sends transport when YOU say you're ready — not on their schedule. Police and the medical examiner are usually not involved in an expected at-home death.",
         tone: "info",
+        gateUntilPaid: true,
       },
       {
         title: "There is genuinely time. Sit with them.",
         body:
           "Hospice will not pressure you. Take the hour you need before transport. Many families deeply regret hurrying through this part. The body does not need to leave the room in the first hour, or the first three hours.",
         tone: "calm",
+        gateUntilPaid: true,
       },
       {
         title: "When the funeral home arrives.",
         body:
           "They'll ask you to sign one thing: a transport authorization letting them take your loved one to their facility. That's the only document you have to sign today. Caskets, services, urns, prices — all of that waits until the arrangement meeting a day or two later.",
         tone: "info",
+        gateUntilPaid: true,
       },
     ],
   },
