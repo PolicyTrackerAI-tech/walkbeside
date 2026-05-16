@@ -360,7 +360,7 @@ export function StepList({
                           <p className="text-ink-soft leading-relaxed text-base">
                             {step.body}
                           </p>
-                          {step.inlineCta && (
+                          {step.inlineCta && !isPaid && (
                             <div className="mt-5 rounded-xl bg-primary-soft border border-primary/30 px-4 py-4">
                               {step.inlineCta.helperText && (
                                 <p className="text-sm text-ink-soft mb-3 leading-relaxed">
@@ -394,7 +394,7 @@ export function StepList({
                       )}
 
                       <div className="flex flex-wrap gap-3 mt-5">
-                        {!step.inlineCta && (
+                        {(!step.inlineCta || isPaid) && (
                           <>
                             <Button
                               size="lg"
