@@ -348,9 +348,11 @@ export function StepList({
                           <h2 className="font-serif text-xl sm:text-2xl text-ink mb-3 leading-tight">
                             {step.title}
                           </h2>
-                          <p className="text-ink-soft leading-relaxed text-base">
-                            {step.body}
-                          </p>
+                          <div className="text-ink-soft leading-relaxed text-base space-y-3">
+                            {step.body.split("\n\n").map((para, idx) => (
+                              <p key={idx}>{para}</p>
+                            ))}
+                          </div>
                           {step.inlineCta && (
                             <div className="mt-5 rounded-xl bg-primary-soft border border-primary/30 px-4 py-4">
                               {step.inlineCta.helperText && (

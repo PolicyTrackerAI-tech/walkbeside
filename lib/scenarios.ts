@@ -65,7 +65,7 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
       {
         title: "Take a breath. You have more time than they're suggesting.",
         body:
-          "The hospital or nursing home will ask you to choose a funeral home quickly — sometimes within an hour. That speed is for their convenience, not a legal requirement. They have to hold your loved one until you're ready. Saying \"I need a few hours to make some calls\" is normal and they will accept it. The single most expensive mistake families make in the first hour is committing to whatever funeral home the staff suggests. Don't. We'll help you compare a few in about ten minutes.",
+          "They'll ask you to pick a funeral home soon. Sometimes within the hour.\n\nYou don't have to rush.\n\nThey have to keep your loved one until YOU say it's time. There is no law that says otherwise.\n\nIf you feel pushed, say this: \"I need a few hours to make some calls.\" That is normal. They will wait.\n\nThe biggest mistake families make in this first hour is just saying yes to whichever home the staff suggests. Don't. Take ten minutes here first.",
         tone: "calm",
       },
       {
