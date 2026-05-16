@@ -31,63 +31,55 @@ export interface ScenarioGuidance {
 
 export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
   hospital: {
-    headline: "You're in the hospital scenario.",
+    headline: "Hospital or nursing home — what to do first.",
     subhead:
-      "The hospital will ask you to choose a funeral home soon — usually within a few hours. Take a breath. You have more time than they're suggesting.",
+      "Either way, the biggest mistake families make in the first hour is agreeing to the first funeral home anyone recommends. You have more time than they're suggesting. We'll walk through it slowly.",
     showPriceCompareGate: true,
     priceGateText:
       "Before you call anyone, spend three minutes here. It could save you thousands.",
     pullQuote:
-      "The hospital is legally required to release the body when you're ready — not when they're ready. You are not causing a problem by taking a few hours.",
+      "Hospitals and nursing homes are legally required to release your loved one when you're ready — not when they're ready. You are not causing a problem by taking a few hours.",
     steps: [
       {
-        title: "Tell the hospital you'll be back to them within a few hours.",
+        title: "Take a breath. You have more time than they're suggesting.",
         body:
-          "You don't have to choose a funeral home in the next 30 minutes. Hospitals have temporary holding for exactly this reason. The hospital is legally required to release the body when you're ready — not when they're ready. Saying \"I need a few hours\" is normal and they will accept it.",
+          "The hospital or nursing home will ask you to choose a funeral home quickly — sometimes within an hour. That speed is for their convenience, not a legal requirement. They have to hold your loved one until you're ready. Saying \"I need a few hours to make some calls\" is normal and they will accept it. The single most expensive mistake families make in the first hour is committing to whatever funeral home the staff suggests. Don't. We'll help you compare a few in about ten minutes.",
         tone: "calm",
       },
       {
-        title: "Do not commit to the first funeral home anyone recommends.",
+        title: "How the death gets confirmed.",
         body:
-          "Hospitals sometimes have informal partnerships. Once a body is moved to a funeral home, you are practically committed to that home. Compare prices first.",
-        tone: "info",
-      },
-      // TODO-FD: please redline the medical/legal specifics in the next
-      // four steps before this content ships.
-      {
-        title: "Who pronounces the death.",
-        body:
-          "In a hospital, the attending physician (or in some circumstances the medical examiner or coroner) makes the legal pronouncement. Until that happens, the death isn't yet official and no funeral home can take possession.",
+          "In a hospital, a doctor on the floor handles this. In a nursing home, a doctor or in some states a nurse practitioner does it. In a sudden or unexpected death — including some nursing-home deaths — the medical examiner is called instead and there can be a wait. Until the death is officially confirmed, nothing else can move forward. Usually it happens within an hour.",
         tone: "info",
       },
       {
-        title: "The hospital does not choose your funeral home — you do.",
+        title: "You pick the funeral home — not the hospital or nursing home.",
         body:
-          "Hospital staff can answer practical questions, but they are not allowed to pressure you toward a specific funeral home. Transport from the hospital to the funeral home of your choice is your decision, not theirs.",
+          "Staff might suggest a home or hand you a brochure. They cannot push you toward a specific one. Your loved one goes where you say, when you say. Compare a few homes first — we can call them on your behalf and bring you the prices side by side.",
         tone: "info",
       },
       {
-        title: "Release of remains paperwork.",
+        title: "The one thing you'll sign before transport.",
         body:
-          "The hospital will ask for a signed release before transferring the body. The funeral home you choose handles most of this with the hospital directly. Read what you sign — you are authorizing transfer to a specific home, and that decision is hard to reverse.",
+          "A release form authorizing the funeral home you chose to take the body. Just that. The hospital or nursing home handles the rest with the funeral home directly. Read it carefully — it names one specific funeral home, and switching after is harder than getting it right the first time.",
         tone: "info",
       },
       {
-        title: "The first three calls to make.",
+        title: "Three calls. In order.",
         body:
-          "(1) Immediate family. (2) The funeral home you've actually chosen — only after you've compared. (3) Your employer if relevant for bereavement leave. The hospital social worker or case manager can help with practicalities, but is not a substitute for a funeral home.",
+          "(1) Two or three immediate family — the ones who need to know first. (2) The funeral home you actually compared and chose. (3) Your employer, if bereavement leave matters. That's it for today. Everything else can wait — we'll help you track who's been told later so nothing falls through.",
         tone: "calm",
       },
       {
-        title: "When the death certificate gets signed.",
+        title: "When the doctor signs the paperwork.",
         body:
-          "The attending physician typically signs the death certificate within 24–72 hours. The funeral home you choose orders certified copies through the state vital records office. Most families need 5–10 copies to start.",
+          "The doctor who confirmed the death also signs the official document (the death certificate). This usually happens within 24–72 hours. The funeral home you chose orders certified copies for you through the state vital records office. Most families need 10–15 originals — banks, life insurance, Social Security, and the IRS each want one.",
         tone: "info",
       },
       {
-        title: "Notify your closest family members — but slow down.",
+        title: "The rest of family — slowly.",
         body:
-          "You don't have to call everyone in the first hour. Pick two or three people. Let them help with the rest of the calls.",
+          "You don't have to call everyone today. Pick two or three close people. Ask them to help with the next round of calls. There's no prize for telling fifty people in twenty-four hours.",
         tone: "calm",
       },
     ],
