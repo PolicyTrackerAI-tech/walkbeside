@@ -85,53 +85,53 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
     ],
   },
   "home-expected": {
-    headline: "You're in the at-home, expected scenario.",
+    headline: "An expected death at home — what to do first.",
     subhead:
-      "If hospice was involved, a hospice nurse will pronounce death. You have a little more time than the hospital scenario, but body removal is still same-day.",
+      "If hospice is involved, you have more time than the hospital scenario. A hospice nurse will come to confirm the death. Take a breath. The next few hours are quieter than you might expect.",
     showPriceCompareGate: false,
+    pullQuote:
+      "Hospice will not pressure you. Take the hour you need before transport. There are people who deeply regret hurrying through this part.",
     steps: [
-      // TODO-FD: please redline the hospice / pronouncement / physician
-      // procedure specifics below before this content ships.
       {
-        title: "Confirm what you're seeing.",
+        title: "Take a breath. They're at peace.",
         body:
-          "For an expected death under hospice, no medical intervention is needed — no chest compressions, no 911. If hospice is not involved, look for no pulse and no breathing for several minutes before you call the next person.",
+          "If hospice has been preparing you, this moment is not an emergency — it's the end of one. No CPR, no 911. If hospice is not involved and the death feels sudden, see the unexpected-death page instead. Otherwise: look for no pulse and no breathing for several minutes before calling the next person.",
         tone: "calm",
       },
       {
-        title: "Call hospice first — not 911.",
+        title: "Call hospice — not 911.",
         body:
-          "If hospice is involved, call the hospice nurse line. Hospice handles pronouncement and the next several hours. Calling 911 will trigger an EMS response that isn't needed in this scenario and can complicate the home transfer.",
+          "If hospice is involved, call the hospice nurse line. Hospice handles the next several hours: confirming the death, paperwork, helping you decide when transport is right. Calling 911 instead brings an ambulance and police you don't need here, and can make the home transfer harder.",
         tone: "info",
       },
       {
-        title: "If hospice is not involved.",
+        title: "If hospice wasn't involved.",
         body:
-          "Call the attending physician's office or the patient's primary care doctor. They can guide you on whether the death can be pronounced at home or whether the medical examiner needs to be called. In most expected-death scenarios at home, EMS and police are not required.",
+          "Call the doctor who was treating your loved one — their office line or the after-hours number. They can confirm the death and tell you whether the medical examiner needs to be called. In most expected at-home deaths, no police or ambulance is involved.",
         tone: "info",
       },
       {
-        title: "Who comes to the home and in what order.",
+        title: "Who arrives, and in what order.",
         body:
-          "Hospice nurse arrives and pronounces. The funeral home you've chosen sends transport when you're ready. Police and the coroner are typically not involved in an expected at-home death.",
+          "Hospice nurse comes first and officially confirms the death. The funeral home you've chosen sends transport when YOU say you're ready — not on their schedule. Police and the medical examiner are usually not involved in an expected at-home death.",
         tone: "info",
       },
       {
         title: "There is genuinely time. Sit with them.",
         body:
-          "With an expected death at home, the family does not need to rush. Hospice will not pressure you. Take the hour you need before transport. There are people who deeply regret hurrying through this part.",
+          "Hospice will not pressure you. Take the hour you need before transport. Many families deeply regret hurrying through this part. The body does not need to leave the room in the first hour, or the first three hours.",
         tone: "calm",
       },
       {
         title: "When the funeral home arrives.",
         body:
-          "They will ask for a transport authorization to take the body to their facility. That is the only document you are obligated to sign at this stage. Anything about caskets, services, urns, or pricing can wait until the arrangement meeting in a day or two.",
+          "They'll ask you to sign one thing: a transport authorization letting them take your loved one to their facility. That's the only document you have to sign today. Caskets, services, urns, prices — all of that waits until the arrangement meeting a day or two later.",
         tone: "info",
       },
       {
-        title: "You don't have to choose a funeral home until hospice asks.",
+        title: "About choosing the funeral home.",
         body:
-          "When hospice asks which funeral home to call for transport, that's the moment that matters. Be ready with one you've actually compared — not just the first name on Google.",
+          "Hospice will ask which funeral home to call for transport — that's the moment that matters. Be ready with one you've actually compared, not just the first name on Google. We can call two or three for you and bring back their prices in about ten minutes.",
         tone: "calm",
       },
     ],
@@ -163,31 +163,31 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
     ],
   },
   elsewhere: {
-    headline: "Tell us a little more.",
+    headline: "Somewhere else — we'll walk through it.",
     subhead:
-      "We can guide most situations. While we sort out the specifics, here are the universal first steps for the next two hours.",
+      "Workplace, public place, in transit, assisted living, in a car — the next few hours look slightly different depending on where, but the universal first steps are the same. Take a breath.",
     showPriceCompareGate: true,
     priceGateText:
       "Whatever the situation, knowing fair funeral prices in your area is a five-minute investment that often saves thousands.",
     pullQuote:
-      "Slow down before calling a funeral home. The first call starts the sales process.",
+      "Slow down before calling a funeral home. The first call starts a sales process you can't easily reverse.",
     steps: [
       {
-        title: "Make sure death has been legally pronounced.",
+        title: "Make sure the death has been officially confirmed.",
         body:
-          "A medical professional, hospice nurse, or first responder needs to confirm the death. Until that happens, no one can move the body and no funeral home can act.",
+          "A medical professional, hospice nurse, or first responder needs to confirm the death. Until that happens, no one can move your loved one and no funeral home can take possession. In most public or in-transit deaths, EMS arrives first and handles this within an hour.",
         tone: "info",
       },
       {
-        title: "Identify the closest one or two people to call.",
+        title: "Find your point person.",
         body:
-          "You don't need to notify the whole family yet. Find your point person and let them help.",
+          "You don't have to call the whole family right now. Find the one or two people who need to know first. Let them help with the rest of the calls. There's no prize for telling fifty people in the first day.",
         tone: "calm",
       },
       {
-        title: "Slow down before calling a funeral home.",
+        title: "Pause before calling a funeral home.",
         body:
-          "The first call to a funeral home starts the sales process. A few minutes of preparation before that call routinely saves families thousands.",
+          "The first call to a funeral home starts a sales process that's hard to reverse — once your loved one is moved to a specific home, you're effectively committed to that home. A few minutes preparing — knowing what fair prices look like, knowing what you can decline — routinely saves families thousands. We can help.",
         tone: "info",
       },
     ],

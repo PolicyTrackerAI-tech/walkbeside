@@ -35,16 +35,15 @@ interface Step {
   body: React.ReactNode;
 }
 
-// TODO-FD: please redline the medical-examiner and coroner specifics
-// in step 5 below before this ships.
 const STEPS: Step[] = [
   {
     title: "Call 911 if you haven't.",
     body: (
       <p>
-        A medical professional has to legally pronounce the death. Police
-        and possibly a coroner will come. That is procedural in any
-        unexpected death &mdash; it does not mean anything is wrong.
+        A medical professional has to officially confirm the death.
+        Paramedics will come first; police will too, and sometimes a
+        medical examiner. That&rsquo;s procedure for any unexpected
+        death &mdash; it doesn&rsquo;t mean anything is wrong.
       </p>
     ),
   },
@@ -53,13 +52,14 @@ const STEPS: Step[] = [
     body: (
       <ul className="list-disc pl-5 space-y-2">
         <li>
-          Don&rsquo;t move the body. Until pronouncement, this is a death
-          scene &mdash; not because anything is wrong, but because
-          that&rsquo;s the procedure.
+          Don&rsquo;t move them. Until the death is officially confirmed,
+          this is procedurally a death scene &mdash; not because anything
+          is wrong, but because that&rsquo;s how every unexpected death
+          is handled.
         </li>
         <li>
-          Unlock the door if you can, so EMS doesn&rsquo;t have to break
-          it.
+          Unlock the door if you can, so paramedics don&rsquo;t have to
+          break it.
         </li>
         <li>
           You don&rsquo;t have to stay in the room. Step outside, sit on
@@ -72,46 +72,53 @@ const STEPS: Step[] = [
     title: "You are not in trouble.",
     body: (
       <p>
-        First responders will ask questions. Answering honestly is the
-        fastest way through. You do not need to make any decisions about
-        funeral homes, paperwork, or family notifications while they are
+        First responders will ask questions about the last day, recent
+        health, medications. Answering plainly is the fastest way
+        through. You do not need to make any decisions about funeral
+        homes, paperwork, or family notifications while they&rsquo;re
         there.
       </p>
     ),
   },
   {
-    title: "There is nothing you have to do on the internet right now.",
+    title: "There is nothing you have to figure out on the internet right now.",
     body: (
       <p>
         No calls. No forms. No funeral home decisions. Those can wait
-        hours or days &mdash; not minutes.
+        hours or days &mdash; not minutes. The site will still be here.
       </p>
     ),
   },
   {
-    title: "What happens when EMS, police, or the medical examiner arrive.",
+    title: "Who shows up, and what they're doing.",
     body: (
       <ul className="list-disc pl-5 space-y-2">
         <li>
-          Police will arrive. They will ask questions. This is procedural
-          for any unexpected at-home death &mdash; not accusatory.
+          <strong>Paramedics</strong> arrive first and confirm the
+          death. They cannot move your loved one without official
+          confirmation.
         </li>
         <li>
-          The medical examiner or coroner is called. They decide whether
-          the death needs an investigation or can be released directly to
-          a funeral home of your choosing.
+          <strong>Police</strong> come along to rule out anything
+          suspicious. This is routine for any unexpected at-home death
+          &mdash; not accusatory.
         </li>
         <li>
-          You do not have to choose a funeral home in the first hour. If
-          asked &ldquo;which funeral home do you want?&rdquo; it is okay
-          to say &ldquo;I need to make a call&rdquo; or &ldquo;I
-          haven&rsquo;t decided yet.&rdquo;
+          <strong>Medical examiner or coroner</strong> is called next.
+          They decide whether the death needs further investigation or
+          can be released directly to a funeral home of your choosing.
         </li>
         <li>
-          If you feel pressured to decide on the spot, you can request
-          the body be transported to the medical examiner&rsquo;s office
-          or the local hospital morgue while you decide. You do not have
-          to commit on the spot.
+          You do not have to choose a funeral home in the first hour.
+          If asked &ldquo;which funeral home do you want?&rdquo; it is
+          completely fine to say &ldquo;I need a few hours&rdquo; or
+          &ldquo;I haven&rsquo;t decided yet.&rdquo;
+        </li>
+        <li>
+          If you feel pressured to decide on the spot, ask that your
+          loved one be transported to the medical examiner&rsquo;s
+          office or the local hospital morgue while you take time to
+          compare. You do not have to commit at the door.
         </li>
       </ul>
     ),
@@ -133,6 +140,10 @@ export function CrisisUnexpected() {
   const [hydrated, setHydrated] = useState(false);
   const [confusedSteps, setConfusedSteps] = useState<Record<number, boolean>>({});
   const currentStepRef = useRef<HTMLLIElement>(null);
+  // Same scroll-on-hydration fix as StepList: suppress scrollIntoView
+  // on initial mount so the page lands at the headline, not partway
+  // down at step 1.
+  const userInitiatedAdvanceRef = useRef(false);
 
   useEffect(() => {
     try {
@@ -160,6 +171,8 @@ export function CrisisUnexpected() {
 
   useEffect(() => {
     if (!hydrated) return;
+    if (!userInitiatedAdvanceRef.current) return;
+    userInitiatedAdvanceRef.current = false;
     if (currentStepRef.current) {
       currentStepRef.current.scrollIntoView({
         behavior: "smooth",
@@ -176,6 +189,7 @@ export function CrisisUnexpected() {
   const currentIndex = statuses.findIndex((s) => s === "current");
 
   function advance(index: number, mark: "done" | "skipped") {
+    userInitiatedAdvanceRef.current = true;
     setStatuses((prev) => {
       const next = [...prev];
       next[index] = mark;
