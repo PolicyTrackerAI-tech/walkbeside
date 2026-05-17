@@ -129,7 +129,12 @@ export async function POST(req: Request) {
         to: home.email,
         subject,
         text: body,
-        fromName: "Honest Funeral",
+        // Outreach to funeral homes uses a different mailbox than the
+        // family-facing 'hello@' default. Override via OUTREACH_FROM
+        // env var if you want to swap mailboxes without a deploy.
+        from:
+          process.env.OUTREACH_FROM ??
+          "Honest Funeral <arrangements@honestfuneral.co>",
         replyTo: `advocate+${neg.id}@honestfuneral.co`,
       });
       sentId = sent.id;

@@ -19,7 +19,13 @@ export interface OutboundEmail {
   /** Optional HTML body. If omitted, plain-text is the only body. */
   html?: string;
   replyTo?: string;
-  fromName?: string;
+  /**
+   * Optional full from-address override, e.g.
+   * `"Honest Funeral <arrangements@honestfuneral.co>"`. Use for outreach
+   * to funeral homes where a different mailbox makes sense than the
+   * family-facing `hello@` address.
+   */
+  from?: string;
 }
 
 /**
@@ -38,7 +44,7 @@ export async function sendEmail(msg: OutboundEmail): Promise<{ id: string }> {
     });
     return { id };
   }
-  const from = msg.fromName ? `${msg.fromName} <hello@honestfuneral.co>` : FROM_DEFAULT;
+  const from = msg.from ?? FROM_DEFAULT;
   const result = await resend().emails.send({
     from,
     to: msg.to,
