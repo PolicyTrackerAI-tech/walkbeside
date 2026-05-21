@@ -4,11 +4,30 @@
  * so the preview is guaranteed to match what funeral homes actually receive.
  */
 
+import crypto from "node:crypto";
+
+const SITE = "https://honestfuneral.co";
+
+/**
+ * CAN-SPAM requires a "valid physical postal address" in every commercial
+ * email. We render this line in every outbound footer alongside the
+ * one-click opt-out URL. Set OUTREACH_POSTAL_ADDRESS in Vercel to a real
+ * mailing address (PO Box, virtual mailbox, or street address). The
+ * default below is a placeholder and is NOT CAN-SPAM compliant.
+ */
+function postalAddressLine(): string {
+  return (
+    process.env.OUTREACH_POSTAL_ADDRESS ??
+    "${postalAddressLine()}"
+  );
+}
+
 export interface OutreachEmailInput {
   familyLabel: string;
   authorizationId: string;
   advocateName: string;
   timing: string;
+  homeEmail: string;
 }
 
 export interface OutreachEmail {
@@ -26,8 +45,8 @@ export function buildFamilyLabel(
 }
 
 export function buildOutreachEmail(input: OutreachEmailInput): OutreachEmail {
-  const { familyLabel, authorizationId, advocateName, timing } = input;
-  const subject = `GPL request on behalf of ${familyLabel} — ref ${authorizationId}`;
+  const { familyLabel, authorizationId, advocateName, timing, homeEmail } = input;
+  const subject = `Price list request — ${familyLabel} (ref ${authorizationId})`;
   const body = `Hello,
 
 I'm writing from Honest Funeral on behalf of ${familyLabel}. They've engaged us as their consumer advocate to gather price information from funeral homes in your area before they choose where to make arrangements.
@@ -44,7 +63,10 @@ honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. We help families gather pricing and prepare for the arrangement meeting; the family makes all arrangements directly with the funeral home they select.`;
+Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. We help families gather pricing and prepare for the arrangement meeting; the family makes all arrangements directly with the funeral home they select.
+
+To opt out of future outreach requests from us, one-click: ${funeralHomeOptOutUrl(homeEmail)}
+${postalAddressLine()}`;
 
   return { subject, body };
 }
@@ -52,6 +74,7 @@ Honest Funeral is a consumer advocacy service, not a licensed funeral establishm
 export interface SelectionEmailInput {
   familyLabel: string;
   homeName: string;
+  homeEmail: string;
   serviceLabel: string;
   quoteCents: number;
   authorizationId: string;
@@ -59,8 +82,8 @@ export interface SelectionEmailInput {
 }
 
 export function buildSelectionEmail(input: SelectionEmailInput): OutreachEmail {
-  const { familyLabel, serviceLabel, quoteCents, authorizationId, advocateName } = input;
-  const subject = `${capitalize(familyLabel)} selected your firm — ref ${authorizationId}`;
+  const { familyLabel, serviceLabel, quoteCents, authorizationId, advocateName, homeEmail } = input;
+  const subject = `${capitalize(familyLabel)} selected your firm (ref ${authorizationId})`;
   const dollars = formatDollars(quoteCents);
   const body = `Hello,
 
@@ -83,7 +106,10 @@ honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family makes all funeral arrangements and signs all paperwork directly with you.`;
+Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family makes all funeral arrangements and signs all paperwork directly with you.
+
+To opt out of future outreach from us, one-click: ${funeralHomeOptOutUrl(homeEmail)}
+${postalAddressLine()}`;
 
   return { subject, body };
 }
@@ -125,6 +151,36 @@ export function authorizationIdFor(negotiationId: string): string {
 export function familyLabelFromOutreachBody(body: string): string | null {
   const m = body.match(/on behalf of (.+?)\. They've engaged us/);
   return m ? m[1] : null;
+}
+
+/**
+ * CAN-SPAM unsubscribe URL for funeral homes. Tokens are HMAC'd with the
+ * shared UNSUBSCRIBE_SECRET but namespaced ("fd:") so a family-side token
+ * can't be replayed to opt a funeral home out, or vice versa.
+ */
+export function funeralHomeOptOutUrl(email: string): string {
+  const secret = process.env.UNSUBSCRIBE_SECRET ?? "fallback-please-set";
+  const token = crypto
+    .createHmac("sha256", secret)
+    .update(`fd:${email.toLowerCase()}`)
+    .digest("hex")
+    .slice(0, 32);
+  const params = new URLSearchParams({ e: email, t: token });
+  return `${SITE}/funeral-home-opt-out?${params.toString()}`;
+}
+
+export function verifyFuneralHomeOptOutToken(
+  email: string,
+  token: string,
+): boolean {
+  const secret = process.env.UNSUBSCRIBE_SECRET ?? "fallback-please-set";
+  const expected = crypto
+    .createHmac("sha256", secret)
+    .update(`fd:${email.toLowerCase()}`)
+    .digest("hex")
+    .slice(0, 32);
+  if (token.length !== expected.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(expected));
 }
 
 export const ADVOCATE_NAME = "The Honest Funeral Advocate Team";

@@ -53,6 +53,7 @@ export async function POST(req: Request) {
   const { subject, body } = buildSelectionEmail({
     familyLabel: ctx.familyLabel,
     homeName: ctx.homeName,
+    homeEmail: ctx.homeEmail,
     serviceLabel,
     quoteCents: ctx.quoteCents,
     authorizationId: PLACEHOLDER_AUTH_ID,

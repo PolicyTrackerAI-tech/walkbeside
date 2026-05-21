@@ -6,9 +6,11 @@ import {
   ADVOCATE_NAME,
   authorizationIdFor,
   familyLabelFromOutreachBody,
+  funeralHomeOptOutUrl,
   outreachFromAddress,
   outreachReplyTo,
 } from "@/lib/negotiation/email-body";
+import { isEmailDenylisted } from "@/lib/negotiation/denylist";
 
 /**
  * Family sends a message to a funeral home, relayed by Honest Funeral so
@@ -58,13 +60,16 @@ export async function POST(
   if (!outreach || !outreach.home_email) {
     return NextResponse.json({ error: "outreach_unreachable" }, { status: 400 });
   }
+  if (isEmailDenylisted(outreach.home_email)) {
+    return NextResponse.json({ error: "outreach_blocked" }, { status: 400 });
+  }
 
   const familyLabel =
     (outreach.initial_email_body &&
       familyLabelFromOutreachBody(outreach.initial_email_body)) ||
     "the family";
   const authorizationId = authorizationIdFor(negotiationId);
-  const subject = `Re: GPL request on behalf of ${familyLabel} — ref ${authorizationId}`;
+  const subject = `Re: Price list request — ${familyLabel} (ref ${authorizationId})`;
   const body = `Hi,
 
 A pre-meeting note from ${familyLabel}:
@@ -79,7 +84,10 @@ Honest Funeral · honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family attends the arrangement meeting in person and signs all paperwork directly with you.`;
+Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family attends the arrangement meeting in person and signs all paperwork directly with you.
+
+To opt out of future outreach from us, one-click: ${funeralHomeOptOutUrl(outreach.home_email)}
+${process.env.OUTREACH_POSTAL_ADDRESS ?? "Honest Funeral, PO Box pending — Salt Lake City, UT"}`;
 
   // Insert the message row first — RLS allows the family to insert
   // outbound_to_fd on their own negotiation. Capture id for the send call.

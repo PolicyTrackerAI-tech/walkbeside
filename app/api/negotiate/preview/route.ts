@@ -63,6 +63,7 @@ export async function POST(req: Request) {
     authorizationId: PLACEHOLDER_AUTH_ID,
     advocateName: ADVOCATE_NAME,
     timing: ctx.timing,
+    homeEmail: homeEmail || "preview@example.com",
   });
 
   return NextResponse.json({

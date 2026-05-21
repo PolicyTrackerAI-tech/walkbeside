@@ -11,6 +11,7 @@ import {
   outreachFromAddress,
   outreachReplyTo,
 } from "@/lib/negotiation/email-body";
+import { isEmailDenylisted } from "@/lib/negotiation/denylist";
 
 const Body = z.object({
   zip: z.string().min(3).max(10),
@@ -78,11 +79,21 @@ export async function POST(req: Request) {
   const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
   for (const home of homes) {
+    // Belt-and-suspenders: code-level denylist runs before any send,
+    // independent of funeral_homes.active. Survives DB edits.
+    if (isEmailDenylisted(home.email)) {
+      console.warn(
+        `[outreach] skipping denylisted email ${home.email} (home=${home.name})`,
+      );
+      continue;
+    }
+
     const { subject, body } = buildOutreachEmail({
       familyLabel,
       authorizationId,
       advocateName: ADVOCATE_NAME,
       timing: ctx.timing,
+      homeEmail: home.email,
     });
 
     // Kill-switch: when OUTREACH_LIVE is not "true", we record what

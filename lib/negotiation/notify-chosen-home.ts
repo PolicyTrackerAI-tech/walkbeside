@@ -20,6 +20,7 @@ import {
   outreachFromAddress,
   outreachReplyTo,
 } from "./email-body";
+import { isEmailDenylisted } from "./denylist";
 
 export type NotifyReason =
   | "ok"
@@ -27,7 +28,8 @@ export type NotifyReason =
   | "no_fd_email"
   | "no_quote"
   | "missing_negotiation"
-  | "missing_outreach";
+  | "missing_outreach"
+  | "denylisted";
 
 export interface NotifyResult {
   sent: boolean;
@@ -59,6 +61,9 @@ export async function notifyChosenHome(opts: {
   if (!outreach.home_email) return { sent: false, reason: "no_fd_email" };
   if (outreach.quote_cents == null)
     return { sent: false, reason: "no_quote" };
+  if (isEmailDenylisted(outreach.home_email)) {
+    return { sent: false, reason: "denylisted" };
+  }
 
   const { data: firstOutreach } = await admin
     .from("negotiation_outreach")
@@ -78,6 +83,7 @@ export async function notifyChosenHome(opts: {
   const { subject, body } = buildSelectionEmail({
     familyLabel,
     homeName: outreach.home_name,
+    homeEmail: outreach.home_email,
     serviceLabel,
     quoteCents: outreach.quote_cents,
     authorizationId: authorizationIdFor(negotiationId),
