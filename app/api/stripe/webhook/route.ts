@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
 
 export const runtime = "nodejs";
 
@@ -34,6 +35,7 @@ export async function POST(req: Request) {
     const kind = session.metadata?.kind;
     const userId = session.metadata?.userId;
     const negotiationId = session.metadata?.negotiationId;
+    const outreachId = session.metadata?.outreachId;
 
     const admin = createClient(
       PUBLIC.supabaseUrl,
@@ -60,14 +62,30 @@ export async function POST(req: Request) {
       };
       if (kind === "unlock") {
         update.unlocked_at = new Date().toISOString();
+        await admin.from("negotiations").update(update).eq("id", negotiationId);
       } else {
         update.status = "closed";
         update.unlocked_at = new Date().toISOString();
+        // Conditional update — only proceeds if not already closed.
+        // Prevents duplicate FD notifications on Stripe webhook retries.
+        const { data: updated } = await admin
+          .from("negotiations")
+          .update(update)
+          .eq("id", negotiationId)
+          .neq("status", "closed")
+          .select("id");
+        if (updated && updated.length > 0 && outreachId) {
+          const result = await notifyChosenHome({
+            admin,
+            negotiationId,
+            outreachId,
+          });
+          // eslint-disable-next-line no-console
+          console.info(
+            `[webhook] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
+          );
+        }
       }
-      await admin
-        .from("negotiations")
-        .update(update)
-        .eq("id", negotiationId);
     }
   }
 

@@ -67,7 +67,7 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
     n: 5,
     title: "You pick a home, or you pick none.",
     body:
-      "Either way, you contact the chosen home directly. We step aside. No hand-off calls, no sales pressure.",
+      "If you pick one, we help schedule the in-person arrangement meeting and stay on email for any pre-meeting questions or post-meeting disputes. You attend the meeting in person and sign all paperwork directly with the home — we never sign for you, and we don't take a cent from any funeral home.",
   },
   {
     n: 6,

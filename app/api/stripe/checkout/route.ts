@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { stripe, stripeAvailable, calcFeeCents } from "@/lib/stripe";
 import { isPaidUser } from "@/lib/auth-paid";
-import { PUBLIC } from "@/lib/env";
+import { PUBLIC, requireServer } from "@/lib/env";
+import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
 
 /**
  * Create a Stripe Checkout session for the negotiation fee on the chosen home.
@@ -47,13 +49,27 @@ export async function POST(req: Request) {
   // Already paid via the upfront toolkit unlock → close the negotiation
   // immediately at zero additional cost. No second charge, no Stripe round-trip.
   if (await isPaidUser(supabase, user)) {
-    await supabase
+    const { data: updated } = await supabase
       .from("negotiations")
-      .update({
-        status: "closed",
-        fee_cents: 0,
-      })
-      .eq("id", negotiationId);
+      .update({ status: "closed", fee_cents: 0 })
+      .eq("id", negotiationId)
+      .neq("status", "closed")
+      .select("id");
+    if (updated && updated.length > 0) {
+      const admin = createServiceClient(
+        PUBLIC.supabaseUrl,
+        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+      );
+      const result = await notifyChosenHome({
+        admin,
+        negotiationId,
+        outreachId,
+      });
+      // eslint-disable-next-line no-console
+      console.info(
+        `[checkout/paid] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
+      );
+    }
     return NextResponse.redirect(
       new URL(`/negotiate/${negotiationId}/closed?included=1`, req.url),
       { status: 303 },
@@ -62,13 +78,27 @@ export async function POST(req: Request) {
 
   if (!stripeAvailable()) {
     // Stripe not configured — mark closed in dev so the flow stays exercisable.
-    await supabase
+    const { data: updated } = await supabase
       .from("negotiations")
-      .update({
-        status: "closed",
-        fee_cents: fee,
-      })
-      .eq("id", negotiationId);
+      .update({ status: "closed", fee_cents: fee })
+      .eq("id", negotiationId)
+      .neq("status", "closed")
+      .select("id");
+    if (updated && updated.length > 0) {
+      const admin = createServiceClient(
+        PUBLIC.supabaseUrl,
+        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+      );
+      const result = await notifyChosenHome({
+        admin,
+        negotiationId,
+        outreachId,
+      });
+      // eslint-disable-next-line no-console
+      console.info(
+        `[checkout/dryrun] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
+      );
+    }
     return NextResponse.redirect(
       new URL(
         `/negotiate/${negotiationId}/closed?dryrun=1&fee=${fee}`,

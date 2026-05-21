@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { client as anthropic, MODEL, textOf, claudeAvailable } from "@/lib/claude";
 import { sendEmail } from "@/lib/email";
-import {
-  initialEmailSystem,
-  initialEmailUser,
-} from "@/lib/negotiation/prompts";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
 import { findHomesFromDirectory } from "@/lib/negotiation/directory";
-import type { ServiceType } from "@/lib/pricing-data";
+import {
+  ADVOCATE_NAME,
+  buildFamilyLabel,
+  buildOutreachEmail,
+  outreachFromAddress,
+  outreachReplyTo,
+} from "@/lib/negotiation/email-body";
 
 const Body = z.object({
   zip: z.string().min(3).max(10),
@@ -72,54 +73,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: negErr?.message ?? "db" }, { status: 500 });
 
   const authorizationId = `WB-${neg.id.slice(0, 8).toUpperCase()}`;
-  const advocateName = "The Honest Funeral Advocate Team";
-  const familyLabel = ctx.senderLastName
-    ? `the ${ctx.senderLastName} family`
-    : `${ctx.senderFirstName}'s family`;
+  const familyLabel = buildFamilyLabel(ctx.senderFirstName, ctx.senderLastName);
 
   const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
   for (const home of homes) {
-    let body = defaultEmailBody(
-      home.name,
+    const { subject, body } = buildOutreachEmail({
       familyLabel,
       authorizationId,
-      advocateName,
-      ctx.timing,
-    );
-    if (claudeAvailable()) {
-      try {
-        const msg = await anthropic().messages.create({
-          model: MODEL,
-          max_tokens: 700,
-          system: initialEmailSystem(),
-          messages: [
-            {
-              role: "user",
-              content: initialEmailUser(home.name, {
-                zip: ctx.zip,
-                serviceType: ctx.serviceType as ServiceType,
-                senderFirstName: ctx.senderFirstName,
-                senderLastName: ctx.senderLastName,
-                timing: ctx.timing,
-                notes: ctx.notes,
-                extras: ctx.extras,
-                advocateName,
-                authorizationId,
-              }),
-            },
-          ],
-        });
-        body = textOf(msg) || body;
-      } catch {
-        // fall through to default body
-      }
-    }
-    const subject = `GPL request on behalf of ${familyLabel} — ref ${authorizationId}`;
+      advocateName: ADVOCATE_NAME,
+      timing: ctx.timing,
+    });
 
     // Kill-switch: when OUTREACH_LIVE is not "true", we record what
-    // WOULD have been sent (so the user can review the generated body)
-    // but we don't actually email the funeral home. Default = dry-run.
+    // WOULD have been sent but we don't actually email the funeral home.
     // Flip OUTREACH_LIVE=true in Vercel env to start real sends.
     const outreachLive = process.env.OUTREACH_LIVE === "true";
 
@@ -129,13 +96,8 @@ export async function POST(req: Request) {
         to: home.email,
         subject,
         text: body,
-        // Outreach to funeral homes uses a different mailbox than the
-        // family-facing 'hello@' default. Override via OUTREACH_FROM
-        // env var if you want to swap mailboxes without a deploy.
-        from:
-          process.env.OUTREACH_FROM ??
-          "Honest Funeral <arrangements@honestfuneral.co>",
-        replyTo: `advocate+${neg.id}@honestfuneral.co`,
+        from: outreachFromAddress(),
+        replyTo: outreachReplyTo(neg.id),
       });
       sentId = sent.id;
     }
@@ -151,27 +113,4 @@ export async function POST(req: Request) {
   }
 
   return NextResponse.json({ id: neg.id });
-}
-
-function defaultEmailBody(
-  home: string,
-  familyLabel: string,
-  authorizationId: string,
-  advocateName: string,
-  timing: string,
-): string {
-  return `Hello,
-
-I'm writing on behalf of ${familyLabel}, who has engaged Honest Funeral (honestfuneral.co) as a consumer advocate to gather General Price Lists and service quotes from funeral homes in your area before choosing where to arrange services.
-
-Under the FTC Funeral Rule, we are requesting your current itemized General Price List. The family is evaluating arrangements within ${timing} and would appreciate your reply with the GPL and any service-specific quote you can share.
-
-The family will review the responses and contact your firm directly if they select you. You will not need to negotiate through us; we just collect the price information on their behalf.
-
-Thank you for your time.
-
-${advocateName}
-Honest Funeral — Consumer Advocacy for Families
-Authorization reference: ${authorizationId}
-${home}`;
 }

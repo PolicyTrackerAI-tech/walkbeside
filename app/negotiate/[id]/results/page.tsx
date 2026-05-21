@@ -64,8 +64,8 @@ export default async function NegotiationResultsPage({
               {replies.length === 0
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
                 : alreadyPaid
-                  ? "Pick the home you want. Contact info releases right away — no additional charge, it’s included in what you’ve already paid."
-                  : `Pick the home you want. We release contact info and charge a flat ${fmtCents(FLAT_FEE_CENTS)} only when you confirm.`}
+                  ? "Pick the home you want. We’ll notify them and help schedule the arrangement meeting right away — no additional charge, it’s included in what you’ve already paid. You’ll meet with the home in person to make final selections and sign."
+                  : `Pick the home you want. We’ll notify them, help schedule the arrangement meeting, and charge a flat ${fmtCents(FLAT_FEE_CENTS)} only when you confirm. You’ll meet with the home in person to make final selections and sign.`}
             </p>
             {replies.length >= 2 && (
               <div className="mt-3">
@@ -88,8 +88,8 @@ export default async function NegotiationResultsPage({
                 {fmtCents(baseline)}
               </div>
               <p className="text-xs text-ink-muted mt-2">
-                Shown for your reference only. You pay the selected home
-                directly at their quoted price.
+                Shown for your reference only &mdash; this is what you were
+                originally quoted.
               </p>
             </Card>
           )}
