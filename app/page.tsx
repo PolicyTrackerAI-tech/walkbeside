@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   title: "Honest Funeral — quiet help after a loss",
   description:
     "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
+  alternates: { canonical: "/" },
 };
 
 /**

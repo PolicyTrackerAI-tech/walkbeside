@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Our role — Honest Funeral is a consumer advocate, not a funeral home",
   description:
     "Honest Funeral is a consumer advocacy service that helps families gather prices, compare quotes, and prepare for the arrangement meeting. We are not a licensed funeral establishment in any state.",
+  alternates: { canonical: "/our-role" },
 };
 
 export default function OurRolePage() {
