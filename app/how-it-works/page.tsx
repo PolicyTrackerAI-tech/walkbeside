@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
   description:
     "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and the full toolkit. One flat $199 charge unlocks everything; money-back in 14 days.",
+  alternates: { canonical: "/how-it-works" },
 };
 
 async function getSignedIn(): Promise<boolean> {

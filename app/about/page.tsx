@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "About Honest Funeral — built by a licensed funeral director",
   description:
     "Honest Funeral was built by a licensed funeral director and her brother. A consumer advocate, not a funeral home. We take no money from the industry.",
+  alternates: { canonical: "/about" },
 };
 
 // TODO-FD: Sarah, replace with your full name + state once you're

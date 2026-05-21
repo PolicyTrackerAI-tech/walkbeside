@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Let's figure out what kind of service fits.",
   description:
     "A short, no-pressure walkthrough that recommends the type of service that fits your faith, your budget, and what you actually want.",
+  alternates: { canonical: "/decide" },
 };
 
 export default function DecidePage() {
