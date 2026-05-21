@@ -80,7 +80,6 @@ export async function POST(req: Request) {
             negotiationId,
             outreachId,
           });
-          // eslint-disable-next-line no-console
           console.info(
             `[webhook] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
           );

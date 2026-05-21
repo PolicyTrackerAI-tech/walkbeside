@@ -65,7 +65,6 @@ export async function POST(req: Request) {
         negotiationId,
         outreachId,
       });
-      // eslint-disable-next-line no-console
       console.info(
         `[checkout/paid] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
       );
@@ -94,7 +93,6 @@ export async function POST(req: Request) {
         negotiationId,
         outreachId,
       });
-      // eslint-disable-next-line no-console
       console.info(
         `[checkout/dryrun] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
       );
