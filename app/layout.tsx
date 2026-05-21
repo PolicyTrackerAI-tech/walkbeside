@@ -23,20 +23,20 @@ export const metadata: Metadata = {
     template: "%s — Honest Funeral",
   },
   description:
-    "Built by a licensed funeral director. We walk with families through the hardest week, from the first phone call to the last account closed.",
+    "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
   openGraph: {
     type: "website",
     siteName: "Honest Funeral",
     title: "Honest Funeral — quiet help after a loss",
     description:
-      "Built by a licensed funeral director. Fair prices, family advocacy, and the checklist for the next 30 days.",
+      "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
     url: "https://honestfuneral.co",
   },
   twitter: {
     card: "summary_large_image",
     title: "Honest Funeral — quiet help after a loss",
     description:
-      "Built by a licensed funeral director. Fair prices, family advocacy, and the checklist for the next 30 days.",
+      "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
   },
   robots: { index: true, follow: true },
 };

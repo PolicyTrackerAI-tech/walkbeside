@@ -10,7 +10,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "A consumer advocate for families making funeral decisions under pressure. Built by a licensed funeral director. Free fair-price lookup and prep kit; full toolkit (advocacy, 30-day checklist, obituary helper, more) for one $199 charge.",
+    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Free fair-price lookup and prep kit; full toolkit for one $199 charge.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -26,7 +26,7 @@ const ORG_SCHEMA = {
 export const metadata: Metadata = {
   title: "Honest Funeral — quiet help after a loss",
   description:
-    "Built by a licensed funeral director. Free help with the first 72 hours: fair prices, what to decline, and the checklist for the next 30 days.",
+    "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
 };
 
 /**
@@ -82,7 +82,7 @@ export default function HomePage() {
           </p>
 
           <p className="mt-10 text-sm text-ink-muted">
-            Built by a licensed funeral director to protect families like yours.
+            Consumer advocacy for families. We take no money from funeral homes.
           </p>
           <p className="mt-3 text-sm text-ink-soft max-w-md mx-auto">
             <strong className="text-ink">No commissions. No kickbacks. No referral fees.</strong>{" "}
