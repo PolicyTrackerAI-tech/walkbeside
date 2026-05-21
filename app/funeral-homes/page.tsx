@@ -7,7 +7,7 @@ import { HelpFooter } from "@/components/HelpFooter";
 export const metadata: Metadata = {
   title: "Funeral home prices by zip code — what fair pricing actually looks like",
   description:
-    "Honest, regional fair-price ranges for funeral services — direct cremation, traditional burial, and cremation with memorial — adjusted for your area. Built by a licensed funeral director, not a directory or broker.",
+    "Honest, regional fair-price ranges for funeral services — direct cremation, traditional burial, and cremation with memorial — adjusted for your area. Consumer advocacy for families, not a directory or broker.",
 };
 
 /**

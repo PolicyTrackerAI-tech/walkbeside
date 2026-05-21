@@ -37,7 +37,7 @@ export async function generateMetadata({
     : `zip ${zip}`;
   return {
     title: `Funeral home prices in ${locationLabel} — fair-range data`,
-    description: `Honest fair-price ranges for direct cremation, traditional burial, and cremation with memorial in ${locationLabel}. Built by a licensed funeral director. No commissions, no kickbacks.`,
+    description: `Honest fair-price ranges for direct cremation, traditional burial, and cremation with memorial in ${locationLabel}. Consumer advocacy for families — no commissions, no kickbacks from any funeral home.`,
   };
 }
 
