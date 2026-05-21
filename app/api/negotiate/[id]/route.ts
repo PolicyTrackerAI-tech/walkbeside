@@ -27,5 +27,17 @@ export async function GET(
     .eq("negotiation_id", id)
     .order("created_at", { ascending: true });
 
-  return NextResponse.json({ negotiation: neg, outreach: outreach ?? [] });
+  const { data: messages } = await supabase
+    .from("negotiation_messages")
+    .select(
+      "id, outreach_id, direction, from_address, subject, body_text, created_at",
+    )
+    .eq("negotiation_id", id)
+    .order("created_at", { ascending: true });
+
+  return NextResponse.json({
+    negotiation: neg,
+    outreach: outreach ?? [],
+    messages: messages ?? [],
+  });
 }

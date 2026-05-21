@@ -4,15 +4,26 @@ import { useEffect, useState, use } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle, CardEyebrow } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
-import { Input, Label } from "@/components/ui/Field";
+import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { fmtCents } from "@/lib/stripe";
 
 interface Outreach {
   id: string;
   home_name: string;
+  home_email: string | null;
   status: string;
   quote_cents: number | null;
   notes: string | null;
+}
+
+interface Message {
+  id: string;
+  outreach_id: string | null;
+  direction: "inbound_fd" | "outbound_to_fd" | "outbound_to_family";
+  from_address: string | null;
+  subject: string | null;
+  body_text: string | null;
+  created_at: string;
 }
 
 interface NegotiationView {
@@ -34,6 +45,7 @@ export default function NegotiationStatusPage({
   const { id } = use(params);
   const [neg, setNeg] = useState<NegotiationView | null>(null);
   const [outreach, setOutreach] = useState<Outreach[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
@@ -45,6 +57,7 @@ export default function NegotiationStatusPage({
     const d = await r.json();
     setNeg(d.negotiation);
     setOutreach(d.outreach);
+    setMessages(d.messages ?? []);
   }
 
   useEffect(() => {
@@ -156,9 +169,167 @@ export default function NegotiationStatusPage({
               </LinkButton>
             </Card>
           )}
+
+          <MessagesPanel
+            negotiationId={id}
+            outreach={outreach}
+            messages={messages}
+            onSent={refresh}
+          />
         </div>
       </section>
     </main>
+  );
+}
+
+function MessagesPanel({
+  negotiationId,
+  outreach,
+  messages,
+  onSent,
+}: {
+  negotiationId: string;
+  outreach: Outreach[];
+  messages: Message[];
+  onSent: () => void;
+}) {
+  const reachable = outreach.filter((o) => o.home_email);
+  const [chosenOutreachId, setChosenOutreachId] = useState<string>("");
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+
+  // Derive the effective selection at render time so the dropdown stays
+  // valid when the outreach list updates without needing a useEffect.
+  const validIds = new Set(reachable.map((o) => o.id));
+  const effectiveOutreachId =
+    chosenOutreachId && validIds.has(chosenOutreachId)
+      ? chosenOutreachId
+      : (reachable[0]?.id ?? "");
+
+  async function send() {
+    if (!effectiveOutreachId || !text.trim()) return;
+    setBusy(true);
+    setSendError(null);
+    try {
+      const r = await fetch(`/api/negotiate/${negotiationId}/messages`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ outreachId: effectiveOutreachId, text }),
+      });
+      if (!r.ok) {
+        const d = await r.json().catch(() => ({}));
+        setSendError(d?.error ? JSON.stringify(d.error) : `HTTP ${r.status}`);
+        return;
+      }
+      setText("");
+      onSent();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const homeNameById = Object.fromEntries(
+    outreach.map((o) => [o.id, o.home_name] as const),
+  );
+
+  if (reachable.length === 0 && messages.length === 0) return null;
+
+  return (
+    <div>
+      <h2 className="font-serif text-xl text-ink mb-3">Pre-meeting messages</h2>
+      <p className="text-sm text-ink-muted mb-4">
+        Use this for scheduling and questions before the arrangement meeting.
+        Your personal contact info stays private. You&rsquo;ll meet with the
+        home in person to make selections and sign &mdash; that part happens
+        at the funeral home, not here.
+      </p>
+
+      {messages.length > 0 && (
+        <ul className="space-y-3 mb-5">
+          {messages.map((m) => (
+            <MessageBubble
+              key={m.id}
+              message={m}
+              homeName={
+                m.outreach_id
+                  ? (homeNameById[m.outreach_id] ?? "Funeral home")
+                  : "Funeral home"
+              }
+            />
+          ))}
+        </ul>
+      )}
+
+      {reachable.length > 0 && (
+        <Card>
+          <CardEyebrow>Send a message</CardEyebrow>
+          <div className="grid gap-3">
+            <div>
+              <Label htmlFor="msg-home">Send to</Label>
+              <Select
+                id="msg-home"
+                value={effectiveOutreachId}
+                onChange={(e) => setChosenOutreachId(e.target.value)}
+              >
+                {reachable.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.home_name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="msg-text">Message</Label>
+              <Textarea
+                id="msg-text"
+                rows={5}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Scheduling, pre-meeting questions, things they should know. We'll relay it from our team."
+              />
+            </div>
+            {sendError && <p className="text-bad text-sm">{sendError}</p>}
+            <div>
+              <Button onClick={send} disabled={busy || !text.trim()}>
+                {busy ? "Sending…" : "Send via Honest Funeral"}
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+function MessageBubble({
+  message,
+  homeName,
+}: {
+  message: Message;
+  homeName: string;
+}) {
+  const isInbound = message.direction === "inbound_fd";
+  const label = isInbound ? homeName : "You (via Honest Funeral)";
+  const align = isInbound ? "items-start" : "items-end";
+  const bg = isInbound ? "bg-surface-soft" : "bg-primary-soft";
+  const when = new Date(message.created_at).toLocaleString();
+  return (
+    <li className={`flex flex-col ${align}`}>
+      <div className={`max-w-[85%] rounded-2xl border border-border px-4 py-3 ${bg}`}>
+        <div className="text-xs text-ink-muted mb-1">
+          {label} · {when}
+        </div>
+        {message.subject && (
+          <div className="text-sm text-ink font-medium mb-1">
+            {message.subject}
+          </div>
+        )}
+        <pre className="text-sm text-ink whitespace-pre-wrap font-sans">
+          {message.body_text}
+        </pre>
+      </div>
+    </li>
   );
 }
 

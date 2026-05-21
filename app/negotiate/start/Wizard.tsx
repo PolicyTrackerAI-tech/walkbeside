@@ -477,16 +477,23 @@ function NegotiateStartWizard() {
                   </p>
                   <ul className="text-sm text-ink space-y-2 list-disc pl-5 mb-5">
                     <li>
-                      We identify ourselves as your advocate — never as
-                      you.
+                      We identify ourselves as your advocate &mdash; never
+                      as you.
                     </li>
                     <li>
                       We request itemized prices, which is your right under
                       the FTC Funeral Rule.
                     </li>
                     <li>
-                      You make the final pick. You contact the home you
-                      choose.
+                      If you pick a home, we help schedule the in-person
+                      arrangement meeting and relay pre-meeting questions
+                      so your personal contact info stays private.
+                    </li>
+                    <li>
+                      You attend the arrangement meeting in person and sign
+                      all paperwork directly with the home &mdash; Honest
+                      Funeral never signs for you and is not a funeral
+                      establishment.
                     </li>
                     <li>
                       Flat $199 only if you choose a home we presented to
@@ -501,7 +508,9 @@ function NegotiateStartWizard() {
                       className="mt-1 w-5 h-5 accent-[var(--primary-deep)] shrink-0"
                     />
                     <span className="text-sm text-ink leading-relaxed">
-                      I authorize Honest Funeral on the terms above.
+                      I am the legal next of kin or have written authority
+                      from the next of kin, and I authorize Honest Funeral
+                      on the terms above.
                     </span>
                   </label>
                   {error && (

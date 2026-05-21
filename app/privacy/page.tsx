@@ -76,12 +76,23 @@ export default function PrivacyPage() {
             4. The funeral-home outreach &mdash; what funeral homes see
           </h2>
           <p>
-            When you authorize our the funeral-home outreach feature, the emails we
-            send to funeral homes identify Honest Funeral as the sender and name
-            the family we represent (e.g., &ldquo;the Smith family&rdquo; or
-            first name plus city). Funeral homes will see this identifying
-            information about your family. Your email address is not shared
-            with them unless you contact them directly after selecting one.
+            When you authorize our funeral-home outreach feature, the emails
+            we send to funeral homes identify Honest Funeral as the sender
+            and name the family we represent (e.g., &ldquo;the Smith
+            family&rdquo; or first name plus city). Funeral homes will see
+            this identifying information about your family.
+          </p>
+          <p>
+            <strong className="text-ink">
+              Your email address and direct contact information are not
+              shared with funeral homes through our service.
+            </strong>{" "}
+            Pre-meeting questions and scheduling between you and a selected
+            funeral home are relayed through our in-app messaging thread &mdash;
+            only the contents you send (and the home&rsquo;s replies) are
+            exchanged. When you attend the in-person arrangement meeting,
+            the funeral home will collect your contact information directly
+            from you for their records.
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
@@ -129,11 +140,12 @@ export default function PrivacyPage() {
             8. Third-party services
           </h2>
           <p>
-            We use Supabase (hosting, database, authentication), Stripe
-            (payments), Resend (email delivery), and Anthropic
-            (AI-generated text). These providers process limited data on
-            our behalf under standard data processing terms. We do not
-            send your data to advertising networks.
+            We use Supabase (database, authentication, file storage), Stripe
+            (payments), Resend (outbound email delivery), Postmark (inbound
+            email parsing for funeral-home replies), Vercel (web hosting),
+            and Anthropic (AI-generated text). These providers process
+            limited data on our behalf under standard data processing terms.
+            We do not send your data to advertising networks.
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">

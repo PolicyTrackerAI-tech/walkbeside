@@ -55,17 +55,43 @@ export default function TermsPage() {
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
-            3. The the funeral-home outreach service
+            3. The funeral-home outreach and messaging service
           </h2>
           <p>
-            If you authorize our the funeral-home outreach feature, Honest Funeral will
-            contact funeral homes on your behalf and identify itself as your
-            authorized advocate. We do not impersonate you. We collect
+            If you authorize our funeral-home outreach feature, Honest Funeral
+            will contact funeral homes on your behalf and identify itself as
+            your authorized advocate. We do not impersonate you. We collect
             General Price Lists and quotes from homes that respond and
-            present them to you for your decision. You make the final
-            selection and contact the selected home directly. Honest Funeral does
-            not control how funeral homes respond, whether they respond, or
-            whether they honor any quote they provide.
+            present them to you for your decision.
+          </p>
+          <p>
+            After you select a home, Honest Funeral may help schedule the
+            arrangement meeting and relay pre-meeting questions between you
+            and the home through an in-app messaging thread, so your
+            personal contact information stays private until you meet with
+            the home in person.
+          </p>
+          <p>
+            <strong className="text-ink">
+              You attend the arrangement meeting in person, make all funeral
+              arrangements and selections, and sign all paperwork and
+              authorizations directly with the funeral home you select.
+            </strong>{" "}
+            Honest Funeral does not make funeral arrangements on your behalf,
+            does not sign any contracts or authorizations, does not take
+            possession of remains, does not file death certificates or
+            disposition permits, and does not otherwise act as a funeral
+            home, funeral director, or funeral establishment under the laws
+            of any state. The contractual and service relationship for
+            funeral goods and services is between you and the funeral home
+            you select. Authorization for disposition (burial, cremation,
+            embalming, body preparation) is given by the legal next of kin
+            in writing at the funeral home; Honest Funeral cannot provide
+            that authorization.
+          </p>
+          <p>
+            Honest Funeral does not control how funeral homes respond, whether
+            they respond, or whether they honor any quote they provide.
           </p>
           <p>
             The advocate fee is a flat $199, charged via Stripe only when you
@@ -104,7 +130,7 @@ export default function TermsPage() {
           <p>
             You agree not to misuse the Service, including by submitting
             false information, attempting to circumvent security, or using
-            the the funeral-home outreach feature for any purpose other than
+            the funeral-home outreach feature for any purpose other than
             arranging services for a specific deceased person (or
             preplanning for yourself or an identified individual). You are
             responsible for activity under your account. Report misuse,
