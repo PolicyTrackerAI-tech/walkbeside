@@ -1006,3 +1006,30 @@ export function denominationsFor(
   if (key === "christian-protestant") return PROTESTANT_DENOMINATIONS;
   return null;
 }
+
+/**
+ * Resolve to the most specific faith profile given a top-level key and an
+ * optional denomination value.
+ *
+ * - If a sub-profile exists for the denomination (e.g. "jewish" + "reform" →
+ *   `jewish-reform`), return that sub-profile.
+ * - Otherwise (no denomination given, "not-sure", denomination without a
+ *   sub-profile like Protestant ones, or unrecognized value) return the
+ *   top-level profile.
+ *
+ * Used by the /decide engine so the recommendation reflects the family's
+ * denomination, not just their broad tradition.
+ */
+export function resolveFaithProfile(
+  faith: FaithKey,
+  denomination?: string | null,
+): FaithTradition {
+  if (denomination) {
+    const opts = denominationsFor(faith);
+    const hit = opts?.find((o) => o.value === denomination);
+    if (hit?.subProfileKey) {
+      return getFaith(hit.subProfileKey);
+    }
+  }
+  return getFaith(faith);
+}

@@ -6,8 +6,8 @@ import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
 import {
   denominationsFor,
+  resolveFaithProfile,
   type FaithKey,
-  getFaith,
 } from "@/lib/faith-traditions";
 import { SERVICE_LABELS, SERVICE_TOTALS, fmtRange } from "@/lib/pricing-data";
 import {
@@ -100,14 +100,25 @@ export function DecideFlow() {
     () =>
       recommend({
         faith,
+        faithDenomination: faithDenomination || null,
         bodyAtService,
         dispositionPreference,
         costPriority,
       }),
-    [faith, bodyAtService, dispositionPreference, costPriority],
+    [
+      faith,
+      faithDenomination,
+      bodyAtService,
+      dispositionPreference,
+      costPriority,
+    ],
   );
 
-  const faithProfile = getFaith(faith);
+  // Resolved profile reflects the denomination — so the "what to expect" card
+  // shows Reform-specific notes, not generic Jewish notes. The /faith/[key]
+  // link below points at the parent because sub-profiles don't have pages yet.
+  const faithProfile = resolveFaithProfile(faith, faithDenomination || null);
+  const faithGuideKey = faithProfile.parentId ?? faithProfile.key;
   const totals = SERVICE_TOTALS.find((t) => t.type === recommendation.serviceType);
 
   return (
@@ -295,7 +306,7 @@ export function DecideFlow() {
                   <dd className="text-ink">{embalmingLabel(faithProfile.embalmingNorm)}</dd>
                 </div>
               </dl>
-              <LinkButton href={`/faith/${faithProfile.key}`} variant="secondary">
+              <LinkButton href={`/faith/${faithGuideKey}`} variant="secondary">
                 Full guide for {faithProfile.label} →
               </LinkButton>
             </Card>

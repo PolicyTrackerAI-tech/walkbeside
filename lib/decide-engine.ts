@@ -9,7 +9,7 @@
  */
 
 import type { ServiceType } from "./pricing-data";
-import { getFaith, type FaithKey } from "./faith-traditions";
+import { resolveFaithProfile, type FaithKey } from "./faith-traditions";
 
 export type CostPriority = "lowest" | "balanced" | "tradition";
 export type BodyAtService = "yes" | "no" | "unsure";
@@ -17,6 +17,13 @@ export type DispositionPreference = "burial" | "cremation" | "donation" | "no-pr
 
 export interface DecideInputs {
   faith: FaithKey;
+  /**
+   * Optional denomination value (e.g. "reform", "orthodox", "sunni", "baptist").
+   * When set and a sub-profile exists, the engine reads from the sub-profile
+   * instead of the top-level faith — so Reform Jewish doesn't get the same
+   * recommendation as Orthodox Jewish.
+   */
+  faithDenomination?: string | null;
   bodyAtService: BodyAtService;
   costPriority: CostPriority;
   dispositionPreference: DispositionPreference;
@@ -33,7 +40,7 @@ export interface Recommendation {
 }
 
 export function recommend(inputs: DecideInputs): Recommendation {
-  const faith = getFaith(inputs.faith);
+  const faith = resolveFaithProfile(inputs.faith, inputs.faithDenomination);
   const reasons: string[] = [];
 
   // Body donation overrides everything else when explicitly chosen.
