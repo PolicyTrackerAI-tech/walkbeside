@@ -10,7 +10,7 @@ import { FEATURES } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Planning a funeral in advance",
   description:
-    "A few hours of research now saves your family thousands and hours of decisions at the worst moment of their lives. Free cheat sheet from a licensed funeral director.",
+    "A few hours of research now saves your family thousands and hours of decisions at the worst moment of their lives. A short, practical cheat sheet — no account needed.",
 };
 
 async function getSignedIn(): Promise<boolean> {
@@ -68,7 +68,7 @@ export default async function PlanningPage() {
             <p className="text-ink-soft mb-5">
               One page. The nine things to ask any funeral home. The five
               upsells to decline. The FTC rights most families don&rsquo;t
-              know they have. Written by a licensed funeral director. Free.
+              know they have.
             </p>
             <CheatSheetForm />
           </Card>

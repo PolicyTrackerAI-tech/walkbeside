@@ -110,7 +110,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Are you affiliated with any funeral homes?",
     plain:
-      "No. Honest Funeral is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. We were built by a licensed funeral director and her brother, a software engineer — the incentives point at the family, not the home.",
+      "No. Honest Funeral is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. The incentives point at the family, not the home.",
     a: (
       <>
         <p>
@@ -118,10 +118,9 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           We don&rsquo;t take commissions or kickbacks from funeral homes.
         </p>
         <p>
-          We were built by a licensed funeral director who spent years
-          watching families overpay &mdash; and her brother, a software
-          engineer. The whole point of this site is that the incentives point
-          at the family, not the home.
+          The whole point of this site is that the incentives point
+          at the family, not the home. We take a flat fee from the
+          family and no money from the industry.
         </p>
       </>
     ),
@@ -310,19 +309,19 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What if I\u2019m not sure I need your help?",
     plain:
-      "Then don't pay us anything. Run the fair-price lookup for free. Read the 72-hour guidance for free. Use the obituary helper for free. Families routinely overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the free tools tell you the quote you've been given is already in range, you're done. Nothing else to do.",
+      "Then don't pay us anything. Use the public guidance and the fair-price lookup to rate the quote you've been given against local data. Families routinely overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the lookup tells you the quote you've been given is already in range, you're done. Nothing else to do.",
     a: (
       <>
         <p>
-          Then don&rsquo;t pay us anything. Run the fair-price lookup for
-          free. Read the 72-hour guidance for free. Use the obituary helper
-          for free.
+          Then don&rsquo;t pay us anything. Use the public guidance and
+          the fair-price lookup to rate the quote you&rsquo;ve been given
+          against local data.
         </p>
         <p>
           Families routinely overpay by{" "}
           <strong>$2,000 to $5,000</strong> on the funeral arrangement alone
           &mdash; usually because they don&rsquo;t know the fair range. If
-          the free tools tell you the quote you&rsquo;ve been given is
+          the lookup tells you the quote you&rsquo;ve been given is
           already in range, you&rsquo;re done. Nothing else to do.
         </p>
       </>

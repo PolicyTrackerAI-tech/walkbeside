@@ -38,63 +38,63 @@ export const HOME_FUNERAL_RULES: HomeFuneralStateRule[] = [
     name: "Connecticut",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must file the death certificate and supervise final disposition.",
+      "A funeral home must file the death certificate and supervise final disposition.",
   },
   {
     abbr: "IL",
     name: "Illinois",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must file the death certificate.",
+      "A funeral home must file the death certificate.",
   },
   {
     abbr: "IN",
     name: "Indiana",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must file the death certificate and obtain the burial-transit permit.",
+      "A funeral home must file the death certificate and obtain the burial-transit permit.",
   },
   {
     abbr: "IA",
     name: "Iowa",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must file the death certificate and obtain the disposition permit.",
+      "A funeral home must file the death certificate and obtain the disposition permit.",
   },
   {
     abbr: "LA",
     name: "Louisiana",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must handle the body after death and file paperwork.",
+      "A funeral home must handle the body after death and file paperwork.",
   },
   {
     abbr: "MI",
     name: "Michigan",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must file the death certificate.",
+      "A funeral home must file the death certificate.",
   },
   {
     abbr: "NE",
     name: "Nebraska",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must file the death certificate.",
+      "A funeral home must file the death certificate.",
   },
   {
     abbr: "NJ",
     name: "New Jersey",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must arrange final disposition (the family can still hold a vigil at home).",
+      "A funeral home must arrange final disposition (the family can still hold a vigil at home).",
   },
   {
     abbr: "NY",
     name: "New York",
     status: "fd-involvement-required",
     requirement:
-      "A licensed funeral director must file the death certificate and arrange transport.",
+      "A funeral home must file the death certificate and arrange transport.",
   },
 
   // States that allow family-led handling end-to-end

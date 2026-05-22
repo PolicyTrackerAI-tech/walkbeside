@@ -5,16 +5,11 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "About Honest Funeral — built by a licensed funeral director",
+  title: "About Honest Funeral",
   description:
-    "Honest Funeral was built by a licensed funeral director and her brother. A consumer advocate, not a funeral home. We take no money from the industry.",
+    "Honest Funeral is a consumer advocate built by two siblings. Not a funeral home. We take no money from the industry — only a flat fee from the family.",
   alternates: { canonical: "/about" },
 };
-
-// TODO-FD: Sarah, replace with your full name + state once you're
-// comfortable. Currently we just say "a licensed funeral director."
-// TODO-margaret: when press lands (NYT, ProPublica, podcast), add an
-// "as featured in" card here.
 
 export default function AboutPage() {
   return (
@@ -28,33 +23,16 @@ export default function AboutPage() {
               About
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              A funeral director and her brother built this.
+              Two siblings built this.
             </h1>
             <p className="text-lg text-ink-soft">
-              Every feature on Honest Funeral comes from one specific observation: the
-              average family walks into the worst day of their life with no
-              information, and the industry is built around that. This is the
-              tool she wishes every family walked in with.
+              Every feature on Honest Funeral comes from one specific
+              observation: the average family walks into the worst day of
+              their life with no information, and the industry is built
+              around that. This is the tool we wish every family walked
+              in with.
             </p>
           </div>
-
-          <Card>
-            <div className="text-xs uppercase tracking-wider text-primary-deep font-medium mb-2">
-              The funeral director
-            </div>
-            <CardTitle>Sarah &mdash; licensed funeral director</CardTitle>
-            <p className="text-ink-soft mb-3">
-              Sarah is a licensed funeral director who has spent her
-              career in arrangement meetings. She writes every piece of
-              content on this site, validates every price in the
-              database against the General Price Lists she sees in the
-              field, and tests every feature against one question
-              before anything ships:{" "}
-              <em>
-                would this have helped the last family I sat across from?
-              </em>
-            </p>
-          </Card>
 
           <Card>
             <div className="text-xs uppercase tracking-wider text-primary-deep font-medium mb-2">
@@ -63,10 +41,9 @@ export default function AboutPage() {
             <CardTitle>Ryan &mdash; founder, product, engineering</CardTitle>
             <p className="text-ink-soft">
               Ryan builds the product and handles everything on the
-              technical side. Honest Funeral is the project of his
-              sister&rsquo;s years of domain knowledge, and his job is
-              to make sure that knowledge ends up in front of families
-              at the exact moment they need it.
+              technical side. His job is to make sure good information
+              ends up in front of families at the exact moment they
+              need it.
             </p>
           </Card>
 
@@ -131,7 +108,7 @@ export default function AboutPage() {
             >
               hello@honestfuneral.co
             </a>
-            . Ryan or Sarah reads every one.
+            . We read every one.
           </p>
 
           <p className="text-sm text-ink-soft">

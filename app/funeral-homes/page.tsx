@@ -86,11 +86,9 @@ export default function FuneralHomesIndexPage() {
             <p className="text-ink-soft mt-3">
               Most &ldquo;funeral home finders&rdquo; on the internet
               are ad surfaces — funeral homes pay to appear. We
-              don&rsquo;t take a cent from any funeral home, ever. We
-              were built by a licensed funeral director and her brother,
-              and the only money we make on your case comes from the
-              family directly. That&rsquo;s how we stay accountable to
-              you.
+              don&rsquo;t take a cent from any funeral home, ever. The
+              only money we make on your case comes from the family
+              directly. That&rsquo;s how we stay accountable to you.
             </p>
           </Card>
 

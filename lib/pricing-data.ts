@@ -1,6 +1,6 @@
 /**
  * Funeral pricing database — US national fair-price benchmarks.
- * Source: master_brief.docx Section 4 (validated by Sarah, licensed funeral director cofounder).
+ * Source: master_brief.docx Section 4 (internally validated against current GPLs).
  *
  * V1 ships national averages. Per-city adjustments layer on later via Supabase.
  */
