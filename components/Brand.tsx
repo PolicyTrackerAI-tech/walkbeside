@@ -142,6 +142,9 @@ export function Footer() {
           <Link href="/our-role" className="hover:text-ink-soft">
             Our role
           </Link>
+          <Link href="/for-funeral-homes" className="hover:text-ink-soft">
+            For funeral homes
+          </Link>
           <Link href="/obituary" className="hover:text-ink-soft">
             Obituary helper
           </Link>

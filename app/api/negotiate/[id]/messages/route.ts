@@ -84,7 +84,7 @@ Honest Funeral · honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family attends the arrangement meeting in person and signs all paperwork directly with you.
+Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family attends the arrangement meeting in person and signs all paperwork directly with you. More about us: https://honestfuneral.co/for-funeral-homes
 
 To opt out of future outreach from us, one-click: ${funeralHomeOptOutUrl(outreach.home_email)}
 ${process.env.OUTREACH_POSTAL_ADDRESS ?? "Honest Funeral, PO Box pending — Salt Lake City, UT"}`;

@@ -63,7 +63,7 @@ honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. We help families gather pricing and prepare for the arrangement meeting; the family makes all arrangements directly with the funeral home they select.
+Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. We help families gather pricing and prepare for the arrangement meeting; the family makes all arrangements directly with the funeral home they select. More about us: ${SITE}/for-funeral-homes
 
 To opt out of future outreach requests from us, one-click: ${funeralHomeOptOutUrl(homeEmail)}
 ${postalAddressLine()}`;
@@ -106,7 +106,7 @@ honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family makes all funeral arrangements and signs all paperwork directly with you.
+Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family makes all funeral arrangements and signs all paperwork directly with you. More about us: ${SITE}/for-funeral-homes
 
 To opt out of future outreach from us, one-click: ${funeralHomeOptOutUrl(homeEmail)}
 ${postalAddressLine()}`;
@@ -133,10 +133,12 @@ export function outreachFromAddress(): string {
 }
 
 export function outreachReplyTo(negotiationId: string): string {
-  // reply.honestfuneral.co subdomain MX points at Postmark Inbound, which
-  // webhooks /api/inbound/email when a funeral home replies. See migration
-  // 2026-05-21-coordinator-messages.sql + app/api/inbound/email/route.ts.
-  return `advocate+${negotiationId}@reply.honestfuneral.co`;
+  // Apex honestfuneral.co MX points at Postmark Inbound, which webhooks
+  // /api/inbound/email on plus-addressed mail. Postmark forwards
+  // non-plus-addressed inbound (arrangements@, hello@) to Ryan's Gmail
+  // via separate routing rules in the Postmark dashboard.
+  // See app/api/inbound/email/route.ts.
+  return `advocate+${negotiationId}@honestfuneral.co`;
 }
 
 export function authorizationIdFor(negotiationId: string): string {
