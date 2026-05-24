@@ -133,12 +133,12 @@ export function outreachFromAddress(): string {
 }
 
 export function outreachReplyTo(negotiationId: string): string {
-  // Apex honestfuneral.co MX points at Postmark Inbound, which webhooks
-  // /api/inbound/email on plus-addressed mail. Postmark forwards
-  // non-plus-addressed inbound (arrangements@, hello@) to Ryan's Gmail
-  // via separate routing rules in the Postmark dashboard.
+  // reply.honestfuneral.co subdomain MX points at Postmark Inbound, which
+  // webhooks /api/inbound/email on plus-addressed mail. The apex domain
+  // (honestfuneral.co) handles user-facing mailboxes via Google Workspace —
+  // those two systems don't conflict because they have different MX records.
   // See app/api/inbound/email/route.ts.
-  return `advocate+${negotiationId}@honestfuneral.co`;
+  return `advocate+${negotiationId}@reply.honestfuneral.co`;
 }
 
 export function authorizationIdFor(negotiationId: string): string {
