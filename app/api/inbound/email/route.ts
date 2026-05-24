@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { notifyFamilyOfReply } from "@/lib/negotiation/notify-family-of-reply";
 
 export const runtime = "nodejs";
 
@@ -130,5 +131,30 @@ export async function POST(req: Request) {
   console.info(
     `[inbound] stored msg neg=${negotiationId} from=${fromAddress} outreach=${outreachId ?? "unmatched"}`,
   );
-  return NextResponse.json({ accepted: true, outreach_matched: !!outreachId });
+
+  // Best-effort family notification — failure here doesn't fail the webhook
+  // since the message is already stored and will surface on /status next refresh.
+  let fromHomeName = "A funeral home";
+  if (outreachId) {
+    const { data: oRow } = await admin
+      .from("negotiation_outreach")
+      .select("home_name")
+      .eq("id", outreachId)
+      .single();
+    if (oRow?.home_name) fromHomeName = oRow.home_name;
+  }
+  const notify = await notifyFamilyOfReply({
+    admin,
+    negotiationId,
+    fromHomeName,
+  });
+  console.info(
+    `[inbound] family notify neg=${negotiationId} reason=${notify.reason} sent=${notify.sent}`,
+  );
+
+  return NextResponse.json({
+    accepted: true,
+    outreach_matched: !!outreachId,
+    family_notified: notify.sent,
+  });
 }
