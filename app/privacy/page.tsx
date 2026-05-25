@@ -177,10 +177,10 @@ export default function PrivacyPage() {
             </a>
             . For misuse of the Service or security reports,{" "}
             <a
-              href="mailto:abuse@honestfuneral.co"
+              href="mailto:safety@honestfuneral.co"
               className="text-primary-deep underline-offset-2 hover:underline"
             >
-              abuse@honestfuneral.co
+              safety@honestfuneral.co
             </a>
             .
           </p>

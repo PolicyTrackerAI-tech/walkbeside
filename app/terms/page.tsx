@@ -136,10 +136,10 @@ export default function TermsPage() {
             responsible for activity under your account. Report misuse,
             harassment, or security concerns to{" "}
             <a
-              href="mailto:abuse@honestfuneral.co"
+              href="mailto:safety@honestfuneral.co"
               className="text-primary-deep underline-offset-2 hover:underline"
             >
-              abuse@honestfuneral.co
+              safety@honestfuneral.co
             </a>
             .
           </p>
