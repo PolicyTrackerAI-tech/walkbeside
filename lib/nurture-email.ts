@@ -11,6 +11,7 @@
  */
 
 import crypto from "node:crypto";
+import { postalAddressLine } from "@/lib/postal-address";
 
 const SITE = "https://honestfuneral.co";
 
@@ -145,11 +146,12 @@ export function verifyUnsubscribeToken(email: string, token: string): boolean {
 function brandFooter(email: string): string {
   return `<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0 16px 0;" />
   <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 12px; color: #9ca3af; margin: 0 0 6px 0;">Honest Funeral — quiet help after a loss.</p>
-  <p style="font-size: 11px; color: #9ca3af; margin: 0;">Not interested in these check-ins? <a href="${unsubscribeUrl(email)}" style="color: #9ca3af; text-decoration: underline;">One-click unsubscribe</a>.</p>`;
+  <p style="font-size: 11px; color: #9ca3af; margin: 0 0 6px 0;">Not interested in these check-ins? <a href="${unsubscribeUrl(email)}" style="color: #9ca3af; text-decoration: underline;">One-click unsubscribe</a>.</p>
+  <p style="font-size: 11px; color: #9ca3af; margin: 0;">${postalAddressLine()}</p>`;
 }
 
 function brandFooterText(email: string): string {
-  return `\nHonest Funeral — quiet help after a loss.\n\nNot interested in these check-ins? One click to unsubscribe: ${unsubscribeUrl(email)}\n`;
+  return `\nHonest Funeral — quiet help after a loss.\n\nNot interested in these check-ins? One click to unsubscribe: ${unsubscribeUrl(email)}\n\n${postalAddressLine()}\n`;
 }
 
 export function buildNurtureEmail(

@@ -11,6 +11,8 @@
  *  - Tone: calm friend, no marketing fluff, no urgency.
  */
 
+import { postalAddressLine } from "@/lib/postal-address";
+
 const SITE = "https://honestfuneral.co";
 
 interface SourceInfo {
@@ -89,7 +91,8 @@ export function buildWelcomeEmail(source: string): {
     <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 28px 0 0 0;">It'll be here whenever you need it. We'll send one calm email a month with new resources we've built. Never marketing, never shared.</p>
     <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 12px 0 0 0;">If this wasn't you, ignore this email and we'll remove the address.</p>
     <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0 16px 0;" />
-    <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 12px; color: #9ca3af; margin: 0;">Honest Funeral — quiet help after a loss.</p>
+    <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 12px; color: #9ca3af; margin: 0 0 6px 0;">Honest Funeral — quiet help after a loss.</p>
+    <p style="font-size: 11px; color: #9ca3af; margin: 0;">${postalAddressLine()}</p>
   </div>
 </div>`;
 
@@ -104,6 +107,8 @@ It'll be here whenever you need it. We'll send one calm email a month with new r
 If this wasn't you, ignore this email and we'll remove the address.
 
 Honest Funeral — quiet help after a loss.
+
+${postalAddressLine()}
 `;
 
   return { subject, html, text };

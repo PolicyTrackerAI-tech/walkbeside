@@ -24,7 +24,7 @@ export default function TermsPage() {
 
           <p>
             These terms govern your use of Honest Funeral (the &ldquo;Service&rdquo;),
-            operated by Honest Funeral Inc. (&ldquo;we,&rdquo; &ldquo;us&rdquo;). By
+            operated by Honest Funeral, LLC (&ldquo;we,&rdquo; &ldquo;us&rdquo;). By
             using the Service you agree to these terms. If you do not agree,
             do not use the Service.
           </p>
