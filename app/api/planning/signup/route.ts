@@ -48,20 +48,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Fire-and-forget welcome email. Don't block the response on send
-  // success/failure; the user's primary signal is the form result.
-  // Failures log but don't break the UX (the address is in the DB
-  // either way and a follow-up can be sent manually).
+  // Await the welcome send — it must finish before we return. On Vercel the
+  // serverless function is frozen the instant the response is sent, so a
+  // fire-and-forget send has its in-flight HTTP request aborted
+  // ("Unable to fetch data. The request could not be resolved.") and the
+  // email silently never goes out. Awaiting keeps the function alive until
+  // Resend responds. A send failure still must not break signup (the address
+  // is saved regardless), so we swallow and log it.
   if (FEATURES.email()) {
     const { subject, html, text } = buildWelcomeEmail(source);
-    sendEmail({ to: email, subject, html, text }).catch((err) => {
+    try {
+      await sendEmail({ to: email, subject, html, text });
+    } catch (err) {
       // eslint-disable-next-line no-console
       console.error("[planning-signup] welcome email failed", {
         email,
         source,
         message: err instanceof Error ? err.message : String(err),
       });
-    });
+    }
   }
 
   return NextResponse.json({ ok: true, stored: true });
