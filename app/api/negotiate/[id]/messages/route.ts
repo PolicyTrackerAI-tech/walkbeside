@@ -11,6 +11,7 @@ import {
   outreachReplyTo,
 } from "@/lib/negotiation/email-body";
 import { isEmailDenylisted } from "@/lib/negotiation/denylist";
+import { postalAddressLine } from "@/lib/postal-address";
 
 /**
  * Family sends a message to a funeral home, relayed by Honest Funeral so
@@ -87,7 +88,7 @@ Authorization reference: ${authorizationId}
 Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family attends the arrangement meeting in person and signs all paperwork directly with you. More about us: https://honestfuneral.co/for-funeral-homes
 
 To opt out of future outreach from us, one-click: ${funeralHomeOptOutUrl(outreach.home_email)}
-${process.env.OUTREACH_POSTAL_ADDRESS ?? "Honest Funeral, PO Box pending — Salt Lake City, UT"}`;
+${postalAddressLine()}`;
 
   // Insert the message row first — RLS allows the family to insert
   // outbound_to_fd on their own negotiation. Capture id for the send call.

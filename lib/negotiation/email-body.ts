@@ -5,22 +5,9 @@
  */
 
 import crypto from "node:crypto";
+import { postalAddressLine } from "@/lib/postal-address";
 
 const SITE = "https://honestfuneral.co";
-
-/**
- * CAN-SPAM requires a "valid physical postal address" in every commercial
- * email. We render this line in every outbound footer alongside the
- * one-click opt-out URL. Set OUTREACH_POSTAL_ADDRESS in Vercel to a real
- * mailing address (PO Box, virtual mailbox, or street address). The
- * default below is a placeholder and is NOT CAN-SPAM compliant.
- */
-function postalAddressLine(): string {
-  return (
-    process.env.OUTREACH_POSTAL_ADDRESS ??
-    "${postalAddressLine()}"
-  );
-}
 
 export interface OutreachEmailInput {
   familyLabel: string;

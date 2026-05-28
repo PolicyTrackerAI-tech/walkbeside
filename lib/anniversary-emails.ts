@@ -10,6 +10,8 @@
  * us keeping that promise.
  */
 
+import { postalAddressLine } from "@/lib/postal-address";
+
 export type Milestone = "1mo" | "6mo" | "1yr";
 
 export const MILESTONE_DAYS: Record<Milestone, number> = {
@@ -49,7 +51,9 @@ We're not building toward anything more from you. Your $199 covered everything. 
 If you'd rather not hear from us at the 6-month and 1-year marks, ${unsubscribeLink(unsubscribeUrl)}
 
 Take care,
-The Honest Funeral team`,
+The Honest Funeral team
+
+${postalAddressLine()}`,
     };
   }
 
@@ -73,7 +77,9 @@ A few specific things at this stage that families often miss:
 If you'd rather not hear from us at the 1-year mark, ${unsubscribeLink(unsubscribeUrl)}
 
 Take care,
-The Honest Funeral team`,
+The Honest Funeral team
+
+${postalAddressLine()}`,
     };
   }
 
@@ -99,7 +105,9 @@ If something comes up — even years from now — reply to this email and a pers
 Take care,
 The Honest Funeral team
 
-P.S. ${unsubscribeLink(unsubscribeUrl)}`,
+P.S. ${unsubscribeLink(unsubscribeUrl)}
+
+${postalAddressLine()}`,
   };
 }
 
