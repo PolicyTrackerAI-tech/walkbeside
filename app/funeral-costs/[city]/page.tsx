@@ -8,7 +8,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
-import { getCity, listCitySlugs } from "@/lib/city-pages";
+import { getCity, listCitySlugs, CITIES } from "@/lib/city-pages";
 import { regionForZip } from "@/lib/zip-regions";
 import { SERVICE_TOTALS, SERVICE_LABELS } from "@/lib/pricing-data";
 import { listStateSlugs } from "@/lib/probate-by-state";
@@ -59,6 +59,11 @@ export default async function CityFuneralCostsPage({
   const metroLabel = region?.metro ?? city.name;
   const hasStateGuide =
     city.stateSlug && listStateSlugs().includes(city.stateSlug);
+
+  // Same-state metros — internal linking across the funeral-costs cluster.
+  const sameStateCities = CITIES.filter(
+    (c) => c.state === city.state && c.slug !== city.slug,
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
   // Friendly multiplier framing
   let multiplierDescription = "in line with national averages";
@@ -248,6 +253,35 @@ export default async function CityFuneralCostsPage({
                 — the full library, by topic.
               </li>
             </ul>
+          </Card>
+
+          {/* Nearby metros — internal linking across the funeral-costs cluster */}
+          <Card>
+            <CardEyebrow>
+              {sameStateCities.length > 0
+                ? `Other ${city.state} metros`
+                : "More cities"}
+            </CardEyebrow>
+            <CardTitle>Compare funeral costs in other metros.</CardTitle>
+            {sameStateCities.length > 0 && (
+              <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-ink-soft">
+                {sameStateCities.map((c) => (
+                  <li key={c.slug}>
+                    <Link
+                      href={`/funeral-costs/${c.slug}`}
+                      className="text-primary-deep underline-offset-2 hover:underline"
+                    >
+                      {c.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p className="mt-4 text-sm">
+              <Link href="/funeral-costs" className="text-primary-deep underline">
+                See fair-price ranges for all {CITIES.length} cities →
+              </Link>
+            </p>
           </Card>
 
           {/* Brand close */}

@@ -9,9 +9,8 @@ import { ArticleSchema } from "@/components/seo/ArticleSchema";
 import { CITIES } from "@/lib/city-pages";
 
 export const metadata: Metadata = {
-  title: "Funeral costs by city — fair-price ranges for 28 US metros",
-  description:
-    "What funerals actually cost by city: direct cremation, traditional burial, green burial. Regional fair-price ranges based on national pricing data adjusted for local cost-of-living.",
+  title: `Funeral costs by city — fair-price ranges for ${CITIES.length} US metros`,
+  description: `What funerals actually cost by city across ${CITIES.length} US metros: direct cremation, traditional burial, green burial. Regional fair-price ranges based on national pricing data adjusted for local cost-of-living.`,
   openGraph: {
     images: [ogImage("Funeral costs by city", "Local pricing")],
   },
@@ -26,7 +25,7 @@ export default function FuneralCostsIndexPage() {
       <ArticleSchema
         slug="funeral-costs"
         title="Funeral costs by city"
-        description="Regional fair-price ranges for 28 major US metros — what each service type actually costs in your area."
+        description={`Regional fair-price ranges for ${CITIES.length} major US metros — what each service type actually costs in your area.`}
         eyebrow="Local pricing"
       />
 
@@ -61,7 +60,7 @@ export default function FuneralCostsIndexPage() {
           <Card>
             <CardEyebrow>{CITIES.length} cities</CardEyebrow>
             <CardTitle>Pick yours.</CardTitle>
-            <ul className="mt-4 grid sm:grid-cols-2 gap-x-6 gap-y-2 text-ink-soft">
+            <ul className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-2 text-ink-soft">
               {sorted.map((c) => (
                 <li key={c.slug}>
                   <Link
