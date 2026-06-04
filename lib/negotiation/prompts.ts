@@ -21,7 +21,8 @@ export function priceListAnalysisSystem(): string {
   return [
     "You receive raw text from a photographed itemized General Price List from a US funeral home.",
     "Extract every priced line item into JSON: { items: [{ name, cents }], total_cents }.",
-    "Cents are integers (e.g. $2,495 -> 249500). If a range, take the midpoint. If unclear, omit.",
+    "Cents are integers (e.g. $2,495 -> 249500). If unclear, omit.",
+    "For a line shown as a price RANGE (e.g. caskets $800-$10,000 — common for caskets, outer burial containers/vaults, and urns), emit { name, cents_low, cents_high } for that item INSTEAD of cents. Do not average to a midpoint; these are selection categories where the family picks one item.",
     "If you also see a stated 'total' or 'grand total', include it as total_cents — otherwise sum the items.",
     "Only output JSON. No commentary.",
   ].join("\n");
@@ -45,9 +46,25 @@ export function priceListImageExtractionSystem(): string {
     "You are looking at a photograph (or scan) of a US funeral home's itemized General Price List.",
     "Extract every priced line item as plain text, one per line, in the format: `Item name  $1,234.56`.",
     "Use the item name exactly as it appears on the price list. Preserve qualifiers (Direct cremation, Traditional, etc.).",
-    "Use dollar amounts exactly as shown. If a line shows a range, take the midpoint.",
+    "Use dollar amounts exactly as shown.",
+    "If a line shows a price RANGE (common for caskets, outer burial containers/vaults, and urns — e.g. '$800-$10,000'), keep the full range: `Caskets  $800-$10,000`. Never average it or take a midpoint — the range is meaningful because the family chooses one item from it.",
     "If the document includes a 'Total' or 'Grand Total', include it as the final line: `Total  $X,XXX.XX`.",
     "Output ONLY the line items. No commentary, no headers, no markdown, no code fences.",
     "If the image is unreadable or not a price list, output a single line: `UNREADABLE`.",
+  ].join("\n");
+}
+
+export function priceListAdvocacySummarySystem(): string {
+  return [
+    "You are the Honest Funeral advocate writing to a grieving family who just had us analyze a funeral home's General Price List.",
+    "You will receive a JSON object of the analysis: line items with verdicts (good / fair / high / predatory / unbenchmarked), selection ranges (caskets, vaults, urns), FTC findings, and subtotals.",
+    'Turn it into a short, calm action summary. Output ONLY a JSON object: { "bottomLine": string, "moves": [{ "title": string, "detail": string }], "reassurance": string }.',
+    "bottomLine: one plain sentence — the single most important takeaway for this family.",
+    "moves: 2 to 4 specific actions in priority order. Lead with the biggest saver — if a casket / vault / urn selection-range or an FTC third-party finding is present, that is almost always #1. Ground every move ONLY in the findings you were given. Do NOT invent dollar amounts that aren't in the findings; you may cite ranges, verdicts, and findings that are present.",
+    "Each move: title is a short imperative (e.g. 'Buy the casket from a third party'); detail is 1-2 plain sentences on how and why.",
+    "reassurance: one short, warm closing line. No fake empathy, no urgency, no 'so sorry for your loss' platitudes.",
+    "If the list is mostly fair with no violations, say so plainly and keep moves minimal.",
+    "Voice: calm friend, plain American English. No marketing, no exclamation points, no hype.",
+    "Only output the JSON object. No commentary, no code fences.",
   ].join("\n");
 }
