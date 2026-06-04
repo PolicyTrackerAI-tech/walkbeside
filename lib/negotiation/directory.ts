@@ -1,7 +1,13 @@
 /**
  * Server-only funeral home directory lookup. Reads the sister-curated
  * `funeral_homes` table; falls back to placeholder `findHomes()` when
- * Supabase is unavailable or the table is empty.
+ * Supabase is unavailable or no home qualifies.
+ *
+ * A home only qualifies for outreach when it is BOTH `active` (good standing)
+ * AND `vetted` (a human reviewed it in /admin/vetting) AND has an email. The
+ * `vetted` gate means an unreviewed import can never be contacted, even with
+ * OUTREACH_LIVE on. Until homes are approved, this returns the placeholder
+ * fallback — which is harmless under the OUTREACH_LIVE kill switch.
  *
  * Imports `@/lib/supabase/server` (which pulls in `next/headers`) — must
  * never be imported from a Client Component.
@@ -25,6 +31,7 @@ export async function findHomesFromDirectory(
     .from("funeral_homes")
     .select("name, email, zip")
     .eq("active", true)
+    .eq("vetted", true)
     .not("email", "is", null);
 
   if (error || !data || data.length === 0) return findHomes(zip, n);
