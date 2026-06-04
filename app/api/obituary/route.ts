@@ -7,14 +7,22 @@ import { FEATURES } from "@/lib/env";
 
 const Body = z.object({
   inputs: z.record(z.string(), z.string().max(1000)),
+  length: z.enum(["short", "standard", "full"]).default("standard"),
 });
+
+const WORD_TARGET: Record<"short" | "standard" | "full", number> = {
+  short: 75,
+  standard: 150,
+  full: 260,
+};
 
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json());
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
-  const { inputs } = parsed.data;
+  const { inputs, length } = parsed.data;
+  const words = WORD_TARGET[length];
 
   let draft = "";
   if (claudeAvailable()) {
@@ -22,6 +30,12 @@ export async function POST(req: Request) {
       .filter(([, v]) => v && v.trim())
       .map(([k, v]) => `${k}: ${v.trim()}`)
       .join("\n");
+    const shape =
+      length === "short"
+        ? "A tight funeral-notice version: just the essential facts and one line of who they were."
+        : length === "full"
+          ? "Room for a story or two and a real sense of their personality."
+          : "A warm, standard-length obituary.";
     const msg = await anthropic().messages.create({
       model: MODEL,
       max_tokens: 800,
@@ -29,7 +43,7 @@ export async function POST(req: Request) {
       messages: [
         {
           role: "user",
-          content: `Write the obituary using these facts. Plain text, single paragraph, 120-180 words.\n\n${lines}`,
+          content: `Write the obituary using these facts. Plain text, single paragraph, about ${words} words. ${shape}\n\n${lines}`,
         },
       ],
     });

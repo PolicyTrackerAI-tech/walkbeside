@@ -7,8 +7,17 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
 import { OBITUARY_PROMPTS } from "@/lib/content";
+import { PrintHeader, PrintFooter } from "@/components/print/PrintHeader";
 
 const OBIT_STORAGE_KEY = "honestfuneral.obituary.draft.v1";
+
+type ObitLength = "short" | "standard" | "full";
+
+const LENGTHS: { value: ObitLength; label: string; hint: string }[] = [
+  { value: "short", label: "Short", hint: "~75 words · newspaper notice" },
+  { value: "standard", label: "Standard", hint: "~150 words" },
+  { value: "full", label: "Full", hint: "~260 words · room for stories" },
+];
 
 /** Screen 12 — Obituary helper. Question by question. */
 export function Obituary() {
@@ -18,6 +27,7 @@ export function Obituary() {
   const [draft, setDraft] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [length, setLength] = useState<ObitLength>("standard");
   const hydratedRef = useRef(false);
 
   // Hydrate persisted answers on mount.
@@ -70,7 +80,7 @@ export function Obituary() {
       const r = await fetch("/api/obituary", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ inputs: answers }),
+        body: JSON.stringify({ inputs: answers, length }),
       });
       if (!r.ok) {
         let msg =
@@ -176,7 +186,13 @@ export function Obituary() {
                       We&rsquo;ll write a warm first version you can edit. Anything
                       we get wrong, you can fix.
                     </p>
-                    <Button onClick={generate} disabled={busy} size="lg">
+                    <LengthPicker value={length} onChange={setLength} />
+                    <Button
+                      onClick={generate}
+                      disabled={busy}
+                      size="lg"
+                      className="mt-5"
+                    >
                       {busy ? "Writing…" : "Write the draft"}
                     </Button>
                     {error && (
@@ -198,61 +214,142 @@ export function Obituary() {
 
           {draft && (
             <>
-              <Card tone="primary">
-                <CardEyebrow>Your draft</CardEyebrow>
-                <div className="mb-4 rounded-xl border border-primary/40 bg-white px-4 py-3 text-sm text-ink-soft">
-                  This is a draft. Please verify every name, date, and
-                  relationship before publishing. We don&rsquo;t guess at
-                  facts &mdash; if something is missing from what you told
-                  us, you&rsquo;ll see{" "}
-                  <span className="font-mono text-ink">[TO VERIFY]</span>{" "}
-                  in the draft. Fill those in before sharing.
-                </div>
-                <Textarea
-                  rows={10}
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  className="bg-white"
-                />
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <Button onClick={() => navigator.clipboard.writeText(draft)}>
-                    Copy
-                  </Button>
+              {/* Screen editing UI */}
+              <div className="print:hidden space-y-6">
+                <Card tone="primary">
+                  <CardEyebrow>Your draft</CardEyebrow>
+                  <div className="mb-4 rounded-xl border border-primary/40 bg-white px-4 py-3 text-sm text-ink-soft">
+                    This is a draft. Please verify every name, date, and
+                    relationship before publishing. We don&rsquo;t guess at
+                    facts &mdash; if something is missing from what you told
+                    us, you&rsquo;ll see{" "}
+                    <span className="font-mono text-ink">[TO VERIFY]</span>{" "}
+                    in the draft. Fill those in before sharing.
+                  </div>
+                  <Textarea
+                    rows={10}
+                    value={draft}
+                    onChange={(e) => setDraft(e.target.value)}
+                    className="bg-white"
+                  />
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <Button onClick={() => navigator.clipboard.writeText(draft)}>
+                      Copy
+                    </Button>
+                    <Button variant="secondary" onClick={() => window.print()}>
+                      Print
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        setDraft(null);
+                        setStep(0);
+                      }}
+                    >
+                      Start over
+                    </Button>
+                  </div>
+                </Card>
+
+                <Card>
+                  <CardEyebrow>Want it shorter or longer?</CardEyebrow>
+                  <p className="text-ink-soft text-sm mb-4">
+                    Newspapers charge per word &mdash; a shorter notice can save
+                    real money. Pick a length and we&rsquo;ll rewrite from your
+                    same answers.
+                  </p>
+                  <LengthPicker value={length} onChange={setLength} />
                   <Button
                     variant="secondary"
-                    onClick={() => {
-                      setDraft(null);
-                      setStep(0);
-                    }}
+                    className="mt-4"
+                    disabled={busy}
+                    onClick={generate}
                   >
-                    Start over
+                    {busy ? "Writing…" : "Rewrite at this length"}
                   </Button>
-                </div>
-              </Card>
+                  {error && (
+                    <div className="mt-4 text-sm text-bad bg-bad-soft border border-bad/30 rounded-xl px-4 py-3">
+                      {error}
+                    </div>
+                  )}
+                </Card>
 
-              <Card tone="soft">
-                <CardTitle>Where to publish — and what it costs</CardTitle>
-                <ul className="space-y-2 text-[15px] text-ink">
-                  <li>
-                    <strong>Online (free)</strong> — funeral home website,
-                    Legacy.com, social media. Most families share these now.
-                  </li>
-                  <li>
-                    <strong>Local newspaper ($150–$500+)</strong> — charged per
-                    word. Keep it short. Ask the paper for the &ldquo;funeral
-                    notice&rdquo; rate, which is cheaper than the obituary
-                    rate.
-                  </li>
-                  <li>
-                    <strong>Family newsletter / church bulletin (free)</strong>{" "}
-                    — often missed; reaches the people who matter most.
-                  </li>
-                </ul>
-              </Card>
+                <Card tone="soft">
+                  <CardTitle>Where to publish — and what it costs</CardTitle>
+                  <ul className="space-y-2 text-[15px] text-ink">
+                    <li>
+                      <strong>Online (free)</strong> — funeral home website,
+                      Legacy.com, social media. Most families share these now.
+                    </li>
+                    <li>
+                      <strong>Local newspaper ($150–$500+)</strong> — charged per
+                      word. Keep it short. Ask the paper for the &ldquo;funeral
+                      notice&rdquo; rate, which is cheaper than the obituary
+                      rate.
+                    </li>
+                    <li>
+                      <strong>Family newsletter / church bulletin (free)</strong>{" "}
+                      — often missed; reaches the people who matter most.
+                    </li>
+                  </ul>
+                </Card>
+              </div>
+
+              {/* Print-only clean rendering — a document the family can hand
+                  to a newspaper or read at a service, no UI chrome. */}
+              <div className="print-only">
+                <PrintHeader title="Obituary draft" />
+                <div
+                  className="font-serif"
+                  style={{
+                    fontSize: "12pt",
+                    lineHeight: 1.7,
+                    whiteSpace: "pre-wrap",
+                    color: "#111",
+                  }}
+                >
+                  {draft}
+                </div>
+                <PrintFooter />
+              </div>
             </>
           )}
         </div>
       </section>
     </main>
+  );
+}
+
+function LengthPicker({
+  value,
+  onChange,
+}: {
+  value: ObitLength;
+  onChange: (v: ObitLength) => void;
+}) {
+  return (
+    <div>
+      <div className="text-sm font-medium text-ink mb-1.5">Length</div>
+      <div className="grid grid-cols-3 gap-2 mt-1">
+        {LENGTHS.map((l) => {
+          const active = value === l.value;
+          return (
+            <button
+              key={l.value}
+              type="button"
+              onClick={() => onChange(l.value)}
+              className={`rounded-xl border px-3 py-2 text-left transition-colors ${
+                active
+                  ? "border-primary bg-primary-soft"
+                  : "border-border hover:border-primary/40"
+              }`}
+            >
+              <div className="font-medium text-ink text-sm">{l.label}</div>
+              <div className="text-xs text-ink-muted mt-0.5">{l.hint}</div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
