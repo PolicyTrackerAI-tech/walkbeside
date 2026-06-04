@@ -355,6 +355,27 @@ export const RULES: Rule[] = [
   // Informational
   // -------------------------------------------------------------------------
   {
+    id: "third-party-merchandise-rights",
+    detect(ctx) {
+      const item = findItem(ctx, (i) =>
+        itemMentions(i, [...CASKET_KEYWORDS, ...VAULT_KEYWORDS, "urn"]),
+      );
+      if (!item) return null;
+      return {
+        ruleId: "third-party-merchandise-rights",
+        severity: "info",
+        title:
+          "You can buy the casket, vault, or urn from a third party — usually the biggest saving",
+        description:
+          "Under the FTC Funeral Rule, you may buy a casket, outer burial container (vault), or urn from any outside seller — and the funeral home must accept it without charging a handling fee, and can't require you to be there when it's delivered. Funeral-home caskets are commonly marked up 300-500%; comparable caskets from Costco, Amazon, or a dedicated online seller routinely cost 50-80% less. For most families this is the single largest saving available.",
+        ftcReference: "16 CFR §453.4(b)(1)",
+        evidence: item.name,
+        whatToSay:
+          "I plan to purchase the casket/urn from an outside seller and have it delivered to you. Per the FTC Funeral Rule you can't charge a handling fee or require me to be present — please confirm in writing.",
+      };
+    },
+  },
+  {
     id: "no-gpl-attestation",
     detect(ctx) {
       // The Funeral Rule requires the GPL to identify itself as a General

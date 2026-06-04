@@ -14,6 +14,9 @@ interface AnalyzerItem {
   classification?: "good" | "fair" | "high" | "predatory";
   fairCentsLow?: number;
   fairCentsHigh?: number;
+  isRange?: boolean;
+  centsLow?: number;
+  centsHigh?: number;
 }
 
 type Severity = "violation" | "suspicious" | "info";
@@ -28,12 +31,22 @@ interface Violation {
   whatToSay?: string;
 }
 
+interface AdvocacyMove {
+  title: string;
+  detail: string;
+}
+
 interface AnalyzerResult {
   items: AnalyzerItem[];
   totalQuoted: number;
   totalFairMid: number;
   potentialSavings: number;
   violations?: Violation[];
+  summary?: {
+    bottomLine: string;
+    moves: AdvocacyMove[];
+    reassurance: string;
+  };
 }
 
 const TONES: Record<string, { label: string; tone: string }> = {
@@ -268,6 +281,39 @@ export function Analyzer() {
 
           {result && (
             <>
+              {result.summary && (
+                <Card tone="primary">
+                  <CardEyebrow>What we&rsquo;d do</CardEyebrow>
+                  <p className="text-ink text-lg leading-relaxed mt-1">
+                    {result.summary.bottomLine}
+                  </p>
+                  {result.summary.moves.length > 0 && (
+                    <ol className="mt-5 space-y-4">
+                      {result.summary.moves.map((m, i) => (
+                        <li key={i} className="flex gap-3">
+                          <span className="flex-shrink-0 font-serif text-lg leading-7 text-primary-deep">
+                            {i + 1}.
+                          </span>
+                          <div>
+                            <div className="font-medium text-ink">{m.title}</div>
+                            {m.detail && (
+                              <p className="text-ink-soft text-sm mt-0.5 leading-relaxed">
+                                {m.detail}
+                              </p>
+                            )}
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  {result.summary.reassurance && (
+                    <p className="text-ink-soft text-sm mt-5">
+                      {result.summary.reassurance}
+                    </p>
+                  )}
+                </Card>
+              )}
+
               <Card tone={result.potentialSavings > 0 ? "warn" : "good"}>
                 <CardEyebrow>Summary</CardEyebrow>
                 <div className="grid sm:grid-cols-3 gap-4">
@@ -306,6 +352,25 @@ export function Analyzer() {
                   </div>
                   <ul>
                     {result.items.map((it, i) => {
+                      if (it.isRange && it.centsLow != null && it.centsHigh != null) {
+                        return (
+                          <li
+                            key={i}
+                            className="grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0"
+                          >
+                            <div className="col-span-6 text-ink">{it.name}</div>
+                            <div className="col-span-2 text-right text-ink">
+                              {`${fmtUSD(it.centsLow / 100)}–${fmtUSD(it.centsHigh / 100)}`}
+                            </div>
+                            <div className="col-span-2 text-right text-ink-soft">
+                              buy 3rd-party
+                            </div>
+                            <div className="col-span-2 text-right font-medium text-ink-muted">
+                              Selection
+                            </div>
+                          </li>
+                        );
+                      }
                       const tone = it.classification
                         ? TONES[it.classification]
                         : { label: "—", tone: "text-ink-muted" };
@@ -362,12 +427,6 @@ function Stat({
     </div>
   );
 }
-
-const SEVERITY_TONE: Record<Severity, "bad" | "warn" | "soft"> = {
-  violation: "bad",
-  suspicious: "warn",
-  info: "soft",
-};
 
 const SEVERITY_LABEL: Record<Severity, string> = {
   violation: "FTC violation",
