@@ -1,20 +1,20 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { client as anthropic, MODEL, textOf, claudeAvailable } from "@/lib/claude";
+import { eulogySystem } from "@/lib/negotiation/prompts";
 
 const Body = z.object({
   inputs: z.record(z.string(), z.string().max(1500)),
   durationMinutes: z.number().min(1).max(15).default(5),
+  tone: z.enum(["reflective", "warm", "solemn"]).default("reflective"),
 });
-
-const SYSTEM = `You write eulogies that sound like a person speaking at a service, not a printed obituary. The voice is warm, specific, and unhurried — the tone of someone telling their family who this person was, in plain language. You use the speaker's actual words and stories where given. You avoid clichés ("they touched everyone they met"), generic religious language unless the family asked for it, and false superlatives. You include 1-2 specific moments or quotes when the user provides them. You write at a 7th-grade reading level. You never make up facts. If a fact is unclear, you write a placeholder in [brackets].`;
 
 export async function POST(req: Request) {
   const parsed = Body.safeParse(await req.json());
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
-  const { inputs, durationMinutes } = parsed.data;
+  const { inputs, durationMinutes, tone } = parsed.data;
 
   let draft = "";
   if (claudeAvailable()) {
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     const msg = await anthropic().messages.create({
       model: MODEL,
       max_tokens: 1200,
-      system: SYSTEM,
+      system: eulogySystem(tone),
       messages: [
         {
           role: "user",

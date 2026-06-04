@@ -70,6 +70,9 @@ export function Eulogy() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [duration, setDuration] = useState(5);
+  const [tone, setTone] = useState<"reflective" | "warm" | "solemn">(
+    "reflective",
+  );
   const [busy, setBusy] = useState(false);
   const [draft, setDraft] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -80,9 +83,12 @@ export function Eulogy() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
+        /* eslint-disable react-hooks/set-state-in-effect */
         if (parsed?.answers) setAnswers(parsed.answers);
         if (parsed?.duration) setDuration(parsed.duration);
+        if (parsed?.tone) setTone(parsed.tone);
         if (parsed?.draft) setDraft(parsed.draft);
+        /* eslint-enable react-hooks/set-state-in-effect */
       }
     } catch {
       // ignore
@@ -95,12 +101,12 @@ export function Eulogy() {
     try {
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ answers, duration, draft }),
+        JSON.stringify({ answers, duration, tone, draft }),
       );
     } catch {
       // ignore
     }
-  }, [answers, duration, draft]);
+  }, [answers, duration, tone, draft]);
 
   const total = PROMPTS.length;
   const current = step < total ? PROMPTS[step] : null;
@@ -113,7 +119,7 @@ export function Eulogy() {
       const r = await fetch("/api/eulogy", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ inputs: answers, durationMinutes: duration }),
+        body: JSON.stringify({ inputs: answers, durationMinutes: duration, tone }),
       });
       if (!r.ok) throw new Error("Drafting failed. Try again in 30 seconds.");
       const data = await r.json();
@@ -220,6 +226,12 @@ export function Eulogy() {
                   )
                 }
               />
+
+              <div className="mt-5">
+                <div className="text-sm font-medium text-ink mb-1.5">Tone</div>
+                <TonePicker value={tone} onChange={setTone} />
+              </div>
+
               {error && (
                 <p className="mt-3 text-sm text-bad">{error}</p>
               )}
@@ -254,11 +266,17 @@ export function Eulogy() {
                     onChange={(e) => setDraft(e.target.value)}
                     className="font-serif text-base"
                   />
+                  <div className="mt-5">
+                    <div className="text-sm font-medium text-ink mb-1.5">
+                      Try a different tone, then re-draft
+                    </div>
+                    <TonePicker value={tone} onChange={setTone} />
+                  </div>
                   <div className="mt-4 flex flex-wrap gap-3">
-                    <Button onClick={() => window.print()}>Print</Button>
                     <Button variant="secondary" onClick={generate} disabled={busy}>
-                      {busy ? "Drafting…" : "Draft again with same answers"}
+                      {busy ? "Drafting…" : "Draft again"}
                     </Button>
+                    <Button onClick={() => window.print()}>Print</Button>
                     <Button variant="ghost" onClick={reset}>
                       Start over
                     </Button>
@@ -292,5 +310,46 @@ export function Eulogy() {
         </div>
       </section>
     </main>
+  );
+}
+
+const EULOGY_TONES: {
+  value: "reflective" | "warm" | "solemn";
+  label: string;
+  hint: string;
+}[] = [
+  { value: "reflective", label: "Reflective", hint: "honest, tender" },
+  { value: "warm", label: "Warm", hint: "fond, a little light" },
+  { value: "solemn", label: "Solemn", hint: "quiet, reverent" },
+];
+
+function TonePicker({
+  value,
+  onChange,
+}: {
+  value: "reflective" | "warm" | "solemn";
+  onChange: (v: "reflective" | "warm" | "solemn") => void;
+}) {
+  return (
+    <div className="grid grid-cols-3 gap-2 mt-1">
+      {EULOGY_TONES.map((t) => {
+        const active = value === t.value;
+        return (
+          <button
+            key={t.value}
+            type="button"
+            onClick={() => onChange(t.value)}
+            className={`rounded-xl border px-3 py-2 text-left transition-colors ${
+              active
+                ? "border-primary bg-primary-soft"
+                : "border-border hover:border-primary/40"
+            }`}
+          >
+            <div className="font-medium text-ink text-sm">{t.label}</div>
+            <div className="text-xs text-ink-muted mt-0.5">{t.hint}</div>
+          </button>
+        );
+      })}
+    </div>
   );
 }

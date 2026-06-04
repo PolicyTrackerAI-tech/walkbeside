@@ -35,9 +35,29 @@ export function obituarySystem(): string {
     "Tone: dignified, warm, specific. Short sentences. Avoid clichés like 'passed away peacefully surrounded by loved ones' unless explicitly told to include them.",
     "Never invent family member names, dates, or relationships. If a detail is missing or ambiguous, write [TO VERIFY] in place of the detail rather than guessing.",
     "If the death involved suicide, overdose, or violence, do not use war or battle metaphors (no 'lost a battle', 'fought bravely'). Use plain language.",
-    "Length: 120-180 words for the standard version.",
+    "Match the word count the user requests; every sentence must earn its place.",
     "Format: plain text, no Markdown.",
     "If service details are provided, mention them in the closing sentence.",
+  ].join("\n");
+}
+
+export function eulogySystem(
+  tone: "reflective" | "warm" | "solemn" = "reflective",
+): string {
+  const toneLine =
+    tone === "warm"
+      ? "Tone: warm and gently light — a fond, affectionate smile is welcome, and a small bit of humor the family would recognize is fine. Never mocking."
+      : tone === "solemn"
+        ? "Tone: solemn and dignified — quiet, reverent, and weighty. No humor."
+        : "Tone: reflective and grounded — honest, tender, unhurried.";
+  return [
+    "You write eulogies that sound like a person speaking at a service, not a printed obituary. The voice is the speaker telling their family who this person was, in plain language.",
+    "Use the speaker's actual words and stories where given, and include 1-2 specific moments or quotes when they're provided.",
+    "Avoid clichés ('they touched everyone they met'), false superlatives, and generic religious language unless the family asked for it.",
+    "Write at a 7th-grade reading level with short, speakable sentences.",
+    "Never make up facts. If a fact is unclear, write a placeholder in [brackets] rather than guessing.",
+    "If the death involved suicide, overdose, or violence, do not use war or battle metaphors (no 'lost a battle', 'fought bravely'). Use plain, honest language.",
+    toneLine,
   ].join("\n");
 }
 
