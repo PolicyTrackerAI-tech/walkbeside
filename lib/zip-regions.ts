@@ -925,6 +925,93 @@ export const ZIP_REGIONS: Record<string, ZipRegion> = {
   "997": { multiplier: 1.15, metro: "Fairbanks", state: "AK" },
   "998": { multiplier: 1.30, metro: "Juneau", state: "AK" },
   "999": { multiplier: 1.40, metro: "Ketchikan", state: "AK" },
+
+  // ─────────────────────────────────────────────────────────────
+  // COVERAGE COMPLETION — previously-missing assigned prefixes.
+  // Three entire states (ND, SD, MT), Vermont, and the US territories
+  // were absent, so their zips fell back to the coarse 1-digit bucket.
+  // Added at metro granularity, same 0.75–1.50 best-fit scale.
+  // (Unassigned 000–005 and military APO/FPO 090–098 / 962–966 are
+  // intentionally omitted — no residents, no COLA to estimate.)
+  // ─────────────────────────────────────────────────────────────
+
+  // Puerto Rico + US Virgin Islands
+  "006": { multiplier: 0.85, metro: "Puerto Rico", state: "PR" },
+  "007": { multiplier: 0.80, metro: "Puerto Rico", state: "PR" },
+  "008": { multiplier: 1.10, metro: "US Virgin Islands", state: "VI" },
+  "009": { multiplier: 0.80, metro: "Puerto Rico", state: "PR" },
+
+  // Vermont (050–059)
+  "050": { multiplier: 0.95, metro: "White River Junction", state: "VT" },
+  "051": { multiplier: 0.90, metro: "Vermont", state: "VT" },
+  "052": { multiplier: 0.90, metro: "Bennington area", state: "VT" },
+  "053": { multiplier: 0.90, metro: "Brattleboro", state: "VT" },
+  "054": { multiplier: 1.00, metro: "Burlington", state: "VT" },
+  "056": { multiplier: 0.90, metro: "Montpelier", state: "VT" },
+  "057": { multiplier: 0.90, metro: "Rutland", state: "VT" },
+  "058": { multiplier: 0.90, metro: "St. Johnsbury area", state: "VT" },
+  "059": { multiplier: 0.90, metro: "Newport, VT", state: "VT" },
+
+  // Massachusetts gap (Worcester / Fitchburg)
+  "016": { multiplier: 1.05, metro: "Worcester/Fitchburg", state: "MA" },
+
+  // West Virginia gap
+  "269": { multiplier: 0.80, metro: "Lewisburg, WV", state: "WV" },
+
+  // Florida Gulf-coast gaps
+  "341": { multiplier: 1.00, metro: "Naples/Fort Myers", state: "FL" },
+  "342": { multiplier: 1.00, metro: "Sarasota/Bradenton", state: "FL" },
+  "344": { multiplier: 0.85, metro: "Gainesville area", state: "FL" },
+  "346": { multiplier: 0.95, metro: "Tampa area", state: "FL" },
+  "347": { multiplier: 0.95, metro: "Orlando area", state: "FL" },
+  "349": { multiplier: 1.00, metro: "West Palm Beach area", state: "FL" },
+
+  // Iowa gaps (Dubuque / Cedar Rapids / Waterloo)
+  "521": { multiplier: 0.85, metro: "Dubuque", state: "IA" },
+  "522": { multiplier: 0.85, metro: "Cedar Rapids area", state: "IA" },
+  "523": { multiplier: 0.85, metro: "Cedar Rapids", state: "IA" },
+  "524": { multiplier: 0.85, metro: "Iowa", state: "IA" },
+  "525": { multiplier: 0.85, metro: "Waterloo", state: "IA" },
+  "526": { multiplier: 0.85, metro: "Waterloo area", state: "IA" },
+  "527": { multiplier: 0.85, metro: "Cedar Rapids area", state: "IA" },
+  "528": { multiplier: 0.85, metro: "Cedar Rapids", state: "IA" },
+
+  // Wisconsin gaps
+  "533": { multiplier: 0.95, metro: "Milwaukee area", state: "WI" },
+  "536": { multiplier: 0.90, metro: "Madison area", state: "WI" },
+
+  // South Dakota (570–577) — entire state was missing
+  "570": { multiplier: 0.85, metro: "Sioux Falls", state: "SD" },
+  "571": { multiplier: 0.80, metro: "South Dakota", state: "SD" },
+  "572": { multiplier: 0.80, metro: "South Dakota", state: "SD" },
+  "573": { multiplier: 0.80, metro: "Mitchell, SD", state: "SD" },
+  "574": { multiplier: 0.80, metro: "Aberdeen, SD", state: "SD" },
+  "575": { multiplier: 0.80, metro: "Pierre, SD", state: "SD" },
+  "576": { multiplier: 0.80, metro: "South Dakota", state: "SD" },
+  "577": { multiplier: 0.85, metro: "Rapid City", state: "SD" },
+
+  // North Dakota (580–588) — entire state was missing
+  "580": { multiplier: 0.85, metro: "Fargo", state: "ND" },
+  "581": { multiplier: 0.85, metro: "Fargo area", state: "ND" },
+  "582": { multiplier: 0.85, metro: "Grand Forks", state: "ND" },
+  "583": { multiplier: 0.85, metro: "Grand Forks area", state: "ND" },
+  "584": { multiplier: 0.85, metro: "Devils Lake, ND", state: "ND" },
+  "585": { multiplier: 0.85, metro: "Bismarck", state: "ND" },
+  "586": { multiplier: 0.90, metro: "Dickinson, ND", state: "ND" },
+  "587": { multiplier: 0.90, metro: "Minot", state: "ND" },
+  "588": { multiplier: 0.95, metro: "Williston (Bakken)", state: "ND" },
+
+  // Montana (590–599) — entire state was missing
+  "590": { multiplier: 0.90, metro: "Billings", state: "MT" },
+  "591": { multiplier: 0.90, metro: "Billings area", state: "MT" },
+  "592": { multiplier: 0.85, metro: "Wolf Point, MT", state: "MT" },
+  "593": { multiplier: 0.85, metro: "Miles City, MT", state: "MT" },
+  "594": { multiplier: 0.90, metro: "Great Falls", state: "MT" },
+  "595": { multiplier: 0.85, metro: "Havre, MT", state: "MT" },
+  "596": { multiplier: 0.95, metro: "Helena", state: "MT" },
+  "597": { multiplier: 0.90, metro: "Butte", state: "MT" },
+  "598": { multiplier: 0.95, metro: "Missoula", state: "MT" },
+  "599": { multiplier: 1.00, metro: "Kalispell/Flathead", state: "MT" },
 };
 
 /**
