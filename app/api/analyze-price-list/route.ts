@@ -6,7 +6,12 @@ import {
   priceListAnalysisSystem,
   priceListAdvocacySummarySystem,
 } from "@/lib/negotiation/prompts";
-import { LINE_ITEMS, classifyPrice, adjustedRange } from "@/lib/pricing-data";
+import {
+  LINE_ITEMS,
+  classifyAgainst,
+  adjustedRange,
+  regionMultiplier,
+} from "@/lib/pricing-data";
 import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES } from "@/lib/env";
 
@@ -93,12 +98,17 @@ export async function POST(req: Request) {
     const cents = raw.cents ?? 0;
     const matched = matchLineItem(raw.name);
     if (!matched) return { name: raw.name, cents };
+    // Classify against the SAME zip-adjusted thresholds we display, including
+    // an adjusted predatory cutoff — otherwise the verdict can contradict the
+    // shown range (e.g. "$300, fair range $143–$285, verdict: Fair").
+    const m = regionMultiplier(zip ?? "");
     const [lo, hi] = adjustedRange(matched.fairLow, matched.fairHigh, zip);
+    const predatory = Math.round(matched.predatoryAt * m);
     return {
       name: raw.name,
       cents,
       matchedItemId: matched.id,
-      classification: classifyPrice(matched, cents / 100),
+      classification: classifyAgainst(cents / 100, lo, hi, predatory),
       fairCentsLow: lo * 100,
       fairCentsHigh: hi * 100,
     };

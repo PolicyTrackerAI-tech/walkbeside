@@ -50,7 +50,7 @@ interface AnalyzerResult {
 }
 
 const TONES: Record<string, { label: string; tone: string }> = {
-  good: { label: "Fair", tone: "text-good" },
+  good: { label: "Good", tone: "text-good" },
   fair: { label: "Fair", tone: "text-good" },
   high: { label: "High", tone: "text-warn" },
   predatory: { label: "Overpriced", tone: "text-bad" },

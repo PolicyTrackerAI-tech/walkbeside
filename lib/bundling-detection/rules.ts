@@ -68,6 +68,9 @@ export interface Rule {
 const CASKET_KEYWORDS = ["casket", "coffin"];
 const EMBALMING_KEYWORDS = ["embalm"];
 const VAULT_KEYWORDS = ["vault", "burial vault", "outer burial container"];
+// "Casket coach" is a funeral term for the hearse — it contains the word
+// "casket" but is NOT casket merchandise. Guard the casket rules against it.
+const HEARSE_KEYWORDS = ["hearse", "coach"];
 const CASH_ADVANCE_KEYWORDS = [
   "cash advance",
   "death certificate",
@@ -84,13 +87,17 @@ function lower(s: string): string {
   return s.toLowerCase();
 }
 
-function rawTextHas(ctx: DetectionContext, needle: string): boolean {
-  return lower(ctx.rawText).includes(lower(needle));
-}
-
 function itemMentions(item: AnalyzedItem, kws: string[]): boolean {
   const n = lower(item.name);
   return kws.some((k) => n.includes(k));
+}
+
+// True only for actual casket merchandise — excludes the hearse ("casket
+// coach"), which contains the word "casket" but is a vehicle, not a casket.
+function mentionsCasket(item: AnalyzedItem): boolean {
+  return (
+    itemMentions(item, CASKET_KEYWORDS) && !itemMentions(item, HEARSE_KEYWORDS)
+  );
 }
 
 function findItem(
@@ -134,9 +141,7 @@ export const RULES: Rule[] = [
     id: "casket-required-for-direct-cremation",
     detect(ctx) {
       if (!isDirectCremation(ctx)) return null;
-      const casket = findItem(ctx, (i) =>
-        itemMentions(i, CASKET_KEYWORDS),
-      );
+      const casket = findItem(ctx, (i) => mentionsCasket(i));
       if (!casket) return null;
       // Direct cremation needs only an "alternative container" — typically <$200.
       // A casket on a direct-cremation quote is either an FTC violation (if required)
@@ -358,7 +363,7 @@ export const RULES: Rule[] = [
     id: "third-party-merchandise-rights",
     detect(ctx) {
       const item = findItem(ctx, (i) =>
-        itemMentions(i, [...CASKET_KEYWORDS, ...VAULT_KEYWORDS, "urn"]),
+        mentionsCasket(i) || itemMentions(i, [...VAULT_KEYWORDS, "urn"]),
       );
       if (!item) return null;
       return {
