@@ -567,6 +567,353 @@ export const GLOSSARY: GlossaryEntry[] = [
     ],
     related: ["beneficiary-designation", "probate"],
   },
+  // ---------------- More services and ceremonies ----------------
+  {
+    slug: "celebration-of-life",
+    term: "Celebration of life",
+    category: "services",
+    short:
+      "An informal gathering focused on the person's life rather than their death. Usually no body present, no set script, and held wherever the family likes — a backyard, a bar, a park.",
+    paragraphs: [
+      "A celebration of life is a memorial service stripped of formality. There is rarely a casket or urn on display, the dress code is whatever the family wants, and the tone leans toward storytelling, music, and food over ritual. It can happen days or months after the death, which removes the time pressure that drives so much funeral spending.",
+      "Because it does not require a funeral home's chapel, casket, or staff, the cost is whatever the venue and catering run — often a few hundred dollars, sometimes nothing. Families who choose direct cremation frequently pair it with a celebration of life weeks later.",
+    ],
+    related: ["memorial-service", "direct-cremation", "celebrant"],
+  },
+  {
+    slug: "immediate-burial",
+    term: "Immediate burial",
+    category: "services",
+    short:
+      "Burial shortly after death with no embalming, no viewing, and no formal service at the funeral home. The burial equivalent of direct cremation.",
+    paragraphs: [
+      "Immediate burial is one of the lowest-cost burial options and, like direct cremation, must appear as its own line on every funeral home's General Price List under the FTC Funeral Rule. It includes basic services, transfer of the body, a simple container, and the burial itself — but skips embalming, cosmetic preparation, viewing, and a chapel ceremony.",
+      "Expect roughly $1,500–$5,000 to the funeral home, plus separate cemetery costs for the plot, opening and closing, and any required liner or vault. Families can still hold a graveside gathering or a memorial later without paying for the funeral home's full service package.",
+    ],
+    related: ["direct-cremation", "graveside-service", "cemetery-plot"],
+  },
+  {
+    slug: "home-funeral",
+    term: "Home funeral",
+    category: "services",
+    short:
+      "The family cares for the body and holds the wake at home rather than handing everything to a funeral home. Legal in most of the US, with a few states requiring a funeral director for specific tasks.",
+    paragraphs: [
+      "In a home funeral the family washes and dresses the body, keeps it cool with dry ice or refrigeration, and holds visitation at home before burial or cremation. It is the way nearly all funerals were handled before the 20th century, and it remains legal across most states. Supporters say it slows the process down and lets people grieve on their own terms.",
+      "A handful of states require a licensed funeral director to file the death certificate, obtain the burial-transit permit, or transport the body — so the family does the caregiving while a professional handles certain paperwork. A death doula or home-funeral guide can walk a family through the legal steps in their state.",
+    ],
+    watchOut:
+      "About eight to nine states require some involvement of a licensed funeral director (for filing paperwork or transport). Check your state's rule before assuming you can do everything yourselves.",
+    related: ["death-doula", "refrigeration", "burial-transit-permit"],
+  },
+
+  // ---------------- Even more care of the body ----------------
+  {
+    slug: "human-composting",
+    term: "Human composting",
+    alsoKnownAs: ["natural organic reduction", "terramation"],
+    category: "body",
+    short:
+      "The body is gently transformed into soil over several weeks inside a vessel with wood chips, straw, and alfalfa. Legal in a growing number of states, starting with Washington in 2020.",
+    paragraphs: [
+      "Also called natural organic reduction, human composting places the body in a reusable vessel with plant material. Microbial activity, warmth, and airflow break everything down — including bones, which are processed after — into roughly a cubic yard of soil over about 30 to 60 days. Families can take some or all of the soil; the rest is often used for land conservation.",
+      "It costs roughly $5,000–$7,000, comparable to a modest burial and well below a traditional funeral. As of the mid-2020s it is legal in a slowly expanding list of states; families outside those states sometimes ship the body to a licensed facility.",
+    ],
+    related: ["green-burial", "aquamation", "cremated-remains"],
+  },
+  {
+    slug: "body-donation",
+    term: "Whole-body donation",
+    category: "body",
+    short:
+      "Donating the entire body to medical schools or research programs. Usually free to the family, and many programs cover transport and return the cremated remains afterward.",
+    paragraphs: [
+      "Whole-body donation supports anatomy education, surgical training, and medical research. Legitimate programs — typically run by universities or established nonprofits — accept the body at no cost, handle transport, and after the study cremate the remains and return them to the family, often within a year.",
+      "This is different from organ donation for transplant, which happens immediately and does not rule out a funeral. Whole-body donation generally rules out an open-casket viewing because the body is needed promptly and is not returned intact.",
+    ],
+    watchOut:
+      "Vet the program. Some for-profit “body brokers” have sold donated remains for parts. Stick with university medical schools or accredited nonprofit programs, and get the terms in writing, including whether they can decline the body (for example after an autopsy or certain infections).",
+    related: ["cremation", "autopsy"],
+  },
+  {
+    slug: "cremated-remains",
+    term: "Cremated remains",
+    alsoKnownAs: ["ashes", "cremains"],
+    category: "body",
+    short:
+      "What is returned after cremation: dry, ground bone fragments weighing roughly 3 to 9 pounds. Despite the nickname, they are not ash in the everyday sense.",
+    paragraphs: [
+      "After cremation, what remains is bone, which is then processed into a uniform, sand-like consistency. An adult typically yields about 3 to 9 pounds. The remains are inert, sterile, and safe to handle, which is why families can keep them, divide them, scatter them, or bury them.",
+      "Remains come back in a plain plastic or cardboard container unless you buy an urn. There is no legal requirement to buy an urn from the funeral home — any container works, and urns are widely available for far less elsewhere.",
+    ],
+    related: ["cremation", "urn", "scattering", "columbarium"],
+  },
+  {
+    slug: "interment",
+    term: "Interment",
+    category: "body",
+    short:
+      "The act of placing remains in their final resting place — burial in the ground, or placement in a crypt or niche. Placing cremated remains specifically is called inurnment.",
+    paragraphs: [
+      "Interment is the umbrella word for the final placement of a body or remains. Ground burial, entombment in a mausoleum crypt, and placement of an urn in a columbarium niche are all forms of interment. Cemeteries usually charge an opening-and-closing or interment fee separate from the plot itself.",
+      "You will see the word on cemetery contracts and price lists. “Inurnment” is the narrower term for interring cremated remains; “entombment” refers to placement in an above-ground crypt.",
+    ],
+    related: ["cemetery-plot", "mausoleum", "columbarium"],
+  },
+  {
+    slug: "mausoleum",
+    term: "Mausoleum",
+    category: "body",
+    short:
+      "An above-ground building that holds caskets in sealed chambers called crypts. An alternative to in-ground burial.",
+    paragraphs: [
+      "A mausoleum entombs a casket in a crypt rather than burying it in the earth. Some families prefer it for tradition, to avoid in-ground burial, or for the appearance of the structure. Community mausoleums hold many crypts; private mausoleums are built for one family and cost far more.",
+      "Entombment in a community mausoleum typically runs $4,000–$12,000 or more for the crypt, plus opening-and-closing and the engraving of the crypt front. A private family mausoleum can run into six figures.",
+    ],
+    related: ["crypt", "interment", "cemetery-plot"],
+  },
+  {
+    slug: "crypt",
+    term: "Crypt",
+    category: "body",
+    short:
+      "A single chamber within a mausoleum that holds one casket. The above-ground equivalent of a grave.",
+    paragraphs: [
+      "A crypt is the individual sealed space a casket is entombed in inside a mausoleum. Crypts are priced by location within the building — eye-level “heart level” crypts cost more than those near the floor or high up. Couples sometimes buy companion crypts side by side or a double-depth crypt.",
+      "The price covers the space; expect separate charges for opening and closing the crypt and for engraving the granite or marble front.",
+    ],
+    related: ["mausoleum", "interment"],
+  },
+
+  // ---------------- More caskets, urns, and vaults ----------------
+  {
+    slug: "coffin",
+    term: "Coffin",
+    category: "items",
+    short:
+      "A tapered, six-sided body container, wider at the shoulders and narrow at the feet. In the US the rectangular “casket” has largely replaced it, and people often use the two words interchangeably.",
+    paragraphs: [
+      "Technically a coffin is the older, body-shaped six-sided form, while a casket is the four-sided rectangular box that dominates the American market. The distinction is mostly historical now; many people say “coffin” to mean any burial container.",
+      "Coffin- or casket-style containers are the single most marked-up item in the funeral business. The Funeral Rule gives you the right to buy one from any third party and requires the funeral home to use it without charging a handling fee.",
+    ],
+    related: ["casket", "third-party-casket", "casket-handling-fee"],
+  },
+  {
+    slug: "alternative-container",
+    term: "Alternative container",
+    category: "items",
+    short:
+      "An unfinished, often cardboard or fiberboard box used for cremation in place of a casket. Crematories require a rigid, combustible container — not a casket.",
+    paragraphs: [
+      "For a direct cremation you do not need a casket. An alternative container — typically heavy cardboard, pressed wood, or fiberboard — satisfies the crematory's requirement for a rigid, combustible enclosure. They cost roughly $50–$150 versus hundreds or thousands for a casket.",
+      "The FTC Funeral Rule requires funeral homes to tell you alternative containers are available for direct cremation and to list one on the price list. Some staff skip mentioning it, steering families toward a casket they do not need.",
+    ],
+    watchOut:
+      "If a funeral home says you must buy a casket for cremation, that is false. Ask for the alternative container — they are legally required to offer one for direct cremation.",
+    related: ["direct-cremation", "casket", "ftc-funeral-rule"],
+  },
+  {
+    slug: "grave-liner",
+    term: "Grave liner",
+    category: "items",
+    short:
+      "A concrete or composite box that lines the grave and supports the soil above the casket so the ground does not sink. A cheaper, unsealed alternative to a burial vault.",
+    paragraphs: [
+      "Most cemeteries require either a grave liner or a vault so that heavy maintenance equipment can drive over graves without the ground caving in as a casket deteriorates. A liner covers the top and sides but is not sealed, which makes it the budget option — typically $700–$1,500 versus $1,000–$10,000 for a vault.",
+      "No state law requires a liner or vault; it is a cemetery rule, not a legal one. If a cemetery requires outer burial containment, the liner is the minimum that satisfies it — the funeral home cannot require you to upgrade to a sealed vault.",
+    ],
+    watchOut:
+      "Funeral homes profit more on sealed vaults and often present them as standard. If the cemetery only requires a liner, you can decline the vault and the “protective” sealing upgrade, which has no proven benefit.",
+    related: ["vault", "cemetery-plot"],
+  },
+  {
+    slug: "headstone",
+    term: "Headstone",
+    alsoKnownAs: ["grave marker", "monument", "gravestone"],
+    category: "items",
+    short:
+      "The stone that marks a grave and carries the inscription. Often dramatically cheaper bought from an independent monument dealer than from the cemetery or funeral home.",
+    paragraphs: [
+      "Markers range from a flat granite or bronze plaque set flush with the ground to a full upright monument. Flat markers typically run $500–$1,500; upright monuments $1,000–$5,000 and well beyond for large or custom stones. The price depends on stone, size, and the amount of engraving.",
+      "Independent monument companies usually beat cemetery and funeral-home pricing by a wide margin for the same stone. You buy direct and have it installed at the grave.",
+    ],
+    watchOut:
+      "Cemeteries may charge a “setting” or “foundation” fee to install a marker you bought elsewhere, and some try to require you to buy through them. They can charge a reasonable installation fee, but watch for rules designed to block outside purchases.",
+    related: ["cemetery-plot", "perpetual-care"],
+  },
+  {
+    slug: "shroud",
+    term: "Burial shroud",
+    category: "items",
+    short:
+      "A simple cloth used to wrap the body for burial instead of a casket. Standard in Jewish and Muslim practice and common in green burial.",
+    paragraphs: [
+      "A shroud wraps the body in natural fabric — often linen, cotton, or wool — for direct, biodegradable burial. It is required or traditional in several faiths and is a natural fit for green burial, where the goal is for everything to decompose. Many natural-burial grounds allow a shroud with no casket at all, sometimes on a rigid board for lowering.",
+      "Shrouds cost from very little for a plain cloth to a few hundred dollars for a purpose-made burial shroud with handles. They are among the least expensive ways to bury someone.",
+    ],
+    related: ["green-burial", "home-funeral"],
+  },
+  {
+    slug: "cemetery-plot",
+    term: "Cemetery plot",
+    alsoKnownAs: ["burial plot", "grave space"],
+    category: "items",
+    short:
+      "The piece of ground you buy for a burial. Paid to the cemetery, entirely separate from funeral-home charges.",
+    paragraphs: [
+      "Buying a plot purchases the right to be buried in that space, not the land itself. Prices swing enormously by location: rural and small-town plots may run $1,000–$3,000, while plots in major metro cemeteries can be $5,000 to well over $20,000. On top of the plot you pay an opening-and-closing fee, usually $1,000–$3,000.",
+      "Plots can often be bought ahead of need, and many cemeteries sell companion or family plots. Some families resell unused plots, though cemeteries frequently restrict or take a cut of resales.",
+    ],
+    related: ["interment", "perpetual-care", "grave-liner"],
+  },
+
+  // ---------------- More paperwork and authority ----------------
+  {
+    slug: "cremation-authorization",
+    term: "Cremation authorization",
+    category: "paperwork",
+    short:
+      "The signed form, completed by the legal next of kin or named agent, that authorizes the crematory to proceed. Because cremation is irreversible, states require explicit written consent.",
+    paragraphs: [
+      "No crematory will proceed without a signed cremation authorization from the person with the legal right to make the decision. The form identifies the deceased, names the authorizing agent and their relationship, and often directs what happens to the remains. Many states also impose a waiting period — commonly 24 to 48 hours after death — and require the medical examiner or coroner to sign off first.",
+      "Disputes among family members can stall a cremation, because the funeral home needs a clear authorizing agent under the state's right-of-disposition order. Naming an agent in advance, in writing, prevents this.",
+    ],
+    related: ["cremation", "right-of-disposition", "next-of-kin"],
+  },
+
+  // ---------------- People and roles ----------------
+  {
+    slug: "funeral-director",
+    term: "Funeral director",
+    alsoKnownAs: ["mortician", "undertaker"],
+    category: "people",
+    short:
+      "The licensed professional who coordinates arrangements, files the paperwork, oversees care of the body, and runs the service. Also called a mortician or undertaker.",
+    paragraphs: [
+      "A funeral director is licensed by the state and handles the logistics families rarely want to think about: transporting the body, filing the death certificate, securing permits, coordinating with the cemetery or crematory, and directing the service. In smaller firms the same person may also be the embalmer; in larger ones the roles are separate.",
+      "A good director lays out options and prices plainly and respects the choices you make, including the cheaper ones. The Funeral Rule requires them to give you an itemized price list and to let you choose only the goods and services you want.",
+    ],
+    related: ["embalmer", "basic-services-fee", "gpl"],
+  },
+  {
+    slug: "embalmer",
+    term: "Embalmer",
+    category: "people",
+    short:
+      "The licensed professional who performs embalming — the chemical preservation of a body. May or may not be the same person as the funeral director.",
+    paragraphs: [
+      "Embalming is a separate license and skill from funeral directing, though many professionals hold both. The embalmer disinfects and temporarily preserves the body and sets the features for a viewing. Their work is what makes an open-casket service with a delay possible.",
+      "Embalming is almost never required by law. If there is no public viewing, refrigeration is a legal alternative in every state, and you can decline embalming to save the fee.",
+    ],
+    related: ["embalming", "refrigeration", "funeral-director"],
+  },
+  {
+    slug: "celebrant",
+    term: "Celebrant",
+    category: "people",
+    short:
+      "A trained officiant — usually non-religious — who writes and leads a personalized ceremony. An alternative to clergy for families who want a service without a religious framework.",
+    paragraphs: [
+      "A funeral celebrant meets with the family, learns the person's story, and crafts a ceremony around it rather than following a set liturgy. They are a natural fit for people who were not religious, for blended-faith families, or for anyone who wants the focus on the individual life.",
+      "Celebrants typically charge $150–$500. Funeral homes can refer one, or families can hire independently. Many were trained through programs run by celebrant institutes.",
+    ],
+    related: ["celebration-of-life", "memorial-service"],
+  },
+  {
+    slug: "pallbearer",
+    term: "Pallbearer",
+    category: "people",
+    short:
+      "One of the people who carry or escort the casket. Usually six, given the weight. Honorary pallbearers walk alongside without lifting.",
+    paragraphs: [
+      "Pallbearers carry the casket from the service to the hearse and to the graveside. Because a casket with a body can weigh several hundred pounds, there are typically six, chosen from close friends and family as a mark of honor. Funeral homes can also provide staff to carry if the family prefers.",
+      "Honorary pallbearers are named to recognize a relationship but do not physically carry the casket — useful for those who are older, frail, or simply many. There is no rule about gender or number.",
+    ],
+    related: ["graveside-service", "traditional-funeral"],
+  },
+
+  // ---------------- Even more money ----------------
+  {
+    slug: "final-expense-insurance",
+    term: "Final expense insurance",
+    alsoKnownAs: ["burial insurance", "funeral insurance policy"],
+    category: "money",
+    short:
+      "A small whole-life policy, usually $5,000–$25,000, marketed to cover funeral costs. Easy to qualify for, but expensive per dollar of coverage.",
+    paragraphs: [
+      "Final expense insurance is permanent life insurance in a small face amount, sold specifically as a way to leave money for a funeral. It is easy to get — often with few or no health questions — and the payout goes to a named beneficiary, not locked to any funeral home, so the family keeps whatever is left over.",
+      "The trade-off is cost. Premiums are high relative to the benefit, and “guaranteed issue” policies usually carry a graded death benefit: if you die within the first two to three years, the policy pays back only your premiums plus interest, not the full amount.",
+    ],
+    watchOut:
+      "If you live long enough, you can pay more in premiums than the policy ever pays out. For many people a payable-on-death savings account earmarked for the funeral is cheaper and more flexible.",
+    related: ["funeral-insurance", "payable-on-death", "pre-need"],
+  },
+  {
+    slug: "perpetual-care",
+    term: "Perpetual care",
+    alsoKnownAs: ["endowment care"],
+    category: "money",
+    short:
+      "A fund that pays for the ongoing upkeep of a cemetery — mowing, landscaping, repairs. Financed by setting aside a portion of every plot sale, and often charged as a separate fee.",
+    paragraphs: [
+      "When you buy a plot at a perpetual-care (or endowment-care) cemetery, a slice of the price goes into a trust whose earnings fund maintenance in perpetuity. It is why well-kept cemeteries stay that way long after their plots are sold out. Many states regulate these trusts.",
+      "Perpetual care usually covers general grounds upkeep, not the cleaning or repair of an individual headstone, which remains the family's responsibility. Watch for it as a separate line on a cemetery contract.",
+    ],
+    related: ["cemetery-plot", "headstone"],
+  },
+
+  // ---------------- More after the funeral / estate ----------------
+  {
+    slug: "will",
+    term: "Last will and testament",
+    alsoKnownAs: ["will"],
+    category: "after",
+    short:
+      "The legal document that says who gets what and names an executor. It still goes through probate — it does not avoid it. Without one, state intestacy law decides.",
+    paragraphs: [
+      "A will directs how a person's probate property is distributed, names the executor who carries it out, and — critically for parents — can name a guardian for minor children. To be valid it must meet the state's signing and witnessing rules. It can be updated any time before death.",
+      "A common misconception is that having a will avoids probate. It does not; it guides the probate court. Tools like payable-on-death accounts, beneficiary designations, and living trusts are what actually move assets outside probate.",
+    ],
+    related: ["executor", "probate", "intestate", "estate"],
+  },
+  {
+    slug: "estate",
+    term: "Estate",
+    category: "after",
+    short:
+      "Everything a person owns at death — real estate, accounts, vehicles, and belongings — minus their debts. The estate is what gets settled and distributed.",
+    paragraphs: [
+      "The estate is the total of a person's assets and liabilities at death. Settling it means inventorying what they owned, paying valid debts and taxes, and distributing what is left to heirs or beneficiaries. Some assets are part of the probate estate; others — like payable-on-death accounts and life insurance with a living beneficiary — pass outside it.",
+      "Whether an estate needs full probate depends on its size and what it holds. Many small estates qualify for a simplified process or a small-estate affidavit instead of a full court proceeding.",
+    ],
+    related: ["probate", "executor", "small-estate-affidavit", "will"],
+  },
+  {
+    slug: "small-estate-affidavit",
+    term: "Small estate affidavit",
+    category: "after",
+    short:
+      "A sworn form that lets heirs collect a modest estate's assets without full probate, when the estate falls under the state's dollar threshold.",
+    paragraphs: [
+      "Most states offer a simplified path for small estates. The heir signs an affidavit — under oath, often after a short waiting period — and presents it with a death certificate to banks or other holders to release the assets, skipping a full probate case. Thresholds vary widely, roughly $20,000 to $200,000 depending on the state, and some states exclude real estate.",
+      "It is the cheapest, fastest way to settle a modest estate. The court forms are usually free or low-cost, and many people complete the process without a lawyer.",
+    ],
+    related: ["probate", "executor", "estate"],
+  },
+  {
+    slug: "power-of-attorney",
+    term: "Power of attorney",
+    category: "after",
+    short:
+      "Authority to act for someone while they are alive — signing documents, managing money, making decisions. It ends the moment they die.",
+    paragraphs: [
+      "A power of attorney lets a named agent act on someone's behalf during life: a financial POA handles money and property, a medical or healthcare POA makes care decisions if the person cannot. A durable POA stays in effect even after the person becomes incapacitated, which is the whole point for end-of-life planning.",
+      "The crucial limit: a power of attorney dies with the person. The moment they die, the agent's authority ends and the executor named in the will (or appointed by the court) takes over.",
+    ],
+    watchOut:
+      "A common and costly mistake is assuming a POA lets you handle a bank account or sign documents after death. It does not. After death you need the executor's authority — Letters Testamentary — not a power of attorney.",
+    related: ["executor", "will", "letters-testamentary"],
+  },
 ];
 
 // ---- helpers ----
