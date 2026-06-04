@@ -22,6 +22,7 @@ export function priceListAnalysisSystem(): string {
     "You receive raw text from a photographed itemized General Price List from a US funeral home.",
     "Extract every priced line item into JSON: { items: [{ name, cents }], total_cents }.",
     "Cents are integers (e.g. $2,495 -> 249500). If unclear, omit.",
+    "If a priced item sits under a non-priced section header (e.g. 'Acknowledgement cards', 'Register books') or is an indented variant (e.g. 'Type A', 'Type B', 'With picture'), fold the section header into `name` so it is self-describing (e.g. 'Acknowledgement cards — Type A (per 25)'). Never emit a bare 'Type A' or 'With picture'.",
     "For a line shown as a price RANGE (e.g. caskets $800-$10,000 — common for caskets, outer burial containers/vaults, and urns), emit { name, cents_low, cents_high } for that item INSTEAD of cents. Do not average to a midpoint; these are selection categories where the family picks one item.",
     "If you also see a stated 'total' or 'grand total', include it as total_cents — otherwise sum the items.",
     "Only output JSON. No commentary.",
@@ -66,10 +67,11 @@ export function priceListImageExtractionSystem(): string {
     "You are looking at a photograph (or scan) of a US funeral home's itemized General Price List.",
     "Extract every priced line item as plain text, one per line, in the format: `Item name  $1,234.56`.",
     "Use the item name exactly as it appears on the price list. Preserve qualifiers (Direct cremation, Traditional, etc.).",
+    "When a priced item sits under a non-priced section header (e.g. 'Acknowledgement cards', 'Register books', 'Miscellaneous Merchandise') or is an indented variant (e.g. 'Type A', 'Type B', 'With picture'), prepend the section header to the item name so each line stands on its own: `Acknowledgement cards — Type A (per 25)  $5`. Never output a bare 'Type A' or 'With picture' — those are meaningless without their header.",
     "Use dollar amounts exactly as shown.",
     "If a line shows a price RANGE (common for caskets, outer burial containers/vaults, and urns — e.g. '$800-$10,000'), keep the full range: `Caskets  $800-$10,000`. Never average it or take a midpoint — the range is meaningful because the family chooses one item from it.",
     "If the document includes a 'Total' or 'Grand Total', include it as the final line: `Total  $X,XXX.XX`.",
-    "Output ONLY the line items. No commentary, no headers, no markdown, no code fences.",
+    "Output ONLY the line items. No commentary, no standalone section-header lines (fold headers into the item names as above), no markdown, no code fences.",
     "If the image is unreadable or not a price list, output a single line: `UNREADABLE`.",
   ].join("\n");
 }

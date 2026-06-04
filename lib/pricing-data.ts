@@ -412,14 +412,29 @@ export const SERVICE_TOTALS: ServiceTotal[] = [
   },
 ];
 
+/**
+ * Classify a price against explicit thresholds. Callers that display a
+ * zip-adjusted fair range must classify against the SAME adjusted numbers
+ * (including an adjusted predatory threshold) so the verdict can never
+ * contradict the range shown to the family.
+ */
+export function classifyAgainst(
+  observed: number,
+  fairLow: number,
+  fairHigh: number,
+  predatoryAt: number,
+): "good" | "fair" | "high" | "predatory" {
+  if (observed <= fairLow) return "good";
+  if (observed <= fairHigh) return "fair";
+  if (observed < predatoryAt) return "high";
+  return "predatory";
+}
+
 export function classifyPrice(
   item: LineItem,
   observed: number,
 ): "good" | "fair" | "high" | "predatory" {
-  if (observed <= item.fairLow) return "good";
-  if (observed <= item.fairHigh) return "fair";
-  if (observed < item.predatoryAt) return "high";
-  return "predatory";
+  return classifyAgainst(observed, item.fairLow, item.fairHigh, item.predatoryAt);
 }
 
 export function fmtUSD(n: number): string {
