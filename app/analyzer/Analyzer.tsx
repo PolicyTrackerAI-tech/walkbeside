@@ -43,6 +43,48 @@ const TONES: Record<string, { label: string; tone: string }> = {
   predatory: { label: "Overpriced", tone: "text-bad" },
 };
 
+/**
+ * Client-side downscale before posting an image to /api/extract-price-list-image.
+ * Phones produce 4-12MB JPEGs; we cap at 2048px on the long edge and re-encode
+ * JPEG at 0.85 quality so the base64 payload stays comfortably under Vercel's
+ * serverless body limit. Always outputs image/jpeg so the server gets a
+ * consistent media_type.
+ */
+async function downscaleImage(
+  file: File,
+  maxDim = 2048,
+  quality = 0.85,
+): Promise<{ dataUrl: string; mediaType: "image/jpeg" }> {
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error("Couldn't read the file."));
+    reader.readAsDataURL(file);
+  });
+  const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const i = new Image();
+    i.onload = () => resolve(i);
+    i.onerror = () => reject(new Error("Couldn't decode the image."));
+    i.src = dataUrl;
+  });
+  let { width, height } = img;
+  if (width > maxDim || height > maxDim) {
+    const ratio = Math.min(maxDim / width, maxDim / height);
+    width = Math.round(width * ratio);
+    height = Math.round(height * ratio);
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas unavailable in this browser.");
+  ctx.drawImage(img, 0, 0, width, height);
+  return {
+    dataUrl: canvas.toDataURL("image/jpeg", quality),
+    mediaType: "image/jpeg",
+  };
+}
+
 /** Screen 10 — Price list analyzer. */
 export function Analyzer() {
   const [text, setText] = useState("");
@@ -50,6 +92,8 @@ export function Analyzer() {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<AnalyzerResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   async function analyze() {
     setBusy(true);
@@ -93,6 +137,39 @@ export function Analyzer() {
     }
   }
 
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError(null);
+    setResult(null);
+    setUploading(true);
+    try {
+      const { dataUrl, mediaType } = await downscaleImage(file);
+      setImagePreview(dataUrl);
+      const r = await fetch("/api/extract-price-list-image", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ image: dataUrl, mediaType }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        throw new Error(
+          d?.error ??
+            "Couldn't read that photo. Try a clearer image, or type the prices below.",
+        );
+      }
+      setText(typeof d?.text === "string" ? d.text : "");
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Couldn't process the image. Try again or type the prices below.",
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
@@ -101,17 +178,54 @@ export function Analyzer() {
           <div>
             <CardEyebrow>Price list analyzer</CardEyebrow>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              Paste their itemized price list. We&rsquo;ll flag the overcharges.
+              Snap a photo or paste their price list. We&rsquo;ll flag the overcharges.
             </h1>
             <p className="text-ink-soft">
-              Type or paste the line items from the General Price List they
-              gave you (or what&rsquo;s on your contract). We&rsquo;ll match each item
-              to fair-market ranges for your region.
+              Upload a photo of the General Price List they handed you, or type
+              the line items in. We&rsquo;ll match each one to fair-market ranges
+              for your region and flag any FTC violations.
             </p>
           </div>
 
           <Card>
             <div className="space-y-5">
+              <div>
+                <Label
+                  htmlFor="photo"
+                  hint="Or type / paste the prices below."
+                >
+                  Upload a photo of the price list
+                </Label>
+                <input
+                  id="photo"
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleFileChange}
+                  disabled={uploading || busy}
+                  className="block w-full text-sm text-ink-soft file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-primary-soft file:text-primary-deep hover:file:bg-primary-soft/80 disabled:opacity-60"
+                />
+                {uploading && (
+                  <p className="text-sm text-ink-soft mt-2">
+                    Reading the price list…
+                  </p>
+                )}
+                {imagePreview && !uploading && (
+                  <div className="mt-3 flex items-start gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={imagePreview}
+                      alt="Uploaded price list"
+                      className="max-w-[120px] max-h-[120px] object-contain rounded-lg border border-border"
+                    />
+                    <p className="text-sm text-ink-soft">
+                      Here&rsquo;s what we read &mdash; review and edit
+                      below if anything looks off, then click{" "}
+                      <strong className="text-ink">Analyze price list</strong>.
+                    </p>
+                  </div>
+                )}
+              </div>
               <div>
                 <Label htmlFor="zip" hint="So we can adjust for your region.">
                   Zip code
@@ -146,13 +260,9 @@ export function Analyzer() {
                   {error}
                 </div>
               )}
-              <Button onClick={analyze} disabled={busy || text.length < 20}>
+              <Button onClick={analyze} disabled={busy || uploading || text.length < 20}>
                 {busy ? "Analyzing…" : "Analyze price list"}
               </Button>
-              <div className="rounded-xl bg-surface-soft border border-border px-4 py-3 text-sm text-ink-soft">
-                Photo upload &amp; OCR is the next iteration. For now, type or
-                paste &mdash; it works just as well.
-              </div>
             </div>
           </Card>
 

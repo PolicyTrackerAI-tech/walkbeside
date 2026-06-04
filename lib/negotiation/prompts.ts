@@ -39,3 +39,15 @@ export function obituarySystem(): string {
     "If service details are provided, mention them in the closing sentence.",
   ].join("\n");
 }
+
+export function priceListImageExtractionSystem(): string {
+  return [
+    "You are looking at a photograph (or scan) of a US funeral home's itemized General Price List.",
+    "Extract every priced line item as plain text, one per line, in the format: `Item name  $1,234.56`.",
+    "Use the item name exactly as it appears on the price list. Preserve qualifiers (Direct cremation, Traditional, etc.).",
+    "Use dollar amounts exactly as shown. If a line shows a range, take the midpoint.",
+    "If the document includes a 'Total' or 'Grand Total', include it as the final line: `Total  $X,XXX.XX`.",
+    "Output ONLY the line items. No commentary, no headers, no markdown, no code fences.",
+    "If the image is unreadable or not a price list, output a single line: `UNREADABLE`.",
+  ].join("\n");
+}
