@@ -114,6 +114,13 @@ const GUIDES: Guide[] = [
     category: "decisions",
   },
   {
+    href: "/average-funeral-cost",
+    title: "How much does a funeral cost?",
+    description:
+      "2026 national averages by service type, what drives the cost, and the line items you can legally decline.",
+    category: "decisions",
+  },
+  {
     href: "/rights",
     title: "What you can decline",
     description:
