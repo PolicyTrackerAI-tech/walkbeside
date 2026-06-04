@@ -62,6 +62,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/glossary`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/guides`, priority: 0.9, changeFrequency: "weekly" },
       { url: `${SITE}/funeral-costs`, priority: 0.9, changeFrequency: "weekly" },
+      { url: `${SITE}/average-funeral-cost`, priority: 0.9, changeFrequency: "monthly" },
       { url: `${SITE}/terms`, priority: 0.3, changeFrequency: "yearly" },
       { url: `${SITE}/privacy`, priority: 0.3, changeFrequency: "yearly" },
     ] as const
