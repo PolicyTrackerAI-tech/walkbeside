@@ -7,6 +7,7 @@ import {
   initialEmailSystem,
   initialEmailUser,
 } from "@/lib/negotiation/prompts";
+import { validateOutreachEmail } from "@/lib/negotiation/guard";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
 import { findHomesFromDirectory } from "@/lib/negotiation/directory";
 import type { ServiceType } from "@/lib/pricing-data";
@@ -110,7 +111,13 @@ export async function POST(req: Request) {
             },
           ],
         });
-        body = textOf(msg) || body;
+        const aiBody = textOf(msg);
+        // Pre-send guard: only use the AI body if it identifies Honest Funeral
+        // and never speaks as the family. Otherwise keep the safe template.
+        // This makes our transparency representation a guarantee, not a hope.
+        if (aiBody && validateOutreachEmail(aiBody).ok) {
+          body = aiBody;
+        }
       } catch {
         // fall through to default body
       }
