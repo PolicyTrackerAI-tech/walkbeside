@@ -266,7 +266,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
     timelineNorm: "Service typically within 3–7 days. No strict requirement.",
     embalmingNorm: "common",
     notes:
-      "Both burial and cremation are accepted across Protestant denominations. A church service with the body present is the most traditional pattern, but cremation followed by a memorial is increasingly common and meaningfully cheaper. Practice ranges from formal liturgical (Episcopal, Lutheran) to plain-spoken (Baptist, non-denominational) — your pastor sets the tone.",
+      "Mainline denominations (Methodist, Lutheran, Episcopal, Presbyterian) and many evangelical and non-denominational churches accept both burial and cremation. Some conservative traditions — certain independent Bible churches, Holiness, and Anabaptist groups — restrict to burial, so ask your pastor about your congregation's practice. A church service with the body present is the most traditional pattern, but cremation followed by a memorial is increasingly common and meaningfully cheaper.",
     defaultServiceType: "traditional-burial",
     whatYouCanDecline: [
       "service-facility", // service is at the church
@@ -599,12 +599,12 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "hindu",
     label: "Hindu",
-    dispositionNorm: "cremation-required", // TODO-FD: verify
+    dispositionNorm: "cremation-preferred", // verified 2026-05-21: cremation is standard but not universal — ascetics/gurus/sadhus and some infants are buried (Hindu American Foundation)
     dispositionAllowed: ["cremation-with-service", "direct-cremation", "aquamation"],
     timelineNorm: "Cremation typically within 24 hours.",
     embalmingNorm: "discouraged", // TODO-FD: verify
     notes:
-      "Cremation is the standard practice. A short pre-cremation viewing or ceremony at the funeral home is typical, often led by the eldest son or another close family member. Ashes are usually scattered in moving water, ideally a sacred river.",
+      "Cremation is the standard practice for most Hindus (a few groups — ascetics, gurus, and some infants — are traditionally buried instead). A short pre-cremation viewing or ceremony at the funeral home is typical, often led by the eldest son or another close family member. Ashes are usually scattered in moving water, ideally a sacred river.",
     defaultServiceType: "cremation-with-service",
     whatYouCanDecline: [
       "embalming",
@@ -732,12 +732,12 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "sikh",
     label: "Sikh",
-    dispositionNorm: "cremation-required", // TODO-FD: verify
+    dispositionNorm: "cremation-preferred", // verified 2026-05-21: cremation is the standard, strongly-preferred practice but not an absolute requirement forbidding burial (Sikh Rehat Maryada, Sikh Coalition)
     dispositionAllowed: ["cremation-with-service", "direct-cremation", "aquamation"],
     timelineNorm: "Cremation typically within 1–3 days. Antam Sanskar service at the gurdwara.",
     embalmingNorm: "discouraged", // TODO-FD: verify
     notes:
-      "Sikh practice calls for cremation, generally within a few days of death. The Antam Sanskar (final rites) include recitation from the Guru Granth Sahib at the gurdwara. Mourners dress in plain clothing, often white. After cremation, ashes are immersed in flowing water; Sikhs traditionally do not erect headstones or memorials.",
+      "Sikh practice calls for cremation in nearly all cases, generally within a few days of death. The Antam Sanskar (final rites) include recitation from the Guru Granth Sahib at the gurdwara. Mourners typically wear plain clothing, often white. After cremation, ashes are immersed in flowing water; Sikhs traditionally do not erect headstones or memorials.",
     defaultServiceType: "cremation-with-service",
     whatYouCanDecline: [
       "embalming",
