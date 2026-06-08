@@ -101,6 +101,13 @@ export default async function FaithPage({
               />
             </div>
 
+            <div className="rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft">
+              This is general guidance to help you prepare &mdash; not religious
+              authority. Customs vary by community and clergy, so confirm the
+              specifics with your own faith leader, especially anything
+              time-sensitive like burial timing.
+            </div>
+
             <Card tone="primary">
               <CardEyebrow>Recommended starting point</CardEyebrow>
               <CardTitle>{SERVICE_LABELS[t.defaultServiceType]}</CardTitle>

@@ -382,6 +382,11 @@ export function DecideFlow() {
               <LinkButton href={`/faith/${faithProfile.key}`} variant="secondary">
                 Full guide for {faithProfile.label} →
               </LinkButton>
+              <p className="text-xs text-ink-muted mt-3">
+                General guidance to help you prepare, not religious authority.
+                Customs vary by community &mdash; confirm specifics with your
+                own faith leader.
+              </p>
             </Card>
           )}
 

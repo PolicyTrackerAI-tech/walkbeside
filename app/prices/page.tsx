@@ -63,18 +63,20 @@ function HowFairRangesWork() {
       </h2>
       <ul className="space-y-3 text-[15px] text-ink-soft">
         <li>
-          <strong className="text-ink">Regional, not national.</strong>{" "}
-          Ranges are adjusted for your zip code. Funeral prices vary more
-          than 3&times; between zips in the same metro — a national average
-          would hide that.
+          <strong className="text-ink">Adjusted for your area.</strong>{" "}
+          We start from national pricing benchmarks and adjust for your
+          region&rsquo;s cost of living, because funeral prices vary more
+          than 3&times; between zips. As we collect real local price lists,
+          the range for that metro gets sharper.
         </li>
         <li>
           <strong className="text-ink">
-            Sourced from real General Price Lists.
+            Grounded in the FTC Funeral Rule.
           </strong>{" "}
-          The FTC Funeral Rule requires every funeral home to publish an
-          itemized price list on request. Our regional ranges aggregate
-          those lists alongside public pricing reports.
+          Every funeral home must provide an itemized General Price List on
+          request. Today our ranges are built from national benchmarks and
+          public pricing reports; as advocate outreach collects real local
+          GPLs, those numbers tighten the ranges for your area over time.
         </li>
         <li>
           <strong className="text-ink">A range, not a single number.</strong>{" "}
