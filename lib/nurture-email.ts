@@ -111,7 +111,7 @@ const SOURCE: Record<string, SourceContext> = {
     guideTitle: "Arrangement cheat sheet",
     guidePath: "/prep",
     step1Opener:
-      "It's been a week since you grabbed the arrangement cheat sheet. If you're approaching an actual arrangement meeting, the rest of the toolkit might be useful.",
+      "It's been a week since you grabbed the arrangement cheat sheet. If you're approaching an actual arrangement meeting, the rest of our free tools might be useful.",
   },
 };
 

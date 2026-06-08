@@ -82,10 +82,9 @@ export default async function PreferencesPage({
                 : "You won't get our check-in emails."}
             </h1>
             <p className="text-lg text-ink-soft">
-              We send three light check-ins after a family unlocks the
-              toolkit: at one month, six months, and one year. Practical
-              tips for the stage you&rsquo;re in &mdash; nothing
-              promotional.
+              We send three light check-ins over the year after a loss:
+              at one month, six months, and one year. Practical tips for
+              the stage you&rsquo;re in &mdash; nothing promotional.
             </p>
           </div>
 
@@ -108,9 +107,9 @@ export default async function PreferencesPage({
 
           <Card tone="soft">
             <p className="text-sm text-ink-soft">
-              Your toolkit access stays open whether you&rsquo;re
-              subscribed to check-ins or not. This setting only controls
-              the three time-based emails.
+              Your account stays open whether you&rsquo;re subscribed to
+              check-ins or not. This setting only controls the three
+              time-based emails.
             </p>
           </Card>
 

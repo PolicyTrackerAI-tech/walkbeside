@@ -304,9 +304,9 @@ const GUIDES: Guide[] = [
   },
   {
     href: "/how-it-works",
-    title: "How the toolkit works",
+    title: "How it works",
     description:
-      "What the $49 unlocks, step by step. The funeral-home outreach process explained.",
+      "What the $49 pays for, step by step. The funeral-home outreach process explained.",
     category: "reference",
   },
 ];

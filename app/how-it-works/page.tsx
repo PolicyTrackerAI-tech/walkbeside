@@ -11,7 +11,7 @@ import { FEATURES } from "@/lib/env";
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
   description:
-    "A consumer advocate, not a funeral home. Here's what we do at every step — fair-price lookup, prep kit, and the full toolkit. One flat $49 charge unlocks everything; money-back in 14 days.",
+    "A consumer advocate, not a funeral home. Every tool is free. The one thing we charge for is the funeral-home outreach — a flat $49, only when you choose a home we found for you. Money-back in 14 days.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -72,9 +72,9 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
   },
   {
     n: 6,
-    title: "Flat $49 upfront, via Stripe.",
+    title: "Flat $49 — only if you pick a home, via Stripe.",
     body:
-      "Charged when you start the toolkit. No commissions, no kickbacks, no referral fees from funeral homes. Money-back in 14 days if we don't save you anything documentable.",
+      "Charged only when you choose one of the homes we found (step 5) — never before, and never if you walk away. No commissions, no kickbacks, no referral fees from funeral homes. Money-back in 14 days if we don't save you anything documentable.",
   },
   ];
 }
@@ -90,17 +90,17 @@ export default async function HowItWorksPage() {
         <div className="max-w-3xl mx-auto px-5 py-12 space-y-8">
           <div>
             <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
-              How the toolkit works
+              How it works
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-4">
-              What the $49 toolkit actually does.
+              What the $49 actually pays for.
             </h1>
             <p className="text-lg text-ink-soft">
-              One charge, the whole arc. We contact funeral homes for
-              you, compare quotes side by side, walk you through the
-              30-day post-funeral checklist, draft the obituary, file
-              VA benefits — everything unlocks at once. Here&rsquo;s
-              every step, start to finish.
+              Every tool on this site is free &mdash; the price lookup, the
+              prep kit, the obituary helper, the 30-day checklist, all of it.
+              The one thing we charge for is contacting funeral homes for you
+              and comparing their quotes side by side. A flat $49, and only
+              when you choose a home we found. Here&rsquo;s every step.
             </p>
           </div>
 
@@ -129,11 +129,11 @@ export default async function HowItWorksPage() {
             <CardEyebrow>The money part</CardEyebrow>
             <CardTitle>Flat $49 once. Money-back in 14 days.</CardTitle>
             <p className="text-ink-soft mb-4">
-              One $49 charge unlocks the full toolkit for your account.
-              No subscriptions. No commissions from any funeral home.
-              No referral fees. If we don&rsquo;t save you anything
-              documentable in 14 days, email us and we refund you in
-              full &mdash; no questions, no form.
+              One flat $49, charged only when you choose a home we found for
+              you. Every tool on the site is free. No subscriptions. No
+              commissions from any funeral home. No referral fees. If we
+              don&rsquo;t save you anything documentable in 14 days, email us
+              and we refund you in full &mdash; no questions, no form.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/decide">

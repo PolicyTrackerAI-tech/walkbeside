@@ -151,7 +151,7 @@ A few reminders before you decide:
 — Read each quote line by line. Cremation arrangements are where
   bundling tricks usually live.
 — You don't owe us anything until you pick a home we presented to
-  you. The flat $49 covered the toolkit; there's no upsell here.
+  you — and then it's a flat $49, nothing more. No upsell here.
 
 Take care,
 The Honest Funeral team

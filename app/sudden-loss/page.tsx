@@ -399,11 +399,11 @@ export default function SuddenLossPage() {
           </Card>
 
           <Card tone="primary">
-            <CardTitle>Our toolkit handles the next 30 days.</CardTitle>
+            <CardTitle>We help you through the next 30 days.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               Sudden loss compresses everything into the same week
               &mdash; arrangements, paperwork, accounts, insurance,
-              grief. The toolkit was built for exactly this. Start
+              grief. Honest Funeral was built for exactly this. Start
               with whichever piece is most urgent right now.
             </p>
             <LinkButton href="/decide" size="lg">

@@ -208,7 +208,7 @@ export default async function DashboardPage({
               <CardTitle>You&rsquo;re through the hardest week.</CardTitle>
               <p className="text-ink-soft mb-3">
                 The active to-do list is empty. The post-funeral
-                checklist and the rest of the toolkit stay open
+                checklist and the rest of our tools stay open
                 whenever you need them.
               </p>
               <Link

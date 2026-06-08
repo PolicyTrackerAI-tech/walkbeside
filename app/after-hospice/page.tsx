@@ -356,13 +356,13 @@ export default function AfterHospicePage() {
           </Card>
 
           <Card tone="primary">
-            <CardTitle>Our toolkit walks the family through the rest.</CardTitle>
+            <CardTitle>We walk the family through the rest.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               The hospice death itself is usually the smoothest part.
               The 30 days after &mdash; the death certificates, the
               accounts, the probate, the survivor benefits &mdash;
-              are where most families get overwhelmed. The toolkit
-              handles that part.
+              are where most families get overwhelmed. We walk you
+              through that part.
             </p>
             <LinkButton href="/decide" size="lg">
               See what fits your situation →

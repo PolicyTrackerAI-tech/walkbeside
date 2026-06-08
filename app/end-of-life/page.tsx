@@ -658,7 +658,7 @@ export default function EndOfLifePage() {
             <p className="text-ink-soft mt-3 mb-5">
               The arrangement meeting, the 30-day paperwork, the
               estate &mdash; those are the parts that overwhelm
-              families. The toolkit walks them through it. You can
+              families. Honest Funeral walks them through it. You can
               share this site with your family now so they have it
               when they need it.
             </p>

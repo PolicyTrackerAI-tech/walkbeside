@@ -98,7 +98,7 @@ A few practical notes for year-mark housekeeping:
 
 — If you set up your own estate while you were thinking about it last year (a lot of families do), this is a good time to check that beneficiary designations are still right and your will is current.
 
-This is the last automated note from us. The toolkit at ${url("/dashboard")} stays open as long as you have an account. We're here whenever you need it.
+This is the last automated note from us. Your dashboard at ${url("/dashboard")} stays open as long as you have an account. We're here whenever you need it.
 
 If something comes up — even years from now — reply to this email and a person responds.
 

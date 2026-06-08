@@ -290,7 +290,7 @@ export default function BodyDonationPage() {
           </Card>
 
           <Card tone="primary">
-            <CardTitle>If body donation isn&rsquo;t the right fit, the toolkit still helps.</CardTitle>
+            <CardTitle>If body donation isn&rsquo;t the right fit, we still help.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               Many families pair a memorial service with body
               donation, and use most of our other tools &mdash;

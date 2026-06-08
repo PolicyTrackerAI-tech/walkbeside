@@ -169,8 +169,9 @@ export default function OurRolePage() {
             </h2>
             <p className="mb-3">
               Honest Funeral is structured as a consumer-paid advocacy
-              service. The family pays a flat $49 fee for the toolkit and
-              advocacy work. No portion of any funeral home&rsquo;s revenue
+              service. Every tool on the site is free; the family pays a flat
+              $49 fee only when they choose a funeral home we found through
+              our outreach. No portion of any funeral home&rsquo;s revenue
               flows to us. We do not hold ourselves out as a funeral
               establishment under the laws of any state.
             </p>
@@ -195,7 +196,8 @@ export default function OurRolePage() {
             <CardTitle>For families</CardTitle>
             <p className="text-ink-soft mb-4">
               You don&rsquo;t have to walk into the arrangement meeting cold.
-              Look up fair prices, run a comparison, or start the toolkit.
+              Look up fair prices, run a comparison, or have us contact
+              funeral homes for you.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/decide">Start with the four questions</LinkButton>

@@ -443,7 +443,7 @@ export default function FinalDaysPage() {
               days after &mdash; funeral arrangements, death
               certificates, Social Security, banks, insurance,
               probate &mdash; are where most families get overwhelmed.
-              The toolkit handles that part. When you&rsquo;re ready,
+              We handle that part. When you&rsquo;re ready,
               there&rsquo;s no rush.
             </p>
             <LinkButton href="/after-hospice" size="lg">

@@ -248,7 +248,7 @@ export function NextThirtyDays() {
             <p className="text-ink-soft text-sm">
               Need to find a missing document, draft a eulogy, or
               hand the work to a family member? Open the dashboard to
-              jump to any tool in the toolkit.
+              jump to any of our tools.
             </p>
             <Link
               href="/dashboard"

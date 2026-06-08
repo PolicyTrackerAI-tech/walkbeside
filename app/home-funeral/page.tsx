@@ -259,14 +259,14 @@ export default function HomeFuneralPage() {
           </Card>
 
           <Card>
-            <CardEyebrow>Where this fits with our toolkit</CardEyebrow>
+            <CardEyebrow>Where this fits with what we do</CardEyebrow>
             <CardTitle>
               Most of what we built is still useful.
             </CardTitle>
             <p className="text-ink-soft mt-3 mb-4">
-              The Honest Funeral toolkit is built for families using
-              funeral homes &mdash; but if you&rsquo;re doing a home
-              funeral, several pieces still help:
+              Honest Funeral is built for families using funeral homes
+              &mdash; but if you&rsquo;re doing a home funeral, several
+              pieces still help:
             </p>
             <ul className="space-y-2 text-ink-soft list-disc pl-5">
               <li>
@@ -342,7 +342,7 @@ export default function HomeFuneralPage() {
               Most of the families we work with go through a funeral
               home &mdash; we just help them avoid getting taken
               advantage of. If a home funeral isn&rsquo;t for you,
-              the toolkit still walks you through the rest.
+              we still walk you through the rest.
             </p>
             <LinkButton href="/decide" size="lg">
               See what fits your situation →

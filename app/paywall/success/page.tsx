@@ -74,11 +74,11 @@ export default async function PaywallSuccessPage({
         <div className="max-w-xl mx-auto px-5 py-14 space-y-6">
           <Card tone="primary">
             <CardEyebrow>Thank you</CardEyebrow>
-            <CardTitle>You&rsquo;re in. The toolkit just unlocked.</CardTitle>
+            <CardTitle>You&rsquo;re in. Payment confirmed.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               {paid
-                ? "Stripe confirmed the payment and we marked your account paid. Everything is unlocked."
-                : "Stripe is still confirming the payment with us. It usually takes a few seconds. If your dashboard still shows locked features in a minute, refresh the page."}
+                ? "Stripe confirmed your payment. You're all set."
+                : "Stripe is still confirming your payment with us. It usually takes a few seconds — if anything looks off in a minute, refresh the page."}
             </p>
             <LinkButton href={next} size="lg">
               Continue to {next === "/dashboard" ? "dashboard" : "where you were"} →
@@ -94,7 +94,7 @@ export default async function PaywallSuccessPage({
                 subscription. No renewal.
               </li>
               <li>✓ No commissions, ever, from any funeral home.</li>
-              <li>✓ No upsells. The full toolkit is unlocked now.</li>
+              <li>✓ No upsells. Every tool on the site is free.</li>
               <li>
                 ✓ 14-day money-back. Email us if we didn&rsquo;t save
                 you anything.

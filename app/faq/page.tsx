@@ -23,53 +23,43 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Two things stay free forever: a fair-price lookup that shows what funeral services should cost in your zip, and a prep kit of questions to ask. Everything else — advocacy outreach to local funeral homes, side-by-side comparison, the 30-day post-funeral checklist, the obituary helper, the price-list analyzer, the veterans benefits checker — is part of one $49 toolkit. Money-back in 14 days.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Every tool on the site is free — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, and the 30-day post-funeral checklist. The one thing we charge for is the funeral-home outreach: we contact homes on your behalf, collect itemized quotes, and put them side by side. A flat $49, charged only when you choose a home we found for you. Money-back in 14 days.",
     a: (
       <>
         <p>
           We help families who&rsquo;ve just lost someone make better
-          funeral decisions under pressure. Two things stay free forever:
+          funeral decisions under pressure. <strong>Every tool on this
+          site is free:</strong>
         </p>
         <ul>
           <li>
-            <strong>Fair price lookup</strong> (free) &mdash; see what
-            funeral services should cost in your zip code, by line item.
+            <strong>Fair price lookup</strong> &mdash; see what funeral
+            services should cost in your zip code, by line item.
           </li>
           <li>
-            <strong>Prep kit</strong> (free) &mdash; the questions to
-            ask, the upsells to decline, the rights families
-            don&rsquo;t know they have.
+            <strong>Prep kit</strong> &mdash; the questions to ask, the
+            upsells to decline, the rights families don&rsquo;t know they
+            have.
+          </li>
+          <li>
+            <strong>Obituary helper, price-list analyzer, pre-meeting
+            worksheet, certificate calculator, veterans benefits checker.</strong>
+          </li>
+          <li>
+            <strong>The 30-day post-funeral checklist</strong> &mdash;
+            death certificates, Social Security, credit freeze, life
+            insurance locator, VA benefits, accounts to close, estate
+            basics.
           </li>
         </ul>
         <p>
-          Everything else is in the <strong>$49 toolkit</strong> &mdash;
-          one charge, all of it unlocks at once:
-        </p>
-        <ul>
-          <li>
-            <strong>Advocacy outreach</strong> &mdash; we contact funeral
-            homes on your behalf and collect comparison quotes.
-          </li>
-          <li>
-            <strong>Side-by-side comparison</strong> with line-item fair-
-            price ratings.
-          </li>
-          <li>
-            <strong>30-day post-funeral checklist</strong> &mdash; with
-            help on every step (death certificates, Social Security,
-            credit freeze, life insurance locator, VA benefits, accounts
-            to close, estate basics).
-          </li>
-          <li>
-            <strong>Pre-meeting worksheet, obituary helper,
-            certificate calculator, price-list analyzer, veterans
-            benefits checker.</strong>
-          </li>
-        </ul>
-        <p>
-          One $49 charge. No subscriptions. Money-back if we don&rsquo;t
-          save you anything in 14 days. We&rsquo;re not a funeral home;
-          we help you <em>compare</em>.
+          The one thing we charge for is the{" "}
+          <strong>funeral-home outreach</strong>: we contact homes on your
+          behalf, collect itemized quotes, and put them side by side so you
+          can choose. A flat <strong>$49</strong> &mdash; charged only when
+          you choose a home we found for you. No subscriptions. Money-back
+          in 14 days. We&rsquo;re not a funeral home; we help you{" "}
+          <em>compare</em>.
         </p>
       </>
     ),
@@ -77,13 +67,14 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "One flat $49 charge per family, charged when you start the toolkit (after the four-question intake). Nothing else. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days if we don't save you anything documentable.",
+      "One flat $49 charge per family, and only when you choose a funeral home we found for you through our outreach. Every tool on the site is free. Nothing else is ever charged. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days if we don't save you anything documentable.",
     a: (
       <>
         <p>
-          One flat <strong>$49</strong> charge per family, charged when
-          you start the toolkit (after the four-question intake at{" "}
-          <em>/decide</em>). That is the only thing we charge for, ever.
+          One flat <strong>$49</strong> charge per family &mdash; and only
+          when you <strong>choose a funeral home we found for you</strong>{" "}
+          through our outreach. Every tool on the site is free. That fee is
+          the only thing we charge for, ever.
         </p>
         <ul>
           <li>No commissions from funeral homes. Ever.</li>
@@ -147,16 +138,16 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "Does the $49 toolkit work for cremation-only arrangements?",
+    q: "Does the $49 fee apply to cremation-only arrangements?",
     plain:
-      "Yes — the $49 toolkit covers every service type: burial, cremation, direct cremation, green burial, body donation. One charge, per family, paid once when you start. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
+      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. The flat $49 is charged once per family, only when you choose a home we found, regardless of service type. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
     a: (
       <>
         <p>
-          Yes. The $49 unlocks the full toolkit regardless of whether
-          the family chooses burial, cremation, direct cremation,
-          green burial, or whole-body donation. One charge per family,
-          paid once when you start.
+          Yes. Our outreach covers every service type &mdash; burial,
+          cremation, direct cremation, green burial, or whole-body
+          donation. The flat $49 is charged once per family, only when you
+          choose a home we found, regardless of service type.
         </p>
         <p>
           Direct cremation in particular is where families often
@@ -170,7 +161,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What if you don\u2019t have price data for my area?",
     plain:
-      "Our fair-price lookup works for most US zip codes. If we don't have enough local data, we say so plainly — we don't make up numbers. The funeral-home outreach in the toolkit still works in any zip with at least a few funeral homes: we send the request, homes respond under the FTC Funeral Rule, and you see whatever comes back.",
+      "Our fair-price lookup works for most US zip codes. If we don't have enough local data, we say so plainly — we don't make up numbers. Our funeral-home outreach still works in any zip with at least a few funeral homes: we send the request, homes respond under the FTC Funeral Rule, and you see whatever comes back.",
     a: (
       <>
         <p>
@@ -180,7 +171,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           numbers.
         </p>
         <p>
-          The funeral-home outreach in the toolkit still works in any zip with at least a few
+          Our funeral-home outreach still works in any zip with at least a few
           funeral homes: we send the request, homes respond under the FTC
           Funeral Rule, and you see whatever comes back.
         </p>
@@ -190,7 +181,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What happens after I submit my zip code?",
     plain:
-      "For the fair-price lookup: you see a results page with the regional range for each line item, and — if you entered a home's quote — a rating of that quote against the range. Nothing is saved. No account, no email collected. For the funeral-home outreach in the toolkit: we show you the homes in your zip and ask for your written authorization before anything goes out. You approve the list. We send the emails. Homes respond. We summarize in your dashboard.",
+      "For the fair-price lookup: you see a results page with the regional range for each line item, and — if you entered a home's quote — a rating of that quote against the range. Nothing is saved. No account, no email collected. For the funeral-home outreach: we show you the homes in your zip and ask for your written authorization before anything goes out. You approve the list. We send the emails. Homes respond. We summarize in your dashboard.",
     a: (
       <>
         <p>
@@ -201,10 +192,10 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           collected.
         </p>
         <p>
-          For the funeral-home outreach in the toolkit: we show you
-          the homes in your zip and ask for your written authorization
-          before anything goes out. You approve the list. We send the
-          emails. Homes respond. We summarize in your dashboard.
+          For the funeral-home outreach: we show you the homes in your zip
+          and ask for your written authorization before anything goes out.
+          You approve the list. We send the emails. Homes respond. We
+          summarize in your dashboard.
         </p>
       </>
     ),
@@ -212,7 +203,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Will funeral homes know I used Honest Funeral?",
     plain:
-      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. When you have us call funeral homes for you (in the toolkit): yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
+      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. When you have us call funeral homes for you (our outreach): yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
     a: (
       <>
         <p>
@@ -220,8 +211,8 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           side, and no home is contacted.
         </p>
         <p>
-          When you have us call funeral homes for you (in the
-          toolkit): yes, and that&rsquo;s the point.{" "}
+          When you have us call funeral homes for you (our
+          outreach): yes, and that&rsquo;s the point.{" "}
           <strong>
             We identify ourselves, by name, in every email.
           </strong>{" "}
@@ -240,14 +231,14 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "What does the toolkit do, and is it anonymous?",
+    q: "What is the funeral-home outreach, and is it anonymous?",
     plain:
-      "The toolkit's funeral-home outreach: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Honest Funeral is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
+      "Our funeral-home outreach: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Honest Funeral is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
     a: (
       <>
         <p>
-          The toolkit&rsquo;s funeral-home outreach contacts funeral
-          homes on your behalf and collects comparison quotes. It is{" "}
+          Our funeral-home outreach contacts funeral homes on your behalf
+          and collects comparison quotes. It is{" "}
           <strong>not anonymous</strong> &mdash; it&rsquo;s transparent.
         </p>
         <p>
@@ -284,13 +275,14 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Can I trust your price data?",
     plain:
-      "Our regional ranges are based on General Price Lists collected from funeral homes, FTC Funeral Rule disclosures, and industry reports. We update them regularly. We'll always show you a range, not a single number — because real prices vary by neighborhood, by home, and by what's included in each package. The range tells you whether a quote is reasonable, not whether it's the lowest possible price. If you ever see a price estimate on this site that you think is wrong, email us and we'll look at it.",
+      "Our regional ranges start from national pricing benchmarks and FTC Funeral Rule disclosures, adjusted for your area, plus industry reports. As we collect real local price lists through outreach, the ranges for that metro get sharper. We'll always show you a range, not a single number — because real prices vary by neighborhood, by home, and by what's included in each package. The range tells you whether a quote is reasonable, not whether it's the lowest possible price. If you ever see a price estimate on this site that you think is wrong, email us and we'll look at it.",
     a: (
       <>
         <p>
-          Our regional ranges are based on General Price Lists collected
-          from funeral homes, FTC Funeral Rule disclosures, and industry
-          reports. We update them regularly.
+          Our regional ranges start from national pricing benchmarks and
+          FTC Funeral Rule disclosures, adjusted for your area, plus
+          industry reports. As we collect real local price lists through
+          outreach, the ranges for that metro get sharper.
         </p>
         <p>
           We&rsquo;ll always show you a range, not a single number &mdash;
@@ -474,7 +466,7 @@ export default function FaqPage() {
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/prices">Look up fair prices</LinkButton>
               <LinkButton href="/how-it-works" variant="secondary">
-                How the toolkit works
+                How it works
               </LinkButton>
             </div>
           </div>

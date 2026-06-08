@@ -53,7 +53,7 @@ export default async function NegotiationClosedPage({
             the home;</strong> we don&rsquo;t sign for you. We stay on email
             for any pre-meeting questions or post-meeting disputes.{" "}
             {sp.included
-              ? "No additional charge — it’s included in the toolkit fee you’ve already paid."
+              ? "No additional charge — it’s included in the flat $49 you’ve already paid."
               : `Our flat fee was ${neg.fee_cents ? fmtCents(neg.fee_cents) : "$0"}.`}
           </p>
 

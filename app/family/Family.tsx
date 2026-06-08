@@ -144,7 +144,7 @@ export function Family() {
               </li>
             </ol>
             <p className="text-sm text-ink-muted mt-4">
-              Links expire in 7 days for privacy. Your toolkit access
+              Links expire in 7 days for privacy. Your account access
               stays with your account; the link only carries your
               checklists and answers.
             </p>
@@ -208,9 +208,8 @@ export function Family() {
               notifications, comparing funeral home quotes.
             </p>
             <p className="text-sm text-ink-muted mt-3">
-              Your toolkit unlock stays on your account. The recipient
-              uses your shared progress without needing their own paid
-              account.
+              Your account stays yours. The recipient uses your shared
+              progress without needing their own account.
             </p>
           </Card>
 

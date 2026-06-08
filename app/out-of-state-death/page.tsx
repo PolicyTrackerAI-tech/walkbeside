@@ -475,7 +475,7 @@ export default function OutOfStateDeathPage() {
           </Card>
 
           <Card tone="primary">
-            <CardTitle>When the body is home, the rest of our toolkit applies.</CardTitle>
+            <CardTitle>When the body is home, the rest of what we do applies.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               Long-distance transport is the most unusual piece of a
               long-distance death. Everything after the body arrives
