@@ -4,7 +4,6 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { VeteransChecker } from "./VeteransChecker";
 import { VSO_NOTE } from "@/lib/veterans-benefits";
-import { requirePaid } from "@/lib/require-paid";
 
 export const metadata: Metadata = {
   title: "Veterans burial benefits — what your family can claim",
@@ -12,8 +11,7 @@ export const metadata: Metadata = {
     "Free checker for VA burial benefits. National cemetery burial, burial allowance, headstone, plot allowance, burial flag. Most families miss at least one — this is the simplest way to find out what you qualify for.",
 };
 
-export default async function VeteransPage() {
-  await requirePaid("/veterans");
+export default function VeteransPage() {
   return <VeteransView />;
 }
 

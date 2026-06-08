@@ -256,14 +256,12 @@ export default async function DashboardPage({
                 eyebrow="Service"
                 title="Eulogy helper"
                 blurb="Eight short questions. We draft a ready-to-read eulogy in your voice."
-                locked={!isPaid}
               />
               <ToolTile
                 href="/obituary"
                 eyebrow="Service"
                 title="Obituary helper"
                 blurb="Twelve questions. We draft the obituary you can edit and hand to the home."
-                locked={!isPaid}
               />
               <ToolTile
                 href="/memorial"
@@ -291,14 +289,12 @@ export default async function DashboardPage({
                 eyebrow="Before the meeting"
                 title="Pre-meeting worksheet"
                 blurb="Walk in with decisions made. The director sees you brought it."
-                locked={!isPaid}
               />
               <ToolTile
                 href="/analyzer"
                 eyebrow="At the meeting"
                 title="Price-list analyzer"
                 blurb="Paste the quote. We flag every overcharge."
-                locked={!isPaid}
               />
               <ToolTile
                 href="/certificates"

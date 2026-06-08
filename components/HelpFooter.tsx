@@ -20,7 +20,7 @@ function formatDisplay(e164: string): string {
 }
 
 export function HelpFooter() {
-  const rawPhone = process.env.NEXT_PUBLIC_HELP_PHONE ?? "+15555555555";
+  const rawPhone = process.env.NEXT_PUBLIC_HELP_PHONE ?? "+13855531141";
   const hours = process.env.NEXT_PUBLIC_HELP_HOURS ?? "9am–9pm ET, every day.";
   const phoneDisplay = formatDisplay(rawPhone);
   const phoneHref = `tel:${rawPhone}`;
