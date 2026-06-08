@@ -10,9 +10,10 @@ export const metadata: Metadata = {
 };
 
 /**
- * Internal QA surface for the licensed funeral director cofounder to review
- * every faith claim in lib/faith-traditions.ts in one pass. Not linked from
- * anywhere public; gated to logged-in admins.
+ * Internal QA surface to review every faith claim in lib/faith-traditions.ts
+ * in one pass before it ships — a place for a domain expert (e.g. a funeral
+ * director or clergy advisor) to validate accuracy. Not linked from anywhere
+ * public; gated to logged-in admins.
  */
 export default async function FaithQAPage() {
   const user = await getUser();

@@ -1,5 +1,5 @@
 /**
- * Server-only funeral home directory lookup. Reads the sister-curated
+ * Server-only funeral home directory lookup. Reads the curated
  * `funeral_homes` table; falls back to placeholder `findHomes()` when
  * Supabase is unavailable or the table is empty.
  *

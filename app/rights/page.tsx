@@ -18,8 +18,8 @@ interface Right {
 }
 
 /**
- * Source: master_brief.docx Section 3 (Phase 3) and Section 4 pricing database.
- * TODO: Sarah review — state-specific embalming rules and vault/liner nuance.
+ * Source: national funeral-pricing benchmarks + FTC Funeral Rule.
+ * TODO: expert review — state-specific embalming rules and vault/liner nuance.
  */
 const RIGHTS: Right[] = [
   {

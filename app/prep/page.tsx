@@ -16,7 +16,7 @@ import {
 
 /**
  * Screen 9 — Arrangement meeting prep kit.
- * The sister's knowledge as a product. Printable cheat sheet.
+ * The site's pricing + rights knowledge as a printable cheat sheet.
  */
 export default function PrepPage() {
   const [zip, setZip] = useState("");

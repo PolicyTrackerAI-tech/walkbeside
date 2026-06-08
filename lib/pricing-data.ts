@@ -1,6 +1,8 @@
 /**
  * Funeral pricing database — US national fair-price benchmarks.
- * Source: master_brief.docx Section 4 (validated by Sarah, licensed funeral director cofounder).
+ * Source: national funeral-pricing benchmarks and FTC Funeral Rule disclosures.
+ * NOTE: not yet validated against launch-market General Price Lists. Do not
+ * represent these as locally verified until a qualified reviewer signs off.
  *
  * V1 ships national averages. Per-city adjustments layer on later via Supabase.
  */
@@ -436,7 +438,7 @@ export function fmtRange(low: number, high: number): string {
 
 /**
  * Coarse regional cost-of-living adjustment by zip prefix.
- * V1 placeholder. Sister's per-city validation replaces this in V2.
+ * V1 placeholder. Per-city validation replaces this in V2.
  */
 export function regionMultiplier(zip: string): number {
   if (!zip || zip.length < 1) return 1;
@@ -470,8 +472,8 @@ export type PriceDataSource =
 
 /**
  * Returns the source quality of pricing data for a given zip.
- * V1: all zips return "national-adjusted" — sister's per-metro validation
- * work (launch city first) upgrades specific zips to "validated" over time.
+ * V1: all zips return "national-adjusted" — per-metro validation work
+ * (launch city first) upgrades specific zips to "validated" over time.
  */
 export function dataSourceForZip(_zip: string): PriceDataSource {
   return "national-adjusted";

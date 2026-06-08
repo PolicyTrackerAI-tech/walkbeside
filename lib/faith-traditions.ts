@@ -8,9 +8,10 @@
  * entry captures the most common modern American practice; sub-profiles in
  * FAITH_SUB_PROFILES carry the denominational specifics.
  *
- * Every faith claim in this file is tagged `// TODO-FD:` for licensed
- * funeral director cofounder review. Sources cited inline + in `sources[]`
- * arrays per profile.
+ * Every faith claim in this file is tagged `// TODO-FD:` ("for domain-expert
+ * review") and must be verified by a qualified reviewer (clergy, a funeral
+ * director, or community authority) before launch. Sources cited inline +
+ * in `sources[]` arrays per profile.
  */
 
 import type { ServiceType } from "./pricing-data";
@@ -112,8 +113,8 @@ export interface FaithTradition {
 
 export const FAITH_TRADITIONS: FaithTradition[] = [
   // -------------------------------------------------------------------------
-  // TODO-FD: verify all secular content. No religious authority — sister to
-  // confirm the secular default still tracks what families actually pick.
+  // TODO-FD: verify all secular content. No religious authority — a reviewer
+  // should confirm the secular default still tracks what families actually pick.
   // -------------------------------------------------------------------------
   {
     key: "secular",

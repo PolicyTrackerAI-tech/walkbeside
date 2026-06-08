@@ -89,7 +89,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Are you affiliated with any funeral homes?",
     plain:
-      "No. Honest Funeral is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. We were built by a licensed funeral director and her brother, a software engineer — the incentives point at the family, not the home.",
+      "No. Honest Funeral is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. We make money in exactly one way — a flat $49 from the family, only when they choose a home we present. The incentives point at the family, not the home.",
     a: (
       <>
         <p>
@@ -97,10 +97,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           We don&rsquo;t take commissions or kickbacks from funeral homes.
         </p>
         <p>
-          We were built by a licensed funeral director who spent years
-          watching families overpay &mdash; and her brother, a software
-          engineer. The whole point of this site is that the incentives point
-          at the family, not the home.
+          We make money in exactly one way: a flat $49 from the family, only
+          when they choose a home we present. We take nothing from funeral
+          homes &mdash; no commissions, no kickbacks, no listing fees. The
+          whole point of this site is that the incentives point at the family,
+          not the home.
         </p>
       </>
     ),

@@ -5,18 +5,10 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "About Honest Funeral — built by a licensed funeral director",
+  title: "About Honest Funeral — on the family's side",
   description:
-    "Honest Funeral was built by a licensed funeral director and her brother. A consumer advocate, not a funeral home. We take no money from the industry.",
+    "Honest Funeral is a consumer advocate for families facing funeral decisions under pressure. Not a funeral home, not a broker. We take no money from the industry.",
 };
-
-/*
- * TODO: Sarah / Ryan — replace placeholder lines marked below with:
- *   - Sarah's full name and state of licensure
- *   - Years in practice, firms worked at (or the level she's comfortable with)
- *   - Press / advisory board mentions once they land
- *   - Ryan's founder bio if desired
- */
 
 export default function AboutPage() {
   return (
@@ -30,45 +22,51 @@ export default function AboutPage() {
               About
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              A funeral director and her brother built this.
+              We built the tool we wish every family had.
             </h1>
             <p className="text-lg text-ink-soft">
-              Every feature on Honest Funeral comes from one specific observation: the
+              Every feature on Honest Funeral comes from one observation: the
               average family walks into the worst day of their life with no
-              information, and the industry is built around that. This is the
-              tool she wishes every family walked in with.
+              information, and the funeral industry is built around that. No one
+              should have to make a $10,000 decision in shock, exhausted, and
+              alone. So we built the thing that sits on the family&rsquo;s side
+              of the table.
             </p>
           </div>
 
           <Card>
             <div className="text-xs uppercase tracking-wider text-primary-deep font-medium mb-2">
-              The funeral director
+              Why we built this
             </div>
-            <CardTitle>Sarah &mdash; licensed funeral director</CardTitle>
+            <CardTitle>The family is the only one without a guide.</CardTitle>
             <p className="text-ink-soft mb-3">
-              Sarah is a licensed funeral director in {"{{TODO_SARAH_STATE}}"}{" "}
-              with {"{{TODO_SARAH_YEARS}}"} years of arrangement-meeting
-              experience. She writes every piece of content on this site,
-              validates every price in the database against the General Price
-              Lists she sees in the field, and tests every feature against one
-              question before anything ships:{" "}
-              <em>
-                would this have helped the last family I sat across from?
-              </em>
+              Every other party in a funeral transaction does this every day.
+              The funeral home has run the arrangement meeting hundreds of
+              times. The family has done it once, under the worst conditions a
+              person can be in. That asymmetry is the entire reason families
+              overpay by $2,000 to $5,000 on the arrangement alone.
+            </p>
+            <p className="text-ink-soft">
+              Honest Funeral closes that gap: fair prices for your area, the
+              questions to ask, the upsells to decline, and &mdash; if you want
+              it &mdash; advocate outreach where we contact homes on your behalf
+              and bring back comparison quotes. The information a professional
+              has, in the hands of the family, at the moment they need it.
             </p>
           </Card>
 
           <Card>
             <div className="text-xs uppercase tracking-wider text-primary-deep font-medium mb-2">
-              The builder
+              How we stay on your side
             </div>
-            <CardTitle>Ryan &mdash; founder, product, engineering</CardTitle>
+            <CardTitle>Our incentives point at the family.</CardTitle>
             <p className="text-ink-soft">
-              {/* TODO: replace with Ryan's short bio */}
-              Ryan builds the product and handles everything on the technical
-              side. Honest Funeral is the project of his sister&rsquo;s decade of
-              domain knowledge and his job is to make sure that knowledge ends
-              up in front of families at the exact moment they need it.
+              We make money in exactly one way: a flat $49 from the family, only
+              when they choose a home we present through advocate outreach. We
+              take nothing from funeral homes &mdash; no commissions, no
+              kickbacks, no listing fees. We don&rsquo;t sell your data. Because
+              the only party that ever pays us is the family, the only interest
+              we can serve is the family&rsquo;s.
             </p>
           </Card>
 
@@ -82,8 +80,7 @@ export default function AboutPage() {
             <p className="text-sm text-ink-soft">
               We will never earn money from funeral homes, never sell lead data,
               and never recommend a provider we wouldn&rsquo;t recommend to our
-              own family. Our only revenue is the flat $49 advocate fee, paid
-              by the family, only when we bring them a home they choose.
+              own family.
             </p>
           </Card>
 

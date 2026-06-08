@@ -212,7 +212,7 @@ export function FaithQAReview({
         {/* Header */}
         <div className="mb-8">
           <p className="text-xs uppercase tracking-wider text-ink-muted mb-2">
-            Internal — funeral director review
+            Internal — content QA
           </p>
           <h1 className="font-serif text-3xl text-ink mb-3">
             Faith content QA

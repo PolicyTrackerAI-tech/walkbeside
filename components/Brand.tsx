@@ -100,7 +100,7 @@ export function Footer() {
     <footer className="mt-auto border-t border-border bg-surface-soft">
       <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
-          Built by a licensed funeral director and her brother. Free to use.
+          We built the tool we wish every grieving family had. Free to use.
           Flat $49 only if you choose a home we present to you through
           advocate outreach.
         </p>

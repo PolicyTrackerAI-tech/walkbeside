@@ -11,7 +11,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "A consumer advocate for families making funeral decisions under pressure. Built by a licensed funeral director. Free fair-price lookup, free prep kit, and flat $49 advocate outreach — only on success.",
+    "A consumer advocate for families making funeral decisions under pressure. On the family's side, never the funeral home's. Free fair-price lookup, free prep kit, and flat $49 advocate outreach — only on success.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -27,7 +27,7 @@ const ORG_SCHEMA = {
 export const metadata: Metadata = {
   title: "Honest Funeral — quiet help after a loss",
   description:
-    "Built by a licensed funeral director. Free help with the first 72 hours: fair prices, what to decline, and the checklist for the next 30 days.",
+    "On the family's side, never the funeral home's. Free help with the first 72 hours: fair prices, what to decline, and the checklist for the next 30 days.",
 };
 
 /**
@@ -81,7 +81,8 @@ export default function HomePage() {
           </p>
 
           <p className="mt-10 text-sm text-ink-muted">
-            Built by a licensed funeral director to protect families like yours.
+            We built the tool we wish every grieving family had &mdash; because
+            no one should face a $10,000 decision alone and uninformed.
           </p>
 
           <p className="mt-2 text-xs text-ink-muted">

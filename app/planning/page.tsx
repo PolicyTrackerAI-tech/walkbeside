@@ -8,7 +8,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Planning a funeral in advance",
   description:
-    "A few hours of research now saves your family thousands and hours of decisions at the worst moment of their lives. Free cheat sheet from a licensed funeral director.",
+    "A few hours of research now saves your family thousands and hours of decisions at the worst moment of their lives. A free cheat sheet built from real funeral pricing data.",
 };
 
 /**
@@ -56,7 +56,7 @@ export default function PlanningPage() {
             <p className="text-ink-soft mb-5">
               One page. The nine things to ask any funeral home. The five
               upsells to decline. The FTC rights most families don&rsquo;t
-              know they have. Written by a licensed funeral director. Free.
+              know they have. Built from real funeral pricing data. Free.
             </p>
             <CheatSheetForm />
           </Card>
@@ -98,7 +98,7 @@ export default function PlanningPage() {
           </Card>
 
           <Card>
-            <CardEyebrow>A note from the funeral director</CardEyebrow>
+            <CardEyebrow>A note from us</CardEyebrow>
             <CardTitle>On prepaid funeral plans.</CardTitle>
             <p className="text-ink-soft mb-3">
               Many families assume prepaying is the responsible move. It
