@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { createClient } from "@/lib/supabase/server";
 import { isPaidUser } from "@/lib/auth-paid";
-import { FEATURES } from "@/lib/env";
+import { stripe, stripeAvailable } from "@/lib/stripe";
+import { FEATURES, PUBLIC, requireServer } from "@/lib/env";
 
 export const metadata: Metadata = {
   title: "You're in",
@@ -14,17 +16,17 @@ export const metadata: Metadata = {
 };
 
 /**
- * Stripe success redirect lands here. The webhook handles the actual
- * paid_at flip — this page just tells the user it worked.
- *
- * If the user lands here without being marked paid yet (webhook hasn't
- * fired in time, ~2-5 second window), the polling client below retries
- * a couple times before giving up.
+ * Stripe success redirect lands here. The webhook normally flips paid_at,
+ * but webhooks can be delayed, fail, or be misconfigured — so this page
+ * ALSO reconciles directly: it verifies the Stripe checkout session
+ * (payment_status === "paid" and the session belongs to this user) and
+ * flips paid_at itself via the service-role client. Belt-and-suspenders so
+ * a family that actually paid is never left stuck paid-but-locked.
  */
 export default async function PaywallSuccessPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; session_id?: string }>;
 }) {
   const sp = await searchParams;
   const next = sp.next ?? "/dashboard";
@@ -37,7 +39,33 @@ export default async function PaywallSuccessPage({
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const paid = await isPaidUser(supabase, user);
+  let paid = await isPaidUser(supabase, user);
+
+  // Reconcile against Stripe if the webhook hasn't marked us paid yet.
+  if (!paid && sp.session_id && stripeAvailable()) {
+    try {
+      const session = await stripe().checkout.sessions.retrieve(sp.session_id);
+      if (
+        session.payment_status === "paid" &&
+        session.metadata?.userId === user.id
+      ) {
+        const admin = createAdminClient(
+          PUBLIC.supabaseUrl,
+          requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+        );
+        const update: Record<string, unknown> = {
+          paid_at: new Date().toISOString(),
+        };
+        if (typeof session.customer === "string") {
+          update.stripe_customer_id = session.customer;
+        }
+        await admin.from("profiles").update(update).eq("id", user.id);
+        paid = true;
+      }
+    } catch {
+      // Retrieval failed — fall back to the webhook + refresh messaging below.
+    }
+  }
 
   return (
     <main className="flex-1 flex flex-col">
