@@ -10,7 +10,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Free fair-price lookup and prep kit; full toolkit for one $199 charge.",
+    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Free fair-price lookup and prep kit; full toolkit for one $49 charge.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -88,7 +88,7 @@ export default function HomePage() {
           <p className="mt-3 text-sm text-ink-soft max-w-md mx-auto">
             <strong className="text-ink">No commissions. No kickbacks. No referral fees.</strong>{" "}
             We take no money from any funeral home, cemetery, or vendor on
-            this site. The flat $199 from the family is our only revenue.
+            this site. The flat $49 from the family is our only revenue.
           </p>
 
           <p className="mt-2 text-xs text-ink-muted">
@@ -120,7 +120,7 @@ export default function HomePage() {
           </ol>
           <p className="mt-8 text-center text-sm text-ink-soft">
             Free price lookup and prep kit. The full toolkit unlocks for
-            one $199 charge — money-back in 14 days if we don&rsquo;t save
+            one $49 charge — money-back in 14 days if we don&rsquo;t save
             you anything.
           </p>
         </div>
@@ -134,7 +134,7 @@ export default function HomePage() {
           <p className="text-center text-ink-soft mb-10 max-w-xl mx-auto">
             Two things stay free forever: the price lookup and the prep
             kit. The full toolkit (advocacy, comparison, 30-day checklist,
-            obituary helper, more) unlocks for one $199 charge.
+            obituary helper, more) unlocks for one $49 charge.
           </p>
           <div className="grid gap-5 sm:grid-cols-3">
             <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
@@ -177,7 +177,7 @@ export default function HomePage() {
 
             <article className="bg-primary-soft border-2 border-primary rounded-2xl p-6 flex flex-col">
               <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
-                $199 once · full toolkit
+                $49 once · full toolkit
               </div>
               <h3 className="font-serif text-xl text-ink mb-2">
                 Unlock the full toolkit
@@ -185,7 +185,7 @@ export default function HomePage() {
               <p className="text-sm text-ink-soft mb-5 flex-1">
                 We contact funeral homes for you, compare quotes, walk
                 you through the 30-day checklist, draft the obituary,
-                and more. One $199 charge, money-back in 14 days if we
+                and more. One $49 charge, money-back in 14 days if we
                 don&rsquo;t save you anything documentable.
               </p>
               <Link

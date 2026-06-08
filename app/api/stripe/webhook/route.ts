@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     } else if (negotiationId) {
       // Legacy per-negotiation flow (still works for in-flight rows
       // before the section-12 cutover).
-      // 'unlock' = pure $199 to reveal homes (V2 flow). Sets unlocked_at, leaves status alone.
+      // 'unlock' = pure $49 to reveal homes (V2 flow). Sets unlocked_at, leaves status alone.
       // anything else = legacy per-home checkout that closes the deal.
       const update: Record<string, unknown> = {
         stripe_payment_intent_id: session.payment_intent as string,

@@ -299,14 +299,14 @@ const GUIDES: Guide[] = [
     href: "/faq",
     title: "FAQ",
     description:
-      "How we make money, what we do, what the $199 fee covers, what we won't do.",
+      "How we make money, what we do, what the $49 fee covers, what we won't do.",
     category: "reference",
   },
   {
     href: "/how-it-works",
     title: "How the toolkit works",
     description:
-      "What the $199 unlocks, step by step. The funeral-home outreach process explained.",
+      "What the $49 unlocks, step by step. The funeral-home outreach process explained.",
     category: "reference",
   },
 ];

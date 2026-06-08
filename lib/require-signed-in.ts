@@ -1,7 +1,7 @@
 /**
  * Auth-only gate (no payment check). Use on routes that need a signed-in
  * user but should remain free until the family actively picks a funeral
- * home (V2 canonical pricing: $199 charged only on home selection).
+ * home (V2 canonical pricing: $49 charged only on home selection).
  *
  * Companion to `requirePaid`. The difference:
  *   - requirePaid:   sends unauthed users to /login, sends authed-but-unpaid

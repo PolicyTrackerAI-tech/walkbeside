@@ -232,7 +232,7 @@ export function PriceCalculator() {
                     comes back.
                   </p>
                   <p className="text-sm text-ink-soft mb-4">
-                    Flat $199 &mdash; charged only if you choose a home we
+                    Flat $49 &mdash; charged only if you choose a home we
                     find. Nothing if you don&rsquo;t.
                   </p>
                   <div className="flex flex-wrap gap-3">
@@ -341,7 +341,7 @@ export function PriceCalculator() {
               With your written authorization, we contact funeral homes in
               your area as your advocate, request their itemized General
               Price Lists, and return side-by-side comparisons. You review
-              the responses and choose. Flat $199 only if you select a home
+              the responses and choose. Flat $49 only if you select a home
               we present to you &mdash; free otherwise.
             </p>
             <LinkButton

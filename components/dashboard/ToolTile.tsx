@@ -18,7 +18,7 @@ export function ToolTile({
   /**
    * True for paid-only tools when the current user is unpaid. The tile
    * still links (route's own requirePaid sends to /paywall) but renders
-   * with a "Unlock $199" badge so the gating is honest up front.
+   * with a "Unlock $49" badge so the gating is honest up front.
    */
   locked?: boolean;
 }) {

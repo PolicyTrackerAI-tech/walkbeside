@@ -46,7 +46,7 @@ A few things that come up around the 30-day mark for most families:
 
 — If we found you a funeral home through our outreach and the quote didn't match the bill, that's a refund situation. Reply to this email and we'll help.
 
-We're not building toward anything more from you. Your $199 covered everything. This is just a check-in.
+We're not building toward anything more from you. Your $49 covered everything. This is just a check-in.
 
 If you'd rather not hear from us at the 6-month and 1-year marks, ${unsubscribeLink(unsubscribeUrl)}
 

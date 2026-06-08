@@ -16,14 +16,14 @@ function slugify(s: string): string {
 export const metadata: Metadata = {
   title: "Questions families ask — Honest Funeral FAQ",
   description:
-    "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and what the $199 fee covers.",
+    "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and what the $49 fee covers.",
 };
 
 export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Two things stay free forever: a fair-price lookup that shows what funeral services should cost in your zip, and a prep kit of questions to ask. Everything else — advocacy outreach to local funeral homes, side-by-side comparison, the 30-day post-funeral checklist, the obituary helper, the price-list analyzer, the veterans benefits checker — is part of one $199 toolkit. Money-back in 14 days.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Two things stay free forever: a fair-price lookup that shows what funeral services should cost in your zip, and a prep kit of questions to ask. Everything else — advocacy outreach to local funeral homes, side-by-side comparison, the 30-day post-funeral checklist, the obituary helper, the price-list analyzer, the veterans benefits checker — is part of one $49 toolkit. Money-back in 14 days.",
     a: (
       <>
         <p>
@@ -42,7 +42,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           </li>
         </ul>
         <p>
-          Everything else is in the <strong>$199 toolkit</strong> &mdash;
+          Everything else is in the <strong>$49 toolkit</strong> &mdash;
           one charge, all of it unlocks at once:
         </p>
         <ul>
@@ -67,7 +67,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           </li>
         </ul>
         <p>
-          One $199 charge. No subscriptions. Money-back if we don&rsquo;t
+          One $49 charge. No subscriptions. Money-back if we don&rsquo;t
           save you anything in 14 days. We&rsquo;re not a funeral home;
           we help you <em>compare</em>.
         </p>
@@ -77,11 +77,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "One flat $199 charge per family, charged when you start the toolkit (after the four-question intake). Nothing else. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $199 within 14 days if we don't save you anything documentable.",
+      "One flat $49 charge per family, charged when you start the toolkit (after the four-question intake). Nothing else. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days if we don't save you anything documentable.",
     a: (
       <>
         <p>
-          One flat <strong>$199</strong> charge per family, charged when
+          One flat <strong>$49</strong> charge per family, charged when
           you start the toolkit (after the four-question intake at{" "}
           <em>/decide</em>). That is the only thing we charge for, ever.
         </p>
@@ -93,7 +93,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           </li>
           <li>
             14-day money-back: if we didn&rsquo;t save you anything
-            documentable, email us and we refund the full $199.
+            documentable, email us and we refund the full $49.
           </li>
         </ul>
         <p>
@@ -147,13 +147,13 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "Does the $199 toolkit work for cremation-only arrangements?",
+    q: "Does the $49 toolkit work for cremation-only arrangements?",
     plain:
-      "Yes — the $199 toolkit covers every service type: burial, cremation, direct cremation, green burial, body donation. One charge, per family, paid once when you start. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
+      "Yes — the $49 toolkit covers every service type: burial, cremation, direct cremation, green burial, body donation. One charge, per family, paid once when you start. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
     a: (
       <>
         <p>
-          Yes. The $199 unlocks the full toolkit regardless of whether
+          Yes. The $49 unlocks the full toolkit regardless of whether
           the family chooses burial, cremation, direct cremation,
           green burial, or whole-body donation. One charge per family,
           paid once when you start.
@@ -330,12 +330,12 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What do I do if the funeral home won\u2019t honor their quote?",
     plain:
-      "For quotes collected through our outreach: tell us within 14 days of service and we'll refund your $199. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
+      "For quotes collected through our outreach: tell us within 14 days of service and we'll refund your $49. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
     a: (
       <>
         <p>
           For quotes collected through our outreach: tell us within
-          14 days of service and we&rsquo;ll refund your $199. We also
+          14 days of service and we&rsquo;ll refund your $49. We also
           escalate with the home &mdash; a written, itemized GPL quote is
           what the Funeral Rule requires homes to provide, and homes that
           fail to honor a written quote can be reported to the FTC and to

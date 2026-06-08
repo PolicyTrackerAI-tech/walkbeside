@@ -4,7 +4,7 @@ import { stripe, stripeAvailable, calcFeeCents } from "@/lib/stripe";
 import { PUBLIC } from "@/lib/env";
 
 /**
- * Pure $199 unlock checkout. Pays to reveal home names + ratings + quotes
+ * Pure $49 unlock checkout. Pays to reveal home names + ratings + quotes
  * on the dashboard. Independent from picking a specific home.
  *
  * Form-POST so it works without JS: <form action="/api/stripe/unlock" method="post">

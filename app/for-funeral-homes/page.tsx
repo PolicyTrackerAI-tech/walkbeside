@@ -43,7 +43,7 @@ export default function ForFuneralHomesPage() {
               <li>
                 <strong>We take no money from funeral homes.</strong> No
                 commissions, no referral fees, no kickbacks, no
-                lead-sale revenue. The family pays our flat $199 fee for
+                lead-sale revenue. The family pays our flat $49 fee for
                 advocacy work. Your firm&rsquo;s revenue stays your firm&rsquo;s.
               </li>
               <li>
@@ -115,7 +115,7 @@ export default function ForFuneralHomesPage() {
                 lead-sale service?</dt>
                 <dd className="mt-1">
                   No. We don&rsquo;t take money from funeral homes in any
-                  form. Our only revenue is the flat $199 the family pays
+                  form. Our only revenue is the flat $49 the family pays
                   us if they select a home we presented to them.
                 </dd>
               </div>

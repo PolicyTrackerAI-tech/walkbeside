@@ -357,7 +357,7 @@ export function DecideFlow() {
             </div>
             <p className="mt-3 text-xs text-ink-muted">
               Free to start. We contact homes on your behalf and bring
-              the quotes back side by side. You only pay our flat $199
+              the quotes back side by side. You only pay our flat $49
               fee when you choose a home we presented &mdash; not
               before. Money-back in 14 days if we didn&rsquo;t save
               you anything. No commissions or kickbacks from any home

@@ -658,7 +658,7 @@ export default function FuneralHomeTacticsPage() {
               <p>
                 We take no money from any funeral home. No
                 commissions, no referral fees, no kickbacks. The
-                family&rsquo;s flat $199 is our only revenue.
+                family&rsquo;s flat $49 is our only revenue.
                 That&rsquo;s why we can write the page you just
                 read.
               </p>

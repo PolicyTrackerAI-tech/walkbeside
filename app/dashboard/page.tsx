@@ -40,7 +40,7 @@ export default async function DashboardPage({
   // V2 canonical model: signed-in users can use the dashboard for free.
   // The paid_at flag determines what's unlocked vs. soft-gated. Active
   // outreach (started via /decide → /negotiate/start) shows up regardless
-  // of payment status. Paid-only tools render with a "Pay $199 to unlock"
+  // of payment status. Paid-only tools render with a "Pay $49 to unlock"
   // badge for unpaid users; clicking them triggers /paywall via the
   // route's own requirePaid gate.
   const isPaid = await isPaidUser(supabase, user);
@@ -162,17 +162,17 @@ export default async function DashboardPage({
           {!isPaid && (
             <Card tone="primary">
               <CardEyebrow>The full toolkit</CardEyebrow>
-              <CardTitle>Save $2,000–$5,000. Or your $199 back.</CardTitle>
+              <CardTitle>Save $2,000–$5,000. Or your $49 back.</CardTitle>
               <p className="text-ink-soft mt-3 mb-4">
                 Outreach to funeral homes is free. The 30-day
                 checklist, obituary helper, eulogy helper, price-list
                 analyzer, and the rest of the toolkit unlock for one
-                $199 charge — refundable in 14 days if we didn’t save
+                $49 charge — refundable in 14 days if we didn’t save
                 you anything. No commissions or kickbacks from any
                 funeral home.
               </p>
               <LinkButton href="/paywall?next=/dashboard" size="lg">
-                Unlock for $199 →
+                Unlock for $49 →
               </LinkButton>
             </Card>
           )}
@@ -246,7 +246,7 @@ export default async function DashboardPage({
               <p className="text-ink-soft text-sm mt-1">
                 {isPaid
                   ? "Open any of these whenever you need them. They stay available across the whole arc."
-                  : "Outreach is free. The tools below unlock with the $199 toolkit. Click any to see what they do."}
+                  : "Outreach is free. The tools below unlock with the $49 toolkit. Click any to see what they do."}
               </p>
             </div>
 

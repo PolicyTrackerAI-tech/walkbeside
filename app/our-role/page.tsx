@@ -169,7 +169,7 @@ export default function OurRolePage() {
             </h2>
             <p className="mb-3">
               Honest Funeral is structured as a consumer-paid advocacy
-              service. The family pays a flat $199 fee for the toolkit and
+              service. The family pays a flat $49 fee for the toolkit and
               advocacy work. No portion of any funeral home&rsquo;s revenue
               flows to us. We do not hold ourselves out as a funeral
               establishment under the laws of any state.

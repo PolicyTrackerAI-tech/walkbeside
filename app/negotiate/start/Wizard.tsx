@@ -148,7 +148,7 @@ function NegotiateStartWizard() {
             <p className="text-ink-soft">
               We&rsquo;ll contact 3&ndash;5 homes near you as your advocate,
               request itemized prices, and bring back the options to compare.
-              Flat $199 only if you pick one we found.
+              Flat $49 only if you pick one we found.
             </p>
           </div>
 
@@ -496,7 +496,7 @@ function NegotiateStartWizard() {
                       establishment.
                     </li>
                     <li>
-                      Flat $199 only if you choose a home we presented to
+                      Flat $49 only if you choose a home we presented to
                       you. Free otherwise.
                     </li>
                   </ul>
