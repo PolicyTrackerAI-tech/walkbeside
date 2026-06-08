@@ -10,7 +10,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Free fair-price lookup and prep kit; full toolkit for one $49 charge.",
+    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Every tool is free; we charge a flat $49 only when you choose a funeral home we found for you.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -119,9 +119,9 @@ export default function HomePage() {
             ))}
           </ol>
           <p className="mt-8 text-center text-sm text-ink-soft">
-            Free price lookup and prep kit. The full toolkit unlocks for
-            one $49 charge — money-back in 14 days if we don&rsquo;t save
-            you anything.
+            Every tool here is free. We charge a flat $49 only when you choose
+            a funeral home we found for you — money-back in 14 days if we
+            don&rsquo;t save you anything.
           </p>
         </div>
       </section>
@@ -132,9 +132,10 @@ export default function HomePage() {
             How we help
           </h2>
           <p className="text-center text-ink-soft mb-10 max-w-xl mx-auto">
-            Two things stay free forever: the price lookup and the prep
-            kit. The full toolkit (advocacy, comparison, 30-day checklist,
-            obituary helper, more) unlocks for one $49 charge.
+            Every tool here is free &mdash; the price lookup, prep kit,
+            obituary helper, analyzer, worksheets, and the 30-day checklist.
+            The only thing we charge for is the funeral-home outreach: a flat
+            $49, only when you choose a home we found for you.
           </p>
           <div className="grid gap-5 sm:grid-cols-3">
             <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
@@ -177,16 +178,16 @@ export default function HomePage() {
 
             <article className="bg-primary-soft border-2 border-primary rounded-2xl p-6 flex flex-col">
               <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
-                $49 once · full toolkit
+                $49 · only on success
               </div>
               <h3 className="font-serif text-xl text-ink mb-2">
-                Unlock the full toolkit
+                Have us get you quotes
               </h3>
               <p className="text-sm text-ink-soft mb-5 flex-1">
-                We contact funeral homes for you, compare quotes, walk
-                you through the 30-day checklist, draft the obituary,
-                and more. One $49 charge, money-back in 14 days if we
-                don&rsquo;t save you anything documentable.
+                We contact funeral homes on your behalf, collect itemized
+                quotes, and put them side by side so you can choose. A flat
+                $49 &mdash; charged only when you pick a home we found.
+                Money-back in 14 days if we don&rsquo;t save you anything.
               </p>
               <Link
                 href="/how-it-works"
