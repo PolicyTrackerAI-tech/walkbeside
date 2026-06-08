@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { requirePaid } from "@/lib/require-paid";
 import { Certificates } from "./Certificates";
 
 export const metadata: Metadata = {
@@ -8,6 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  await requirePaid("/certificates");
   return <Certificates />;
 }

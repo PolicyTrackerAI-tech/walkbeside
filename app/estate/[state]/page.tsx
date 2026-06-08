@@ -5,7 +5,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
-import { requirePaid } from "@/lib/require-paid";
 import {
   getStateGuide,
   listStateSlugs,
@@ -36,7 +35,6 @@ export default async function StateProbatePage({
   params: Promise<{ state: string }>;
 }) {
   const { state } = await params;
-  await requirePaid(`/estate/${state}`);
   const guide = getStateGuide(state);
   if (!guide) notFound();
 

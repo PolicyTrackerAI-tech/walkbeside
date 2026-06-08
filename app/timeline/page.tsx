@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { requirePaid } from "@/lib/require-paid";
 import { Timeline } from "./Timeline";
 
 export const metadata: Metadata = {
@@ -10,6 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  await requirePaid("/timeline");
   return <Timeline />;
 }

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { HelpFooter } from "@/components/HelpFooter";
-import { requirePaid } from "@/lib/require-paid";
 import { STATE_GUIDES } from "@/lib/probate-by-state";
 import { EstateStatePicker } from "./EstateStatePicker";
 
@@ -13,7 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default async function EstatePage() {
-  await requirePaid("/estate");
 
   const detailedSlugs = STATE_GUIDES.map((s) => s.slug);
 
