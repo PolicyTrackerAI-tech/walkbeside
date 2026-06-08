@@ -1,6 +1,8 @@
 /**
  * Funeral pricing database — US national fair-price benchmarks.
- * Source: master_brief.docx Section 4 (internally validated against current GPLs).
+ * Source: national funeral-pricing benchmarks + FTC Funeral Rule disclosures.
+ * NOTE: not yet validated against launch-market General Price Lists. Do not
+ * represent these as locally verified until a qualified reviewer signs off.
  *
  * V1 ships national averages. Per-city adjustments layer on later via Supabase.
  */

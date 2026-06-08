@@ -152,9 +152,8 @@ export default async function CityFuneralCostsPage({
               </table>
             </div>
             <p className="text-xs text-ink-muted mt-4">
-              Source: national pricing data validated by a licensed
-              funeral director, adjusted by a regional cost-of-living
-              multiplier of {multiplier.toFixed(2)}x for the{" "}
+              Source: national pricing benchmarks, adjusted by a regional
+              cost-of-living multiplier of {multiplier.toFixed(2)}x for the{" "}
               {metroLabel} market. Real quotes vary by funeral home and
               by what&rsquo;s included. Comparison-shopping at least
               two homes is the most reliable way to find a fair price.

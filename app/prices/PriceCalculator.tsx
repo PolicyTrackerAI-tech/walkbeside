@@ -212,9 +212,10 @@ export function PriceCalculator() {
               </div>
               <p className="text-ink-soft mt-2">{dealRating.message}</p>
               <p className="text-xs text-ink-muted mt-3">
-                Regional ranges are based on aggregated General Price Lists
-                and public pricing data. A specific firm&rsquo;s actual
-                current prices can only be verified by their printed GPL.
+                Regional ranges are based on national pricing benchmarks and
+                public pricing data, adjusted for your area. A specific
+                firm&rsquo;s actual current prices can only be verified by their
+                printed GPL.
               </p>
               {dealRating.tone !== "good" && (
                 <div className="mt-5 rounded-xl border border-primary-deep/20 bg-surface p-5">

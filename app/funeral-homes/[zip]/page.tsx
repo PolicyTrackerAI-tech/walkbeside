@@ -97,7 +97,7 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
               {DATA_SOURCE_LABEL[dataSource]}.
             </p>
             <p className="text-xs text-ink-muted mt-2">
-              National benchmarks last validated{" "}
+              National benchmarks, last updated{" "}
               {PRICING_LAST_UPDATED}.
             </p>
           </div>

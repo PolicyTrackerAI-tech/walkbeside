@@ -113,7 +113,7 @@ export default function AverageFuneralCostPage() {
               </table>
             </div>
             <p className="text-xs text-ink-muted mt-4">
-              National benchmarks validated by a licensed funeral director.
+              National fair-price benchmarks, adjusted for regional cost of living.
               Prices run higher in expensive metros and lower in rural areas
               &mdash; see{" "}
               <Link

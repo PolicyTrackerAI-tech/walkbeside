@@ -162,8 +162,9 @@ export default function ForFuneralHomesPage() {
                 <dt className="font-semibold text-ink">Who&rsquo;s behind
                 Honest Funeral?</dt>
                 <dd className="mt-1">
-                  A licensed funeral director and her brother. She handles
-                  content + price benchmarking; he handles the software.
+                  An independent consumer-advocate team building the tool we
+                  wish every family had. We&rsquo;re not affiliated with any
+                  funeral home or chain and take no money from the industry.
                   See{" "}
                   <Link
                     href="/about"
