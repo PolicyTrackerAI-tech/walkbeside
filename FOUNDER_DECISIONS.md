@@ -5,6 +5,30 @@ decisions into specs, memory updates, and the lawyer brief.
 
 ---
 
+## ✅ ACTIONED 2026-05-21 (decisions you gave; what got done)
+
+- **#3 Fee = flat $49** — VERIFIED already uniform across code + copy; the old
+  "20% of savings / capped $500" model is fully gone. No change needed. Proof in
+  `docs/CLAIMS_VALIDATION.md` §2.
+- **#7 Remove funeral-director / sister positioning** — DONE across homepage,
+  layout meta, footer, /about (full rewrite, also killed literal
+  {{TODO_SARAH_STATE}} placeholders that would've shipped), /faq, /planning,
+  /prep, and false "validated by [cofounder]" provenance in code. Voice is now
+  founder-as-builder. Sister out of all plans; possible later hire.
+- **#8 Lawyer doc** → `docs/LAWYER_BRIEF.md` (complete; business overview, money
+  flow, 11 risk areas, prioritized questions, materials to bring).
+- **#6 AI strategy** → `docs/AI_STRATEGY.md` (exhaustive, buildable).
+- **#2 Validate all claims** → `docs/CLAIMS_VALIDATION.md` (faith/fee/outflow/
+  rights audited; outreach transparency claim verified at source).
+- **#4 Data plan** → `docs/DATA_PLAN.md` (raw Utah → national pipeline).
+- **#5 No manual deals / live testing** — baked into the docs as a constraint
+  (features must be self-serve + safe; outreach needs a pre-send guard).
+
+The sections below remain for your own thinking where a human call is still open
+(release discipline, launch-state gating, Sarah's eventual role, lawyer inputs).
+
+---
+
 ## TIER 1 — Blocking right now
 
 ### 1. Release / integration discipline
