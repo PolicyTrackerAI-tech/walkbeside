@@ -61,7 +61,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     paragraphs: [
       "Direct cremation is the cheapest legal way to handle a body in the United States. Typical price in 2026: $800–$3,000 depending on city and provider. The funeral home transports the body, files the death certificate, performs the cremation, and returns the ashes — usually within one to three weeks.",
       "Choosing direct cremation does not mean skipping a memorial. Most families who pick direct cremation still hold a memorial service later, on their own timeline, anywhere they want, without the funeral home involved. The body is not present at the service because it has already been cremated.",
-      "Funeral homes are required by federal law (the FTC Funeral Rule) to offer direct cremation. They are also required to quote the price clearly. If a home will not give you a direct cremation price over the phone, call somewhere else.",
+      "If a funeral home offers cremation, the FTC Funeral Rule requires it to list direct cremation as a separately-priced option — without making you buy a casket — and to make a plain alternative container available. Homes must also quote prices clearly over the phone. If a home won't give you a direct cremation price by phone, call somewhere else.",
     ],
     watchOut:
       "Some funeral homes quote direct cremation at $1,500 but then add a 'cremation container,' 'crematory fee,' and 'transportation surcharge' that double the bill. Ask for the all-in price before you commit.",
@@ -270,7 +270,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "The one fee a funeral home is allowed to charge every family regardless of what services they pick. Covers overhead — facility, staff time, paperwork.",
     paragraphs: [
-      "Typical 2026 range: $1,500–$4,500 depending on region and home. The fee covers the funeral home's general operating costs (rent, staff, filing the death certificate, coordinating with the crematory or cemetery). It is the only legally non-declinable item under the FTC Funeral Rule.",
+      "Typical 2026 range: $1,500–$4,500 depending on region and home. The fee covers the funeral home's general operating costs (rent, staff, filing the death certificate, coordinating with the crematory or cemetery). It is the primary non-declinable item under the FTC Funeral Rule — the one fee every family pays regardless of the services they choose.",
       "This fee varies more between funeral homes than almost any other line item. A neighborhood independent might charge $1,800; a national chain in the same zip code might charge $3,800 for the same service. Always check this number first when comparing GPLs.",
     ],
     related: ["gpl", "ftc-funeral-rule"],
@@ -815,7 +815,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       "A trained officiant — usually non-religious — who writes and leads a personalized ceremony. An alternative to clergy for families who want a service without a religious framework.",
     paragraphs: [
       "A funeral celebrant meets with the family, learns the person's story, and crafts a ceremony around it rather than following a set liturgy. They are a natural fit for people who were not religious, for blended-faith families, or for anyone who wants the focus on the individual life.",
-      "Celebrants typically charge $150–$500. Funeral homes can refer one, or families can hire independently. Many were trained through programs run by celebrant institutes.",
+      "Celebrants typically charge $250–$1,000, with most around $300–$500 for a funeral service. Funeral homes can refer one, or families can hire independently. Many were trained through programs run by celebrant institutes.",
     ],
     related: ["celebration-of-life", "memorial-service"],
   },
