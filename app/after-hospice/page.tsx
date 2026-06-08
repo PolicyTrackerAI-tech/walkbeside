@@ -211,7 +211,7 @@ export default function AfterHospicePage() {
                   burial. Service or no service. Music. Where to
                   scatter ashes if cremation.{" "}
                   <Link
-                    href="/preferences"
+                    href="/worksheet"
                     className="text-primary-deep underline"
                   >
                     There is a preferences worksheet here.

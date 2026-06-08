@@ -381,7 +381,7 @@ export default function PlanAheadPage() {
               <p>
                 We have a structured worksheet for this:{" "}
                 <Link
-                  href="/preferences"
+                  href="/worksheet"
                   className="text-primary-deep underline"
                 >
                   fill out preferences here
@@ -555,7 +555,7 @@ export default function PlanAheadPage() {
               arrangement cheat sheet. All free, no account needed.
             </p>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href="/preferences">
+              <LinkButton href="/worksheet">
                 Open the preferences worksheet →
               </LinkButton>
               <LinkButton href="/prices" variant="secondary">

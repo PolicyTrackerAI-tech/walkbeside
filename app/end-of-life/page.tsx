@@ -444,7 +444,7 @@ export default function EndOfLifePage() {
                   permission (&ldquo;keep it modest&rdquo; is one of
                   the most useful things you can write).{" "}
                   <Link
-                    href="/preferences"
+                    href="/worksheet"
                     className="text-primary-deep underline"
                   >
                     Preferences worksheet here.
