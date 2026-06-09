@@ -424,7 +424,7 @@ Out of 211 items, **these are the true gates.** Do these and you can take real m
   - _How:_ File: /Users/ryancurrie/FH/app/api/stripe/webhook/route.ts. Webhook is idempotent. Status page (/api/negotiate/[id]) reconciles missed webhooks. BUT: verify checkout form prevents double-submit (add disabled state on button). Also test: user pays, webhook sent but delayed, user clicks status page, outreach sent early, webhook arrives late (should be handled by negotiation_outreach status check).
 
 ### Observability, Ops & Support
-- [ ] **Build refund-handling runbook and SOP** — _YOU · M_
+- [x] **Build refund-handling runbook and SOP** — _YOU · M_ ✅DONE 2026-06-09 (Batch 7 — drafted docs/REFUND_SOP.md: criteria, Stripe steps, status update, family message, SLA, automation path. Founder to confirm criteria + window.)
   - _Why:_ The business model promises $49 refunds within 14 days if families don't get documented savings. Currently, refunds are manual (Stripe Dashboard). No process, no audit trail, no criteria for approval.
   - _How:_ Document in docs/REFUND_SOP.md: (1) criteria for approval (quote not honored, < $49 savings, no response from home); (2) approval process (Ryan decides, sister checks quote validity); (3) Stripe refund step-by-step; (4) update negotiation.status to 'refunded', add note in negotiation_outreach; (5) notify family via email. For V1, manual is OK. Create in-app refund button after 10 deals as per LAUNCH_PLAYBOOK.
 - [ ] **Create incident response and on-call playbook** — _YOU · M_
@@ -448,7 +448,7 @@ Out of 211 items, **these are the true gates.** Do these and you can take real m
 - [x] **Set up rate limiting on API endpoints** — _eng · M_ ✅DONE 2026-06-09 (Batch 1 — see "Add rate limiting to public API endpoints")
   - _Why:_ No rate limiting on POST endpoints (/api/stripe/checkout, /api/planning/signup, /api/inbound/*). Vulnerable to brute force, spam, or accidental abuse.
   - _How:_ Use Vercel's built-in rate limiting via next.config.ts middleware, or npm package (redis-based like Upstash). Apply: (1) /api/planning/signup: 5 per IP per hour (prevent spam); (2) /api/inbound/* (Postmark/Resend webhooks): unlimited from their IPs only, blocked from others; (3) /api/stripe/*: standard. Configure in middleware.ts or as edge middleware. See: https://vercel.com/docs/edge-functions/edge-middleware#rate-limiting
-- [ ] **Add monitoring for cron job execution and failures** — _eng · M_
+- [x] **Add monitoring for cron job execution and failures** — _eng · M_ ✅DONE 2026-06-09 (Batch 7 — all 3 crons emit logEvent run summaries + sendAlert on failures + captureError on query errors; needs ALERT_WEBHOOK_URL for push)
   - _Why:_ Three cron jobs run daily/hourly (anniversary, quote-notifications, nurture-emails). No monitoring that they completed. If a cron 500s, Vercel retries but there's no alert to Ryan.
   - _How:_ Each cron (/api/cron/*) already returns structured JSON with sent count + errors array. Setup: (1) Vercel Cron Monitoring (native, free); (2) OR use cron.is or similar to ping a status endpoint on success. Each route should return {success: true, sent, errors} and HTTP 200 always (so Vercel doesn't retry). Add alert if cron doesn't complete within expected time window (60s max).
 - [ ] **Set up Resend webhook for bounce/complaint handling** — _eng · S_ ⚠️PARTIAL
