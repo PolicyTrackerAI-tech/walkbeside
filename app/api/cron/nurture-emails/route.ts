@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendEmail } from "@/lib/email";
 import { buildNurtureEmail } from "@/lib/nurture-email";
+import { logEvent, captureError, sendAlert, maskEmail } from "@/lib/observability";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -67,6 +68,10 @@ export async function GET(req: Request) {
   ]);
 
   if (step1Result.error || step2Result.error) {
+    await captureError(
+      "cron.nurture.query_failed",
+      step1Result.error ?? step2Result.error,
+    );
     return NextResponse.json(
       {
         error:
@@ -98,7 +103,7 @@ export async function GET(req: Request) {
       sentCount++;
     } catch (e) {
       errors.push({
-        email,
+        email: maskEmail(email),
         step: 1,
         reason: e instanceof Error ? e.message : "send failed",
       });
@@ -122,11 +127,24 @@ export async function GET(req: Request) {
       sentCount++;
     } catch (e) {
       errors.push({
-        email,
+        email: maskEmail(email),
         step: 2,
         reason: e instanceof Error ? e.message : "send failed",
       });
     }
+  }
+
+  logEvent("cron.nurture", {
+    step1Pending: step1Result.data?.length ?? 0,
+    step2Pending: step2Result.data?.length ?? 0,
+    sent: sentCount,
+    errorCount: errors.length,
+  });
+  if (errors.length) {
+    await sendAlert("warn", "Nurture cron had send failures", {
+      errorCount: errors.length,
+      sent: sentCount,
+    });
   }
 
   return NextResponse.json({

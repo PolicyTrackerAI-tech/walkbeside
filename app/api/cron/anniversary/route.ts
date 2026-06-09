@@ -7,6 +7,7 @@ import {
   MILESTONE_DAYS,
   type Milestone,
 } from "@/lib/anniversary-emails";
+import { logEvent, captureError, sendAlert } from "@/lib/observability";
 
 export const runtime = "nodejs";
 // Vercel cron may take longer than the default Edge function limit.
@@ -68,6 +69,7 @@ export async function GET(req: Request) {
     .order("paid_at", { ascending: true });
 
   if (error) {
+    await captureError("cron.anniversary.query_failed", error);
     return NextResponse.json(
       { error: error.message },
       { status: 500 },
@@ -132,6 +134,18 @@ export async function GET(req: Request) {
         reason: e instanceof Error ? e.message : "send failed",
       });
     }
+  }
+
+  logEvent("cron.anniversary", {
+    candidates: candidates?.length ?? 0,
+    sent: sentCount,
+    errorCount: errors.length,
+  });
+  if (errors.length) {
+    await sendAlert("warn", "Anniversary cron had failures", {
+      errorCount: errors.length,
+      sent: sentCount,
+    });
   }
 
   return NextResponse.json({

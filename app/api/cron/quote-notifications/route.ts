@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendEmail } from "@/lib/email";
 import { fmtCents } from "@/lib/stripe";
+import { logEvent, captureError, sendAlert } from "@/lib/observability";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -59,6 +60,7 @@ export async function GET(req: Request) {
     .limit(50);
 
   if (error) {
+    await captureError("cron.quote_notifications.query_failed", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
@@ -175,6 +177,19 @@ Reply to this email if anything looks off — a person reads it.`;
         reason: e instanceof Error ? e.message : "send failed",
       });
     }
+  }
+
+  logEvent("cron.quote_notifications", {
+    pending: pending.length,
+    grouped: byNeg.size,
+    sent: sentCount,
+    errorCount: errors.length,
+  });
+  if (errors.length) {
+    await sendAlert("warn", "Quote-notification cron had failures", {
+      errorCount: errors.length,
+      sent: sentCount,
+    });
   }
 
   return NextResponse.json({
