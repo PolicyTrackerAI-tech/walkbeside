@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { FEATURES, requireServer } from "./env";
+import { maskEmail } from "./observability";
 
 let _resend: Resend | null = null;
 function resend(): Resend {
@@ -37,9 +38,9 @@ export async function sendEmail(msg: OutboundEmail): Promise<{ id: string }> {
     const id = `dryrun_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     // eslint-disable-next-line no-console
     console.log("[email:dryrun]", id, {
-      to: msg.to,
+      to: maskEmail(msg.to),
       subject: msg.subject,
-      bodyPreview: msg.text.slice(0, 200),
+      hasText: msg.text.length > 0,
       hasHtml: !!msg.html,
     });
     return { id };

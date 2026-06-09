@@ -7,6 +7,7 @@ import {
   textOf,
 } from "@/lib/claude";
 import { priceListImageExtractionSystem } from "@/lib/negotiation/prompts";
+import { readLimitedJson } from "@/lib/http-guards";
 
 /**
  * Vision-OCR a photographed General Price List into plain-text line items
@@ -44,7 +45,18 @@ export async function POST(req: Request) {
     );
   }
 
-  const parsed = Body.safeParse(await req.json());
+  const limited = await readLimitedJson(req, 8500);
+  if (!limited.ok)
+    return NextResponse.json(
+      {
+        error:
+          limited.status === 413
+            ? "That image is too large — downscale it and try again, or paste the prices below."
+            : "Couldn't process that image. Try a clearer photo, or paste the prices below.",
+      },
+      { status: limited.status },
+    );
+  const parsed = Body.safeParse(limited.data);
   if (!parsed.success) {
     return NextResponse.json(
       {

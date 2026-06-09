@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { readLimitedJson } from "@/lib/http-guards";
 
 /**
  * POST /api/share/create
@@ -14,15 +15,10 @@ import { createClient } from "@/lib/supabase/server";
  * insert for anon role.
  */
 export async function POST(req: Request) {
-  let body: { payload?: unknown };
-  try {
-    body = (await req.json()) as { payload?: unknown };
-  } catch {
-    return NextResponse.json(
-      { error: "Invalid JSON body" },
-      { status: 400 },
-    );
-  }
+  const limited = await readLimitedJson<{ payload?: unknown }>(req, 100);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+  const body = limited.data;
 
   if (!body.payload || typeof body.payload !== "object") {
     return NextResponse.json(

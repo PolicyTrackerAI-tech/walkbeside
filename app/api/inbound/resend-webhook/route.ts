@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
-import { logEvent, logWarn, captureError, sendAlert } from "@/lib/observability";
+import { logEvent, logWarn, captureError, sendAlert, hashId } from "@/lib/observability";
+import { readLimitedText } from "@/lib/http-guards";
 
 export const runtime = "nodejs";
 
@@ -75,7 +76,10 @@ function verifySvixSignature(
 }
 
 export async function POST(req: Request) {
-  const payload = await req.text();
+  const limited = await readLimitedText(req, 50);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+  const payload = limited.text;
   const id = req.headers.get("svix-id");
   const timestamp = req.headers.get("svix-timestamp");
   const signature = req.headers.get("svix-signature");
@@ -133,7 +137,7 @@ export async function POST(req: Request) {
       await captureError(
         "resend.webhook.deactivate_failed",
         error,
-        { email, reason },
+        { emailHash: hashId(email), reason },
         { alert: false },
       );
       continue;
@@ -142,7 +146,7 @@ export async function POST(req: Request) {
       flipped.push(email);
       logEvent("resend.webhook.home_deactivated", {
         reason,
-        email,
+        emailHash: hashId(email),
         matched: data.length,
       });
     }
@@ -152,7 +156,7 @@ export async function POST(req: Request) {
   if (flipped.length > 0) {
     await sendAlert("warn", "Funeral home deactivated (bounce/complaint)", {
       reason,
-      emails: flipped,
+      count: flipped.length,
     });
   }
 

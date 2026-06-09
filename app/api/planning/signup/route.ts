@@ -4,11 +4,16 @@ import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
 import { sendEmail } from "@/lib/email";
 import { buildWelcomeEmail } from "@/lib/welcome-email";
+import { hashId } from "@/lib/observability";
+import { readLimitedJson } from "@/lib/http-guards";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: NextRequest) {
-  const body = await request.json().catch(() => null);
+  const parsedBody = await readLimitedJson<Record<string, unknown>>(request, 5);
+  if (!parsedBody.ok)
+    return NextResponse.json({ error: parsedBody.error }, { status: parsedBody.status });
+  const body = parsedBody.data;
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
   const zip = typeof body?.zip === "string" ? body.zip.trim().slice(0, 10) : null;
   // Source identifies which content page or surface captured the email.
@@ -62,7 +67,7 @@ export async function POST(request: NextRequest) {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error("[planning-signup] welcome email failed", {
-        email,
+        emailHash: hashId(email),
         source,
         message: err instanceof Error ? err.message : String(err),
       });

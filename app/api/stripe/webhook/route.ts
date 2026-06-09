@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
 import { logEvent, logWarn, captureError } from "@/lib/observability";
+import { readLimitedText } from "@/lib/http-guards";
 
 export const runtime = "nodejs";
 
@@ -18,11 +19,14 @@ export async function POST(req: Request) {
   if (!sig)
     return NextResponse.json({ error: "no_signature" }, { status: 400 });
 
+  const limited = await readLimitedText(req, 100);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+
   let event;
   try {
-    const raw = await req.text();
     event = stripe().webhooks.constructEvent(
-      raw,
+      limited.text,
       sig,
       requireServer("STRIPE_WEBHOOK_SECRET"),
     );

@@ -5,7 +5,8 @@ import { stripe, stripeAvailable, calcFeeCents } from "@/lib/stripe";
 import { isPaidUser } from "@/lib/auth-paid";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
-import { logEvent } from "@/lib/observability";
+import { logEvent, maskEmail } from "@/lib/observability";
+import { validateOrigin } from "@/lib/http-guards";
 
 /**
  * Upfront pay-to-send checkout. This is the ONLY charge under Model A: a flat
@@ -19,6 +20,9 @@ import { logEvent } from "@/lib/observability";
  * we don't charge ourselves during testing — but the outreach still sends.
  */
 export async function POST(req: Request) {
+  if (!validateOrigin(req))
+    return NextResponse.json({ error: "bad_origin" }, { status: 403 });
+
   const form = await req.formData();
   const negotiationId = String(form.get("negotiationId") ?? "");
   if (!negotiationId)
@@ -54,7 +58,7 @@ export async function POST(req: Request) {
 
   // Free-email test/founder account → send now, no charge.
   if (await isPaidUser(supabase, user)) {
-    logEvent("checkout.free_bypass", { negotiationId, email: user.email });
+    logEvent("checkout.free_bypass", { negotiationId, email: maskEmail(user.email) });
     await sendOutreachForNegotiation(admin(), negotiationId);
     return NextResponse.redirect(
       new URL(`/negotiate/${negotiationId}/status?freebypass=1`, req.url),

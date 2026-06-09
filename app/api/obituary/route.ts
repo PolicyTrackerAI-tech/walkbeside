@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { client as anthropic, MODEL, textOf, claudeAvailable } from "@/lib/claude";
 import { obituarySystem } from "@/lib/negotiation/prompts";
 import { FEATURES } from "@/lib/env";
+import { readLimitedJson } from "@/lib/http-guards";
 
 const Body = z.object({
   inputs: z.record(z.string(), z.string().max(1000)),
@@ -17,7 +18,10 @@ const WORD_TARGET: Record<"short" | "standard" | "full", number> = {
 };
 
 export async function POST(req: Request) {
-  const parsed = Body.safeParse(await req.json());
+  const limited = await readLimitedJson(req, 40);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+  const parsed = Body.safeParse(limited.data);
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 

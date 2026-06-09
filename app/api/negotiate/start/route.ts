@@ -9,6 +9,7 @@ import {
   buildOutreachEmail,
 } from "@/lib/negotiation/email-body";
 import { isEmailDenylisted } from "@/lib/negotiation/denylist";
+import { readLimitedJson } from "@/lib/http-guards";
 
 const Body = z.object({
   zip: z.string().min(3).max(10),
@@ -40,7 +41,10 @@ export async function POST(req: Request) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
-  const parsed = Body.safeParse(await req.json());
+  const limited = await readLimitedJson(req, 100);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+  const parsed = Body.safeParse(limited.data);
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 

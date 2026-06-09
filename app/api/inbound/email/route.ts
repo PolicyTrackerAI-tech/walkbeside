@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { notifyFamilyOfReply } from "@/lib/negotiation/notify-family-of-reply";
+import { readLimitedJson } from "@/lib/http-guards";
 
 export const runtime = "nodejs";
 
@@ -44,12 +45,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  let payload: PostmarkInbound;
-  try {
-    payload = (await req.json()) as PostmarkInbound;
-  } catch {
-    return NextResponse.json({ error: "bad_json" }, { status: 400 });
-  }
+  const limited = await readLimitedJson<PostmarkInbound>(req, 100);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+  const payload = limited.data;
 
   // Plus-addressed local part — e.g. `advocate+abc-uuid@reply.honestfuneral.co`
   // → MailboxHash = `abc-uuid`. Postmark also exposes per-recipient hash in
@@ -64,9 +63,7 @@ export async function POST(req: Request) {
     // 200 so Postmark doesn't retry, but log for visibility — these are
     // typically replies to a non-plus-addressed inbox (someone manually
     // emailing arrangements@) or spam.
-    console.warn(
-      `[inbound] no negotiationId in to=${toAddress} from=${fromAddress} msgId=${inboundMessageId}`,
-    );
+    console.warn(`[inbound] no negotiationId msgId=${inboundMessageId}`);
     return NextResponse.json({ accepted: false, reason: "no_negotiation_id" });
   }
 
@@ -82,9 +79,7 @@ export async function POST(req: Request) {
     .eq("id", negotiationId)
     .single();
   if (!neg) {
-    console.warn(
-      `[inbound] negotiation not found id=${negotiationId} from=${fromAddress}`,
-    );
+    console.warn(`[inbound] negotiation not found id=${negotiationId}`);
     return NextResponse.json({ accepted: false, reason: "unknown_negotiation" });
   }
 
@@ -129,7 +124,7 @@ export async function POST(req: Request) {
   }
 
   console.info(
-    `[inbound] stored msg neg=${negotiationId} from=${fromAddress} outreach=${outreachId ?? "unmatched"}`,
+    `[inbound] stored msg neg=${negotiationId} outreach=${outreachId ?? "unmatched"}`,
   );
 
   // Best-effort family notification — failure here doesn't fail the webhook

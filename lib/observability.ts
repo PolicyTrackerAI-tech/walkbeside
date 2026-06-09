@@ -1,4 +1,22 @@
 import "server-only";
+import crypto from "node:crypto";
+
+/**
+ * Redaction helpers — use these instead of logging raw PII. Email addresses,
+ * full names, and message bodies must never land in plaintext logs/alerts.
+ */
+export function maskEmail(email: string | null | undefined): string {
+  if (!email) return "(none)";
+  const [local, domain] = email.split("@");
+  if (!local || !domain) return "***";
+  return `${local[0]}***@${domain}`;
+}
+
+/** Stable short hash for correlation/dedup without storing the raw value. */
+export function hashId(value: string | null | undefined): string {
+  if (!value) return "(none)";
+  return crypto.createHash("sha256").update(value).digest("hex").slice(0, 10);
+}
 
 /**
  * Vendor-agnostic observability seam for the launch-critical paths

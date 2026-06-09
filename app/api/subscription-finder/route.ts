@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { client as anthropic, MODEL, textOf, claudeAvailable } from "@/lib/claude";
+import { readLimitedJson } from "@/lib/http-guards";
 
 const Body = z.object({
   text: z.string().min(20).max(50_000),
@@ -32,7 +33,10 @@ Rules:
 - If no recurring charges are found, return { "charges": [] }.`;
 
 export async function POST(req: Request) {
-  const parsed = Body.safeParse(await req.json());
+  const limited = await readLimitedJson(req, 60);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+  const parsed = Body.safeParse(limited.data);
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 

@@ -14,6 +14,7 @@ import {
 } from "@/lib/pricing-data";
 import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES } from "@/lib/env";
+import { readLimitedJson } from "@/lib/http-guards";
 
 const Body = z.object({
   text: z.string().min(20).max(20000),
@@ -53,7 +54,10 @@ interface AdvocacySummary {
 }
 
 export async function POST(req: Request) {
-  const parsed = Body.safeParse(await req.json());
+  const limited = await readLimitedJson(req, 200);
+  if (!limited.ok)
+    return NextResponse.json({ error: limited.error }, { status: limited.status });
+  const parsed = Body.safeParse(limited.data);
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 

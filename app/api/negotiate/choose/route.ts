@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
+import { validateOrigin } from "@/lib/http-guards";
 
 /**
  * Family picks a home from their results. Under the upfront-pay model the $49
@@ -12,6 +13,9 @@ import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
  * Form POST from the results page so it works without JS.
  */
 export async function POST(req: Request) {
+  if (!validateOrigin(req))
+    return NextResponse.json({ error: "bad_origin" }, { status: 403 });
+
   const form = await req.formData();
   const negotiationId = String(form.get("negotiationId") ?? "");
   const outreachId = String(form.get("outreachId") ?? "");
