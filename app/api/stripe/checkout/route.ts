@@ -7,11 +7,14 @@ import { PUBLIC, requireServer } from "@/lib/env";
 import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
 
 /**
- * Create a Stripe Checkout session for the negotiation fee on the chosen home.
- * Submitted as a regular form POST from the results page so it works even if JS is disabled.
+ * Create a Stripe Checkout session for the flat $49 success fee on the chosen
+ * home. This is the ONLY charge under Model A — every tool is free, and the
+ * fee fires here, when the family selects a home we presented.
+ * Submitted as a regular form POST from the results page so it works even if
+ * JS is disabled.
  *
- * Paid users (paid_at set via the upfront $49 toolkit unlock) bypass Stripe
- * entirely — they've already paid the flat fee and we don't double-charge.
+ * Free-email test/founder accounts (isPaidUser → isFreeEmail) bypass Stripe so
+ * we don't charge ourselves during testing. No real family is ever pre-paid.
  */
 export async function POST(req: Request) {
   const form = await req.formData();
@@ -46,8 +49,7 @@ export async function POST(req: Request) {
 
   const fee = calcFeeCents();
 
-  // Already paid via the upfront toolkit unlock → close the negotiation
-  // immediately at zero additional cost. No second charge, no Stripe round-trip.
+  // Free-email test/founder account → close at no charge, no Stripe round-trip.
   if (await isPaidUser(supabase, user)) {
     const { data: updated } = await supabase
       .from("negotiations")

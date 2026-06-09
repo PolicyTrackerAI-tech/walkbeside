@@ -1,15 +1,19 @@
 /**
- * Account-level paywall check.
+ * "Skip the fee" check, used so the per-deal success fee can be waived for
+ * specific accounts.
  *
- * Margaret refactor section 12. A user is considered "paid" — i.e. has
- * unlocked the full toolkit — if EITHER:
+ * Under Model A there is no account-level paywall: every tool is free and the
+ * only charge is the $49 success fee on home selection. This helper exists so
+ * test accounts and the founder's own logins close deals WITHOUT being charged
+ * during testing. A user qualifies if EITHER:
  *
  * 1. Their email matches an entry in HONEST_FUNERAL_FREE_EMAILS (env var,
- *    comma-separated). Used for test accounts and the founder's own logins
- *    so we don't have to fake-pay during dev. Case-insensitive, trimmed.
+ *    comma-separated). This is the live mechanism. Case-insensitive, trimmed.
  *
- * 2. Their profiles.paid_at is set (Stripe webhook flips this on after
- *    a successful account-paywall checkout).
+ * 2. Their profiles.paid_at is set. Legacy column — nothing writes it anymore
+ *    (the upfront account-paywall that used it was removed), so in practice
+ *    this check is the free-email allowlist. Kept for backward compatibility
+ *    with any historical rows.
  *
  * Both checks are server-side. Don't expose the free-email list to the client.
  */

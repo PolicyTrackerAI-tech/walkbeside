@@ -1,13 +1,8 @@
 /**
  * Auth-only gate (no payment check). Use on routes that need a signed-in
- * user but should remain free until the family actively picks a funeral
- * home (V2 canonical pricing: $49 charged only on home selection).
- *
- * Companion to `requirePaid`. The difference:
- *   - requirePaid:   sends unauthed users to /login, sends authed-but-unpaid
- *                    users to /paywall.
- *   - requireSignedIn: sends unauthed users to /login. Authed users pass through
- *                      regardless of payment status.
+ * user. Under Model A every tool is free and the only charge is the $49
+ * success fee on home selection, so this is the only gate the negotiate
+ * flow needs: unauthed users go to /login; authed users pass through.
  *
  * If Supabase isn't configured (dev / no-account mode), this is a no-op
  * so the flow stays exercisable.

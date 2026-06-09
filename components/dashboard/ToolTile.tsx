@@ -1,26 +1,21 @@
 import Link from "next/link";
 
 /**
- * Tile for the dashboard's "full toolkit" grid. Card-shaped, hover state,
+ * Tile for the dashboard's free-tools grid. Card-shaped, hover state,
  * right-aligned arrow. Matches the visual rhythm of other dashboard cards.
+ *
+ * Model A: every tool is free, so there is no locked/paywalled state.
  */
 export function ToolTile({
   href,
   eyebrow,
   title,
   blurb,
-  locked = false,
 }: {
   href: string;
   eyebrow?: string;
   title: string;
   blurb: string;
-  /**
-   * True for paid-only tools when the current user is unpaid. The tile
-   * still links (route's own requirePaid sends to /paywall) but renders
-   * with a "Unlock $49" badge so the gating is honest up front.
-   */
-  locked?: boolean;
 }) {
   return (
     <Link
@@ -40,11 +35,6 @@ export function ToolTile({
           <div className="text-sm text-ink-soft mt-1.5 leading-relaxed">
             {blurb}
           </div>
-          {locked && (
-            <div className="mt-2 inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-ink-muted bg-surface-soft border border-border rounded-full px-2 py-0.5">
-              <span aria-hidden>🔒</span> Unlock with toolkit
-            </div>
-          )}
         </div>
         <span
           className="text-primary text-lg leading-none pt-1 shrink-0 transition-transform group-hover:translate-x-0.5"

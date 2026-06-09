@@ -62,17 +62,29 @@ export default async function GuidancePage({
 
   const g = SCENARIO_GUIDANCE[scenario];
 
-  // Post-decision operational steps (gateUntilPaid) only render for
-  // users who've actually picked a home with us. Pre-pay readers see
-  // the calming + pivot-CTA steps only.
-  let isPaid = false;
+  // Post-decision operational steps only render once the family has actually
+  // picked a home with us — i.e. a closed negotiation. (Model A: everything is
+  // free, so this is progressive disclosure keyed on the decision, not a
+  // paywall.) Free-email test/founder accounts also pass, for QA. Everyone
+  // else sees the calming + pivot-CTA steps only.
+  let pickedHome = false;
   if (FEATURES.supabase()) {
     const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
     if (user) {
-      isPaid = await isPaidUser(supabase, user);
+      if (await isPaidUser(supabase, user)) {
+        pickedHome = true;
+      } else {
+        const { data: closed } = await supabase
+          .from("negotiations")
+          .select("id")
+          .eq("user_id", user.id)
+          .eq("status", "closed")
+          .limit(1);
+        pickedHome = (closed?.length ?? 0) > 0;
+      }
     }
   }
 
@@ -106,7 +118,7 @@ export default async function GuidancePage({
         steps={g.steps}
         pullQuote={g.pullQuote}
         showCrisisResources={scenario === "elsewhere"}
-        isPaid={isPaid}
+        isPaid={pickedHome}
       />
     </>
   );

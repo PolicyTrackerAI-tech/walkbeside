@@ -1,10 +1,13 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { requireSignedIn } from "@/lib/require-signed-in";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents, stripe, stripeAvailable } from "@/lib/stripe";
+import { PUBLIC, requireServer } from "@/lib/env";
+import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
 
 export default async function NegotiationClosedPage({
   params,
@@ -34,6 +37,45 @@ export default async function NegotiationClosedPage({
     .eq("user_id", user.id)
     .single();
   if (!neg) redirect("/dashboard");
+
+  // Reconcile against Stripe if the webhook hasn't closed this deal yet.
+  // Critical: notifyChosenHome only fires on close. Without this, a delayed
+  // or missed webhook means the chosen home is never actually notified while
+  // this page tells the family it was. We verify the session, then close +
+  // notify ourselves (mirroring the webhook) via the service-role client.
+  if (neg.status !== "closed" && sp.session_id && stripeAvailable()) {
+    try {
+      const session = await stripe().checkout.sessions.retrieve(sp.session_id);
+      if (
+        session.payment_status === "paid" &&
+        session.metadata?.negotiationId === id
+      ) {
+        const admin = createAdminClient(
+          PUBLIC.supabaseUrl,
+          requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+        );
+        const { data: updated } = await admin
+          .from("negotiations")
+          .update({
+            status: "closed",
+            unlocked_at: new Date().toISOString(),
+            stripe_payment_intent_id: session.payment_intent as string,
+          })
+          .eq("id", id)
+          .neq("status", "closed")
+          .select("id");
+        if (updated && updated.length > 0) {
+          const outreachId = session.metadata?.outreachId;
+          if (outreachId) {
+            await notifyChosenHome({ admin, negotiationId: id, outreachId });
+          }
+          neg.status = "closed";
+        }
+      }
+    } catch {
+      // Retrieval failed — fall back to the webhook.
+    }
+  }
 
   return (
     <main className="flex-1 flex flex-col">

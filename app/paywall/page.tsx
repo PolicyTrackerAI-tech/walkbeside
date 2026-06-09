@@ -7,10 +7,10 @@ import { redirect } from "next/navigation";
  * and the flat $49 is charged only when a family chooses a funeral home we
  * found for them (a success fee on selection — see /negotiate/[id]/results).
  *
- * This route used to host the upfront-unlock checkout. Nothing should link
- * here anymore; we redirect to the canonical explainer so any stale link
- * (or the checkout-account cancel_url, pending its removal in the payment
- * consolidation) lands somewhere coherent instead of a false paywall.
+ * This route used to host the upfront-unlock checkout (since removed, along
+ * with /api/stripe/checkout-account and /paywall/success). Nothing links here
+ * anymore; we redirect to the canonical explainer so any stale external link
+ * lands somewhere coherent instead of a dead paywall.
  */
 export default function PaywallPage() {
   redirect("/how-it-works");

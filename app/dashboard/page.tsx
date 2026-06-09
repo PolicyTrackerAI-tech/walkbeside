@@ -37,12 +37,9 @@ export default async function DashboardPage({
   } = await supabase.auth.getUser();
   if (!user) return <AnonymousDashboard />;
 
-  // V2 canonical model: signed-in users can use the dashboard for free.
-  // The paid_at flag determines what's unlocked vs. soft-gated. Active
-  // outreach (started via /decide → /negotiate/start) shows up regardless
-  // of payment status. Paid-only tools render with a "Pay $49 to unlock"
-  // badge for unpaid users; clicking them triggers /paywall via the
-  // route's own requirePaid gate.
+  // Model A: every tool is free. `isPaid` here is only the "skip the fee"
+  // flag (free-email test/founder accounts) — used to tone the outreach CTA,
+  // not to gate any tool. The $49 is charged on home selection, not here.
   const isPaid = await isPaidUser(supabase, user);
 
   const [

@@ -32,58 +32,39 @@ export async function POST(req: Request) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    const kind = session.metadata?.kind;
-    const userId = session.metadata?.userId;
     const negotiationId = session.metadata?.negotiationId;
     const outreachId = session.metadata?.outreachId;
 
-    const admin = createClient(
-      PUBLIC.supabaseUrl,
-      requireServer("SUPABASE_SERVICE_ROLE_KEY"),
-    );
-
-    if (kind === "account-paywall" && userId) {
-      // Margaret-section-12: account-level paywall. Flip paid_at on the
-      // user's profile and stash the Stripe customer for refund handling.
-      const customerId =
-        typeof session.customer === "string" ? session.customer : undefined;
-      const update: Record<string, unknown> = {
-        paid_at: new Date().toISOString(),
-      };
-      if (customerId) update.stripe_customer_id = customerId;
-      await admin.from("profiles").update(update).eq("id", userId);
-    } else if (negotiationId) {
-      // Legacy per-negotiation flow (still works for in-flight rows
-      // before the section-12 cutover).
-      // 'unlock' = pure $49 to reveal homes (V2 flow). Sets unlocked_at, leaves status alone.
-      // anything else = legacy per-home checkout that closes the deal.
-      const update: Record<string, unknown> = {
-        stripe_payment_intent_id: session.payment_intent as string,
-      };
-      if (kind === "unlock") {
-        update.unlocked_at = new Date().toISOString();
-        await admin.from("negotiations").update(update).eq("id", negotiationId);
-      } else {
-        update.status = "closed";
-        update.unlocked_at = new Date().toISOString();
-        // Conditional update — only proceeds if not already closed.
-        // Prevents duplicate FD notifications on Stripe webhook retries.
-        const { data: updated } = await admin
-          .from("negotiations")
-          .update(update)
-          .eq("id", negotiationId)
-          .neq("status", "closed")
-          .select("id");
-        if (updated && updated.length > 0 && outreachId) {
-          const result = await notifyChosenHome({
-            admin,
-            negotiationId,
-            outreachId,
-          });
-          console.info(
-            `[webhook] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
-          );
-        }
+    // Model A: the only Stripe charge is the per-deal success fee, paid when
+    // the family chooses a home. On payment, close the negotiation and notify
+    // the chosen home. (The /negotiate/[id]/closed page performs the same
+    // reconciliation if this webhook is delayed or missed.)
+    if (negotiationId) {
+      const admin = createClient(
+        PUBLIC.supabaseUrl,
+        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+      );
+      // Conditional update — only proceeds if not already closed. Prevents
+      // duplicate home notifications on Stripe webhook retries.
+      const { data: updated } = await admin
+        .from("negotiations")
+        .update({
+          status: "closed",
+          unlocked_at: new Date().toISOString(),
+          stripe_payment_intent_id: session.payment_intent as string,
+        })
+        .eq("id", negotiationId)
+        .neq("status", "closed")
+        .select("id");
+      if (updated && updated.length > 0 && outreachId) {
+        const result = await notifyChosenHome({
+          admin,
+          negotiationId,
+          outreachId,
+        });
+        console.info(
+          `[webhook] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
+        );
       }
     }
   }

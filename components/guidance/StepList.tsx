@@ -23,7 +23,7 @@ interface Props {
   showCta?: boolean;
   /** Show 988 block. True for scenarios with elevated survivor suicide risk. */
   showCrisisResources?: boolean;
-  /** True if the user has paid for the toolkit. Unlocks post-decision steps. */
+  /** True once the family has picked a home (a closed deal). Unlocks post-decision steps. */
   isPaid?: boolean;
 }
 
