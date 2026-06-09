@@ -97,7 +97,7 @@ export function Header({ minimal = false }: { minimal?: boolean }) {
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-border bg-surface-soft">
+    <footer className="mt-auto border-t border-border bg-surface-soft print:hidden">
       <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
           A consumer advocate for families &mdash; not a funeral home.

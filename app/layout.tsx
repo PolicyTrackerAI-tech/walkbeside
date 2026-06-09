@@ -57,8 +57,16 @@ export default function RootLayout({
       className={`${sans.variable} ${serif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-ink">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:rounded-lg focus:border focus:border-border focus:bg-surface focus:px-4 focus:py-2 focus:text-ink"
+        >
+          Skip to content
+        </a>
         <PhaseProvider>
-          {children}
+          <div id="main-content" tabIndex={-1} className="flex-1 flex flex-col">
+            {children}
+          </div>
           <Footer />
         </PhaseProvider>
       </body>

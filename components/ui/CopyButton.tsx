@@ -24,6 +24,8 @@ export function CopyButton({ text, label = "Copy", className = "" }: Props) {
     <button
       type="button"
       onClick={copy}
+      aria-label={copied ? "Copied to clipboard" : label}
+      aria-live="polite"
       className={`text-xs uppercase tracking-wider text-primary-deep border border-primary/30 rounded-full px-3 py-1 hover:bg-primary-soft transition-colors ${className}`}
     >
       {copied ? "Copied" : label}

@@ -275,6 +275,7 @@ function NegotiateStartWizard() {
                   <div className="grid sm:grid-cols-3 gap-3 mt-3">
                     {[10, 25, 50].map((mi) => (
                       <button
+                        type="button"
                         key={mi}
                         onClick={() => {
                           update("radiusMiles", mi);
@@ -313,6 +314,7 @@ function NegotiateStartWizard() {
                       { value: "no" as const, label: "No, not yet" },
                     ].map((opt) => (
                       <button
+                        type="button"
                         key={opt.value}
                         onClick={() => {
                           update("hasQuote", opt.value);
@@ -390,6 +392,7 @@ function NegotiateStartWizard() {
                       { value: "not-sure", label: "Not sure yet" },
                     ].map((opt) => (
                       <button
+                        type="button"
                         key={opt.value}
                         onClick={() => {
                           update("timing", opt.value);

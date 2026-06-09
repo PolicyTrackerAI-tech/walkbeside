@@ -53,7 +53,7 @@ export function SiteHeader({
 
   return (
     <header
-      className={`border-b border-border bg-surface/70${className ? ` ${className}` : ""}`}
+      className={`border-b border-border bg-surface/70 print:hidden${className ? ` ${className}` : ""}`}
     >
       <div className="max-w-6xl mx-auto px-5 py-4 flex items-center gap-4">
         <Brand />
@@ -193,8 +193,9 @@ function HeaderAuthButton() {
           className="ml-2 text-xs text-ink-muted hover:text-ink-soft"
           aria-haspopup="menu"
           aria-expanded={menuOpen}
+          aria-label="Account menu"
         >
-          {email.split("@")[0]} ▾
+          {email.split("@")[0]} <span aria-hidden="true">▾</span>
         </button>
       )}
       {menuOpen && (

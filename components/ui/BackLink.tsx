@@ -26,7 +26,11 @@ export function BackLink({ defaultHref = "/", defaultLabel = "← Back" }: Props
   }, []);
 
   return (
-    <Link href={href} className="text-sm text-ink-muted hover:text-ink-soft">
+    <Link
+      href={href}
+      aria-label="Go back to the previous page"
+      className="text-sm text-ink-muted hover:text-ink-soft"
+    >
       {defaultLabel}
     </Link>
   );
