@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
-import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
@@ -11,123 +10,153 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
+const PRINCIPLES: { label: string; title: string; body: string }[] = [
+  {
+    label: "Whose side we're on",
+    title: "Paid only by you",
+    body: "No commissions, kickbacks, or referral fees from any funeral home, cemetery, or vendor. Ever. That's the only way to stay on your side.",
+  },
+  {
+    label: "What it costs",
+    title: "A flat $49",
+    body: "Paid upfront, before we contact a single home. Refundable in 14 days if we don't save you anything.",
+  },
+  {
+    label: "What's free",
+    title: "Every tool",
+    body: "Price lookup, prep kit, checklists, the obituary helper — all free. The $49 is only for the funeral-home outreach.",
+  },
+];
+
+const NOT: string[] = [
+  "Not a funeral home, law firm, or financial advisor.",
+  "Not a marketplace paid by the homes it lists.",
+  "Not a subscription — one flat $49, refundable.",
+  "Not a replacement for your own attorney on complex estates.",
+];
+
 export default function AboutPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader backLabel="Home" />
 
-      <section className="flex-1">
-        <div className="max-w-2xl mx-auto px-5 py-10 space-y-8">
-          <div>
-            <p className="text-xs uppercase tracking-wider text-ink-muted mb-3">
-              About
-            </p>
-            <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              The family is the only one in the room without help.
-            </h1>
-            <p className="text-lg text-ink-soft">
-              When someone dies, everyone else in the arrangement has done this
-              hundreds of times &mdash; the funeral home, the cemetery, the
-              vendors. The family has done it once, in shock, at the worst
-              moment of their life, with a $10,000 decision in front of them and
-              no reference for what anything should cost. That asymmetry is why
-              families overpay by thousands. Honest Funeral exists to close it
-              &mdash; to put the same information a professional has into the
-              family&rsquo;s hands, at the moment they need it.
-            </p>
+      {/* Hero — the asymmetry, in one breath */}
+      <section className="flex-1 flex items-center">
+        <div className="max-w-2xl mx-auto px-5 py-16 text-center">
+          <p className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-4">
+            About
+          </p>
+          <h1 className="font-serif text-3xl sm:text-5xl leading-tight text-ink mb-6">
+            <span className="block">The industry has done this</span>
+            <span className="block">a thousand times.</span>
+            <span className="block text-primary-deep">You&rsquo;re doing it once.</span>
+          </h1>
+          <p className="text-lg text-ink-soft max-w-md mx-auto">
+            That gap &mdash; between people who do this every day and a family in
+            shock doing it for the first time &mdash; is why families overpay by
+            thousands. Honest Funeral exists to close it.
+          </p>
+        </div>
+      </section>
+
+      {/* Why we can stay on your side — three scannable principles */}
+      <section className="border-t border-border bg-surface-soft">
+        <div className="max-w-4xl mx-auto px-5 py-14">
+          <h2 className="font-serif text-2xl sm:text-3xl text-ink text-center mb-10">
+            Why we can stay on your side
+          </h2>
+          <div className="grid gap-5 sm:grid-cols-3">
+            {PRINCIPLES.map((p) => (
+              <div
+                key={p.title}
+                className="bg-surface border border-border rounded-2xl p-6"
+              >
+                <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
+                  {p.label}
+                </div>
+                <h3 className="font-serif text-xl text-ink mb-2">{p.title}</h3>
+                <p className="text-sm text-ink-soft">{p.body}</p>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
 
-          <Card>
-            <CardTitle>Why we take no money from the industry</CardTitle>
-            <p className="text-ink-soft mt-3 mb-3">
-              Most &ldquo;free&rdquo; funeral services are paid by the funeral
-              homes they list &mdash; so their recommendations follow the money,
-              not your interest. We refuse all of it.
-            </p>
-            <p className="text-sm text-ink-soft">
-              <strong className="text-ink">
-                No commissions, no kickbacks, no referral or lead-sale revenue
-                from any funeral home, cemetery, monument company, or vendor.
-              </strong>{" "}
-              Our only revenue is a flat $49 from the family, paid upfront and
-              refundable in 14 days if we don&rsquo;t save you anything. Charging
-              the family &mdash; and no one else &mdash; is the only way to stay
-              accountable to the family.
-            </p>
-          </Card>
+      {/* The promise */}
+      <section className="border-t border-border">
+        <div className="max-w-2xl mx-auto px-5 py-16 text-center">
+          <p className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-4">
+            The promise
+          </p>
+          <p className="font-serif text-2xl sm:text-3xl text-ink leading-snug italic">
+            &ldquo;When someone important dies, you shouldn&rsquo;t have to
+            figure this out alone. We walk beside you &mdash; from the first
+            phone call to the last account closed.&rdquo;
+          </p>
+        </div>
+      </section>
 
-          <Card tone="primary">
-            <CardTitle>The promise</CardTitle>
-            <p className="text-ink font-serif text-lg italic">
-              &ldquo;When someone important dies, you should not have to figure
-              this out alone. We walk beside you from the first phone call to
-              the last account closed.&rdquo;
-            </p>
-          </Card>
-
-          <Card tone="soft">
-            <CardTitle>Who&rsquo;s behind it</CardTitle>
-            <p className="text-ink-soft">
-              Honest Funeral is built and run by one person &mdash; me. Not a
-              funeral director, not an investor-backed startup: a builder who
-              kept watching families get taken advantage of at the worst
-              possible time and decided to make the tool I&rsquo;d want my own
-              family to have. Keeping it small and independent is the point
-              &mdash; no board, no funeral home to answer to. Just the family.
-            </p>
-          </Card>
-
-          <Card tone="soft">
-            <CardTitle>What this product is not</CardTitle>
-            <ul className="text-ink-soft space-y-2 list-disc list-inside text-sm">
-              <li>Not a law firm, not a funeral home, not a financial advisor.</li>
-              <li>
-                Not a marketplace funded by the funeral homes it lists. (Ours
-                isn&rsquo;t.)
-              </li>
-              <li>
-                Not a subscription. Every tool is free; the only charge is a
-                flat $49, paid upfront before we contact any home, refundable
-                in 14 days.
-              </li>
-              <li>
-                Not a substitute for a conversation with your own attorney or
-                financial professional for complex estate decisions.
-              </li>
-            </ul>
-          </Card>
-
-          <div className="pt-4 flex flex-wrap gap-3">
-            <LinkButton href="/where">Start here</LinkButton>
-            <Link
-              href="/rights"
-              className="inline-flex items-center text-sm text-ink-soft hover:text-ink underline-offset-2 hover:underline self-center"
-            >
-              What you can decline →
-            </Link>
+      {/* Who's behind it + what we're not, side by side */}
+      <section className="border-t border-border bg-surface-soft">
+        <div className="max-w-4xl mx-auto px-5 py-14">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="bg-surface border border-border rounded-2xl p-6">
+              <div className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-3">
+                Who&rsquo;s behind it
+              </div>
+              <p className="text-ink-soft">
+                Built and run by one person &mdash; me. Not a funeral director,
+                not a venture-backed startup. Just a builder who got tired of
+                watching families get taken advantage of at the worst possible
+                moment, and made the tool I&rsquo;d want for my own family.
+              </p>
+            </div>
+            <div className="bg-surface border border-border rounded-2xl p-6">
+              <div className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-3">
+                What we&rsquo;re not
+              </div>
+              <ul className="space-y-2">
+                {NOT.map((n) => (
+                  <li key={n} className="flex gap-2 text-sm text-ink-soft">
+                    <span className="text-ink-muted shrink-0">&mdash;</span>
+                    <span>{n}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <p className="text-sm text-ink-soft pt-2">
-            Want to say hi, ask a question, or tell us what we missed?
-            Email{" "}
+      {/* CTA + contact */}
+      <section className="border-t border-border">
+        <div className="max-w-2xl mx-auto px-5 py-14 text-center">
+          <LinkButton href="/where" size="lg">
+            Start here
+          </LinkButton>
+          <p className="mt-6 text-sm text-ink-soft">
+            Questions, or something we missed? Email{" "}
             <a
               href="mailto:hello@honestfuneral.co"
               className="text-primary-deep underline-offset-2 hover:underline"
             >
               hello@honestfuneral.co
-            </a>
-            . We read every one.
-          </p>
-
-          <p className="text-sm text-ink-soft">
-            <strong className="text-ink">Press inquiries:</strong>{" "}
+            </a>{" "}
+            &middot; press:{" "}
             <a
               href="mailto:press@honestfuneral.co"
               className="text-primary-deep underline-offset-2 hover:underline"
             >
               press@honestfuneral.co
             </a>
-            .
+          </p>
+          <p className="mt-3 text-xs text-ink-muted">
+            <Link
+              href="/rights"
+              className="underline-offset-2 hover:underline"
+            >
+              What you can decline →
+            </Link>
           </p>
         </div>
       </section>
