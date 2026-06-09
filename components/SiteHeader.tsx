@@ -207,6 +207,13 @@ function HeaderAuthButton() {
           >
             Dashboard
           </Link>
+          <Link
+            href="/account"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-2 text-sm text-ink hover:bg-surface-soft"
+          >
+            Account &amp; data
+          </Link>
           <button
             type="button"
             onClick={async () => {
