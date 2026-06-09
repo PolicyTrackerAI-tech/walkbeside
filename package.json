@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "seed:demo": "node --env-file-if-exists=.env.local scripts/seed-demo.mjs",
-    "import:homes": "node --env-file-if-exists=.env.local scripts/import-funeral-homes.mjs"
+    "import:homes": "node --env-file-if-exists=.env.local scripts/import-funeral-homes.mjs",
+    "smoke:check": "node --env-file-if-exists=.env.local scripts/smoke-check.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",

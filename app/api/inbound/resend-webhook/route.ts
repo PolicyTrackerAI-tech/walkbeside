@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { logEvent, logWarn, captureError, sendAlert } from "@/lib/observability";
 
 export const runtime = "nodejs";
 
@@ -81,6 +82,7 @@ export async function POST(req: Request) {
 
   const secret = requireServer("RESEND_WEBHOOK_SECRET");
   if (!verifySvixSignature(payload, id, timestamp, signature, secret)) {
+    logWarn("resend.webhook.bad_signature", { svixId: id });
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
@@ -128,17 +130,30 @@ export async function POST(req: Request) {
       .ilike("email", email)
       .select("id, name, email");
     if (error) {
-      console.error(
-        `[resend-webhook] update failed for ${email}: ${error.message}`,
+      await captureError(
+        "resend.webhook.deactivate_failed",
+        error,
+        { email, reason },
+        { alert: false },
       );
       continue;
     }
     if (data && data.length > 0) {
       flipped.push(email);
-      console.warn(
-        `[resend-webhook] flipped active=false reason=${reason} email=${email} matched=${data.length}`,
-      );
+      logEvent("resend.webhook.home_deactivated", {
+        reason,
+        email,
+        matched: data.length,
+      });
     }
+  }
+
+  // A home going dark on us is worth a heads-up so the directory stays healthy.
+  if (flipped.length > 0) {
+    await sendAlert("warn", "Funeral home deactivated (bounce/complaint)", {
+      reason,
+      emails: flipped,
+    });
   }
 
   return NextResponse.json({

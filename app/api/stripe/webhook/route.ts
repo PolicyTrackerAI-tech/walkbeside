@@ -3,6 +3,7 @@ import { stripe } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
+import { logEvent, logWarn, captureError } from "@/lib/observability";
 
 export const runtime = "nodejs";
 
@@ -26,6 +27,11 @@ export async function POST(req: Request) {
       requireServer("STRIPE_WEBHOOK_SECRET"),
     );
   } catch (e) {
+    // Invalid signature is usually a prober or a misconfigured secret — log,
+    // don't page.
+    logWarn("stripe.webhook.bad_signature", {
+      error: e instanceof Error ? e.message : "bad_sig",
+    });
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "bad_sig" },
       { status: 400 },
@@ -45,10 +51,19 @@ export async function POST(req: Request) {
         PUBLIC.supabaseUrl,
         requireServer("SUPABASE_SERVICE_ROLE_KEY"),
       );
-      const result = await sendOutreachForNegotiation(admin, negotiationId);
-      console.info(
-        `[webhook] sendOutreach neg=${negotiationId} sent=${result.sent} dryRun=${result.dryRun} skipped=${result.skipped}`,
-      );
+      try {
+        const result = await sendOutreachForNegotiation(admin, negotiationId);
+        logEvent("stripe.webhook.outreach_sent", {
+          negotiationId,
+          ...result,
+        });
+      } catch (e) {
+        // Payment succeeded but sending threw — a paid family with no outreach.
+        // Alert; Stripe will retry the webhook, and the status-page
+        // reconciliation is a second backstop.
+        await captureError("stripe.webhook.send_failed", e, { negotiationId });
+        return NextResponse.json({ error: "send_failed" }, { status: 500 });
+      }
     }
   }
 

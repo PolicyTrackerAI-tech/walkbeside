@@ -5,6 +5,7 @@ import { stripe, stripeAvailable, calcFeeCents } from "@/lib/stripe";
 import { isPaidUser } from "@/lib/auth-paid";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
+import { logEvent } from "@/lib/observability";
 
 /**
  * Upfront pay-to-send checkout. This is the ONLY charge under Model A: a flat
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
 
   // Free-email test/founder account → send now, no charge.
   if (await isPaidUser(supabase, user)) {
+    logEvent("checkout.free_bypass", { negotiationId, email: user.email });
     await sendOutreachForNegotiation(admin(), negotiationId);
     return NextResponse.redirect(
       new URL(`/negotiate/${negotiationId}/status?freebypass=1`, req.url),
@@ -62,6 +64,7 @@ export async function POST(req: Request) {
 
   // Stripe not configured (dev) → send now so the flow stays exercisable.
   if (!stripeAvailable()) {
+    logEvent("checkout.stripe_unconfigured_bypass", { negotiationId });
     await sendOutreachForNegotiation(admin(), negotiationId);
     return NextResponse.redirect(
       new URL(`/negotiate/${negotiationId}/status?dryrun=1`, req.url),
@@ -98,6 +101,12 @@ export async function POST(req: Request) {
     .from("negotiations")
     .update({ stripe_payment_intent_id: session.id, fee_cents: fee })
     .eq("id", negotiationId);
+
+  logEvent("checkout.session_created", {
+    negotiationId,
+    sessionId: session.id,
+    feeCents: fee,
+  });
 
   return NextResponse.redirect(session.url!, { status: 303 });
 }

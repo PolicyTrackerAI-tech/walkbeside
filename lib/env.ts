@@ -66,6 +66,7 @@ const LIVE_REQUIRED_VARS = [
   "STRIPE_SECRET_KEY",
   "STRIPE_WEBHOOK_SECRET",
   "RESEND_API_KEY",
+  "RESEND_WEBHOOK_SECRET", // route requireServer()s it; missing → webhook 500s, bounces unhandled
   "UNSUBSCRIBE_SECRET",
   "ADMIN_EMAILS", // empty = any logged-in user is an admin; dangerous when live
   "CRON_SECRET",
@@ -76,6 +77,7 @@ const LIVE_RECOMMENDED_VARS = [
   "ANTHROPIC_API_KEY", // outreach copy falls back to deterministic templates
   "POSTMARK_INBOUND_USER", // funeral-home reply pipeline
   "POSTMARK_INBOUND_SECRET",
+  "ALERT_WEBHOOK_URL", // push alerts for failed sends / bounces
 ];
 
 export function validateEnv(): { errors: string[]; warnings: string[] } {

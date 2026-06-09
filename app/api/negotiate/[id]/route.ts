@@ -4,6 +4,7 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { stripe, stripeAvailable } from "@/lib/stripe";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
+import { logEvent, captureError } from "@/lib/observability";
 
 export async function GET(
   _req: Request,
@@ -42,11 +43,16 @@ export async function GET(
           PUBLIC.supabaseUrl,
           requireServer("SUPABASE_SERVICE_ROLE_KEY"),
         );
-        await sendOutreachForNegotiation(admin, id);
+        const result = await sendOutreachForNegotiation(admin, id);
         neg.status = "contacting";
+        logEvent("negotiate.reconcile_sent", { negotiationId: id, ...result });
       }
-    } catch {
-      // Retrieval failed — fall back to the webhook.
+    } catch (e) {
+      // Retrieval/send failed — the webhook is the primary path, so don't page;
+      // just record it. (send.ts already alerts on per-email send failures.)
+      await captureError("negotiate.reconcile_failed", e, { negotiationId: id }, {
+        alert: false,
+      });
     }
   }
 
