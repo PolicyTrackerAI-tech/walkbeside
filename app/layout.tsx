@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Brand";
@@ -39,6 +39,13 @@ export const metadata: Metadata = {
       "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
   },
   robots: { index: true, follow: true },
+};
+
+// Explicit viewport (Next injects a default + charset=utf-8 automatically; we
+// declare the viewport explicitly so mobile scaling is unambiguous).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

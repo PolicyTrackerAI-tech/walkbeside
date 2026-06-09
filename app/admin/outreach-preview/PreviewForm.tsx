@@ -38,7 +38,7 @@ const SERVICE_OPTIONS: { value: string; label: string }[] = [
   { value: "memorial-no-body", label: "Memorial (no body)" },
 ];
 
-export function PreviewForm({ previewKey }: { previewKey: string }) {
+export function PreviewForm() {
   const [mode, setMode] = useState<Mode>("outreach");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +96,6 @@ export function PreviewForm({ previewKey }: { previewKey: string }) {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          "x-admin-preview-key": previewKey,
         },
         body: JSON.stringify(body),
       });

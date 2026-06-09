@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
-import { getUser } from "@/lib/supabase/server";
-import { adminAllowlistConfigured, isAdminEmail } from "@/lib/admin";
+import { adminAllowlistConfigured } from "@/lib/admin";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { FaithQAReview } from "./FaithQAReview";
 
 export const metadata: Metadata = {
@@ -16,9 +15,6 @@ export const metadata: Metadata = {
  * public; gated to logged-in admins.
  */
 export default async function FaithQAPage() {
-  const user = await getUser();
-  if (!user) redirect("/login?next=/admin/faith-qa");
-  if (!isAdminEmail(user.email)) notFound();
-
+  await requireAdminPage("/admin/faith-qa");
   return <FaithQAReview allowlistConfigured={adminAllowlistConfigured()} />;
 }

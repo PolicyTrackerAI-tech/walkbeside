@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { requireAdminPage } from "@/lib/admin-auth";
 
 export const metadata: Metadata = {
   title: "Inbound FD messages — admin",
@@ -34,17 +34,8 @@ interface NegotiationLite {
   created_at: string;
 }
 
-export default async function AdminMessagesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ key?: string }>;
-}) {
-  const sp = await searchParams;
-  const expected = process.env.ADMIN_PREVIEW_KEY;
-  const provided = (sp.key ?? "").trim();
-  if (!expected || provided !== expected) {
-    notFound();
-  }
+export default async function AdminMessagesPage() {
+  await requireAdminPage("/admin/messages");
 
   const admin = createServiceClient(
     PUBLIC.supabaseUrl,

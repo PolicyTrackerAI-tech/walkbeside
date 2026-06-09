@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { requireServer } from "@/lib/env";
+import { requireAdminApi } from "@/lib/admin-auth";
 import { findHomesFromDirectory } from "@/lib/negotiation/directory";
 import {
   ADVOCATE_NAME,
@@ -23,10 +23,8 @@ const PLACEHOLDER_NEG_ID = "preview-00000000-0000-0000-0000-000000000000";
 const PLACEHOLDER_AUTH_ID = "WB-PREVIEW";
 
 export async function POST(req: Request) {
-  const key = req.headers.get("x-admin-preview-key");
-  if (key !== requireServer("ADMIN_PREVIEW_KEY")) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdminApi();
+  if (denied) return denied;
 
   const parsed = Body.safeParse(await req.json());
   if (!parsed.success) {

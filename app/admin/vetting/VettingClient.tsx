@@ -50,13 +50,7 @@ const STATUS_LABEL: Record<Status, string> = {
   rejected: "Rejected",
 };
 
-export function VettingClient({
-  initial,
-  adminKey,
-}: {
-  initial: VettingHome[];
-  adminKey: string;
-}) {
+export function VettingClient({ initial }: { initial: VettingHome[] }) {
   const [homes, setHomes] = React.useState<VettingHome[]>(initial);
   const [edits, setEdits] = React.useState<
     Record<string, { email?: string; notes?: string }>
@@ -160,7 +154,6 @@ export function VettingClient({
         method: "PATCH",
         headers: {
           "content-type": "application/json",
-          "x-admin-preview-key": adminKey,
         },
         body: JSON.stringify({
           id,

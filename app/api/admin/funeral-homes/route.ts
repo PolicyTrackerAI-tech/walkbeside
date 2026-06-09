@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { requireAdminApi } from "@/lib/admin-auth";
 
 /**
  * Admin write endpoint for the funeral-home vetting tool (/admin/vetting).
- * Gated by the same x-admin-preview-key header as the other admin tools and
- * backed by the service-role key (bypasses RLS). Mutations only — the page
- * itself reads directly via service role.
+ * Gated by requireAdminApi (logged-in Supabase session on the ADMIN_EMAILS
+ * allowlist) and backed by the service-role key (bypasses RLS). Mutations
+ * only — the page itself reads directly via service role.
  *
  *   approve → vetted=true,  active=true   (eligible for outreach)
  *   reject  → vetted=true,  active=false  (reviewed, excluded)
@@ -28,10 +29,8 @@ const Body = z.object({
 });
 
 export async function PATCH(req: Request) {
-  const key = req.headers.get("x-admin-preview-key");
-  if (key !== requireServer("ADMIN_PREVIEW_KEY")) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdminApi();
+  if (denied) return denied;
 
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {

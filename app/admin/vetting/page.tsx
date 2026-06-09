@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { requireAdminPage } from "@/lib/admin-auth";
 import { VettingClient, type VettingHome } from "./VettingClient";
 
 export const metadata: Metadata = {
@@ -14,17 +14,8 @@ export const metadata: Metadata = {
 const SELECT_COLS =
   "id, name, email, phone, address, city, state, zip, google_rating, google_review_count, notes, active, vetted, vetted_at, vetted_by";
 
-export default async function AdminVettingPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ key?: string }>;
-}) {
-  const sp = await searchParams;
-  const expected = process.env.ADMIN_PREVIEW_KEY;
-  const provided = (sp.key ?? "").trim();
-  if (!expected || provided !== expected) {
-    notFound();
-  }
+export default async function AdminVettingPage() {
+  await requireAdminPage("/admin/vetting");
 
   const admin = createServiceClient(
     PUBLIC.supabaseUrl,
@@ -65,7 +56,7 @@ export default async function AdminVettingPage({
               Could not load the directory: {error.message}
             </div>
           ) : (
-            <VettingClient initial={homes} adminKey={provided} />
+            <VettingClient initial={homes} />
           )}
         </div>
       </section>
