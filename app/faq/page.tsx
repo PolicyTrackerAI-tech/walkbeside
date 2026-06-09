@@ -84,7 +84,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
             services, or anyone else.
           </li>
           <li>
-            14-day money-back: if we didn&rsquo;t save you anything
+            Refundable for 14 days: if we didn&rsquo;t save you anything
             documentable, email us and we refund the full $49.
           </li>
         </ul>
