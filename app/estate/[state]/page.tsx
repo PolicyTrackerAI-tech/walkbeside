@@ -10,6 +10,7 @@ import {
   listStateSlugs,
   STATE_GUIDES,
 } from "@/lib/probate-by-state";
+import { ogImage } from "@/lib/og";
 
 export async function generateStaticParams() {
   return listStateSlugs().map((slug) => ({ state: slug }));
@@ -25,6 +26,7 @@ export async function generateMetadata({
   if (!guide) return {};
   return {
     title: `Probate in ${guide.name} — what the family needs to know`,
+    openGraph: { images: [ogImage(`Probate in ${guide.name}`, "Estate")] },
     description: `Probate basics for ${guide.name}: small-estate threshold, typical timeline, key forms, where to file. ${guide.smallEstateThresholdUSD ? `Estates under $${guide.smallEstateThresholdUSD.toLocaleString()} qualify for the small-estate process.` : ""}`,
   };
 }

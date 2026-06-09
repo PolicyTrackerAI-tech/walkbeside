@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ogImage } from "@/lib/og";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
@@ -27,6 +28,7 @@ export async function generateMetadata({
   return {
     title: `${entry.term} — plain-language definition`,
     description: entry.short,
+    openGraph: { images: [ogImage(entry.term, "Glossary")] },
   };
 }
 

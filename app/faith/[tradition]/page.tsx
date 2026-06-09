@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ogImage } from "@/lib/og";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
@@ -50,6 +51,7 @@ export async function generateMetadata({
   return {
     title: `${t.label} — funeral planning guide`,
     description: t.notes,
+    openGraph: { images: [ogImage(t.label, "Faith guide")] },
   };
 }
 

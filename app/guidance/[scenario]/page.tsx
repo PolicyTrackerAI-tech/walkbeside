@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ogImage } from "@/lib/og";
 import {
   SCENARIO_GUIDANCE,
   type Scenario,
@@ -44,6 +45,7 @@ export async function generateMetadata({
   return {
     title: SCENARIO_SEO_TITLES[scenario],
     description: SCENARIO_DESCRIPTIONS[scenario],
+    openGraph: { images: [ogImage(SCENARIO_SEO_TITLES[scenario], "Guidance")] },
   };
 }
 
