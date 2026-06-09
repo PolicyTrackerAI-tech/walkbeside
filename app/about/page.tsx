@@ -7,7 +7,7 @@ import { LinkButton } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "About Honest Funeral",
   description:
-    "Honest Funeral is a consumer advocate built by two siblings. Not a funeral home. We take no money from the industry — only a flat fee from the family.",
+    "Honest Funeral is a consumer advocate built by its founder — on the family's side. Not a funeral home. We take no money from the industry, only a flat fee from the family.",
   alternates: { canonical: "/about" },
 };
 
@@ -23,13 +23,13 @@ export default function AboutPage() {
               About
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              Two siblings built this.
+              I built this.
             </h1>
             <p className="text-lg text-ink-soft">
               Every feature on Honest Funeral comes from one specific
               observation: the average family walks into the worst day of
               their life with no information, and the industry is built
-              around that. This is the tool we wish every family walked
+              around that. This is the tool I wish every family walked
               in with.
             </p>
           </div>
