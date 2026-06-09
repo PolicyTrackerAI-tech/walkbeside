@@ -386,28 +386,28 @@ Out of 211 items, **these are the true gates.** Do these and you can take real m
 - [ ] **Document PII handling and retention policy** — _YOU · S_
   - _Why:_ Families' names, deceased names, and zip codes are stored in profiles/negotiations. Funeral home emails and replies are stored in negotiation_messages. No documented retention or deletion policy for completed negotiations.
   - _How:_ Create docs/PRIVACY_RETENTION.md: (1) Profile data retained until account deletion. (2) Negotiations + messages deleted 1 year after close (or manually via /admin). (3) planning_signups unsubscribed_at set on opt-out (not deleted; needed for suppression). (4) Backup/export policy for compliance (GDPR, etc.).
-- [ ] **Add rate limiting to public API endpoints** — _eng · M_
+- [x] **Add rate limiting to public API endpoints** — _eng · M_ ✅DONE 2026-06-09 (Batch 1 — lib/rate-limit.ts via proxy.ts; docs/SECURITY.md; Upstash upgrade path noted)
   - _Why:_ POST /api/planning/signup, POST /api/share/create, GET /api/share/[id], POST /api/negotiate/start lack rate limiting. Attackers can spam planning signups, create share-link floods, or brute-force negotiation IDs. No protection against enumeration attacks.
   - _How:_ Use Vercel's rateLimit or @upstash/ratelimit. Per-IP limits: planning signup (5/hour), share (10/hour), start negotiation (10/hour). Files: /Users/ryancurrie/FH/app/api/planning/signup/route.ts, /Users/ryancurrie/FH/app/api/share/*.ts, /Users/ryancurrie/FH/app/api/negotiate/start/route.ts.
-- [ ] **Add HTTPS enforcement and security headers middleware** — _eng · M_
+- [x] **Add HTTPS enforcement and security headers middleware** — _eng · M_ ✅DONE 2026-06-09 (Batch 1 — HSTS + headers + CSP report-only in next.config.ts; verified emitting)
   - _Why:_ No explicit HTTPS redirect or X-Frame-Options, X-Content-Type-Options, Strict-Transport-Security headers configured. On Vercel, HTTPS is automatic but headers are not. Missing headers expose to clickjacking, MIME-type sniffing, and downgrade attacks.
   - _How:_ Create /Users/ryancurrie/FH/middleware.ts with headers middleware (next/headers). Set: X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Strict-Transport-Security: max-age=31536000; includeSubDomains, X-XSS-Protection: 1; mode=block, Referrer-Policy: strict-origin-when-cross-origin.
-- [ ] **Validate input length and format on /api/negotiate/start form fields** — _eng · S_
+- [x] **Validate input length and format on /api/negotiate/start form fields** — _eng · S_ ✅DONE 2026-06-09 (Batch 1 — Zod + readLimitedJson body caps on start AND every public/webhook route)
   - _Why:_ Form fields (senderFirstName, targetHomeName, timing, notes, extras) accept up to 120–800 chars but are stored directly in negotiation_outreach.initial_email_body without sanitization. If rendered in emails, could inject HTML/phishing. notes field is 800 chars with no content validation.
   - _How:_ File: /Users/ryancurrie/FH/app/api/negotiate/start/route.ts. Add Zod refinement to sanitize user text (e.g., no <, >, &, quotes). Use DOMPurify or similar if rendering in emails. Email body is stored but also transmitted—verify no XSS in email rendering.
-- [ ] **Document and enforce session expiry policy** — _eng · S_
+- [x] **Document and enforce session expiry policy** — _eng · S_ ✅DONE 2026-06-09 (Batch 1 — documented in docs/SECURITY.md: 1h JWT auto-refresh, 400-day cookie, SameSite=Lax)
   - _Why:_ No explicit session timeout configured. Supabase default is long-lived tokens. Families may access negotiation data indefinitely after login, even if account is compromised. Funeral home replies could be read by an attacker weeks later.
   - _How:_ Configure Supabase JWT expiry (default 1 hour). Set refresh token expiry (default 30 days). Document in /Users/ryancurrie/FH/.env.example. Consider shorter expiry (30 min) for sensitive negotiation pages. Check Supabase project settings → API → JWT defaults.
-- [ ] **Remove or redact sensitive data from server logs** — _eng · M_
+- [x] **Remove or redact sensitive data from server logs** — _eng · M_ ✅DONE 2026-06-09 (Batch 1 — maskEmail/hashId across pay→send + inbound/bounce logs; dropped raw emails/bodies)
   - _Why:_ Email addresses (funeral home, family), negotiation IDs, user emails, and message content are logged to console.log/console.warn. If logs are aggregated (Vercel Logs, Sentry), they expose PII and can reveal patterns for account enumeration.
   - _How:_ Files: /Users/ryancurrie/FH/app/api/inbound/email/route.ts (lines 67, 85, 131), /Users/ryancurrie/FH/app/api/stripe/webhook/route.ts (line 50), /Users/ryancurrie/FH/app/api/inbound/resend-webhook/route.ts (lines 131, 138). Remove or hash email addresses, only log UUIDs or redact first/last char of emails.
-- [ ] **Add CSRF token to negotiation state transitions (form-based)** — _eng · M_
+- [x] **Add CSRF token to negotiation state transitions (form-based)** — _eng · M_ ✅DONE 2026-06-09 (Batch 1 — validateOrigin Origin/Referer check on checkout/choose/signout atop SameSite=Lax)
   - _Why:_ POST /api/negotiate/choose and POST /api/stripe/checkout accept form submissions without CSRF tokens. A malicious site could forge a POST and trigger payment or home selection on behalf of a logged-in user.
   - _How:_ Files: /Users/ryancurrie/FH/app/api/negotiate/choose/route.ts, /Users/ryancurrie/FH/app/api/stripe/checkout/route.ts. Use next-csrf or manual HMAC-SHA256 token validation on form. Add hidden field to forms in /negotiate/[id]/preview and /negotiate/[id]/closed pages.
 - [ ] **Verify PII minimization in /preferences and /unsubscribe flows** — _eng · S_ ⚠️PARTIAL
   - _Why:_ Both /preferences/[id] and /unsubscribe use UUID-based auth (no login required). If a user's UUID is leaked, anyone can change their preferences or unsubscribe them. The 'knowing the UUID = auth' model is acceptable for one-click links in emails, but the UUID should not be predictable or guessable.
   - _How:_ File: /Users/ryancurrie/FH/app/preferences/[id]/page.tsx, /Users/ryancurrie/FH/app/unsubscribe/page.tsx. UUIDs are cryptographically random (v4), so guessing is infeasible. Confirm profiles.id is UUID v4 in schema. If users can share account URLs, add a warning that the UUID in the URL is a secret (don't share).
-- [ ] **Add validation on /api/share/create to limit payload size and prevent DoS** — _eng · S_
+- [x] **Add validation on /api/share/create to limit payload size and prevent DoS** — _eng · S_ ✅DONE 2026-06-09 (Batch 1 — readLimitedJson 100KB cap → 413)
   - _Why:_ POST /api/share/create accepts any JSON payload and stores it as JSONB in the database. No size limit means a user could submit 10MB of data to exhaust storage or cause slowdowns. Payload could contain malicious JSON structures.
   - _How:_ File: /Users/ryancurrie/FH/app/api/share/create/route.ts. Add payload size check (max 64KB). Validate payload structure with Zod (whitelist expected keys: faithChoices, decideAnswers, etc.). Reject oversized or unexpected objects.
 - [ ] **Verify negotiation_messages RLS delete policy completeness** — _eng · S_
@@ -416,7 +416,7 @@ Out of 211 items, **these are the true gates.** Do these and you can take real m
 - [ ] **Verify share_links RLS prevents unauthorized modification** — _eng · S_
   - _Why:_ share_links RLS allows anyone to create, update (opened_at), and read non-expired rows. No explicit delete policy. A malicious user could update a link's opened_at to cover tracks or theoretically delete a link.
   - _How:_ File: /Users/ryancurrie/FH/supabase/migrations/2026-05-05-margaret-share-links.sql. Add policy: 'CREATE POLICY share_links_no_delete ON public.share_links FOR DELETE TO authenticated, anon USING (FALSE);'. Prevent update of payload (allow only opened_at): check in the 'update' policy USING/WITH CHECK.
-- [ ] **Add IP address logging and rate limiting to auth endpoints** — _eng · M_
+- [x] **Add IP address logging and rate limiting to auth endpoints** — _eng · M_ ✅DONE 2026-06-09 (Batch 1: rate-limit on our POST endpoints; Supabase hosts magic-link auth itself)
   - _Why:_ POST /login (email/password) is not rate-limited. Attackers can brute-force passwords at scale. planning/signup hashes IP but doesn't use it for rate limiting.
   - _How:_ Supabase Auth handles rate limiting on its own (see Supabase docs). Verify via dashboard under Auth → Rate limiting. If custom rate limiting needed on /api/planning/signup, use IP-based limits (5 signups per IP per hour). File: /Users/ryancurrie/FH/app/api/planning/signup/route.ts already hashes IP; extend to rate limit.
 - [ ] **Verify Stripe webhook idempotency and payment double-charge prevention** — _eng · M_ ⚠️PARTIAL
@@ -445,7 +445,7 @@ Out of 211 items, **these are the true gates.** Do these and you can take real m
 - [ ] **Document webhook retry/failure handling for Stripe and Postmark** — _eng · S_ ⚠️PARTIAL
   - _Why:_ Both services retry webhooks on failure, but retry behavior differs. Stripe retries up to 3 days, Postmark retries hours. The negotiation_messages.inbound_message_id unique partial index provides dedup for Postmark, but Stripe webhook retries could trigger duplicate outreach sends if not carefully handled.
   - _How:_ Stripe webhook idempotency is handled: sendOutreachForNegotiation only sends rows in 'pending' status, so retries are safe. Document in /api/stripe/webhook/route.ts. Postmark: verify the negotiation_messages.inbound_message_id unique partial index exists (it does in 2026-05-21 migration). No action needed, already correct. Add comment in both routes explaining retry safety.
-- [ ] **Set up rate limiting on API endpoints** — _eng · M_
+- [x] **Set up rate limiting on API endpoints** — _eng · M_ ✅DONE 2026-06-09 (Batch 1 — see "Add rate limiting to public API endpoints")
   - _Why:_ No rate limiting on POST endpoints (/api/stripe/checkout, /api/planning/signup, /api/inbound/*). Vulnerable to brute force, spam, or accidental abuse.
   - _How:_ Use Vercel's built-in rate limiting via next.config.ts middleware, or npm package (redis-based like Upstash). Apply: (1) /api/planning/signup: 5 per IP per hour (prevent spam); (2) /api/inbound/* (Postmark/Resend webhooks): unlimited from their IPs only, blocked from others; (3) /api/stripe/*: standard. Configure in middleware.ts or as edge middleware. See: https://vercel.com/docs/edge-functions/edge-middleware#rate-limiting
 - [ ] **Add monitoring for cron job execution and failures** — _eng · M_
