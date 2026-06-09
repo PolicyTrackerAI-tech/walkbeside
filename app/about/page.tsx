@@ -7,7 +7,7 @@ import { LinkButton } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "About Honest Funeral",
   description:
-    "Honest Funeral is a consumer advocate built by its founder — on the family's side. Not a funeral home. We take no money from the industry, only a flat fee from the family.",
+    "Why Honest Funeral exists: to put a grieving family on equal footing with the funeral industry. Independent and founder-built — we take no money from funeral homes, only a flat fee from the family.",
   alternates: { canonical: "/about" },
 };
 
@@ -23,49 +23,57 @@ export default function AboutPage() {
               About
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              I built this.
+              The family is the only one in the room without help.
             </h1>
             <p className="text-lg text-ink-soft">
-              Every feature on Honest Funeral comes from one specific
-              observation: the average family walks into the worst day of
-              their life with no information, and the industry is built
-              around that. This is the tool I wish every family walked
-              in with.
+              When someone dies, everyone else in the arrangement has done this
+              hundreds of times &mdash; the funeral home, the cemetery, the
+              vendors. The family has done it once, in shock, at the worst
+              moment of their life, with a $10,000 decision in front of them and
+              no reference for what anything should cost. That asymmetry is why
+              families overpay by thousands. Honest Funeral exists to close it
+              &mdash; to put the same information a professional has into the
+              family&rsquo;s hands, at the moment they need it.
             </p>
           </div>
 
           <Card>
-            <div className="text-xs uppercase tracking-wider text-primary-deep font-medium mb-2">
-              The builder
-            </div>
-            <CardTitle>Ryan &mdash; founder, product, engineering</CardTitle>
-            <p className="text-ink-soft">
-              Ryan builds the product and handles everything on the
-              technical side. His job is to make sure good information
-              ends up in front of families at the exact moment they
-              need it.
+            <CardTitle>Why we take no money from the industry</CardTitle>
+            <p className="text-ink-soft mt-3 mb-3">
+              Most &ldquo;free&rdquo; funeral services are paid by the funeral
+              homes they list &mdash; so their recommendations follow the money,
+              not your interest. We refuse all of it.
+            </p>
+            <p className="text-sm text-ink-soft">
+              <strong className="text-ink">
+                No commissions, no kickbacks, no referral or lead-sale revenue
+                from any funeral home, cemetery, monument company, or vendor.
+              </strong>{" "}
+              Our only revenue is a flat $49 from the family, paid upfront and
+              refundable in 14 days if we don&rsquo;t save you anything. Charging
+              the family &mdash; and no one else &mdash; is the only way to stay
+              accountable to the family.
             </p>
           </Card>
 
           <Card tone="primary">
-            <CardTitle>The founding promise</CardTitle>
-            <p className="text-ink font-serif text-lg italic mb-3">
+            <CardTitle>The promise</CardTitle>
+            <p className="text-ink font-serif text-lg italic">
               &ldquo;When someone important dies, you should not have to figure
               this out alone. We walk beside you from the first phone call to
               the last account closed.&rdquo;
             </p>
-            <p className="text-sm text-ink-soft">
-              <strong className="text-ink">
-                We take no commissions, no kickbacks, no referral fees, and
-                no lead-sale revenue from funeral homes, cemeteries, monument
-                companies, or any vendor mentioned anywhere on this site.
-              </strong>{" "}
-              The funeral industry runs on those kickbacks &mdash; which is
-              why almost every &ldquo;free&rdquo; service quietly steers
-              families to the home that paid for the placement. We won&rsquo;t
-              do that. Our only revenue is the flat $49 the family pays
-              upfront, before we contact any home. Refundable in 14 days if
-              we didn&rsquo;t save you anything.
+          </Card>
+
+          <Card tone="soft">
+            <CardTitle>Who&rsquo;s behind it</CardTitle>
+            <p className="text-ink-soft">
+              Honest Funeral is built and run by one person &mdash; me. Not a
+              funeral director, not an investor-backed startup: a builder who
+              kept watching families get taken advantage of at the worst
+              possible time and decided to make the tool I&rsquo;d want my own
+              family to have. Keeping it small and independent is the point
+              &mdash; no board, no funeral home to answer to. Just the family.
             </p>
           </Card>
 
