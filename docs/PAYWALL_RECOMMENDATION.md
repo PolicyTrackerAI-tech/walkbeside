@@ -1,5 +1,12 @@
 # What belongs in front of vs behind the paywall (2026-05-21)
 
+> **UPDATE 2026-06-09 — final model shipped:** all tools free; the $49 is the
+> funeral-home outreach, **paid UPFRONT**, and **no home is emailed until
+> payment clears** (a teaser at /negotiate/[id]/preview shows blurred home
+> names + "Get my quotes — $49"). The "$49 charged on home selection" framing
+> below was an interim step, now superseded. See memory + docs/LAWYER_BRIEF.md
+> §2–3 for the current flow.
+
 You asked whether the obituary helper, analyzer, worksheet, veterans checker,
 and after-funeral checklist should be paid. Short answer: **no — those should
 all be free.** This doc explains why, what I changed, and the one bigger

@@ -39,16 +39,23 @@ side. We charge a **flat $49**, only when a family chooses a home we presented.
   list; AI flags line items above the fair range.
 - **Post-funeral checklist, worksheet, veterans-benefits checker** — guidance.
 
-**Paid — "advocate outreach" (flat $49):**
-1. Family creates an account and authorizes us to contact homes on their behalf.
-2. We email funeral homes in the family's area **identifying ourselves as
-   Honest Funeral, the family's named advocate** (we do **not** impersonate the
-   family and do **not** send anonymous/secret-shopper inquiries — see §4).
-3. We invoke the family's right under the **FTC Funeral Rule** to receive an
-   itemized General Price List (GPL).
+**Paid — "advocate outreach" (flat $49, charged UPFRONT):**
+1. Family creates an account, authorizes us to contact homes on their behalf,
+   and we identify the local homes we would contact (nothing is sent yet).
+2. Family sees a preview ("we found N homes near you") and **pays the flat $49
+   upfront via Stripe.** **No email is sent to any funeral home until that
+   payment is confirmed** — this is deliberate, to avoid contacting homes on
+   behalf of families who haven't engaged.
+3. After payment, we email those homes **identifying ourselves as Honest
+   Funeral, the family's named advocate** (we do **not** impersonate the family
+   and do **not** send anonymous/secret-shopper inquiries — see §4), invoking
+   the family's **FTC Funeral Rule** right to an itemized General Price List.
 4. Homes reply; we collect/parse quotes and present them side by side.
-5. Family picks a home. We release contact info. **Stripe charges $49.**
-6. Refund offered within 14 days if the chosen home won't honor its written quote.
+5. Family picks a home (or none). Picking a home costs **nothing more** — the
+   $49 was already paid. We notify the chosen home; the family meets them in
+   person to make selections and sign.
+6. Refund offered within 14 days if we don't save them anything (or the chosen
+   home won't honor its written quote).
 
 **Secondary revenue [CONFIRM — planned, may not be live]:** at deal close we may
 show referrals (insurance, funeral financing via credit unions, estate
@@ -60,12 +67,13 @@ attorneys), disclosed on the same screen. We'd earn a referral fee.
 
 - **Who pays:** the family (consumer). **Never** the funeral home.
 - **How much:** flat **$49**, one time, per family.
-- **When charged:** only at the moment the family selects a home we presented
-  through advocate outreach. Free tools never charge.
-- **Processor:** Stripe. Payment method may be collected up front; charge fires
-  on selection. [CONFIRM current Stripe flow: authorize-then-capture vs charge.]
-- **Refunds:** $49 refundable within 14 days if the selected home refuses to
-  honor its quote.
+- **When charged:** **upfront**, before we contact any funeral home — after the
+  family sees which homes we'd contact and authorizes the outreach. Free tools
+  never charge. No outreach email is sent unless/until this payment clears.
+- **Processor:** Stripe Checkout (card). Charged at checkout, not authorize-
+  then-capture.
+- **Refunds:** $49 refundable within 14 days if we don't save them anything (or
+  the chosen home refuses to honor its quote).
 - **No commissions, kickbacks, or listing fees from funeral homes. We do not
   hold or transmit any funeral payment** — the family pays the funeral home
   directly at the home's own quoted price.
