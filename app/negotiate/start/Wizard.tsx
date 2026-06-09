@@ -124,7 +124,9 @@ function NegotiateStartWizard() {
       const data = await r.json();
       if (!r.ok) throw new Error(JSON.stringify(data.error));
       clearState();
-      router.push(`/dashboard?started=${data.id}`);
+      // Nothing has been sent yet — the family lands on the teaser to pay,
+      // and only then do we contact the homes.
+      router.push(`/negotiate/${data.id}/preview`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not start.");
     } finally {

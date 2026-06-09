@@ -4,23 +4,23 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { stripe, stripeAvailable, calcFeeCents } from "@/lib/stripe";
 import { isPaidUser } from "@/lib/auth-paid";
 import { PUBLIC, requireServer } from "@/lib/env";
-import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
+import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
 
 /**
- * Create a Stripe Checkout session for the flat $49 success fee on the chosen
- * home. This is the ONLY charge under Model A — every tool is free, and the
- * fee fires here, when the family selects a home we presented.
- * Submitted as a regular form POST from the results page so it works even if
- * JS is disabled.
+ * Upfront pay-to-send checkout. This is the ONLY charge under Model A: a flat
+ * $49, paid BEFORE we contact any funeral home. On success we send the
+ * prepared outreach (lib/negotiation/send.ts). Picking a home afterward costs
+ * nothing more.
  *
- * Free-email test/founder accounts (isPaidUser → isFreeEmail) bypass Stripe so
- * we don't charge ourselves during testing. No real family is ever pre-paid.
+ * Submitted as a form POST from /negotiate/[id]/preview so it works without JS.
+ *
+ * Free-email test/founder accounts (isPaidUser → isFreeEmail) skip Stripe so
+ * we don't charge ourselves during testing — but the outreach still sends.
  */
 export async function POST(req: Request) {
   const form = await req.formData();
   const negotiationId = String(form.get("negotiationId") ?? "");
-  const outreachId = String(form.get("outreachId") ?? "");
-  if (!negotiationId || !outreachId)
+  if (!negotiationId)
     return NextResponse.json({ error: "missing" }, { status: 400 });
 
   const supabase = await createClient();
@@ -31,82 +31,45 @@ export async function POST(req: Request) {
 
   const { data: neg } = await supabase
     .from("negotiations")
-    .select("id, user_id")
+    .select("id, user_id, status")
     .eq("id", negotiationId)
     .eq("user_id", user.id)
     .single();
-  if (!neg)
-    return NextResponse.json({ error: "not_found" }, { status: 404 });
+  if (!neg) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
-  const { data: pick } = await supabase
-    .from("negotiation_outreach")
-    .select("id, home_name, home_email")
-    .eq("id", outreachId)
-    .eq("negotiation_id", negotiationId)
-    .single();
-  if (!pick)
-    return NextResponse.json({ error: "not_found" }, { status: 404 });
-
-  const fee = calcFeeCents();
-
-  // Free-email test/founder account → close at no charge, no Stripe round-trip.
-  if (await isPaidUser(supabase, user)) {
-    const { data: updated } = await supabase
-      .from("negotiations")
-      .update({ status: "closed", fee_cents: 0 })
-      .eq("id", negotiationId)
-      .neq("status", "closed")
-      .select("id");
-    if (updated && updated.length > 0) {
-      const admin = createServiceClient(
-        PUBLIC.supabaseUrl,
-        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
-      );
-      const result = await notifyChosenHome({
-        admin,
-        negotiationId,
-        outreachId,
-      });
-      console.info(
-        `[checkout/paid] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
-      );
-    }
+  // Already paid / already sending → don't charge again; go to status.
+  if (neg.status !== "pending_payment") {
     return NextResponse.redirect(
-      new URL(`/negotiate/${negotiationId}/closed?included=1`, req.url),
+      new URL(`/negotiate/${negotiationId}/status`, req.url),
       { status: 303 },
     );
   }
 
-  if (!stripeAvailable()) {
-    // Stripe not configured — mark closed in dev so the flow stays exercisable.
-    const { data: updated } = await supabase
-      .from("negotiations")
-      .update({ status: "closed", fee_cents: fee })
-      .eq("id", negotiationId)
-      .neq("status", "closed")
-      .select("id");
-    if (updated && updated.length > 0) {
-      const admin = createServiceClient(
-        PUBLIC.supabaseUrl,
-        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
-      );
-      const result = await notifyChosenHome({
-        admin,
-        negotiationId,
-        outreachId,
-      });
-      console.info(
-        `[checkout/dryrun] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,
-      );
-    }
+  const admin = () =>
+    createServiceClient(
+      PUBLIC.supabaseUrl,
+      requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+    );
+
+  // Free-email test/founder account → send now, no charge.
+  if (await isPaidUser(supabase, user)) {
+    await sendOutreachForNegotiation(admin(), negotiationId);
     return NextResponse.redirect(
-      new URL(
-        `/negotiate/${negotiationId}/closed?dryrun=1&fee=${fee}`,
-        req.url,
-      ),
+      new URL(`/negotiate/${negotiationId}/status?freebypass=1`, req.url),
+      { status: 303 },
     );
   }
 
+  // Stripe not configured (dev) → send now so the flow stays exercisable.
+  if (!stripeAvailable()) {
+    await sendOutreachForNegotiation(admin(), negotiationId);
+    return NextResponse.redirect(
+      new URL(`/negotiate/${negotiationId}/status?dryrun=1`, req.url),
+      { status: 303 },
+    );
+  }
+
+  const fee = calcFeeCents();
   const origin = PUBLIC.appUrl || new URL(req.url).origin;
   const session = await stripe().checkout.sessions.create({
     mode: "payment",
@@ -118,25 +81,22 @@ export async function POST(req: Request) {
           currency: "usd",
           unit_amount: fee,
           product_data: {
-            name: `Honest Funeral advocacy fee — ${pick.home_name}`,
+            name: "Honest Funeral — funeral-home outreach",
             description:
-              "Flat success fee for presenting funeral homes that responded to your authorized outreach. Refundable if the selected home refuses to honor their quote within 14 days.",
+              "Flat fee to contact local funeral homes on your behalf, collect itemized quotes, and present them side by side. Refundable within 14 days if we don't save you anything.",
           },
         },
         quantity: 1,
       },
     ],
-    success_url: `${origin}/negotiate/${negotiationId}/closed?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/negotiate/${negotiationId}/results`,
-    metadata: { negotiationId, outreachId },
+    success_url: `${origin}/negotiate/${negotiationId}/status?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/negotiate/${negotiationId}/preview?canceled=1`,
+    metadata: { negotiationId },
   });
 
   await supabase
     .from("negotiations")
-    .update({
-      stripe_payment_intent_id: session.id,
-      fee_cents: fee,
-    })
+    .update({ stripe_payment_intent_id: session.id, fee_cents: fee })
     .eq("id", negotiationId);
 
   return NextResponse.redirect(session.url!, { status: 303 });

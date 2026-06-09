@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { sendEmail } from "@/lib/email";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
 import { findHomesFromDirectory } from "@/lib/negotiation/directory";
 import {
   ADVOCATE_NAME,
   buildFamilyLabel,
   buildOutreachEmail,
-  outreachFromAddress,
-  outreachReplyTo,
 } from "@/lib/negotiation/email-body";
 import { isEmailDenylisted } from "@/lib/negotiation/denylist";
 
@@ -66,7 +63,7 @@ export async function POST(req: Request) {
       service_type: ctx.serviceType,
       target_home_name: ctx.targetHomeName,
       target_home_estimate_cents: ctx.targetEstimateCents,
-      status: "contacting",
+      status: "pending_payment",
     })
     .select()
     .single();
@@ -78,50 +75,35 @@ export async function POST(req: Request) {
 
   const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
-  for (const home of homes) {
-    // Belt-and-suspenders: code-level denylist runs before any send,
-    // independent of funeral_homes.active. Survives DB edits.
-    if (isEmailDenylisted(home.email)) {
-      console.warn(
-        `[outreach] skipping denylisted email ${home.email} (home=${home.name})`,
-      );
-      continue;
-    }
-
-    const { subject, body } = buildOutreachEmail({
-      familyLabel,
-      authorizationId,
-      advocateName: ADVOCATE_NAME,
-      timing: ctx.timing,
-      homeEmail: home.email,
-    });
-
-    // Kill-switch: when OUTREACH_LIVE is not "true", we record what
-    // WOULD have been sent but we don't actually email the funeral home.
-    // Flip OUTREACH_LIVE=true in Vercel env to start real sends.
-    const outreachLive = process.env.OUTREACH_LIVE === "true";
-
-    let sentId: string | null = null;
-    if (outreachLive) {
-      const sent = await sendEmail({
-        to: home.email,
-        subject,
-        text: body,
-        from: outreachFromAddress(),
-        replyTo: outreachReplyTo(neg.id),
+  // Build and STORE the outreach as `pending` — we do NOT send anything here.
+  // Emails go out only after the family pays (lib/negotiation/send.ts, invoked
+  // from the Stripe webhook + the status-page reconciliation). This is what
+  // guarantees we never email a home for a family that hasn't paid.
+  const rows = homes
+    // Code-level denylist runs before we even store a home, independent of
+    // funeral_homes.active. Survives DB edits.
+    .filter((home) => !isEmailDenylisted(home.email))
+    .map((home) => {
+      const { body } = buildOutreachEmail({
+        familyLabel,
+        authorizationId,
+        advocateName: ADVOCATE_NAME,
+        timing: ctx.timing,
+        homeEmail: home.email,
       });
-      sentId = sent.id;
-    }
-
-    await supabase.from("negotiation_outreach").insert({
-      negotiation_id: neg.id,
-      home_name: home.name,
-      home_email: home.email,
-      initial_email_id: sentId,
-      initial_email_body: body,
-      status: outreachLive ? "sent" : "dry_run",
+      return {
+        negotiation_id: neg.id,
+        home_name: home.name,
+        home_email: home.email,
+        initial_email_body: body,
+        status: "pending",
+      };
     });
+
+  if (rows.length > 0) {
+    await supabase.from("negotiation_outreach").insert(rows);
   }
 
+  // Family lands on the teaser/preview to pay before anything is sent.
   return NextResponse.json({ id: neg.id });
 }

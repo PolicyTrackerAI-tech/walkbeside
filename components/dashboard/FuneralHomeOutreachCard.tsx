@@ -47,13 +47,16 @@ export function FuneralHomeOutreachCard({
     .filter((q): q is number => typeof q === "number" && q > 0);
   const lowQuote = quotes.length ? Math.min(...quotes) : null;
   const highQuote = quotes.length ? Math.max(...quotes) : null;
+  const pendingPayment = status === "pending_payment";
   const closed = status === "closed";
 
-  const headline = closed
-    ? "Your funeral-home outreach — placed."
-    : status === "received" || replied.length > 0
-      ? `Your funeral-home outreach — ${replied.length} ${replied.length === 1 ? "home has" : "homes have"} replied.`
-      : "Your funeral-home outreach — in progress.";
+  const headline = pendingPayment
+    ? "Your funeral-home outreach — ready to send."
+    : closed
+      ? "Your funeral-home outreach — placed."
+      : status === "received" || replied.length > 0
+        ? `Your funeral-home outreach — ${replied.length} ${replied.length === 1 ? "home has" : "homes have"} replied.`
+        : "Your funeral-home outreach — in progress.";
 
   return (
     <Card tone={unlocked ? "good" : "primary"}>
@@ -69,49 +72,70 @@ export function FuneralHomeOutreachCard({
       )}
 
       <p className="text-ink-soft mb-4">
-        We contacted {outreach.length}{" "}
-        {outreach.length === 1 ? "home" : "homes"} on your behalf and
-        requested itemized prices under the FTC Funeral Rule.
-        {quotes.length > 0 && lowQuote !== null && highQuote !== null && (
+        {pendingPayment ? (
           <>
-            {" "}
-            Quotes so far range from{" "}
-            <strong className="text-ink">{fmtCents(lowQuote)}</strong> to{" "}
-            <strong className="text-ink">{fmtCents(highQuote)}</strong>.
+            We found {outreach.length}{" "}
+            {outreach.length === 1 ? "home" : "homes"} near you and prepared a
+            request to each. <strong className="text-ink">Nothing has been
+            sent yet</strong> &mdash; review and send to start getting quotes.
+          </>
+        ) : (
+          <>
+            We contacted {outreach.length}{" "}
+            {outreach.length === 1 ? "home" : "homes"} on your behalf and
+            requested itemized prices under the FTC Funeral Rule.
+            {quotes.length > 0 && lowQuote !== null && highQuote !== null && (
+              <>
+                {" "}
+                Quotes so far range from{" "}
+                <strong className="text-ink">{fmtCents(lowQuote)}</strong> to{" "}
+                <strong className="text-ink">{fmtCents(highQuote)}</strong>.
+              </>
+            )}
           </>
         )}
       </p>
 
-      <ul className="space-y-2 mb-5">
-        {outreach.map((o) => (
-          <li
-            key={o.id}
-            className="flex items-center justify-between gap-3 rounded-xl border border-border bg-white/60 px-4 py-3"
-          >
-            <span className="flex-1 text-sm text-ink">{o.home_name}</span>
-            <span className="text-xs uppercase tracking-wider text-ink-muted shrink-0">
-              {STATUS_LABEL[o.status] ?? o.status}
-            </span>
-            {o.quote_cents != null && o.quote_cents > 0 && (
-              <span className="text-sm font-medium text-ink shrink-0">
-                {fmtCents(o.quote_cents)}
+      {!pendingPayment && (
+        <ul className="space-y-2 mb-5">
+          {outreach.map((o) => (
+            <li
+              key={o.id}
+              className="flex items-center justify-between gap-3 rounded-xl border border-border bg-white/60 px-4 py-3"
+            >
+              <span className="flex-1 text-sm text-ink">{o.home_name}</span>
+              <span className="text-xs uppercase tracking-wider text-ink-muted shrink-0">
+                {STATUS_LABEL[o.status] ?? o.status}
               </span>
-            )}
-          </li>
-        ))}
-      </ul>
+              {o.quote_cents != null && o.quote_cents > 0 && (
+                <span className="text-sm font-medium text-ink shrink-0">
+                  {fmtCents(o.quote_cents)}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
 
-      <div className="flex flex-wrap gap-3">
-        <LinkButton href={`/negotiate/${negotiationId}/results`}>
-          {closed ? "View results" : "View results & choose a home →"}
-        </LinkButton>
-        <LinkButton
-          href={`/negotiate/${negotiationId}/status`}
-          variant="secondary"
-        >
-          Outreach detail
-        </LinkButton>
-      </div>
+      {pendingPayment ? (
+        <div className="flex flex-wrap gap-3">
+          <LinkButton href={`/negotiate/${negotiationId}/preview`}>
+            Review &amp; send →
+          </LinkButton>
+        </div>
+      ) : (
+        <div className="flex flex-wrap gap-3">
+          <LinkButton href={`/negotiate/${negotiationId}/results`}>
+            {closed ? "View results" : "View results & choose a home →"}
+          </LinkButton>
+          <LinkButton
+            href={`/negotiate/${negotiationId}/status`}
+            variant="secondary"
+          >
+            Outreach detail
+          </LinkButton>
+        </div>
+      )}
     </Card>
   );
 }

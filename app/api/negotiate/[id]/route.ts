@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { stripe, stripeAvailable } from "@/lib/stripe";
+import { PUBLIC, requireServer } from "@/lib/env";
+import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
 
 export async function GET(
   _req: Request,
@@ -20,6 +24,31 @@ export async function GET(
     .single();
   if (error || !neg)
     return NextResponse.json({ error: error?.message ?? "not_found" }, { status: 404 });
+
+  // Self-heal: if the family paid but the webhook hasn't sent the outreach yet
+  // (delayed/missed), verify the stored checkout session and send now. The
+  // status page polls this route, so this runs automatically. Idempotent.
+  if (
+    neg.status === "pending_payment" &&
+    neg.stripe_payment_intent_id &&
+    stripeAvailable()
+  ) {
+    try {
+      const session = await stripe().checkout.sessions.retrieve(
+        neg.stripe_payment_intent_id,
+      );
+      if (session.payment_status === "paid") {
+        const admin = createServiceClient(
+          PUBLIC.supabaseUrl,
+          requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+        );
+        await sendOutreachForNegotiation(admin, id);
+        neg.status = "contacting";
+      }
+    } catch {
+      // Retrieval failed — fall back to the webhook.
+    }
+  }
 
   const { data: outreach } = await supabase
     .from("negotiation_outreach")

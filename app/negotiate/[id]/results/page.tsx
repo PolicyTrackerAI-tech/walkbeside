@@ -2,11 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireSignedIn } from "@/lib/require-signed-in";
-import { isPaidUser } from "@/lib/auth-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
-import { FLAT_FEE_CENTS, fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/stripe";
 
 export default async function NegotiationResultsPage({
   params,
@@ -21,11 +20,9 @@ export default async function NegotiationResultsPage({
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=/negotiate/${id}/results`);
 
-  // Per V2 canonical model: anyone signed in can reach this page;
-  // payment is charged only on home selection. Check paid_at so the UI
-  // can hide the fee for already-paid users (rare under V2, but the
-  // upfront /paywall onramp still exists for the legacy/edge case).
-  const alreadyPaid = await isPaidUser(supabase, user);
+  // Upfront-pay model: anyone who reaches results has already paid (the $49
+  // was charged at /preview before outreach was sent). Choosing a home costs
+  // nothing more — it just notifies the home and closes the negotiation.
 
   const { data: neg } = await supabase
     .from("negotiations")
@@ -63,9 +60,7 @@ export default async function NegotiationResultsPage({
             <p className="text-ink-soft mt-2">
               {replies.length === 0
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
-                : alreadyPaid
-                  ? "Pick the home you want. We’ll notify them and help schedule the arrangement meeting right away — no additional charge, it’s included in what you’ve already paid. You’ll meet with the home in person to make final selections and sign."
-                  : `Pick the home you want. We’ll notify them, help schedule the arrangement meeting, and charge a flat ${fmtCents(FLAT_FEE_CENTS)} only when you confirm. You’ll meet with the home in person to make final selections and sign.`}
+                : "Pick the home you want. We’ll notify them and help schedule the arrangement meeting — no additional charge, it’s included in what you already paid. You’ll meet with the home in person to make final selections and sign."}
             </p>
             {replies.length >= 2 && (
               <div className="mt-3">
@@ -110,12 +105,7 @@ export default async function NegotiationResultsPage({
                         </div>
                       </div>
                       <div className="text-right">
-                        {!alreadyPaid && (
-                          <div className="text-xs text-ink-muted mb-2">
-                            Our fee if you choose this home: {fmtCents(FLAT_FEE_CENTS)}
-                          </div>
-                        )}
-                        <form action="/api/stripe/checkout" method="post">
+                        <form action="/api/negotiate/choose" method="post">
                           <input type="hidden" name="negotiationId" value={id} />
                           <input type="hidden" name="outreachId" value={r.id} />
                           <button
