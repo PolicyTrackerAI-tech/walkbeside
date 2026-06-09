@@ -63,9 +63,9 @@ export default function AboutPage() {
               The funeral industry runs on those kickbacks &mdash; which is
               why almost every &ldquo;free&rdquo; service quietly steers
               families to the home that paid for the placement. We won&rsquo;t
-              do that. Our only revenue is the flat $49 the family pays &mdash;
-              and only when they choose a funeral home we found for them.
-              Refundable in 14 days if we didn&rsquo;t save you anything.
+              do that. Our only revenue is the flat $49 the family pays
+              upfront, before we contact any home. Refundable in 14 days if
+              we didn&rsquo;t save you anything.
             </p>
           </Card>
 
@@ -79,8 +79,8 @@ export default function AboutPage() {
               </li>
               <li>
                 Not a subscription. Every tool is free; the only charge is a
-                flat $49, and only when you choose a funeral home we found
-                for you.
+                flat $49, paid upfront before we contact any home, refundable
+                in 14 days.
               </li>
               <li>
                 Not a substitute for a conversation with your own attorney or

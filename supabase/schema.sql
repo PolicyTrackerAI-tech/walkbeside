@@ -101,7 +101,7 @@ create table if not exists public.negotiation_outreach (
   initial_email_body text,
   quote_cents int,
   notes text,
-  status text not null default 'sent', -- 'sent' | 'replied' | 'no-reply' | 'declined'
+  status text not null default 'pending', -- 'pending' (stored, not yet sent) | 'sent' | 'dry_run' | 'replied' | 'no-reply' | 'declined'
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

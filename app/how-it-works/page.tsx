@@ -11,7 +11,7 @@ import { FEATURES } from "@/lib/env";
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
   description:
-    "A consumer advocate, not a funeral home. Every tool is free. The one thing we charge for is the funeral-home outreach — a flat $49, only when you choose a home we found for you. Money-back in 14 days.",
+    "A consumer advocate, not a funeral home. Every tool is free. The one thing we charge for is the funeral-home outreach — a flat $49, paid upfront before we contact any home. Refundable in 14 days.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -30,24 +30,30 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
   return [
   {
     n: 1,
-    title: "You authorize us to contact funeral homes on your behalf.",
+    title: "We find the funeral homes near you, and you approve the list.",
     body:
-      "We'll email up to nine homes near you. You approve the list before anything goes out.",
+      "We line up to nine homes in your area. You approve the list before anything goes out — we only contact homes once you're in.",
   },
   {
     n: 2,
+    title: "Flat $49, paid upfront — before we contact any home, via Stripe.",
+    body:
+      "You pay the flat $49 before we send a single email. No commissions, no kickbacks, no referral fees from funeral homes. Refundable in full within 14 days if we don't save you anything documentable.",
+  },
+  {
+    n: 3,
     title: "Every email identifies us as your advocate — by name.",
     body:
       "Sent from advocate@honestfuneral.co. We don't pretend to be you. The family's surname is mentioned; no other identifying details unless you tell us to.",
   },
   {
-    n: 3,
+    n: 4,
     title: "We invoke your FTC Funeral Rule right to a General Price List.",
     body:
       "Homes that respond send their prices. Homes that refuse self-select out.",
   },
   {
-    n: 4,
+    n: 5,
     title: "We summarize the responses for you — real prices, line by line.",
     body: (
       <>
@@ -65,16 +71,10 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
     ),
   },
   {
-    n: 5,
-    title: "You pick a home, or you pick none.",
-    body:
-      "If you pick one, we help schedule the in-person arrangement meeting and stay on email for any pre-meeting questions or post-meeting disputes. You attend the meeting in person and sign all paperwork directly with the home — we never sign for you, and we don't take a cent from any funeral home.",
-  },
-  {
     n: 6,
-    title: "Flat $49 — only if you pick a home, via Stripe.",
+    title: "You pick a home at no extra charge, or you pick none.",
     body:
-      "Charged only when you choose one of the homes we found (step 5) — never before, and never if you walk away. No commissions, no kickbacks, no referral fees from funeral homes. Money-back in 14 days if we don't save you anything documentable.",
+      "Choosing a home costs nothing more. If you pick one, we help schedule the in-person arrangement meeting and stay on email for any pre-meeting questions or post-meeting disputes. You attend the meeting in person and sign all paperwork directly with the home — we never sign for you, and we don't take a cent from any funeral home.",
   },
   ];
 }
@@ -99,8 +99,8 @@ export default async function HowItWorksPage() {
               Every tool on this site is free &mdash; the price lookup, the
               prep kit, the obituary helper, the 30-day checklist, all of it.
               The one thing we charge for is contacting funeral homes for you
-              and comparing their quotes side by side. A flat $49, and only
-              when you choose a home we found. Here&rsquo;s every step.
+              and comparing their quotes side by side. A flat $49, paid upfront
+              before we contact any home. Here&rsquo;s every step.
             </p>
           </div>
 
@@ -127,13 +127,13 @@ export default async function HowItWorksPage() {
 
           <Card tone="primary">
             <CardEyebrow>The money part</CardEyebrow>
-            <CardTitle>Flat $49 once. Money-back in 14 days.</CardTitle>
+            <CardTitle>Flat $49 once. Refundable in 14 days.</CardTitle>
             <p className="text-ink-soft mb-4">
-              One flat $49, charged only when you choose a home we found for
-              you. Every tool on the site is free. No subscriptions. No
-              commissions from any funeral home. No referral fees. If we
-              don&rsquo;t save you anything documentable in 14 days, email us
-              and we refund you in full &mdash; no questions, no form.
+              One flat $49, paid upfront before we contact any home. Every tool
+              on the site is free. No subscriptions. No commissions from any
+              funeral home. No referral fees. If we don&rsquo;t save you
+              anything documentable in 14 days, email us and we refund you in
+              full &mdash; no questions, no form.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/decide">

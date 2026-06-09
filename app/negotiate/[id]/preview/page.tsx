@@ -113,8 +113,9 @@ export default async function NegotiationPreviewPage({
                   ))}
                 </ul>
                 <p className="text-xs text-ink-muted mt-3">
-                  {count} {count === 1 ? "home" : "homes"}, ready to go. Names
-                  unlock the moment you pay &mdash; we email them only then.
+                  {count} {count === 1 ? "home" : "homes"}, ready to go. We
+                  don&rsquo;t email any of them until you pay &mdash; the names
+                  unlock when we send.
                 </p>
               </Card>
 

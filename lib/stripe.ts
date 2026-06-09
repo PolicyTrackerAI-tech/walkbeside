@@ -12,8 +12,8 @@ export function stripe(): Stripe {
 export const stripeAvailable = FEATURES.stripe;
 
 /**
- * Pricing model: flat success fee, charged only when the family signs with a
- * home we presented to them. No counterfactual baseline required.
+ * Pricing model: a flat $49, paid upfront before we contact any home.
+ * Refundable in 14 days if we don't save the family anything.
  */
 export const FLAT_FEE_CENTS = 49_00;
 

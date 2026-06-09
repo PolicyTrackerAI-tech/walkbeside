@@ -356,12 +356,12 @@ export function DecideFlow() {
               </LinkButton>
             </div>
             <p className="mt-3 text-xs text-ink-muted">
-              Free to start. We contact homes on your behalf and bring
-              the quotes back side by side. You only pay our flat $49
-              fee when you choose a home we presented &mdash; not
-              before. Money-back in 14 days if we didn&rsquo;t save
-              you anything. No commissions or kickbacks from any home
-              we contact.
+              Free to start. A flat $49, paid upfront before we contact
+              any home. Then we reach out on your behalf and bring the
+              quotes back side by side &mdash; you pick a home at no
+              extra charge. Refundable in 14 days if we didn&rsquo;t
+              save you anything. No commissions or kickbacks from any
+              home we contact.
             </p>
           </Card>
 

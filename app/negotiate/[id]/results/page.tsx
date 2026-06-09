@@ -21,7 +21,7 @@ export default async function NegotiationResultsPage({
   if (!user) redirect(`/login?next=/negotiate/${id}/results`);
 
   // Upfront-pay model: anyone who reaches results has already paid (the $49
-  // was charged at /preview before outreach was sent). Choosing a home costs
+  // was charged at checkout, before outreach was sent). Choosing a home costs
   // nothing more — it just notifies the home and closes the negotiation.
 
   const { data: neg } = await supabase
@@ -31,6 +31,9 @@ export default async function NegotiationResultsPage({
     .eq("user_id", user.id)
     .single();
   if (!neg) redirect("/dashboard");
+
+  // Guard: an unpaid negotiation has no results to show — send them to pay.
+  if (neg.status === "pending_payment") redirect(`/negotiate/${id}/preview`);
 
   const { data: outreach } = await supabase
     .from("negotiation_outreach")

@@ -23,7 +23,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Every tool on the site is free — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, and the 30-day post-funeral checklist. The one thing we charge for is the funeral-home outreach: we contact homes on your behalf, collect itemized quotes, and put them side by side. A flat $49, charged only when you choose a home we found for you. Money-back in 14 days.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Every tool on the site is free — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, and the 30-day post-funeral checklist. The one thing we charge for is the funeral-home outreach: we contact homes on your behalf, collect itemized quotes, and put them side by side. A flat $49, paid upfront before we contact any home. Refundable in 14 days if we don't save you anything.",
     a: (
       <>
         <p>
@@ -56,9 +56,10 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           The one thing we charge for is the{" "}
           <strong>funeral-home outreach</strong>: we contact homes on your
           behalf, collect itemized quotes, and put them side by side so you
-          can choose. A flat <strong>$49</strong> &mdash; charged only when
-          you choose a home we found for you. No subscriptions. Money-back
-          in 14 days. We&rsquo;re not a funeral home; we help you{" "}
+          can choose. A flat <strong>$49</strong> &mdash; paid upfront,
+          before we contact any home. No subscriptions. Refundable in 14
+          days if we don&rsquo;t save you anything. We&rsquo;re not a funeral
+          home; we help you{" "}
           <em>compare</em>.
         </p>
       </>
@@ -67,14 +68,14 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "One flat $49 charge per family, and only when you choose a funeral home we found for you through our outreach. Every tool on the site is free. Nothing else is ever charged. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days if we don't save you anything documentable.",
+      "One flat $49 charge per family, paid upfront before we contact any funeral home on your behalf. Every tool on the site is free. Nothing else is ever charged. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days if we don't save you anything documentable.",
     a: (
       <>
         <p>
-          One flat <strong>$49</strong> charge per family &mdash; and only
-          when you <strong>choose a funeral home we found for you</strong>{" "}
-          through our outreach. Every tool on the site is free. That fee is
-          the only thing we charge for, ever.
+          One flat <strong>$49</strong> charge per family &mdash;{" "}
+          <strong>paid upfront, before we contact any home</strong> on your
+          behalf. Every tool on the site is free. That fee is the only thing
+          we charge for, ever.
         </p>
         <ul>
           <li>No commissions from funeral homes. Ever.</li>
@@ -140,14 +141,14 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Does the $49 fee apply to cremation-only arrangements?",
     plain:
-      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. The flat $49 is charged once per family, only when you choose a home we found, regardless of service type. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
+      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. The flat $49 is charged once per family, paid upfront before we contact any home, regardless of service type. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
     a: (
       <>
         <p>
           Yes. Our outreach covers every service type &mdash; burial,
           cremation, direct cremation, green burial, or whole-body
-          donation. The flat $49 is charged once per family, only when you
-          choose a home we found, regardless of service type.
+          donation. The flat $49 is charged once per family, paid upfront
+          before we contact any home, regardless of service type.
         </p>
         <p>
           Direct cremation in particular is where families often

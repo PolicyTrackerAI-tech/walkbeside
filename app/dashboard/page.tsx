@@ -39,7 +39,7 @@ export default async function DashboardPage({
 
   // Model A: every tool is free. `isPaid` here is only the "skip the fee"
   // flag (free-email test/founder accounts) — used to tone the outreach CTA,
-  // not to gate any tool. The $49 is charged on home selection, not here.
+  // not to gate any tool. The $49 is charged upfront, before outreach is sent.
   const isPaid = await isPaidUser(supabase, user);
 
   const [
@@ -163,9 +163,9 @@ export default async function DashboardPage({
               <p className="text-ink-soft mt-3 mb-4">
                 Every tool here is free. When you want it, we contact funeral
                 homes on your behalf, collect itemized quotes, and put them
-                side by side. Flat $49 &mdash; charged only when you choose a
-                home we found for you. Refundable in 14 days if we don&rsquo;t
-                save you anything. No commissions or kickbacks, ever.
+                side by side. A flat $49, paid upfront before we contact any
+                home. Refundable in 14 days if we don&rsquo;t save you anything.
+                No commissions or kickbacks, ever.
               </p>
               <LinkButton href="/negotiate/start" size="lg">
                 Have us contact funeral homes →
@@ -242,7 +242,8 @@ export default async function DashboardPage({
               <p className="text-ink-soft text-sm mt-1">
                 Open any of these whenever you need them &mdash; no charge. The
                 only thing we charge for is the funeral-home outreach: a flat
-                $49, and only when you choose a home we found for you.
+                $49, paid upfront before we contact any home. Picking a home is
+                free.
               </p>
             </div>
 

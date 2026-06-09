@@ -30,9 +30,10 @@ const STATUS_LABEL: Record<string, string> = {
 /**
  * Dashboard card showing the family's active funeral-home outreach.
  *
- * Model A: results are free to view. The family sees every home and quote;
- * the flat $49 is charged only when they choose a home (on the results page,
- * via the per-deal success fee). No reveal paywall.
+ * The flat $49 is paid upfront, before we contact any home; results are free
+ * to view and choosing a home costs nothing extra. The family sees every home
+ * and quote with no reveal paywall. ($49 refundable in 14 days if we don't
+ * save them anything.)
  */
 export function FuneralHomeOutreachCard({
   negotiationId,

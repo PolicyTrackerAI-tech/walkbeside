@@ -232,8 +232,8 @@ export function PriceCalculator() {
                     comes back.
                   </p>
                   <p className="text-sm text-ink-soft mb-4">
-                    Flat $49 &mdash; charged only if you choose a home we
-                    find. Nothing if you don&rsquo;t.
+                    A flat $49, paid upfront before we contact any home.
+                    Refundable in 14 days if we don&rsquo;t save you anything.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <LinkButton
@@ -341,8 +341,9 @@ export function PriceCalculator() {
               With your written authorization, we contact funeral homes in
               your area as your advocate, request their itemized General
               Price Lists, and return side-by-side comparisons. You review
-              the responses and choose. Flat $49 only if you select a home
-              we present to you &mdash; free otherwise.
+              the responses and choose. A flat $49, paid upfront before we
+              contact any home &mdash; refundable in 14 days if we
+              don&rsquo;t save you anything.
             </p>
             <LinkButton
               href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}`}

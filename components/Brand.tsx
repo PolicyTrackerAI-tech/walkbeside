@@ -101,8 +101,8 @@ export function Footer() {
       <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
           A consumer advocate for families &mdash; not a funeral home.
-          Flat $49 only if you choose a funeral home we presented to you
-          through our outreach.
+          A flat $49, paid upfront before we contact any home. Refundable in
+          14 days if we don&rsquo;t save you anything.
         </p>
         <p>
           <strong className="text-ink-soft">
