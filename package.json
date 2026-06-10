@@ -11,6 +11,7 @@
     "seed:demo": "node --env-file-if-exists=.env.local scripts/seed-demo.mjs",
     "import:homes": "node --env-file-if-exists=.env.local scripts/import-funeral-homes.mjs",
     "smoke:check": "node --env-file-if-exists=.env.local scripts/smoke-check.mjs",
+    "build:bootstrap": "node scripts/build-bootstrap-sql.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },
