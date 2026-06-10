@@ -42,3 +42,7 @@ next-env.d.ts
 
 # claude code local settings
 /.claude/
+
+# Real funeral-home data — curated contact list stays out of git.
+# (The .template.csv and .example.csv are committed; the working file isn't.)
+/supabase/seed/utah-homes.csv
