@@ -4,7 +4,7 @@
  *
  * Under Model A there is no account-level paywall: every tool is free and the
  * only charge is the flat $49, paid upfront before we contact any home
- * (refundable in 14 days if we don't save the family anything). Home selection
+ * (refundable in 14 days). Home selection
  * itself is free. This helper exists so test accounts and the founder's own
  * logins run outreach WITHOUT being charged during testing. A user qualifies if
  * EITHER:

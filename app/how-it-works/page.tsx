@@ -38,7 +38,7 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
     n: 2,
     title: "Flat $49, paid upfront — before we contact any home, via Stripe.",
     body:
-      "You pay the flat $49 before we send a single email. No commissions, no kickbacks, no referral fees from funeral homes. Refundable in full within 14 days if we don't save you anything documentable.",
+      "You pay the flat $49 before we send a single email. No commissions, no kickbacks, no referral fees from funeral homes. Refundable in full within 14 days.",
   },
   {
     n: 3,
@@ -131,9 +131,8 @@ export default async function HowItWorksPage() {
             <p className="text-ink-soft mb-4">
               One flat $49, paid upfront before we contact any home. Every tool
               on the site is free. No subscriptions. No commissions from any
-              funeral home. No referral fees. If we don&rsquo;t save you
-              anything documentable in 14 days, email us and we refund you in
-              full &mdash; no questions, no form.
+              funeral home. No referral fees. Email us within 14 days and we
+              refund you in full &mdash; no questions, no form.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/decide">

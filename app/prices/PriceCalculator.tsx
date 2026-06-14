@@ -233,7 +233,7 @@ export function PriceCalculator() {
                   </p>
                   <p className="text-sm text-ink-soft mb-4">
                     A flat $49, paid upfront before we contact any home.
-                    Refundable in 14 days if we don&rsquo;t save you anything.
+                    Refundable in 14 days.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <LinkButton
@@ -342,8 +342,7 @@ export function PriceCalculator() {
               your area as your advocate, request their itemized General
               Price Lists, and return side-by-side comparisons. You review
               the responses and choose. A flat $49, paid upfront before we
-              contact any home &mdash; refundable in 14 days if we
-              don&rsquo;t save you anything.
+              contact any home &mdash; refundable in 14 days.
             </p>
             <LinkButton
               href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}`}

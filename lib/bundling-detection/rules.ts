@@ -284,7 +284,7 @@ export const RULES: Rule[] = [
     },
   },
   // -------------------------------------------------------------------------
-  // Suspicious upsells (legal, but families routinely overpay)
+  // Suspicious upsells (legal, but families often overpay)
   // -------------------------------------------------------------------------
   {
     id: "basic-services-fee-high",

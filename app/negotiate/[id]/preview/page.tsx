@@ -139,8 +139,8 @@ export default async function NegotiationPreviewPage({
                     price.
                   </li>
                   <li>
-                    &bull; Refundable in 14 days if we don&rsquo;t save you
-                    anything. No commissions or kickbacks from any home.
+                    &bull; Refundable in 14 days. No commissions or kickbacks
+                    from any home.
                   </li>
                 </ul>
                 <form action="/api/stripe/checkout" method="post">

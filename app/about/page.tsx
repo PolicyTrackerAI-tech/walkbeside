@@ -19,7 +19,7 @@ const PRINCIPLES: { label: string; title: string; body: string }[] = [
   {
     label: "What it costs",
     title: "A flat $49",
-    body: "Paid upfront, before we contact a single home. Refundable in 14 days if we don't save you anything.",
+    body: "Paid upfront, before we contact a single home. Refundable in 14 days.",
   },
   {
     label: "What's free",

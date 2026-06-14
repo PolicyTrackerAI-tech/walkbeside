@@ -123,7 +123,7 @@ function LoginForm() {
             </CardTitle>
             <p className="text-ink-soft mb-6 text-[15px]">
               {mode === "signup"
-                ? "An account lets us hold your work while you step away. Every tool is free; the flat $49 is paid upfront before we contact any home — refundable in 14 days if we don't save you anything."
+                ? "An account lets us hold your work while you step away. Every tool is free; the flat $49 is paid upfront before we contact any home — refundable in 14 days."
                 : "Sign in to pick up where you left off."}
             </p>
             {mode === "signup" && (

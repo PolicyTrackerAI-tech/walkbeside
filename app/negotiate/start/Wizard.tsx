@@ -151,7 +151,7 @@ function NegotiateStartWizard() {
               We&rsquo;ll contact 3&ndash;5 homes near you as your advocate,
               request itemized prices, and bring back the options to compare.
               A flat $49, paid upfront before we contact any home. Refundable
-              in 14 days if we don&rsquo;t save you anything.
+              in 14 days.
             </p>
           </div>
 
@@ -503,8 +503,7 @@ function NegotiateStartWizard() {
                     </li>
                     <li>
                       A flat $49, paid upfront before we contact any home.
-                      Refundable in 14 days if we don&rsquo;t save you
-                      anything.
+                      Refundable in 14 days.
                     </li>
                   </ul>
                   <label className="flex items-start gap-3 cursor-pointer mb-5">

@@ -102,7 +102,7 @@ export function Footer() {
         <p>
           A consumer advocate for families &mdash; not a funeral home.
           A flat $49, paid upfront before we contact any home. Refundable in
-          14 days if we don&rsquo;t save you anything.
+          14 days.
         </p>
         <p>
           <strong className="text-ink-soft">

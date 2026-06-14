@@ -23,7 +23,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Every tool on the site is free — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, and the 30-day post-funeral checklist. The one thing we charge for is the funeral-home outreach: we contact homes on your behalf, collect itemized quotes, and put them side by side. A flat $49, paid upfront before we contact any home. Refundable in 14 days if we don't save you anything.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Every tool on the site is free — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, and the 30-day post-funeral checklist. The one thing we charge for is the funeral-home outreach: we contact homes on your behalf, collect itemized quotes, and put them side by side. A flat $49, paid upfront before we contact any home. Refundable in 14 days.",
     a: (
       <>
         <p>
@@ -58,7 +58,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           behalf, collect itemized quotes, and put them side by side so you
           can choose. A flat <strong>$49</strong> &mdash; paid upfront,
           before we contact any home. No subscriptions. Refundable in 14
-          days if we don&rsquo;t save you anything. We&rsquo;re not a funeral
+          days. We&rsquo;re not a funeral
           home; we help you{" "}
           <em>compare</em>.
         </p>
@@ -68,7 +68,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "One flat $49 charge per family, paid upfront before we contact any funeral home on your behalf. Every tool on the site is free. Nothing else is ever charged. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days if we don't save you anything documentable.",
+      "One flat $49 charge per family, paid upfront before we contact any funeral home on your behalf. Every tool on the site is free. Nothing else is ever charged. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days.",
     a: (
       <>
         <p>
@@ -84,8 +84,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
             services, or anyone else.
           </li>
           <li>
-            Refundable for 14 days: if we didn&rsquo;t save you anything
-            documentable, email us and we refund the full $49.
+            Refundable for 14 days: email us and we refund the full $49.
           </li>
         </ul>
         <p>
@@ -302,7 +301,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What if I\u2019m not sure I need your help?",
     plain:
-      "Then don't pay us anything. Use the public guidance and the fair-price lookup to rate the quote you've been given against local data. Families routinely overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the lookup tells you the quote you've been given is already in range, you're done. Nothing else to do.",
+      "Then don't pay us anything. Use the public guidance and the fair-price lookup to rate the quote you've been given against local data. Families often overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the lookup tells you the quote you've been given is already in range, you're done. Nothing else to do.",
     a: (
       <>
         <p>
@@ -311,7 +310,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           against local data.
         </p>
         <p>
-          Families routinely overpay by{" "}
+          Families often overpay by{" "}
           <strong>$2,000 to $5,000</strong> on the funeral arrangement alone
           &mdash; usually because they don&rsquo;t know the fair range. If
           the lookup tells you the quote you&rsquo;ve been given is

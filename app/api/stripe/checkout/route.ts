@@ -90,7 +90,7 @@ export async function POST(req: Request) {
           product_data: {
             name: "Honest Funeral — funeral-home outreach",
             description:
-              "Flat fee to contact local funeral homes on your behalf, collect itemized quotes, and present them side by side. Refundable within 14 days if we don't save you anything.",
+              "Flat fee to contact local funeral homes on your behalf, collect itemized quotes, and present them side by side. Refundable within 14 days.",
           },
         },
         quantity: 1,

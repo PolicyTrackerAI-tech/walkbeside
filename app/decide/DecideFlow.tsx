@@ -359,8 +359,7 @@ export function DecideFlow() {
               Free to start. A flat $49, paid upfront before we contact
               any home. Then we reach out on your behalf and bring the
               quotes back side by side &mdash; you pick a home at no
-              extra charge. Refundable in 14 days if we didn&rsquo;t
-              save you anything. No commissions or kickbacks from any
+              extra charge. Refundable in 14 days. No commissions or kickbacks from any
               home we contact.
             </p>
           </Card>

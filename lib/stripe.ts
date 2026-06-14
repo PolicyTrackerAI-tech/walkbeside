@@ -13,7 +13,7 @@ export const stripeAvailable = FEATURES.stripe;
 
 /**
  * Pricing model: a flat $49, paid upfront before we contact any home.
- * Refundable in 14 days if we don't save the family anything.
+ * Refundable in 14 days.
  */
 export const FLAT_FEE_CENTS = 49_00;
 

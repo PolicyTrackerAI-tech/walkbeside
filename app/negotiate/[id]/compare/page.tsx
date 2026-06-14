@@ -222,7 +222,7 @@ export default async function NegotiationComparePage({
             <p className="text-ink-soft mb-4">
               Pick a home back on the results page. Choosing is free — the flat
               $49 was paid upfront before we contacted any home, and it&rsquo;s
-              refundable in 14 days if we don&rsquo;t save you anything.
+              refundable in 14 days.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href={`/negotiate/${id}/results`}>

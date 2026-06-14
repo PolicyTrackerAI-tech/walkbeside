@@ -264,7 +264,7 @@ export default function AverageFuneralCostPage() {
               We contact funeral homes in your area as your authorized
               advocate, pull written itemized quotes, and put the options side
               by side. A flat $49, paid upfront before we contact any home.
-              Refundable in 14 days if we don&rsquo;t save you anything. No
+              Refundable in 14 days. No
               commissions, no kickbacks.
             </p>
             <LinkButton href="/where" size="lg">

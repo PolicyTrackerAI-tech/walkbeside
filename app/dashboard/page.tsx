@@ -164,7 +164,7 @@ export default async function DashboardPage({
                 Every tool here is free. When you want it, we contact funeral
                 homes on your behalf, collect itemized quotes, and put them
                 side by side. A flat $49, paid upfront before we contact any
-                home. Refundable in 14 days if we don&rsquo;t save you anything.
+                home. Refundable in 14 days.
                 No commissions or kickbacks, ever.
               </p>
               <LinkButton href="/negotiate/start" size="lg">

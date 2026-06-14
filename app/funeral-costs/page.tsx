@@ -80,8 +80,7 @@ export default function FuneralCostsIndexPage() {
               We contact homes in your area as your authorized
               advocate, pull written itemized quotes, and put the
               options side by side. A flat $49, paid upfront before
-              we contact any home, refundable in 14 days if we
-              don&rsquo;t save you anything. No commissions, no kickbacks.
+              we contact any home, refundable in 14 days. No commissions, no kickbacks.
             </p>
             <LinkButton href="/where" size="lg">
               Start here →

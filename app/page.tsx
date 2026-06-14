@@ -10,7 +10,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Every tool is free; we charge a flat $49, paid upfront before we contact any home, refundable in 14 days if we don't save you anything.",
+    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Every tool is free; we charge a flat $49, paid upfront before we contact any home, refundable in 14 days.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -76,7 +76,7 @@ export default function HomePage() {
           </LinkButton>
 
           <p className="mt-6 text-sm text-ink-soft max-w-md mx-auto">
-            Families routinely overpay by{" "}
+            Families often overpay by{" "}
             <span className="font-medium text-ink">$2,000 to $5,000</span> on
             the funeral arrangement alone. Knowing the fair range is usually
             the whole difference.
@@ -120,8 +120,7 @@ export default function HomePage() {
           </ol>
           <p className="mt-8 text-center text-sm text-ink-soft">
             Every tool here is free. We charge a flat $49, paid upfront before
-            we contact any home — refundable in 14 days if we don&rsquo;t save
-            you anything.
+            we contact any home — refundable in 14 days.
           </p>
         </div>
       </section>
@@ -135,8 +134,7 @@ export default function HomePage() {
             Every tool here is free &mdash; the price lookup, prep kit,
             obituary helper, analyzer, worksheets, and the 30-day checklist.
             The only thing we charge for is the funeral-home outreach: a flat
-            $49, paid upfront before we contact any home, refundable in 14 days
-            if we don&rsquo;t save you anything.
+            $49, paid upfront before we contact any home, refundable in 14 days.
           </p>
           <div className="grid gap-5 sm:grid-cols-3">
             <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
@@ -188,8 +186,7 @@ export default function HomePage() {
                 We contact funeral homes on your behalf, collect itemized
                 quotes, and put them side by side so you can choose. A flat
                 $49 &mdash; paid upfront before we contact any home, and
-                choosing a home costs nothing extra. Refundable in 14 days if
-                we don&rsquo;t save you anything.
+                choosing a home costs nothing extra. Refundable in 14 days.
               </p>
               <Link
                 href="/how-it-works"

@@ -15,8 +15,8 @@ export const metadata: Metadata = {
  *
  * Strategy: own the SEO surface for "funeral home prices [city]" and
  * "funeral pricing near me" searches. The page itself is informational
- * (no specific funeral home recommendations yet — that's V2 with Sarah's
- * vetted list); the conversion is the zip-entry form that takes the
+ * (no specific funeral home recommendations yet — that's a later phase,
+ * once real homes are vetted); the conversion is the zip-entry form that takes the
  * visitor to /funeral-homes/[zip] for regional fair-pricing data, then
  * to /negotiate/start to have us call homes for them.
  */

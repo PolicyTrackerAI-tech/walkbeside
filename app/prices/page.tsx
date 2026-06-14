@@ -35,7 +35,7 @@ export default function PricesPage() {
             <CardTitle>Want us to call homes for you?</CardTitle>
             <p className="text-ink-soft mb-4">
               A flat $49, paid upfront before we contact any home. Refundable
-              in 14 days if we don&rsquo;t save you anything. Every other tool
+              in 14 days. Every other tool
               is free.
             </p>
             <LinkButton href="/negotiate/start">

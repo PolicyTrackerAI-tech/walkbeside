@@ -5,8 +5,7 @@ import { redirect } from "next/navigation";
  *
  * The old "$49 upfront toolkit unlock" no longer exists: every tool is free,
  * and the flat $49 is for funeral-home outreach — paid upfront, before we
- * contact any home, and refundable in 14 days if we don't save the family
- * anything (see /negotiate/[id]/results).
+ * contact any home, and refundable in 14 days (see /negotiate/[id]/results).
  *
  * This route used to host the upfront-unlock checkout (since removed, along
  * with /api/stripe/checkout-account and /paywall/success). Nothing links here
