@@ -7,6 +7,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
 import { fmtUSD } from "@/lib/pricing-data";
+import { overchargeCents, ftcFlagFor } from "@/lib/analyzer-display";
 
 interface AnalyzerItem {
   name: string;
@@ -374,12 +375,31 @@ export function Analyzer() {
                       const tone = it.classification
                         ? TONES[it.classification]
                         : { label: "—", tone: "text-ink-muted" };
+                      const over = overchargeCents(it);
+                      const flag = ftcFlagFor(it, result.violations);
+                      const flagAccent =
+                        flag?.severity === "violation"
+                          ? "border-l-4 border-l-bad bg-bad-soft/30"
+                          : flag?.severity === "suspicious"
+                            ? "border-l-4 border-l-warn bg-warn-soft/30"
+                            : "";
                       return (
                         <li
                           key={i}
-                          className="grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0"
+                          className={`grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0 ${flagAccent}`}
                         >
-                          <div className="col-span-6 text-ink">{it.name}</div>
+                          <div className="col-span-6 text-ink">
+                            {it.name}
+                            {flag && (
+                              <div
+                                className={`text-xs font-medium mt-0.5 ${flag.severity === "violation" ? "text-bad" : "text-warn"}`}
+                              >
+                                {flag.severity === "violation"
+                                  ? "Possible FTC issue — see below"
+                                  : "Worth pushing back — see below"}
+                              </div>
+                            )}
+                          </div>
                           <div className="col-span-2 text-right text-ink">
                             {fmtUSD(it.cents / 100)}
                           </div>
@@ -390,6 +410,11 @@ export function Analyzer() {
                           </div>
                           <div className={`col-span-2 text-right font-medium ${tone.tone}`}>
                             {tone.label}
+                            {over > 0 && (
+                              <div className="text-xs font-semibold text-bad mt-0.5">
+                                +{fmtUSD(over / 100)} above fair
+                              </div>
+                            )}
                           </div>
                         </li>
                       );
