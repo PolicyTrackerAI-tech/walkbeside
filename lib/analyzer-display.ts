@@ -47,3 +47,50 @@ export function ftcFlagFor<T extends DisplayFlag>(
       f.evidence === it.name,
   );
 }
+
+export interface RangeAwareItem extends DisplayItem {
+  /** Selection-range merchandise (caskets/urns/vaults shown as a $low–$high). */
+  isRange?: boolean;
+}
+
+export interface SavingsBreakdown {
+  /** Dollars over fair on negotiable, fixed-price, overpriced services. */
+  negotiateCents: number;
+  negotiateCount: number;
+  /** Selection merchandise (casket/urn/vault) you can buy third-party. */
+  thirdPartyCount: number;
+  /** Fixed items carrying a likely-FTC-violation flag — candidates to remove. */
+  declineCount: number;
+}
+
+/**
+ * Split the total opportunity into the three honest levers a family can pull:
+ * negotiate overpriced services down to fair (a hard, benchmark-based dollar
+ * figure), buy selection merchandise third-party, and decline/question items
+ * that carry a likely FTC violation. An item can count toward more than one
+ * lever (e.g. overpriced AND flagged). No fabricated third-party totals — only
+ * the negotiate figure is a dollar amount, because it's the only one we can
+ * defend from our benchmarks.
+ */
+export function savingsBreakdown(
+  items: RangeAwareItem[],
+  flags: DisplayFlag[] | undefined,
+): SavingsBreakdown {
+  let negotiateCents = 0;
+  let negotiateCount = 0;
+  let thirdPartyCount = 0;
+  let declineCount = 0;
+  for (const it of items) {
+    if (it.isRange) {
+      thirdPartyCount++;
+      continue;
+    }
+    if (ftcFlagFor(it, flags)?.severity === "violation") declineCount++;
+    const over = overchargeCents(it);
+    if (over > 0) {
+      negotiateCents += over;
+      negotiateCount++;
+    }
+  }
+  return { negotiateCents, negotiateCount, thirdPartyCount, declineCount };
+}

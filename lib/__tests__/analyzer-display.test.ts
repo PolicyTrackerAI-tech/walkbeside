@@ -2,8 +2,10 @@ import { describe, it, expect } from "vitest";
 import {
   overchargeCents,
   ftcFlagFor,
+  savingsBreakdown,
   type DisplayItem,
   type DisplayFlag,
+  type RangeAwareItem,
 } from "@/lib/analyzer-display";
 
 const base: DisplayItem = {
@@ -80,5 +82,58 @@ describe("ftcFlagFor", () => {
 
   it("returns undefined when there are no flags", () => {
     expect(ftcFlagFor({ name: "Embalming", cents: 1 }, undefined)).toBeUndefined();
+  });
+});
+
+describe("savingsBreakdown", () => {
+  const items: RangeAwareItem[] = [
+    // Overpriced AND flagged as a violation → counts to negotiate + decline.
+    {
+      name: "Embalming",
+      cents: 120000,
+      classification: "high",
+      fairCentsLow: 50000,
+      fairCentsHigh: 90000, // mid 70000 → over 50000
+    },
+    // Overpriced, no flag → negotiate only.
+    {
+      name: "Basic services fee",
+      cents: 400000,
+      classification: "predatory",
+      fairCentsLow: 150000,
+      fairCentsHigh: 250000, // mid 200000 → over 200000
+    },
+    // Within range → no lever.
+    {
+      name: "Hearse",
+      cents: 30000,
+      classification: "fair",
+      fairCentsLow: 25000,
+      fairCentsHigh: 40000,
+    },
+    // Selection merchandise → third-party.
+    { name: "Caskets", cents: 120000, isRange: true },
+  ];
+  const flags: DisplayFlag[] = [{ severity: "violation", evidence: "Embalming" }];
+
+  it("sums negotiate dollars from overpriced fixed items only", () => {
+    const b = savingsBreakdown(items, flags);
+    expect(b.negotiateCents).toBe(250000); // 50000 + 200000
+    expect(b.negotiateCount).toBe(2);
+  });
+
+  it("counts third-party merchandise and declinable (violation-flagged) items", () => {
+    const b = savingsBreakdown(items, flags);
+    expect(b.thirdPartyCount).toBe(1);
+    expect(b.declineCount).toBe(1);
+  });
+
+  it("is all-zero for a clean, in-range quote", () => {
+    expect(savingsBreakdown([items[2]], undefined)).toEqual({
+      negotiateCents: 0,
+      negotiateCount: 0,
+      thirdPartyCount: 0,
+      declineCount: 0,
+    });
   });
 });

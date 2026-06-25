@@ -6,8 +6,12 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
-import { fmtUSD } from "@/lib/pricing-data";
-import { overchargeCents, ftcFlagFor } from "@/lib/analyzer-display";
+import { fmtUSD, dataSourceForZip, DATA_SOURCE_LABEL } from "@/lib/pricing-data";
+import {
+  overchargeCents,
+  ftcFlagFor,
+  savingsBreakdown,
+} from "@/lib/analyzer-display";
 
 interface AnalyzerItem {
   name: string;
@@ -184,6 +188,15 @@ export function Analyzer() {
     }
   }
 
+  const breakdown = result
+    ? savingsBreakdown(result.items, result.violations)
+    : null;
+  const dataSource = dataSourceForZip(zip);
+  const sourceNote =
+    dataSource === "national-adjusted"
+      ? `${DATA_SOURCE_LABEL[dataSource]} — an estimate, not yet locally validated for your metro.`
+      : DATA_SOURCE_LABEL[dataSource];
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
@@ -282,6 +295,11 @@ export function Analyzer() {
 
           {result && (
             <>
+              <ResultHero
+                savings={result.potentialSavings}
+                sourceNote={sourceNote}
+              />
+
               {result.summary && (
                 <Card tone="primary">
                   <CardEyebrow>What we&rsquo;d do</CardEyebrow>
@@ -329,14 +347,53 @@ export function Analyzer() {
                     tone={result.potentialSavings > 0 ? "bad" : "good"}
                   />
                 </div>
-                {result.potentialSavings > 0 && (
-                  <p className="text-ink-soft text-sm mt-4">
-                    Most of that is fixable. The high-priced rows below are
-                    where to push back — sometimes you can ask the funeral home
-                    to match fair-market prices, sometimes you can swap to a
-                    third-party vendor (caskets, urns, headstones).
-                  </p>
-                )}
+                {breakdown &&
+                  (breakdown.negotiateCount > 0 ||
+                    breakdown.thirdPartyCount > 0 ||
+                    breakdown.declineCount > 0) && (
+                    <div className="mt-5 pt-4 border-t border-border/60 space-y-2">
+                      <div className="text-xs uppercase tracking-wider text-ink-muted">
+                        Where it comes from
+                      </div>
+                      {breakdown.negotiateCount > 0 && (
+                        <div className="flex justify-between gap-3 text-sm">
+                          <span className="text-ink-soft">
+                            Negotiate {breakdown.negotiateCount} overpriced
+                            service
+                            {breakdown.negotiateCount === 1 ? "" : "s"} down to
+                            fair
+                          </span>
+                          <span className="font-semibold text-bad whitespace-nowrap">
+                            ~{fmtUSD(breakdown.negotiateCents / 100)}
+                          </span>
+                        </div>
+                      )}
+                      {breakdown.thirdPartyCount > 0 && (
+                        <div className="flex justify-between gap-3 text-sm">
+                          <span className="text-ink-soft">
+                            Buy {breakdown.thirdPartyCount} item
+                            {breakdown.thirdPartyCount === 1 ? "" : "s"}{" "}
+                            (casket / urn / vault) from a third party
+                          </span>
+                          <span className="font-medium text-ink-soft whitespace-nowrap">
+                            50–80% less
+                          </span>
+                        </div>
+                      )}
+                      {breakdown.declineCount > 0 && (
+                        <div className="flex justify-between gap-3 text-sm">
+                          <span className="text-ink-soft">
+                            Question or remove {breakdown.declineCount} flagged
+                            item
+                            {breakdown.declineCount === 1 ? "" : "s"}
+                          </span>
+                          <span className="font-medium text-warn whitespace-nowrap">
+                            see FTC findings
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
               </Card>
 
               {result.violations && result.violations.length > 0 && (
@@ -427,6 +484,46 @@ export function Analyzer() {
         </div>
       </section>
     </main>
+  );
+}
+
+function ResultHero({
+  savings,
+  sourceNote,
+}: {
+  savings: number;
+  sourceNote: string;
+}) {
+  const over = savings > 0;
+  return (
+    <Card tone={over ? "warn" : "good"}>
+      <div className="text-center sm:text-left">
+        {over ? (
+          <>
+            <div className="text-xs uppercase tracking-wider text-ink-muted">
+              Estimated overcharge on this quote
+            </div>
+            <div className="font-serif text-4xl sm:text-5xl text-bad mt-1 leading-none">
+              {fmtUSD(savings / 100)}
+            </div>
+            <p className="text-ink-soft mt-2">
+              above fair for your region &mdash; money you may be able to keep.
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="font-serif text-3xl sm:text-4xl text-good leading-tight">
+              This quote looks fair
+            </div>
+            <p className="text-ink-soft mt-2">
+              Nothing on it reads as priced above the fair range for your
+              region.
+            </p>
+          </>
+        )}
+        <p className="text-xs text-ink-muted mt-3">{sourceNote}</p>
+      </div>
+    </Card>
   );
 }
 
