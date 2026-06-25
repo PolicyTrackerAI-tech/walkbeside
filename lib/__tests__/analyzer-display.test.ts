@@ -3,6 +3,7 @@ import {
   overchargeCents,
   ftcFlagFor,
   savingsBreakdown,
+  fallbackAdvocacySummary,
   type DisplayItem,
   type DisplayFlag,
   type RangeAwareItem,
@@ -137,3 +138,73 @@ describe("savingsBreakdown", () => {
     });
   });
 });
+
+describe("fallbackAdvocacySummary", () => {
+  const overpriced: RangeAwareItem = {
+    name: "Embalming",
+    cents: 120000,
+    classification: "high",
+    fairCentsLow: 50000,
+    fairCentsHigh: 90000,
+  };
+
+  it("never returns a blank summary, even with no findings", () => {
+    const s = fallbackAdvocacySummary({
+      items: [],
+      violations: [],
+      potentialSavings: 0,
+    });
+    expect(s.bottomLine).toContain("in line with fair pricing");
+    expect(s.reassurance.length).toBeGreaterThan(0);
+    expect(Array.isArray(s.moves)).toBe(true);
+  });
+
+  it("leads with the overcharge dollars and the violation count", () => {
+    const s = fallbackAdvocacySummary({
+      items: [overpriced],
+      violations: [
+        {
+          severity: "violation",
+          title: "Embalming claimed required",
+          whatToSay: "Ask for the statute.",
+        },
+      ],
+      potentialSavings: 50000,
+    });
+    expect(s.bottomLine).toContain("$500");
+    expect(s.bottomLine).toContain("1 item");
+    // A violation move (with its script) and a push-back move are present.
+    expect(s.moves[0].detail).toBe("Ask for the statute.");
+    expect(s.moves.some((m) => m.title.includes("Push back on Embalming"))).toBe(
+      true,
+    );
+  });
+
+  it("adds a third-party move when there's selection merchandise", () => {
+    const s = fallbackAdvocacySummary({
+      items: [{ name: "Caskets", cents: 100000, isRange: true }],
+      violations: [],
+      potentialSavings: 0,
+    });
+    expect(s.moves.some((m) => m.title.includes("third party"))).toBe(true);
+  });
+
+  it("caps moves at 5", () => {
+    const many: FallbackInputViolation[] = Array.from({ length: 8 }, (_, i) => ({
+      severity: "suspicious" as const,
+      title: `Upsell ${i}`,
+    }));
+    const s = fallbackAdvocacySummary({
+      items: [],
+      violations: many,
+      potentialSavings: 0,
+    });
+    expect(s.moves.length).toBeLessThanOrEqual(5);
+  });
+});
+
+type FallbackInputViolation = {
+  title: string;
+  severity: "violation" | "suspicious" | "info";
+  whatToSay?: string;
+};

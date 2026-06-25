@@ -17,6 +17,7 @@ import {
   stripCodeFence,
   type RawItem,
 } from "@/lib/negotiation/price-list-parse";
+import { fallbackAdvocacySummary } from "@/lib/analyzer-display";
 import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
@@ -166,8 +167,8 @@ export async function POST(req: Request) {
 
   // Advocacy synthesis — turn the deterministic findings into a calm,
   // prioritized "what we'd do" for the family. Grounded ONLY in the findings
-  // (no invented prices). Best-effort: if Claude is down or returns malformed
-  // JSON, summary is undefined and the table/cards still render.
+  // (no invented prices). Always present: if Claude is down or returns malformed
+  // JSON, a deterministic fallback summary is built from the findings.
   const summary = await buildAdvocacySummary({
     items,
     violations,
@@ -189,11 +190,22 @@ export async function POST(req: Request) {
 
 async function buildAdvocacySummary(input: {
   items: ItemOut[];
-  violations: { title: string; severity: string }[];
+  violations: { title: string; severity: string; whatToSay?: string }[];
   totalQuoted: number;
   potentialSavings: number;
-}): Promise<AdvocacySummary | undefined> {
-  if (!claudeAvailable()) return undefined;
+}): Promise<AdvocacySummary> {
+  // Deterministic safety net — the checker must never show a blank "what to do".
+  const fallback = () =>
+    fallbackAdvocacySummary({
+      items: input.items,
+      violations: input.violations.map((v) => ({
+        title: v.title,
+        severity: v.severity as "violation" | "suspicious" | "info",
+        whatToSay: v.whatToSay,
+      })),
+      potentialSavings: input.potentialSavings,
+    });
+  if (!claudeAvailable()) return fallback();
 
   // Compact, structured findings — the ONLY ground truth the summary may use.
   const findings = {
@@ -240,7 +252,7 @@ async function buildAdvocacySummary(input: {
       reassurance?: unknown;
     };
     if (typeof parsed.bottomLine !== "string" || !Array.isArray(parsed.moves)) {
-      return undefined;
+      return fallback();
     }
     const moves: AdvocacyMove[] = (parsed.moves as unknown[])
       .map((m) => {
@@ -259,6 +271,6 @@ async function buildAdvocacySummary(input: {
         typeof parsed.reassurance === "string" ? parsed.reassurance : "",
     };
   } catch {
-    return undefined;
+    return fallback();
   }
 }

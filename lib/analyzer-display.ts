@@ -2,6 +2,7 @@
  * Pure display helpers for the price-list checker result. Kept out of the
  * React component so the numbers we show a grieving family are unit-tested.
  */
+import { fmtUSD } from "./pricing-data";
 
 export interface DisplayItem {
   name: string;
@@ -93,4 +94,93 @@ export function savingsBreakdown(
     }
   }
   return { negotiateCents, negotiateCount, thirdPartyCount, declineCount };
+}
+
+export interface AdvocacyMoveOut {
+  title: string;
+  detail: string;
+}
+
+export interface AdvocacySummaryOut {
+  bottomLine: string;
+  moves: AdvocacyMoveOut[];
+  reassurance: string;
+}
+
+interface FallbackFinding {
+  title: string;
+  severity: DisplayFlag["severity"];
+  whatToSay?: string;
+}
+
+/**
+ * A deterministic "what we'd do" summary built entirely from the findings —
+ * the safety net when the Claude-written summary is unavailable or fails. The
+ * checker must never show a blank "what to do" mid-demo (or to a grieving
+ * family). Grounded only in the parsed items + rule findings; invents nothing.
+ */
+export function fallbackAdvocacySummary(input: {
+  items: RangeAwareItem[];
+  violations: FallbackFinding[];
+  potentialSavings: number;
+}): AdvocacySummaryOut {
+  const { items, violations, potentialSavings } = input;
+  const usd = (cents: number) => fmtUSD(Math.round(cents) / 100);
+  const realViolations = violations.filter((v) => v.severity === "violation");
+  const suspicious = violations.filter((v) => v.severity === "suspicious");
+
+  const overpriced = items
+    .filter((it) => !it.isRange)
+    .map((it) => ({ it, over: overchargeCents(it) }))
+    .filter((x) => x.over > 0)
+    .sort((a, b) => b.over - a.over);
+  const hasThirdParty = items.some((it) => it.isRange);
+
+  const moves: AdvocacyMoveOut[] = [];
+  for (const v of realViolations) {
+    moves.push({
+      title: v.title,
+      detail:
+        v.whatToSay ??
+        "Ask the funeral home to justify or remove this — it may not be permitted under the FTC Funeral Rule.",
+    });
+  }
+  for (const { it, over } of overpriced.slice(0, 2)) {
+    moves.push({
+      title: `Push back on ${it.name}`,
+      detail: `They quoted ${usd(it.cents)} — about ${usd(over)} above the fair price for your region. Ask them to match fair market.`,
+    });
+  }
+  if (hasThirdParty) {
+    moves.push({
+      title: "Buy the casket, urn, or vault from a third party",
+      detail:
+        "Funeral-home merchandise is commonly marked up 300–500%. Under the FTC Funeral Rule you can buy these elsewhere and the home must accept them with no handling fee.",
+    });
+  }
+  for (const v of suspicious) {
+    if (moves.length >= 5) break;
+    moves.push({
+      title: v.title,
+      detail: v.whatToSay ?? "Worth questioning before you agree to it.",
+    });
+  }
+
+  const vCount = realViolations.length;
+  const vNote = `${vCount} item${vCount === 1 ? "" : "s"}`;
+  const bottomLine =
+    potentialSavings > 0
+      ? vCount > 0
+        ? `This quote runs about ${usd(potentialSavings)} above fair, and we flagged ${vNote} that may not be allowed under the FTC Funeral Rule.`
+        : `This quote runs about ${usd(potentialSavings)} above fair for your region — most of it is negotiable.`
+      : vCount > 0
+        ? `The pricing is close to fair, but we flagged ${vNote} worth questioning under the FTC Funeral Rule.`
+        : "This quote is in line with fair pricing for your region.";
+
+  return {
+    bottomLine,
+    moves: moves.slice(0, 5),
+    reassurance:
+      "Every point here comes straight from the price list they gave you. You're allowed to decline anything you don't want, and to compare other homes.",
+  };
 }
