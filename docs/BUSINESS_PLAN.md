@@ -24,10 +24,12 @@ insurer-backed concierges serve the insurer.
 
 We take the one seat no one else can occupy: **paid by no one with a stake in the
 funeral price.** Families use our tools and advocacy **for free.** Revenue comes
-from the **institutions that already serve the dying and are required to support
-the bereaved — hospices first, then employers, then insurers** (a B2B2C model).
-We compound a **proprietary outcomes dataset** (what families were quoted vs. what
-they actually paid) and a **conflict-free brand** into a durable moat and an
+from the **institutions that serve the dying and are required to support the
+bereaved — hospices first, then employers** (a B2B2C model). Insurers may
+*distribute* our tools to their beneficiaries, but **never pay us** — taking
+insurer money is the conflict that defines our competitors (e.g., Empathy), not
+us. We compound a **proprietary outcomes dataset** (what families were quoted vs.
+what they actually paid) and a **conflict-free brand** into a durable moat and an
 eventual premium acquisition.
 
 - **Mission:** no family overcharged, misled, or alone at the worst moment.
