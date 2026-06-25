@@ -1,6 +1,6 @@
 # Plan: remove the consumer payment, keep families free, send zero live emails
 
-> **Fee amount:** the live family charge is `FLAT_FEE_CENTS` in `lib/stripe.ts` = **$199** (an earlier **$49** in some docs/comments is stale). "The consumer fee" below means that constant — it is being removed entirely, so the figure doesn't change the plan.
+> **Fee amount:** the live family charge is `FLAT_FEE_CENTS` in `lib/stripe.ts` = **$49** (`49_00`, verified on `main`). It is being removed entirely (families become free), so the figure doesn't change the plan.
 
 **Why.** Guardrail #2 of the [Operating Plan](OPERATING_PLAN.md): never charge
 the grieving family as the growth engine. Today families pay a flat **$49

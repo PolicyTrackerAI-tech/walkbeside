@@ -1,6 +1,6 @@
 # Trust Spine — page specs
 
-> **Fee note:** the live family charge is `FLAT_FEE_CENTS` = **$199** (some copy/docs say **$49** — stale). Scrub targets below should grep for **both** `$49` and `$199` (and `fee_cents`) to catch the real strings.
+> **Fee note:** the live family charge is `FLAT_FEE_CENTS` = **$49** (`49_00`, verified on `main`). Scrub targets below should grep for `$49` and `fee_cents` (and any stale `$199`) to catch the real strings.
 
 > Build-priority **#2** in the roadmap (after the outcomes layer). See
 > [`ROADMAP.md`](ROADMAP.md) P2: "Build the trust spine: methodology page, 'we
