@@ -14,6 +14,9 @@ _Confidential · June 2026 · Ryan Currie, Founder · honestfuneral.co_
 
 ## 1. Executive summary
 
+*The neutral seat in funeral pricing is empty because everyone else is paid to keep
+it that way. We take it — and build a brand and a dataset an acquirer can't.*
+
 **Honest Funeral is building the free, neutral source of truth for funeral
 pricing in America** — and the advocate that helps grieving families act on it.
 ~3 million Americans die each year into a funeral market where identical services
@@ -43,9 +46,17 @@ eventual strategic acquisition.
   contract realistically in **~4–6 months** (healthcare procurement + a BAA).
 - **Funding:** bootstrapped; this is a **prove-it-first** raise — raise *after*
   1–2 paid contracts show willingness-to-pay and renewal signal.
-- **Honest shape:** an impact-scale free layer wrapped around a capital-efficient,
-  conflict-free institutional business — base case a strategic acquisition, not an
-  obvious unicorn (§12.5).
+- **Honest shape:** a **capital-efficient, conflict-free institutional business in a
+  category whose strategic acquirers are already active** (Empathy raised $162M;
+  Cake, Everplans, and Lantern were all acquired — several as absorptions into
+  incumbents, the cautionary pattern we design around by flipping the payer) —
+  wrapped around a free layer that compounds a neutral brand and a proprietary
+  outcomes dataset no acquirer can replicate. **That is the company:** built for a
+  **strategic acquisition** on near-zero burn, owning the one seat — paid by no one
+  with a funeral-price stake — that every competitor is structurally barred from. The
+  venture-scale outcome (the consumer brand opens the employer channel and a
+  licensable data standard) is a **real option we're positioned to take, not the bet
+  we're asking you to make** (§12.5).
 
 ---
 
@@ -123,7 +134,16 @@ tooling**, sized bottom-up:
   employee bereavement benefit have **no stake in the funeral price**, so
   employer-as-payer is permitted. This is a far larger pool (Empathy already has
   **1,000+ employer customers**) and is **where venture-scale revenue would come
-  from** — but it's contested by incumbents (§9) and is a *later* motion.
+  from** — but it's contested by incumbents (§9) and is a *later* motion. Our wedge
+  in that channel is the same one that defines us everywhere else: a **neutral,
+  family-side funeral-price advocate Empathy structurally cannot offer.** Empathy is
+  **insurer- and employer-paid** — its payers want the claim paid out fast, not the
+  funeral *bill* driven down — so the **funeral-price seat sits empty inside every
+  bereavement benefit on the market.** We sell into it as the **differentiated
+  component** — "the piece that actually lowers what your people pay" — a claim a
+  conflicted, insurer-paid incumbent can't credibly make. (The conflict is
+  structural, inferred from the payer model, not from Empathy's stated intent.) The
+  employer logos-to-revenue math is in §12.
 - **What we do *not* sell into:** funeral homes (forbidden) and insurers-as-payer
   (forbidden — the conflict that defines Empathy). We trade that TAM for the
   neutral position; see §12.5 for the honest implication.
@@ -246,12 +266,43 @@ over years**, not a fast venture curve. Reaching real scale requires (a) higher
 ACV (multi-facility systems), (b) a **sales team** (post-raise), and (c) the
 **employer channel** opening.
 
+**The employer math (the same table, run on the channel that scales):**
+
+The hospice table above is the proof-and-data beachhead; the scale path is the
+employer channel — and it isn't "trust me, it's bigger," it's the **same arithmetic
+with two variables flipped: higher ACV, fewer logos.** A bereavement benefit prices
+off **PEPM** (per-employee-per-month). General EAP runs **$1–$5 PEPM** (comprehensive
+platforms $4–$8+; Oliver Wyman, 2024–25). Using an **illustrative, unvalidated $3.50
+PEPM** — narrower than full EAP, anchored to published EAP pricing, *not* a disclosed
+bereavement-only number (no vendor publishes one) — ACV scales with headcount:
+
+| Employer size (@ $3.50 PEPM) | Illustrative ACV | Logos for **$1M ARR** | Logos for **$10M ARR** |
+|---|---|---|---|
+| 500 employees | **~$21,000** | ~48 | ~476 |
+| 1,000 employees | **~$42,000** | ~24 | ~238 |
+| 5,000 employees | **~$210,000** | ~5 | ~48 |
+
+Even at the *conservative* small-employer ACV, **~50 employer logos clear $1M ARR — a
+quarter of the 200 hospices** the table above needs at $5K; at the mid-case, **~25
+logos do it.** Each employer logo is worth **~4–8× a hospice logo at the small-to-mid
+band ($21–42K vs. $5K), and far more at enterprise** — so the same per-logo sales
+motion that grinds for years in hospice-land compounds far faster here. The adoption
+curve is still ours to prove — but the shape isn't in doubt: **the employer channel is
+where the few-$M hospice business becomes a venture-scale one, on tens of logos, not
+hundreds.**
+
 - **CAC / payback (directional):** founder time today; a future per-logo CAC must
   stay well under one year of ACV for the model to work — *to be measured in the
   first paid deals.*
-- **Renewal / churn (the year-2 question):** the make-or-break unknown is whether
-  a hospice **renews**, or whether year-1 was a one-time compliance checkbox.
-  Pilots must show a renewal/expansion signal before any growth claim is credible.
+- **Renewal / churn (the year-2 question):** the make-or-break unknown is whether a
+  hospice **renews** or treats year-1 as a one-time compliance checkbox — pilots must
+  show a renewal/expansion signal before any growth claim is credible. The renewal
+  *thesis* is concrete: **embedding and switching cost.** Once the neutral tool sits
+  inside the hospice's intake/referral workflow and the proof report sits in their
+  compliance file (their evidence for the unfunded **42 CFR 418.64** duty), ripping it
+  out re-opens the exact gap it closed and removes a record they've come to rely on.
+  Achieving that embedding is the **job of year one, not a fact of it** — but it's a
+  concrete, buildable thesis, not a hope.
 - **Valuation (no anchoring):** pre-revenue with tiny contracts, the company is
   valued on **team + traction (i.e., low)** — *not* the 6–9× data/SaaS multiple,
   which only applies once meaningful recurring revenue + outcomes volume exist.
@@ -260,20 +311,40 @@ ACV (multi-facility systems), (b) a **sales team** (post-raise), and (c) the
 
 The plan contains two different curves; we underwrite and pitch the honest one.
 
-- **Impact trajectory (large, cheap, likely):** the free source-of-truth + AI-
-  citation flywheel can reach **millions of families at near-zero marginal cost.**
-  Real and valuable — but **reach is not revenue.**
-- **Revenue trajectory (constrained):** hospice-by-hospice land-and-expand is a
-  grind; **the leap to venture-scale ($100M revenue) runs through the *employer*
-  channel + the consumer brand**, *not* hospices alone and *not* insurers (whom we
-  won't take money from). That employer motion is real and allowed, but contested
-  by Empathy and unproven for us.
-- **Base case:** a **capital-efficient, mission-driven company** that helps a lot
-  of people, reaches modest-but-real revenue, and exits via **strategic
-  acquisition** (the category is proven — Empathy raised $162M; acquirers exist).
-- **Upside case (the venture bet):** the free layer becomes a **dominant consumer
-  trust brand** that unlocks the employer channel at scale and a licensable data
-  standard. Plausible, unproven — the thing a venture investor would underwrite.
+- **Impact trajectory (built, large, cheap — not yet measured):** the free
+  source-of-truth + AI-citation flywheel is **already built and live** — 87 metro
+  pages, the analyzer, the glossary — at **near-zero marginal cost**, and it's the
+  engine under the entire upside case. The one thing we haven't done is the cheapest:
+  **instrument analytics** (no GA / Plausible / Search Console live yet). That's a
+  weeks-and-an-afternoon next step that turns reach from a hypothesis into a measured
+  curve. Until those numbers exist, **we underwrite on revenue, not reach.**
+- **Revenue trajectory (base case — what we underwrite):** hospice-by-hospice
+  land-and-expand is a deliberate, capital-efficient grind that reaches **a few $M ARR
+  over years** on near-zero burn — and in a category where acquirers are already
+  active, a conflict-free brand plus proprietary outcomes data is exactly what gets
+  bought. **This is the company.** We don't need the upside to be a good outcome; we
+  choose it.
+- **The employer path (where scale actually lives — and the math is different):** the
+  leap toward venture-scale doesn't run through 200 hospice logos; it runs through
+  employers, where **ACV is multiples higher and the logo count to real revenue is far
+  lower** — **~25–50 employer logos ≈ $1M ARR** at the illustrative $21–42K ACVs in
+  §12, roughly what **200 hospice logos** do at $5K, from a buyer pool that expands by
+  headcount. Hospices prove the product and seed the dataset; employers carry the
+  curve.
+- **The employer wedge (why this isn't just hope):** Empathy already owns the employer
+  bereavement channel — **1,000+ employers, 50M+ covered lives** — but is **insurer-
+  and employer-paid, and therefore structurally conflicted on driving the funeral bill
+  *down*.** We sell the one component they can't: a **neutral funeral-price advocate**,
+  the same empty seat as our consumer wedge. Contested and unproven for us — but a real
+  engine, not a wish.
+- **Upside case (a real option, not the pitch):** the free flywheel becomes a
+  **dominant consumer-trust brand** that opens that employer channel at scale and makes
+  our benchmark the neutral data standard. We're positioned to take it. *(A FAIR
+  Health–style license of neutral benchmark
+  data to **non-conflicted buyers — health systems, employers, researchers, agencies —
+  payment for data, never for steering** — stays available as deliberately-unexercised
+  optionality. Insurers remain a potential acquirer, never a payer; the clean "no
+  insurer money" headline holds.)*
 
 ## 13. The ask & how we'd position a raise
 
@@ -281,9 +352,11 @@ The plan contains two different curves; we underwrite and pitch the honest one.
   *after* the first 2–3 paying hospices show renewal signal.
 - **Right investors:** **mission/impact funds** (the Bain Double Impact / FreeWill-
   backer profile), strategic angels, or an aligned health-system/insurer corporate
-  arm — **not** generalist growth VCs at this stage. Positioned as *"capital-
-  efficient, conflict-free by conviction, with a credible path to strategic
-  acquisition in a proven category,"* not a swing-for-the-fences unicorn pitch.
+  arm — **not** generalist growth VCs at this stage. Positioned as a
+  **capital-efficient, conflict-free-by-conviction business with a proven-category
+  acquisition path** — one that *also* holds a credible venture option (consumer brand
+  → employer channel) for the investor who wants it. We lead with the business we can
+  stand behind, not a swing-for-the-fences unicorn pitch.
 - **Use of funds:** founder salary (full-time), the **domain-insider hire**, and
   acceleration of the data + sales motion.
 
