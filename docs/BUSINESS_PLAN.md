@@ -40,7 +40,7 @@ eventual strategic acquisition.
   advocacy flow, outcomes instrumentation) at near-zero cost. **Pre-revenue,
   pre-first-pilot.**
 - **Near-term goal:** **a signed (free) hospice pilot in ~90 days**; a *paid*
-  contract realistically in **6–12 months** (healthcare procurement + a BAA).
+  contract realistically in **~4–6 months** (healthcare procurement + a BAA).
 - **Funding:** bootstrapped; this is a **prove-it-first** raise — raise *after*
   1–2 paid contracts show willingness-to-pay and renewal signal.
 - **Honest shape:** an impact-scale free layer wrapped around a capital-efficient,
@@ -75,6 +75,13 @@ third (and the neutral service it wraps).**
 3. **Institutional product** — a partner portal + reporting dashboard a hospice
    (then an employer) uses to refer families to the neutral tool and to **prove
    they delivered** their bereavement obligation.
+
+The hospice-facing product is our differentiated **funeral-price advocacy wrapped
+in a light practical-navigation layer** (after-death checklist, what-to-do-next,
+resource pointers) — enough to map to their whole ~13-month bereavement
+obligation, without building a deep estate/probate/grief platform (the
+conflict-laden swamp we avoid). The price wedge makes us *different and safe to
+hand a family*; the light wrapper makes us *enough* to satisfy the mandate.
 
 ## 4. Why now
 
@@ -125,9 +132,12 @@ tooling**, sized bottom-up:
 
 ## 6. Business model & unit economics
 
-- **Free to family. Hospices then employers pay.** Pricing **hypothesis**: a
-  per-facility annual subscription, census-tiered (illustrative $3–12K). **This is
-  unproven — it's the #1 thing pilots must validate.**
+- **Free to family. Hospices then employers pay.** Pricing **hypothesis** (the #1
+  thing pilots must validate): a small, **census-tiered annual framed as cheaper
+  than the staff/volunteer hours it saves** (illustrative $3–12K) — *not* a new
+  line item. Plus a **per-family micro-fee** for hospices that won't commit to an
+  annual, and a **grant-subsidized/free tier** (we're pursuing aging/bereavement
+  grants) so "no budget" is a non-issue while we accumulate paid logos + data.
 - **Revenue lines, in order:** (1) institutional B2B2C recurring — the engine;
   (2) anonymized data/Index licensing to non-conflicted buyers — later, highest
   margin; (3) free consumer — proof + data, never a revenue target. **Never:**
@@ -164,8 +174,10 @@ on one rule (no funeral-home/insurer money):
 - **Land:** an 8-stage process — list → cold outreach → discovery → pitch →
   **free 60-day pilot** → results → **paid annual contract** → peer referrals.
   Realistic cadence: a **pilot in ~90 days**, a **paid contract in 6–12 months**
-  (procurement + BAA). Pitch anchor: the unfunded mandate + reputation/CAHPS +
-  staff-hours, with **proof** they delivered.
+  (procurement + BAA). **Lead with the hospice's real ROI — referral reputation**
+  (a better family experience → word-of-mouth + referral-source goodwill →
+  census), *then* mandate coverage, *then* staff-hours saved, *then*
+  free-to-families + neutral. (CAHPS is reputation, not a Medicare-dollars lever.)
 - **Deliver by hand first:** the founder runs early pilot cases — the data engine
   needs no institutional product yet, keeping GTM cheap and the portal a
   *post-yes* build.
@@ -174,6 +186,10 @@ on one rule (no funeral-home/insurer money):
 - **Reach (free, compounding):** the SEO clusters already built (head term, 87
   metro pages, 63-term glossary, 40+ guides) + generative-engine optimization +
   the quarterly Fair-Price Index as a press/AI-citation event.
+- **A parallel cranker so revenue isn't hostage to hospice speed:** the free
+  tools + content + Index run from day one — they compound reach and the dataset,
+  make every hospice sale easier (families already trust the brand), and keep the
+  business moving on reach + data in the months before contracts close.
 
 ## 9. Competition
 
