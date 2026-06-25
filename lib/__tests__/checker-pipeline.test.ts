@@ -1,0 +1,134 @@
+import { describe, it, expect } from "vitest";
+import { naiveExtract, matchLineItem } from "@/lib/negotiation/price-list-parse";
+import {
+  classifyAgainst,
+  adjustedRange,
+  regionMultiplier,
+  fmtUSD,
+} from "@/lib/pricing-data";
+import { runRules, type AnalyzedItem } from "@/lib/bundling-detection/rules";
+import {
+  overchargeCents,
+  ftcFlagFor,
+  savingsBreakdown,
+  fallbackAdvocacySummary,
+} from "@/lib/analyzer-display";
+
+/**
+ * End-to-end pipeline mirror of /api/analyze-price-list (deterministic path,
+ * no Claude) so we can exercise — and see — the full result the demo renders.
+ */
+function analyze(text: string, zip: string) {
+  const extracted = naiveExtract(text);
+  const items = extracted.items.map((raw) => {
+    if (raw.cents_low != null && raw.cents_high != null) {
+      return {
+        name: raw.name,
+        cents: raw.cents_low,
+        isRange: true,
+        centsLow: raw.cents_low,
+        centsHigh: raw.cents_high,
+      };
+    }
+    const cents = raw.cents ?? 0;
+    const matched = matchLineItem(raw.name);
+    if (!matched) return { name: raw.name, cents };
+    const m = regionMultiplier(zip);
+    const [lo, hi] = adjustedRange(matched.fairLow, matched.fairHigh, zip);
+    const predatory = Math.round(matched.predatoryAt * m);
+    return {
+      name: raw.name,
+      cents,
+      matchedItemId: matched.id,
+      classification: classifyAgainst(cents / 100, lo, hi, predatory),
+      fairCentsLow: lo * 100,
+      fairCentsHigh: hi * 100,
+    };
+  });
+  const priced = items.filter((i) => !i.isRange);
+  const totalQuoted =
+    extracted.total_cents ?? priced.reduce((s, i) => s + (i.cents || 0), 0);
+  const totalFairLow = priced.reduce((s, i) => s + (i.fairCentsLow ?? i.cents), 0);
+  const totalFairHigh = priced.reduce(
+    (s, i) => s + (i.fairCentsHigh ?? i.cents),
+    0,
+  );
+  const totalFairMid = Math.round((totalFairLow + totalFairHigh) / 2);
+  const potentialSavings = Math.max(totalQuoted - totalFairMid, 0);
+  const violations = runRules({
+    rawText: text,
+    items: items as AnalyzedItem[],
+    totalCents: totalQuoted,
+  });
+  const breakdown = savingsBreakdown(items, violations);
+  const summary = fallbackAdvocacySummary({ items, violations, potentialSavings });
+  return { items, totalQuoted, totalFairMid, potentialSavings, violations, breakdown, summary };
+}
+
+const SAMPLE = `Direct cremation arrangement
+Basic services fee $4,200
+Embalming $1,400
+Metal casket $3,800
+Death certificates $250
+Urns $200-$2,000`;
+
+describe("checker pipeline (end-to-end, deterministic)", () => {
+  const r = analyze(SAMPLE, "94110");
+
+  it("produces a demo-grade result and prints it", () => {
+    const usd = (c: number) => fmtUSD(c / 100);
+    const lines: string[] = [];
+    lines.push(
+      `\n  HERO  →  ${usd(r.potentialSavings)} estimated above fair  (quoted ${usd(r.totalQuoted)} · fair ${usd(r.totalFairMid)})`,
+    );
+    lines.push("  TABLE:");
+    for (const it of r.items) {
+      if (it.isRange) {
+        lines.push(`    ${it.name.padEnd(22)} ${usd(it.cents)}–${usd(it.centsHigh!)}  ·  Selection (buy 3rd-party)`);
+        continue;
+      }
+      const over = overchargeCents(it);
+      const flag = ftcFlagFor(it, r.violations);
+      lines.push(
+        `    ${it.name.padEnd(22)} ${usd(it.cents).padStart(8)}  ·  ${(it.classification ?? "—").padEnd(9)}` +
+          (over > 0 ? `  +${usd(over)} above fair` : "") +
+          (flag ? `  ⚑ ${flag.severity}` : ""),
+      );
+    }
+    lines.push("  WHERE IT COMES FROM:");
+    if (r.breakdown.negotiateCount)
+      lines.push(`    negotiate ${r.breakdown.negotiateCount} services → ~${usd(r.breakdown.negotiateCents)}`);
+    if (r.breakdown.thirdPartyCount)
+      lines.push(`    buy ${r.breakdown.thirdPartyCount} item(s) third-party → 50–80% less`);
+    if (r.breakdown.declineCount)
+      lines.push(`    question/remove ${r.breakdown.declineCount} flagged item(s)`);
+    lines.push(`  FTC FINDINGS: ${r.violations.length}`);
+    for (const v of r.violations) lines.push(`    [${v.severity}] ${v.title}`);
+    lines.push(`  WHAT WE'D DO: ${r.summary.bottomLine}`);
+    for (const m of r.summary.moves) lines.push(`    • ${m.title}`);
+    // Print the rendered result on demand:
+    //   PIPELINE_DEBUG=1 npx vitest run lib/__tests__/checker-pipeline.test.ts --disableConsoleIntercept
+    if (process.env.PIPELINE_DEBUG) {
+      // eslint-disable-next-line no-console
+      console.log(lines.join("\n"));
+    }
+
+    // Assertions: the demo's load-bearing facts.
+    expect(r.potentialSavings).toBeGreaterThan(0);
+    expect(r.violations.length).toBeGreaterThan(0);
+    expect(r.violations.some((v) => v.severity === "violation")).toBe(true);
+    expect(r.breakdown.thirdPartyCount).toBe(1); // the urn range
+    expect(r.breakdown.negotiateCount).toBeGreaterThan(0);
+    expect(r.summary.bottomLine).toMatch(/\$|fair/);
+    expect(r.summary.moves.length).toBeGreaterThan(0);
+  });
+
+  it("never shows an overcharge on an item classified within range", () => {
+    for (const it of r.items) {
+      if (it.isRange) continue;
+      if (it.classification === "good" || it.classification === "fair") {
+        expect(overchargeCents(it)).toBe(0);
+      }
+    }
+  });
+});
