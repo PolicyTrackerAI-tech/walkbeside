@@ -1,3 +1,5 @@
+> **⚠️ PARTIALLY SUPERSEDED (2026-06-24).** Phase 0–1 (preflight, `OUTREACH_LIVE` kill switch, `dry_run`, webhook reconciliation) stay valid. Phase 2 assumes a **family checkout** that is being removed — see [PAYMENT_DECOMMISSION.md](PAYMENT_DECOMMISSION.md). Under the new model ([OPERATING_PLAN.md](OPERATING_PLAN.md)) the smoke test should verify institutional partner onboarding, not family payment.
+
 # Launch-day smoke test (upfront pay → send)
 
 The signed-off manual run before — and right after — you flip `OUTREACH_LIVE`

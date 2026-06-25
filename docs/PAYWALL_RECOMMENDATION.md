@@ -1,3 +1,5 @@
+> **⚠️ SUPERSEDED (2026-06-24).** This reflects the old family-paid model. The company now runs off [OPERATING_PLAN.md](OPERATING_PLAN.md) — **free to families; institutions pay.** The consumer charge is being removed — see [PAYMENT_DECOMMISSION.md](PAYMENT_DECOMMISSION.md). Kept for history.
+
 # What belongs in front of vs behind the paywall (2026-05-21)
 
 > **UPDATE 2026-06-09 — final model shipped:** all tools free; the $49 is the

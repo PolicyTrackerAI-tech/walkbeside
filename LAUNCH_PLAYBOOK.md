@@ -1,3 +1,5 @@
+> **⚠️ PARTIALLY SUPERSEDED (2026-06-24).** The infra setup (Supabase, Vercel, Resend, domain) is still valid; the **$49 consumer-fee** parts are legacy. The company now runs off [docs/OPERATING_PLAN.md](docs/OPERATING_PLAN.md) — free to families, institutions pay. Live plan: [docs/ROADMAP.md](docs/ROADMAP.md).
+
 # Launch Playbook — making Honest Funeral real
 
 Step-by-step for the brother (you) and the sister (the funeral director). Do these in order. None of this requires touching code.
