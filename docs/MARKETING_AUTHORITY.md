@@ -8,7 +8,7 @@
 
 ## 0. TL;DR — where we are, where the leverage is
 
-We already have a strong L1 SEO build: a national head-term page, an 89-metro city cluster, a 65-term glossary, 40+ guides, valid Article + FAQ schema, a clean sitemap/robots, and dynamic OG images. **The architecture is good. The two things missing are the two things that win the next era of discovery:** (1) a **proprietary, citable statistic** (the Fair-Price Index) that earns AI citations and press backlinks, and (2) the **trust spine** (methodology, pledge, mistakes, named reviewers) that makes a YMYL site authoritative enough to be cited at all. Everything else is incremental.
+We already have a strong L1 SEO build: a national head-term page, an 87-metro city cluster, a 63-term glossary, 40+ guides, valid Article + FAQ schema, a clean sitemap/robots, and dynamic OG images. **The architecture is good. The two things missing are the two things that win the next era of discovery:** (1) a **proprietary, citable statistic** (the Fair-Price Index) that earns AI citations and press backlinks, and (2) the **trust spine** (methodology, pledge, mistakes, named reviewers) that makes a YMYL site authoritative enough to be cited at all. Everything else is incremental.
 
 | Lever | Status | Where it lives | Priority |
 |---|---|---|---|
@@ -32,10 +32,10 @@ The cluster model from Operating Plan Part 6 is mostly real. Here is the actual 
 | Cluster role | Route(s) | Backing data | Notes |
 |---|---|---|---|
 | **Head term** (pillar) | `/average-funeral-cost` | `lib/pricing-data.ts` (`SERVICE_TOTALS`, `LINE_ITEMS`) | Answer-first; leads with cremation $1,000–$2,500 / burial $8,000–$12,000; tables for service type + overpriced line items |
-| **Cluster hub** | `/funeral-costs` | `lib/city-pages.ts` (`CITIES`) | Links all 89 city pages, sorted |
-| **Programmatic metros** | `/funeral-costs/[city]` | `CITIES` × `lib/zip-regions.ts` multiplier | **89 cities** (not "87"); same-state internal-link block; cross-links to `/funeral-homes/[zip]`, `/estate/[state]`, `/rights` |
+| **Cluster hub** | `/funeral-costs` | `lib/city-pages.ts` (`CITIES`) | Links all 87 city pages, sorted |
+| **Programmatic metros** | `/funeral-costs/[city]` | `CITIES` × `lib/zip-regions.ts` multiplier | **87 cities**; same-state internal-link block; cross-links to `/funeral-homes/[zip]`, `/estate/[state]`, `/rights` |
 | **ZIP tool** (interactive) | `/prices` | 917-multiplier `zip-regions.ts` | National coverage, every US zip |
-| **Glossary cluster** | `/glossary` + `/glossary/[slug]` | `lib/glossary.ts` (**65 terms**, 8 categories) | In sitemap at priority 0.5 |
+| **Glossary cluster** | `/glossary` + `/glossary/[slug]` | `lib/glossary.ts` (**63 terms**, 8 categories) | In sitemap at priority 0.5 |
 | **Reference clusters** | `/estate/[state]` (25 states), `/faith/[key]` (22), `/guidance/[scenario]` (4), `/after/[topic]` (3) | respective libs | Strong supporting depth |
 | **Guides hub** | `/guides` | inline `Guide[]` (9 categories) | 40+ guides across right-now / decisions / after / money / estate / grief / vendors / plan-ahead / reference |
 
@@ -45,10 +45,10 @@ The cluster model from Operating Plan Part 6 is mostly real. Here is the actual 
 
 | Gap | Impact | Action | Cut line |
 |---|---|---|---|
-| City count claimed as "87/28" in old docs/metadata | Stale; actual is **89** (`CITIES.length`) — page metadata already reads it dynamically, good | Audit any hard-coded counts in copy/memory | — |
+| City-count copy must match code | actual is **87** (`CITIES.length`); page metadata reads it dynamically | Audit any hard-coded counts in copy/memory | — |
 | **Glossary `/glossary/[slug]` pages lack Article schema** | The index page (`app/glossary/page.tsx`) emits **no** `<ArticleSchema>`; term pages are thin for GEO | Add `ArticleSchema` (or `DefinedTerm` schema) to glossary term pages | Don't over-build; one schema add |
 | No **breadcrumb** schema anywhere | Loses rich-result breadcrumbs + cluster-structure signal to crawlers | Add `BreadcrumbList` to city + glossary + guide pages | P3 |
-| Estate cluster (25 states) ≠ city cluster (89) | Probate guides exist for fewer states than metros | Fill the missing 25 states only if a metro links to a non-existent state guide (the template already guards this with `hasStateGuide`) | Don't write all 50 — fill on demand |
+| Estate cluster (25 states) ≠ city cluster (87) | Probate guides exist for fewer states than metros | Fill the missing 25 states only if a metro links to a non-existent state guide (the template already guards this with `hasStateGuide`) | Don't write all 50 — fill on demand |
 | **No `/funeral-homes/[city-name]` SEO surface** | Directory is `/funeral-homes/[zip]` (vetted-gated); not a discoverable city landing | Defer — directory is gated + thin until more vetted homes | **CUT until vetting volume exists** |
 | No comparison/"vs" long-tail (cremation vs burial cost) | High-intent informational queries uncaptured | One pillar sub-article; link from `/average-funeral-cost` | P3 |
 
@@ -217,7 +217,7 @@ Aligned to Operating Plan §11 (afternoons = content + Index work) and the 90-da
 - [ ] Wikidata entity; pursue Wikipedia citations on existing articles.
 - [ ] `BreadcrumbList` + glossary `DefinedTerm`/Article schema; comparison long-tail sub-article.
 
-**Explicit cuts (not now):** new metros beyond 89, `/funeral-homes/[city]` SEO pages, all 50 estate guides, drip email, paid PR, any single-home public number. None of these move the keystone (the Index + trust spine), and several risk guardrail #4.
+**Explicit cuts (not now):** new metros beyond 87, `/funeral-homes/[city]` SEO pages, all 50 estate guides, drip email, paid PR, any single-home public number. None of these move the keystone (the Index + trust spine), and several risk guardrail #4.
 
 ---
 
