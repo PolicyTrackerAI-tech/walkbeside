@@ -8,8 +8,8 @@ Funeral. Read it first. The full strategy is [`docs/OPERATING_PLAN.md`](docs/OPE
 
 Honest Funeral is the **free, neutral source of truth for funeral pricing** for
 grieving families. Families pay **nothing**. Revenue comes from the
-**institutions that serve the dying** — hospices first, then employers, then
-insurers (B2B2C). The moat is a **proprietary outcomes dataset + conflict-free
+**institutions that serve the dying** — hospices first, then employers (B2B2C).
+Insurers may distribute our tools or acquire us later, but **never pay us**. The moat is a **proprietary outcomes dataset + conflict-free
 trust**, and the exit is a premium acquisition. We **never take a dollar from
 funeral homes or insurers**, and we **never charge the grieving family**.
 

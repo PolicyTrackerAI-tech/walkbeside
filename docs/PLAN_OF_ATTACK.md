@@ -8,8 +8,8 @@ elaborate.
 
 > **One sentence:** Build the free, neutral source of truth for funeral pricing
 > that every grieving family can use; deliver the hands-on help through the
-> institutions that already serve the dying and will pay for it (hospices →
-> employers → insurers); compound a proprietary outcomes dataset and a
+> institutions that already serve the dying and will pay for it (hospices, then
+> employers; insurers distribute or acquire, never pay); compound a proprietary outcomes dataset and a
 > conflict-free brand into a moat and a premium acquisition — **never taking a
 > dollar from the funeral homes we judge, and never charging the grieving
 > family.**

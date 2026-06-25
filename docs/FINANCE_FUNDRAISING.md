@@ -8,7 +8,7 @@
 
 ## 0. The one-paragraph money thesis
 
-We run **near-zero-cost** today — the real expense is the founder's time, not infrastructure. Revenue comes in a strict order: **(1) institutional B2B2C recurring contracts** (hospices → employers → insurers-as-distribution) are the engine; **(2) data / Fair-Price Index licensing** to non-conflicted buyers is the later, highest-margin layer; **(3) the free consumer tier** is *proof and data, never a revenue target*. We **bootstrap** until 1–2 paid contracts plus free-tool traction prove the model, then raise a small mission-aligned round — triggered by the [`SCORECARD.md`](SCORECARD.md) turning green, not by feeling — to put the founder full-time and hire a part-time licensed FD/bereavement expert first. The goal is to **look like a recurring-data business (6–9× revenue), not a content blog (1–3×)** by the time anyone underwrites us.
+We run **near-zero-cost** today — the real expense is the founder's time, not infrastructure. Revenue comes in a strict order: **(1) institutional B2B2C recurring contracts** (hospices → employers; insurers distribute/acquire but never pay) are the engine; **(2) data / Fair-Price Index licensing** to non-conflicted buyers is the later, highest-margin layer; **(3) the free consumer tier** is *proof and data, never a revenue target*. We **bootstrap** until 1–2 paid contracts plus free-tool traction prove the model, then raise a small mission-aligned round — triggered by the [`SCORECARD.md`](SCORECARD.md) turning green, not by feeling — to put the founder full-time and hire a part-time licensed FD/bereavement expert first. The goal is to **look like a recurring-data business (6–9× revenue), not a content blog (1–3×)** by the time anyone underwrites us.
 
 ---
 
@@ -62,7 +62,7 @@ Three lines, plus a hard **NEVER** list. Build them in order; do not let lines 2
 
 | # | Line | What it is | Margin | When | Status |
 |---|---|---|---|---|---|
-| **1** | **Institutional B2B2C (the engine)** | Recurring contracts: **hospices → employers/EAPs → insurers** (insurer as *distribution*, never as our payer). Per-facility annual SaaS, tiered by census. | High (software) | **Now → 90-day goal** | 🔴 0 contracts |
+| **1** | **Institutional B2B2C (the engine)** | Recurring contracts: **hospices → employers/EAPs** (insurers distribute/acquire, **never pay**). Per-facility annual SaaS, tiered by census. | High (software) | **Now → 90-day goal** | 🔴 0 contracts |
 | **2** | **Data / Fair-Price Index licensing** | License the proprietary outcomes dataset + the [Fair-Price Index](FAIR_PRICE_INDEX.md) to **non-conflicted** buyers (researchers, journalists-via-citation, gov/regulatory, non-funeral fintech/estate platforms). | **Highest** (sell the same data many times) | **Later** (after data has depth + the Index is published) | ⚪ not started |
 | **3** | **Lean / free consumer** | The free L1 tools + L2 family service. **Not a revenue line** — it is the proof of neutrality, the acquisition surface, and the data-collection instrument. | n/a (cost center, kept tiny) | Live now | 🟢 built, free |
 
@@ -81,7 +81,7 @@ This is where survival lives. Detailed sales mechanics are in [`HOSPICE_GTM.md`]
   | **Hybrid** | small base + per-family | only if both stall |
 
 - **Value-anchoring math** (bring to the close, per `HOSPICE_GTM.md` Part F): staff hours saved × loaded hourly cost **+** CAHPS/APU-penalty avoidance framing **+** documented CoP compliance. The annual price should look small next to that. **Anchor on value, never on "software."**
-- **Expansion path:** hospices first (drive-to, fast-deciding Utah independents) → mid-size **employers / benefits brokers** (bereavement-benefit gap) → **insurers as a distribution channel** (beneficiary goodwill) — *insurer pays us to reach families is fine; insurer pays us in exchange for influence over the funeral number is the NEVER line.*
+- **Expansion path:** hospices first (drive-to, fast-deciding Utah independents) → mid-size **employers / benefits brokers** (bereavement-benefit gap) → **insurers as an unpaid distribution channel + eventual acquirer** (beneficiary goodwill) — but **insurers never pay us, period**; that bright line is what separates us from insurer-funded incumbents.
 
 ### 2.3 Line 2 — Data / Index licensing (later, highest margin)
 

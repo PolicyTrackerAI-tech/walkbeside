@@ -68,8 +68,10 @@ again.
    the beneficiary and an institution the payer.
 4. **The institutions that serve the dying will pay.** Hospices have a federal
    duty (13 months of bereavement support, 42 CFR 418.64) and no money to do it
-   well; employers have a bereavement gap; insurers want beneficiary goodwill.
-   They are the survivor-pattern payer whose interests align with the family's.
+   well; employers have a bereavement gap and can pay. Insurers want beneficiary
+   goodwill but are a distribution / acquisition partner, **never our payer**.
+   Hospices and employers are the survivor-pattern payers whose interests align
+   with the family's.
 5. **Data + trust is the moat, not the price list.** Public prices are
    scrapeable. The proprietary OUTCOMES layer — what families actually paid,
    what advocacy negotiated, which homes flex — exists nowhere else, and the
@@ -96,7 +98,7 @@ at least one.
 |---|---|---|
 | **1. Source of truth** | Free price tools, guides, and the Fair-Price Index | Reach, brand, AI/press citations, and the data flywheel — cheap acquisition |
 | **2. Family service** | At-need advocacy + after-death navigation, lean and instrumented | Proof of neutrality, savings case studies, and the proprietary outcomes data |
-| **3. Institutional revenue** | B2B2C contracts with hospices, then employers, then insurers | Recurring revenue, distribution, and the warm pool of acquirers |
+| **3. Institutional revenue** | B2B2C contracts with hospices, then employers (insurers distribute + acquire, never pay) | Recurring revenue, distribution, and the warm pool of acquirers |
 
 **The moat, stated plainly** — three real powers, all resting on one rule (no
 funeral-home / insurer money):
@@ -308,8 +310,8 @@ before the first institutional contract or any handling of health data.
 
 - **Cost structure (lean):** infra runs tens of dollars/month early; per
   advocacy case a couple dollars in AI/email. Your main cost is your time.
-- **Revenue lines (in order):** (1) institutional B2B2C (hospices → employers →
-  insurers) — recurring, the engine; (2) data/Index licensing to non-conflicted
+- **Revenue lines (in order):** (1) institutional B2B2C (hospices → employers) — recurring, the engine
+  (insurers distribute/acquire but never pay); (2) data/Index licensing to non-conflicted
   buyers — later, highest margin; (3) lean/free consumer — proof and data, not a
   revenue target. **Never:** funeral-home fees or insurer-as-payer deals.
 - **Valuation drivers:** recurring revenue (data/SaaS ~6–9× vs ~1–3× for

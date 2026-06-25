@@ -38,7 +38,7 @@ copy most:
   for", "flat $49, refundable in 14 days", `fee_cents`). That model is being
   removed (`PAYMENT_DECOMMISSION.md`). **None of the four new pages may
   reference a family fee.** The payer story is: *families pay nothing;
-  institutions (hospices → employers → insurers) pay.* If the decommission has
+  institutions (hospices → employers) pay — insurers never pay us.* If the decommission has
   not landed when these ship, write the new pages to the **post-decommission**
   truth anyway and flag the old pages for the same scrub.
 - **Guardrail #4 — never publish a number we can't defend.** This is the entire
