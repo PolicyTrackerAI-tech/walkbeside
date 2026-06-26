@@ -151,6 +151,19 @@ describe("FTC engine — expansion rules (2026-06-26)", () => {
       const d = fire("Register book is required by law $95");
       expect(sev(d, "declinable-item-required-by-law-claim")).toBe("suspicious");
     });
+    it("does not bleed a vault's 'required by law' into an adjacent casket line", () => {
+      // Regression (caught live, deploy #20): the windowed scan crossed the
+      // newline and false-fired the CASKET violation off the VAULT's claim.
+      const d = fire(
+        "Burial vault — required by law $1,295\nMetal casket $3,000",
+        [
+          { name: "Burial vault", cents: 129500 },
+          { name: "Metal casket", cents: 300000 },
+        ],
+      );
+      expect(sev(d, "vault-required-by-law-claim")).toBe("violation");
+      expect(ids(d)).not.toContain("casket-required-by-law-claim");
+    });
   });
 
   describe("suppression — no double/triple casket flags", () => {

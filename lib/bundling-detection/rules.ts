@@ -147,30 +147,30 @@ const NEGATED_REQUIRE =
   /\b(?:no|not|never|n't|isn't|aren't|doesn't|does not|do not|no longer|cannot|can't)\b[^.;\n]{0,20}?(?:requir|mandat|necessary|need)/i;
 
 /**
- * Scan `text` for a funeral-noun `keyword`; for each occurrence take a ~80-char
- * window and return it IFF a `trigger` (mandate) phrase appears in that window
- * and is NOT negated (and no `excludeInWindow` term is present). Shared by the
- * vault/casket/declinable-item/cremation-casket "required by law" rules.
+ * Return the first SINGLE LINE of `text` that contains both the funeral-noun
+ * `keyword` and the `trigger` (mandate) phrase, is NOT negated, and carries no
+ * `excludeInWindow` term. Per-LINE (not a cross-line character window) on
+ * purpose: a vault's "required by law" on one line must NOT bleed into an
+ * adjacent casket line and false-fire that casket's "violation" (caught live,
+ * deploy #20). The real claim — "A casket is required by law" — is on one line,
+ * so per-line still catches it; missing a footnote-style split is the safe
+ * (under-claiming) direction. Shared by the four "required by law" rules.
  */
 function windowedClaim(opts: {
   text: string;
   keyword: RegExp;
   trigger: RegExp;
-  window?: number;
   excludeInWindow?: RegExp;
 }): string | null {
-  const { text, keyword, trigger, window = 80, excludeInWindow } = opts;
-  const kw = new RegExp(keyword.source, "gi");
-  let m: RegExpExecArray | null;
-  while ((m = kw.exec(text)) !== null) {
-    const win = text.slice(
-      Math.max(0, m.index - window),
-      Math.min(text.length, m.index + m[0].length + window),
-    );
-    if (!trigger.test(win)) continue;
-    if (NEGATED_REQUIRE.test(win)) continue;
-    if (excludeInWindow && excludeInWindow.test(win)) continue;
-    return win.replace(/\s+/g, " ").trim();
+  const { text, keyword, trigger, excludeInWindow } = opts;
+  const kw = new RegExp(keyword.source, "i");
+  for (const rawLine of text.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (!kw.test(line)) continue;
+    if (!trigger.test(line)) continue;
+    if (NEGATED_REQUIRE.test(line)) continue;
+    if (excludeInWindow && excludeInWindow.test(line)) continue;
+    return line.replace(/\s+/g, " ").trim();
   }
   return null;
 }
@@ -680,7 +680,6 @@ export const RULES: Rule[] = [
         keyword:
           /identification (?:viewing|fee)|witness(?:ed)? cremation|viewing (?:prior to|before) cremation|ID viewing|positive identification/i,
         trigger: /required|mandatory|non-?optional|must|not optional/i,
-        window: 60,
       });
       if (!win) return null;
       return {
@@ -716,7 +715,6 @@ export const RULES: Rule[] = [
         text: ctx.rawText,
         keyword: PREP,
         trigger: /non-?declinable|mandatory|required|cannot be declined|not optional/i,
-        window: 50,
       });
       if (!win) return null;
       if (/optional|you may decline|may be declined|can be declined/i.test(win)) return null;
@@ -795,7 +793,6 @@ export const RULES: Rule[] = [
         text: ctx.rawText,
         keyword: /after[\s-]?hours|weekend|holiday|evening|overnight|night(?:time)?/i,
         trigger: /fee|surcharge|charge|premium/i,
-        window: 40,
         excludeInWindow: /\b(?:no|not|never|waived|included|free)\b/i,
       });
       if (!win) return null;
