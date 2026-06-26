@@ -39,6 +39,8 @@ interface ItemOut {
   isRange?: boolean;
   centsLow?: number;
   centsHigh?: number;
+  /** Quantity for per-unit items (e.g. 10 death certificates); cents is the total. */
+  qty?: number;
 }
 
 interface AdvocacyMove {
@@ -107,13 +109,19 @@ export async function POST(req: Request) {
     const m = regionMultiplier(zip ?? "");
     const [lo, hi] = adjustedRange(matched.fairLow, matched.fairHigh, zip);
     const predatory = Math.round(matched.predatoryAt * m);
+    // Per-unit items (e.g. death certificates) are quoted as a total for N
+    // copies; judge the PER-UNIT price against the per-each fair range, so a
+    // $250 line for 10 certificates ($25 each) reads as fair, not predatory.
+    const qty = matched.perUnit && raw.qty && raw.qty > 1 ? raw.qty : undefined;
+    const perUnitDollars = (qty ? cents / qty : cents) / 100;
     return {
       name: raw.name,
       cents,
       matchedItemId: matched.id,
-      classification: classifyAgainst(cents / 100, lo, hi, predatory),
+      classification: classifyAgainst(perUnitDollars, lo, hi, predatory),
       fairCentsLow: lo * 100,
       fairCentsHigh: hi * 100,
+      ...(qty ? { qty } : {}),
     };
   });
 

@@ -10,6 +10,8 @@ export interface DisplayItem {
   classification?: "good" | "fair" | "high" | "predatory";
   fairCentsLow?: number;
   fairCentsHigh?: number;
+  /** Quantity for per-unit items (cents is the total; fair range is per-each). */
+  qty?: number;
 }
 
 export interface DisplayFlag {
@@ -18,18 +20,22 @@ export interface DisplayFlag {
 }
 
 /**
- * How many cents this line is over the fair midpoint — but ONLY for items
- * actually above the fair range (classified "high"/"predatory"). An item within
- * range returns 0, so we never show "$X above fair" on a price that isn't.
- * Midpoint basis matches the summary's potential-savings figure.
+ * How many cents this line is over fair — but ONLY for items actually above the
+ * fair range (classified "high"/"predatory"). An item within range returns 0, so
+ * we never show "$X above fair" on a price that isn't. For per-unit items (e.g.
+ * death certificates) the fair range is per-each and `cents` is the total, so we
+ * compare the per-unit price to the per-each midpoint and scale by quantity —
+ * 10 certificates at $25 each reads as $0 over, not a $225 overcharge.
  */
 export function overchargeCents(it: DisplayItem): number {
   if (it.classification !== "high" && it.classification !== "predatory") {
     return 0;
   }
   if (it.fairCentsLow == null || it.fairCentsHigh == null) return 0;
-  const fairMid = Math.round((it.fairCentsLow + it.fairCentsHigh) / 2);
-  return Math.max(0, it.cents - fairMid);
+  const qty = it.qty && it.qty > 1 ? it.qty : 1;
+  const fairMid = (it.fairCentsLow + it.fairCentsHigh) / 2;
+  const perUnit = it.cents / qty;
+  return Math.max(0, Math.round((perUnit - fairMid) * qty));
 }
 
 /**
