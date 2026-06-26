@@ -212,8 +212,8 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
             <p className="text-ink-soft mt-3 mb-5">
               We&rsquo;ll contact 3–5 funeral homes in zip {zip} on your
               behalf, request itemized prices under the FTC Funeral
-              Rule, and bring you the responses side-by-side. You only
-              pay the flat $49 if you choose a home we present.
+              Rule, and bring you the responses side-by-side. Free to
+              families — at no charge.
             </p>
             <LinkButton href={`/negotiate/start?zip=${zip}`} size="lg">
               Have us call homes near {zip} →

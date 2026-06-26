@@ -33,7 +33,7 @@ export default function NegotiateError({
           <p className="text-ink-soft mb-3">Try again in a moment.</p>
           <p className="text-ink-soft mb-8">
             <strong className="text-ink">
-              If you already paid, your $49 is safe
+              Your request is safe
             </strong>{" "}
             and your requests still go out &mdash; nothing is lost. Call us and
             we&rsquo;ll confirm where things stand.

@@ -37,9 +37,8 @@ export default async function DashboardPage({
   } = await supabase.auth.getUser();
   if (!user) return <AnonymousDashboard />;
 
-  // Model A: every tool is free. `isPaid` here is only the "skip the fee"
-  // flag (free-email test/founder accounts) — used to tone the outreach CTA,
-  // not to gate any tool. The $49 is charged upfront, before outreach is sent.
+  // Everything is free to families. `isPaid` here is only the free-email
+  // test/founder flag — used to tone the outreach CTA, not to gate a tool.
   const isPaid = await isPaidUser(supabase, user);
 
   const [

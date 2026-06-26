@@ -168,10 +168,10 @@ export default function OurRolePage() {
               For regulators and press
             </h2>
             <p className="mb-3">
-              Honest Funeral is structured as a consumer-paid advocacy
-              service. Every tool on the site is free; the family pays a flat
-              $49 fee only when they choose a funeral home we found through
-              our outreach. No portion of any funeral home&rsquo;s revenue
+              Honest Funeral is a free, neutral advocacy service for families.
+              Everything on the site is free, and we contact funeral homes on
+              your behalf at no charge — we’re funded by the institutions we
+              partner with. No portion of any funeral home&rsquo;s revenue
               flows to us. We do not hold ourselves out as a funeral
               establishment under the laws of any state.
             </p>

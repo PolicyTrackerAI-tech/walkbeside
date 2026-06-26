@@ -289,8 +289,8 @@ export default async function CityFuneralCostsPage({
             <p className="text-ink-soft mt-3 mb-5">
               We contact funeral homes in {city.name} as your
               authorized advocate, pull written itemized quotes, and
-              put the options side by side. Flat $49 only if you
-              choose a home we presented. No commissions, no
+              put the options side by side. Free to families — no charge
+              to contact homes or to choose one. No commissions, no
               kickbacks — ever.
             </p>
             <LinkButton href="/where" size="lg">

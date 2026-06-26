@@ -16,7 +16,7 @@ function slugify(s: string): string {
 export const metadata: Metadata = {
   title: "Questions families ask — Honest Funeral FAQ",
   description:
-    "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and what the $49 fee covers.",
+    "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and how we stay free for families.",
 };
 
 export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [

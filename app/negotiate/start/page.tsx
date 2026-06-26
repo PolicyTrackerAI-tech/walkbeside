@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  // Free to start outreach. V2 canonical model charges $49 only when
-  // the family picks a home we presented.
+  // Free to families — outreach is sent at no charge (dry_run until
+  // OUTREACH_LIVE is enabled).
   await requireSignedIn("/negotiate/start");
   return <Wizard />;
 }
