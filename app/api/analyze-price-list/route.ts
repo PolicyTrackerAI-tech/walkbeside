@@ -13,6 +13,7 @@ import {
 } from "@/lib/pricing-data";
 import {
   matchLineItem,
+  cleanItemName,
   naiveExtract,
   stripCodeFence,
   type RawItem,
@@ -89,11 +90,15 @@ export async function POST(req: Request) {
   }
 
   const items: ItemOut[] = extracted.items.map((raw) => {
+    // The extractor may fold a non-priced section header into the name
+    // ("Direct cremation arrangement — Basic services fee"). Strip it back to
+    // the self-describing item where it's safe to do so (cosmetic only).
+    const name = cleanItemName(raw.name);
     // Selection-range item (caskets, vaults, urns): keep the range and don't
     // classify it against a single fair price — the family hasn't picked one.
     if (raw.cents_low != null && raw.cents_high != null) {
       return {
-        name: raw.name,
+        name,
         cents: raw.cents_low,
         isRange: true,
         centsLow: raw.cents_low,
@@ -101,8 +106,8 @@ export async function POST(req: Request) {
       };
     }
     const cents = raw.cents ?? 0;
-    const matched = matchLineItem(raw.name);
-    if (!matched) return { name: raw.name, cents };
+    const matched = matchLineItem(name);
+    if (!matched) return { name, cents };
     // Classify against the SAME zip-adjusted thresholds we display, including
     // an adjusted predatory cutoff — otherwise the verdict can contradict the
     // shown range (e.g. "$300, fair range $143–$285, verdict: Fair").
@@ -123,7 +128,7 @@ export async function POST(req: Request) {
     const qty = matched.perUnit && raw.qty && raw.qty > 1 ? raw.qty : undefined;
     const perUnitDollars = (qty ? cents / qty : cents) / 100;
     return {
-      name: raw.name,
+      name,
       cents,
       matchedItemId: matched.id,
       classification: classifyAgainst(perUnitDollars, lo, hi, predatory),
