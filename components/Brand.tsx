@@ -135,6 +135,9 @@ export function Footer() {
           <Link href="/how-it-works" className="hover:text-ink-soft">
             How it works
           </Link>
+          <Link href="/methodology" className="hover:text-ink-soft">
+            Methodology
+          </Link>
           <Link href="/about" className="hover:text-ink-soft">
             About
           </Link>

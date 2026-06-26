@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
@@ -579,7 +580,12 @@ function ResultHero({
             </p>
           </>
         )}
-        <p className="text-xs text-ink-muted mt-3">{sourceNote}</p>
+        <p className="text-xs text-ink-muted mt-3">
+          {sourceNote}{" "}
+          <Link href="/methodology" className="underline hover:text-ink-soft print:hidden">
+            How we calculate this
+          </Link>
+        </p>
       </div>
     </Card>
   );
