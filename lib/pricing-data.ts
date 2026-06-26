@@ -51,6 +51,153 @@ export const SERVICE_LABELS: Record<ServiceType, string> = {
 };
 
 export const LINE_ITEMS: LineItem[] = [
+  // ── Wave 1 benchmark expansion (2026-06-26) ──────────────────────────────
+  // Sourced + adversarially verified against NFDA 2021/2023 GPL Survey medians,
+  // Funeral Consumers Alliance, and ~15 funeral-home GPLs. Full citations:
+  // docs/BENCHMARK_EXPANSION_SPEC.md. Placed FIRST so order-sensitive matches
+  // win over broader existing synonyms (e.g. rental-casket before casket-metal,
+  // which reduces to bare "casket"). NOTE: direct-cremation-fee is placed LAST
+  // (end of array) instead — its "direct cremation" synonym would otherwise
+  // capture a folded header like "Direct cremation arrangement — Basic services
+  // fee" before the real item, breaking cleanItemName's header strip.
+  {
+    id: "cremation-process-fee",
+    name: "Crematory fee / cremation process fee / cremation process",
+    fairLow: 250,
+    fairHigh: 400,
+    predatoryAt: 800,
+    required: "cremation",
+    notes:
+      "The crematory's own charge, often passed through. Wholesale is typically $250–$400.",
+    categories: ["direct-cremation", "cremation-with-service", "aquamation"],
+  },
+  {
+    id: "rental-casket",
+    name: "Rental casket / casket rental / ceremonial casket",
+    fairLow: 750,
+    fairHigh: 1100,
+    predatoryAt: 1800,
+    required: "no",
+    notes:
+      "A ceremonial casket rented for a viewing before cremation — far cheaper than buying. Above about $1,500 you're nearing the cost of simply buying a basic casket.",
+    categories: ["cremation-with-service", "direct-cremation", "memorial-no-body"],
+    highMarkup: true,
+  },
+  {
+    id: "witness-cremation-fee",
+    name: "Witness cremation / witness cremation fee / cremation witness",
+    fairLow: 100,
+    fairHigh: 250,
+    predatoryAt: 450,
+    required: "no",
+    notes:
+      "Add-on to be present when the cremation begins. A small fee — $100–$300 is typical.",
+    categories: ["direct-cremation", "cremation-with-service", "aquamation"],
+  },
+  {
+    id: "refrigeration-shelter",
+    name: "Refrigeration / sheltering of remains / shelter of remains",
+    fairLow: 35,
+    fairHigh: 85,
+    predatoryAt: 200,
+    required: "no",
+    notes:
+      "Charged per day. Most homes give a free grace period (often 24–72 hours) before the clock starts, so a multi-day total is not an overcharge — check the daily rate.",
+    categories: [
+      "direct-cremation",
+      "cremation-with-service",
+      "traditional-burial",
+      "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
+    ],
+    perUnit: true,
+  },
+  {
+    id: "forwarding-remains",
+    name: "Forwarding of remains / forwarding remains",
+    fairLow: 1300,
+    fairHigh: 2400,
+    predatoryAt: 4500,
+    required: "no",
+    notes:
+      "The funeral home's service fee to prepare and forward remains to another home. Does NOT include the separate airline shipping cost, which can legitimately add thousands — a high total may be mostly freight.",
+    categories: [
+      "direct-cremation",
+      "cremation-with-service",
+      "traditional-burial",
+      "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
+    ],
+  },
+  {
+    id: "receiving-remains",
+    name: "Receiving of remains / receiving remains",
+    fairLow: 1000,
+    fairHigh: 2000,
+    predatoryAt: 3800,
+    required: "no",
+    notes:
+      "The service fee to receive remains from another funeral home and handle the local arrangements.",
+    categories: [
+      "direct-cremation",
+      "cremation-with-service",
+      "traditional-burial",
+      "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
+    ],
+  },
+  {
+    id: "acknowledgement-cards",
+    name: "Acknowledgement cards / thank-you cards / thank you cards",
+    fairLow: 15,
+    fairHigh: 25,
+    predatoryAt: 50,
+    required: "no",
+    notes:
+      "Thank-you / acknowledgement cards, usually sold by the box of about 25. Often far cheaper outside the funeral home.",
+    categories: [
+      "direct-cremation",
+      "cremation-with-service",
+      "traditional-burial",
+      "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
+    ],
+    highMarkup: true,
+  },
+  {
+    id: "register-book",
+    name: "Register book / guest book / memorial register",
+    fairLow: 25,
+    fairHigh: 50,
+    predatoryAt: 120,
+    required: "no",
+    notes:
+      "The guest / register book. A simple one is $25–$50; 'premium', 'personalized', or 'custom' versions are a common upsell.",
+    categories: [
+      "direct-cremation",
+      "cremation-with-service",
+      "traditional-burial",
+      "graveside-burial",
+      "green-burial",
+      "aquamation",
+      "body-donation",
+      "memorial-no-body",
+    ],
+    highMarkup: true,
+  },
+  // ── end Wave 1 expansion ─────────────────────────────────────────────────
   {
     id: "basic-services",
     name: "Basic services fee",
@@ -105,12 +252,13 @@ export const LINE_ITEMS: LineItem[] = [
   },
   {
     id: "service-facility",
-    name: "Funeral service facility",
+    name: "Funeral service facility / use of facilities and staff / chapel",
     fairLow: 400,
-    fairHigh: 600,
+    fairHigh: 550,
     predatoryAt: 1000,
     required: "no",
-    notes: "Chapel use. A church, park, or home is often free.",
+    notes:
+      "Use of facilities & staff for the ceremony (NFDA 2023 median $550). A church, park, or home is often free.",
     categories: [
       "traditional-burial",
       "cremation-with-service",
@@ -334,6 +482,22 @@ export const LINE_ITEMS: LineItem[] = [
     ],
     highMarkup: true,
   },
+  // Placed LAST on purpose (see the Wave 1 note at the top of this array): its
+  // "direct cremation" synonym must not shadow an item folded under a "Direct
+  // cremation arrangement" header. A standalone "Direct cremation $1,295" line
+  // (which no earlier item matches) still falls through to here.
+  {
+    id: "direct-cremation-fee",
+    name: "Direct cremation / immediate cremation",
+    fairLow: 700,
+    fairHigh: 1800,
+    predatoryAt: 3500,
+    required: "no",
+    notes:
+      "The bundled cremation package line on a GPL. Budget and online providers run $700–$1,400; traditional homes charge more. Worth comparing the whole arrangement total too.",
+    categories: ["direct-cremation"],
+    highMarkup: true,
+  },
 ];
 
 export interface ServiceTotal {
@@ -348,10 +512,13 @@ export interface ServiceTotal {
 
 export const SERVICE_TOTALS: ServiceTotal[] = [
   {
+    // fairHigh tightened 2500 → 2200 to sit at the ~$2,183 national-average
+    // direct-cremation total (Funeralocity/After), reconciling the whole-service
+    // band with the better-anchored direct-cremation-fee line item.
     type: "direct-cremation",
     label: SERVICE_LABELS["direct-cremation"],
     fairLow: 1000,
-    fairHigh: 2500,
+    fairHigh: 2200,
     predatoryLow: 4000,
     predatoryHigh: 6000,
     maxSavings: 3500,

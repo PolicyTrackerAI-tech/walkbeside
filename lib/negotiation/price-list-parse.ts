@@ -28,6 +28,11 @@ export function extractQty(name: string): { name: string; qty?: number } {
     /\bqty\.?\s*[:=]?\s*(\d{1,3})\b/i, // "qty: 10"
     /\bquantity\s*[:=]?\s*(\d{1,3})\b/i,
     /\b(\d{1,3})\s*(?:copies|certified copies|certificates|each|count|ct)\b/i,
+    // Per-day items (refrigeration / sheltering): "(5 days)", "5 days", "3 nights".
+    // Optional surrounding parens are consumed so no orphan "( )" is left in the
+    // name. qty is only USED downstream when the matched item is perUnit, so this
+    // is inert for non-per-day items even if a stray "N day(s)" appears in a name.
+    /\(?\s*\b(\d{1,3})\s*(?:days?|nights?)\b\s*\)?/i,
   ];
   for (const re of patterns) {
     const m = re.exec(name);
