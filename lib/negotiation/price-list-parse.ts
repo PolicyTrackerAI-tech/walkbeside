@@ -228,3 +228,41 @@ export function matchLineItem(name: string): LineItem | undefined {
     });
   });
 }
+
+// Header separators the Claude extractor uses to glue a non-priced section
+// header onto the following item's name: " — " / " – " / " - " (a dash with
+// surrounding spaces) or ": " (colon + space). The surrounding spaces matter —
+// they keep intra-word hyphens like "18-gauge" and "drive-through" from being
+// mistaken for a separator. The non-greedy prefix splits on the FIRST separator,
+// so a leading header is peeled off even when the item's own name has an em-dash.
+const HEADER_SEPARATOR = /^(.+?)(?:\s+[—–-]\s+|:\s+)(.+)$/;
+
+/**
+ * Strip a leading section-header prefix that the extractor folded into an item
+ * name.
+ *
+ * The extraction prompt is deliberately told to fold a non-priced section
+ * header into the following item so bare variants ("Type A", "With picture")
+ * stay self-describing. But when the line under the header is ALREADY a
+ * benchmarked, self-describing item ("Basic services fee"), that folding
+ * produces a sloppy "Direct cremation arrangement — Basic services fee". Real
+ * GPLs carry section headers ("PROFESSIONAL SERVICES", "CASH ADVANCE ITEMS")
+ * that trip the same way.
+ *
+ * This is a cosmetic-only cleanup: it strips the prefix ONLY when the trailing
+ * part alone matches the SAME benchmarked line item the full name matches —
+ * which guarantees the strip can never change which benchmark an item maps to.
+ * A meaningful fold like "Acknowledgement cards — Type A (per 25)" is left
+ * untouched because its trailing part isn't a benchmarked item.
+ */
+export function cleanItemName(name: string): string {
+  const trimmed = name.trim();
+  const m = HEADER_SEPARATOR.exec(trimmed);
+  if (!m) return trimmed;
+  const rest = m[2].trim();
+  const restMatch = matchLineItem(rest);
+  if (restMatch && matchLineItem(trimmed)?.id === restMatch.id) {
+    return rest;
+  }
+  return trimmed;
+}

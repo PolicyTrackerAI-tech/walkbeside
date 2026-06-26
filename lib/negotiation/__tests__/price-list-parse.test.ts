@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   naiveExtract,
   matchLineItem,
+  cleanItemName,
   stripCodeFence,
   extractQty,
 } from "@/lib/negotiation/price-list-parse";
@@ -87,6 +88,63 @@ describe("matchLineItem (name → benchmarked item)", () => {
 
   it("returns undefined for an item we don't benchmark", () => {
     expect(matchLineItem("Catering and sandwiches")).toBeUndefined();
+  });
+});
+
+describe("cleanItemName (strip folded section headers)", () => {
+  it("strips a header folded onto a benchmarked item (the repro)", () => {
+    // GPL has "Direct cremation arrangement" header above "Basic services fee
+    // $4,200"; Claude folds them into one name. We want just the item.
+    const cleaned = cleanItemName(
+      "Direct cremation arrangement — Basic services fee",
+    );
+    expect(cleaned).toBe("Basic services fee");
+    // The cleaned name still matches the same benchmark.
+    expect(matchLineItem(cleaned)?.id).toBe("basic-services");
+  });
+
+  it("strips ALL-CAPS GPL section headers", () => {
+    expect(cleanItemName("PROFESSIONAL SERVICES — Basic services fee")).toBe(
+      "Basic services fee",
+    );
+    expect(
+      cleanItemName("CASH ADVANCE ITEMS — Death certificates (each)"),
+    ).toBe("Death certificates (each)");
+    expect(cleanItemName("MERCHANDISE — Embalming")).toBe("Embalming");
+  });
+
+  it("handles a colon-style header separator", () => {
+    expect(cleanItemName("Professional services: Basic services fee")).toBe(
+      "Basic services fee",
+    );
+  });
+
+  it("leaves a meaningful fold intact (trailing part isn't benchmarked)", () => {
+    // "Type A (per 25)" is meaningless without its header — keep the fold.
+    const name = "Acknowledgement cards — Type A (per 25)";
+    expect(cleanItemName(name)).toBe(name);
+  });
+
+  it("leaves a benchmarked item whose own name has an em-dash untouched", () => {
+    // "Casket — 18-gauge metal" is itself the line-item name; "18-gauge metal"
+    // isn't a benchmark on its own, so nothing is stripped.
+    expect(cleanItemName("Casket — 18-gauge metal")).toBe(
+      "Casket — 18-gauge metal",
+    );
+  });
+
+  it("does not strip when prefix and trailing map to different benchmarks", () => {
+    // Stripping here could change the classification, so leave it alone.
+    const name = "Hearse — Family car / limousine";
+    expect(cleanItemName(name)).toBe(name);
+  });
+
+  it("leaves a plain self-describing name alone", () => {
+    expect(cleanItemName("Basic services fee")).toBe("Basic services fee");
+  });
+
+  it("does not treat an intra-word hyphen as a header separator", () => {
+    expect(cleanItemName("18-gauge metal casket")).toBe("18-gauge metal casket");
   });
 });
 
