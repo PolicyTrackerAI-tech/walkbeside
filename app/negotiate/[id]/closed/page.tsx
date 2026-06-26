@@ -4,7 +4,6 @@ import { requireSignedIn } from "@/lib/require-signed-in";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
-import { fmtCents } from "@/lib/stripe";
 
 export default async function NegotiationClosedPage({
   params,
@@ -27,8 +26,7 @@ export default async function NegotiationClosedPage({
   if (!user) redirect(`/login?next=/negotiate/${id}/closed`);
 
   // The /api/negotiate/choose action already closed the negotiation and
-  // notified the chosen home (payment happened upfront at /preview), so this
-  // page is purely confirmation.
+  // notified the chosen home, so this page is purely confirmation.
   const { data: neg } = await supabase
     .from("negotiations")
     .select("*")
@@ -54,9 +52,8 @@ export default async function NegotiationClosedPage({
             attend the meeting in person and sign all paperwork directly with
             the home;</strong> we don&rsquo;t sign for you. We stay on email
             for any pre-meeting questions or post-meeting disputes.{" "}
-            {sp.included
-              ? "No additional charge — it’s included in the flat $49 you’ve already paid."
-              : `Our flat fee was ${neg.fee_cents ? fmtCents(neg.fee_cents) : "$0"}.`}
+            Choosing your home was free, and so was the outreach &mdash; Honest
+            Funeral is free to families.
           </p>
 
           {process.env.NODE_ENV !== "production" && sp.dryrun && (

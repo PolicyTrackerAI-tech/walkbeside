@@ -23,7 +23,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Every tool on the site is free — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, and the 30-day post-funeral checklist. The one thing we charge for is the funeral-home outreach: we contact homes on your behalf, collect itemized quotes, and put them side by side. A flat $49, paid upfront before we contact any home. Refundable in 14 days.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Everything on the site is free to families — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, the 30-day post-funeral checklist, and the funeral-home outreach. We contact homes on your behalf, collect itemized quotes, and put them side by side at no charge. We keep families free because we're funded by the institutions we partner with, never by funeral homes.",
     a: (
       <>
         <p>
@@ -53,13 +53,12 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           </li>
         </ul>
         <p>
-          The one thing we charge for is the{" "}
+          That includes the{" "}
           <strong>funeral-home outreach</strong>: we contact homes on your
           behalf, collect itemized quotes, and put them side by side so you
-          can choose. A flat <strong>$49</strong> &mdash; paid upfront,
-          before we contact any home. No subscriptions. Refundable in 14
-          days. We&rsquo;re not a funeral
-          home; we help you{" "}
+          can choose. It&rsquo;s free to families &mdash; we contact homes for
+          you at no charge, and there&rsquo;s no subscription. We&rsquo;re not
+          a funeral home; we help you{" "}
           <em>compare</em>.
         </p>
       </>
@@ -68,14 +67,14 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "One flat $49 charge per family, paid upfront before we contact any funeral home on your behalf. Every tool on the site is free. Nothing else is ever charged. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We refund the full $49 within 14 days.",
+      "We're free to families and funded by the institutions we partner with — hospices today, employers and insurers over time. Everything on the site is free to families, and nothing is ever charged to you. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We never take money from funeral homes or insurers, and we never charge the grieving family.",
     a: (
       <>
         <p>
-          One flat <strong>$49</strong> charge per family &mdash;{" "}
-          <strong>paid upfront, before we contact any home</strong> on your
-          behalf. Every tool on the site is free. That fee is the only thing
-          we charge for, ever.
+          We&rsquo;re <strong>free to families</strong> and funded by the{" "}
+          <strong>institutions we partner with</strong> &mdash; hospices
+          today, and employers and insurers over time. Everything on the site
+          is free to families, and nothing is ever charged to you.
         </p>
         <ul>
           <li>No commissions from funeral homes. Ever.</li>
@@ -84,16 +83,16 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
             services, or anyone else.
           </li>
           <li>
-            Refundable for 14 days: email us and we refund the full $49.
+            We never take money from funeral homes or insurers, and we never
+            charge the grieving family.
           </li>
         </ul>
         <p>
-          Charging the family directly is the only way to stay
-          accountable to the family. Every "free" service in this
-          industry runs on commissions or kickbacks from funeral homes
-          &mdash; which is why most of them route grieving families
-          to whichever home paid for the placement. We don&rsquo;t
-          play that game.
+          Staying free to families is the only way to stay accountable to the
+          family. Every "free" service in this industry runs on commissions or
+          kickbacks from funeral homes &mdash; which is why most of them route
+          grieving families to whichever home paid for the placement. We
+          don&rsquo;t play that game.
         </p>
       </>
     ),
@@ -110,8 +109,8 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
         </p>
         <p>
           The whole point of this site is that the incentives point
-          at the family, not the home. We take a flat fee from the
-          family and no money from the industry.
+          at the family, not the home. We&rsquo;re free to families and take
+          no money from the industry.
         </p>
       </>
     ),
@@ -138,16 +137,16 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
-    q: "Does the $49 fee apply to cremation-only arrangements?",
+    q: "Does the outreach cover cremation-only arrangements?",
     plain:
-      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. The flat $49 is charged once per family, paid upfront before we contact any home, regardless of service type. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
+      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. It's free to families regardless of service type, and we contact homes on your behalf at no charge. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
     a: (
       <>
         <p>
           Yes. Our outreach covers every service type &mdash; burial,
           cremation, direct cremation, green burial, or whole-body
-          donation. The flat $49 is charged once per family, paid upfront
-          before we contact any home, regardless of service type.
+          donation. It&rsquo;s free to families regardless of service type,
+          and we contact homes on your behalf at no charge.
         </p>
         <p>
           Direct cremation in particular is where families often
@@ -322,16 +321,15 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What do I do if the funeral home won\u2019t honor their quote?",
     plain:
-      "For quotes collected through our outreach: tell us within 14 days of service and we'll refund your $49. We also escalate with the home — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
+      "For quotes collected through our outreach: tell us and we'll escalate with the home on your behalf — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
     a: (
       <>
         <p>
-          For quotes collected through our outreach: tell us within
-          14 days of service and we&rsquo;ll refund your $49. We also
-          escalate with the home &mdash; a written, itemized GPL quote is
-          what the Funeral Rule requires homes to provide, and homes that
-          fail to honor a written quote can be reported to the FTC and to
-          your state attorney general.
+          For quotes collected through our outreach: tell us and we&rsquo;ll
+          escalate with the home on your behalf &mdash; a written, itemized
+          GPL quote is what the Funeral Rule requires homes to provide, and
+          homes that fail to honor a written quote can be reported to the FTC
+          and to your state attorney general.
         </p>
         <p>
           For quotes you collected on your own: keep every written

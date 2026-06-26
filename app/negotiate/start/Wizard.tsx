@@ -124,9 +124,9 @@ function NegotiateStartWizard() {
       const data = await r.json();
       if (!r.ok) throw new Error(JSON.stringify(data.error));
       clearState();
-      // Nothing has been sent yet — the family lands on the teaser to pay,
-      // and only then do we contact the homes.
-      router.push(`/negotiate/${data.id}/preview`);
+      // Free to the family — the outreach is already triggered server-side
+      // (dry_run until OUTREACH_LIVE is on). Go straight to the status page.
+      router.push(`/negotiate/${data.id}/status`);
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not start.");
     } finally {
@@ -150,8 +150,8 @@ function NegotiateStartWizard() {
             <p className="text-ink-soft">
               We&rsquo;ll contact 3&ndash;5 homes near you as your advocate,
               request itemized prices, and bring back the options to compare.
-              A flat $49, paid upfront before we contact any home. Refundable
-              in 14 days.
+              Free to families &mdash; we contact homes on your behalf at no
+              charge.
             </p>
           </div>
 
@@ -502,8 +502,8 @@ function NegotiateStartWizard() {
                       establishment.
                     </li>
                     <li>
-                      A flat $49, paid upfront before we contact any home.
-                      Refundable in 14 days.
+                      This is free to families &mdash; we contact homes on
+                      your behalf at no charge.
                     </li>
                   </ul>
                   <label className="flex items-start gap-3 cursor-pointer mb-5">

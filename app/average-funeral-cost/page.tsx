@@ -263,9 +263,8 @@ export default function AverageFuneralCostPage() {
             <p className="text-ink-soft mt-3 mb-5">
               We contact funeral homes in your area as your authorized
               advocate, pull written itemized quotes, and put the options side
-              by side. A flat $49, paid upfront before we contact any home.
-              Refundable in 14 days. No
-              commissions, no kickbacks.
+              by side. Free to families &mdash; we contact homes on your behalf
+              at no charge. No commissions, no kickbacks.
             </p>
             <LinkButton href="/where" size="lg">
               Start here →

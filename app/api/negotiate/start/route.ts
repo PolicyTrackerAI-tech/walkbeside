@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { PUBLIC, requireServer } from "@/lib/env";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
 import { findHomesFromDirectory } from "@/lib/negotiation/directory";
 import {
@@ -9,6 +11,7 @@ import {
   buildOutreachEmail,
 } from "@/lib/negotiation/email-body";
 import { isEmailDenylisted } from "@/lib/negotiation/denylist";
+import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
 import { readLimitedJson } from "@/lib/http-guards";
 
 const Body = z.object({
@@ -79,10 +82,11 @@ export async function POST(req: Request) {
 
   const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
-  // Build and STORE the outreach as `pending` — we do NOT send anything here.
-  // Emails go out only after the family pays (lib/negotiation/send.ts, invoked
-  // from the Stripe webhook + the status-page reconciliation). This is what
-  // guarantees we never email a home for a family that hasn't paid.
+  // Build and STORE the outreach as `pending`. Honest Funeral is FREE to
+  // families (Operating Plan guardrail #2) — there is no payment step. We then
+  // trigger the send below directly. The send self-gates on OUTREACH_LIVE and,
+  // until the founder explicitly enables live outreach, records `dry_run` rows
+  // and emails no funeral home.
   const rows = homes
     // Code-level denylist runs before we even store a home, independent of
     // funeral_homes.active. Survives DB edits.
@@ -108,6 +112,15 @@ export async function POST(req: Request) {
     await supabase.from("negotiation_outreach").insert(rows);
   }
 
-  // Family lands on the teaser/preview to pay before anything is sent.
+  // Trigger the outreach now — free to the family, no payment step. The send
+  // self-gates on OUTREACH_LIVE (records `dry_run` rows and emails nothing
+  // until the founder explicitly enables live outreach) and is the ONLY code
+  // path that ever emails a funeral home.
+  const admin = createServiceClient(
+    PUBLIC.supabaseUrl,
+    requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+  );
+  await sendOutreachForNegotiation(admin, neg.id);
+
   return NextResponse.json({ id: neg.id });
 }

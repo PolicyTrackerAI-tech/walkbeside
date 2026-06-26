@@ -6,7 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: "About Honest Funeral",
   description:
-    "Why Honest Funeral exists: to put a grieving family on equal footing with the funeral industry. Independent and founder-built — we take no money from funeral homes, only a flat fee from the family.",
+    "Why Honest Funeral exists: to put a grieving family on equal footing with the funeral industry. Independent and founder-built — free to families, funded by the institutions we partner with, and we take no money from funeral homes.",
   alternates: { canonical: "/about" },
 };
 
@@ -18,20 +18,20 @@ const PRINCIPLES: { label: string; title: string; body: string }[] = [
   },
   {
     label: "What it costs",
-    title: "A flat $49",
-    body: "Paid upfront, before we contact a single home. Refundable in 14 days.",
+    title: "Free to families",
+    body: "There's nothing to pay. We keep families free and are funded by the institutions we partner with — never by funeral homes or insurers.",
   },
   {
     label: "What's free",
-    title: "Every tool",
-    body: "Price lookup, prep kit, checklists, the obituary helper — all free. The $49 is only for the funeral-home outreach.",
+    title: "Everything",
+    body: "Price lookup, prep kit, checklists, the obituary helper, and the funeral-home outreach — all free to families.",
   },
 ];
 
 const NOT: string[] = [
   "Not a funeral home, law firm, or financial advisor.",
   "Not a marketplace paid by the homes it lists.",
-  "Not a subscription — one flat $49, refundable.",
+  "Not a subscription — free to families, funded by our partners.",
   "Not a replacement for your own attorney on complex estates.",
 ];
 

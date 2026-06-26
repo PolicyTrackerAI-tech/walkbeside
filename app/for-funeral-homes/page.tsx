@@ -115,8 +115,8 @@ export default function ForFuneralHomesPage() {
                 lead-sale service?</dt>
                 <dd className="mt-1">
                   No. We don&rsquo;t take money from funeral homes in any
-                  form. Our only revenue is the flat $49 the family pays
-                  us if they select a home we presented to them.
+                  form. Families are never charged either &mdash; we&rsquo;re
+                  funded by the institutions we partner with.
                 </dd>
               </div>
               <div>

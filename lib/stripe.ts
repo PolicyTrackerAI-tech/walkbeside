@@ -11,15 +11,9 @@ export function stripe(): Stripe {
 
 export const stripeAvailable = FEATURES.stripe;
 
-/**
- * Pricing model: a flat $49, paid upfront before we contact any home.
- * Refundable in 14 days.
- */
-export const FLAT_FEE_CENTS = 49_00;
-
-export function calcFeeCents(): number {
-  return FLAT_FEE_CENTS;
-}
+// The consumer family fee is decommissioned — Honest Funeral is free to
+// families (Operating Plan guardrail #2). Stripe stays as scaffolding for
+// future INSTITUTIONAL billing (per-facility annual), never a family charge.
 
 export function fmtCents(cents: number): string {
   return new Intl.NumberFormat("en-US", {

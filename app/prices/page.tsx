@@ -34,9 +34,9 @@ export default function PricesPage() {
             <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
             <CardTitle>Want us to call homes for you?</CardTitle>
             <p className="text-ink-soft mb-4">
-              A flat $49, paid upfront before we contact any home. Refundable
-              in 14 days. Every other tool
-              is free.
+              Free to families &mdash; we contact homes on your behalf at no
+              charge. Every other tool
+              is free too.
             </p>
             <LinkButton href="/negotiate/start">
               Have us call funeral homes for you
