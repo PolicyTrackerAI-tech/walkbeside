@@ -121,6 +121,109 @@ describe("extractQty", () => {
   });
 });
 
+// OCR-robustness pass: real GPL formats that used to be hard misses (the price
+// regex required the dollar amount at the literal end of line) now parse, and a
+// matching set of precision guards proves the broadened matching never
+// fabricates an item from structural noise (years, addresses, totals, phones).
+describe("naiveExtract — OCR robustness (recovered misses)", () => {
+  const only = (text: string) => naiveExtract(text).items;
+
+  it("strips a trailing footnote / marker after a price", () => {
+    expect(only("Embalming $895*")).toEqual([{ name: "Embalming", cents: 89500 }]);
+    expect(only("Embalming $895 (1)")).toEqual([{ name: "Embalming", cents: 89500 }]);
+    expect(only("Embalming $895 †")).toEqual([{ name: "Embalming", cents: 89500 }]);
+  });
+
+  it("treats 'and up' / '+' as a single floor value", () => {
+    expect(only("Cremation $895 and up")).toEqual([{ name: "Cremation", cents: 89500 }]);
+    expect(only("Direct cremation $1,295+")).toEqual([
+      { name: "Direct cremation", cents: 129500 },
+    ]);
+  });
+
+  it("handles dot/colon/dash leaders and glued separators, cleaning the name", () => {
+    expect(only("Basic services fee .......... $2,195")).toEqual([
+      { name: "Basic services fee", cents: 219500 },
+    ]);
+    expect(only("Embalming:$895")).toEqual([{ name: "Embalming", cents: 89500 }]);
+    expect(only("Embalming — $895")).toEqual([{ name: "Embalming", cents: 89500 }]);
+    // word-internal hyphen preserved
+    expect(only("Set-up fee $300")).toEqual([{ name: "Set-up fee", cents: 30000 }]);
+  });
+
+  it("reads a per-unit price carried by a trailing unit word", () => {
+    expect(only("Death certificates $25 each")).toEqual([
+      { name: "Death certificates", cents: 2500 },
+    ]);
+    expect(only("Certified copies $25/copy")).toEqual([
+      { name: "Certified copies", cents: 2500 },
+    ]);
+    expect(only("Additional staff $150 per hour")).toEqual([
+      { name: "Additional staff", cents: 15000 },
+    ]);
+  });
+
+  it("reads a floor ('from'/'starting at') as a single price, not a phantom $0", () => {
+    expect(only("Direct cremation from $1,295")).toEqual([
+      { name: "Direct cremation", cents: 129500 },
+    ]);
+    expect(only("Caskets starting at $895")).toEqual([
+      { name: "Caskets", cents: 89500 },
+    ]);
+  });
+
+  it("reads a closed range stated in words", () => {
+    expect(only("Caskets between $800 and $10,000")).toEqual([
+      { name: "Caskets", cents_low: 80000, cents_high: 1000000 },
+    ]);
+    expect(only("Urns $95 to $1,200")).toEqual([
+      { name: "Urns", cents_low: 9500, cents_high: 120000 },
+    ]);
+  });
+
+  it("keeps a dash-range intact even with a trailing marker", () => {
+    expect(only("Caskets $800-$10,000*")).toEqual([
+      { name: "Caskets", cents_low: 80000, cents_high: 1000000 },
+    ]);
+  });
+});
+
+describe("naiveExtract — precision guards (structural noise stays skipped)", () => {
+  const run = (text: string) => naiveExtract(text);
+  const only = (text: string) => run(text).items;
+
+  it("never fabricates an item from a bare year, address, or hours", () => {
+    expect(only("Established 1962")).toEqual([]);
+    expect(only("Suite 200")).toEqual([]);
+    expect(only("123 Main St, Suite 200")).toEqual([]);
+    expect(only("Open 9-5")).toEqual([]); // not a $9–$5 range
+    expect(only("Phone: 801-555-1234")).toEqual([]);
+  });
+
+  it("skips accounting / payment lines but keeps a real charge with a similar word", () => {
+    expect(only("Sales tax $42.50")).toEqual([]);
+    expect(only("Balance due $9,500")).toEqual([]);
+    expect(only("Tax preparation $200")).toEqual([
+      { name: "Tax preparation", cents: 20000 },
+    ]);
+  });
+
+  it("routes totals, preferring a grand total over a subtotal", () => {
+    const r = run("Embalming $900\nSubtotal $8,000\nGrand Total $9,500");
+    expect(r.items).toEqual([{ name: "Embalming", cents: 90000 }]);
+    expect(r.total_cents).toBe(950000);
+  });
+
+  it("does not invent a range from a bare-number 'to'/'and' pair", () => {
+    expect(only("Lots 100 to 200")).toEqual([]);
+    expect(only("Sections 1 and 2")).toEqual([]);
+  });
+
+  it("still parses an ordinary $-priced item", () => {
+    expect(only("Honorarium $250")).toEqual([{ name: "Honorarium", cents: 25000 }]);
+  });
+});
+
 // The bug this guards against: the result could display a zip-adjusted fair
 // range yet stamp the same item "high" because the verdict compared against
 // NATIONAL thresholds. The fix classifies against the SAME adjusted thresholds
