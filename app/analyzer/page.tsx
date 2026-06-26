@@ -24,6 +24,18 @@ export default async function Page({
   const sp = await searchParams;
   const raw = sp.ref ?? sp.for ?? sp.partner;
   const ref = Array.isArray(raw) ? raw[0] : raw;
-  const partner = ref ? titleize(decodeURIComponent(ref)).slice(0, 60) : undefined;
-  return <Analyzer partner={partner || undefined} />;
+  // decodeURIComponent throws on a stray "%" ("50%off", "%C0") — and this is an
+  // async Server Component with no boundary, so an unguarded throw would replace
+  // the entire checker with the error page. The banner is cosmetic; never crash.
+  let partner: string | undefined;
+  if (ref) {
+    let decoded = ref;
+    try {
+      decoded = decodeURIComponent(ref);
+    } catch {
+      // keep the raw value
+    }
+    partner = titleize(decoded).slice(0, 60) || undefined;
+  }
+  return <Analyzer partner={partner} />;
 }
