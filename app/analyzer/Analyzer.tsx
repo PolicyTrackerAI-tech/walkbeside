@@ -6,7 +6,13 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
-import { fmtUSD } from "@/lib/pricing-data";
+import { fmtUSD, dataSourceForZip, DATA_SOURCE_LABEL } from "@/lib/pricing-data";
+import {
+  overchargeCents,
+  ftcFlagFor,
+  savingsBreakdown,
+  buildShareText,
+} from "@/lib/analyzer-display";
 
 interface AnalyzerItem {
   name: string;
@@ -107,6 +113,7 @@ export function Analyzer() {
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function analyze() {
     setBusy(true);
@@ -183,12 +190,44 @@ export function Analyzer() {
     }
   }
 
+  const breakdown = result
+    ? savingsBreakdown(result.items, result.violations)
+    : null;
+  const dataSource = dataSourceForZip(zip);
+  const sourceNote =
+    dataSource === "national-adjusted"
+      ? `${DATA_SOURCE_LABEL[dataSource]} — an estimate, not yet locally validated for your metro.`
+      : DATA_SOURCE_LABEL[dataSource];
+
+  async function copyResults() {
+    if (!result) return;
+    const text = buildShareText({
+      items: result.items,
+      totalQuoted: result.totalQuoted,
+      totalFairMid: result.totalFairMid,
+      potentialSavings: result.potentialSavings,
+      violations: result.violations,
+      summary: result.summary,
+      sourceNote,
+    });
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard blocked (e.g. insecure context) — let the user copy manually.
+      window.prompt("Copy this summary:", text);
+    }
+  }
+
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
+      <div className="print:hidden">
+        <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
+      </div>
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
-          <div>
+          <div className="print:hidden">
             <CardEyebrow>Price list analyzer</CardEyebrow>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               Snap a photo or paste their price list. We&rsquo;ll flag the overcharges.
@@ -200,7 +239,7 @@ export function Analyzer() {
             </p>
           </div>
 
-          <Card>
+          <Card className="print:hidden">
             <div className="space-y-5">
               <div>
                 <Label
@@ -281,6 +320,20 @@ export function Analyzer() {
 
           {result && (
             <>
+              <ResultHero
+                savings={result.potentialSavings}
+                sourceNote={sourceNote}
+              />
+
+              <div className="flex flex-wrap gap-3 print:hidden">
+                <Button variant="secondary" onClick={copyResults}>
+                  {copied ? "Copied to clipboard" : "Copy results"}
+                </Button>
+                <Button variant="secondary" onClick={() => window.print()}>
+                  Print / Save as PDF
+                </Button>
+              </div>
+
               {result.summary && (
                 <Card tone="primary">
                   <CardEyebrow>What we&rsquo;d do</CardEyebrow>
@@ -328,14 +381,53 @@ export function Analyzer() {
                     tone={result.potentialSavings > 0 ? "bad" : "good"}
                   />
                 </div>
-                {result.potentialSavings > 0 && (
-                  <p className="text-ink-soft text-sm mt-4">
-                    Most of that is fixable. The high-priced rows below are
-                    where to push back — sometimes you can ask the funeral home
-                    to match fair-market prices, sometimes you can swap to a
-                    third-party vendor (caskets, urns, headstones).
-                  </p>
-                )}
+                {breakdown &&
+                  (breakdown.negotiateCount > 0 ||
+                    breakdown.thirdPartyCount > 0 ||
+                    breakdown.declineCount > 0) && (
+                    <div className="mt-5 pt-4 border-t border-border/60 space-y-2">
+                      <div className="text-xs uppercase tracking-wider text-ink-muted">
+                        Where it comes from
+                      </div>
+                      {breakdown.negotiateCount > 0 && (
+                        <div className="flex justify-between gap-3 text-sm">
+                          <span className="text-ink-soft">
+                            Negotiate {breakdown.negotiateCount} overpriced
+                            service
+                            {breakdown.negotiateCount === 1 ? "" : "s"} down to
+                            fair
+                          </span>
+                          <span className="font-semibold text-bad whitespace-nowrap">
+                            ~{fmtUSD(breakdown.negotiateCents / 100)}
+                          </span>
+                        </div>
+                      )}
+                      {breakdown.thirdPartyCount > 0 && (
+                        <div className="flex justify-between gap-3 text-sm">
+                          <span className="text-ink-soft">
+                            Buy {breakdown.thirdPartyCount} item
+                            {breakdown.thirdPartyCount === 1 ? "" : "s"}{" "}
+                            (casket / urn / vault) from a third party
+                          </span>
+                          <span className="font-medium text-ink-soft whitespace-nowrap">
+                            50–80% less
+                          </span>
+                        </div>
+                      )}
+                      {breakdown.declineCount > 0 && (
+                        <div className="flex justify-between gap-3 text-sm">
+                          <span className="text-ink-soft">
+                            Question or remove {breakdown.declineCount} flagged
+                            item
+                            {breakdown.declineCount === 1 ? "" : "s"}
+                          </span>
+                          <span className="font-medium text-warn whitespace-nowrap">
+                            see FTC findings
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
               </Card>
 
               {result.violations && result.violations.length > 0 && (
@@ -374,12 +466,31 @@ export function Analyzer() {
                       const tone = it.classification
                         ? TONES[it.classification]
                         : { label: "—", tone: "text-ink-muted" };
+                      const over = overchargeCents(it);
+                      const flag = ftcFlagFor(it, result.violations);
+                      const flagAccent =
+                        flag?.severity === "violation"
+                          ? "border-l-4 border-l-bad bg-bad-soft/30"
+                          : flag?.severity === "suspicious"
+                            ? "border-l-4 border-l-warn bg-warn-soft/30"
+                            : "";
                       return (
                         <li
                           key={i}
-                          className="grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0"
+                          className={`grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0 ${flagAccent}`}
                         >
-                          <div className="col-span-6 text-ink">{it.name}</div>
+                          <div className="col-span-6 text-ink">
+                            {it.name}
+                            {flag && (
+                              <div
+                                className={`text-xs font-medium mt-0.5 ${flag.severity === "violation" ? "text-bad" : "text-warn"}`}
+                              >
+                                {flag.severity === "violation"
+                                  ? "Possible FTC issue — see below"
+                                  : "Worth pushing back — see below"}
+                              </div>
+                            )}
+                          </div>
                           <div className="col-span-2 text-right text-ink">
                             {fmtUSD(it.cents / 100)}
                           </div>
@@ -390,6 +501,11 @@ export function Analyzer() {
                           </div>
                           <div className={`col-span-2 text-right font-medium ${tone.tone}`}>
                             {tone.label}
+                            {over > 0 && (
+                              <div className="text-xs font-semibold text-bad mt-0.5">
+                                +{fmtUSD(over / 100)} above fair
+                              </div>
+                            )}
                           </div>
                         </li>
                       );
@@ -402,6 +518,46 @@ export function Analyzer() {
         </div>
       </section>
     </main>
+  );
+}
+
+function ResultHero({
+  savings,
+  sourceNote,
+}: {
+  savings: number;
+  sourceNote: string;
+}) {
+  const over = savings > 0;
+  return (
+    <Card tone={over ? "warn" : "good"}>
+      <div className="text-center sm:text-left">
+        {over ? (
+          <>
+            <div className="text-xs uppercase tracking-wider text-ink-muted">
+              Estimated overcharge on this quote
+            </div>
+            <div className="font-serif text-4xl sm:text-5xl text-bad mt-1 leading-none">
+              {fmtUSD(savings / 100)}
+            </div>
+            <p className="text-ink-soft mt-2">
+              above fair for your region &mdash; money you may be able to keep.
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="font-serif text-3xl sm:text-4xl text-good leading-tight">
+              This quote looks fair
+            </div>
+            <p className="text-ink-soft mt-2">
+              Nothing on it reads as priced above the fair range for your
+              region.
+            </p>
+          </>
+        )}
+        <p className="text-xs text-ink-muted mt-3">{sourceNote}</p>
+      </div>
+    </Card>
   );
 }
 

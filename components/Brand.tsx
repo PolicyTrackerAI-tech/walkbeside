@@ -100,18 +100,17 @@ export function Footer() {
     <footer className="mt-auto border-t border-border bg-surface-soft print:hidden">
       <div className="max-w-3xl mx-auto px-5 py-8 text-sm text-ink-muted space-y-3">
         <p>
-          A consumer advocate for families &mdash; not a funeral home.
-          A flat $49, paid upfront before we contact any home. Refundable in
-          14 days.
+          A consumer advocate for families &mdash; not a funeral home. We
+          answer to families, never to the funeral industry.
         </p>
         <p>
           <strong className="text-ink-soft">
             We accept zero commissions, referral fees, or kickbacks from
-            funeral homes, cemeteries, monument companies, or any vendor we
-            mention.
+            funeral homes, cemeteries, monument companies, insurers, or any
+            vendor we mention.
           </strong>{" "}
-          The $49 from the family is our only revenue. If we ever change
-          that, you’ll see it here first.
+          That independence is the whole point &mdash; it&rsquo;s what lets us
+          tell a family the truth about a price.
         </p>
         <p>
           Questions, feedback, or you’re stuck:{" "}

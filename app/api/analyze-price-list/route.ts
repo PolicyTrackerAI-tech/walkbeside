@@ -7,11 +7,17 @@ import {
   priceListAdvocacySummarySystem,
 } from "@/lib/negotiation/prompts";
 import {
-  LINE_ITEMS,
   classifyAgainst,
   adjustedRange,
   regionMultiplier,
 } from "@/lib/pricing-data";
+import {
+  matchLineItem,
+  naiveExtract,
+  stripCodeFence,
+  type RawItem,
+} from "@/lib/negotiation/price-list-parse";
+import { fallbackAdvocacySummary } from "@/lib/analyzer-display";
 import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
@@ -33,13 +39,6 @@ interface ItemOut {
   isRange?: boolean;
   centsLow?: number;
   centsHigh?: number;
-}
-
-interface RawItem {
-  name: string;
-  cents?: number;
-  cents_low?: number;
-  cents_high?: number;
 }
 
 interface AdvocacyMove {
@@ -168,8 +167,8 @@ export async function POST(req: Request) {
 
   // Advocacy synthesis — turn the deterministic findings into a calm,
   // prioritized "what we'd do" for the family. Grounded ONLY in the findings
-  // (no invented prices). Best-effort: if Claude is down or returns malformed
-  // JSON, summary is undefined and the table/cards still render.
+  // (no invented prices). Always present: if Claude is down or returns malformed
+  // JSON, a deterministic fallback summary is built from the findings.
   const summary = await buildAdvocacySummary({
     items,
     violations,
@@ -189,17 +188,24 @@ export async function POST(req: Request) {
   });
 }
 
-function stripCodeFence(s: string): string {
-  return s.replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "").trim();
-}
-
 async function buildAdvocacySummary(input: {
   items: ItemOut[];
-  violations: { title: string; severity: string }[];
+  violations: { title: string; severity: string; whatToSay?: string }[];
   totalQuoted: number;
   potentialSavings: number;
-}): Promise<AdvocacySummary | undefined> {
-  if (!claudeAvailable()) return undefined;
+}): Promise<AdvocacySummary> {
+  // Deterministic safety net — the checker must never show a blank "what to do".
+  const fallback = () =>
+    fallbackAdvocacySummary({
+      items: input.items,
+      violations: input.violations.map((v) => ({
+        title: v.title,
+        severity: v.severity as "violation" | "suspicious" | "info",
+        whatToSay: v.whatToSay,
+      })),
+      potentialSavings: input.potentialSavings,
+    });
+  if (!claudeAvailable()) return fallback();
 
   // Compact, structured findings — the ONLY ground truth the summary may use.
   const findings = {
@@ -246,7 +252,7 @@ async function buildAdvocacySummary(input: {
       reassurance?: unknown;
     };
     if (typeof parsed.bottomLine !== "string" || !Array.isArray(parsed.moves)) {
-      return undefined;
+      return fallback();
     }
     const moves: AdvocacyMove[] = (parsed.moves as unknown[])
       .map((m) => {
@@ -265,67 +271,6 @@ async function buildAdvocacySummary(input: {
         typeof parsed.reassurance === "string" ? parsed.reassurance : "",
     };
   } catch {
-    return undefined;
+    return fallback();
   }
-}
-
-function naiveExtract(text: string): {
-  items: RawItem[];
-  total_cents?: number;
-} {
-  // Fallback parser. Try a range ("name $800-$10,000") before a single price.
-  const items: RawItem[] = [];
-  const reRange =
-    /^(.+?)\s+\$?([\d,]+(?:\.\d{2})?)\s*[-–—]\s*\$?([\d,]+(?:\.\d{2})?)\s*$/;
-  const reSingle = /^(.+?)\s+\$?([\d,]+(?:\.\d{2})?)\s*$/;
-  let total: number | undefined;
-  for (const rawLine of text.split(/\r?\n/)) {
-    const line = rawLine.trim();
-    const mr = reRange.exec(line);
-    if (mr) {
-      const low = Number(mr[2].replace(/,/g, ""));
-      const high = Number(mr[3].replace(/,/g, ""));
-      if (Number.isFinite(low) && Number.isFinite(high)) {
-        items.push({
-          name: mr[1].trim(),
-          cents_low: Math.round(low * 100),
-          cents_high: Math.round(high * 100),
-        });
-      }
-      continue;
-    }
-    const m = reSingle.exec(line);
-    if (!m) continue;
-    const name = m[1].trim();
-    const dollars = Number(m[2].replace(/,/g, ""));
-    if (!Number.isFinite(dollars)) continue;
-    const cents = Math.round(dollars * 100);
-    if (/total/i.test(name)) total = cents;
-    else items.push({ name, cents });
-  }
-  return { items, total_cents: total };
-}
-
-function matchLineItem(name: string): (typeof LINE_ITEMS)[number] | undefined {
-  const n = name.toLowerCase();
-  return LINE_ITEMS.find((it) => {
-    // Synonyms are separated by "/" (e.g. "Family car / limousine",
-    // "Grave liner / burial vault"). Within each synonym, drop trailing
-    // qualifiers in parentheses or after an em-dash ("(each)", "— newspaper")
-    // so generic words like "each" / "basic" / "local" can't cause false hits.
-    const synonyms = it.name
-      .toLowerCase()
-      .split("/")
-      .map((s) => s.split(/[—(]/)[0].trim())
-      .filter(Boolean);
-    return synonyms.some((key) => {
-      // Whole-phrase, word-boundary match — "limousine" hits "limousine",
-      // "urn" hits "urn" but not "return".
-      const re = new RegExp(`\\b${key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`);
-      if (re.test(n)) return true;
-      // Or every word of a multi-word synonym appears somewhere in the name.
-      const words = key.split(/\s+/);
-      return words.length > 1 && words.every((w) => n.includes(w));
-    });
-  });
 }
