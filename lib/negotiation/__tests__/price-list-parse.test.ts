@@ -3,6 +3,7 @@ import {
   naiveExtract,
   matchLineItem,
   stripCodeFence,
+  extractQty,
 } from "@/lib/negotiation/price-list-parse";
 import {
   LINE_ITEMS,
@@ -86,6 +87,37 @@ describe("matchLineItem (name → benchmarked item)", () => {
 
   it("returns undefined for an item we don't benchmark", () => {
     expect(matchLineItem("Catering and sandwiches")).toBeUndefined();
+  });
+});
+
+describe("extractQty", () => {
+  it("reads a parenthetical count and strips it from the name", () => {
+    expect(extractQty("Death certificates (10)")).toEqual({
+      name: "Death certificates",
+      qty: 10,
+    });
+  });
+
+  it("reads x-notation, qty:, and copy phrasing", () => {
+    expect(extractQty("Death certificates x10").qty).toBe(10);
+    expect(extractQty("Certified copies qty: 8").qty).toBe(8);
+    expect(extractQty("12 certified copies").qty).toBe(12);
+  });
+
+  it("ignores a quantity of 1 or none", () => {
+    expect(extractQty("Basic services fee")).toEqual({
+      name: "Basic services fee",
+    });
+    expect(extractQty("Death certificates (1)").qty).toBeUndefined();
+  });
+
+  it("naiveExtract attaches qty to the parsed item", () => {
+    const { items } = naiveExtract("Death certificates (10) $250");
+    expect(items[0]).toEqual({
+      name: "Death certificates",
+      cents: 25000,
+      qty: 10,
+    });
   });
 });
 

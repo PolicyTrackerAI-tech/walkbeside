@@ -12,15 +12,23 @@ import {
   ftcFlagFor,
   savingsBreakdown,
   fallbackAdvocacySummary,
+  type DisplayItem,
 } from "@/lib/analyzer-display";
 
 /**
  * End-to-end pipeline mirror of /api/analyze-price-list (deterministic path,
  * no Claude) so we can exercise — and see — the full result the demo renders.
  */
+type PItem = DisplayItem & {
+  matchedItemId?: string;
+  isRange?: boolean;
+  centsLow?: number;
+  centsHigh?: number;
+};
+
 function analyze(text: string, zip: string) {
   const extracted = naiveExtract(text);
-  const items = extracted.items.map((raw) => {
+  const items = extracted.items.map((raw): PItem => {
     if (raw.cents_low != null && raw.cents_high != null) {
       return {
         name: raw.name,
@@ -36,13 +44,16 @@ function analyze(text: string, zip: string) {
     const m = regionMultiplier(zip);
     const [lo, hi] = adjustedRange(matched.fairLow, matched.fairHigh, zip);
     const predatory = Math.round(matched.predatoryAt * m);
+    const qty = matched.perUnit && raw.qty && raw.qty > 1 ? raw.qty : undefined;
+    const perUnitDollars = (qty ? cents / qty : cents) / 100;
     return {
       name: raw.name,
       cents,
       matchedItemId: matched.id,
-      classification: classifyAgainst(cents / 100, lo, hi, predatory),
+      classification: classifyAgainst(perUnitDollars, lo, hi, predatory),
       fairCentsLow: lo * 100,
       fairCentsHigh: hi * 100,
+      ...(qty ? { qty } : {}),
     };
   });
   const priced = items.filter((i) => !i.isRange);
@@ -69,7 +80,7 @@ const SAMPLE = `Direct cremation arrangement
 Basic services fee $4,200
 Embalming $1,400
 Metal casket $3,800
-Death certificates $250
+Death certificates (10) $250
 Urns $200-$2,000`;
 
 describe("checker pipeline (end-to-end, deterministic)", () => {
@@ -121,10 +132,22 @@ describe("checker pipeline (end-to-end, deterministic)", () => {
     expect(r.breakdown.negotiateCount).toBeGreaterThan(0);
     expect(r.summary.bottomLine).toMatch(/\$|fair/);
     expect(r.summary.moves.length).toBeGreaterThan(0);
+
+    // Quantity-aware: 10 death certificates at $250 ($25 each) reads as fair,
+    // NOT a predatory "+$224 above fair" (the bug this guards against).
+    const certs = r.items.find(
+      (i) => (i as { matchedItemId?: string }).matchedItemId === "death-cert",
+    ) as (DisplayItem & { qty?: number }) | undefined;
+    expect(certs?.qty).toBe(10);
+    expect(
+      certs?.classification === "high" || certs?.classification === "predatory",
+    ).toBe(false);
+    expect(overchargeCents(certs!)).toBe(0);
   });
 
   it("never shows an overcharge on an item classified within range", () => {
-    for (const it of r.items) {
+    for (const raw of r.items) {
+      const it = raw as DisplayItem & { isRange?: boolean };
       if (it.isRange) continue;
       if (it.classification === "good" || it.classification === "fair") {
         expect(overchargeCents(it)).toBe(0);

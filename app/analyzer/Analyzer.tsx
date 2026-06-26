@@ -23,6 +23,7 @@ interface AnalyzerItem {
   isRange?: boolean;
   centsLow?: number;
   centsHigh?: number;
+  qty?: number;
 }
 
 type Severity = "violation" | "suspicious" | "info";
@@ -493,10 +494,15 @@ export function Analyzer() {
                           </div>
                           <div className="col-span-2 text-right text-ink">
                             {fmtUSD(it.cents / 100)}
+                            {it.qty && it.qty > 1 && (
+                              <div className="text-xs text-ink-muted mt-0.5">
+                                {fmtUSD(it.cents / it.qty / 100)} ea &times; {it.qty}
+                              </div>
+                            )}
                           </div>
                           <div className="col-span-2 text-right text-ink-soft">
                             {it.fairCentsLow != null && it.fairCentsHigh != null
-                              ? `${fmtUSD(it.fairCentsLow / 100)}–${fmtUSD(it.fairCentsHigh / 100)}`
+                              ? `${fmtUSD(it.fairCentsLow / 100)}–${fmtUSD(it.fairCentsHigh / 100)}${it.qty && it.qty > 1 ? " ea" : ""}`
                               : "—"}
                           </div>
                           <div className={`col-span-2 text-right font-medium ${tone.tone}`}>

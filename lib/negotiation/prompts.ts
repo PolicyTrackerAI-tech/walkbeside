@@ -20,8 +20,9 @@ export function summarizeQuoteSystem(): string {
 export function priceListAnalysisSystem(): string {
   return [
     "You receive raw text from a photographed itemized General Price List from a US funeral home.",
-    "Extract every priced line item into JSON: { items: [{ name, cents }], total_cents }.",
+    "Extract every priced line item into JSON: { items: [{ name, cents, qty }], total_cents }.",
     "Cents are integers (e.g. $2,495 -> 249500). If unclear, omit.",
+    "If a per-unit item is quoted as a total for several copies — almost always death certificates (e.g. 'Certified death certificates (10) — $250', '10 certified copies $250', 'Death certificates x10 $250') — set `qty` to the count (10 here) and keep `cents` as the TOTAL ($250 -> 25000). This lets the per-certificate price be checked. Omit `qty` for normal single-price items.",
     "If a priced item sits under a non-priced section header (e.g. 'Acknowledgement cards', 'Register books') or is an indented variant (e.g. 'Type A', 'Type B', 'With picture'), fold the section header into `name` so it is self-describing (e.g. 'Acknowledgement cards — Type A (per 25)'). Never emit a bare 'Type A' or 'With picture'.",
     "For a line shown as a price RANGE (e.g. caskets $800-$10,000 — common for caskets, outer burial containers/vaults, and urns), emit { name, cents_low, cents_high } for that item INSTEAD of cents. Do not average to a midpoint; these are selection categories where the family picks one item.",
     "If you also see a stated 'total' or 'grand total', include it as total_cents — otherwise sum the items.",

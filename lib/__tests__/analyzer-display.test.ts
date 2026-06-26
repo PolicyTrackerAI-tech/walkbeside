@@ -52,6 +52,20 @@ describe("overchargeCents", () => {
     expect(overchargeCents({ ...base, cents: 60000, classification: "high" }))
       .toBe(0);
   });
+
+  it("judges per-unit items by their per-each price (qty-aware)", () => {
+    // Death certs: fair $10–$25 each (mid $17.50). $250 total for 10 = $25 each,
+    // which is at the top of fair → not high → $0 over, never a $225 overcharge.
+    const cert = { name: "Death certificates", fairCentsLow: 1000, fairCentsHigh: 2500 };
+    expect(
+      overchargeCents({ ...cert, cents: 25000, qty: 10, classification: "fair" }),
+    ).toBe(0);
+    // $400 total for 10 = $40 each (above the $25 top, below $50 predatory) → high.
+    // Overcharge = ($40 − $17.50 mid) × 10 = $225.
+    expect(
+      overchargeCents({ ...cert, cents: 40000, qty: 10, classification: "high" }),
+    ).toBe(22500);
+  });
 });
 
 describe("ftcFlagFor", () => {

@@ -21,6 +21,12 @@ export interface LineItem {
   categories: ServiceType[];
   /** Sister's "watch out" markers — surfaced first in the prep kit */
   highMarkup?: boolean;
+  /**
+   * Priced per unit (the fair range is per-each). Families usually buy several
+   * (e.g. death certificates), so a quoted total must be divided by the
+   * quantity before it's compared to the fair range.
+   */
+  perUnit?: boolean;
 }
 
 export type ServiceType =
@@ -166,6 +172,7 @@ export const LINE_ITEMS: LineItem[] = [
     fairLow: 10,
     fairHigh: 25,
     predatoryAt: 50,
+    perUnit: true,
     required: "yes",
     notes:
       "Most families need 5–10 copies to start. Order through the funeral home at the time of death — it's faster, and most homes pass through the state's base fee. Ask whether they're charging a markup. You can order more later directly from your state vital records office.",

@@ -10,6 +10,35 @@ export interface RawItem {
   cents?: number;
   cents_low?: number;
   cents_high?: number;
+  /** Count, for per-unit items priced as a total (e.g. 10 death certificates). */
+  qty?: number;
+}
+
+/**
+ * Pull a quantity out of a line-item name written by a family or OCR'd from a
+ * GPL — "Death certificates (10)", "Death certificates x10", "10 certified
+ * copies", "qty: 10". Returns the cleaned name plus the quantity (undefined if
+ * none / 1). This is what lets a $250 line for 10 death certificates be judged
+ * per-certificate ($25 each) instead of as a single $250 item.
+ */
+export function extractQty(name: string): { name: string; qty?: number } {
+  const patterns: RegExp[] = [
+    /\((\d{1,3})\)\s*$/, //               "Death certificates (10)"
+    /\s*[x×]\s*(\d{1,3})\b/i, //          "Death certificates x10"
+    /\bqty\.?\s*[:=]?\s*(\d{1,3})\b/i, // "qty: 10"
+    /\bquantity\s*[:=]?\s*(\d{1,3})\b/i,
+    /\b(\d{1,3})\s*(?:copies|certified copies|certificates|each|count|ct)\b/i,
+  ];
+  for (const re of patterns) {
+    const m = re.exec(name);
+    if (m) {
+      const qty = Number(m[1]);
+      if (Number.isFinite(qty) && qty > 1) {
+        return { name: name.replace(re, "").replace(/\s{2,}/g, " ").trim(), qty };
+      }
+    }
+  }
+  return { name };
 }
 
 /** Strip a leading/trailing ```json … ``` fence from an LLM response. */
@@ -49,12 +78,16 @@ export function naiveExtract(text: string): {
     }
     const m = reSingle.exec(line);
     if (!m) continue;
-    const name = m[1].trim();
+    const rawName = m[1].trim();
     const dollars = Number(m[2].replace(/,/g, ""));
     if (!Number.isFinite(dollars)) continue;
     const cents = Math.round(dollars * 100);
-    if (/total/i.test(name)) total = cents;
-    else items.push({ name, cents });
+    if (/total/i.test(rawName)) {
+      total = cents;
+    } else {
+      const { name, qty } = extractQty(rawName);
+      items.push(qty ? { name, cents, qty } : { name, cents });
+    }
   }
   return { items, total_cents: total };
 }
