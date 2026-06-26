@@ -91,6 +91,36 @@ describe("matchLineItem (name → benchmarked item)", () => {
   });
 });
 
+describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
+  const id = (s: string) => matchLineItem(s)?.id;
+
+  it("matches the new logistics / cremation / stationery line items", () => {
+    expect(id("Forwarding of remains to another funeral home")).toBe("forwarding-remains");
+    expect(id("Receiving remains from another home")).toBe("receiving-remains");
+    expect(id("Refrigeration")).toBe("refrigeration-shelter");
+    expect(id("Sheltering of remains")).toBe("refrigeration-shelter");
+    expect(id("Crematory fee")).toBe("cremation-process-fee");
+    expect(id("Witness cremation")).toBe("witness-cremation-fee");
+    expect(id("Thank-you cards")).toBe("acknowledgement-cards");
+    expect(id("Guest book")).toBe("register-book");
+    expect(id("Direct cremation")).toBe("direct-cremation-fee");
+  });
+
+  it("routes a rental casket to rental-casket, NOT the plain metal casket (order-sensitivity)", () => {
+    expect(id("Rental casket")).toBe("rental-casket");
+    expect(id("Ceremonial casket")).toBe("rental-casket");
+    // ...and a plain casket is unaffected by the new rental synonyms.
+    expect(id("Metal casket")).toBe("casket-metal");
+    expect(id("18-gauge metal casket")).toBe("casket-metal");
+  });
+
+  it("does not let a new item steal an existing line", () => {
+    expect(id("Transfer of remains")).toBe("transfer");
+    expect(id("Cremation container")).toBe("cremation-container");
+    expect(id("Memorial programs")).toBe("programs");
+  });
+});
+
 describe("cleanItemName (strip folded section headers)", () => {
   it("strips a header folded onto a benchmarked item (the repro)", () => {
     // GPL has "Direct cremation arrangement" header above "Basic services fee
@@ -176,6 +206,18 @@ describe("extractQty", () => {
       cents: 25000,
       qty: 10,
     });
+  });
+
+  it("reads per-day counts for refrigeration/shelter and cleans the name", () => {
+    // So a multi-day total divides to a daily rate (refrigeration is perUnit).
+    expect(extractQty("Refrigeration (5 days)")).toEqual({
+      name: "Refrigeration",
+      qty: 5,
+    });
+    expect(extractQty("Sheltering of remains 3 nights").qty).toBe(3);
+    expect(extractQty("Refrigeration (1 day)").qty).toBeUndefined(); // 1 day = the rate
+    const { items } = naiveExtract("Refrigeration (5 days) $425");
+    expect(items[0]).toEqual({ name: "Refrigeration", cents: 42500, qty: 5 });
   });
 });
 
