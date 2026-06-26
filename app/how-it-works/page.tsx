@@ -11,7 +11,7 @@ import { FEATURES } from "@/lib/env";
 export const metadata: Metadata = {
   title: "How Honest Funeral helps families",
   description:
-    "A consumer advocate, not a funeral home. Every tool is free. The one thing we charge for is the funeral-home outreach — a flat $49, paid upfront before we contact any home. Refundable in 14 days.",
+    "A consumer advocate, not a funeral home. Everything is free to families — the tools and the funeral-home outreach. We contact homes on your behalf at no charge, and we keep families free because we're funded by the institutions we partner with.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -36,9 +36,9 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
   },
   {
     n: 2,
-    title: "Flat $49, paid upfront — before we contact any home, via Stripe.",
+    title: "It's free to families — we contact homes on your behalf at no charge.",
     body:
-      "You pay the flat $49 before we send a single email. No commissions, no kickbacks, no referral fees from funeral homes. Refundable in full within 14 days.",
+      "There's nothing to pay. No commissions, no kickbacks, no referral fees from funeral homes. We keep families free because we're funded by the institutions we partner with.",
   },
   {
     n: 3,
@@ -93,14 +93,14 @@ export default async function HowItWorksPage() {
               How it works
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-4">
-              What the $49 actually pays for.
+              How the outreach actually works.
             </h1>
             <p className="text-lg text-ink-soft">
-              Every tool on this site is free &mdash; the price lookup, the
-              prep kit, the obituary helper, the 30-day checklist, all of it.
-              The one thing we charge for is contacting funeral homes for you
-              and comparing their quotes side by side. A flat $49, paid upfront
-              before we contact any home. Here&rsquo;s every step.
+              Everything on this site is free to families &mdash; the price
+              lookup, the prep kit, the obituary helper, the 30-day checklist,
+              all of it. That includes contacting funeral homes for you and
+              comparing their quotes side by side. We contact homes on your
+              behalf at no charge. Here&rsquo;s every step.
             </p>
           </div>
 
@@ -127,12 +127,13 @@ export default async function HowItWorksPage() {
 
           <Card tone="primary">
             <CardEyebrow>The money part</CardEyebrow>
-            <CardTitle>Flat $49 once. Refundable in 14 days.</CardTitle>
+            <CardTitle>Free to families. Always.</CardTitle>
             <p className="text-ink-soft mb-4">
-              One flat $49, paid upfront before we contact any home. Every tool
-              on the site is free. No subscriptions. No commissions from any
-              funeral home. No referral fees. Email us within 14 days and we
-              refund you in full &mdash; no questions, no form.
+              Everything on the site is free to families &mdash; the tools and
+              the funeral-home outreach. There&rsquo;s nothing to pay and no
+              subscription. No commissions from any funeral home. No referral
+              fees. We keep families free because we&rsquo;re funded by the
+              institutions we partner with, never by funeral homes or insurers.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/decide">

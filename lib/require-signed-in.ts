@@ -1,7 +1,6 @@
 /**
  * Auth-only gate (no payment check). Use on routes that need a signed-in
- * user. Under Model A every tool is free and the only charge is the flat
- * $49 paid upfront before we contact any home (refundable in 14 days), so
+ * user. Honest Funeral is free to families — there is no family charge — so
  * this is the only gate the negotiate flow needs: unauthed users go to
  * /login; authed users pass through.
  *

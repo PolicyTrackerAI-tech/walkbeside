@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
 
 /**
- * RETIRED under the Model A pricing model (2026-05-21).
+ * RETIRED.
  *
- * The old "$49 upfront toolkit unlock" no longer exists: every tool is free,
- * and the flat $49 is for funeral-home outreach — paid upfront, before we
- * contact any home, and refundable in 14 days (see /negotiate/[id]/results).
+ * The old upfront toolkit unlock no longer exists: everything is free to
+ * families, including the funeral-home outreach (see /negotiate/[id]/results).
  *
  * This route used to host the upfront-unlock checkout (since removed, along
  * with /api/stripe/checkout-account and /paywall/success). Nothing links here

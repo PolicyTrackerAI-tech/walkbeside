@@ -10,7 +10,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Paid only by families, never by funeral homes. Every tool is free; we charge a flat $49, paid upfront before we contact any home, refundable in 14 days.",
+    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Free to families, never paid by funeral homes. Everything is free to families — the tools and the funeral-home outreach.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -88,7 +88,8 @@ export default function HomePage() {
           <p className="mt-3 text-sm text-ink-soft max-w-md mx-auto">
             <strong className="text-ink">No commissions. No kickbacks. No referral fees.</strong>{" "}
             We take no money from any funeral home, cemetery, or vendor on
-            this site. The flat $49 from the family is our only revenue.
+            this site. We keep families free and are funded by the
+            institutions we partner with.
           </p>
 
           <p className="mt-2 text-xs text-ink-muted">
@@ -119,8 +120,8 @@ export default function HomePage() {
             ))}
           </ol>
           <p className="mt-8 text-center text-sm text-ink-soft">
-            Every tool here is free. We charge a flat $49, paid upfront before
-            we contact any home — refundable in 14 days.
+            Everything is free to families — the tools and the funeral-home
+            outreach. We contact homes on your behalf at no charge.
           </p>
         </div>
       </section>
@@ -131,10 +132,10 @@ export default function HomePage() {
             How we help
           </h2>
           <p className="text-center text-ink-soft mb-10 max-w-xl mx-auto">
-            Every tool here is free &mdash; the price lookup, prep kit,
-            obituary helper, analyzer, worksheets, and the 30-day checklist.
-            The only thing we charge for is the funeral-home outreach: a flat
-            $49, paid upfront before we contact any home, refundable in 14 days.
+            Everything here is free to families &mdash; the price lookup, prep
+            kit, obituary helper, analyzer, worksheets, the 30-day checklist,
+            and the funeral-home outreach. We contact homes on your behalf at
+            no charge.
           </p>
           <div className="grid gap-5 sm:grid-cols-3">
             <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
@@ -177,16 +178,17 @@ export default function HomePage() {
 
             <article className="bg-primary-soft border-2 border-primary rounded-2xl p-6 flex flex-col">
               <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
-                $49 · paid upfront
+                Free · funded by our partners
               </div>
               <h3 className="font-serif text-xl text-ink mb-2">
                 Have us get you quotes
               </h3>
               <p className="text-sm text-ink-soft mb-5 flex-1">
                 We contact funeral homes on your behalf, collect itemized
-                quotes, and put them side by side so you can choose. A flat
-                $49 &mdash; paid upfront before we contact any home, and
-                choosing a home costs nothing extra. Refundable in 14 days.
+                quotes, and put them side by side so you can choose. Free to
+                families &mdash; we contact homes for you at no charge, and
+                choosing a home costs nothing. We&rsquo;re funded by the
+                institutions we partner with, never by funeral homes.
               </p>
               <Link
                 href="/how-it-works"

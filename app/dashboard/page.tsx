@@ -161,10 +161,9 @@ export default async function DashboardPage({
               <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
               <CardTitle>Have us get you real quotes. Save $2,000–$5,000.</CardTitle>
               <p className="text-ink-soft mt-3 mb-4">
-                Every tool here is free. When you want it, we contact funeral
-                homes on your behalf, collect itemized quotes, and put them
-                side by side. A flat $49, paid upfront before we contact any
-                home. Refundable in 14 days.
+                Everything here is free to families. When you want it, we
+                contact funeral homes on your behalf, collect itemized quotes,
+                and put them side by side &mdash; at no charge.
                 No commissions or kickbacks, ever.
               </p>
               <LinkButton href="/negotiate/start" size="lg">
@@ -240,10 +239,9 @@ export default async function DashboardPage({
                 Every tool here is free.
               </h2>
               <p className="text-ink-soft text-sm mt-1">
-                Open any of these whenever you need them &mdash; no charge. The
-                only thing we charge for is the funeral-home outreach: a flat
-                $49, paid upfront before we contact any home. Picking a home is
-                free.
+                Open any of these whenever you need them &mdash; no charge.
+                Everything is free to families, including the funeral-home
+                outreach. Picking a home is free too.
               </p>
             </div>
 

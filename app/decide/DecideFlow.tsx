@@ -356,10 +356,9 @@ export function DecideFlow() {
               </LinkButton>
             </div>
             <p className="mt-3 text-xs text-ink-muted">
-              Free to start. A flat $49, paid upfront before we contact
-              any home. Then we reach out on your behalf and bring the
+              Free to families. We reach out on your behalf and bring the
               quotes back side by side &mdash; you pick a home at no
-              extra charge. Refundable in 14 days. No commissions or kickbacks from any
+              charge. No commissions or kickbacks from any
               home we contact.
             </p>
           </Card>

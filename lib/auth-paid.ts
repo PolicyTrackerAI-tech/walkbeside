@@ -1,13 +1,8 @@
 /**
- * "Skip the fee" check, used so the flat $49 outreach fee can be waived for
- * specific accounts.
- *
- * Under Model A there is no account-level paywall: every tool is free and the
- * only charge is the flat $49, paid upfront before we contact any home
- * (refundable in 14 days). Home selection
- * itself is free. This helper exists so test accounts and the founder's own
- * logins run outreach WITHOUT being charged during testing. A user qualifies if
- * EITHER:
+ * Free-email / test-account check. Honest Funeral is free to families — there is
+ * no family charge anywhere. This helper survives as scaffolding to identify
+ * test/founder accounts (e.g. to gate future institutional billing or test-only
+ * behavior); it no longer waives any consumer fee. A user qualifies if EITHER:
  *
  * 1. Their email matches an entry in HONEST_FUNERAL_FREE_EMAILS (env var,
  *    comma-separated). This is the live mechanism. Case-insensitive, trimmed.

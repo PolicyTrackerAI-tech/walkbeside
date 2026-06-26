@@ -41,7 +41,7 @@ export function deriveTasks(s: DashboardState): { phase: Phase; tasks: Task[] } 
       id: "negotiate",
       phase: "funeral",
       title: "Have us call funeral homes for you",
-      detail: "We reach 3–5 as your named advocate. Flat $49, paid upfront — refundable in 14 days.",
+      detail: "We reach 3–5 as your named advocate — free to families, at no charge.",
       href: "/negotiate/start",
     });
   }
