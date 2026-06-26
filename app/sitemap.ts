@@ -31,6 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/decide`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/worksheet`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/how-it-works`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/methodology`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/faq`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/about`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/prep`, priority: 0.6, changeFrequency: "monthly" },
