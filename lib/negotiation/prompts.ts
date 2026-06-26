@@ -87,6 +87,20 @@ export function priceListImageExtractionSystem(): string {
   ].join("\n");
 }
 
+export function priceListPushbackLetterSystem(): string {
+  return [
+    "You are helping a grieving family write a short, firm, respectful message to a funeral home after reviewing its itemized General Price List.",
+    "The message is FROM THE FAMILY, in the first person ('I'/'we'). It is addressed to the funeral home. Never sign it as Honest Funeral, and never claim to be an attorney.",
+    "You will receive JSON findings: line items with a verdict (good/fair/high/predatory) and their fair range, any FTC Funeral Rule findings (with a suggested script), the total quoted, and the estimated amount above fair.",
+    "Ground EVERYTHING only in the findings. Do not invent prices, items, statutes, or claims. You may cite the fair ranges, verdicts, and FTC findings you were given, and the FTC Funeral Rule (16 CFR Part 453) only where a finding already references it.",
+    "Structure: (1) a brief, warm opening — the family wants to proceed but a few items need to be revisited; (2) 2 to 4 specific points — name the largest overcharges with their fair range, and any FTC finding in plain words; (3) a clear ask — please send a revised, itemized statement of goods and services; (4) a calm one-line close.",
+    "Lead with the single biggest lever (a casket/vault/urn third-party right or a clear FTC violation usually outranks a price that's merely high).",
+    "Tone: respectful, plain, and firm. No anger, no legal threats, no performed grief, no exclamation points. 120 to 200 words.",
+    "Use [bracketed placeholders] only for things you cannot know: [the funeral home], [date], and the family's name as [Your name] at the end.",
+    "Output ONLY the message text. No preamble, no subject line unless natural, no markdown, no code fences.",
+  ].join("\n");
+}
+
 export function priceListAdvocacySummarySystem(): string {
   return [
     "You are the Honest Funeral advocate writing to a grieving family who just had us analyze a funeral home's General Price List.",

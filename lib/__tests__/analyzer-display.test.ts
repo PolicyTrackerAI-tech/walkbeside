@@ -6,6 +6,7 @@ import {
   fallbackAdvocacySummary,
   buildShareText,
   assessCoverage,
+  fallbackPushbackLetter,
   type DisplayItem,
   type DisplayFlag,
   type RangeAwareItem,
@@ -305,6 +306,52 @@ Death certificates (10) $250`;
     expect(c.pricedLines).toBe(0);
     expect(c.missed).toBe(0);
     expect(c.level).toBe("high");
+  });
+});
+
+describe("fallbackPushbackLetter", () => {
+  it("builds a sendable letter from the findings, leading with the violation", () => {
+    const letter = fallbackPushbackLetter({
+      items: [
+        {
+          name: "Metal casket",
+          cents: 380000,
+          classification: "high",
+          fairCentsLow: 150000,
+          fairCentsHigh: 200000,
+        },
+        { name: "Urns", cents: 20000, isRange: true },
+      ],
+      violations: [
+        {
+          severity: "violation",
+          title: "Casket on a direct-cremation quote",
+          whatToSay: "Please remove the casket.",
+        },
+      ],
+      potentialSavings: 205000,
+    });
+    // Addressed from the family to the home, with editable placeholders.
+    expect(letter).toContain("[the funeral home]");
+    expect(letter).toContain("[Your name]");
+    // Leads with the violation's script, then the overcharge with its fair range.
+    const violationAt = letter.indexOf("Please remove the casket.");
+    const casketAt = letter.indexOf("Metal casket: you quoted $3,800");
+    expect(violationAt).toBeGreaterThan(-1);
+    expect(casketAt).toBeGreaterThan(violationAt);
+    expect(letter).toContain("$1,500"); // fair-range low
+    expect(letter).toContain("outside seller"); // third-party right (urn range)
+    expect(letter).toContain("$2,050"); // total above fair (savings)
+  });
+
+  it("is never blank, even on a clean quote", () => {
+    const letter = fallbackPushbackLetter({
+      items: [],
+      violations: [],
+      potentialSavings: 0,
+    });
+    expect(letter).toContain("[the funeral home]");
+    expect(letter.length).toBeGreaterThan(60);
   });
 });
 
