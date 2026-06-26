@@ -117,8 +117,25 @@ async function downscaleImage(
   };
 }
 
+/**
+ * A realistic, deliberately-overpriced direct-cremation quote used by the "see a
+ * sample" button. It exercises the whole checker at once: services above fair,
+ * an FTC violation (a casket pushed on a direct cremation), third-party rights
+ * (the urn range), and a correctly-fair per-unit item (10 death certs at $25).
+ * It is just demo input — the checker computes the result live, nothing faked.
+ */
+const SAMPLE_BILL = `Direct cremation arrangement
+Basic services fee $3,995
+Transfer of remains $695
+Embalming $1,295
+Metal casket $4,200
+Cremation container $295
+Death certificates (10) $250
+Urns $95-$1,800
+Total $10,730`;
+
 /** Screen 10 — Price list analyzer. */
-export function Analyzer() {
+export function Analyzer({ partner }: { partner?: string }) {
   const [text, setText] = useState("");
   const [zip, setZip] = useState("");
   const [busy, setBusy] = useState(false);
@@ -127,29 +144,36 @@ export function Analyzer() {
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [sample, setSample] = useState(false);
 
-  async function analyze() {
+  async function analyze(opts?: { text?: string; zip?: string; hint?: string }) {
+    const useText = opts?.text ?? text;
+    const useZip = opts?.zip ?? zip;
     setBusy(true);
     setError(null);
     try {
       // Pass the recommended service type from /decide if we have it —
       // it lets the bundling detector know things like 'this is a direct
-      // cremation, so a casket on the quote is a violation.'
-      let serviceTypeHint: string | undefined;
-      try {
-        serviceTypeHint =
-          window.sessionStorage.getItem(
-            "hf-decide:recommendedServiceType",
-          ) ?? undefined;
-      } catch {
-        // ignore
+      // cremation, so a casket on the quote is a violation.' The sample passes
+      // its own hint so the demo result is deterministic regardless of any
+      // stale /decide value left in this browser.
+      let serviceTypeHint = opts?.hint;
+      if (serviceTypeHint === undefined) {
+        try {
+          serviceTypeHint =
+            window.sessionStorage.getItem(
+              "hf-decide:recommendedServiceType",
+            ) ?? undefined;
+        } catch {
+          // ignore
+        }
       }
       const r = await fetch("/api/analyze-price-list", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          text,
-          zip: zip || undefined,
+          text: useText,
+          zip: useZip || undefined,
           serviceTypeHint,
         }),
       });
@@ -170,11 +194,23 @@ export function Analyzer() {
     }
   }
 
+  function loadSample() {
+    setError(null);
+    setImagePreview(null);
+    setText(SAMPLE_BILL);
+    setZip("");
+    setSample(true);
+    // Pass the service-type hint explicitly so the FTC casket-on-direct-cremation
+    // finding fires for the demo no matter what's in sessionStorage.
+    void analyze({ text: SAMPLE_BILL, zip: "", hint: "direct-cremation" });
+  }
+
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
     setError(null);
     setResult(null);
+    setSample(false);
     setUploading(true);
     try {
       const { dataUrl, mediaType } = await downscaleImage(file);
@@ -241,6 +277,13 @@ export function Analyzer() {
       </div>
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
+          {partner && (
+            <div className="print:hidden rounded-xl border border-primary/30 bg-primary-soft/50 px-4 py-3 text-sm text-ink">
+              <span className="font-medium">Provided to you free by {partner}.</span>{" "}
+              Neutral funeral-price help, at no cost to you — Honest Funeral
+              takes no money from funeral homes or insurers.
+            </div>
+          )}
           <div className="print:hidden">
             <CardEyebrow>Price list analyzer</CardEyebrow>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
@@ -317,7 +360,10 @@ export function Analyzer() {
                   id="list"
                   rows={10}
                   value={text}
-                  onChange={(e) => setText(e.target.value)}
+                  onChange={(e) => {
+                    setText(e.target.value);
+                    setSample(false);
+                  }}
                   placeholder={`Basic services fee   $2,495\nEmbalming            $1,150\nMetal casket         $4,200\nViewing facility       $750\nGrave liner          $1,800\nDeath certificates (10) $250\nTotal                $12,650`}
                 />
               </div>
@@ -326,14 +372,35 @@ export function Analyzer() {
                   {error}
                 </div>
               )}
-              <Button onClick={analyze} disabled={busy || uploading || text.length < 20}>
-                {busy ? "Analyzing…" : "Analyze price list"}
-              </Button>
+              <div className="flex flex-wrap items-center gap-3">
+                <Button
+                  onClick={() => analyze()}
+                  disabled={busy || uploading || text.length < 20}
+                >
+                  {busy ? "Analyzing…" : "Analyze price list"}
+                </Button>
+                <button
+                  type="button"
+                  onClick={loadSample}
+                  disabled={busy || uploading}
+                  className="text-sm text-primary-deep underline underline-offset-2 hover:text-ink disabled:opacity-60"
+                >
+                  Don&rsquo;t have a bill handy? See it work on a sample
+                </button>
+              </div>
             </div>
           </Card>
 
           {result && (
             <>
+              {sample && (
+                <div className="print:hidden rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft">
+                  <span className="font-medium text-ink">This is a sample bill.</span>{" "}
+                  A real, deliberately-overpriced quote — the numbers below are
+                  computed live, nothing is faked. Upload or paste your own to
+                  check it.
+                </div>
+              )}
               {/* Letterhead — print only. The printed sheet is the artifact a
                   family carries into the arrangement conference, so it must
                   identify itself, carry a date, and state our neutrality. */}
