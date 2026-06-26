@@ -142,7 +142,7 @@ export function Analyzer({ partner }: { partner?: string }) {
   const [result, setResult] = useState<AnalyzerResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
   const [sample, setSample] = useState(false);
   const [letter, setLetter] = useState<string | null>(null);
@@ -200,7 +200,7 @@ export function Analyzer({ partner }: { partner?: string }) {
 
   function loadSample() {
     setError(null);
-    setImagePreview(null);
+    setImagePreviews([]);
     setText(SAMPLE_BILL);
     setZip("");
     setSample(true);
@@ -210,28 +210,55 @@ export function Analyzer({ partner }: { partner?: string }) {
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
     setError(null);
     setResult(null);
     setSample(false);
     setUploading(true);
+    setImagePreviews([]);
+    // Real General Price Lists are often 2–4 pages. Read each photo in turn and
+    // stitch the extracted line items together, so a multi-page list checks as
+    // one bill. Previews fill in progressively as pages are read.
     try {
-      const { dataUrl, mediaType } = await downscaleImage(file);
-      setImagePreview(dataUrl);
-      const r = await fetch("/api/extract-price-list-image", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ image: dataUrl, mediaType }),
-      });
-      const d = await r.json().catch(() => ({}));
-      if (!r.ok) {
+      const previews: string[] = [];
+      const pages: string[] = [];
+      let failed = 0;
+      for (const file of files) {
+        const { dataUrl, mediaType } = await downscaleImage(file);
+        previews.push(dataUrl);
+        setImagePreviews([...previews]);
+        const r = await fetch("/api/extract-price-list-image", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ image: dataUrl, mediaType }),
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          // One bad page among several shouldn't sink the whole upload.
+          if (files.length === 1) {
+            throw new Error(
+              d?.error ??
+                "Couldn't read that photo. Try a clearer image, or type the prices below.",
+            );
+          }
+          failed++;
+          continue;
+        }
+        if (typeof d?.text === "string" && d.text.trim()) pages.push(d.text.trim());
+      }
+      const combined = pages.join("\n");
+      if (!combined) {
         throw new Error(
-          d?.error ??
-            "Couldn't read that photo. Try a clearer image, or type the prices below.",
+          "Couldn't read the price list from those photos. Try clearer, straight-on images, or paste the prices below.",
         );
       }
-      setText(typeof d?.text === "string" ? d.text : "");
+      setText(combined);
+      if (failed > 0) {
+        setError(
+          `Read ${pages.length} of ${files.length} pages — ${failed} couldn't be read clearly. Review below and re-add any missing pages, or type them in.`,
+        );
+      }
     } catch (err) {
       setError(
         err instanceof Error
@@ -343,7 +370,7 @@ export function Analyzer({ partner }: { partner?: string }) {
               <div>
                 <Label
                   htmlFor="photo"
-                  hint="Or type / paste the prices below."
+                  hint="Multi-page list? Add every page — we&rsquo;ll read them as one bill."
                 >
                   Upload a photo of the price list
                 </Label>
@@ -352,26 +379,39 @@ export function Analyzer({ partner }: { partner?: string }) {
                   type="file"
                   accept="image/*"
                   capture="environment"
+                  multiple
                   onChange={handleFileChange}
                   disabled={uploading || busy}
                   className="block w-full text-sm text-ink-soft file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-primary-soft file:text-primary-deep hover:file:bg-primary-soft/80 disabled:opacity-60"
                 />
                 {uploading && (
                   <p className="text-sm text-ink-soft mt-2">
-                    Reading the price list…
+                    Reading {imagePreviews.length > 1
+                      ? `${imagePreviews.length} pages`
+                      : "the price list"}
+                    …
                   </p>
                 )}
-                {imagePreview && !uploading && (
-                  <div className="mt-3 flex items-start gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={imagePreview}
-                      alt="Uploaded price list"
-                      className="max-w-[120px] max-h-[120px] object-contain rounded-lg border border-border"
-                    />
+                {imagePreviews.length > 0 && !uploading && (
+                  <div className="mt-3 space-y-2">
+                    <div className="flex flex-wrap gap-2">
+                      {imagePreviews.map((src, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          key={i}
+                          src={src}
+                          alt={`Uploaded price list page ${i + 1}`}
+                          className="max-w-[96px] max-h-[96px] object-contain rounded-lg border border-border"
+                        />
+                      ))}
+                    </div>
                     <p className="text-sm text-ink-soft">
-                      Here&rsquo;s what we read &mdash; review and edit
-                      below if anything looks off, then click{" "}
+                      Here&rsquo;s what we read across{" "}
+                      {imagePreviews.length > 1
+                        ? `${imagePreviews.length} pages`
+                        : "this page"}{" "}
+                      &mdash; review and edit below if anything looks off, then
+                      click{" "}
                       <strong className="text-ink">Analyze price list</strong>.
                     </p>
                   </div>
