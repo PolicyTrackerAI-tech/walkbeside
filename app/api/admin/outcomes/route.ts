@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { requireAdminApi } from "@/lib/admin-auth";
 
 /**
  * Admin write endpoint for the outcomes instrumentation view (/admin/outcomes).
- * Gated by the same x-admin-preview-key header as the other admin tools and
- * backed by the service-role key (bypasses RLS). Mutations only — the page
- * reads via service role.
+ * Gated by the session-based admin allowlist (requireAdminApi — same as the
+ * other /admin/* tools) and backed by the service-role key (bypasses RLS).
+ * Mutations only — the page reads via service role.
  *
  * Records the outcome fields that the family-facing flow can't capture on its
  * own (which home was chosen, negotiated figures, hidden fees, amount paid).
@@ -49,10 +50,8 @@ const OUTREACH_COLS =
   "id, negotiation_id, home_name, quote_cents, chosen, listed_price_cents, negotiated_price_cents, hidden_fees, status";
 
 export async function PATCH(req: Request) {
-  const key = req.headers.get("x-admin-preview-key");
-  if (key !== requireServer("ADMIN_PREVIEW_KEY")) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
+  const denied = await requireAdminApi();
+  if (denied) return denied;
 
   const parsed = Body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) {

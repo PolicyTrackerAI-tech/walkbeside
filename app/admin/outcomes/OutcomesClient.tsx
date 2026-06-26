@@ -59,13 +59,7 @@ function inputToCents(v: string): number | null {
   return Math.round(n * 100);
 }
 
-export function OutcomesClient({
-  initial,
-  adminKey,
-}: {
-  initial: OutcomeCase[];
-  adminKey: string;
-}) {
+export function OutcomesClient({ initial }: { initial: OutcomeCase[] }) {
   const [cases, setCases] = React.useState<OutcomeCase[]>(initial);
   const [filter, setFilter] = React.useState<Filter>("all");
   const [query, setQuery] = React.useState("");
@@ -106,10 +100,7 @@ export function OutcomesClient({
     try {
       const res = await fetch("/api/admin/outcomes", {
         method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-          "x-admin-preview-key": adminKey,
-        },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       });
       const json = await res.json();
