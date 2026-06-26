@@ -265,6 +265,75 @@ export function assessCoverage(
   return { pricedLines, parsedItems, benchmarked, unbenchmarked, missed, level, note };
 }
 
+/**
+ * A deterministic, ready-to-send message FROM the family TO the funeral home,
+ * built entirely from the findings — the safety net when the Claude-written
+ * letter is unavailable. Leads with the strongest lever (an FTC violation or a
+ * third-party right), then the biggest overcharges with their fair range, then
+ * a clear ask for a revised itemized statement. Invents nothing; uses bracketed
+ * placeholders only for what we can't know.
+ */
+export function fallbackPushbackLetter(input: {
+  items: RangeAwareItem[];
+  violations: FallbackFinding[];
+  potentialSavings: number;
+}): string {
+  const { items, violations, potentialSavings } = input;
+  const usd = (cents: number) => fmtUSD(Math.round(cents) / 100);
+  const realViolations = violations.filter((v) => v.severity === "violation");
+  const overpriced = items
+    .filter((it) => !it.isRange)
+    .map((it) => ({ it, over: overchargeCents(it) }))
+    .filter((x) => x.over > 0)
+    .sort((a, b) => b.over - a.over);
+  const hasThirdParty = items.some((it) => it.isRange);
+
+  const points: string[] = [];
+  for (const v of realViolations.slice(0, 2)) {
+    points.push(
+      `- ${v.title}. ${v.whatToSay ?? "We'd ask you to review and correct this under the FTC Funeral Rule."}`,
+    );
+  }
+  for (const { it } of overpriced.slice(0, 3)) {
+    const range =
+      it.fairCentsLow != null && it.fairCentsHigh != null
+        ? ` — above the fair range of ${usd(it.fairCentsLow)}–${usd(it.fairCentsHigh)} for our area`
+        : "";
+    points.push(
+      `- ${it.name}: you quoted ${usd(it.cents)}${range}. We'd ask you to bring this in line with fair pricing.`,
+    );
+  }
+  if (hasThirdParty) {
+    points.push(
+      "- We plan to provide the casket, urn, or vault from an outside seller. Under the FTC Funeral Rule there is no handling fee for that — please confirm in writing.",
+    );
+  }
+  if (points.length === 0) {
+    points.push(
+      "- We'd appreciate a clear, itemized breakdown so we can be sure each charge is one we've chosen.",
+    );
+  }
+
+  const savingsLine =
+    potentialSavings > 0
+      ? `Altogether this is roughly ${usd(potentialSavings)} above what we'd expect for our area. `
+      : "";
+
+  return [
+    "To [the funeral home],",
+    "",
+    "Thank you for the itemized price list. We want to move forward with you, and we're writing because a few items need to be revisited first.",
+    "",
+    points.join("\n"),
+    "",
+    `${savingsLine}Could you please send a revised, itemized statement of goods and services that reflects these points?`,
+    "",
+    "Thank you for your understanding at a difficult time.",
+    "",
+    "[Your name]",
+  ].join("\n");
+}
+
 export interface ShareItem extends RangeAwareItem {
   centsLow?: number;
   centsHigh?: number;

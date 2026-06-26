@@ -145,12 +145,16 @@ export function Analyzer({ partner }: { partner?: string }) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [sample, setSample] = useState(false);
+  const [letter, setLetter] = useState<string | null>(null);
+  const [letterBusy, setLetterBusy] = useState(false);
+  const [letterCopied, setLetterCopied] = useState(false);
 
   async function analyze(opts?: { text?: string; zip?: string; hint?: string }) {
     const useText = opts?.text ?? text;
     const useZip = opts?.zip ?? zip;
     setBusy(true);
     setError(null);
+    setLetter(null);
     try {
       // Pass the recommended service type from /decide if we have it —
       // it lets the bundling detector know things like 'this is a direct
@@ -269,6 +273,44 @@ export function Analyzer({ partner }: { partner?: string }) {
       window.prompt("Copy this summary:", text);
     }
   }
+
+  async function draftLetter() {
+    if (!result) return;
+    setLetterBusy(true);
+    try {
+      const r = await fetch("/api/analyze-price-list/draft-letter", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          items: result.items,
+          violations: result.violations,
+          potentialSavings: result.potentialSavings,
+          totalQuoted: result.totalQuoted,
+        }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (typeof d?.letter === "string") setLetter(d.letter);
+    } catch {
+      // Leave the letter unset; the button stays available to retry.
+    } finally {
+      setLetterBusy(false);
+    }
+  }
+
+  async function copyLetter() {
+    if (!letter) return;
+    try {
+      await navigator.clipboard.writeText(letter);
+      setLetterCopied(true);
+      setTimeout(() => setLetterCopied(false), 2000);
+    } catch {
+      window.prompt("Copy this message:", letter);
+    }
+  }
+
+  const canDraft =
+    !!result &&
+    (result.potentialSavings > 0 || (result.violations?.length ?? 0) > 0);
 
   return (
     <main className="flex-1 flex flex-col">
@@ -436,6 +478,15 @@ export function Analyzer({ partner }: { partner?: string }) {
                 )}
 
               <div className="flex flex-wrap gap-3 print:hidden">
+                {canDraft && (
+                  <Button onClick={draftLetter} disabled={letterBusy}>
+                    {letterBusy
+                      ? "Writing…"
+                      : letter
+                        ? "Rewrite the message"
+                        : "Draft a message to the funeral home"}
+                  </Button>
+                )}
                 <Button variant="secondary" onClick={copyResults}>
                   {copied ? "Copied to clipboard" : "Copy results"}
                 </Button>
@@ -443,6 +494,28 @@ export function Analyzer({ partner }: { partner?: string }) {
                   Print / Save as PDF
                 </Button>
               </div>
+
+              {letter && (
+                <Card tone="primary" className="print:hidden">
+                  <CardEyebrow>Your message to the funeral home</CardEyebrow>
+                  <p className="text-ink-soft text-sm mt-1 mb-4">
+                    Built only from the findings above — review it, add the
+                    home&rsquo;s name and your own, and send or read it aloud. You can
+                    edit anything before you do.
+                  </p>
+                  <Textarea
+                    rows={14}
+                    value={letter}
+                    onChange={(e) => setLetter(e.target.value)}
+                    className="font-sans"
+                  />
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    <Button variant="secondary" onClick={copyLetter}>
+                      {letterCopied ? "Copied to clipboard" : "Copy message"}
+                    </Button>
+                  </div>
+                </Card>
+              )}
 
               {result.summary && (
                 <Card tone="primary">
