@@ -10,7 +10,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "Consumer advocacy for families navigating funeral arrangements. Compare prices, avoid common upsells, decide with confidence. Free to families, never paid by funeral homes. Everything is free to families — the tools and the funeral-home outreach.",
+    "The neutral price truth for the American funeral. Snap a photo of any funeral price list and see the overcharges, the FTC-rule violations, and exactly how much you're above fair. Free to families — we take no money from funeral homes or insurers, ever.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -24,9 +24,9 @@ const ORG_SCHEMA = {
 };
 
 export const metadata: Metadata = {
-  title: "Honest Funeral — quiet help after a loss",
+  title: "Honest Funeral — is this funeral price fair?",
   description:
-    "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
+    "Snap a photo of any funeral price list and see the overcharges and FTC-rule violations in seconds. Free, neutral funeral-price help — we're paid by no one with a stake in your bill: no funeral home, no insurer, ever.",
   alternates: { canonical: "/" },
 };
 
@@ -72,8 +72,18 @@ export default function HomePage() {
           </p>
 
           <LinkButton href="/where" size="lg" className="w-full sm:w-auto">
-            Get started — it&rsquo;s free to start
+            Get started — it&rsquo;s free
           </LinkButton>
+
+          <p className="mt-4 text-sm text-ink-soft">
+            Already holding a price list?{" "}
+            <Link
+              href="/analyzer"
+              className="font-medium text-primary-deep underline-offset-2 hover:underline"
+            >
+              Check if your quote is fair &rarr;
+            </Link>
+          </p>
 
           <p className="mt-6 text-sm text-ink-soft max-w-md mx-auto">
             Families often overpay by{" "}
@@ -83,7 +93,7 @@ export default function HomePage() {
           </p>
 
           <p className="mt-10 text-sm text-ink-muted">
-            Consumer advocacy for families. We take no money from funeral homes.
+            The one guide paid by no one with a stake in your funeral bill.
           </p>
           <p className="mt-3 text-sm text-ink-soft max-w-md mx-auto">
             <strong className="text-ink">No commissions. No kickbacks. No referral fees.</strong>{" "}
@@ -131,12 +141,35 @@ export default function HomePage() {
           <h2 className="font-serif text-2xl sm:text-3xl text-ink text-center mb-2">
             How we help
           </h2>
-          <p className="text-center text-ink-soft mb-10 max-w-xl mx-auto">
-            Everything here is free to families &mdash; the price lookup, prep
-            kit, obituary helper, analyzer, worksheets, the 30-day checklist,
-            and the funeral-home outreach. We contact homes on your behalf at
-            no charge.
+          <p className="text-center text-ink-soft mb-8 max-w-xl mx-auto">
+            Everything here is free to families. Start with the fair-price
+            check, or let us gather quotes for you &mdash; at no charge, ever.
           </p>
+
+          {/* The tip of the spear — the "is this quote fair?" checker. */}
+          <Link
+            href="/analyzer"
+            className="block group bg-primary-soft border-2 border-primary rounded-2xl p-6 sm:p-8 mb-6 no-underline hover:no-underline"
+          >
+            <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
+              Is this quote fair? &middot; free, no account
+            </div>
+            <h3 className="font-serif text-2xl sm:text-3xl text-ink mb-2">
+              Snap a photo of any funeral price list.
+            </h3>
+            <p className="text-ink-soft mb-4 max-w-xl">
+              In seconds, see the overcharges line by line, the FTC-rule
+              violations, and exactly how much you&rsquo;re paying{" "}
+              <strong className="text-ink">above fair</strong>{" "}for your
+              region.
+              No one else can tell you that &mdash; every comparison site is
+              paid by the funeral homes.
+            </p>
+            <span className="text-sm font-medium text-primary-deep group-hover:underline underline-offset-2">
+              Check your quote now &rarr;
+            </span>
+          </Link>
+
           <div className="grid gap-5 sm:grid-cols-3">
             <article className="bg-surface border border-border rounded-2xl p-6 flex flex-col">
               <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
