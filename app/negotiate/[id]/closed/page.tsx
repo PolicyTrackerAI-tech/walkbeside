@@ -4,6 +4,7 @@ import { requireSignedIn } from "@/lib/require-signed-in";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { CaseSatisfaction } from "@/components/negotiate/CaseSatisfaction";
 
 export default async function NegotiationClosedPage({
   params,
@@ -79,6 +80,11 @@ export default async function NegotiationClosedPage({
               </LinkButton>
             </div>
           </Card>
+
+          <CaseSatisfaction
+            negotiationId={id}
+            initialScore={neg.satisfaction_score ?? null}
+          />
         </div>
       </section>
     </main>
