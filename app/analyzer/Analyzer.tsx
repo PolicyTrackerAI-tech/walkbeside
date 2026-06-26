@@ -11,6 +11,7 @@ import {
   overchargeCents,
   ftcFlagFor,
   savingsBreakdown,
+  buildShareText,
 } from "@/lib/analyzer-display";
 
 interface AnalyzerItem {
@@ -112,6 +113,7 @@ export function Analyzer() {
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   async function analyze() {
     setBusy(true);
@@ -197,12 +199,35 @@ export function Analyzer() {
       ? `${DATA_SOURCE_LABEL[dataSource]} — an estimate, not yet locally validated for your metro.`
       : DATA_SOURCE_LABEL[dataSource];
 
+  async function copyResults() {
+    if (!result) return;
+    const text = buildShareText({
+      items: result.items,
+      totalQuoted: result.totalQuoted,
+      totalFairMid: result.totalFairMid,
+      potentialSavings: result.potentialSavings,
+      violations: result.violations,
+      summary: result.summary,
+      sourceNote,
+    });
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard blocked (e.g. insecure context) — let the user copy manually.
+      window.prompt("Copy this summary:", text);
+    }
+  }
+
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
+      <div className="print:hidden">
+        <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
+      </div>
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
-          <div>
+          <div className="print:hidden">
             <CardEyebrow>Price list analyzer</CardEyebrow>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               Snap a photo or paste their price list. We&rsquo;ll flag the overcharges.
@@ -214,7 +239,7 @@ export function Analyzer() {
             </p>
           </div>
 
-          <Card>
+          <Card className="print:hidden">
             <div className="space-y-5">
               <div>
                 <Label
@@ -299,6 +324,15 @@ export function Analyzer() {
                 savings={result.potentialSavings}
                 sourceNote={sourceNote}
               />
+
+              <div className="flex flex-wrap gap-3 print:hidden">
+                <Button variant="secondary" onClick={copyResults}>
+                  {copied ? "Copied to clipboard" : "Copy results"}
+                </Button>
+                <Button variant="secondary" onClick={() => window.print()}>
+                  Print / Save as PDF
+                </Button>
+              </div>
 
               {result.summary && (
                 <Card tone="primary">

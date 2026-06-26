@@ -4,6 +4,7 @@ import {
   ftcFlagFor,
   savingsBreakdown,
   fallbackAdvocacySummary,
+  buildShareText,
   type DisplayItem,
   type DisplayFlag,
   type RangeAwareItem,
@@ -208,3 +209,52 @@ type FallbackInputViolation = {
   severity: "violation" | "suspicious" | "info";
   whatToSay?: string;
 };
+
+describe("buildShareText", () => {
+  const txt = buildShareText({
+    items: [
+      {
+        name: "Metal casket",
+        cents: 380000,
+        classification: "high",
+        fairCentsLow: 150000,
+        fairCentsHigh: 200000,
+      },
+      { name: "Urns", cents: 20000, isRange: true, centsLow: 20000, centsHigh: 200000 },
+    ],
+    totalQuoted: 380000,
+    totalFairMid: 175000,
+    potentialSavings: 205000,
+    violations: [
+      {
+        title: "Casket on a direct-cremation quote",
+        severity: "violation",
+        whatToSay: "Please remove the casket.",
+      },
+    ],
+    summary: {
+      bottomLine: "This quote runs about $2,050 above fair.",
+      moves: [{ title: "Push back on the casket", detail: "Ask them to match fair." }],
+    },
+    sourceNote: "Based on national benchmarks adjusted for your region — an estimate.",
+  });
+
+  it("leads with the headline overcharge and the quoted/fair totals", () => {
+    expect(txt).toContain("ESTIMATED $2,050 ABOVE FAIR");
+    expect(txt).toContain("Quoted $3,800");
+  });
+
+  it("includes line items, the third-party tip, findings and the script", () => {
+    expect(txt).toContain("Metal casket: $3,800");
+    expect(txt).toContain("+$2,050 above fair");
+    expect(txt).toContain("buy third-party");
+    expect(txt).toContain("[Possible FTC issue] Casket on a direct-cremation quote");
+    expect(txt).toContain('What to say: "Please remove the casket."');
+  });
+
+  it("carries the what-we'd-do summary and the neutrality footer", () => {
+    expect(txt).toContain("WHAT WE'D DO");
+    expect(txt).toContain("1. Push back on the casket");
+    expect(txt).toContain("takes no money from funeral homes or insurers");
+  });
+});

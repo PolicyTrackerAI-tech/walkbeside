@@ -184,3 +184,86 @@ export function fallbackAdvocacySummary(input: {
       "Every point here comes straight from the price list they gave you. You're allowed to decline anything you don't want, and to compare other homes.",
   };
 }
+
+export interface ShareItem extends RangeAwareItem {
+  centsLow?: number;
+  centsHigh?: number;
+}
+
+export interface ShareResult {
+  items: ShareItem[];
+  totalQuoted: number;
+  totalFairMid: number;
+  potentialSavings: number;
+  violations?: {
+    title: string;
+    severity: DisplayFlag["severity"];
+    whatToSay?: string;
+  }[];
+  summary?: { bottomLine: string; moves: { title: string; detail: string }[] };
+  sourceNote: string;
+}
+
+/**
+ * Render the result as a clean plain-text summary a bereavement coordinator can
+ * paste into an email or text to the family. The handoff artifact — every line
+ * traces to the analysis, nothing invented.
+ */
+export function buildShareText(r: ShareResult): string {
+  const usd = (c: number) => fmtUSD(Math.round(c) / 100);
+  const out: string[] = ["Honest Funeral — price-list check", ""];
+
+  if (r.potentialSavings > 0) {
+    out.push(`ESTIMATED ${usd(r.potentialSavings)} ABOVE FAIR`);
+  } else {
+    out.push("This quote is in line with fair pricing for your region.");
+  }
+  out.push(`Quoted ${usd(r.totalQuoted)} · Fair midpoint ${usd(r.totalFairMid)}`);
+  out.push(r.sourceNote, "", "LINE ITEMS");
+
+  for (const it of r.items) {
+    if (it.isRange && it.centsLow != null && it.centsHigh != null) {
+      out.push(
+        `- ${it.name}: ${usd(it.centsLow)}–${usd(it.centsHigh)} — buy third-party (often 50–80% less)`,
+      );
+      continue;
+    }
+    const fair =
+      it.fairCentsLow != null && it.fairCentsHigh != null
+        ? ` (fair ${usd(it.fairCentsLow)}–${usd(it.fairCentsHigh)})`
+        : "";
+    const verdict = it.classification ? ` — ${it.classification}` : "";
+    const over = overchargeCents(it);
+    const overTxt = over > 0 ? `, +${usd(over)} above fair` : "";
+    out.push(`- ${it.name}: ${usd(it.cents)}${fair}${verdict}${overTxt}`);
+  }
+
+  const findings = r.violations ?? [];
+  if (findings.length) {
+    out.push("", "FTC / UPSELL FINDINGS");
+    for (const v of findings) {
+      const tag =
+        v.severity === "violation"
+          ? "Possible FTC issue"
+          : v.severity === "suspicious"
+            ? "Worth pushing back"
+            : "Note";
+      out.push(`- [${tag}] ${v.title}`);
+      if (v.whatToSay) out.push(`  What to say: "${v.whatToSay}"`);
+    }
+  }
+
+  if (r.summary) {
+    out.push("", "WHAT WE'D DO", r.summary.bottomLine);
+    r.summary.moves.forEach((m, i) =>
+      out.push(`${i + 1}. ${m.title}${m.detail ? ` — ${m.detail}` : ""}`),
+    );
+  }
+
+  out.push(
+    "",
+    "Free and neutral. Honest Funeral takes no money from funeral homes or insurers.",
+    "honestfuneral.co",
+  );
+  return out.join("\n");
+}
