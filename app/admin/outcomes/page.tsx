@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { requireAdminPage } from "@/lib/admin-auth";
 import {
   OutcomesClient,
   type OutcomeCase,
@@ -20,17 +20,10 @@ const NEG_COLS =
 const OUTREACH_COLS =
   "id, negotiation_id, home_name, quote_cents, chosen, listed_price_cents, negotiated_price_cents, hidden_fees, status";
 
-export default async function AdminOutcomesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ key?: string }>;
-}) {
-  const sp = await searchParams;
-  const expected = process.env.ADMIN_PREVIEW_KEY;
-  const provided = (sp.key ?? "").trim();
-  if (!expected || provided !== expected) {
-    notFound();
-  }
+export default async function AdminOutcomesPage() {
+  // Session-based admin gate (logged-in ADMIN_EMAILS allowlist), same as the
+  // other /admin/* tools — replaces the deprecated ?key=ADMIN_PREVIEW_KEY scheme.
+  await requireAdminPage("/admin/outcomes");
 
   const admin = createServiceClient(
     PUBLIC.supabaseUrl,
@@ -90,7 +83,7 @@ export default async function AdminOutcomesPage({
               Could not load outcomes: {error.message}
             </div>
           ) : (
-            <OutcomesClient initial={cases} adminKey={provided} />
+            <OutcomesClient initial={cases} />
           )}
         </div>
       </section>
