@@ -152,8 +152,8 @@ A few reminders before you decide:
 — Don't sign anything yet. Take a day to compare.
 — Read each quote line by line. Cremation arrangements are where
   bundling tricks usually live.
-— You don't owe us anything until you pick a home we presented to
-  you — and then it's a flat $49, nothing more. No upsell here.
+— You don't owe us anything, ever — Honest Funeral is free to
+  families. No upsell here.
 
 Take care,
 The Honest Funeral team

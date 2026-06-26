@@ -43,8 +43,8 @@ export default function ForFuneralHomesPage() {
               <li>
                 <strong>We take no money from funeral homes.</strong> No
                 commissions, no referral fees, no kickbacks, no
-                lead-sale revenue. The family pays our flat $49 fee for
-                advocacy work. Your firm&rsquo;s revenue stays your firm&rsquo;s.
+                lead-sale revenue. We’re funded by the institutions we partner
+                with, never by families. Your firm&rsquo;s revenue stays your firm&rsquo;s.
               </li>
               <li>
                 <strong>The family contracts with you directly.</strong> If

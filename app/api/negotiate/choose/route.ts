@@ -6,9 +6,8 @@ import { notifyChosenHome } from "@/lib/negotiation/notify-chosen-home";
 import { validateOrigin } from "@/lib/http-guards";
 
 /**
- * Family picks a home from their results. Under the upfront-pay model the $49
- * was already charged at /preview, so choosing costs NOTHING more — we just
- * notify the chosen home and close the negotiation.
+ * Family picks a home from their results. Free to families — choosing
+ * costs NOTHING; we just notify the chosen home and close the negotiation.
  *
  * Form POST from the results page so it works without JS.
  */

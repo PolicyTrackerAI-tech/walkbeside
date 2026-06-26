@@ -20,9 +20,9 @@ export default async function NegotiationResultsPage({
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=/negotiate/${id}/results`);
 
-  // Upfront-pay model: anyone who reaches results has already paid (the $49
-  // was charged at checkout, before outreach was sent). Choosing a home costs
-  // nothing more — it just notifies the home and closes the negotiation.
+  // Free to families: outreach is sent when the family submits
+  // /negotiate/start. Choosing a home costs nothing — it just notifies the
+  // home and closes the negotiation.
 
   const { data: neg } = await supabase
     .from("negotiations")

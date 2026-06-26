@@ -154,9 +154,8 @@ export default async function PlanningPage() {
             <CardTitle>We can do the calling for you.</CardTitle>
             <p className="text-ink-soft mb-3">
               Planning ahead means your family won&rsquo;t be making cold
-              calls in the worst week of their life. For a flat $49 &mdash;
-              only if they choose a home we present &mdash; we contact
-              funeral homes near them, pull written itemized quotes, and put
+              calls in the worst week of their life. Free to families &mdash; at
+              no charge &mdash; we contact funeral homes near them, pull written itemized quotes, and put
               the options side by side in their dashboard. They make the
               call. We make sure they don&rsquo;t miss anything.
             </p>
