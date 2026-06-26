@@ -208,6 +208,14 @@ export default function MethodologyPage() {
                 More about our role &rarr;
               </Link>
             </p>
+            <p>
+              And when we get something wrong, we fix it in the open &mdash; see
+              our{" "}
+              <Link href="/corrections" className="text-primary-deep underline">
+                corrections &amp; accuracy page
+              </Link>
+              .
+            </p>
           </div>
 
           <div className="pt-2">
