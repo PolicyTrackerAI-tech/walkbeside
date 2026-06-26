@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 const PRINCIPLES: { label: string; title: string; body: string }[] = [
   {
     label: "Whose side we're on",
-    title: "Paid only by you",
-    body: "No commissions, kickbacks, or referral fees from any funeral home, cemetery, or vendor. Ever. That's the only way to stay on your side.",
+    title: "Beholden to no one",
+    body: "No commissions, kickbacks, or referral fees from any funeral home, cemetery, insurer, or vendor. Ever. That's the only way to stay on your side.",
   },
   {
     label: "What it costs",

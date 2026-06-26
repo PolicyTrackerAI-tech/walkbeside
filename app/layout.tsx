@@ -23,20 +23,20 @@ export const metadata: Metadata = {
     template: "%s — Honest Funeral",
   },
   description:
-    "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
+    "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
   openGraph: {
     type: "website",
     siteName: "Honest Funeral",
     title: "Honest Funeral — quiet help after a loss",
     description:
-      "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
+      "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
     url: "https://honestfuneral.co",
   },
   twitter: {
     card: "summary_large_image",
     title: "Honest Funeral — quiet help after a loss",
     description:
-      "Compare funeral home prices, avoid common upsells, and decide with confidence. Consumer advocacy for families — paid only by you, never by funeral homes.",
+      "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
   },
   robots: { index: true, follow: true },
 };
