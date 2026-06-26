@@ -282,6 +282,132 @@ describe("naiveExtract — precision guards (structural noise stays skipped)", (
   });
 });
 
+// Deploy #11 deferred two wrong-NAME formats: a quantity in its own column
+// (leading/middle), and two items collapsed onto one OCR line. Both now parse,
+// and the matching guards prove the broadened matching never reads a stray
+// number as a quantity or splits a single name that contains a "$" figure.
+describe("naiveExtract — quantity columns (leading / middle / @)", () => {
+  const only = (text: string) => naiveExtract(text).items;
+
+  it("reads a LEADING quantity column and cleans the name", () => {
+    expect(only("10  Death certificates  $250")).toEqual([
+      { name: "Death certificates", cents: 25000, qty: 10 },
+    ]);
+  });
+
+  it("reads a MIDDLE / trailing quantity column (3-column layout)", () => {
+    expect(only("Death certificates  10  $250")).toEqual([
+      { name: "Death certificates", cents: 25000, qty: 10 },
+    ]);
+    expect(only("Certified copies   12   $300")).toEqual([
+      { name: "Certified copies", cents: 30000, qty: 12 },
+    ]);
+  });
+
+  it("reads a 'Qty N' label column", () => {
+    expect(only("Qty 10  Certified copies  $250")).toEqual([
+      { name: "Certified copies", cents: 25000, qty: 10 },
+    ]);
+  });
+
+  it("reads 'N @ $unit' and keeps cents as the TOTAL (qty × unit), not the unit", () => {
+    // FOOTGUN: the stated $125 is per-copy; the line total is 2 × $125 = $250.
+    // Storing the unit ($125 -> 12500) where the total belongs breaks the
+    // subtotal — cents must be 25000.
+    expect(only("Certified copies 2 @ $125")).toEqual([
+      { name: "Certified copies", cents: 25000, qty: 2 },
+    ]);
+  });
+
+  it("keeps cents as the line TOTAL so the per-unit math reads per-copy as fair", () => {
+    const it = naiveExtract("10  Death certificates  $250").items[0];
+    expect(it.cents).toBe(25000); // the TOTAL, not the $25 unit
+    expect(it.qty).toBe(10);
+    const di = LINE_ITEMS.find((i) => i.id === "death-cert")!;
+    const perUnitDollars = it.cents! / it.qty! / 100; // 25 — the per-certificate price
+    expect(perUnitDollars).toBe(25);
+    // Mirrors the route: per-unit items benchmark against the NATIONAL flat
+    // range. $25/cert sits at the fair ceiling — never high/predatory.
+    expect(
+      classifyAgainst(perUnitDollars, di.fairLow, di.fairHigh, di.predatoryAt),
+    ).not.toBe("predatory");
+    expect(["good", "fair"]).toContain(
+      classifyAgainst(perUnitDollars, di.fairLow, di.fairHigh, di.predatoryAt),
+    );
+  });
+
+  it("does NOT read a leading/middle number as a quantity without a cert/copy noun", () => {
+    // The gate (death certificates / certified copies / copies) protects these.
+    expect(only("24 hour visitation $300")).toEqual([
+      { name: "24 hour visitation", cents: 30000 },
+    ]);
+    expect(only("1 hour viewing $200")).toEqual([
+      { name: "1 hour viewing", cents: 20000 },
+    ]);
+    // A real leading count on a non-benchmarked item is left untouched (no qty)
+    // rather than mis-attributed — conservative.
+    expect(only("10 acknowledgement cards $50")).toEqual([
+      { name: "10 acknowledgement cards", cents: 5000 },
+    ]);
+    expect(only("Suite 200")).toEqual([]);
+  });
+
+  it("a quantity of 1 is not attached", () => {
+    expect(only("1  Death certificate  $25")).toEqual([
+      { name: "1 Death certificate", cents: 2500 },
+    ]);
+  });
+});
+
+describe("naiveExtract — two items collapsed onto one OCR line", () => {
+  const only = (text: string) => naiveExtract(text).items;
+
+  it("splits two 'name $price' columns into two items", () => {
+    expect(only("Embalming $895   Dressing $250")).toEqual([
+      { name: "Embalming", cents: 89500 },
+      { name: "Dressing", cents: 25000 },
+    ]);
+  });
+
+  it("splits even with dot leaders and routes each half normally", () => {
+    expect(only("Refrigeration ... $200    Sales tax $42.50")).toEqual([
+      { name: "Refrigeration", cents: 20000 }, // tax half recognized + skipped
+    ]);
+  });
+
+  it("each split half still runs the full pipeline (a qty column inside a half)", () => {
+    expect(only("10 Death certificates $250    Embalming $895")).toEqual([
+      { name: "Death certificates", cents: 25000, qty: 10 },
+      { name: "Embalming", cents: 89500 },
+    ]);
+  });
+
+  it("does NOT split a single name that contains a '$' figure (single-spaced)", () => {
+    expect(only("Casket (a $2,000 value) $1,500")).toEqual([
+      { name: "Casket (a $2,000 value)", cents: 150000 },
+    ]);
+  });
+
+  it("does NOT split a reference / sale price even across a column gap", () => {
+    // name1 ends in 'retail' / name2 starts with 'sale' → one item, last price.
+    const items = only("Casket retail $2,000  sale $1,500");
+    expect(items).toHaveLength(1);
+    expect(items[0].cents).toBe(150000);
+  });
+
+  it("does NOT steal a selection range that has spaces around its dash", () => {
+    expect(only("Caskets $800 - $10,000")).toEqual([
+      { name: "Caskets", cents_low: 80000, cents_high: 1000000 },
+    ]);
+  });
+
+  it("leaves a three-price line for the single-price path (no garbled split)", () => {
+    // Exactly-two-$ guard: a 3-column collapse is not force-split into junk.
+    const items = only("A $1   B $2   C $3");
+    expect(items.every((i) => typeof i.cents === "number")).toBe(true);
+  });
+});
+
 // The bug this guards against: the result could display a zip-adjusted fair
 // range yet stamp the same item "high" because the verdict compared against
 // NATIONAL thresholds. The fix classifies against the SAME adjusted thresholds
