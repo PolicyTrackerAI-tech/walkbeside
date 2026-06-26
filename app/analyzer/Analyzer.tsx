@@ -334,6 +334,29 @@ export function Analyzer() {
 
           {result && (
             <>
+              {/* Letterhead — print only. The printed sheet is the artifact a
+                  family carries into the arrangement conference, so it must
+                  identify itself, carry a date, and state our neutrality. */}
+              <div className="hidden print:block border-b border-border pb-3 mb-2">
+                <div className="flex items-baseline justify-between">
+                  <span className="font-serif text-xl text-ink">
+                    Honest Funeral
+                  </span>
+                  <span className="text-xs text-ink-muted">
+                    Price-list check ·{" "}
+                    {new Date().toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
+                <p className="text-xs text-ink-muted mt-1">
+                  Free and neutral — we take no money from funeral homes or
+                  insurers. An informational estimate, not legal advice.
+                </p>
+              </div>
+
               <ResultHero
                 savings={result.potentialSavings}
                 sourceNote={sourceNote}
@@ -537,6 +560,17 @@ export function Analyzer() {
                     })}
                   </ul>
                 </div>
+              </div>
+
+              {/* Footer — print only. Closes the document with the source note
+                  and where to verify the method. */}
+              <div className="hidden print:block border-t border-border pt-3 mt-4 text-xs text-ink-muted leading-relaxed">
+                <p>{sourceNote}</p>
+                <p className="mt-1">
+                  How these figures are calculated: honestfuneral.co/methodology
+                  · Honest Funeral is free to families and takes no money from
+                  funeral homes or insurers.
+                </p>
               </div>
             </>
           )}
