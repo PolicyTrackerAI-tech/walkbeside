@@ -235,6 +235,23 @@ export function assessCoverage(
     .map((l) => l.trim())
     .filter((l) => PRICE_ON_LINE.test(l) && !TOTAL_LINE.test(l)).length;
   const parsedItems = items.length;
+  // Nothing parsed, but the page clearly has money on it (a bare "Total $X", or
+  // lines we couldn't turn into items) — we can't stand behind any number, so
+  // never let this read as full-coverage "high".
+  if (parsedItems === 0) {
+    const hasMoney = rawText.split(/\r?\n/).some((l) => PRICE_ON_LINE.test(l));
+    return {
+      pricedLines,
+      parsedItems: 0,
+      benchmarked: 0,
+      unbenchmarked: 0,
+      missed: pricedLines,
+      level: hasMoney ? "low" : "high",
+      note: hasMoney
+        ? "We couldn't read any individual line items here — please paste or photograph the itemized list (each service with its own price) so we can check it."
+        : "",
+    };
+  }
   const benchmarked = items.filter(
     (i) => i.isRange || i.classification != null,
   ).length;

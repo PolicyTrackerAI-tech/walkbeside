@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
@@ -148,6 +148,20 @@ export function Analyzer({ partner }: { partner?: string }) {
   const [letter, setLetter] = useState<string | null>(null);
   const [letterBusy, setLetterBusy] = useState(false);
   const [letterCopied, setLetterCopied] = useState(false);
+  // A persistent notice about the SOURCE (e.g. some uploaded pages couldn't be
+  // read). Kept separate from `error` so clicking Analyze — which clears
+  // `error` — can't silently erase a "we only read part of the bill" warning.
+  const [pageWarning, setPageWarning] = useState<string | null>(null);
+  const resultRef = useRef<HTMLDivElement | null>(null);
+
+  // After analysis completes, move focus and scroll to the result so keyboard
+  // and screen-reader users (and anyone on a phone) know it appeared.
+  useEffect(() => {
+    if (result && resultRef.current) {
+      resultRef.current.focus();
+      resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [result]);
 
   async function analyze(opts?: { text?: string; zip?: string; hint?: string }) {
     const useText = opts?.text ?? text;
@@ -155,6 +169,7 @@ export function Analyzer({ partner }: { partner?: string }) {
     setBusy(true);
     setError(null);
     setLetter(null);
+    setLetterCopied(false);
     try {
       // Pass the recommended service type from /decide if we have it —
       // it lets the bundling detector know things like 'this is a direct
@@ -200,6 +215,7 @@ export function Analyzer({ partner }: { partner?: string }) {
 
   function loadSample() {
     setError(null);
+    setPageWarning(null);
     setImagePreviews([]);
     setText(SAMPLE_BILL);
     setZip("");
@@ -210,33 +226,35 @@ export function Analyzer({ partner }: { partner?: string }) {
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? []);
+    const input = e.target;
+    const files = Array.from(input.files ?? []);
     if (!files.length) return;
     setError(null);
+    setPageWarning(null);
     setResult(null);
     setSample(false);
     setUploading(true);
     setImagePreviews([]);
     // Real General Price Lists are often 2–4 pages. Read each photo in turn and
     // stitch the extracted line items together, so a multi-page list checks as
-    // one bill. Previews fill in progressively as pages are read.
+    // one bill. Only a page that actually yielded text becomes a thumbnail, so
+    // the preview count reflects what we truly read.
     try {
       const previews: string[] = [];
       const pages: string[] = [];
       let failed = 0;
       for (const file of files) {
         const { dataUrl, mediaType } = await downscaleImage(file);
-        previews.push(dataUrl);
-        setImagePreviews([...previews]);
         const r = await fetch("/api/extract-price-list-image", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ image: dataUrl, mediaType }),
         });
         const d = await r.json().catch(() => ({}));
-        if (!r.ok) {
+        const pageText = typeof d?.text === "string" ? d.text.trim() : "";
+        if (!r.ok || !pageText) {
           // One bad page among several shouldn't sink the whole upload.
-          if (files.length === 1) {
+          if (files.length === 1 && !r.ok) {
             throw new Error(
               d?.error ??
                 "Couldn't read that photo. Try a clearer image, or type the prices below.",
@@ -245,18 +263,21 @@ export function Analyzer({ partner }: { partner?: string }) {
           failed++;
           continue;
         }
-        if (typeof d?.text === "string" && d.text.trim()) pages.push(d.text.trim());
+        pages.push(pageText);
+        previews.push(dataUrl);
+        setImagePreviews([...previews]);
       }
       const combined = pages.join("\n");
       if (!combined) {
+        setImagePreviews([]);
         throw new Error(
           "Couldn't read the price list from those photos. Try clearer, straight-on images, or paste the prices below.",
         );
       }
       setText(combined);
       if (failed > 0) {
-        setError(
-          `Read ${pages.length} of ${files.length} pages — ${failed} couldn't be read clearly. Review below and re-add any missing pages, or type them in.`,
+        setPageWarning(
+          `We read ${pages.length} of ${files.length} pages — ${failed} couldn't be read clearly, so some line items may be missing. Re-add those pages or type them in before relying on the total.`,
         );
       }
     } catch (err) {
@@ -267,6 +288,8 @@ export function Analyzer({ partner }: { partner?: string }) {
       );
     } finally {
       setUploading(false);
+      // Let the same file re-fire onChange if a read failed and they retry it.
+      input.value = "";
     }
   }
 
@@ -304,6 +327,7 @@ export function Analyzer({ partner }: { partner?: string }) {
   async function draftLetter() {
     if (!result) return;
     setLetterBusy(true);
+    setLetterCopied(false);
     try {
       const r = await fetch("/api/analyze-price-list/draft-letter", {
         method: "POST",
@@ -316,9 +340,17 @@ export function Analyzer({ partner }: { partner?: string }) {
         }),
       });
       const d = await r.json().catch(() => ({}));
-      if (typeof d?.letter === "string") setLetter(d.letter);
+      if (!r.ok || typeof d?.letter !== "string") {
+        setError(
+          "Couldn't draft a message just now — the findings above are still good to use, or try again.",
+        );
+        return;
+      }
+      setLetter(d.letter);
     } catch {
-      // Leave the letter unset; the button stays available to retry.
+      setError(
+        "Couldn't draft a message just now — the findings above are still good to use, or try again.",
+      );
     } finally {
       setLetterBusy(false);
     }
@@ -361,7 +393,8 @@ export function Analyzer({ partner }: { partner?: string }) {
             <p className="text-ink-soft">
               Upload a photo of the General Price List they handed you, or type
               the line items in. We&rsquo;ll match each one to fair-market ranges
-              for your region and flag any FTC violations.
+              for your region and flag likely FTC Funeral Rule problems &mdash; the
+              most common violations and upsells.
             </p>
           </div>
 
@@ -385,7 +418,11 @@ export function Analyzer({ partner }: { partner?: string }) {
                   className="block w-full text-sm text-ink-soft file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-primary-soft file:text-primary-deep hover:file:bg-primary-soft/80 disabled:opacity-60"
                 />
                 {uploading && (
-                  <p className="text-sm text-ink-soft mt-2">
+                  <p
+                    role="status"
+                    aria-live="polite"
+                    className="text-sm text-ink-soft mt-2"
+                  >
                     Reading {imagePreviews.length > 1
                       ? `${imagePreviews.length} pages`
                       : "the price list"}
@@ -445,13 +482,27 @@ export function Analyzer({ partner }: { partner?: string }) {
                   onChange={(e) => {
                     setText(e.target.value);
                     setSample(false);
+                    setPageWarning(null);
                   }}
                   placeholder={`Basic services fee   $2,495\nEmbalming            $1,150\nMetal casket         $4,200\nViewing facility       $750\nGrave liner          $1,800\nDeath certificates (10) $250\nTotal                $12,650`}
                 />
               </div>
               {error && (
-                <div className="text-sm text-bad bg-bad-soft border border-bad/30 rounded-xl px-4 py-3">
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="text-sm text-bad bg-bad-soft border border-bad/30 rounded-xl px-4 py-3"
+                >
                   {error}
+                </div>
+              )}
+              {pageWarning && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="text-sm text-ink bg-warn-soft/50 border border-warn/40 rounded-xl px-4 py-3"
+                >
+                  {pageWarning}
                 </div>
               )}
               <div className="flex flex-wrap items-center gap-3">
@@ -474,7 +525,24 @@ export function Analyzer({ partner }: { partner?: string }) {
           </Card>
 
           {result && (
-            <>
+            <div
+              ref={resultRef}
+              tabIndex={-1}
+              className="space-y-6 focus:outline-none"
+            >
+              {result.items.length === 0 ? (
+                <Card tone="warn">
+                  <CardEyebrow>Nothing to check yet</CardEyebrow>
+                  <CardTitle>We couldn&rsquo;t read any line items</CardTitle>
+                  <p className="text-ink-soft mt-2">
+                    To check a quote we need the itemized list &mdash; each
+                    service or item with its own price. Paste those lines above,
+                    or upload a clearer photo of the itemized page, and try
+                    again.
+                  </p>
+                </Card>
+              ) : (
+              <>
               {sample && (
                 <div className="print:hidden rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft">
                   <span className="font-medium text-ink">This is a sample bill.</span>{" "}
@@ -511,6 +579,12 @@ export function Analyzer({ partner }: { partner?: string }) {
                 sourceNote={sourceNote}
               />
 
+              {pageWarning && (
+                <div className="print:hidden rounded-xl border border-warn/40 bg-warn-soft/50 px-4 py-3 text-sm text-ink">
+                  {pageWarning}
+                </div>
+              )}
+
               {result.coverage &&
                 result.coverage.level !== "high" &&
                 result.coverage.note && (
@@ -546,6 +620,7 @@ export function Analyzer({ partner }: { partner?: string }) {
                   <Textarea
                     rows={14}
                     value={letter}
+                    aria-label="Draft message to the funeral home"
                     onChange={(e) => setLetter(e.target.value)}
                     className="font-sans"
                   />
@@ -657,33 +732,51 @@ export function Analyzer({ partner }: { partner?: string }) {
                 <ViolationsPanel violations={result.violations} />
               )}
 
-              <div className="overflow-x-auto">
-                <div className="rounded-2xl border border-border bg-surface overflow-hidden min-w-[560px]">
-                  <div className="grid grid-cols-12 px-5 py-3 border-b border-border bg-surface-soft text-xs uppercase tracking-wider text-ink-muted">
-                    <div className="col-span-6">Item</div>
-                    <div className="col-span-2 text-right">Quoted</div>
-                    <div className="col-span-2 text-right">Fair range</div>
-                    <div className="col-span-2 text-right">Verdict</div>
-                  </div>
-                  <ul>
+              {/* Responsive semantic table: a real <table> on sm+ (header row,
+                  th scope, and the print page-break-inside:avoid rule), and a
+                  stacked labeled card per item on phones — the kitchen-table
+                  case — so nothing scrolls off-screen. */}
+              <div className="rounded-2xl border border-border bg-surface overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="hidden sm:table-header-group">
+                    <tr className="bg-surface-soft text-xs uppercase tracking-wider text-ink-muted">
+                      <th scope="col" className="text-left font-medium px-5 py-3">Item</th>
+                      <th scope="col" className="text-right font-medium px-5 py-3">Quoted</th>
+                      <th scope="col" className="text-right font-medium px-5 py-3">Fair range</th>
+                      <th scope="col" className="text-right font-medium px-5 py-3">Verdict</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {result.items.map((it, i) => {
+                      const itemCell =
+                        "block sm:table-cell px-5 pt-3 pb-1 sm:py-4 text-ink sm:align-top";
+                      const valCell =
+                        "flex justify-between gap-3 sm:table-cell px-5 py-0.5 pb-2 sm:py-4 sm:align-top sm:text-right";
+                      const lbl = (t: string) => (
+                        <span className="sm:hidden text-xs uppercase tracking-wider text-ink-muted">
+                          {t}
+                        </span>
+                      );
                       if (it.isRange && it.centsLow != null && it.centsHigh != null) {
                         return (
-                          <li
+                          <tr
                             key={i}
-                            className="grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0"
+                            className="block sm:table-row border-b border-border last:border-b-0"
                           >
-                            <div className="col-span-6 text-ink">{it.name}</div>
-                            <div className="col-span-2 text-right text-ink">
-                              {`${fmtUSD(it.centsLow / 100)}–${fmtUSD(it.centsHigh / 100)}`}
-                            </div>
-                            <div className="col-span-2 text-right text-ink-soft">
-                              buy 3rd-party
-                            </div>
-                            <div className="col-span-2 text-right font-medium text-ink-muted">
-                              Selection
-                            </div>
-                          </li>
+                            <td className={itemCell}>{it.name}</td>
+                            <td className={`${valCell} text-ink`}>
+                              {lbl("Quoted")}
+                              <span>{`${fmtUSD(it.centsLow / 100)}–${fmtUSD(it.centsHigh / 100)}`}</span>
+                            </td>
+                            <td className={`${valCell} text-ink-soft`}>
+                              {lbl("Fair range")}
+                              <span>buy 3rd-party</span>
+                            </td>
+                            <td className={`${valCell} font-medium text-ink-muted`}>
+                              {lbl("Verdict")}
+                              <span>Selection</span>
+                            </td>
+                          </tr>
                         );
                       }
                       const tone = it.classification
@@ -698,48 +791,57 @@ export function Analyzer({ partner }: { partner?: string }) {
                             ? "border-l-4 border-l-warn bg-warn-soft/30"
                             : "";
                       return (
-                        <li
+                        <tr
                           key={i}
-                          className={`grid grid-cols-12 px-5 py-4 border-b border-border last:border-b-0 ${flagAccent}`}
+                          className={`block sm:table-row border-b border-border last:border-b-0 ${flagAccent}`}
                         >
-                          <div className="col-span-6 text-ink">
+                          <td className={itemCell}>
                             {it.name}
                             {flag && (
-                              <div
-                                className={`text-xs font-medium mt-0.5 ${flag.severity === "violation" ? "text-bad" : "text-warn"}`}
+                              <span
+                                className={`block text-xs font-medium mt-0.5 ${flag.severity === "violation" ? "text-bad" : "text-warn"}`}
                               >
                                 {flag.severity === "violation"
                                   ? "Possible FTC issue — see below"
                                   : "Worth pushing back — see below"}
-                              </div>
+                              </span>
                             )}
-                          </div>
-                          <div className="col-span-2 text-right text-ink">
-                            {fmtUSD(it.cents / 100)}
-                            {it.qty && it.qty > 1 && (
-                              <div className="text-xs text-ink-muted mt-0.5">
-                                {fmtUSD(it.cents / it.qty / 100)} ea &times; {it.qty}
-                              </div>
-                            )}
-                          </div>
-                          <div className="col-span-2 text-right text-ink-soft">
-                            {it.fairCentsLow != null && it.fairCentsHigh != null
-                              ? `${fmtUSD(it.fairCentsLow / 100)}–${fmtUSD(it.fairCentsHigh / 100)}${it.qty && it.qty > 1 ? " ea" : ""}`
-                              : "—"}
-                          </div>
-                          <div className={`col-span-2 text-right font-medium ${tone.tone}`}>
-                            {tone.label}
-                            {over > 0 && (
-                              <div className="text-xs font-semibold text-bad mt-0.5">
-                                +{fmtUSD(over / 100)} above fair
-                              </div>
-                            )}
-                          </div>
-                        </li>
+                          </td>
+                          <td className={`${valCell} text-ink`}>
+                            {lbl("Quoted")}
+                            <span>
+                              {fmtUSD(it.cents / 100)}
+                              {it.qty && it.qty > 1 && (
+                                <span className="block text-xs text-ink-muted mt-0.5">
+                                  {fmtUSD(it.cents / it.qty / 100)} ea &times; {it.qty}
+                                </span>
+                              )}
+                            </span>
+                          </td>
+                          <td className={`${valCell} text-ink-soft`}>
+                            {lbl("Fair range")}
+                            <span>
+                              {it.fairCentsLow != null && it.fairCentsHigh != null
+                                ? `${fmtUSD(it.fairCentsLow / 100)}–${fmtUSD(it.fairCentsHigh / 100)}${it.qty && it.qty > 1 ? " ea" : ""}`
+                                : "—"}
+                            </span>
+                          </td>
+                          <td className={`${valCell} font-medium ${tone.tone}`}>
+                            {lbl("Verdict")}
+                            <span>
+                              {tone.label}
+                              {over > 0 && (
+                                <span className="block text-xs font-semibold text-bad mt-0.5">
+                                  +{fmtUSD(over / 100)} above fair
+                                </span>
+                              )}
+                            </span>
+                          </td>
+                        </tr>
                       );
                     })}
-                  </ul>
-                </div>
+                  </tbody>
+                </table>
               </div>
 
               {/* Footer — print only. Closes the document with the source note
@@ -752,7 +854,9 @@ export function Analyzer({ partner }: { partner?: string }) {
                   funeral homes or insurers.
                 </p>
               </div>
-            </>
+              </>
+              )}
+            </div>
           )}
         </div>
       </section>
@@ -780,7 +884,8 @@ function ResultHero({
               {fmtUSD(savings / 100)}
             </div>
             <p className="text-ink-soft mt-2">
-              above fair for your region &mdash; money you may be able to keep.
+              above the fair range for your region &mdash; worth questioning before
+              you agree to it.
             </p>
           </>
         ) : (
@@ -853,7 +958,7 @@ function Stat({
 }
 
 const SEVERITY_LABEL: Record<Severity, string> = {
-  violation: "FTC violation",
+  violation: "Likely FTC violation",
   suspicious: "Suspicious upsell",
   info: "Worth checking",
 };

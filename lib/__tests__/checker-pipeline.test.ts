@@ -63,13 +63,11 @@ function analyze(text: string, zip: string) {
   const priced = items.filter((i) => !i.isRange);
   const totalQuoted =
     extracted.total_cents ?? priced.reduce((s, i) => s + (i.cents || 0), 0);
-  const totalFairLow = priced.reduce((s, i) => s + (i.fairCentsLow ?? i.cents), 0);
-  const totalFairHigh = priced.reduce(
-    (s, i) => s + (i.fairCentsHigh ?? i.cents),
-    0,
-  );
-  const totalFairMid = Math.round((totalFairLow + totalFairHigh) / 2);
-  const potentialSavings = Math.max(totalQuoted - totalFairMid, 0);
+  // Headline must equal the sum of the per-item overcharge badges — NOT
+  // totalQuoted - totalFairMid (which would charge un-benchmarked lines, ranges,
+  // padded totals, and per-copy death-cert quantities as overcharge).
+  const potentialSavings = savingsBreakdown(items, []).negotiateCents;
+  const totalFairMid = Math.max(0, totalQuoted - potentialSavings);
   const violations = runRules({
     rawText: text,
     items: items as AnalyzedItem[],
@@ -147,6 +145,17 @@ describe("checker pipeline (end-to-end, deterministic)", () => {
       certs?.classification === "high" || certs?.classification === "predatory",
     ).toBe(false);
     expect(overchargeCents(certs!)).toBe(0);
+
+    // The headline "above fair" equals the sum of the per-item overcharge
+    // badges — never the inflated totalQuoted - totalFairMid. The fair
+    // death-cert line contributes $0, not a phantom per-each overcharge, and
+    // the three summary stats reconcile.
+    const badgeSum = r.items.reduce(
+      (s, it) => s + overchargeCents(it as DisplayItem),
+      0,
+    );
+    expect(r.potentialSavings).toBe(badgeSum);
+    expect(r.totalQuoted - r.potentialSavings).toBe(r.totalFairMid);
   });
 
   it("never shows an overcharge on an item classified within range", () => {

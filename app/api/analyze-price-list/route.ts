@@ -18,7 +18,11 @@ import {
   stripCodeFence,
   type RawItem,
 } from "@/lib/negotiation/price-list-parse";
-import { fallbackAdvocacySummary, assessCoverage } from "@/lib/analyzer-display";
+import {
+  fallbackAdvocacySummary,
+  assessCoverage,
+  savingsBreakdown,
+} from "@/lib/analyzer-display";
 import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
@@ -147,16 +151,22 @@ export async function POST(req: Request) {
   const totalQuoted =
     extracted.total_cents ?? priced.reduce((s, i) => s + (i.cents || 0), 0);
 
-  const totalFairLow = priced.reduce(
-    (s, i) => s + (i.fairCentsLow ?? i.cents),
-    0,
-  );
-  const totalFairHigh = priced.reduce(
-    (s, i) => s + (i.fairCentsHigh ?? i.cents),
-    0,
-  );
-  const totalFairMid = Math.round((totalFairLow + totalFairHigh) / 2);
-  const potentialSavings = Math.max(totalQuoted - totalFairMid, 0);
+  // The headline "$X above fair" MUST equal the sum of the per-item overcharge
+  // badges the family sees in the table — never `totalQuoted - totalFairMid`,
+  // which would also charge un-benchmarked pass-through lines, OCR-dropped or
+  // home-padded gaps in the stated total, casket/urn/vault ranges, and the full
+  // per-COPY quantity of a fairly-priced per-unit item (10 death certs at $25)
+  // as "overcharge" — an indefensible number that contradicts the item table.
+  // savingsBreakdown sums overchargeCents (qty-aware, range-excluding, only
+  // high/predatory, clamped ≥0), which is exactly the visible badge total.
+  const potentialSavings = savingsBreakdown(items, []).negotiateCents;
+  // Fair total = what THIS bill would cost if the overpriced items came down to
+  // fair (everything else, including correctly-fair per-unit items, stays at the
+  // quoted price). Derived from the headline so the three summary stats always
+  // reconcile: Quoted − Above-fair = Fair total.
+  const totalFairMid = Math.max(0, totalQuoted - potentialSavings);
+  const totalFairLow = totalFairMid;
+  const totalFairHigh = totalFairMid;
 
   // How much of the bill we can stand behind. If OCR dropped lines, or we
   // parsed items we don't benchmark, the headline number is built on a partial

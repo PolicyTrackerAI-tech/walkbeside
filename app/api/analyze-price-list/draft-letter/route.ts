@@ -12,16 +12,17 @@ import { readLimitedJson } from "@/lib/http-guards";
  * prices, no new claims). Always returns a letter: a deterministic fallback is
  * built from the findings if Claude is unavailable or returns nothing usable.
  */
+const cents = z.number().finite().nonnegative();
 const Item = z.object({
   name: z.string().max(200),
-  cents: z.number(),
+  cents,
   classification: z.enum(["good", "fair", "high", "predatory"]).optional(),
-  fairCentsLow: z.number().optional(),
-  fairCentsHigh: z.number().optional(),
+  fairCentsLow: cents.optional(),
+  fairCentsHigh: cents.optional(),
   isRange: z.boolean().optional(),
-  centsLow: z.number().optional(),
-  centsHigh: z.number().optional(),
-  qty: z.number().optional(),
+  centsLow: cents.optional(),
+  centsHigh: cents.optional(),
+  qty: z.number().finite().nonnegative().optional(),
 });
 
 const Body = z.object({
@@ -36,8 +37,8 @@ const Body = z.object({
     )
     .max(30)
     .optional(),
-  potentialSavings: z.number().optional(),
-  totalQuoted: z.number().optional(),
+  potentialSavings: cents.optional(),
+  totalQuoted: cents.optional(),
 });
 
 export async function POST(req: Request) {
