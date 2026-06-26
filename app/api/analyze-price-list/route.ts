@@ -17,7 +17,7 @@ import {
   stripCodeFence,
   type RawItem,
 } from "@/lib/negotiation/price-list-parse";
-import { fallbackAdvocacySummary } from "@/lib/analyzer-display";
+import { fallbackAdvocacySummary, assessCoverage } from "@/lib/analyzer-display";
 import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
@@ -153,6 +153,11 @@ export async function POST(req: Request) {
   const totalFairMid = Math.round((totalFairLow + totalFairHigh) / 2);
   const potentialSavings = Math.max(totalQuoted - totalFairMid, 0);
 
+  // How much of the bill we can stand behind. If OCR dropped lines, or we
+  // parsed items we don't benchmark, the headline number is built on a partial
+  // read — say so plainly rather than projecting false confidence.
+  const coverage = assessCoverage(text, items);
+
   // Run the bundling-detection rules engine against the raw text + parsed
   // items. Returns FTC violations, suspicious upsells, and informational
   // flags. Margaret refactor — the moat.
@@ -201,6 +206,7 @@ export async function POST(req: Request) {
     potentialSavings,
     violations,
     summary,
+    coverage,
   });
 }
 

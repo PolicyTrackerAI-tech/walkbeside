@@ -43,6 +43,16 @@ interface AdvocacyMove {
   detail: string;
 }
 
+interface Coverage {
+  pricedLines: number;
+  parsedItems: number;
+  benchmarked: number;
+  unbenchmarked: number;
+  missed: number;
+  level: "high" | "partial" | "low";
+  note: string;
+}
+
 interface AnalyzerResult {
   items: AnalyzerItem[];
   totalQuoted: number;
@@ -54,6 +64,7 @@ interface AnalyzerResult {
     moves: AdvocacyMove[];
     reassurance: string;
   };
+  coverage?: Coverage;
 }
 
 const TONES: Record<string, { label: string; tone: string }> = {
@@ -210,6 +221,7 @@ export function Analyzer() {
       violations: result.violations,
       summary: result.summary,
       sourceNote,
+      coverage: result.coverage,
     });
     try {
       await navigator.clipboard.writeText(text);
@@ -325,6 +337,12 @@ export function Analyzer() {
                 savings={result.potentialSavings}
                 sourceNote={sourceNote}
               />
+
+              {result.coverage &&
+                result.coverage.level !== "high" &&
+                result.coverage.note && (
+                  <CoverageNote coverage={result.coverage} />
+                )}
 
               <div className="flex flex-wrap gap-3 print:hidden">
                 <Button variant="secondary" onClick={copyResults}>
@@ -564,6 +582,30 @@ function ResultHero({
         <p className="text-xs text-ink-muted mt-3">{sourceNote}</p>
       </div>
     </Card>
+  );
+}
+
+/**
+ * Honesty band: when we couldn't read the whole bill, or matched items we don't
+ * benchmark, say so before the family acts on the number. "low" (likely missed
+ * lines) gets a warn tone; "partial" (un-benchmarked items only) stays calm —
+ * the estimate is still conservative, we just didn't check everything.
+ */
+function CoverageNote({ coverage }: { coverage: Coverage }) {
+  const low = coverage.level === "low";
+  return (
+    <div
+      className={`rounded-xl border px-4 py-3 text-sm leading-relaxed ${
+        low
+          ? "border-warn/40 bg-warn-soft/50 text-ink"
+          : "border-border bg-surface-soft text-ink-soft"
+      }`}
+    >
+      <span className="font-medium text-ink">
+        {low ? "Double-check this against your copy. " : "Heads up. "}
+      </span>
+      {coverage.note}
+    </div>
   );
 }
 

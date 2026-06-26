@@ -191,6 +191,80 @@ export function fallbackAdvocacySummary(input: {
   };
 }
 
+/**
+ * How much of the bill we can stand behind. The checker's headline number
+ * ("$X above fair") is only as trustworthy as the read it's built on — if OCR
+ * dropped half the lines, or matched items we don't benchmark, a confident
+ * total would be a lie. This assesses, deterministically, two honest gaps:
+ *
+ *  1. MISSED — priced lines in the source we didn't turn into items (a bad
+ *     photo, a column we couldn't read). The estimate is built on a partial
+ *     read; the family must compare against the copy in their hand.
+ *  2. UNBENCHMARKED — lines we parsed but have no fair-price reference for, so
+ *     we passed them through at face value. They don't inflate the estimate
+ *     (conservative by design), but the family should know they weren't checked.
+ *
+ * Returns a calm, specific note only when confidence is below "high" — silence
+ * when we read the whole bill.
+ */
+export interface CoverageReport {
+  /** Source lines that carry a price (a "total" line is excluded). */
+  pricedLines: number;
+  /** Items we parsed out of the source. */
+  parsedItems: number;
+  /** Parsed items we matched to a benchmark (classified) or recognized merchandise (range). */
+  benchmarked: number;
+  /** Parsed items with no benchmark — passed through at face value. */
+  unbenchmarked: number;
+  /** Priced source lines that never became an item (likely an OCR/read gap). */
+  missed: number;
+  level: "high" | "partial" | "low";
+  /** Family-facing caveat; empty string when level is "high". */
+  note: string;
+}
+
+const PRICE_ON_LINE = /\$\s?\d/;
+const TOTAL_LINE = /\b(total|subtotal|balance|amount\s+due|grand\s+total)\b/i;
+
+export function assessCoverage(
+  rawText: string,
+  items: { classification?: string; isRange?: boolean }[],
+): CoverageReport {
+  const pricedLines = rawText
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter((l) => PRICE_ON_LINE.test(l) && !TOTAL_LINE.test(l)).length;
+  const parsedItems = items.length;
+  const benchmarked = items.filter(
+    (i) => i.isRange || i.classification != null,
+  ).length;
+  const unbenchmarked = parsedItems - benchmarked;
+  const missed = Math.max(0, pricedLines - parsedItems);
+
+  const missRatio = pricedLines > 0 ? missed / pricedLines : 0;
+  let level: CoverageReport["level"] = "high";
+  if (missed >= 2 || missRatio > 0.34) level = "low";
+  else if (missed === 1 || unbenchmarked > 0) level = "partial";
+
+  let note = "";
+  if (missed >= 1) {
+    note =
+      `Your price list looks like it has about ${pricedLines} priced lines, but we could ` +
+      `only read ${parsedItems} of them clearly. Compare this against the copy in your hand ` +
+      `— and try a sharper, straight-on photo if any lines are missing — before you rely on the total.`;
+  } else if (unbenchmarked > 0) {
+    const s = unbenchmarked === 1 ? "" : "s";
+    const them = unbenchmarked === 1 ? "it" : "them";
+    const isnt = unbenchmarked === 1 ? "it isn't" : "they aren't";
+    note =
+      `We checked ${benchmarked} of ${parsedItems} line items against fair-price data. ` +
+      `The other ${unbenchmarked} item${s} aren't in our reference set yet, so we left ${them} ` +
+      `at face value — ${isnt} part of the overcharge estimate.`;
+  }
+
+  return { pricedLines, parsedItems, benchmarked, unbenchmarked, missed, level, note };
+}
+
 export interface ShareItem extends RangeAwareItem {
   centsLow?: number;
   centsHigh?: number;
@@ -208,6 +282,7 @@ export interface ShareResult {
   }[];
   summary?: { bottomLine: string; moves: { title: string; detail: string }[] };
   sourceNote: string;
+  coverage?: CoverageReport;
 }
 
 /**
@@ -225,7 +300,11 @@ export function buildShareText(r: ShareResult): string {
     out.push("This quote is in line with fair pricing for your region.");
   }
   out.push(`Quoted ${usd(r.totalQuoted)} · Fair midpoint ${usd(r.totalFairMid)}`);
-  out.push(r.sourceNote, "", "LINE ITEMS");
+  out.push(r.sourceNote);
+  if (r.coverage && r.coverage.level !== "high" && r.coverage.note) {
+    out.push(`Note on coverage: ${r.coverage.note}`);
+  }
+  out.push("", "LINE ITEMS");
 
   for (const it of r.items) {
     if (it.isRange && it.centsLow != null && it.centsHigh != null) {

@@ -5,6 +5,7 @@ import {
   savingsBreakdown,
   fallbackAdvocacySummary,
   buildShareText,
+  assessCoverage,
   type DisplayItem,
   type DisplayFlag,
   type RangeAwareItem,
@@ -223,6 +224,89 @@ type FallbackInputViolation = {
   severity: "violation" | "suspicious" | "info";
   whatToSay?: string;
 };
+
+describe("assessCoverage", () => {
+  const FULL = `Basic services fee $2,195
+Embalming $1,150
+Metal casket $3,800
+Death certificates (10) $250`;
+
+  it("reports high confidence when every priced line is parsed + benchmarked", () => {
+    const items = [
+      { classification: "high" },
+      { classification: "fair" },
+      { isRange: true },
+      { classification: "fair" },
+    ];
+    const c = assessCoverage(FULL, items);
+    expect(c.pricedLines).toBe(4);
+    expect(c.parsedItems).toBe(4);
+    expect(c.missed).toBe(0);
+    expect(c.level).toBe("high");
+    expect(c.note).toBe("");
+  });
+
+  it("excludes a total line from the priced-line count", () => {
+    const text = `Embalming $1,150\nTotal $2,300`;
+    const c = assessCoverage(text, [{ classification: "fair" }]);
+    expect(c.pricedLines).toBe(1); // the total line doesn't count as a missed item
+    expect(c.missed).toBe(0);
+    expect(c.level).toBe("high");
+  });
+
+  it("flags low confidence when priced lines outnumber parsed items (OCR gap)", () => {
+    // 4 priced lines in the source, only 2 items came back → 2 missed.
+    const c = assessCoverage(FULL, [
+      { classification: "high" },
+      { classification: "fair" },
+    ]);
+    expect(c.missed).toBe(2);
+    expect(c.level).toBe("low");
+    expect(c.note).toContain("4 priced lines");
+    expect(c.note).toContain("2 of them");
+  });
+
+  it("flags partial confidence for a single missed line", () => {
+    const c = assessCoverage(FULL, [
+      { classification: "high" },
+      { classification: "fair" },
+      { classification: "fair" },
+    ]);
+    expect(c.missed).toBe(1);
+    expect(c.level).toBe("partial");
+    expect(c.note).toContain("priced lines");
+  });
+
+  it("flags partial + explains un-benchmarked items left at face value", () => {
+    // All 4 lines parsed, but one wasn't matched to a benchmark.
+    const c = assessCoverage(FULL, [
+      { classification: "high" },
+      { classification: "fair" },
+      {}, // unbenchmarked pass-through
+      { classification: "fair" },
+    ]);
+    expect(c.missed).toBe(0);
+    expect(c.benchmarked).toBe(3);
+    expect(c.unbenchmarked).toBe(1);
+    expect(c.level).toBe("partial");
+    expect(c.note).toContain("3 of 4 line items");
+    expect(c.note).toContain("face value");
+  });
+
+  it("counts a range item as benchmarked (we gave guidance on it)", () => {
+    const c = assessCoverage("Caskets $1,200-$10,000", [{ isRange: true }]);
+    expect(c.benchmarked).toBe(1);
+    expect(c.unbenchmarked).toBe(0);
+    expect(c.level).toBe("high");
+  });
+
+  it("does not divide by zero on text with no priced lines", () => {
+    const c = assessCoverage("Itemized statement of goods and services", []);
+    expect(c.pricedLines).toBe(0);
+    expect(c.missed).toBe(0);
+    expect(c.level).toBe("high");
+  });
+});
 
 describe("buildShareText", () => {
   const txt = buildShareText({
