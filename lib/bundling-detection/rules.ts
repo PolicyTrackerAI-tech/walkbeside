@@ -137,6 +137,48 @@ function isCremationOnly(ctx: DetectionContext): boolean {
   return !/burial|interment/i.test(withoutVaultNames);
 }
 
+// A negated requirement, e.g. "state law does NOT require...", "a casket is not
+// required", "no vault needed". NON-NEGOTIABLE guard for the "required by law"
+// rules: the FTC Funeral Rule's OWN mandated disclosures literally contain
+// "state or local law does not require that you buy a container" and "a casket
+// is not required for direct cremation" — without this guard those COMPLIANT
+// lines would fire a false "violation", the single worst false positive.
+const NEGATED_REQUIRE =
+  /\b(?:no|not|never|n't|isn't|aren't|doesn't|does not|do not|no longer|cannot|can't)\b[^.;\n]{0,20}?(?:requir|mandat|necessary|need)/i;
+
+/**
+ * Scan `text` for a funeral-noun `keyword`; for each occurrence take a ~80-char
+ * window and return it IFF a `trigger` (mandate) phrase appears in that window
+ * and is NOT negated (and no `excludeInWindow` term is present). Shared by the
+ * vault/casket/declinable-item/cremation-casket "required by law" rules.
+ */
+function windowedClaim(opts: {
+  text: string;
+  keyword: RegExp;
+  trigger: RegExp;
+  window?: number;
+  excludeInWindow?: RegExp;
+}): string | null {
+  const { text, keyword, trigger, window = 80, excludeInWindow } = opts;
+  const kw = new RegExp(keyword.source, "gi");
+  let m: RegExpExecArray | null;
+  while ((m = kw.exec(text)) !== null) {
+    const win = text.slice(
+      Math.max(0, m.index - window),
+      Math.min(text.length, m.index + m[0].length + window),
+    );
+    if (!trigger.test(win)) continue;
+    if (NEGATED_REQUIRE.test(win)) continue;
+    if (excludeInWindow && excludeInWindow.test(win)) continue;
+    return win.replace(/\s+/g, " ").trim();
+  }
+  return null;
+}
+
+// Mandate phrases that assert a LEGAL requirement (not a cemetery policy).
+const LAW_MANDATE =
+  /required by (?:state |local )?law|state law requires|legally (?:required|mandated)|required by statute|mandated by law|the law requires/i;
+
 // ---------------------------------------------------------------------------
 // The rules themselves.
 // ---------------------------------------------------------------------------
@@ -418,11 +460,513 @@ export const RULES: Rule[] = [
       };
     },
   },
+  // =========================================================================
+  // Expansion (2026-06-26): sourced + adversarially verified against the
+  // verbatim text of 16 CFR Part 453 (law.cornell.edu). Only 3 carry
+  // "violation" severity — all self-proving from the GPL text and gated by the
+  // mandatory negation guard (windowedClaim/NEGATED_REQUIRE). When unsure, the
+  // grading is "suspicious"/"info" — a false "FTC VIOLATION" is the worst case.
+  // =========================================================================
+  {
+    id: "embalming-on-no-viewing-arrangement",
+    detect(ctx) {
+      const noViewing =
+        isDirectCremation(ctx) ||
+        /immediate burial|direct burial/i.test(ctx.rawText) ||
+        ctx.serviceTypeHint === "body-donation";
+      if (!noViewing) return null;
+      // A family may lawfully authorize embalming for a viewing held BEFORE
+      // cremation — we can't disprove that, so don't fire if a viewing is shown.
+      if (/view(?:ing)?|visitation|open[\s-]?casket/i.test(ctx.rawText)) return null;
+      const embalming = findItem(ctx, (i) => itemMentions(i, EMBALMING_KEYWORDS));
+      if (!embalming || embalming.cents <= 0) return null; // $0/declined line is the main FP
+      return {
+        ruleId: "embalming-on-no-viewing-arrangement",
+        severity: "suspicious",
+        title: "Embalming charged on a no-viewing arrangement",
+        description:
+          "On a direct cremation or immediate burial with no viewing, embalming is almost never needed. The FTC Funeral Rule's required itemized-statement notice says you do not have to pay for embalming you did not approve when you select arrangements like direct cremation or immediate burial. If no one signed off on it here, you can have it removed.",
+        ftcReference: "16 CFR §453.5(b)",
+        evidence: embalming.name,
+        whatToSay:
+          "I selected a no-viewing arrangement. Did the family authorize embalming in writing? If not, please remove it — under the Funeral Rule I don't have to pay for embalming I didn't approve on a direct cremation or immediate burial.",
+      };
+    },
+  },
+  {
+    id: "vault-required-by-law-claim",
+    detect(ctx) {
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword: /vault|grave liner|outer burial container|burial container/i,
+        trigger: LAW_MANDATE,
+      });
+      if (!win) return null;
+      return {
+        ruleId: "vault-required-by-law-claim",
+        severity: "violation",
+        title: "Vault claimed to be required by law",
+        description:
+          "No U.S. state law requires a burial vault or grave liner. A cemetery may require one as its own policy — but that is the cemetery's rule, not state law. The FTC Funeral Rule makes it a deceptive act to represent that state or local law requires an outer burial container when that isn't the case.",
+        ftcReference: "16 CFR §453.3(c)(1)",
+        evidence: win,
+        whatToSay:
+          "Your price list says a vault is required by law. No state law requires a vault — a cemetery can require one as policy, but that's not the law. Please correct that statement, and tell me whether this is actually the cemetery's policy.",
+      };
+    },
+  },
+  {
+    id: "casket-required-by-law-claim",
+    detect(ctx) {
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword: /casket|coffin/i,
+        trigger: LAW_MANDATE,
+        excludeInWindow: /casket coach|hearse|coach/i,
+      });
+      if (!win) return null;
+      const directCremation =
+        isDirectCremation(ctx) && /direct cremation|immediate cremation/i.test(win);
+      return {
+        ruleId: "casket-required-by-law-claim",
+        severity: "violation",
+        title: "Casket claimed to be required by law",
+        description:
+          "No law requires a casket. The FTC Funeral Rule prohibits a funeral home from representing that any federal, state, or local law (or a cemetery or crematory) requires you to buy a casket when that isn't true. For direct cremation specifically, the Rule also bars claiming a casket is required at all.",
+        ftcReference: directCremation
+          ? "16 CFR §453.3(d)(1); §453.3(b)(1) for direct cremation"
+          : "16 CFR §453.3(d)(1)",
+        evidence: win,
+        whatToSay:
+          "Your price list states a casket is required by law. No law requires a casket — for direct cremation I'm entitled to use an alternative container. Please correct that and remove any forced casket charge.",
+      };
+    },
+  },
+  {
+    id: "declinable-item-required-by-law-claim",
+    detect(ctx) {
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword:
+          /register book|guest book|memorial folder|memorial card|prayer card|\burn\b|keepsake|limousine|flowers|obituary|use of (?:the )?(?:facilities|chapel)|facilities fee/i,
+        trigger: LAW_MANDATE,
+        // Exclusion set: defer to the dedicated vault/casket/embalming rules.
+        excludeInWindow:
+          /casket|coffin|vault|outer burial container|grave liner|embalm|basic services|services of (?:the )?funeral director/i,
+      });
+      if (!win) return null;
+      return {
+        ruleId: "declinable-item-required-by-law-claim",
+        severity: "suspicious",
+        title: "An optional item claimed to be required by law",
+        description:
+          "Things like a register book, prayer cards, an urn, a limousine, or use of the chapel are optional purchases — no law requires them. The FTC Funeral Rule prohibits representing that a law (or a cemetery/crematory) requires any funeral good or service when it doesn't. Worth confirming with the home.",
+        ftcReference: "16 CFR §453.3(d)(1)",
+        evidence: win,
+        whatToSay:
+          "Your price list suggests this item is required by law. As far as I know it's optional — can you point to the specific law? If there isn't one, I'd like to decline it.",
+      };
+    },
+  },
+  {
+    id: "cremation-casket-asserted-required",
+    detect(ctx) {
+      if (!isDirectCremation(ctx)) return null;
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword: /casket|coffin/i,
+        trigger: /required|mandatory|must (?:have|purchase|buy)|you (?:must|need)/i,
+        // Hearse guard + don't fire when the casket is tied to a (lawful)
+        // viewing or where an alternative container is already offered.
+        excludeInWindow:
+          /casket coach|hearse|coach|alternative container|view(?:ing)?|visitation/i,
+      });
+      if (!win) return null;
+      return {
+        ruleId: "cremation-casket-asserted-required",
+        severity: "violation",
+        title: "Casket asserted as required for direct cremation",
+        description:
+          "For a direct cremation, the FTC Funeral Rule specifically prohibits a funeral home from representing that a casket is required — by law or otherwise. You are entitled to use an inexpensive alternative container instead.",
+        ftcReference: "16 CFR §453.3(b)(1)",
+        evidence: win,
+        whatToSay:
+          "Your price list says a casket is required for direct cremation. That's prohibited by the Funeral Rule — please remove it and provide the alternative container you're required to make available.",
+      };
+    },
+  },
+  {
+    id: "alternative-container-not-offered",
+    detect(ctx) {
+      if (!isDirectCremation(ctx)) return null;
+      const ALT =
+        /alternative container|unfinished wood|fiberboard|cardboard|pressed[\s-]?wood|composition (?:material|box)|cremation container|minimum container|non-metal (?:receptacle|container)/i;
+      if (ALT.test(ctx.rawText) || ctx.items.some((i) => ALT.test(i.name))) return null;
+      return {
+        ruleId: "alternative-container-not-offered",
+        severity: "suspicious",
+        title: "No alternative container shown on a direct-cremation quote",
+        description:
+          "If a funeral home arranges direct cremations, the FTC Funeral Rule requires it to make an inexpensive 'alternative container' (an unfinished wood or fiberboard box) available. I don't see one on what you shared — it may be on their separate casket price list, but it's worth confirming so you aren't pushed toward a casket you don't need.",
+        ftcReference: "16 CFR §453.4(a)(2)",
+        whatToSay:
+          "I don't see an alternative container listed for direct cremation. The Funeral Rule requires you to make one available — please send me its price.",
+      };
+    },
+  },
+  {
+    id: "alternative-container-overpriced",
+    detect(ctx) {
+      const ALT =
+        /alternative container|unfinished wood|fiberboard|cardboard|pressed[\s-]?wood|composition|cremation container|minimum container/i;
+      const item = findItem(
+        ctx,
+        (i) => ALT.test(i.name) && !itemMentions(i, CASKET_KEYWORDS),
+      );
+      if (!item) return null;
+      const over =
+        item.classification === "predatory" ||
+        item.classification === "high" ||
+        item.cents > 300_00;
+      if (!over) return null;
+      return {
+        ruleId: "alternative-container-overpriced",
+        severity: "suspicious",
+        title: "Alternative container priced like a casket",
+        description:
+          "An 'alternative container' is, by FTC definition, an unfinished, non-metal box with no ornamentation or fixed lining — it should be inexpensive (commonly around $50–$150). This one is priced far above that, which usually means you're being steered toward casket-level pricing for a basic cremation box.",
+        ftcReference: "16 CFR §453.1(a)",
+        evidence: item.name,
+        whatToSay:
+          "An alternative container is just an unfinished box — this price looks like a casket. What's your least expensive alternative container for direct cremation?",
+      };
+    },
+  },
+  {
+    id: "rental-casket-sold-as-purchase",
+    detect(ctx) {
+      if (!(isCremationOnly(ctx) || /cremation/i.test(ctx.rawText))) return null;
+      if (/rental casket|ceremonial casket|rent(?:al)? (?:a )?casket/i.test(ctx.rawText))
+        return null;
+      const casket = findItem(
+        ctx,
+        (i) =>
+          mentionsCasket(i) &&
+          (i.cents > 1_500_00 ||
+            i.classification === "high" ||
+            i.classification === "predatory"),
+      );
+      if (!casket) return null;
+      return {
+        // No ftcReference — there is no Part 453 provision requiring a rental
+        // casket; this is a pure cost-saving nudge, graded info-grade suspicious.
+        ruleId: "rental-casket-sold-as-purchase",
+        severity: "suspicious",
+        title: "Consider a rental casket for the viewing",
+        description:
+          "For a cremation with a viewing, many funeral homes offer a 'rental' (ceremonial) casket — the body is presented in it for the service, then cremated in an inexpensive insert. That can cost far less than buying a casket outright for a cremation. It's worth asking about.",
+        evidence: casket.name,
+        whatToSay:
+          "We're doing a cremation. Do you offer a rental or ceremonial casket for the viewing instead of buying one outright? I'd like to compare the cost.",
+      };
+    },
+  },
+  {
+    id: "viewing-witness-id-fee-tied-to-cremation",
+    detect(ctx) {
+      if (!isCremationOnly(ctx)) return null;
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword:
+          /identification (?:viewing|fee)|witness(?:ed)? cremation|viewing (?:prior to|before) cremation|ID viewing|positive identification/i,
+        trigger: /required|mandatory|non-?optional|must|not optional/i,
+        window: 60,
+      });
+      if (!win) return null;
+      return {
+        ruleId: "viewing-witness-id-fee-tied-to-cremation",
+        severity: "suspicious",
+        title: "Confirm a viewing/ID fee on a cremation quote is optional",
+        description:
+          "Some cremation quotes attach a viewing or identification/witness fee. If it's presented as required, the FTC Funeral Rule prohibits conditioning one service on the purchase of another. If it's genuinely optional you can decline it — but a crematory may require positive ID as a lawful safety step, so it's worth confirming.",
+        ftcReference: "16 CFR §453.4(b)(1)(i)",
+        evidence: win,
+        whatToSay:
+          "Is this identification/viewing fee optional? If I can decline it, please remove it — and if it's required, tell me whether that's your policy or a state requirement.",
+      };
+    },
+  },
+  {
+    id: "non-declinable-prep-fee",
+    detect(ctx) {
+      const PREP =
+        /dressing|casketing|cosmetolog|cosmetic|restorative art|preparation of (?:the )?(?:body|remains)|sanitary care|washing and disinfect|setting features/i;
+      const item = findItem(
+        ctx,
+        (i) =>
+          PREP.test(i.name) &&
+          !/basic services? (?:fee|charge)|services? of (?:the )?funeral director/i.test(
+            i.name,
+          ),
+      );
+      if (!item) return null;
+      // Require a non-declinability token in proximity to a prep keyword — NOT
+      // anywhere in rawText (the FTC boilerplate contains "required").
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword: PREP,
+        trigger: /non-?declinable|mandatory|required|cannot be declined|not optional/i,
+        window: 50,
+      });
+      if (!win) return null;
+      if (/optional|you may decline|may be declined|can be declined/i.test(win)) return null;
+      return {
+        ruleId: "non-declinable-prep-fee",
+        severity: "suspicious",
+        title: "A prep service charged as non-declinable",
+        description:
+          "Other than the single basic services fee, the FTC Funeral Rule says a funeral home cannot make any fee non-declinable. A body-preparation service (dressing, casketing, cosmetology, restorative art) listed as mandatory is a yellow flag — these are optional, especially with no open-casket viewing.",
+        ftcReference: "16 CFR §453.2(b)(4)(iv)",
+        evidence: item.name,
+        whatToSay:
+          "This preparation charge looks non-declinable. Other than your basic services fee, the Funeral Rule says nothing can be mandatory — can I decline this?",
+      };
+    },
+  },
+  {
+    id: "dressing-casketing-billed-on-top-of-prep",
+    detect(ctx) {
+      const prep = findItem(
+        ctx,
+        (i) =>
+          itemMentions(i, EMBALMING_KEYWORDS) ||
+          /preparation of (?:the )?(?:body|remains)/i.test(i.name),
+      );
+      const dressing = findItem(ctx, (i) =>
+        /dressing|casketing|cosmetolog|cosmetic|restorative art|hairdress|hair styling/i.test(
+          i.name,
+        ),
+      );
+      if (!prep || !dressing) return null;
+      return {
+        ruleId: "dressing-casketing-billed-on-top-of-prep",
+        severity: "info",
+        title: "Dressing/casketing and embalming both billed",
+        description:
+          "Dressing, casketing, cosmetology, and restorative art are separate, declinable services — distinct from embalming or basic preparation. With no open-casket viewing you can decline the ones you don't need. The FTC Funeral Rule lets you select these individually rather than as a bundle.",
+        ftcReference: "16 CFR §453.4(b)(1)",
+        evidence: dressing.name,
+        whatToSay:
+          "I see preparation plus separate dressing/cosmetology charges. Which of these are optional? With no open-casket viewing I'd like to decline what isn't needed.",
+      };
+    },
+  },
+  {
+    id: "duplicate-nondeclinable-fee",
+    detect(ctx) {
+      const isBasic = (n: string) =>
+        /basic services? (?:fee|charge)|services? of (?:the )?funeral director/i.test(n);
+      if (!ctx.items.some((i) => isBasic(i.name))) return null;
+      const DUP =
+        /facilit(?:y|ies) fee|administrative fee|admin fee|coordination fee|overhead fee|preparation room fee/i;
+      const FACILITY_USE = /use of (?:the )?(?:facilit|staff|chapel|viewing room)/i;
+      const second = findItem(
+        ctx,
+        (i) => DUP.test(i.name) && !FACILITY_USE.test(i.name) && !isBasic(i.name),
+      );
+      if (!second) return null;
+      return {
+        ruleId: "duplicate-nondeclinable-fee",
+        severity: "suspicious",
+        title: "A second overhead fee stacked on the basic services fee",
+        description:
+          "The FTC Funeral Rule allows exactly one non-declinable overhead charge: the basic services fee. A second mandatory-looking overhead fee — a facility fee, administrative fee, or coordination fee stacked on top — may be double-charging you for overhead the basic fee is supposed to cover.",
+        ftcReference: "16 CFR §453.2(b)(4)(iv)",
+        evidence: second.name,
+        whatToSay:
+          "You already charge a basic services fee, the only non-declinable overhead fee allowed. What does this additional fee cover that isn't already in the basic fee?",
+      };
+    },
+  },
+  {
+    id: "after-hours-surcharge-on-basic-fee",
+    detect(ctx) {
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword: /after[\s-]?hours|weekend|holiday|evening|overnight|night(?:time)?/i,
+        trigger: /fee|surcharge|charge|premium/i,
+        window: 40,
+        excludeInWindow: /\b(?:no|not|never|waived|included|free)\b/i,
+      });
+      if (!win) return null;
+      return {
+        ruleId: "after-hours-surcharge-on-basic-fee",
+        severity: "suspicious",
+        title: "After-hours / weekend surcharge as a separate overhead fee",
+        description:
+          "The FTC Funeral Rule requires a home's unallocated overhead — including coordinating at off-hours — to be inside the single basic services fee. A separate after-hours, weekend, or holiday surcharge added as its own mandatory line may be a second overhead charge the Rule doesn't permit.",
+        ftcReference: "16 CFR §453.2(b)(4)(iii)(C)",
+        evidence: win,
+        whatToSay:
+          "Is this after-hours surcharge mandatory? Overhead is supposed to be inside your basic services fee — if this is general overhead, it shouldn't be a separate required charge.",
+      };
+    },
+  },
+  {
+    id: "single-professional-services-no-itemization",
+    detect(ctx) {
+      if (/package|bundle/i.test(ctx.rawText)) return null; // defer to service-charge-bundled
+      const lump = findItem(ctx, (i) =>
+        /professional services|service charge|funeral services?(?! of (?:the )?funeral director)/i.test(
+          i.name,
+        ),
+      );
+      if (!lump || ctx.totalCents <= 0 || lump.cents <= ctx.totalCents * 0.5) return null;
+      if (isDirectCremation(ctx) && /direct cremation|immediate cremation/i.test(lump.name))
+        return null;
+      const CATS = [
+        /forwarding|receiving/i,
+        /direct cremation|immediate cremation/i,
+        /immediate burial/i,
+        /transfer of remains/i,
+        /embalm/i,
+        /preparation/i,
+        /use of (?:facilit|staff)|viewing|visitation|ceremony|graveside/i,
+        /hearse/i,
+        /limousine|family car/i,
+      ];
+      if (CATS.filter((re) => re.test(ctx.rawText)).length > 2) return null;
+      return {
+        ruleId: "single-professional-services-no-itemization",
+        severity: "suspicious",
+        title: "One lump 'professional services' line, not itemized",
+        description:
+          "The FTC Funeral Rule requires a General Price List to price each service category separately. This quote looks like one lump 'professional services' charge with the itemized breakdown missing. You're entitled to the fully itemized list.",
+        ftcReference: "16 CFR §453.2(b)(4)(ii)",
+        evidence: lump.name,
+        whatToSay:
+          "This looks like one lump service charge. Under the Funeral Rule I'm entitled to a fully itemized General Price List with each category priced separately — please send that.",
+      };
+    },
+  },
+  {
+    id: "death-certificate-marked-up",
+    detect(ctx) {
+      const cert = findItem(
+        ctx,
+        (i) =>
+          (i.matchedItemId?.includes("death-cert") ?? false) ||
+          /death certificate|certified cop(?:y|ies) of (?:the )?death/i.test(i.name),
+      );
+      if (!cert) return null;
+      if (cert.classification !== "high" && cert.classification !== "predatory") return null;
+      return {
+        ruleId: "death-certificate-marked-up",
+        severity: "suspicious",
+        title: "Death certificates priced above the state's per-copy fee",
+        description:
+          "Death certificates are a cash advance item — the funeral home pays the state's set per-copy fee and passes it to you. The FTC Funeral Rule requires the home to disclose any markup over what it actually pays. This line is priced above the typical per-copy state fee, so it's worth asking what the state charges and how many copies you're getting.",
+        ftcReference: "16 CFR §453.3(f)(2)",
+        evidence: cert.name,
+        whatToSay:
+          "How many death certificates is this, and what does the state charge per copy? The Funeral Rule requires you to disclose any markup over the actual government fee.",
+      };
+    },
+  },
+  {
+    id: "duplicate-permit-filing-fee",
+    detect(ctx) {
+      const basicPresent = ctx.items.some((i) =>
+        /basic services? (?:fee|charge)|services? of (?:the )?funeral director/i.test(i.name),
+      );
+      if (!basicPresent) return null;
+      const permit = findItem(ctx, (i) =>
+        /permit|filing fee|file the (?:death )?certificate|documentation fee|paperwork fee|recording fee/i.test(
+          i.name,
+        ),
+      );
+      if (!permit) return null;
+      return {
+        ruleId: "duplicate-permit-filing-fee",
+        severity: "suspicious",
+        title: "A separate permit/filing fee on top of basic services",
+        description:
+          "The FTC Funeral Rule's definition of the basic services fee already includes obtaining necessary permits. A separate permit or filing fee on top of the basic fee may be charging you twice for the same work — unless it's a government permit cost the home is passing straight through. Worth asking which it is.",
+        ftcReference: "16 CFR §453.1(p)",
+        evidence: permit.name,
+        whatToSay:
+          "Your basic services fee is supposed to include obtaining permits. Is this separate permit/filing fee a government cost you're passing through, or work already covered by the basic fee?",
+      };
+    },
+  },
+  {
+    id: "cash-advance-item-above-benchmark",
+    detect(ctx) {
+      const item = findItem(
+        ctx,
+        (i) =>
+          /paid obituary|newspaper (?:notice|obituary|ad)|obituary (?:placement|notice)|flowers|floral/i.test(
+            i.name,
+          ) &&
+          (i.classification === "high" || i.classification === "predatory"),
+      );
+      if (!item) return null;
+      return {
+        ruleId: "cash-advance-item-above-benchmark",
+        severity: "suspicious",
+        title: "A third-party cash advance item priced above benchmark",
+        description:
+          "Items like a paid newspaper obituary or flowers are usually cash advances — the funeral home pays an outside vendor and passes the cost to you. If that's the case here, the FTC Funeral Rule requires the home to disclose any markup over what it actually paid. This line is above benchmark, so it's worth asking for the vendor's real charge.",
+        ftcReference: "16 CFR §453.3(f)(2)",
+        evidence: item.name,
+        whatToSay:
+          "If this is a third-party cost you pay on our behalf, what does the vendor actually charge? The Funeral Rule requires you to disclose any markup over that amount.",
+      };
+    },
+  },
 ];
 
 /** Run every rule and return the firing detections. */
 export function runRules(ctx: DetectionContext): Detection[] {
-  return RULES.map((r) => r.detect(ctx)).filter(
+  const all = RULES.map((r) => r.detect(ctx)).filter(
     (d): d is Detection => d != null,
   );
+  return suppress(all);
+}
+
+/**
+ * Drop overlapping detections so the family never sees two or three flags on the
+ * same line. The item-based casket rule wins over the textual casket claims; the
+ * specific death-cert markup rule wins over the generic cash-advance flags.
+ */
+function suppress(detections: Detection[]): Detection[] {
+  const ids = new Set(detections.map((d) => d.ruleId));
+  const cad = detections.find((d) => d.ruleId === "cash-advance-no-disclosure");
+  return detections.filter((d) => {
+    if (
+      (d.ruleId === "casket-required-by-law-claim" ||
+        d.ruleId === "cremation-casket-asserted-required") &&
+      ids.has("casket-required-for-direct-cremation")
+    ) {
+      return false;
+    }
+    if (
+      d.ruleId === "cash-advance-no-disclosure" &&
+      ids.has("death-certificate-marked-up") &&
+      d.evidence &&
+      /death cert/i.test(d.evidence)
+    ) {
+      return false;
+    }
+    if (
+      d.ruleId === "cash-advance-item-above-benchmark" &&
+      cad &&
+      cad.evidence &&
+      d.evidence &&
+      cad.evidence === d.evidence
+    ) {
+      return false;
+    }
+    return true;
+  });
 }
