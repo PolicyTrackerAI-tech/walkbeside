@@ -124,9 +124,17 @@ function isCremationOnly(ctx: DetectionContext): boolean {
   ) {
     return true;
   }
-  return (
-    /cremation/i.test(ctx.rawText) && !/burial|interment/i.test(ctx.rawText)
+  if (!/cremation/i.test(ctx.rawText)) return false;
+  // The merchandise names "burial vault" / "outer burial container" contain the
+  // word "burial" but do NOT indicate a ground-burial SERVICE — they're exactly
+  // the upsell we're trying to flag on a cremation. Strip those names before
+  // testing for an actual burial choice, or the rule never fires on the most
+  // common vault naming (which contains "burial").
+  const withoutVaultNames = ctx.rawText.replace(
+    /(outer\s+)?burial\s+(vault|container)|burial\s+container/gi,
+    "",
   );
+  return !/burial|interment/i.test(withoutVaultNames);
 }
 
 // ---------------------------------------------------------------------------
@@ -234,24 +242,32 @@ export const RULES: Rule[] = [
     detect(ctx) {
       // Cash advance items (clergy honorarium, death certificates, paid obit,
       // flowers, hairdresser, etc.) must be disclosed in writing as cash
-      // advances and the funeral home cannot mark them up without disclosure.
+      // advances, and any markup disclosed. But we only see the lines the family
+      // showed us — the disclosure may be elsewhere on the GPL, or worded as
+      // "disbursements"/"advance items"/"accommodations" rather than the literal
+      // "cash advance." Death certificates alone appear on nearly every price
+      // list, so asserting a confident "violation" here would cry wolf on the
+      // majority of real quotes. We instead PROMPT the family to confirm — a
+      // claim we can stand behind even from a partial photo. (suspicious, not
+      // violation: we can't prove non-disclosure from the price list alone.)
       const cashItem = findItem(ctx, (i) => itemMentions(i, CASH_ADVANCE_KEYWORDS));
       if (!cashItem) return null;
-      const hasDisclosure = /cash advance/i.test(ctx.rawText);
-      if (!hasDisclosure) {
-        return {
-          ruleId: "cash-advance-no-disclosure",
-          severity: "violation",
-          title: "Pass-through item not disclosed as cash advance",
-          description:
-            "Death certificates, clergy honoraria, paid newspaper obituaries, and similar items the funeral home pays on your behalf are 'cash advance items' under the FTC Funeral Rule. They must be disclosed as such in writing, and any markup must also be disclosed. The lack of 'cash advance' language anywhere on this list is a violation.",
-          ftcReference: "16 CFR §453.3(d)",
-          evidence: cashItem.name,
-          whatToSay:
-            "Is this a cash advance item? I'd like the actual cost the funeral home pays the third party, in writing. The Funeral Rule requires that disclosure.",
-        };
-      }
-      return null;
+      const hasDisclosure =
+        /cash advance|advance item|disbursement|accommodation|paid on (your|the family'?s) behalf|third[\s-]?party (charge|item|fee|payment)|pass[\s-]?through/i.test(
+          ctx.rawText,
+        );
+      if (hasDisclosure) return null;
+      return {
+        ruleId: "cash-advance-no-disclosure",
+        severity: "suspicious",
+        title: "Confirm pass-through items are disclosed as cash advances",
+        description:
+          "Death certificates, clergy honoraria, paid newspaper obituaries, and flowers are typically 'cash advance items' under the FTC Funeral Rule — things the funeral home pays a third party for on your behalf. The home must disclose them as cash advances in writing and disclose any markup over what they actually paid. We don't see that disclosure on what you shared (it may be elsewhere on the price list). Worth confirming — and asking for the actual third-party cost.",
+        ftcReference: "16 CFR §453.3(d)",
+        evidence: cashItem.name,
+        whatToSay:
+          "Are these cash advance items? Please put in writing the actual amount you pay the third party for each, plus any markup. The Funeral Rule requires that disclosure.",
+      };
     },
   },
   {
