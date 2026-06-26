@@ -107,11 +107,19 @@ export async function POST(req: Request) {
     // an adjusted predatory cutoff — otherwise the verdict can contradict the
     // shown range (e.g. "$300, fair range $143–$285, verdict: Fair").
     const m = regionMultiplier(zip ?? "");
-    const [lo, hi] = adjustedRange(matched.fairLow, matched.fairHigh, zip);
-    const predatory = Math.round(matched.predatoryAt * m);
-    // Per-unit items (e.g. death certificates) are quoted as a total for N
-    // copies; judge the PER-UNIT price against the per-each fair range, so a
-    // $250 line for 10 certificates ($25 each) reads as fair, not predatory.
+    // Per-unit items (e.g. death certificates) are a fixed government/state fee,
+    // NOT metro-cost-of-living sensitive — a certificate costs the same state
+    // fee in rural Utah as in San Francisco — so benchmark them against the
+    // NATIONAL range, not a COLA-adjusted one. Everything else is zip-adjusted.
+    const [lo, hi, predatory] = matched.perUnit
+      ? [matched.fairLow, matched.fairHigh, matched.predatoryAt]
+      : [
+          ...adjustedRange(matched.fairLow, matched.fairHigh, zip),
+          Math.round(matched.predatoryAt * m),
+        ];
+    // Per-unit items are quoted as a total for N copies; judge the PER-UNIT
+    // price against the per-each range, so $250 for 10 certificates ($25 each)
+    // reads as fair, not a $225 overcharge.
     const qty = matched.perUnit && raw.qty && raw.qty > 1 ? raw.qty : undefined;
     const perUnitDollars = (qty ? cents / qty : cents) / 100;
     return {

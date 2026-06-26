@@ -42,8 +42,12 @@ function analyze(text: string, zip: string) {
     const matched = matchLineItem(raw.name);
     if (!matched) return { name: raw.name, cents };
     const m = regionMultiplier(zip);
-    const [lo, hi] = adjustedRange(matched.fairLow, matched.fairHigh, zip);
-    const predatory = Math.round(matched.predatoryAt * m);
+    const [lo, hi, predatory] = matched.perUnit
+      ? [matched.fairLow, matched.fairHigh, matched.predatoryAt]
+      : [
+          ...adjustedRange(matched.fairLow, matched.fairHigh, zip),
+          Math.round(matched.predatoryAt * m),
+        ];
     const qty = matched.perUnit && raw.qty && raw.qty > 1 ? raw.qty : undefined;
     const perUnitDollars = (qty ? cents / qty : cents) / 100;
     return {
@@ -153,5 +157,21 @@ describe("checker pipeline (end-to-end, deterministic)", () => {
         expect(overchargeCents(it)).toBe(0);
       }
     }
+  });
+
+  it("does not COLA-penalize per-unit state fees in a low-cost metro", () => {
+    // Salt Lake City (84101, COLA < 1). A death certificate is a fixed state
+    // fee, so $25 each must read fair against the national $10–$25 range — not
+    // "high" because the metro multiplier shrank the top to $24.
+    const low = analyze("Death certificates (10) $250", "84101");
+    const certs = low.items.find(
+      (i) => (i as { matchedItemId?: string }).matchedItemId === "death-cert",
+    ) as (DisplayItem & { qty?: number }) | undefined;
+    expect(certs?.qty).toBe(10);
+    expect(certs?.fairCentsHigh).toBe(2500); // national $25, not COLA-shrunk
+    expect(
+      certs?.classification === "high" || certs?.classification === "predatory",
+    ).toBe(false);
+    expect(overchargeCents(certs!)).toBe(0);
   });
 });
