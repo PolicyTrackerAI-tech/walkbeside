@@ -24,6 +24,9 @@ const CaseBody = z.object({
   negotiatedPriceCents: CENTS.nullable().optional(),
   amountPaidCents: CENTS.nullable().optional(),
   satisfactionScore: z.number().int().min(1).max(5).nullable().optional(),
+  // Referring partner (hospice) for the partner report. Set AFTER the family
+  // chose — a reporting label only, never read by selection/outreach.
+  partnerId: z.string().uuid().nullable().optional(),
 });
 
 const HiddenFee = z.object({
@@ -78,6 +81,9 @@ export async function PATCH(req: Request) {
     }
     if (body.satisfactionScore !== undefined) {
       patch.satisfaction_score = body.satisfactionScore;
+    }
+    if (body.partnerId !== undefined) {
+      patch.partner_id = body.partnerId;
     }
 
     const { data, error } = await admin
