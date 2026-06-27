@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   aggregateCohort,
   sampleCohort,
+  rowToCohortRecord,
   SMALL_SAMPLE_THRESHOLD,
   type CohortRecord,
 } from "@/lib/partner-report";
@@ -75,5 +76,56 @@ describe("sampleCohort (demo seed)", () => {
     expect(stats.avgSatisfaction).toBeGreaterThanOrEqual(4.5);
     expect(stats.medianResolutionDays).toBeGreaterThan(0);
     expect(stats.smallSample).toBe(false);
+  });
+});
+
+describe("rowToCohortRecord (real partner report mapping)", () => {
+  it("maps a completed case: overcharge from savings, resolution from dates", () => {
+    const rec = rowToCohortRecord({
+      savings_vs_listed_cents: 215000,
+      satisfaction_score: 5,
+      created_at: "2026-06-01T00:00:00Z",
+      outcome_recorded_at: "2026-06-05T00:00:00Z",
+      hidden_fees_count: 2,
+    });
+    expect(rec).toEqual({
+      overchargeCaughtCents: 215000,
+      ftcIssues: 2,
+      satisfaction: 5,
+      resolutionDays: 4,
+    });
+  });
+
+  it("clamps a negative saving to 0 and omits missing satisfaction/resolution", () => {
+    const rec = rowToCohortRecord({
+      savings_vs_listed_cents: -500, // home quoted higher than listed → no saving
+      satisfaction_score: null,
+      created_at: "2026-06-01T00:00:00Z",
+      outcome_recorded_at: null,
+    });
+    expect(rec.overchargeCaughtCents).toBe(0);
+    expect(rec.ftcIssues).toBe(0);
+    expect(rec.satisfaction).toBeUndefined();
+    expect(rec.resolutionDays).toBeUndefined();
+  });
+
+  it("feeds the unchanged aggregator: n=0 empty, n<5 small-sample, n≥5 full", () => {
+    const row = (over: number): Parameters<typeof rowToCohortRecord>[0] => ({
+      savings_vs_listed_cents: over,
+      satisfaction_score: 5,
+      created_at: "2026-06-01T00:00:00Z",
+      outcome_recorded_at: "2026-06-03T00:00:00Z",
+    });
+    expect(aggregateCohort([]).familiesHelped).toBe(0);
+
+    const few = [row(100000), row(200000)].map(rowToCohortRecord);
+    expect(aggregateCohort(few).smallSample).toBe(true);
+
+    const many = Array.from({ length: SMALL_SAMPLE_THRESHOLD }, () =>
+      rowToCohortRecord(row(150000)),
+    );
+    const stats = aggregateCohort(many);
+    expect(stats.smallSample).toBe(false);
+    expect(stats.totalOverchargeCaughtCents).toBe(150000 * SMALL_SAMPLE_THRESHOLD);
   });
 });

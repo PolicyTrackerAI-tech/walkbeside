@@ -69,6 +69,44 @@ export function aggregateCohort(records: CohortRecord[]): CohortStats {
 }
 
 /**
+ * One real outcome row, as read (service-role) for a partner's report. Only
+ * numeric/timestamp outcome fields — never user_id, zip, home name, or free
+ * text — so nothing identifiable can reach the aggregate.
+ */
+export interface OutcomeRow {
+  /** Generated savings vs the family's original listed quote (cents). */
+  savings_vs_listed_cents: number | null;
+  satisfaction_score: number | null;
+  created_at: string;
+  outcome_recorded_at: string | null;
+  /** Count of hidden-fee findings across this case's outreach rows (FTC proxy). */
+  hidden_fees_count?: number;
+}
+
+/**
+ * Map a real outcome row to a CohortRecord. Overcharge caught is the case's own
+ * generated savings (never negative; never the double-counting price_list path).
+ * Resolution days come from intake → outcome. Pure so the report math is locked.
+ */
+export function rowToCohortRecord(row: OutcomeRow): CohortRecord {
+  const rec: CohortRecord = {
+    overchargeCaughtCents: Math.max(0, row.savings_vs_listed_cents ?? 0),
+    ftcIssues: Math.max(0, row.hidden_fees_count ?? 0),
+  };
+  if (typeof row.satisfaction_score === "number") {
+    rec.satisfaction = row.satisfaction_score;
+  }
+  if (row.outcome_recorded_at) {
+    const days = Math.round(
+      (Date.parse(row.outcome_recorded_at) - Date.parse(row.created_at)) /
+        86_400_000,
+    );
+    if (Number.isFinite(days) && days >= 0) rec.resolutionDays = days;
+  }
+  return rec;
+}
+
+/**
  * Deterministic seeded cohort for the demo proof sheet. Believable, not
  * cherry-picked — one family's quote came back fair (no saving), because honest
  * data has that. These are ILLUSTRATIVE; the UI must label them as a sample.
