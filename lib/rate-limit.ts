@@ -19,7 +19,6 @@ export interface RateLimitRule {
 /** Per-path rules, keyed by exact pathname. POST-only (enforced by the caller). */
 export const RATE_LIMITS: Record<string, RateLimitRule> = {
   "/api/negotiate/start": { limit: 8, windowMs: 60_000 },
-  "/api/stripe/checkout": { limit: 6, windowMs: 60_000 },
   "/api/share/create": { limit: 15, windowMs: 60_000 },
   "/api/planning/signup": { limit: 15, windowMs: 60_000 },
   "/api/analyze-price-list": { limit: 12, windowMs: 60_000 },

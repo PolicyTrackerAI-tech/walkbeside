@@ -665,10 +665,11 @@ export function adjustedRange(
 }
 
 /**
- * ISO date of the last pricing-data validation pass.
- * Sister updates this when she refreshes national benchmarks or launch-metro GPL data.
+ * ISO date of the last pricing-data validation pass. Update this whenever
+ * LINE_ITEMS benchmarks are refreshed (new items, source re-verification, or
+ * launch-metro GPL data). Shown on /methodology and /fair-price-index.
  */
-export const PRICING_LAST_UPDATED = "2026-04-01";
+export const PRICING_LAST_UPDATED = "2026-06-26";
 
 export type PriceDataSource =
   | "validated" // GPL-validated per-zip data (≥20 data points / line item)

@@ -18,12 +18,6 @@ const checks: { key: string; label: string; ok: () => boolean; envs: string[] }[
     envs: ["ANTHROPIC_API_KEY"],
   },
   {
-    key: "stripe",
-    label: "Stripe checkout (negotiation fee)",
-    ok: () => FEATURES.stripe(),
-    envs: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
-  },
-  {
     key: "email",
     label: "Outbound negotiation email",
     ok: () => FEATURES.email(),

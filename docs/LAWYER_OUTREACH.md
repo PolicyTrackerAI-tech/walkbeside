@@ -4,8 +4,18 @@
 > so that next week sending is one click. **Do not send until you're ready to
 > engage** (and have picked the attorney). Drafting ≠ sending.
 
+> **⚠️ Rewritten 2026-07-01 to match the current business model.** An earlier
+> draft of this email described a $49 flat consumer fee. **That model is fully
+> decommissioned — the family pays nothing, ever; hospices/employers pay
+> instead.** Before sending: (1) confirm you have not already sent the old
+> version to counsel — if you have, follow up directly with the corrected facts
+> rather than relying on this file alone; (2) re-read `docs/LAWYER_BRIEF.md`
+> once yourself, since the new institutional-payer model raises a genuinely new
+> legal question (§5.L — Anti-Kickback/Stark/HIPAA) that a prior conversation
+> with counsel would not have covered.
+
 The attachment is `docs/LAWYER_BRIEF.md` — it's already comprehensive (business,
-money flow, the exact representations we make, risk areas A–K, jurisdiction,
+money flow, the exact representations we make, risk areas A–L, jurisdiction,
 materials, prioritized questions). This file is just the cover email + the
 send-day checklist so you don't have to reassemble it.
 
@@ -16,53 +26,66 @@ send-day checklist so you don't have to reassemble it.
 A firm/attorney with **two** of these, ideally one who has all three:
 - **Consumer-protection / FTC advertising** experience (our claims + the FTC
   Funeral Rule invocation),
+- **Healthcare regulatory** experience (Anti-Kickback Statute, Stark Law, HIPAA
+  — now the highest-priority question, since a hospice pays us and refers
+  patients to a free service),
 - **Funeral / death-care or occupational-licensing** familiarity (the gating
-  licensing question — Utah specifically),
-- **Startup/transactional** comfort (fixed-scope opinion, fast turnaround).
+  licensing question — Utah specifically).
 
 Where to find one: Utah State Bar lawyer referral, a Utah business/regulatory
-boutique, or a firm with an advertising-law / consumer-protection practice.
-Ask up front for a **fixed-fee initial opinion** so cost is bounded.
+boutique, or a firm with a healthcare-compliance or advertising-law practice —
+ideally one that can cover both the healthcare-referral question and the
+consumer/FTC side, since they're now both load-bearing. Ask up front for a
+**fixed-fee initial opinion** so cost is bounded.
 
 ---
 
 ## The email (ready to send — fill the [brackets])
 
-> **Subject:** Pre-launch legal review — consumer-advocacy startup (funeral pricing), Utah
+> **Subject:** Pre-launch legal review — funeral-pricing consumer tool + hospice partnership model, Utah
 
 Hi [Attorney name],
 
-I'm [your name], founder of Honest Funeral ([honestfuneral.co]) — a
-consumer-advocacy service that helps grieving families compare funeral prices.
-Every tool on the site is free; our only revenue is a flat $49 a family pays
-**upfront** for us to contact local funeral homes **as their named advocate**,
-collect itemized price lists (invoking the family's FTC Funeral Rule rights),
-and bring the quotes back side by side. **We take zero money from funeral homes
-— no commissions, referrals, or kickbacks.** The family signs directly with the
-home they choose.
+I'm [your name], founder of Honest Funeral ([honestfuneral.co]) — a free,
+neutral consumer tool that helps grieving families check whether a funeral
+home's price list is fair and flags likely FTC Funeral Rule issues. **Every
+tool on the site is free to families, with no charge at any step** — including
+an advocate-outreach feature where we contact local funeral homes on a
+family's behalf, as their named advocate, to collect itemized price quotes.
+**We take zero money from funeral homes or insurers.**
 
-We're preparing to launch in **Utah first** (multi-state later) and I want legal
-clearance before we take real money or email real funeral homes. I'm looking for
-a **defined-scope initial opinion** on:
+Our revenue comes from a different source: **hospices (and later employers)
+pay us**, under a separate institutional agreement, for the right to refer the
+families they serve to this free tool. In exchange, the hospice receives an
+**aggregate, de-identified** report of outcomes across all the families it
+referred — never an individual family's data or situation.
 
-1. **Licensing (the gating question):** Does our paid advocate-outreach model
-   require a funeral, broker, or other license in Utah — and how does this vary
-   by state?
-2. **Our outreach representations:** Are we safe describing ourselves as the
+I'm preparing to sign our first hospice pilot agreement and want legal
+clearance first. I'm looking for a **defined-scope initial opinion** on:
+
+1. **Healthcare referral law (new, highest priority):** Given a hospice pays us
+   and refers its patients' families to a service that's free to them, does
+   this implicate the Anti-Kickback Statute, Stark Law, or HIPAA (e.g., a
+   Business Associate Agreement if the hospice shares family contact info with
+   us)? What contract structure keeps us clear of it?
+2. **Licensing:** Does our free advocate-outreach model require a funeral,
+   broker, or other license in Utah — and how does this vary by state?
+3. **Our outreach representations:** Are we safe describing ourselves as the
    family's named advocate invoking the FTC Funeral Rule? Any
    impersonation / CAN-SPAM exposure? (I'll send the exact email templates —
    they're the single most important artifact.)
-3. **Advertising substantiation:** What can we claim about "savings" and "fair
-   price," with what disclaimers?
-4. **Authorization + privacy:** What family authorization do we need before
-   contacting homes in their name; are our privacy practices sound for sensitive
-   bereavement data?
+4. **Advertising substantiation:** What can we claim about "fair price" and
+   FTC-violation findings, with what disclaimers?
+5. **Authorization + privacy:** What family authorization do we need before
+   contacting homes in their name; are our privacy practices sound for
+   sensitive bereavement data?
 
 I've prepared a detailed brief (business model, exact money flow, the
 representations we make, and the risk areas we've already addressed) and can
-share a staging URL and the outreach templates. We've deliberately removed the
-conflicts that plague funeral lead-gen (we take nothing from homes) and can
-geo-gate outreach to cleared states if you advise.
+share a staging URL and the outreach templates. We take nothing from funeral
+homes or insurers and charge families nothing — the conflicts that plague
+funeral lead-gen simply don't exist in this model — and can geo-gate outreach
+to cleared states if you advise.
 
 Could we set up an initial consult, and could you let me know your fixed-fee
 range for an opinion on the above? Happy to send the brief ahead of time.
@@ -90,12 +113,15 @@ cover it* — is the same for both; getting both scoped in one engagement is che
 ## Send-day checklist (attach / link these — from LAWYER_BRIEF §7)
 
 - [ ] `docs/LAWYER_BRIEF.md` (the brief) attached
-- [ ] Live or staging URL — esp. `/how-it-works`, `/faq`, `/terms`, `/privacy`, the outreach flow
+- [ ] Live or staging URL — esp. `/how-it-works`, `/our-role`, `/faq`, `/terms`,
+      `/privacy`, `/methodology`, `/corrections`, the outreach flow
 - [ ] **The outreach email templates** (most important): from `lib/negotiation/email-body.ts` — `buildOutreachEmail` + `buildSelectionEmail`. Paste the rendered text (use `/admin/outreach-preview`).
-- [ ] Stripe product/fee config + refund policy text (`docs/REFUND_SOP.md`)
 - [ ] Terms of Service + Privacy Policy (`/terms`, `/privacy`)
 - [ ] LLC formation docs + EIN
-- [ ] Data-storage summary (`docs/PRIVACY_RETENTION.md` covers what we store + where)
+- [ ] Data-storage summary (`docs/PRIVACY_RETENTION.md` covers what we store + where), including the outcomes/partner-reporting tables
+- [ ] A draft or term sheet of the intended hospice institutional agreement, if
+      one exists — counsel needs this for the Anti-Kickback/HIPAA question
 
-Open the consult by asking counsel to **red-team §4 and §5 of the brief** — the
-representations we make and the licensing question are where the real exposure is.
+Open the consult by asking counsel to **red-team §5.L (the new institutional-
+payer/healthcare-referral question) and §5.B (licensing) of the brief** — those
+are where the real exposure lives under the current model.

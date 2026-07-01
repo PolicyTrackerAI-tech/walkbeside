@@ -44,17 +44,23 @@ Consider a visible "general guidance, confirm with your clergy" disclaimer on
 
 ## 2. Fee & pricing claims
 
+**⚠️ Rewritten 2026-07-01.** The prior $49 flat consumer fee described here is
+**fully decommissioned** — families pay nothing, ever, at any step. Revenue now
+comes from institutions (hospices, later employers); see `docs/OPERATING_PLAN.md`
+and `docs/LAWYER_BRIEF.md` §1–3 for the current model.
+
 | Claim | Where | Status |
 |---|---|---|
-| Flat **$49**, only when family picks a presented home | `lib/stripe.ts`, homepage, /faq, /how-it-works, /prices, /terms, negotiate flow | ✅ consistent everywhere; old "20% of savings / capped $500" model fully removed |
-| No commissions/kickbacks/listing fees from homes | /about, /faq, /how-it-works | ✅ true today (keep true) |
-| Fair-price ranges per ZIP | `lib/pricing-data.ts`, /prices, /prep | 🔴 **national benchmarks, NOT validated against local price lists.** Code comments now say this. Displayed to families as a "fair range." |
-| "Families overpay $2,000–$5,000" / "save $1,500–$3,000 on direct cremation" | homepage, /faq, /planning | 🟡 industry-sourced but **needs substantiation** for FTC §5; pair with sourcing/disclaimer |
-| Deal rating good/fair/overpriced on a specific home | analyzer, compare | 🟡 opinion about a named business — see lawyer brief §4.4 |
+| **Free to families, forever** — no charge at any step | homepage, /faq, /how-it-works, /our-role, /terms, the whole negotiate flow | ✅ consistent sitewide; no Stripe checkout/webhook code path exists for a family charge |
+| No commissions/kickbacks/listing fees from homes or insurers | /about, /faq, /how-it-works, /our-role | ✅ true today (keep true) |
+| Fair-price ranges per ZIP, sourced (30 benchmarked line items) | `lib/pricing-data.ts`, /prices, /prep, /fair-price-index, /methodology | 🟡 sourced against published NFDA survey medians + real GPLs (cited on `/methodology`), regionally adjusted, but **not yet validated against local price lists in every metro** — disclosed on `/methodology`, `/corrections`, and in the checker result itself |
+| Checker headline: "$X above fair" on a specific quote | `/analyzer` | ✅ **locked by an invariant test** — the headline is defined to exactly equal the sum of the visible per-item overcharge badges (never a looser total-vs-benchmark subtraction), so it can't silently overclaim. See `docs/BENCHMARK_EXPANSION_SPEC.md` and the checker's test suite. |
+| FTC-violation flags on a specific home's price list | `/analyzer` | 🟡 opinion/finding about a named business's document — the engine is deliberately conservative (most findings grade "worth confirming," not "violation," unless the price list's own text proves it); see lawyer brief §4.4 and §5.A |
 
-**Action:** (a) keep $49 consistent (done); (b) before representing price ranges
-as locally "fair," either validate against real GPLs (ties to the data work) or
-disclaim clearly; (c) get counsel's read on savings-claim substantiation.
+**Action:** (a) free-to-families claim — done, keep consistent; (b) before
+representing price ranges as locally "fair" everywhere, either validate against
+more real GPLs per metro or keep the existing disclaimer language; (c) get
+counsel's read on FTC-violation-finding exposure (lawyer brief §5.A, §5.D).
 
 ---
 
@@ -120,13 +126,19 @@ privacy, fee model. Licensing is the pre-launch gating question.
 
 1. 🔴 **Faith content** — expert review via `/admin/faith-qa`; disclaim until
    signed off. (Wrong religious advice is the worst failure mode.)
-2. 🔴 **Licensing read** — lawyer brief §B; gates whether/where outreach can run.
-3. 🟡 **Price-range honesty** — validate against real GPLs OR add a clear
-   "national estimate, not locally verified" disclaimer before launch.
-4. 🟡 **Savings-claim substantiation** — sourcing/disclaimer per counsel.
+2. 🔴 **Licensing + healthcare-referral read** — lawyer brief §B and the new
+   §L (Anti-Kickback/Stark/HIPAA for the hospice-payer model); gates the first
+   pilot agreement and whether/where outreach can run.
+3. 🟡 **Price-range honesty** — the disclaimer already exists (`/methodology`,
+   `/corrections`); continue validating against real GPLs per metro over time.
+4. 🟡 **FTC-violation-finding exposure** — counsel's read on defamation/
+   trade-libel risk for a specific home's finding (lawyer brief §5.A, §5.D).
 5. 🟡 **Quote-parse confidence** — threshold + "verify original" note.
 6. ✅ **Outreach transparency** — guaranteed by construction (static template +
    denylist + `OUTREACH_LIVE` kill-switch). Re-add the pre-send guard only if AI
    email generation is reintroduced.
-7. ✅ **Fee = $49** — verified consistent.
+7. ✅ **Free to families** — verified consistent; the $49/$199 fee model is
+   fully decommissioned in code and copy.
 8. ✅ **Positioning** — FD/sister claims removed; provenance corrected.
+9. ✅ **Checker headline math** — locked by an invariant test; can't silently
+   overclaim beyond the sum of visible per-item badges.
