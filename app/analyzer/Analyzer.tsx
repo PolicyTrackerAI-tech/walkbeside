@@ -396,6 +396,12 @@ export function Analyzer({ partner }: { partner?: string }) {
               for your region and flag likely FTC Funeral Rule problems &mdash; the
               most common violations and upsells.
             </p>
+            <p className="text-sm text-ink-muted mt-2">
+              Already have the final bill?{" "}
+              <Link href="/bill-check" className="underline hover:text-ink-soft">
+                Check it against the quote you were given &rarr;
+              </Link>
+            </p>
           </div>
 
           <Card className="print:hidden">
