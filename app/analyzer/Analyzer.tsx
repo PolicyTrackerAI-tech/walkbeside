@@ -400,6 +400,10 @@ export function Analyzer({ partner }: { partner?: string }) {
               Already have the final bill?{" "}
               <Link href="/bill-check" className="underline hover:text-ink-soft">
                 Check it against the quote you were given &rarr;
+              </Link>{" "}
+              &middot; Shopping more than one home?{" "}
+              <Link href="/compare-quotes" className="underline hover:text-ink-soft">
+                Compare quotes side by side &rarr;
               </Link>
             </p>
           </div>
