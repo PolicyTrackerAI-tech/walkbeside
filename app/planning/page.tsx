@@ -49,12 +49,12 @@ export default async function PlanningPage() {
 
           <section className="grid gap-4 sm:grid-cols-3">
             <Stat
-              number="$2,000–$5,000"
-              label="Typical overpayment when a family shops under crisis, without a reference range."
+              number="up to 50%"
+              label="What comparison shopping can cut from funeral costs, per the Consumer Federation of America."
             />
             <Stat
-              number="3×"
-              label="Price variation between funeral homes in the same zip code for the same services."
+              number="2–3×"
+              label="Documented price variation between funeral homes in the same metro for identical services."
             />
             <Stat
               number="30 min"

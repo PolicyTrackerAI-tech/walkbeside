@@ -158,7 +158,10 @@ export default async function DashboardPage({
           {!isPaid && (
             <Card tone="primary">
               <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
-              <CardTitle>Have us get you real quotes. Save $2,000–$5,000.</CardTitle>
+              <CardTitle>
+                Have us get you real quotes &mdash; the same service can cost
+                2&ndash;3&times; more across town.
+              </CardTitle>
               <p className="text-ink-soft mt-3 mb-4">
                 Everything here is free to families. When you want it, we
                 contact funeral homes on your behalf, collect itemized quotes,

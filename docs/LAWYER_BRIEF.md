@@ -222,22 +222,45 @@ shipped product, that is a deception risk we need to fix before launch:
 - Hospices are healthcare providers, most of which bill Medicare/Medicaid. A
   hospice paying a third party (us) for a service it then refers its patients'
   families to raises questions that **did not exist under the prior
-  consumer-fee model** and that this brief has not previously addressed. **Q
-  (highest priority):** Does this arrangement implicate the federal
-  Anti-Kickback Statute, the Stark Law, or state equivalents — given hospice
-  is a Medicare benefit and the hospice is paying a vendor connected to patient
-  referrals, even though the vendor's service is free to the patient/family and
-  no money flows from the vendor back to the hospice? What contract structure
-  (e.g., fair-market-value services agreement, no per-referral/per-patient
-  pricing) is needed to keep this on the right side of that analysis? **Q:**
-  Does any hospice-side sharing of family contact information with us (so we
-  can reach a referred family) trigger HIPAA Business Associate Agreement
-  obligations, and do we need a BAA template ready before approaching a pilot
-  hospice? **Q:** Should the site or the hospice's own materials disclose to
-  the family that their hospice is paying for this service, to avoid any
-  perception of undisclosed influence — even though we do not steer families
-  toward any funeral home and the hospice has no visibility into an
-  individual's outcome?
+  consumer-fee model.** Our July 2026 market research (not legal advice —
+  compiled against OIG guidance, state statutes, and enforcement records;
+  citations in `Honest_Funeral_Market_Research.pdf`) frames the analysis we
+  need counsel to confirm or correct:
+  - **AKS/CMP framing [CONFIRM]:** funerals are not federally payable, so the
+    funeral referral itself appears to fall outside AKS/CMP — the danger vector
+    is instead a **free family benefit used to induce HOSPICE selection**
+    (one-purpose test). OIG guidance reportedly holds that benefits disclosed
+    only **after** provider selection don't violate the inducement bar. Our
+    design rules, built to match: the benefit is delivered **post-admission
+    only**, never appears in a hospice's pre-admission marketing, and the
+    contract is framed as bereavement/psychosocial-support procurement. **Q:**
+    Is this framing right, and what contract terms lock it in?
+  - **State funeral law [CONFIRM]:** NY Pub. Health Law §3450 and Virginia's
+    anti-cappers statute make paying for funeral patronage a license-revocation
+    offense (we take nothing from homes — but this also poisons any future
+    supply-side monetization); TX Occ. Code ch. 651 and SC define "funeral
+    directing" broadly (we stay navigation/education, never "arranging");
+    **at-need solicitation bans (FL §497.164, TX, ME, NE)** restrict outbound
+    contact with grieving families — our platform is **family-initiated
+    activation only** (the hospice hands the family a link; we never
+    cold-contact next of kin). **Q:** Do our flows as built clear these?
+  - **HIPAA [CONFIRM]:** decedent PHI is protected for 50 years; receiving
+    patient/family data **from** a hospice would make us a business associate.
+    Our design avoids this by construction — **the hospice transmits nothing;
+    families self-activate.** **Q:** Does that hold, and should a BAA template
+    exist anyway for hospices that insist on warm-handoff data flows?
+  - **Q:** Should the site or the hospice's own materials disclose to the
+    family that their hospice is paying for this service, to avoid any
+    perception of undisclosed influence — even though we do not steer families
+    toward any funeral home and the hospice has no visibility into an
+    individual's outcome?
+  - **Context for counsel:** the channel is scarred (Grace, a cremation
+    startup, used hospice/hospital lead-gen including an EHR death-feed, and
+    is the cautionary tale hospices cite) and the compliance climate is tense
+    (June 2026 DOJ takedown included a hospice–funeral-home decedent-data
+    scheme; CMS moratorium on new hospice enrollments since May 2026). Expect
+    conservative vendor diligence; we intend to lead with compliance
+    documentation.
 
 ---
 

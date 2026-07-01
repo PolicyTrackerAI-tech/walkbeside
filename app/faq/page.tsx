@@ -139,7 +139,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Does the outreach cover cremation-only arrangements?",
     plain:
-      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. It's free to families regardless of service type, and we contact homes on your behalf at no charge. Direct cremation is where families often overpay the most, and our comparison quotes typically save $1,500–$3,000 on direct cremation alone.",
+      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. It's free to families regardless of service type, and we contact homes on your behalf at no charge. Direct cremation is where price differences are starkest — consumer surveys have documented the identical service ranging from about $850 to over $3,300 within a single metro — so comparing quotes matters most there.",
     a: (
       <>
         <p>
@@ -149,10 +149,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           and we contact homes on your behalf at no charge.
         </p>
         <p>
-          Direct cremation in particular is where families often
-          overpay the most, because traditional homes quote it as if
-          it were a full service. Our comparison quotes typically save{" "}
-          $1,500&ndash;$3,000 on direct cremation alone.
+          Direct cremation in particular is where price differences are
+          starkest, because traditional homes often quote it as if it were a
+          full service. Consumer surveys have documented the identical
+          direct cremation ranging from about $850 to over $3,300 within a
+          single metro &mdash; so comparing quotes matters most there.
         </p>
       </>
     ),
