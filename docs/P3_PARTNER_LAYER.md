@@ -70,7 +70,6 @@ instantly by rotating the column.
 
 ## Deferred (additive later, FK onto `partners.id`, zero repaint)
 
-Per-case partner `<select>` in `/admin/outcomes` (next; tag via API/SQL for now) ·
 `partner_codes` (N referral codes/tenant + `?ref=` cookie attribution) ·
 `partner_members` (seats + magic-link/SSO for employers) · per-tenant branding ·
 billing.
