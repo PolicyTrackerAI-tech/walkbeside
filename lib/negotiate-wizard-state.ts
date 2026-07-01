@@ -20,6 +20,8 @@ export interface WizardState {
   senderLastName: string;
   notes: string;
   extras: string;
+  /** Optional YYYY-MM-DD date of the passing — anchors the bereavement check-ins. */
+  dateOfDeath: string;
 }
 
 export const STORAGE_KEY = "honestfuneral.negotiate-wizard.v1";
@@ -36,6 +38,7 @@ export const DEFAULT_STATE: WizardState = {
   senderLastName: "",
   notes: "",
   extras: "",
+  dateOfDeath: "",
 };
 
 export function readState(): WizardState | null {

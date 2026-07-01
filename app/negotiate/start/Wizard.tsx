@@ -112,6 +112,7 @@ function NegotiateStartWizard() {
           timing: state.timing,
           notes: state.notes || undefined,
           extras: state.extras || undefined,
+          dateOfDeath: state.dateOfDeath || undefined,
           authorizationAccepted: authorized,
         }),
       });
@@ -460,6 +461,22 @@ function NegotiateStartWizard() {
                     onChange={(e) => update("notes", e.target.value)}
                     placeholder="e.g. Catholic funeral, Spanish-speaking, veteran (DD-214 ready)…"
                   />
+                  <div className="mt-5">
+                    <Label
+                      htmlFor="dod"
+                      hint="Optional. Lets us check in at the moments that tend to matter — a month out, the anniversary. Never marketing, and you can turn it off anytime."
+                    >
+                      When did they pass?
+                    </Label>
+                    <Input
+                      id="dod"
+                      type="date"
+                      value={state.dateOfDeath}
+                      max={new Date().toISOString().slice(0, 10)}
+                      onChange={(e) => update("dateOfDeath", e.target.value)}
+                      className="max-w-xs"
+                    />
+                  </div>
                   <div className="flex flex-wrap gap-3 mt-5">
                     <Button size="lg" onClick={next}>
                       Continue →

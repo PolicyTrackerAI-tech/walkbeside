@@ -110,13 +110,19 @@ adult children) hits with no help today.*
 touchpoints this population is entitled to under 42 CFR 418.64. Content and
 cadence only — never an operated counseling service.*
 
-- [ ] **[M] ⚠️ FIX FIRST: death-date capture + re-anchored bereavement email
+- [x] **[M] ⚠️ FIX FIRST: death-date capture + re-anchored bereavement email
   cadence.** The anniversary cron (`app/api/cron/anniversary/route.ts`,
   `lib/anniversary-emails.ts`) still keys milestones off the decommissioned
   `paid_at` field — **it currently matches zero users and sends nothing.**
   Add a real `date_of_death` at intake, re-anchor milestones to it, and extend
   the cadence across the 13-month bereavement window. This is a live bug
   sitting directly on the regulatory bereavement clock.
+  *Code shipped 2026-07-01: optional date-of-passing intake field (explicit
+  only — no proxy anchor), cadence extended to 1mo/3mo/6mo/1yr/13mo (3mo
+  carries the hospice bereavement-benefit entitlement; 13mo closes the arc),
+  and a latent out-of-order-send bug fixed + regression-tested. To go live:
+  founder applies `supabase/migrations/2026-07-01-bereavement-cadence.sql`
+  and sets `ANNIVERSARY_EMAILS_ENABLED=true`.*
 - [ ] **[M] "Have you used your free bereavement benefit?" nudge + partner
   metric.** Recurring plain-worded reminder pointing the family back to their
   hospice's own Medicare-required bereavement counseling ("here's the number;

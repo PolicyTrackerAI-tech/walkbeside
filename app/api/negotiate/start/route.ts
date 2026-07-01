@@ -33,6 +33,19 @@ const Body = z.object({
   timing: z.string().max(120).default("within the next week"),
   notes: z.string().max(800).optional(),
   extras: z.string().max(400).optional(),
+  // Optional date of the passing (YYYY-MM-DD) — anchors the bereavement
+  // check-in cadence. Must be a real, non-future calendar date.
+  dateOfDeath: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .refine(
+      (s) => {
+        const t = Date.parse(`${s}T00:00:00Z`);
+        return Number.isFinite(t) && t <= Date.now();
+      },
+      { message: "date_of_death_invalid" },
+    )
+    .optional(),
   radiusMiles: z.number().int().min(5).max(100).default(25),
   authorizationAccepted: z.boolean().default(false),
 });
@@ -76,6 +89,20 @@ export async function POST(req: Request) {
     .single();
   if (negErr || !neg)
     return NextResponse.json({ error: negErr?.message ?? "db" }, { status: 500 });
+
+  // Anchor the bereavement check-in cadence on the family's own explicit date.
+  // Best-effort by design: an intake nicety must never fail the outreach itself
+  // (e.g. if the bereavement-cadence migration hasn't been applied yet, the
+  // update errors and we simply move on — RLS profiles_self_write covers it).
+  if (ctx.dateOfDeath) {
+    await supabase
+      .from("profiles")
+      .update({
+        date_of_death: ctx.dateOfDeath,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", user.id);
+  }
 
   const authorizationId = `WB-${neg.id.slice(0, 8).toUpperCase()}`;
   const familyLabel = buildFamilyLabel(ctx.senderFirstName, ctx.senderLastName);

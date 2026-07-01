@@ -3,9 +3,10 @@ import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendEmail } from "@/lib/email";
 import {
+  dueMilestone,
   emailFor,
+  markSent,
   MILESTONE_DAYS,
-  type Milestone,
 } from "@/lib/anniversary-emails";
 import { logEvent, captureError, sendAlert } from "@/lib/observability";
 
@@ -15,21 +16,28 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 /**
- * Daily cron — sends anniversary check-in emails to paid users.
+ * Daily cron — sends bereavement check-in emails, anchored on the DATE OF
+ * DEATH the family explicitly gave us at intake (profiles.date_of_death).
+ * Families who never provided a date get no cadence — deliberately no proxy
+ * anchor (signup/negotiation date), because a mis-anchored condolence email
+ * (e.g. to a plan-ahead user whose person has not died) is the worst possible
+ * failure mode.
+ *
+ * Previously anchored on profiles.paid_at, which nothing writes since the
+ * family charge was decommissioned — so this cron matched zero users and the
+ * bereavement touchpoint engine silently sent nothing. Requires the
+ * 2026-07-01-bereavement-cadence migration (adds date_of_death).
  *
  * Schedule (in vercel.json): every day at 14:00 UTC (around 9–10am ET).
  *
  * Security: Vercel cron jobs include an Authorization header with
  * CRON_SECRET. Reject requests without it in production.
  *
- * Logic:
- *   for each profile where opt_in = true and paid_at is not null:
- *     for each milestone in [1yr, 6mo, 1mo]:  (descending — send latest first)
- *       if paid_at is older than MILESTONE_DAYS days
- *       AND milestone not in anniversary_emails_sent:
- *         send the email
- *         append milestone to anniversary_emails_sent
- *         break  (one email per user per cron run)
+ * Logic, per opted-in profile with a date_of_death ≥30 days ago:
+ *   dueMilestone() picks the LATEST due, unsent milestone (1mo/3mo/6mo/1yr/
+ *   13mo) — one email per user per run — and markSent() records it PLUS every
+ *   earlier milestone, so a late joiner gets only the latest applicable
+ *   check-in and a stale early one can never fire out of order afterward.
  */
 export async function GET(req: Request) {
   // Vercel sets this header on cron invocations.
@@ -54,50 +62,45 @@ export async function GET(req: Request) {
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
-  // Look back at the longest milestone window (1yr) to find every paid user
-  // who could potentially be due for an email.
-  const oneYearAgo = new Date(Date.now() - 365 * 24 * 3600 * 1000).toISOString();
+  // Candidates: opted in, gave us a date of death, and that date is at least
+  // the shortest milestone (30 days) in the past. date_of_death is a DATE
+  // column, so compare against a YYYY-MM-DD string.
+  const earliestCutoff = new Date(
+    Date.now() - MILESTONE_DAYS["1mo"] * 24 * 3600 * 1000,
+  )
+    .toISOString()
+    .slice(0, 10);
 
   const { data: candidates, error } = await admin
     .from("profiles")
-    .select(
-      "id, paid_at, anniversary_emails_sent, anniversary_emails_opt_in",
-    )
+    .select("id, date_of_death, anniversary_emails_sent, anniversary_emails_opt_in")
     .eq("anniversary_emails_opt_in", true)
-    .not("paid_at", "is", null)
-    .lte("paid_at", new Date(Date.now() - MILESTONE_DAYS["1mo"] * 24 * 3600 * 1000).toISOString())
-    .order("paid_at", { ascending: true });
+    .not("date_of_death", "is", null)
+    .lte("date_of_death", earliestCutoff)
+    .order("date_of_death", { ascending: true });
 
   if (error) {
+    // Most likely cause pre-launch: the bereavement-cadence migration hasn't
+    // been applied yet (date_of_death column missing). Alert once, fail clean.
     await captureError("cron.anniversary.query_failed", error);
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Try newest milestone first so users only get the most-recent due email.
-  const milestoneOrder: Milestone[] = ["1yr", "6mo", "1mo"];
   const now = Date.now();
   let sentCount = 0;
   const errors: { id: string; reason: string }[] = [];
 
   for (const profile of candidates ?? []) {
-    if (!profile.paid_at) continue;
+    if (!profile.date_of_death) continue;
     const sent: string[] = Array.isArray(profile.anniversary_emails_sent)
       ? (profile.anniversary_emails_sent as string[])
       : [];
-    const paidAtMs = new Date(profile.paid_at).getTime();
+    // A bare YYYY-MM-DD parses as midnight UTC — fine for day-granularity
+    // milestones.
+    const anchorMs = new Date(profile.date_of_death).getTime();
+    if (!Number.isFinite(anchorMs)) continue;
 
-    let toSend: Milestone | null = null;
-    for (const m of milestoneOrder) {
-      if (sent.includes(m)) continue;
-      const cutoff = MILESTONE_DAYS[m] * 24 * 3600 * 1000;
-      if (now - paidAtMs >= cutoff) {
-        toSend = m;
-        break;
-      }
-    }
+    const toSend = dueMilestone(anchorMs, sent, now);
     if (!toSend) continue;
 
     // Look up the user's email (Supabase auth.users) using admin RPC.
@@ -122,10 +125,9 @@ export async function GET(req: Request) {
         subject: content.subject,
         text: content.text,
       });
-      const updatedSent = [...sent, toSend];
       await admin
         .from("profiles")
-        .update({ anniversary_emails_sent: updatedSent })
+        .update({ anniversary_emails_sent: markSent(sent, toSend) })
         .eq("id", profile.id);
       sentCount++;
     } catch (e) {
