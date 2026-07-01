@@ -219,19 +219,24 @@ export const RULES: Rule[] = [
       // Look for any mention of "not required" / "optional" / "you authorized" /
       // "your authorization" near embalming. Embalming requires written
       // authorization from the family per the FTC.
-      const txt = lower(ctx.rawText);
       const hasAuthorizationLanguage =
         /not required|optional|you (did )?authoriz|your authoriz|family authoriz|written authoriz/i.test(
           ctx.rawText,
         );
-      // If the GPL just lists embalming as a charged item with no mention that
-      // it's optional or that the family authorized it, that's a disclosure
-      // violation. Also flag if the GPL claims state law requires it (almost
-      // always false).
-      if (
-        /required by (state )?law|state law requires/.test(txt) &&
-        /embalm/.test(txt)
-      ) {
+      // If the GPL claims state law requires embalming (almost always false),
+      // that's a misrepresentation — but only when the claim is AFFIRMATIVE.
+      // windowedClaim's negation guard is load-bearing here: the FTC-compliant
+      // disclosure itself reads "embalming is NOT required by state law", and a
+      // bare substring match on "required by state law" would false-fire
+      // "violation" on a home that disclosed correctly (caught live 2026-07-01 —
+      // the AI summary escalated it into "this funeral home is misrepresenting
+      // state law... a federal violation" against a fully compliant quote).
+      const win = windowedClaim({
+        text: ctx.rawText,
+        keyword: /embalm/i,
+        trigger: LAW_MANDATE,
+      });
+      if (win) {
         return {
           ruleId: "embalming-no-disclosure",
           severity: "violation",
@@ -239,7 +244,7 @@ export const RULES: Rule[] = [
           description:
             "Embalming is not legally required in any state. Some states require embalming OR refrigeration after a time window for body holding — the family always has the option to refrigerate instead. A funeral home claiming 'state law requires embalming' is making a misrepresentation prohibited by the FTC Funeral Rule.",
           ftcReference: "16 CFR §453.5(a)(2)",
-          evidence: embalming.name,
+          evidence: win,
           whatToSay:
             "Please point to the specific state statute requiring embalming. I'd like to choose refrigeration instead — that satisfies any state holding-period rule.",
         };

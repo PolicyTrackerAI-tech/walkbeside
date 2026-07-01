@@ -110,6 +110,19 @@ describe("embalming-no-disclosure", () => {
     ]);
     expect(ids(d)).not.toContain("embalming-no-disclosure");
   });
+
+  it("regression: a COMPLIANT 'not required by state law' disclosure never fires violation", () => {
+    // Live bug (caught 2026-07-01): a bare substring match on "required by
+    // state law" fired even when the text said "NOT required" — the exact
+    // FTC-mandated compliant disclosure wording. This must stay silent (or at
+    // most the calm 'suspicious' authorization-language check), never violation.
+    const d = fire(
+      "Embalming (not required by state law, family authorized in writing) $900",
+      [{ name: "Embalming", cents: 90000 }],
+    );
+    expect(sev(d, "embalming-no-disclosure")).not.toBe("violation");
+    expect(ids(d)).not.toContain("embalming-no-disclosure");
+  });
 });
 
 describe("FTC engine — expansion rules (2026-06-26)", () => {
