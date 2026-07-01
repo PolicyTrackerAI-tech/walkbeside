@@ -18,6 +18,24 @@ import { requireAdminApi } from "@/lib/admin-auth";
 
 const CENTS = z.number().int().nonnegative().max(100_000_00);
 
+/**
+ * True only when the request carries a REAL outcome field. Drives whether
+ * outcome_recorded_at is stamped — which in turn drives what counts as a
+ * completed case on a partner's report. Tagging a partner alone (the "Referred
+ * by" selector) must never, by itself, mark a case "resolved."
+ */
+export function hasRealOutcomeField(body: {
+  negotiatedPriceCents?: number | null;
+  amountPaidCents?: number | null;
+  satisfactionScore?: number | null;
+}): boolean {
+  return (
+    body.negotiatedPriceCents !== undefined ||
+    body.amountPaidCents !== undefined ||
+    body.satisfactionScore !== undefined
+  );
+}
+
 const CaseBody = z.object({
   scope: z.literal("case"),
   negotiationId: z.string().uuid(),
@@ -69,10 +87,12 @@ export async function PATCH(req: Request) {
   );
 
   if (body.scope === "case") {
-    const patch: Record<string, unknown> = {
-      updated_at: now,
-      outcome_recorded_at: now,
-    };
+    const patch: Record<string, unknown> = { updated_at: now };
+    // Caught in the 2026-07-01 readout audit: tagging partnerId alone must not
+    // mark a case "resolved" with $0 savings on a partner's real report.
+    if (hasRealOutcomeField(body)) {
+      patch.outcome_recorded_at = now;
+    }
     if (body.negotiatedPriceCents !== undefined) {
       patch.negotiated_price_cents = body.negotiatedPriceCents;
     }
