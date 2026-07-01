@@ -1,0 +1,216 @@
+# Hospice-Referred Family Feature Roadmap
+
+**Status: the live build checklist.** Produced 2026-07-01 by a research +
+adversarial-vet workflow: a current-app audit (so nothing below duplicates a
+shipped feature), sourced research (Medicare hospice bereavement requirements
+under 42 CFR 418.64, post-death admin burden, caregiver/anticipatory-grief best
+practices, accessibility needs of an older population), feature generation
+across six themes, and a guardrail vet that revised or killed anything touching
+the six non-negotiables in `CLAUDE.md`.
+
+**How to use this:** items are checkboxes. Work top-to-bottom within a phase;
+phases are ordered by how directly they serve a hospice-referred family first
+and the business second (per the L1→L3 build order). Check an item only when
+it's live, gated (typecheck/tests/build), and verified on production. Effort:
+**S** = hours, **M** = a day-ish, **L** = multi-day.
+
+**Who these families are (design target):** elderly spouses or adult-child
+caregivers exhausted by a long terminal illness — grief started *before* the
+death (anticipatory), tech comfort varies widely, several relatives coordinate
+remotely, and they're entitled to ~13 months of bereavement support their
+hospice is required to offer (42 CFR 418.64) but is usually under-resourced to
+deliver. That gap is our opportunity and our obligation.
+
+---
+
+## Phase 1 — Deepen the core wedge (the fair-price checker)
+
+*Goal: make the analyzer's verdicts more precise, more provable, and
+self-improving — without ever letting a published number get ahead of its
+sourcing.*
+
+- [ ] **[M] Final-bill-vs-original-quote drift checker.** New analyzer mode:
+  upload the original quote AND the final signed bill; diff the line items and
+  flag new/increased charges. Every claim derives from the family's own two
+  documents — provable, not a benchmark guess. Same under-claim discipline as
+  the existing engine.
+- [ ] **[S] Self-collected multi-home price comparison.** A family who
+  gathered their own quotes runs each through the analyzer and sees them side
+  by side with the same neutral good/fair/high/predatory rating. No ranking,
+  no recommendation — parallel facts only (guardrail 3).
+- [ ] **[S] Cemetery/monument price-list scope detection.** Detect when an
+  uploaded document is a cemetery/monument list (NOT governed by the FTC
+  Funeral Rule) and suppress/relabel FTC flags accordingly — prevents citing a
+  violation the Rule doesn't cover.
+- [ ] **[M] Cash-advance receipt markup verification.** Upload the third-party
+  receipt (florist, newspaper) next to the funeral home's charge for the same
+  item → compute the exact dollar markup instead of a benchmark-based
+  "suspicious" flag. Turns a fuzzy flag into a proven number.
+- [ ] **[M] State-specific legal-claim layer for `/rights`.** Replace blanket
+  national embalming/vault statements with a per-state table, every row gated
+  behind an explicit citation to that state's statute (closes the file's
+  existing TODO; guardrail 4).
+- [ ] **[L] Crowdsourced benchmark refinement pipeline.** Admin-only pipeline
+  aggregating de-identified `price_list_analyses` to refine the fair-price
+  ranges. Every change gated behind a minimum sample size per region/item
+  (reuse `SMALL_SAMPLE_THRESHOLD`), logged to `/corrections` (old range → new
+  range, n, date), disclosed on `/methodology` (survey-baseline vs
+  crowd-refined). **This is the proprietary-data moat** — defensible only if
+  the provenance rigor never slips.
+
+## Phase 2 — Family coordination & the after-funeral admin gap
+
+*Goal: close named, sourced gaps in the ~420-hour post-death admin slog that
+this population (older, Medicaid/reverse-mortgage-exposed, multiple remote
+adult children) hits with no help today.*
+
+- [ ] **[L] Medicaid Estate Recovery (MERP) navigator.** State-by-state guide:
+  when a state can claim against a deceased Medicaid recipient's estate
+  (usually the house), the Notice-of-Intent response window, and hardship-
+  waiver categories (surviving spouse, disabled child, caregiver child). No
+  state row ships without a citation to that state's Medicaid manual/statute
+  (mirror `lib/probate-by-state.ts` discipline) + a "confirm with a local
+  elder-law attorney" disclaimer. Hospice decedents skew Medicaid/dual-
+  eligible; families are blindsided by this. Zero coverage in the app today.
+- [ ] **[S] Surviving spouse's Medicare Part B deadline alert.** New
+  context-aware task + short guide: 8-month Special Enrollment Period after
+  losing coverage under the deceased's employer plan; COBRA does NOT extend
+  it; missing it = permanent premium penalty. Single well-established federal
+  rule, severe if missed, squarely this population.
+- [ ] **[M] Reverse mortgage heir timeline guide.** HECM-scoped: loan due at
+  death, 30-day response to the due-and-payable notice, up to 6 months + two
+  90-day extensions, the 95%-of-appraised-value payoff option, non-recourse
+  protection. Note that proprietary (non-FHA) loans differ — confirm loan type
+  with the servicer.
+- [ ] **[S] Bereavement-leave HR prompt.** One line added to the existing
+  employer-notification task: ask HR what happens to your own PTO/leave if you
+  were on caregiver leave at the time of death (~6 states mandate any
+  bereavement leave).
+- [ ] **[S] Point-person designation for negotiation.** Family designates one
+  member as the authorized contact on a negotiation thread; only that person's
+  info is shared with homes. Lightweight consent confirmation.
+- [ ] **[L] Live shared household link.** Upgrade `/share` from a one-time
+  snapshot to a durable, unguessable-slug live view of Vault/Notifications/
+  Next-30-Days/negotiation state for multiple family members — with link
+  expiry/rotation (sensitive data).
+- [ ] **[S] Assignee field on Vault, Notifications, Next-30-Days.** Free-text
+  "assigned to" + filter by assignee. Sibling division-of-labor is a real,
+  named pain point; trivial addition to already-free tools.
+- [ ] **[M] Consolidated print/export "family briefing" one-pager.** One print
+  view rolling up the family's own Vault, Notifications, Next-30-Days, and
+  certificate-count data — legible at a glance for an out-of-town relative or
+  a physical folder.
+- [ ] **[M] Per-family-member task digest (email now, SMS later).** Read-only
+  digest to a delegated relative listing just their assigned tasks, no login
+  required.
+
+## Phase 3 — Grief & bereavement support (legally owed, chronically under-delivered)
+
+*Goal: fix a confirmed dead cron, then build the evidence-based bereavement
+touchpoints this population is entitled to under 42 CFR 418.64. Content and
+cadence only — never an operated counseling service.*
+
+- [ ] **[M] ⚠️ FIX FIRST: death-date capture + re-anchored bereavement email
+  cadence.** The anniversary cron (`app/api/cron/anniversary/route.ts`,
+  `lib/anniversary-emails.ts`) still keys milestones off the decommissioned
+  `paid_at` field — **it currently matches zero users and sends nothing.**
+  Add a real `date_of_death` at intake, re-anchor milestones to it, and extend
+  the cadence across the 13-month bereavement window. This is a live bug
+  sitting directly on the regulatory bereavement clock.
+- [ ] **[M] "Have you used your free bereavement benefit?" nudge + partner
+  metric.** Recurring plain-worded reminder pointing the family back to their
+  hospice's own Medicare-required bereavement counseling ("here's the number;
+  you're entitled to this"), plus a new aggregate, small-sample-gated
+  partner-report field ("% of referred families reminded/engaged"). Research:
+  fewer than half of eligible families ever use the benefit they're owed. We
+  drive utilization of the hospice's own service — we never provide counseling.
+- [ ] **[M] Optional PG-13 grief self-check with escalation routing.**
+  Clearly non-diagnostic self-check on `/grief` built on the validated PG-13
+  (Prolonged Grief) instrument, offered around the 6- and 12-month
+  touchpoints; plain-language result + prominent human escalation paths
+  (hospice bereavement counselor, 988, ADEC/Psychology Today directories).
+- [ ] **[M] SMS opt-in channel for bereavement touchpoints.** Same content as
+  the email touchpoints via Twilio opt-in; cost absorbed by Honest Funeral,
+  never the family. This population skews older — SMS outperforms email here.
+- [ ] **[S] Decisional-regret normalization content.** Short, sourced addition
+  to `/after-hospice` and `/final-days` normalizing lingering doubt over
+  end-of-life decisions (hospice timing, DNR, stopping treatment) as a common,
+  non-pathological caregiver experience — pointing to existing escalation
+  resources.
+- [ ] **[L] Spanish translation of the core intake + grief arc.**
+  Human-reviewed (not machine-only): `/where`, `/guidance/[scenario]`,
+  `/decide`, `/worksheet`, `/grief`, `/after-hospice` — carrying every
+  disclaimer verbatim in meaning, and flagging faith content as
+  pending-clergy-review exactly as English does. Zero non-English content
+  exists today; language is the top named barrier for Hispanic hospice
+  families.
+
+## Phase 4 — Hospice-facing infrastructure
+
+*Goal: the self-serve referral, attribution, and reporting infrastructure the
+B2B2C model runs on — every institutional money relationship stays behind a
+human approval gate; every family-level data point stays aggregate-only.*
+
+- [ ] **[L] Self-serve neutral referral code + claim-link system.** A hospice
+  coordinator generates their own referral link (no engineer, no SQL) that
+  attributes a family's case to the institution for aggregate reporting only.
+  Coordinator has zero visibility into which homes any family sees.
+- [ ] **[M] Co-branded referral landing on `/negotiate/start`.** Hospice
+  name/logo alongside a persistent, non-overridable Honest Funeral neutrality
+  pledge — visible at the exact moment of trust-transfer.
+- [ ] **[M] Aggregate-only "tool engagement" signal in the partner report.**
+  Usage counts (% who opened next-30-days, reached Month 2, used /estate) in
+  the same small-sample-suppression path as the existing metrics — not a
+  separate export that could bypass it.
+- [ ] **[M] Printable partner outcomes summary.** Print-optimized export of
+  the existing aggregate metrics with the methodology footnote and neutrality
+  line. Explicitly NOT framed as a "CAHPS" or "compliance" artifact (no
+  implied CMS certification).
+- [ ] **[M] Self-serve hospice partner onboarding.** Signup form → pending
+  state → **manual founder approval** before any referral code goes live.
+  Removes engineer-in-the-loop friction; preserves human review of every new
+  institutional money relationship.
+- [ ] **[S] Unclaimed-referral follow-up safety net.** Internal-only admin
+  count of codes issued vs claimed — surfaced to the founder, never the
+  hospice — to prompt a human check-in with the coordinator.
+- [ ] **[S] Automated aggregate-only partner activity digest email.** Periodic
+  email to each partner with strictly aggregate counts. No names, no
+  individual choices, no price data.
+
+## Phase 5 — Reach & accessibility
+
+*Goal: widen who can actually use everything above — older, lower-tech-comfort
+users and language needs the site currently has zero support for.*
+
+- [ ] **[M] Site-wide low-vision / low-tech display mode.** Persistent toggle:
+  larger base font, higher contrast, simplified single-column layout —
+  site-wide, not one page. Primary users are frequently 65–85+; today there is
+  a fixed 17px base font and no control at all.
+- [ ] **[S] Public `/accessibility` statement + language-assistance notice.**
+  States a conformance *target* (not a claim of achieved compliance), known
+  limitations, and how to request accommodation. Also de-risks a hospice's own
+  Section 1557 concern about referring patients to a vendor tool.
+- [ ] **[M] Readability lint gate on family-facing copy.** CI check scoring
+  the family-facing content files against a Flesch-Kincaid grade 6–8 ceiling
+  (citations/disclaimers excluded from scoring), failing any change that
+  lowers the score by stripping the hedges that make a claim defensible.
+  Acute grief measurably impairs reading comprehension.
+
+---
+
+## Killed in the guardrail vet (do not resurrect without new evidence)
+
+- **AI grief-companion chatbot / conversational "griefbot"** — rejected
+  outright, not revised. Published safety research documents that chatbots
+  cannot assess imminent crisis risk (suicidality, dissociation), including a
+  case preceding a user's death by suicide. All crisis/escalation paths stay
+  static and human-staffed (988, the hospice bereavement line, professional
+  directories) — matching the one-shot (not conversational) pattern already
+  used safely for obituary/eulogy generation.
+
+## Standing rules for everything above
+
+Every item, before it ships: passes the six guardrails in `CLAUDE.md`; free to
+the family with no exceptions; any number or legal claim carries a citation
+(guardrail 4 — the discipline that has already caught real errors twice);
+typecheck + tests + build green; verified on production after deploy.
