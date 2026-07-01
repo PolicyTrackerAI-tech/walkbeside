@@ -73,18 +73,47 @@ deal, or deepens the data.
 
 ---
 
-## The 90-day sprint (adapted)
+## The 90-day validation sprint (re-baselined 2026-07-01 to the market research)
 
-- **Weeks 1–4 — Foundation & first data:** apply outcomes migration; ship the
-  decommission (families free, emails still off); publish methodology + trust
-  pages; build the 20–30 Utah-hospice target list; first mini price-disclosure
-  survey; first 10 hospice outreaches.
-- **Weeks 5–8 — First pilots & proof:** 10+ discovery calls; 1–2 free pilots;
-  run at-need cases by hand capturing every outcome; partner portal + reporting
-  v1; first savings case studies.
-- **Weeks 9–12 — Convert & publish:** one-page proof sheet; ask for the paid
-  contract + peer intros; publish the first Fair-Price Index with a press push;
-  decision memo vs the scorecard.
+Much of the original sprint's engineering is DONE (decommission shipped, trust
+spine + Fair-Price Index published, partner report + outcomes layer built). What
+remains is validation — per `Honest_Funeral_Market_Research.pdf`:
+
+- **Weeks 1–4 — Discovery + the price asset:** 20 discovery interviews — hospice
+  **social workers and bereavement coordinators** (the felt pain: ~14 staff
+  minutes/patient/week) plus 2–3 executives (one regional for-profit, one
+  nonprofit). Test: who owns the budget, what triggers the funeral conversation
+  today, reaction to per-family pricing ($25–$75), compliance objections.
+  Simultaneously **hand-build the verified GPL database for ONE metro** (the
+  Funeral Rule guarantees in-person GPL access; date-stamp everything — this
+  database is the moat).
+- **Weeks 5–8 — Paper pilot:** 1–2 hospices, concierge-style (human +
+  spreadsheet + our tools), 10–20 families. Instrument the **five core metrics
+  from day one:** median $ saved vs the metro median price · quotes per family ·
+  benefit dollars recovered · staff minutes saved (survey) · family NPS.
+- **Weeks 9–12 — Convert:** turn pilot results into the sales narrative; test
+  pricing at $25/$50/$75 per family with 5 more hospices; decide build scope.
+  **Gate to proceed: hospices sign paid LOIs AND pilot families saved a median
+  ≥$1,500 (or recovered equivalent benefits).**
+
+### The pitch — what to say and what never to say (research-verified)
+
+- **Lead with:** unfunded-mandate coverage (42 CFR 418.64, unreimbursed);
+  social-worker time returned; a compliant answer to "who should we call?"
+  (steering-liability relief — NHPCO ethics bar referrals while funeral homes
+  actively court hospices); family financial protection as referral-market
+  differentiation; donor goodwill for nonprofits.
+- **Never pitch "fix your bereavement/CAHPS scores"** — emotional support is
+  CAHPS's HIGHEST measure (91% top-box). The honest CAHPS angle is marginal
+  differentiation on flat "rating 9–10"/"would recommend" numbers, later.
+- **Positioning is informed choice, never cheapness** — some families rationally
+  choose the $12,000 service; now they do it knowingly. Nothing may imply the
+  hospice steers families to cheap providers.
+- Pricing anchors: average hospice ≈ 200 deaths/yr → $5–15K/yr contracts at
+  $25–$75/family (below signature thresholds, inside the for-profit 13.7%
+  margin). Nonprofits (−1.3% margins) are mission-aligned but broke — offer
+  foundation/donor-funded sponsorship tiers. Land with regional 2–20-site
+  operators; use published pilot metrics to open chains (VITAS/Gentiva).
 
 ---
 

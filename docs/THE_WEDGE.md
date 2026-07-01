@@ -35,6 +35,35 @@ instantly:
 It's the family-trust hook, the AI-citation magnet, and the engine that builds our
 proprietary dataset — all in one.
 
+## The moment — sharpened by the July 2026 market research
+
+The value concentrates **before the first call**: whoever removes the body becomes
+the funeral home by default, the decision closes in 24–72 hours, and a majority of
+families (54.7%, NFDA 2025 — and rising) never contact a second home. Hospice is
+the only channel that reaches the family **before** that moment — but the window is
+brutal: **median hospice stay is 19 days; a quarter of patients die within 5 days
+of enrollment** (MedPAC 2026).
+
+Two design laws follow:
+
+1. **The core loop must complete in one sitting** — understand options → see
+   verified local prices → capture wishes → identify benefits → a documented
+   family plan. A leisurely planning journey is an enhancement, never a
+   requirement.
+2. **The product does the comparing.** "Give grieving people a tool and hope they
+   comparison-shop" is falsified — single-home shopping is *rising*. We compare
+   for them, pre-death, delivered through the hospice they already trust.
+
+The research (~60 sources verified against NFDA/MedPAC/FTC/CMS primaries;
+`Honest_Funeral_Market_Research.pdf`, July 2026) confirmed the white space is
+**empty**: no company sells funeral navigation or price transparency to hospices as
+the payer. Every scaled analog proves a piece — Help Texts (hospice-pays, mandate
+framing), Empathy ($162M raised, institution-pays), Everest (funeral price
+comparison as an embedded benefit) — and nobody has assembled them. The graveyard
+of consumer-paid funeral transparency (Funeralocity, Grace, Lantern, Cake,
+Everdays, Farewill) confirms the other half: **grieving consumers don't pay;
+institutions do.**
+
 ## What we do NOT do
 
 We do **not** become a broad after-death / estate / grief platform. That's Empathy's

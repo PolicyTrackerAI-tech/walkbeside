@@ -55,11 +55,38 @@ the data, it's probably a distraction.
   requires `active = true AND vetted = true`. Don't loosen it.
 - **Family data is private.** `negotiations` / `negotiation_outreach` are
   owner-scoped by RLS (`auth.uid()`). New columns inherit it; never add a public
-  read of family case data. Admin tools read via the service-role key behind
-  `ADMIN_PREVIEW_KEY` — mirror `/admin/vetting`.
-- **The consumer payment ($49 pay-to-send) is being removed** (guardrail #2).
-  See [`docs/PAYMENT_DECOMMISSION.md`](docs/PAYMENT_DECOMMISSION.md). Until that
-  lands, don't build new family-paid features.
+  read of family case data. Admin tools read via the service-role key behind the
+  session-based admin gate (`lib/admin-auth.ts` `requireAdminPage` /
+  `requireAdminApi` + the `ADMIN_EMAILS` allowlist) — mirror `/admin/vetting`.
+- **The consumer payment is fully decommissioned** (guardrail #2, shipped
+  2026-06-26). There is no family charge anywhere; never build one.
+
+## Channel-survival rules (from the July 2026 market research — treat as law)
+
+The hospice channel was burned once (Grace used hospices as lead-gen and died);
+these rules are what make us admissible. Full analysis + citations:
+`Honest_Funeral_Market_Research.pdf` and `docs/LAWYER_BRIEF.md` §5.L.
+
+- **Family-initiated activation only.** The hospice hands the family a
+  link/packet; the family activates. The platform NEVER cold-contacts a next of
+  kin (at-need solicitation is banned in FL, TX, ME, NE — and it's the Grace
+  failure mode). Opt-in follow-ups to a family who activated are fine.
+- **Delivered post-admission only.** The benefit must never appear in a
+  hospice's pre-admission marketing or be usable to induce hospice selection —
+  that is the Anti-Kickback danger vector (the funeral itself isn't federally
+  payable; inducing HOSPICE selection is). Frame institutional contracts as
+  bereavement/psychosocial-support procurement.
+- **The hospice transmits nothing.** Design every partner flow so no
+  patient/family data flows hospice → platform (self-serve family activation).
+  That keeps us out of HIPAA business-associate territory by construction
+  (decedent PHI is protected for 50 years); if a flow ever requires hospice-
+  transmitted data, it needs a BAA first.
+- **Navigation and education, never "arranging."** Broad state definitions of
+  unlicensed funeral directing (TX, SC) mean we inform, compare, and document —
+  the family makes every arrangement and signs everything directly.
+- **No per-referral revenue from the supply side, ever** (already guardrail #1
+  — but note it is also a license-revocation offense for homes in NY/VA, so it
+  poisons both sides).
 
 ## Release discipline (this repo moves fast on `origin/main`)
 

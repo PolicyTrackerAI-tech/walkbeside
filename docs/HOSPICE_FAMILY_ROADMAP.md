@@ -21,7 +21,53 @@ remotely, and they're entitled to ~13 months of bereavement support their
 hospice is required to offer (42 CFR 418.64) but is usually under-resourced to
 deliver. That gap is our opportunity and our obligation.
 
+**Re-baselined 2026-07-01 against `Honest_Funeral_Market_Research.pdf`:** the
+research ranks the opportunities (1) pre-death admission-week navigation, (2)
+the verified price layer, (3) staff relief/compliance as the sales wedge, (4)
+benefit recovery, (5) the bereavement companion — *later, not first*. Phase 0
+below is new; Phase 3 stays but deliberately behind Phases 0–2 and 4. The
+timing constraint that governs everything: **median hospice stay is 19 days; a
+quarter of patients die within 5 days of enrollment** — the core loop must
+complete in one sitting, and the product does the comparing (single-home
+shopping is rising; grieving people don't become bargain hunters).
+
 ---
+
+## Phase 0 — The admission-week flow (the research's #1 opportunity) *(new)*
+
+*Goal: break the "first-call default" — the funeral home that removes the body
+wins by default — by reaching the family pre-death, through the hospice, with a
+one-sitting flow. Every dollar of family value concentrates before the first
+call.*
+
+- [ ] **[L] The one-sitting plan (`/plan-now` or evolved `/decide`).** A single
+  guided pass, completable in ~20 minutes on a phone, that ends in a
+  **documented family plan**: understand the options (burial/cremation types,
+  plain language) → see fair local prices for the chosen path → capture the
+  family's wishes and the deceased-to-be's preferences → surface likely
+  benefits (VA, SSA, county) → name the point person and the plan. Printable +
+  shareable. Framed for the hospice-admission moment ("your hospice gave you
+  this so you can decide calmly, before the phone call"). Pre-death framing
+  throughout — never assumes the death has happened.
+- [ ] **[M] The "first call" script + plan card.** The single highest-leverage
+  artifact: a one-page, printable "when the time comes" card — who to call
+  (the family's *chosen* home, from their plan), what to say, what NOT to
+  authorize on the phone (nothing beyond transport), and the reminder that
+  choosing who removes the body is choosing the funeral home. Generated from
+  the family plan; works on paper for the 80-year-old spouse.
+- [ ] **[M] Pre-death mode across existing tools.** The checker, worksheet, and
+  decide flow currently assume at-need. Add a "planning ahead on hospice"
+  entry state: same tools, tense-shifted copy, no death-date required, and the
+  outputs feed the family plan. (The `/plan-ahead` page exists but is generic
+  pre-need — this is the hospice-specific, days-not-years version.)
+- [ ] **[M] Benefit-recovery sweep in one pass.** One short questionnaire
+  (veteran? Medicaid? employed? life insurance?) that outputs the family's
+  likely benefits with dollar figures and exact next steps — VA burial
+  benefits (unused by >75% of eligible veteran families), the SSA $255 lump
+  sum, county indigent programs, employer/union benefits, the NAIC life-policy
+  locator. Extends the existing `/veterans` + next-30-days content into a
+  unified, instrumentable pass; record "benefit dollars identified" per case
+  (aggregate-only) for the partner report.
 
 ## Phase 1 — Deepen the core wedge (the fair-price checker)
 
@@ -120,6 +166,12 @@ adult children) hits with no help today.*
 touchpoints this population is entitled to under 42 CFR 418.64. Content and
 cadence only — never an operated counseling service.*
 
+*Research note (2026-07-01): the bereavement companion is opportunity **#5 —
+"do later, not first"** (Help Texts/Empathy already crowd it, and it isn't the
+money moment). The cron fix below was a live bug and stays; hold the rest of
+this phase behind Phases 0, 1, and 4. Also: never pitch this to hospices as
+CAHPS-score repair — emotional support is already their highest score (91%).*
+
 - [x] **[M] ⚠️ FIX FIRST: death-date capture + re-anchored bereavement email
   cadence.** The anniversary cron (`app/api/cron/anniversary/route.ts`,
   `lib/anniversary-emails.ts`) still keys milestones off the decommissioned
@@ -192,6 +244,15 @@ human approval gate; every family-level data point stays aggregate-only.*
 - [ ] **[S] Automated aggregate-only partner activity digest email.** Periodic
   email to each partner with strictly aggregate counts. No names, no
   individual choices, no price data.
+- [ ] **[M] The five pilot metrics, instrumented end to end.** The research's
+  day-one measurement set, wired through the outcomes layer and the partner
+  report: median $ saved **vs the metro median price** (not just vs the
+  family's own quote) · quotes per family (countable from outreach rows) ·
+  benefit dollars recovered (new per-case field, admin-entered for the pilot) ·
+  staff minutes saved (a one-question coordinator survey, ops-side) · family
+  NPS (extend the existing 1–5 satisfaction capture). A pilot that publishes
+  first-of-kind outcome data owns the category's evidence base — no RCT links
+  funeral pre-arrangement to grief outcomes yet.
 
 ## Phase 5 — Reach & accessibility
 
