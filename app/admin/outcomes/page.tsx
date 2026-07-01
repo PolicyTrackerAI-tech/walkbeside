@@ -8,6 +8,7 @@ import {
   OutcomesClient,
   type OutcomeCase,
   type OutcomeHome,
+  type PartnerLite,
 } from "./OutcomesClient";
 
 export const metadata: Metadata = {
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 const NEG_COLS =
-  "id, zip, service_type, status, target_home_estimate_cents, best_quote_cents, negotiated_price_cents, amount_paid_cents, satisfaction_score, savings_vs_listed_cents, outcome_recorded_at, created_at";
+  "id, zip, service_type, status, target_home_estimate_cents, best_quote_cents, negotiated_price_cents, amount_paid_cents, satisfaction_score, savings_vs_listed_cents, outcome_recorded_at, partner_id, created_at";
 const OUTREACH_COLS =
   "id, negotiation_id, home_name, quote_cents, chosen, listed_price_cents, negotiated_price_cents, hidden_fees, status";
 
@@ -60,6 +61,25 @@ export default async function AdminOutcomesPage() {
     ),
   }));
 
+  // The list of partners to tag cases to. Tolerant: if the partners table isn't
+  // there yet (migration unapplied), the selector just shows "no partners yet".
+  let partners: PartnerLite[] = [];
+  try {
+    const { data } = await admin
+      .from("partners")
+      .select("id, name")
+      .eq("active", true)
+      .order("name", { ascending: true });
+    partners = (data as PartnerLite[] | null) ?? [];
+  } catch {
+    partners = [];
+  }
+
+  // So the founder never silently drops a referred case from a partner report.
+  const untaggedRecorded = cases.filter(
+    (c) => c.outcome_recorded_at && !c.partner_id,
+  ).length;
+
   return (
     <main className="flex-1 flex flex-col bg-bg">
       <SiteHeader showBack={false} />
@@ -83,7 +103,17 @@ export default async function AdminOutcomesPage() {
               Could not load outcomes: {error.message}
             </div>
           ) : (
-            <OutcomesClient initial={cases} />
+            <>
+              {untaggedRecorded > 0 && partners.length > 0 && (
+                <div className="rounded-xl border border-warn/40 bg-warn-soft/50 text-ink text-sm px-4 py-3">
+                  {untaggedRecorded} recorded{" "}
+                  {untaggedRecorded === 1 ? "case is" : "cases are"} not tagged to
+                  a partner &mdash; tag them below so they appear on the right
+                  partner&rsquo;s report.
+                </div>
+              )}
+              <OutcomesClient initial={cases} partners={partners} />
+            </>
           )}
         </div>
       </section>

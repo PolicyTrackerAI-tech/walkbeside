@@ -24,6 +24,11 @@ export interface OutcomeHome {
   status: string;
 }
 
+export interface PartnerLite {
+  id: string;
+  name: string;
+}
+
 export interface OutcomeCase {
   id: string;
   zip: string;
@@ -36,6 +41,7 @@ export interface OutcomeCase {
   satisfaction_score: number | null;
   savings_vs_listed_cents: number | null;
   outcome_recorded_at: string | null;
+  partner_id: string | null;
   created_at: string;
   homes: OutcomeHome[];
 }
@@ -59,7 +65,13 @@ function inputToCents(v: string): number | null {
   return Math.round(n * 100);
 }
 
-export function OutcomesClient({ initial }: { initial: OutcomeCase[] }) {
+export function OutcomesClient({
+  initial,
+  partners = [],
+}: {
+  initial: OutcomeCase[];
+  partners?: PartnerLite[];
+}) {
   const [cases, setCases] = React.useState<OutcomeCase[]>(initial);
   const [filter, setFilter] = React.useState<Filter>("all");
   const [query, setQuery] = React.useState("");
@@ -201,6 +213,7 @@ export function OutcomesClient({ initial }: { initial: OutcomeCase[] }) {
             <li key={c.id}>
               <CaseRow
                 c={c}
+                partners={partners}
                 busy={busy}
                 send={send}
                 patchCaseLocal={patchCaseLocal}
@@ -216,12 +229,14 @@ export function OutcomesClient({ initial }: { initial: OutcomeCase[] }) {
 
 function CaseRow({
   c,
+  partners,
   busy,
   send,
   patchCaseLocal,
   patchHomeLocal,
 }: {
   c: OutcomeCase;
+  partners: PartnerLite[];
   busy: Record<string, boolean>;
   send: (
     payload: Record<string, unknown>,
@@ -262,6 +277,15 @@ function CaseRow({
     if (res?.negotiation) patchCaseLocal(c.id, res.negotiation);
   }
 
+  async function setPartner(partnerId: string | null) {
+    const res = await send(
+      { scope: "case", negotiationId: c.id, partnerId },
+      `partner:${c.id}`,
+    );
+    // The route returns the row sans partner_id, so patch it explicitly.
+    if (res) patchCaseLocal(c.id, { partner_id: partnerId });
+  }
+
   const created = new Date(c.created_at).toLocaleDateString();
   const saving = !!busy[`case:${c.id}`];
 
@@ -288,6 +312,31 @@ function CaseRow({
           )}
         </div>
       </div>
+
+      {/* Referring partner (hospice) — drives the partner report. Tag AFTER the
+          family has chosen; this is a reporting label only, never read by
+          selection or outreach. */}
+      {partners.length > 0 && (
+        <div className="mt-3 flex items-center gap-2">
+          <Label htmlFor={`partner-${c.id}`} className="!mb-0 whitespace-nowrap">
+            Referred by
+          </Label>
+          <select
+            id={`partner-${c.id}`}
+            value={c.partner_id ?? ""}
+            disabled={!!busy[`partner:${c.id}`]}
+            onChange={(e) => setPartner(e.target.value || null)}
+            className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-ink disabled:opacity-60"
+          >
+            <option value="">— none —</option>
+            {partners.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Reference (read-only) metrics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 text-sm">
