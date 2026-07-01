@@ -1,3 +1,5 @@
+> **⚠️ SUPERSEDED (2026-06-24).** Tied to the old family-paid $49 charge, which is being removed (families become free; institutions pay) — see [OPERATING_PLAN.md](OPERATING_PLAN.md) and [PAYMENT_DECOMMISSION.md](PAYMENT_DECOMMISSION.md). Kept for history until the charge is gone.
+
 # Refund SOP
 
 The promise we make everywhere: **flat $49, refundable within 14 days if we

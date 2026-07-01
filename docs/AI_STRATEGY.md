@@ -1,3 +1,5 @@
+> **⚠️ PARTIALLY SUPERSEDED (2026-06-24).** The AI/data architecture here is still valid; anything that anchors unit economics to a **family-paid $49** is legacy. The company now runs off [OPERATING_PLAN.md](OPERATING_PLAN.md) — free to families, **institutions pay** (the payer changes; the data pipeline doesn't). See [ROADMAP.md](ROADMAP.md).
+
 # Honest Funeral — AI Strategy
 
 *A buildable plan for turning AI plus proprietary funeral-pricing data into an uncopyable moat. Written for the founder who will ship it.*

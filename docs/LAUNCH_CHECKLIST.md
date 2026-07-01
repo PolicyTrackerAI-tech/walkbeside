@@ -1,3 +1,5 @@
+> **⚠️ PARTIALLY SUPERSEDED (2026-06-24).** Technical/setup items (Supabase, Vercel, RLS, monitoring, QA) are still valid; the **pricing/refund/family-payment items are legacy**. The company now runs off [OPERATING_PLAN.md](OPERATING_PLAN.md) — free to families, institutions pay. The live execution plan is [ROADMAP.md](ROADMAP.md).
+
 # Honest Funeral — Master Launch Checklist
 
 _Generated 2026-06-09 from an 8-dimension codebase sweep. The single source of truth for getting to a real launch (taking real money + emailing real funeral homes). Check items off as you go._
