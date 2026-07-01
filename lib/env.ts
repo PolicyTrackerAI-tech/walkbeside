@@ -57,14 +57,18 @@ const CORE_VARS = [
 ];
 
 /**
- * Required to safely run LIVE outreach (real money + real emails). These are
- * LIVE-specific and intentionally do NOT repeat CORE_VARS — when live, a
+ * Required to safely run LIVE outreach (real emails to funeral homes). These
+ * are LIVE-specific and intentionally do NOT repeat CORE_VARS — when live, a
  * missing CORE var already escalates to an error above, so listing it here too
  * would print the failure twice.
+ *
+ * Stripe is deliberately NOT here: the family-facing product is free (no
+ * checkout/webhook exists), and Stripe is kept only as scaffolding for future
+ * institutional billing. Requiring a live Stripe key to flip OUTREACH_LIVE was
+ * leftover coupling from the decommissioned $49 family-fee model — outreach
+ * has no payment dependency, so it must not fail to boot over one.
  */
 const LIVE_REQUIRED_VARS = [
-  "STRIPE_SECRET_KEY",
-  "STRIPE_WEBHOOK_SECRET",
   "RESEND_API_KEY",
   "RESEND_WEBHOOK_SECRET", // route requireServer()s it; missing → webhook 500s, bounces unhandled
   "UNSUBSCRIBE_SECRET",
@@ -109,11 +113,6 @@ export function validateEnv(): { errors: string[]; warnings: string[] } {
       }
     }
     // Footguns: live mode with test/sandbox values.
-    if ((process.env.STRIPE_SECRET_KEY ?? "").startsWith("sk_test_")) {
-      errors.push(
-        "OUTREACH_LIVE=true but STRIPE_SECRET_KEY is a TEST key (sk_test_) — use a live key",
-      );
-    }
     const from = (process.env.RESEND_FROM ?? "").toLowerCase();
     if (from.includes("resend.dev") || from.includes("onboarding@")) {
       warnings.push(

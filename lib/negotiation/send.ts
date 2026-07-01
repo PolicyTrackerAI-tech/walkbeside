@@ -6,18 +6,17 @@ import { isEmailDenylisted } from "@/lib/negotiation/denylist";
 import { logEvent, captureError, sendAlert } from "@/lib/observability";
 
 /**
- * Send the prebuilt outreach emails for a PAID negotiation.
+ * Send the prebuilt outreach emails for a negotiation.
  *
- * GUARANTEE (the whole point of the upfront-pay model): this is the only
- * place outreach emails to funeral homes are sent, and callers invoke it
- * ONLY after Stripe confirms payment. /negotiate/start stores the homes as
- * `pending` rows and never sends — so a family that doesn't pay never causes
- * a single email to go out. Protects funeral-home deliverability/goodwill.
+ * Honest Funeral is free to families (no payment step of any kind) — this is
+ * simply the ONLY place outreach emails to funeral homes are sent, called
+ * directly by /negotiate/start once the family authorizes outreach. The real
+ * guardrail is OUTREACH_LIVE: when not "true", this records `dry_run` rows
+ * instead of emailing, so the flow is exercisable pre-launch without
+ * contacting a single home. Protects funeral-home deliverability/goodwill.
  *
- * Idempotent: only rows still in `pending` are sent, so the webhook and the
- * status-page reconciliation can both call this without double-sending.
- * Honors OUTREACH_LIVE: when not "true", records `dry_run` rows instead of
- * emailing (so the flow is exercisable pre-launch without contacting homes).
+ * Idempotent: only rows still in `pending` are sent, so this can safely be
+ * called more than once for the same negotiation without double-sending.
  */
 export async function sendOutreachForNegotiation(
   admin: SupabaseClient,

@@ -68,9 +68,10 @@ describe("validateEnv", () => {
     expect(errors.some((e) => e.includes("NEXT_PUBLIC_SUPABASE_URL"))).toBe(true);
     expect(warnings.some((w) => w.includes("NEXT_PUBLIC_SUPABASE_URL"))).toBe(false);
     // LIVE-required vars also error.
-    expect(errors.some((e) => e.includes("STRIPE_WEBHOOK_SECRET"))).toBe(true);
     expect(errors.some((e) => e.includes("RESEND_WEBHOOK_SECRET"))).toBe(true);
     expect(errors.some((e) => e.includes("ADMIN_EMAILS"))).toBe(true);
+    // Stripe is NOT live-required: outreach has no payment dependency.
+    expect(errors.some((e) => e.includes("STRIPE"))).toBe(false);
   });
 
   it("does not double-report a var that's in both core and live buckets", () => {
@@ -80,18 +81,20 @@ describe("validateEnv", () => {
     expect(svc).toHaveLength(1);
   });
 
-  it("live + all required set + live Stripe key → no errors", () => {
+  it("live + all required set → no errors", () => {
     setLiveAllRequired();
     process.env.RESEND_FROM = "Honest Funeral <hello@honestfuneral.co>";
     const { errors } = validateEnv();
     expect(errors).toHaveLength(0);
   });
 
-  it("live + TEST Stripe key is a hard error (footgun)", () => {
+  it("live + no Stripe key at all → still no errors (outreach has no payment dependency)", () => {
     setLiveAllRequired();
-    process.env.STRIPE_SECRET_KEY = "sk_test_abc";
+    delete process.env.STRIPE_SECRET_KEY;
+    delete process.env.STRIPE_WEBHOOK_SECRET;
+    process.env.RESEND_FROM = "Honest Funeral <hello@honestfuneral.co>";
     const { errors } = validateEnv();
-    expect(errors.some((e) => e.includes("TEST key"))).toBe(true);
+    expect(errors).toHaveLength(0);
   });
 
   it("live + sandbox RESEND_FROM is a warning, not an error", () => {
