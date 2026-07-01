@@ -6,132 +6,15 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Label, Textarea } from "@/components/ui/Field";
+import { DocInput } from "@/components/checker/DocInput";
 import { fmtUSD } from "@/lib/pricing-data";
 import type { DriftItem, DriftResult } from "@/lib/bill-drift";
 
 /**
  * Final-bill vs original-quote drift check. Two documents in, a line-by-line
  * diff out — pure arithmetic on the family's own paperwork, no benchmarks.
- * Reuses the analyzer's photo-OCR endpoint for each side.
+ * Reuses the analyzer's photo-OCR endpoint for each side (via DocInput).
  */
-
-async function downscaleImage(
-  file: File,
-  maxDim = 2048,
-  quality = 0.85,
-): Promise<{ dataUrl: string; mediaType: "image/jpeg" }> {
-  const dataUrl = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error("Couldn't read the file."));
-    reader.readAsDataURL(file);
-  });
-  const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-    const i = new Image();
-    i.onload = () => resolve(i);
-    i.onerror = () => reject(new Error("Couldn't decode the image."));
-    i.src = dataUrl;
-  });
-  let { width, height } = img;
-  if (width > maxDim || height > maxDim) {
-    const ratio = Math.min(maxDim / width, maxDim / height);
-    width = Math.round(width * ratio);
-    height = Math.round(height * ratio);
-  }
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("Canvas unavailable in this browser.");
-  ctx.drawImage(img, 0, 0, width, height);
-  return {
-    dataUrl: canvas.toDataURL("image/jpeg", quality),
-    mediaType: "image/jpeg",
-  };
-}
-
-function DocInput({
-  side,
-  label,
-  hint,
-  text,
-  setText,
-  disabled,
-}: {
-  side: "quote" | "bill";
-  label: string;
-  hint: string;
-  text: string;
-  setText: (v: string) => void;
-  disabled: boolean;
-}) {
-  const [reading, setReading] = useState(false);
-  const [readError, setReadError] = useState<string | null>(null);
-
-  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const input = e.target;
-    const files = Array.from(input.files ?? []);
-    if (!files.length) return;
-    setReading(true);
-    setReadError(null);
-    try {
-      const pages: string[] = [];
-      for (const file of files) {
-        const { dataUrl, mediaType } = await downscaleImage(file);
-        const r = await fetch("/api/extract-price-list-image", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ image: dataUrl, mediaType }),
-        });
-        const d = await r.json().catch(() => ({}));
-        const pageText = typeof d?.text === "string" ? d.text.trim() : "";
-        if (r.ok && pageText) pages.push(pageText);
-      }
-      if (!pages.length) {
-        setReadError("Couldn't read that photo — try a clearer one, or type the lines below.");
-      } else {
-        setText(pages.join("\n"));
-      }
-    } catch {
-      setReadError("Couldn't process the image — try again or type the lines below.");
-    } finally {
-      setReading(false);
-      input.value = "";
-    }
-  }
-
-  return (
-    <div>
-      <Label htmlFor={`${side}-text`} hint={hint}>
-        {label}
-      </Label>
-      <input
-        type="file"
-        accept="image/*"
-        capture="environment"
-        multiple
-        aria-label={`Upload a photo of the ${side === "quote" ? "original quote" : "final bill"}`}
-        onChange={handleFile}
-        disabled={disabled || reading}
-        className="block w-full text-sm text-ink-soft mb-2 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-primary-soft file:text-primary-deep hover:file:bg-primary-soft/80 disabled:opacity-60"
-      />
-      {reading && (
-        <p role="status" aria-live="polite" className="text-sm text-ink-soft mb-2">
-          Reading the photo…
-        </p>
-      )}
-      {readError && <p className="text-sm text-bad mb-2">{readError}</p>}
-      <Textarea
-        id={`${side}-text`}
-        rows={8}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder={`Basic services fee   $2,195\nEmbalming            $895\n…`}
-      />
-    </div>
-  );
-}
 
 const KIND_LABEL: Record<DriftItem["kind"], { label: string; tone: string }> = {
   added: { label: "Added — not on the quote", tone: "text-bad" },
@@ -216,17 +99,19 @@ export function BillCheck() {
           <Card className="print:hidden">
             <div className="grid gap-6 sm:grid-cols-2">
               <DocInput
-                side="quote"
+                id="quote"
                 label="1. The original quote"
                 hint="The price list or quote they gave you at the start — photo or typed."
+                photoAriaLabel="Upload a photo of the original quote"
                 text={quoteText}
                 setText={setQuoteText}
                 disabled={busy}
               />
               <DocInput
-                side="bill"
+                id="bill"
                 label="2. The final bill"
                 hint="The signed statement or final bill — photo or typed."
+                photoAriaLabel="Upload a photo of the final bill"
                 text={billText}
                 setText={setBillText}
                 disabled={busy}

@@ -39,10 +39,15 @@ sourcing.*
   or exact normalized name; unpaired = confirm wording, never a silent merge),
   quote ranges treated as selections not drift, honest both directions
   (decreases/removals reported as savings), print letterhead, rate-limited.*
-- [ ] **[S] Self-collected multi-home price comparison.** A family who
+- [x] **[S] Self-collected multi-home price comparison.** A family who
   gathered their own quotes runs each through the analyzer and sees them side
   by side with the same neutral good/fair/high/predatory rating. No ranking,
   no recommendation — parallel facts only (guardrail 3).
+  *Shipped 2026-07-01 as `/compare-quotes`: 2–3 quotes (photo or text each,
+  family's own labels), each run through the existing analyze API, rendered in
+  entry order with identical metrics per column — neutrality structural, no
+  sort/winner/recommendation. Shared `DocInput` extracted for bill-check +
+  this page.*
 - [ ] **[S] Cemetery/monument price-list scope detection.** Detect when an
   uploaded document is a cemetery/monument list (NOT governed by the FTC
   Funeral Rule) and suppress/relabel FTC flags accordingly — prevents citing a
