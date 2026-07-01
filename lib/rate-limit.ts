@@ -22,6 +22,7 @@ export const RATE_LIMITS: Record<string, RateLimitRule> = {
   "/api/share/create": { limit: 15, windowMs: 60_000 },
   "/api/planning/signup": { limit: 15, windowMs: 60_000 },
   "/api/analyze-price-list": { limit: 12, windowMs: 60_000 },
+  "/api/compare-bill": { limit: 12, windowMs: 60_000 },
   "/api/extract-price-list-image": { limit: 12, windowMs: 60_000 },
   "/api/subscription-finder": { limit: 8, windowMs: 60_000 },
   "/api/eulogy": { limit: 8, windowMs: 60_000 },

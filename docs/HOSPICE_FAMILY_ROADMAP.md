@@ -29,11 +29,16 @@ deliver. That gap is our opportunity and our obligation.
 self-improving — without ever letting a published number get ahead of its
 sourcing.*
 
-- [ ] **[M] Final-bill-vs-original-quote drift checker.** New analyzer mode:
+- [x] **[M] Final-bill-vs-original-quote drift checker.** New analyzer mode:
   upload the original quote AND the final signed bill; diff the line items and
   flag new/increased charges. Every claim derives from the family's own two
   documents — provable, not a benchmark guess. Same under-claim discipline as
   the existing engine.
+  *Shipped 2026-07-01 as `/bill-check` (+ `POST /api/compare-bill`): pure
+  document arithmetic (`lib/bill-drift.ts`), conservative pairing (benchmark id
+  or exact normalized name; unpaired = confirm wording, never a silent merge),
+  quote ranges treated as selections not drift, honest both directions
+  (decreases/removals reported as savings), print letterhead, rate-limited.*
 - [ ] **[S] Self-collected multi-home price comparison.** A family who
   gathered their own quotes runs each through the analyzer and sees them side
   by side with the same neutral good/fair/high/predatory rating. No ranking,
