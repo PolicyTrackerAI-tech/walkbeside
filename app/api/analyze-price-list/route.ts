@@ -190,14 +190,24 @@ export async function POST(req: Request) {
       data: { user },
     } = await supabase.auth.getUser();
     if (user) {
-      await supabase.from("price_list_analyses").insert({
+      const row = {
         user_id: user.id,
         raw_text: text.slice(0, 5000),
         total_quoted_cents: totalQuoted,
         total_fair_cents: totalFairMid,
         potential_savings_cents: potentialSavings,
         items,
-      });
+      };
+      // zip drives the benchmark pipeline's regional aggregation. The column
+      // ships in 2026-07-02-benchmark-zip.sql (founder-applied); until then
+      // the insert with zip fails, so fall back to the legacy shape rather
+      // than silently losing the analysis.
+      const { error: insertError } = await supabase
+        .from("price_list_analyses")
+        .insert({ ...row, zip: zip ?? null });
+      if (insertError) {
+        await supabase.from("price_list_analyses").insert(row);
+      }
     }
   }
 
