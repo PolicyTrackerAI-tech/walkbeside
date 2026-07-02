@@ -119,10 +119,16 @@ sourcing.*
   entry order with identical metrics per column — neutrality structural, no
   sort/winner/recommendation. Shared `DocInput` extracted for bill-check +
   this page.*
-- [ ] **[S] Cemetery/monument price-list scope detection.** Detect when an
+- [x] **[S] Cemetery/monument price-list scope detection.** Detect when an
   uploaded document is a cemetery/monument list (NOT governed by the FTC
   Funeral Rule) and suppress/relabel FTC flags accordingly — prevents citing a
   violation the Rule doesn't cover.
+  *Shipped 2026-07-02: `detectDocScope` (lib/bundling-detection/doc-scope.ts)
+  gates `runRules` — cemetery concepts present + zero funeral-home signals →
+  all FTC flags replaced by one honest info card (Rule doesn't cover
+  cemeteries/monument dealers; compare + negotiate still applies). Ties keep
+  full checking (combos ARE covered by the Rule); adjectival "casket burial"/
+  "cremation niche" don't count as funeral signals. 9 tests.*
 - [ ] **[M] Cash-advance receipt markup verification.** Upload the third-party
   receipt (florist, newspaper) next to the funeral home's charge for the same
   item → compute the exact dollar markup instead of a benchmark-based

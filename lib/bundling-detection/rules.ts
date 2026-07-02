@@ -21,6 +21,8 @@
  * Sister will extend this file as she sees patterns in the wild.
  */
 
+import { detectDocScope } from "./doc-scope";
+
 export type Severity = "violation" | "suspicious" | "info";
 
 export interface AnalyzedItem {
@@ -930,6 +932,30 @@ export const RULES: Rule[] = [
 
 /** Run every rule and return the firing detections. */
 export function runRules(ctx: DetectionContext): Detection[] {
+  // Scope gate first: the FTC Funeral Rule covers funeral providers, not
+  // cemeteries or monument dealers. When the document is confidently a
+  // cemetery/monument list (cemetery concepts present, zero funeral-home
+  // signals), every Rule-based flag would cite a regulation that doesn't
+  // govern the seller — replace the whole run with one honest info card.
+  // Ties go to the status quo: "unknown" and mixed lists get full checking.
+  const scope = detectDocScope(
+    ctx.rawText,
+    ctx.items.map((i) => i.name),
+  );
+  if (scope.scope === "cemetery-monument") {
+    return [
+      {
+        ruleId: "cemetery-scope-notice",
+        severity: "info",
+        title: "This looks like a cemetery or monument price list",
+        description:
+          "The federal FTC Funeral Rule — the rule behind our violation checks — covers funeral homes, but generally does not cover cemeteries or monument dealers. So we don't flag Funeral Rule violations on this list. Price comparison still applies: cemetery and monument prices vary widely and are negotiable, and you can usually buy a marker or monument from an outside dealer, not just the cemetery.",
+        evidence: `Cemetery/monument terms found: ${scope.cemeteryHits.join(", ")}`,
+        whatToSay:
+          "Ask the cemetery for its full price list in writing, and compare at least one other cemetery or monument dealer before signing — the same grave space, liner, or marker can differ by thousands nearby.",
+      },
+    ];
+  }
   const all = RULES.map((r) => r.detect(ctx)).filter(
     (d): d is Detection => d != null,
   );
