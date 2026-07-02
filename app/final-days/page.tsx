@@ -437,18 +437,25 @@ export default function FinalDaysPage() {
           </Card>
 
           <Card tone="primary">
-            <CardTitle>When the day comes, we handle the rest.</CardTitle>
+            <CardTitle>
+              The kindest thing you can do this week: make the plan now.
+            </CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
-              The hospice death itself is usually peaceful. The 30
-              days after &mdash; funeral arrangements, death
-              certificates, Social Security, banks, insurance,
-              probate &mdash; are where most families get overwhelmed.
-              We handle that part. When you&rsquo;re ready,
-              there&rsquo;s no rush.
+              When the time comes, the funeral home that picks up the body
+              usually becomes the funeral home &mdash; decided in one rushed
+              phone call. Twenty calm minutes now &mdash; the path, what&rsquo;s
+              fair to pay near you, the benefits you&rsquo;re owed, who makes
+              the first call &mdash; means that call happens on your terms.
+              Free, private, and nothing leaves your device.
             </p>
-            <LinkButton href="/after-hospice" size="lg">
-              See the after-hospice guide →
-            </LinkButton>
+            <div className="flex flex-wrap gap-3">
+              <LinkButton href="/plan-now" size="lg">
+                Make the plan — about 20 minutes →
+              </LinkButton>
+              <LinkButton href="/after-hospice" variant="secondary" size="lg">
+                The after-hospice guide
+              </LinkButton>
+            </div>
           </Card>
 
           <p className="text-xs text-ink-muted">
