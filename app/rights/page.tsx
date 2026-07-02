@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { StateRules } from "./StateRules";
 
 export const metadata: Metadata = {
   title: "What you can decline",
@@ -19,13 +20,14 @@ interface Right {
 
 /**
  * Source: master_brief.docx Section 3 (Phase 3) and Section 4 pricing database.
- * TODO: Sarah review — state-specific embalming rules and vault/liner nuance.
+ * State-specific embalming rules live in lib/state-body-care.ts (statute-
+ * verified rows only) and render via <StateRules /> below the list.
  */
 const RIGHTS: Right[] = [
   {
     title: "Embalming, in most states",
     law: "FTC Funeral Rule · 16 CFR 453.3 and 453.5",
-    body: "No US state requires embalming for every death. About 15 states require either embalming or refrigeration after 24–48 hours, and a few require embalming for cross-state transport or for certain communicable diseases. Refrigeration is a legal alternative in every state. If a funeral home tells you state law requires embalming, that is almost always false — and itself an FTC Funeral Rule violation.",
+    body: "No US state requires embalming for every death. Some states require either embalming or refrigeration if disposition doesn't happen within a set time (often 24–48 hours), and a few have rules for cross-state transport or certain communicable diseases — refrigeration is an alternative wherever a time rule exists. If a funeral home tells you state law requires embalming, that is almost always false — and itself an FTC Funeral Rule violation. Look up your state's actual rule in the checker below the list.",
     tellThem: "We’re not having embalming. We understand it isn’t legally required for the service we’re planning.",
   },
   {
@@ -139,6 +141,8 @@ export default function RightsPage() {
               </li>
             ))}
           </ol>
+
+          <StateRules />
 
           <Card>
             <CardTitle>One thing the FTC Funeral Rule does not cover</CardTitle>

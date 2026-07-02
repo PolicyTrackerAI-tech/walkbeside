@@ -140,10 +140,18 @@ sourcing.*
   disclosure, never claims illegality — the Rule regulates disclosure, not
   the markup). Cross-linked from /bill-check + the analyzer's cash-advance
   flag. 6 tests.*
-- [ ] **[M] State-specific legal-claim layer for `/rights`.** Replace blanket
+- [x] **[M] State-specific legal-claim layer for `/rights`.** Replace blanket
   national embalming/vault statements with a per-state table, every row gated
   behind an explicit citation to that state's statute (closes the file's
   existing TODO; guardrail 4).
+  *Shipped 2026-07-02: all 51 jurisdictions in `lib/state-body-care.ts`, each
+  row statute-cited and DOUBLE-verified (research pass + adversarial verify,
+  then a second hostile refutation pass on the 15 riskiest rows, which caught
+  4 wrong-as-worded rows incl. Delaware's rule amended eff. 2026-02-11 and
+  Michigan's 48h transport rule with no refrigeration alternative). State
+  picker on /rights; unverified fallback = national baseline (structurally
+  can't guess). Full audit trail in docs/STATE_BODY_CARE_FINDINGS.md —
+  queued for counsel review, "laws change" disclaimer live on every row.*
 - [ ] **[L] Crowdsourced benchmark refinement pipeline.** Admin-only pipeline
   aggregating de-identified `price_list_analyses` to refine the fair-price
   ranges. Every change gated behind a minimum sample size per region/item
