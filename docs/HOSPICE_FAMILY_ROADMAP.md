@@ -66,11 +66,18 @@ call.*
   transport-only → decide nothing else on that call → ask for the GPL (FTC
   right) → check any quote at /analyzer — with the named point person.
   Print letterhead + footer per house convention.*
-- [ ] **[M] Pre-death mode across existing tools.** The checker, worksheet, and
+- [x] **[M] Pre-death mode across existing tools.** The checker, worksheet, and
   decide flow currently assume at-need. Add a "planning ahead on hospice"
   entry state: same tools, tense-shifted copy, no death-date required, and the
   outputs feed the family plan. (The `/plan-ahead` page exists but is generic
   pre-need — this is the hospice-specific, days-not-years version.)
+  *Shipped 2026-07-02: `?mode=ahead` on /analyzer, /worksheet, /decide via a
+  shared `PlanningAheadBanner`; the decide veteran question tense-shifts
+  ("Have they served" / "they're a veteran") and its result CTA swaps outreach
+  for "Take this into your family plan"; the analyzer drops the final-bill
+  cross-link pre-death and explains the ask-for-the-GPL right; /plan-now links
+  out to all three in ahead mode and they link back. None of the tools ever
+  required a death date (verified) — copy + routing only, no data changes.*
 - [x] **[M] Benefit-recovery sweep in one pass.** One short questionnaire
   (veteran? Medicaid? employed? life insurance?) that outputs the family's
   likely benefits with dollar figures and exact next steps — VA burial

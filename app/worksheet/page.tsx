@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
+import {
+  PlanningAheadBanner,
+  isAheadMode,
+} from "@/components/PlanningAheadBanner";
 import { Worksheet } from "./Worksheet";
 
 export const metadata: Metadata = {
@@ -9,11 +13,15 @@ export const metadata: Metadata = {
     "Walk into the funeral home knowing what you want. Print this and bring it. The director sees you brought it and the meeting changes.",
 };
 
-export default function WorksheetPage() {
-  return <WorksheetView />;
+export default async function WorksheetPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  return <WorksheetView aheadMode={isAheadMode(await searchParams)} />;
 }
 
-function WorksheetView() {
+function WorksheetView({ aheadMode }: { aheadMode: boolean }) {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader
@@ -38,6 +46,12 @@ function WorksheetView() {
               Your answers save to this browser only. Nothing is sent.
             </p>
           </div>
+
+          {aheadMode && (
+            <div className="no-print mb-8">
+              <PlanningAheadBanner note="The worksheet works just as well before a death — the arrangement meeting hasn't happened yet, and filling this out now means it starts with your decisions already made. Skip anything that doesn't apply yet." />
+            </div>
+          )}
 
           <Worksheet />
         </div>
