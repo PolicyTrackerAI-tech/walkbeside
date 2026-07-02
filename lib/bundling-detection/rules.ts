@@ -311,7 +311,7 @@ export const RULES: Rule[] = [
         severity: "suspicious",
         title: "Confirm pass-through items are disclosed as cash advances",
         description:
-          "Death certificates, clergy honoraria, paid newspaper obituaries, and flowers are typically 'cash advance items' under the FTC Funeral Rule — things the funeral home pays a third party for on your behalf. The home must disclose them as cash advances in writing and disclose any markup over what they actually paid. We don't see that disclosure on what you shared (it may be elsewhere on the price list). Worth confirming — and asking for the actual third-party cost.",
+          "Death certificates, clergy honoraria, paid newspaper obituaries, and flowers are typically 'cash advance items' under the FTC Funeral Rule — things the funeral home pays a third party for on your behalf. The home must disclose them as cash advances in writing and disclose any markup over what they actually paid. We don't see that disclosure on what you shared (it may be elsewhere on the price list). Worth confirming — and asking for the actual third-party cost. If you have the vendor's own receipt, honestfuneral.co/cash-advance-check turns the two numbers into the exact documented difference.",
         ftcReference: "16 CFR §453.3(d)",
         evidence: cashItem.name,
         whatToSay:

@@ -129,10 +129,17 @@ sourcing.*
   cemeteries/monument dealers; compare + negotiate still applies). Ties keep
   full checking (combos ARE covered by the Rule); adjectival "casket burial"/
   "cremation niche" don't count as funeral signals. 9 tests.*
-- [ ] **[M] Cash-advance receipt markup verification.** Upload the third-party
+- [x] **[M] Cash-advance receipt markup verification.** Upload the third-party
   receipt (florist, newspaper) next to the funeral home's charge for the same
   item → compute the exact dollar markup instead of a benchmark-based
   "suspicious" flag. Turns a fuzzy flag into a proven number.
+  *Shipped 2026-07-02 as `/cash-advance-check`: manual side-by-side entry
+  (billed vs the vendor's own receipt — no OCR of heterogeneous receipts, no
+  server write, on-device only), pure `markupSummary`/`markupLetter` in
+  lib/cash-advance.ts (refunds never offset markups; letter asks about
+  disclosure, never claims illegality — the Rule regulates disclosure, not
+  the markup). Cross-linked from /bill-check + the analyzer's cash-advance
+  flag. 6 tests.*
 - [ ] **[M] State-specific legal-claim layer for `/rights`.** Replace blanket
   national embalming/vault statements with a per-state table, every row gated
   behind an explicit citation to that state's statute (closes the file's

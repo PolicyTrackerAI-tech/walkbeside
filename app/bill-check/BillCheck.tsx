@@ -289,6 +289,12 @@ export function BillCheck() {
                   quote checker
                 </Link>{" "}
                 compares each line against fair-market ranges for your region.
+                And for flowers, the obituary, and other pass-through items,
+                the{" "}
+                <Link href="/cash-advance-check" className="underline hover:text-ink-soft">
+                  cash-advance check
+                </Link>{" "}
+                verifies the bill against the vendor&rsquo;s own receipt.
               </p>
 
               {/* Print footer — same convention as the analyzer. */}
