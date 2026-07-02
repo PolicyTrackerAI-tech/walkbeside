@@ -152,13 +152,21 @@ sourcing.*
   picker on /rights; unverified fallback = national baseline (structurally
   can't guess). Full audit trail in docs/STATE_BODY_CARE_FINDINGS.md —
   queued for counsel review, "laws change" disclaimer live on every row.*
-- [ ] **[L] Crowdsourced benchmark refinement pipeline.** Admin-only pipeline
+- [x] **[L] Crowdsourced benchmark refinement pipeline.** Admin-only pipeline
   aggregating de-identified `price_list_analyses` to refine the fair-price
   ranges. Every change gated behind a minimum sample size per region/item
   (reuse `SMALL_SAMPLE_THRESHOLD`), logged to `/corrections` (old range → new
   range, n, date), disclosed on `/methodology` (survey-baseline vs
   crowd-refined). **This is the proprietary-data moat** — defensible only if
   the provenance rigor never slips.
+  *Shipped 2026-07-02: `lib/benchmark-pipeline.ts` (pure, 9 tests — dedupe,
+  min-N gate, per-unit never COLA'd, range items excluded, national
+  normalization) + `/admin/benchmarks` (PROPOSES only — no apply button
+  exists; emits the founder-PR spec text) + `/methodology` disclosure +
+  `/corrections` append-only BENCHMARK_CHANGES log (empty state live).
+  **Founder action: run `supabase/migrations/2026-07-02-benchmark-zip.sql`**
+  (adds the zip column; until then the API falls back to the legacy insert
+  and aggregation is national-only).*
 
 ## Phase 2 — Family coordination & the after-funeral admin gap
 

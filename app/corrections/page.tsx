@@ -22,6 +22,20 @@ const RULE_COUNT = RULES.length;
  * changed, framed as the continuous verification it is — never airing a scary
  * bug list. Each one is a real, defensible improvement to how the checker works.
  */
+/**
+ * Crowd-refined benchmark changes. APPEND-ONLY, and only from the pipeline's
+ * founder-reviewed PR flow (/admin/benchmarks proposes → a person reviews →
+ * the same PR edits lib/pricing-data.ts, bumps PRICING_LAST_UPDATED, and adds
+ * the row here). An entry without all four fields doesn't ship.
+ */
+const BENCHMARK_CHANGES: {
+  date: string;
+  item: string;
+  oldRange: string;
+  newRange: string;
+  n: number;
+}[] = [];
+
 const CORRECTIONS: { date: string; title: string; body: string }[] = [
   {
     date: "June 2026",
@@ -118,6 +132,42 @@ export default function CorrectionsPage() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h2 className="font-serif text-2xl text-ink">
+              Benchmark changes from real quotes
+            </h2>
+            <p>
+              As families check real price lists with us, the de-identified
+              prices accumulate into evidence about what funeral homes actually
+              charge. When that evidence is strong enough &mdash; enough
+              independent samples, reviewed by a person &mdash; we refine a
+              fair-price range, and the change gets logged here: the old range,
+              the new range, how many observations supported it, and the date.
+            </p>
+            {BENCHMARK_CHANGES.length === 0 ? (
+              <p className="text-sm text-ink-muted">
+                No crowd-refined changes yet &mdash; every range currently in
+                use is on its published survey baseline. The first change will
+                appear here before it takes effect.
+              </p>
+            ) : (
+              <ul className="space-y-5 mt-2">
+                {BENCHMARK_CHANGES.map((c) => (
+                  <li key={c.item + c.date} className="border-l-2 border-border pl-4">
+                    <div className="text-xs uppercase tracking-wider text-ink-muted">
+                      {c.date}
+                    </div>
+                    <div className="font-medium text-ink mt-0.5">{c.item}</div>
+                    <p className="text-sm mt-1 leading-relaxed">
+                      {c.oldRange} &rarr; {c.newRange} (based on {c.n} de-identified
+                      observations)
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <Card tone="warn">

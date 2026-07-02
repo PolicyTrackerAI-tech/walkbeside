@@ -124,6 +124,7 @@ create table if not exists public.price_list_analyses (
   total_fair_cents int,
   potential_savings_cents int,
   items jsonb,
+  zip text,                        -- regional benchmark aggregation (2026-07-02-benchmark-zip.sql)
   created_at timestamptz not null default now()
 );
 

@@ -77,6 +77,19 @@ export default function MethodologyPage() {
               fair. Our reference data was last reviewed in{" "}
               <strong className="text-ink">{LAST_UPDATED}</strong>.
             </p>
+            <p>
+              As families check real quotes with us, those de-identified prices
+              accumulate into an observed picture of what funeral homes actually
+              charge. We use it to refine the ranges over time &mdash; carefully: a
+              range only changes when enough independent samples agree (never a
+              handful of outliers), every change is reviewed by a person before
+              it ships, and every change is logged on our{" "}
+              <Link href="/corrections" className="text-primary-deep underline">
+                corrections page
+              </Link>{" "}
+              with the old range, the new range, and the sample size. Until an
+              item crosses that bar, it stays on the published survey baseline.
+            </p>
           </div>
 
           <div className="space-y-3">
