@@ -40,7 +40,7 @@ wins by default — by reaching the family pre-death, through the hospice, with 
 one-sitting flow. Every dollar of family value concentrates before the first
 call.*
 
-- [ ] **[L] The one-sitting plan (`/plan-now` or evolved `/decide`).** A single
+- [x] **[L] The one-sitting plan (`/plan-now` or evolved `/decide`).** A single
   guided pass, completable in ~20 minutes on a phone, that ends in a
   **documented family plan**: understand the options (burial/cremation types,
   plain language) → see fair local prices for the chosen path → capture the
@@ -49,18 +49,29 @@ call.*
   shareable. Framed for the hospice-admission moment ("your hospice gave you
   this so you can decide calmly, before the phone call"). Pre-death framing
   throughout — never assumes the death has happened.
-- [ ] **[M] The "first call" script + plan card.** The single highest-leverage
+  *Shipped 2026-07-02 as `/plan-now`: 5-step wizard (path w/ plain-language
+  notes and a "not sure" branch showing the two common paths → zip-adjusted
+  fair range from SERVICE_TOTALS → wishes/faith → 5-question benefit sweep →
+  point person) → printable plan. All state in localStorage — no account, no
+  server write, nothing transmitted (channel rule). `?ref=` hospice co-brand
+  supported. CTA'd from /final-days as the primary action.*
+- [x] **[M] The "first call" script + plan card.** The single highest-leverage
   artifact: a one-page, printable "when the time comes" card — who to call
   (the family's *chosen* home, from their plan), what to say, what NOT to
   authorize on the phone (nothing beyond transport), and the reminder that
   choosing who removes the body is choosing the funeral home. Generated from
   the family plan; works on paper for the 80-year-old spouse.
+  *Shipped 2026-07-02 as the lead card of the `/plan-now` plan output: call
+  the hospice first (nurse confirms, no 911) → call YOUR chosen home /
+  transport-only → decide nothing else on that call → ask for the GPL (FTC
+  right) → check any quote at /analyzer — with the named point person.
+  Print letterhead + footer per house convention.*
 - [ ] **[M] Pre-death mode across existing tools.** The checker, worksheet, and
   decide flow currently assume at-need. Add a "planning ahead on hospice"
   entry state: same tools, tense-shifted copy, no death-date required, and the
   outputs feed the family plan. (The `/plan-ahead` page exists but is generic
   pre-need — this is the hospice-specific, days-not-years version.)
-- [ ] **[M] Benefit-recovery sweep in one pass.** One short questionnaire
+- [x] **[M] Benefit-recovery sweep in one pass.** One short questionnaire
   (veteran? Medicaid? employed? life insurance?) that outputs the family's
   likely benefits with dollar figures and exact next steps — VA burial
   benefits (unused by >75% of eligible veteran families), the SSA $255 lump
@@ -68,6 +79,13 @@ call.*
   locator. Extends the existing `/veterans` + next-30-days content into a
   unified, instrumentable pass; record "benefit dollars identified" per case
   (aggregate-only) for the partner report.
+  *Shipped 2026-07-02 as `lib/plan-now.ts` `benefitSweep()` (pure, 6 tests —
+  incl. a guard that no invented dollar promise can appear; the only $ figure
+  permitted is the statutory $255), rendered as step 4 + the benefits card of
+  `/plan-now`. "Unsure" answers still surface the item — finding out is the
+  action. Remaining for later: the per-case "benefit dollars recovered" metric
+  (part of the five-metrics instrumentation item in Phase 4, needs the
+  outcomes layer live).*
 
 ## Phase 1 — Deepen the core wedge (the fair-price checker)
 

@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/fair-price-index`, priority: 0.9, changeFrequency: "monthly" },
       { url: `${SITE}/bill-check`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/compare-quotes`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/plan-now`, priority: 0.9, changeFrequency: "monthly" },
       { url: `${SITE}/planning`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/decide`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/worksheet`, priority: 0.7, changeFrequency: "monthly" },
