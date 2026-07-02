@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { isAheadMode } from "@/components/PlanningAheadBanner";
 import { Analyzer } from "./Analyzer";
 
 export const metadata: Metadata = {
@@ -37,5 +38,5 @@ export default async function Page({
     }
     partner = titleize(decoded).slice(0, 60) || undefined;
   }
-  return <Analyzer partner={partner} />;
+  return <Analyzer partner={partner} aheadMode={isAheadMode(sp)} />;
 }

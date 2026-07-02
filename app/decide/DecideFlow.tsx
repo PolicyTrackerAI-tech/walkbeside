@@ -44,7 +44,7 @@ const FAITH_DROPDOWN: { value: FaithKey; label: string }[] = [
 
 export type IsVeteran = "yes" | "no" | "unsure";
 
-export function DecideFlow() {
+export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
   const [faith, setFaith] = useState<FaithKey>("secular");
   const [customFaith, setCustomFaith] = useState<string>("");
   const [faithDenomination, setFaithDenomination] = useState<string>("");
@@ -268,7 +268,9 @@ export function DecideFlow() {
 
           <div>
             <Label htmlFor="veteran" hint="Veterans qualify for free national cemetery burial, a burial allowance, and a flag — most families miss at least one. We'll surface them automatically if you answer yes.">
-              Did the deceased serve in the military?
+              {aheadMode
+                ? "Have they served in the military?"
+                : "Did the deceased serve in the military?"}
             </Label>
             <Select
               id="veteran"
@@ -276,7 +278,9 @@ export function DecideFlow() {
               onChange={(e) => setIsVeteran(e.target.value as IsVeteran)}
             >
               <option value="unsure">Not sure</option>
-              <option value="yes">Yes — they were a veteran</option>
+              <option value="yes">
+                {aheadMode ? "Yes — they're a veteran" : "Yes — they were a veteran"}
+              </option>
               <option value="no">No</option>
             </Select>
           </div>
@@ -341,26 +345,49 @@ export function DecideFlow() {
                 </p>
               </div>
             )}
-            <div className="flex flex-wrap gap-3">
-              <LinkButton
-                href={`/negotiate/start?svc=${recommendation.serviceType}`}
-                size="lg"
-              >
-                Have us compare funeral homes for you →
-              </LinkButton>
-              <LinkButton
-                variant="secondary"
-                href={`/prices?svc=${recommendation.serviceType}`}
-              >
-                Or look up fair prices first
-              </LinkButton>
-            </div>
-            <p className="mt-3 text-xs text-ink-muted">
-              Free to families. We reach out on your behalf and bring the
-              quotes back side by side &mdash; you pick a home at no
-              charge. No commissions or kickbacks from any
-              home we contact.
-            </p>
+            {aheadMode ? (
+              <>
+                <div className="flex flex-wrap gap-3">
+                  <LinkButton href="/plan-now" size="lg">
+                    Take this into your family plan →
+                  </LinkButton>
+                  <LinkButton
+                    variant="secondary"
+                    href={`/prices?svc=${recommendation.serviceType}`}
+                  >
+                    See fair prices for this path
+                  </LinkButton>
+                </div>
+                <p className="mt-3 text-xs text-ink-muted">
+                  Nothing is committed and no one is contacted &mdash; this
+                  just tells you which path to write into the plan, so the
+                  first call later happens on your terms.
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="flex flex-wrap gap-3">
+                  <LinkButton
+                    href={`/negotiate/start?svc=${recommendation.serviceType}`}
+                    size="lg"
+                  >
+                    Have us compare funeral homes for you →
+                  </LinkButton>
+                  <LinkButton
+                    variant="secondary"
+                    href={`/prices?svc=${recommendation.serviceType}`}
+                  >
+                    Or look up fair prices first
+                  </LinkButton>
+                </div>
+                <p className="mt-3 text-xs text-ink-muted">
+                  Free to families. We reach out on your behalf and bring the
+                  quotes back side by side &mdash; you pick a home at no
+                  charge. No commissions or kickbacks from any
+                  home we contact.
+                </p>
+              </>
+            )}
           </Card>
 
           {faithProfile.key !== "secular" && faithProfile.key !== "other" && (

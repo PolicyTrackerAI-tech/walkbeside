@@ -214,6 +214,16 @@ export function PlanNow({ partner }: { partner?: string }) {
                       </div>
                     </button>
                   </div>
+                  <p className="text-sm text-ink-soft mt-4">
+                    Want help choosing?{" "}
+                    <Link
+                      href="/decide?mode=ahead"
+                      className="text-primary-deep underline"
+                    >
+                      Four short questions
+                    </Link>{" "}
+                    recommend a path — then come back here.
+                  </p>
                 </Card>
               )}
 
@@ -257,9 +267,10 @@ export function PlanNow({ partner }: { partner?: string }) {
                         That&rsquo;s the fair range near you &mdash; a quote far
                         above it deserves a &ldquo;why?&rdquo;. The same service
                         can cost 2&ndash;3&times; more across town, and prices
-                        are negotiable. When you have a real quote in hand, our
-                        free{" "}
-                        <Link href="/analyzer" className="text-primary-deep underline">
+                        are negotiable. Any funeral home must give you its
+                        price list if you ask &mdash; and when you have one in
+                        hand, our free{" "}
+                        <Link href="/analyzer?mode=ahead" className="text-primary-deep underline">
                           checker
                         </Link>{" "}
                         reads it line by line.
@@ -559,10 +570,15 @@ export function PlanNow({ partner }: { partner?: string }) {
                 Print a copy for the point person and one for the folder with
                 the important documents. When you have a real quote in hand,
                 the{" "}
-                <Link href="/analyzer" className="text-primary-deep underline">
+                <Link href="/analyzer?mode=ahead" className="text-primary-deep underline">
                   checker
                 </Link>{" "}
-                reads it line by line — free.
+                reads it line by line — free. And if you want to prepare for
+                the arrangement meeting itself, the{" "}
+                <Link href="/worksheet?mode=ahead" className="text-primary-deep underline">
+                  pre-meeting worksheet
+                </Link>{" "}
+                walks every decision before anyone is across the table.
               </p>
 
               {/* Print footer — same convention as the analyzer. */}

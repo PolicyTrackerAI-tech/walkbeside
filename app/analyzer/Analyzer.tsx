@@ -7,6 +7,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
+import { PlanningAheadBanner } from "@/components/PlanningAheadBanner";
 import { fmtUSD, dataSourceForZip, DATA_SOURCE_LABEL } from "@/lib/pricing-data";
 import {
   overchargeCents,
@@ -135,7 +136,13 @@ Urns $95-$1,800
 Total $10,730`;
 
 /** Screen 10 — Price list analyzer. */
-export function Analyzer({ partner }: { partner?: string }) {
+export function Analyzer({
+  partner,
+  aheadMode,
+}: {
+  partner?: string;
+  aheadMode?: boolean;
+}) {
   const [text, setText] = useState("");
   const [zip, setZip] = useState("");
   const [busy, setBusy] = useState(false);
@@ -391,21 +398,26 @@ export function Analyzer({ partner }: { partner?: string }) {
               Snap a photo or paste their price list. We&rsquo;ll flag the overcharges.
             </h1>
             <p className="text-ink-soft">
-              Upload a photo of the General Price List they handed you, or type
-              the line items in. We&rsquo;ll match each one to fair-market ranges
-              for your region and flag likely FTC Funeral Rule problems &mdash; the
-              most common violations and upsells.
+              {aheadMode
+                ? "Upload a photo of a General Price List, or type the line items in. Any funeral home must give you its price list when you ask — that's a federal FTC rule, and asking now, before anything is urgent, is exactly how you compare homes on your terms."
+                : "Upload a photo of the General Price List they handed you, or type the line items in. We'll match each one to fair-market ranges for your region and flag likely FTC Funeral Rule problems — the most common violations and upsells."}
             </p>
-            <p className="text-sm text-ink-muted mt-2">
-              Already have the final bill?{" "}
-              <Link href="/bill-check" className="underline hover:text-ink-soft">
-                Check it against the quote you were given &rarr;
-              </Link>{" "}
-              &middot; Shopping more than one home?{" "}
-              <Link href="/compare-quotes" className="underline hover:text-ink-soft">
-                Compare quotes side by side &rarr;
-              </Link>
-            </p>
+            {aheadMode ? (
+              <div className="mt-3">
+                <PlanningAheadBanner note="Nothing has happened yet — checking prices now is the calm version of the rushed call most families get. Check a list from more than one home if you can." />
+              </div>
+            ) : (
+              <p className="text-sm text-ink-muted mt-2">
+                Already have the final bill?{" "}
+                <Link href="/bill-check" className="underline hover:text-ink-soft">
+                  Check it against the quote you were given &rarr;
+                </Link>{" "}
+                &middot; Shopping more than one home?{" "}
+                <Link href="/compare-quotes" className="underline hover:text-ink-soft">
+                  Compare quotes side by side &rarr;
+                </Link>
+              </p>
+            )}
           </div>
 
           <Card className="print:hidden">

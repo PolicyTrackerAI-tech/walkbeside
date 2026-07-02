@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { HelpFooter } from "@/components/HelpFooter";
+import {
+  PlanningAheadBanner,
+  isAheadMode,
+} from "@/components/PlanningAheadBanner";
 import { DecideFlow } from "./DecideFlow";
 
 export const metadata: Metadata = {
@@ -11,7 +15,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/decide" },
 };
 
-export default function DecidePage() {
+export default async function DecidePage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const aheadMode = isAheadMode(await searchParams);
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/planning" defaultLabel="← Planning" />} />
@@ -26,7 +35,13 @@ export default function DecidePage() {
             can move on to comparing prices. No account, nothing saved.
           </p>
 
-          <DecideFlow />
+          {aheadMode && (
+            <div className="mb-8">
+              <PlanningAheadBanner note="Deciding the type of service now — while nothing is urgent — is exactly the right order. Answer for the person you're planning for." />
+            </div>
+          )}
+
+          <DecideFlow aheadMode={aheadMode} />
 
           <HelpFooter />
         </div>
