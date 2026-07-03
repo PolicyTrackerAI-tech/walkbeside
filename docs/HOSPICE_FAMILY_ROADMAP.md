@@ -345,9 +345,17 @@ human approval gate; every family-level data point stays aggregate-only.*
   case), reporting-only (anti-steering untouched by construction).
   **Founder action: run `supabase/migrations/2026-07-03-partner-codes.sql`**
   (needs 2026-06-27-partners.sql first). 5 tests.*
-- [ ] **[M] Co-branded referral landing on `/negotiate/start`.** Hospice
+- [x] **[M] Co-branded referral landing on `/negotiate/start`.** Hospice
   name/logo alongside a persistent, non-overridable Honest Funeral neutrality
   pledge — visible at the exact moment of trust-transfer.
+  *Shipped 2026-07-03: `ReferralCoBrand` resolves the visit's (or the
+  remembered) code to the institution's REAL name via public
+  `GET /api/partner/resolve` (active codes only, rate-limited, 404 otherwise)
+  and renders it fused to the pledge — a partner name can never appear
+  without "no money from funeral homes or insurers / your choices are never
+  shared / they see only anonymous totals." Live on /negotiate/start,
+  /plan-now, /analyzer; code refs suppress the old titleized cosmetic banner
+  so "Hf 7kq2md" never renders as a name.*
 - [ ] **[M] Aggregate-only "tool engagement" signal in the partner report.**
   Usage counts (% who opened next-30-days, reached Month 2, used /estate) in
   the same small-sample-suppression path as the existing metrics — not a

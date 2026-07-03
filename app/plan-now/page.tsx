@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { RememberReferral } from "@/components/RememberReferral";
+import { ReferralCoBrand } from "@/components/ReferralCoBrand";
+import { normalizeReferralCode } from "@/lib/referral-codes";
 import { PlanNow } from "./PlanNow";
 
 export const metadata: Metadata = {
@@ -38,9 +40,16 @@ export default async function Page({
     }
     partner = titleize(decoded).slice(0, 60) || undefined;
   }
+  // A real referral code resolves to the institution's actual name via
+  // <ReferralCoBrand> — suppress the titleized cosmetic banner for codes so
+  // "Hf 7kq2md" never renders as a partner name.
+  if (normalizeReferralCode(ref)) partner = undefined;
   return (
     <>
       <RememberReferral code={ref} />
+      <div className="max-w-2xl mx-auto px-5 pt-4 empty:hidden">
+        <ReferralCoBrand refParam={ref} />
+      </div>
       <PlanNow partner={partner} />
     </>
   );
