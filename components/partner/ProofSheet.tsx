@@ -125,6 +125,49 @@ export function ProofSheet({
                 />
               </div>
 
+              {stats.pilotMetrics && (
+                <Card>
+                  <CardTitle>Pilot metrics</CardTitle>
+                  <p className="text-xs text-ink-muted mt-1 mb-3">
+                    Savings measured against the metro&rsquo;s median fair
+                    price (not just the family&rsquo;s own quote). Benefit
+                    dollars are amounts families actually recovered (VA, SSA,
+                    insurance, county). Satisfaction share = families rating
+                    4&ndash;5 of 5.
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <Metric
+                      label="Median saved vs metro"
+                      value={
+                        stats.pilotMetrics.medianSavedVsMetroCents != null
+                          ? fmtUSD(stats.pilotMetrics.medianSavedVsMetroCents / 100)
+                          : "—"
+                      }
+                    />
+                    <Metric
+                      label="Avg quotes / family"
+                      value={stats.pilotMetrics.avgQuotesPerFamily ?? "—"}
+                    />
+                    <Metric
+                      label="Benefit $ recovered"
+                      value={
+                        stats.pilotMetrics.totalBenefitDollarsCents != null
+                          ? fmtUSD(stats.pilotMetrics.totalBenefitDollarsCents / 100)
+                          : "—"
+                      }
+                    />
+                    <Metric
+                      label="Rating 4–5 of 5"
+                      value={
+                        stats.pilotMetrics.satisfactionPromoterPct != null
+                          ? `${stats.pilotMetrics.satisfactionPromoterPct}%`
+                          : "—"
+                      }
+                    />
+                  </div>
+                </Card>
+              )}
+
               {stats.toolEngagement && (
                 <Card>
                   <CardTitle>How families used the tools</CardTitle>

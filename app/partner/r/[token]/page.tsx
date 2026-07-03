@@ -5,6 +5,7 @@ import { PUBLIC, requireServer } from "@/lib/env";
 import {
   aggregateCohort,
   rowToCohortRecord,
+  metroMedianCents,
   type OutcomeRow,
 } from "@/lib/partner-report";
 import { ProofSheet } from "@/components/partner/ProofSheet";
@@ -58,28 +59,44 @@ export default async function PartnerTokenReportPage({
   try {
     const { data: negs } = await admin
       .from("negotiations")
-      .select("id, user_id, savings_vs_listed_cents, satisfaction_score, created_at, outcome_recorded_at")
+      .select(
+        "id, user_id, zip, service_type, savings_vs_listed_cents, satisfaction_score, amount_paid_cents, benefit_dollars_recovered_cents, created_at, outcome_recorded_at",
+      )
       .eq("partner_id", partner.id)
       .not("outcome_recorded_at", "is", null);
 
-    const cases = (negs ?? []) as (OutcomeRow & { id: string; user_id: string })[];
+    const cases = (negs ?? []) as (OutcomeRow & {
+      id: string;
+      user_id: string;
+      zip: string;
+      service_type: string;
+    })[];
 
-    // Hidden-fee findings per case (FTC proxy) from the case's outreach rows.
+    // Hidden-fee findings (FTC proxy) + quotes-received per case, from the
+    // case's outreach rows in one pass.
     const feeCount = new Map<string, number>();
+    const quoteCount = new Map<string, number>();
     if (cases.length) {
       const { data: outreach } = await admin
         .from("negotiation_outreach")
-        .select("negotiation_id, hidden_fees")
+        .select("negotiation_id, hidden_fees, quote_cents")
         .in("negotiation_id", cases.map((c) => c.id));
       for (const row of (outreach ?? []) as {
         negotiation_id: string;
         hidden_fees: unknown;
+        quote_cents: number | null;
       }[]) {
         const n = Array.isArray(row.hidden_fees) ? row.hidden_fees.length : 0;
         feeCount.set(
           row.negotiation_id,
           (feeCount.get(row.negotiation_id) ?? 0) + n,
         );
+        if (typeof row.quote_cents === "number") {
+          quoteCount.set(
+            row.negotiation_id,
+            (quoteCount.get(row.negotiation_id) ?? 0) + 1,
+          );
+        }
       }
     }
 
@@ -102,7 +119,12 @@ export default async function PartnerTokenReportPage({
     ]);
 
     records = cases.map((c) => ({
-      ...rowToCohortRecord({ ...c, hidden_fees_count: feeCount.get(c.id) ?? 0 }),
+      ...rowToCohortRecord({
+        ...c,
+        hidden_fees_count: feeCount.get(c.id) ?? 0,
+        quote_count: quoteCount.get(c.id) ?? 0,
+        metro_median_cents: metroMedianCents(c.service_type, c.zip),
+      }),
       usedChecker: checkerUsers.has(c.user_id),
       usedCertTracker: certUsers.has(c.user_id),
       usedObituary: obitUsers.has(c.user_id),

@@ -3,6 +3,7 @@ import {
   aggregateCohort,
   sampleCohort,
   rowToCohortRecord,
+  metroMedianCents,
   SMALL_SAMPLE_THRESHOLD,
   type CohortRecord,
 } from "@/lib/partner-report";
@@ -18,6 +19,7 @@ describe("aggregateCohort", () => {
       avgSatisfaction: null,
       medianResolutionDays: null,
       toolEngagement: null,
+      pilotMetrics: null,
       smallSample: true,
     });
   });
@@ -156,5 +158,87 @@ describe("toolEngagement (aggregate-only, same suppression gate)", () => {
       certTrackerPct: 60,
       obituaryPct: 0,
     });
+  });
+});
+
+describe("pilotMetrics (five-metrics instrumentation, same suppression gate)", () => {
+  const rec = (over: {
+    vsMetro?: number;
+    quotes?: number;
+    benefit?: number;
+    sat?: number;
+  }) => ({
+    overchargeCaughtCents: 0,
+    ftcIssues: 0,
+    ...(over.sat !== undefined ? { satisfaction: over.sat } : {}),
+    ...(over.vsMetro !== undefined ? { savedVsMetroCents: over.vsMetro } : {}),
+    ...(over.quotes !== undefined ? { quotesReceived: over.quotes } : {}),
+    ...(over.benefit !== undefined ? { benefitDollarsCents: over.benefit } : {}),
+  });
+
+  it("is null under the small-sample threshold", () => {
+    const few = Array.from({ length: SMALL_SAMPLE_THRESHOLD - 1 }, () =>
+      rec({ vsMetro: 50_000, quotes: 4, benefit: 25_500, sat: 5 }),
+    );
+    expect(aggregateCohort(few).pilotMetrics).toBeNull();
+  });
+
+  it("computes median-vs-metro (negatives included honestly), avg quotes, benefit total, promoter share", () => {
+    const stats = aggregateCohort([
+      rec({ vsMetro: 100_000, quotes: 3, benefit: 25_500, sat: 5 }),
+      rec({ vsMetro: 50_000, quotes: 4, sat: 4 }),
+      rec({ vsMetro: -20_000, quotes: 2, sat: 2 }),
+      rec({ vsMetro: 60_000, quotes: 5, benefit: 130_000, sat: 5 }),
+      rec({ quotes: 4, sat: 4 }),
+    ]);
+    expect(stats.pilotMetrics).toEqual({
+      medianSavedVsMetroCents: 55_000, // median of [-200, 500, 600, 1000] dollars → (500+600)/2
+      avgQuotesPerFamily: 3.6,
+      totalBenefitDollarsCents: 155_500,
+      satisfactionPromoterPct: 80, // 4 of 5 rated ≥4
+    });
+  });
+
+  it("individual fields are null when no case carries the data yet", () => {
+    const stats = aggregateCohort(
+      Array.from({ length: SMALL_SAMPLE_THRESHOLD }, () => rec({})),
+    );
+    expect(stats.pilotMetrics).toEqual({
+      medianSavedVsMetroCents: null,
+      avgQuotesPerFamily: null,
+      totalBenefitDollarsCents: null,
+      satisfactionPromoterPct: null,
+    });
+  });
+});
+
+describe("metroMedianCents", () => {
+  it("returns the zip-adjusted mid of the service fair band, in cents", () => {
+    const national = metroMedianCents("direct-cremation", "");
+    expect(national).toBeGreaterThan(50_000);
+    const manhattan = metroMedianCents("direct-cremation", "10001");
+    expect(manhattan!).toBeGreaterThan(national!);
+  });
+
+  it("returns null for unknown service types — never a guessed baseline", () => {
+    expect(metroMedianCents("not-a-service", "84101")).toBeNull();
+  });
+});
+
+describe("rowToCohortRecord pilot fields", () => {
+  it("computes savedVsMetro only when both sides exist", () => {
+    const base = {
+      savings_vs_listed_cents: 0,
+      satisfaction_score: null,
+      created_at: "2026-06-01T00:00:00Z",
+      outcome_recorded_at: null,
+    };
+    expect(
+      rowToCohortRecord({ ...base, amount_paid_cents: 150_000, metro_median_cents: 200_000 })
+        .savedVsMetroCents,
+    ).toBe(50_000);
+    expect(
+      rowToCohortRecord({ ...base, amount_paid_cents: 150_000 }).savedVsMetroCents,
+    ).toBeUndefined();
   });
 });

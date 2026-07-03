@@ -402,7 +402,7 @@ human approval gate; every family-level data point stays aggregate-only.*
   failures never block the rest. Kill-switch: PARTNER_DIGEST_ENABLED
   (default off — founder flips it in Vercel env with CRON_SECRET already
   set). 3 tests.*
-- [ ] **[M] The five pilot metrics, instrumented end to end.** The research's
+- [x] **[M] The five pilot metrics, instrumented end to end.** The research's
   day-one measurement set, wired through the outcomes layer and the partner
   report: median $ saved **vs the metro median price** (not just vs the
   family's own quote) · quotes per family (countable from outreach rows) ·
@@ -411,6 +411,18 @@ human approval gate; every family-level data point stays aggregate-only.*
   NPS (extend the existing 1–5 satisfaction capture). A pilot that publishes
   first-of-kind outcome data owns the category's evidence base — no RCT links
   funeral pre-arrangement to grief outcomes yet.
+  *Shipped 2026-07-03: (1) median saved vs the METRO median — `metroMedianCents`
+  (mid of the zip-adjusted fair band, same benchmarks as the checker) minus
+  amount actually paid, negatives kept honestly; (2) quotes/family counted
+  from outreach rows with a real quote; (3) benefit dollars recovered —
+  admin-entered per case on /admin/outcomes (counts as a real outcome field
+  for the stamp gate); (4) satisfaction 1–5 avg + promoter share (% rating
+  4–5) — deliberately NOT labeled NPS (true NPS needs 0–10; we won't fake
+  the number); (5) staff minutes saved = the ops-side one-question
+  coordinator survey, not app data (documented, not coded). All inside
+  `pilotMetrics` in `aggregateCohort` — same suppression gate, no bypass
+  path. Renders on the proof sheet with the basis stated. **Founder action:
+  run `supabase/migrations/2026-07-03-pilot-metrics.sql`.** 6 tests.*
 
 ## Phase 5 — Reach & accessibility
 
