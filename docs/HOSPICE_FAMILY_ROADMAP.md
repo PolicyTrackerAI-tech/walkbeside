@@ -377,13 +377,22 @@ human approval gate; every family-level data point stays aggregate-only.*
   engagement = server floors, /methodology pointer) and the explicit "what
   this is not" paragraph — not a CMS/CAHPS instrument, not a compliance
   certification, no implied endorsement.*
-- [ ] **[M] Self-serve hospice partner onboarding.** Signup form → pending
+- [x] **[M] Self-serve hospice partner onboarding.** Signup form → pending
   state → **manual founder approval** before any referral code goes live.
   Removes engineer-in-the-loop friction; preserves human review of every new
   institutional money relationship.
-- [ ] **[S] Unclaimed-referral follow-up safety net.** Internal-only admin
+  *Shipped 2026-07-03: `/partners/apply` (two commitments stated before the
+  form — structural neutrality + zero family visibility) → pending row with
+  `active=false`, inert by construction (report, links, and resolution all
+  require active) → founder approves on `/admin/partners` (stamps
+  approved_at); a courtesy email pings the founder mailbox per application.
+  **Founder action: run `supabase/migrations/2026-07-03-partner-onboarding.sql`.***
+- [x] **[S] Unclaimed-referral follow-up safety net.** Internal-only admin
   count of codes issued vs claimed — surfaced to the founder, never the
   hospice — to prompt a human check-in with the coordinator.
+  *Shipped 2026-07-03 on `/admin/partners`: per-partner codes-issued vs
+  claims, with a founder-only nudge line when active codes sit at zero
+  claims ("worth a friendly check-in with the coordinator").*
 - [ ] **[S] Automated aggregate-only partner activity digest email.** Periodic
   email to each partner with strictly aggregate counts. No names, no
   individual choices, no price data.
