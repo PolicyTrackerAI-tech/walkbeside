@@ -367,10 +367,16 @@ human approval gate; every family-level data point stays aggregate-only.*
   are deliberately NOT server-knowable (the tools are on-device by privacy
   design and we won't add tracking to them), so the report frames these as
   floors ("server-recorded artifacts only... floors, not totals").*
-- [ ] **[M] Printable partner outcomes summary.** Print-optimized export of
+- [x] **[M] Printable partner outcomes summary.** Print-optimized export of
   the existing aggregate metrics with the methodology footnote and neutrality
   line. Explicitly NOT framed as a "CAHPS" or "compliance" artifact (no
   implied CMS certification).
+  *Shipped 2026-07-03 on the ProofSheet itself (sample + live token report):
+  house print letterhead, a print-VISIBLE methodology footnote (own-quote
+  savings basis, family-reported satisfaction, small-sample suppression,
+  engagement = server floors, /methodology pointer) and the explicit "what
+  this is not" paragraph — not a CMS/CAHPS instrument, not a compliance
+  certification, no implied endorsement.*
 - [ ] **[M] Self-serve hospice partner onboarding.** Signup form → pending
   state → **manual founder approval** before any referral code goes live.
   Removes engineer-in-the-loop friction; preserves human review of every new
