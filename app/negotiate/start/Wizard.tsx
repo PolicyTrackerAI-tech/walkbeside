@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { HelpFooter } from "@/components/HelpFooter";
 import { readReferral } from "@/lib/referral-codes";
+import { ReferralCoBrand } from "@/components/ReferralCoBrand";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
 import {
@@ -149,6 +150,8 @@ function NegotiateStartWizard() {
       />
       <section className="flex-1">
         <div className="max-w-xl mx-auto px-5 py-10 space-y-6">
+          <ReferralCoBrand refParam={sp.get("ref") ?? undefined} />
+
           <div>
             <h1 className="font-serif text-3xl text-ink mb-3">
               Have us call funeral homes for you.

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { isAheadMode } from "@/components/PlanningAheadBanner";
 import { RememberReferral } from "@/components/RememberReferral";
+import { ReferralCoBrand } from "@/components/ReferralCoBrand";
+import { normalizeReferralCode } from "@/lib/referral-codes";
 import { Analyzer } from "./Analyzer";
 
 export const metadata: Metadata = {
@@ -39,9 +41,15 @@ export default async function Page({
     }
     partner = titleize(decoded).slice(0, 60) || undefined;
   }
+  // Codes resolve to the real institution name via <ReferralCoBrand>; the
+  // titleized cosmetic banner is suppressed for them.
+  if (normalizeReferralCode(ref)) partner = undefined;
   return (
     <>
       <RememberReferral code={ref} />
+      <div className="max-w-3xl mx-auto px-5 pt-4 empty:hidden">
+        <ReferralCoBrand refParam={ref} />
+      </div>
       <Analyzer partner={partner} aheadMode={isAheadMode(sp)} />
     </>
   );
