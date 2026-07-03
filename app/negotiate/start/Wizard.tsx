@@ -8,6 +8,7 @@ import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { HelpFooter } from "@/components/HelpFooter";
+import { readReferral } from "@/lib/referral-codes";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
 import {
@@ -115,6 +116,9 @@ function NegotiateStartWizard() {
           dateOfDeath: state.dateOfDeath || undefined,
           pointPersonConsent: state.pointPersonConsent,
           authorizationAccepted: authorized,
+          // Attribution for the referring institution's AGGREGATE report only
+          // (remembered on-device from a ?ref= visit; absent for most families).
+          referralCode: readReferral() ?? undefined,
         }),
       });
       if (r.status === 401) {

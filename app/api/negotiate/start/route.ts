@@ -13,6 +13,7 @@ import {
 import { isEmailDenylisted } from "@/lib/negotiation/denylist";
 import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
 import { readLimitedJson } from "@/lib/http-guards";
+import { normalizeReferralCode } from "@/lib/referral-codes";
 
 const Body = z.object({
   zip: z.string().min(3).max(10),
@@ -52,6 +53,9 @@ const Body = z.object({
   // their first name appearing in outreach. Defaults false so an old client
   // (or a hand-rolled request) can't skip the designation.
   pointPersonConsent: z.boolean().default(false),
+  // Optional referral attribution (HF-XXXXXX) remembered on-device from a
+  // ?ref= visit. Reporting-only; validated + resolved server-side.
+  referralCode: z.string().max(20).optional(),
 });
 
 export async function POST(req: Request) {
@@ -103,6 +107,34 @@ export async function POST(req: Request) {
     .single();
   if (negErr || !neg)
     return NextResponse.json({ error: negErr?.message ?? "db" }, { status: 500 });
+
+  // Referral attribution — reporting label ONLY (never read by choose/outreach/
+  // ranking; anti-steering is structural). Best-effort: an invalid, revoked, or
+  // unknown code — or the partner_codes migration not being applied yet — must
+  // never fail the family's own flow. Service role because partner tables are
+  // RLS-deny-all.
+  const referralCode = normalizeReferralCode(ctx.referralCode);
+  if (referralCode) {
+    try {
+      const svc = createServiceClient(
+        PUBLIC.supabaseUrl,
+        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+      );
+      const { data: codeRow } = await svc
+        .from("partner_codes")
+        .select("code, partner_id, active")
+        .eq("code", referralCode)
+        .maybeSingle();
+      if (codeRow?.active) {
+        await svc
+          .from("negotiations")
+          .update({ partner_id: codeRow.partner_id, partner_code: codeRow.code })
+          .eq("id", neg.id);
+      }
+    } catch {
+      // attribution is never worth failing a family's case over
+    }
+  }
 
   // Anchor the bereavement check-in cadence on the family's own explicit date.
   // Best-effort by design: an intake nicety must never fail the outreach itself
