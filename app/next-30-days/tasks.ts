@@ -110,7 +110,7 @@ export const PHASES: Phase[] = [
       {
         id: "p0-bereavement",
         title: "Tell the deceased's employer",
-        body: "Final paycheck, employer life-insurance, bereavement leave for surviving family who work there.",
+        body: "Final paycheck, employer life-insurance, bereavement leave for surviving family who work there. And one for YOUR own HR: if you were on family or caregiver leave when they passed, ask what happens to that leave and your PTO now — a handful of states mandate bereavement leave, and many employers offer it unasked.",
         help: {
           kind: "expander",
           label: "Show me what to say to HR →",
@@ -277,6 +277,20 @@ export const PHASES: Phase[] = [
         id: "w2-medicare",
         title: "Cancel Medicare and Medicaid",
         body: "Medicare is reported via Social Security automatically — but confirm. Medicare Advantage and Part D plans need separate cancellation; otherwise they keep billing.",
+      },
+      {
+        id: "w2-partb-sep",
+        title:
+          "Were you covered by their employer's health plan? Your own Medicare clock is running",
+        body: "If you're 65 or older and had health coverage through the deceased's job, losing that coverage starts an 8-month window to enroll in Medicare Part B without a lifetime penalty. COBRA does NOT pause or extend this window — that's the mistake that costs people permanently.",
+        help: {
+          kind: "expander",
+          label: "The 8-month rule, in plain English",
+          description:
+            "One well-established federal rule, severe if missed. Two minutes to read.",
+          details:
+            "When employer group health coverage ends — including because the employee spouse died — a Special Enrollment Period opens: 8 months to sign up for Medicare Part B with no late penalty, counted from the month after the employment or the coverage ends, whichever comes first.\n\nThe trap: electing COBRA feels like 'still having coverage,' but COBRA does not count as employer coverage for Medicare. The 8-month clock keeps running while you're on COBRA, and if it expires you wait for the next General Enrollment Period and pay a 10% premium penalty for every 12 months you went without — for life.\n\nWhat to do: if you're 65+, contact Social Security (ssa.gov or 1-800-772-1213) about Part B enrollment within the 8 months, even if you take COBRA for the gap. You'll want form CMS-L564 (proof of the employer coverage — HR fills out their part) along with the CMS-40B application. If you're under 65, this rule doesn't apply to you — but mind the COBRA election deadline (60 days) and compare marketplace plans, which are often cheaper.",
+        },
       },
       {
         id: "w2-subs",

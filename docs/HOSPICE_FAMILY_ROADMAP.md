@@ -182,20 +182,24 @@ adult children) hits with no help today.*
   (mirror `lib/probate-by-state.ts` discipline) + a "confirm with a local
   elder-law attorney" disclaimer. Hospice decedents skew Medicaid/dual-
   eligible; families are blindsided by this. Zero coverage in the app today.
-- [ ] **[S] Surviving spouse's Medicare Part B deadline alert.** New
+- [x] **[S] Surviving spouse's Medicare Part B deadline alert.** New
   context-aware task + short guide: 8-month Special Enrollment Period after
   losing coverage under the deceased's employer plan; COBRA does NOT extend
   it; missing it = permanent premium penalty. Single well-established federal
   rule, severe if missed, squarely this population.
+  *Shipped 2026-07-03: task `w2-partb-sep` in /next-30-days with an expander
+  guide — the 8-month SEP, the COBRA trap named explicitly, CMS-40B +
+  CMS-L564 forms, the under-65 branch.*
 - [ ] **[M] Reverse mortgage heir timeline guide.** HECM-scoped: loan due at
   death, 30-day response to the due-and-payable notice, up to 6 months + two
   90-day extensions, the 95%-of-appraised-value payoff option, non-recourse
   protection. Note that proprietary (non-FHA) loans differ — confirm loan type
   with the servicer.
-- [ ] **[S] Bereavement-leave HR prompt.** One line added to the existing
+- [x] **[S] Bereavement-leave HR prompt.** One line added to the existing
   employer-notification task: ask HR what happens to your own PTO/leave if you
   were on caregiver leave at the time of death (~6 states mandate any
   bereavement leave).
+  *Shipped 2026-07-03 on the funeral-week "Tell the deceased's employer" task.*
 - [ ] **[S] Point-person designation for negotiation.** Family designates one
   member as the authorized contact on a negotiation thread; only that person's
   info is shared with homes. Lightweight consent confirmation.
