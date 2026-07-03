@@ -339,11 +339,17 @@ CAHPS-score repair — emotional support is already their highest score (91%).*
   vars, and BEREAVEMENT_SMS_ENABLED=true. **Founder actions: run
   `supabase/migrations/2026-07-03-bereavement-sms.sql`; create the Twilio
   account + set TWILIO_ACCOUNT_SID/AUTH_TOKEN/FROM; flip the switch.***
-- [ ] **[S] Decisional-regret normalization content.** Short, sourced addition
+- [x] **[S] Decisional-regret normalization content.** Short, sourced addition
   to `/after-hospice` and `/final-days` normalizing lingering doubt over
   end-of-life decisions (hospice timing, DNR, stopping treatment) as a common,
   non-pathological caregiver experience — pointing to existing escalation
   resources.
+  *Shipped 2026-07-03 on both pages ("If you keep replaying the decisions,
+  you're in good company"): names the exact doubts (hospice timing, one more
+  treatment, the DNR), frames replaying as sense-making not evidence of a
+  wrong choice, soft-sourced ("research... consistently finds" — no invented
+  stat, per guardrail 4), and routes to the hospice bereavement counselor +
+  the /grief self-check when the loop gets heavier instead of lighter.*
 - [ ] **[L] Spanish translation of the core intake + grief arc.**
   Human-reviewed (not machine-only): `/where`, `/guidance/[scenario]`,
   `/decide`, `/worksheet`, `/grief`, `/after-hospice` — carrying every
