@@ -250,10 +250,17 @@ adult children) hits with no help today.*
   (`next30.assignees.v1`) with the input on the current-task card and badges
   on upcoming/completed rows. Assignees flow into the live family view
   ("Mike is on it") via the household payload.*
-- [ ] **[M] Consolidated print/export "family briefing" one-pager.** One print
+- [x] **[M] Consolidated print/export "family briefing" one-pager.** One print
   view rolling up the family's own Vault, Notifications, Next-30-Days, and
   certificate-count data — legible at a glance for an out-of-town relative or
   a physical folder.
+  *Shipped 2026-07-03 as `/briefing`: reuses `snapshotHousehold()` +
+  `parseHouseholdView()` (hostile-safe) + `readPlan()` — plan/point person/
+  wishes, open checklist items with "X is on it", still-to-reach contacts,
+  missing documents (on-hand as a one-line rollup). Print letterhead/footer
+  per house convention; on-device only; cross-linked from /family with the
+  live-link alternative noted. Cert-count rides the vault's death-certificate
+  entry rather than the logged-in tracker (device-local coherence).*
 - [ ] **[M] Per-family-member task digest (email now, SMS later).** Read-only
   digest to a delegated relative listing just their assigned tasks, no login
   required.

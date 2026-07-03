@@ -200,6 +200,19 @@ export function Family() {
 
           <HouseholdLinkCard />
 
+          <Card>
+            <CardTitle>Prefer paper? Print the family briefing.</CardTitle>
+            <p className="text-ink-soft mt-3">
+              One page with where everything stands — the plan and point
+              person, the checklist with who&rsquo;s on what, who&rsquo;s
+              been told, and which documents are still missing. For the
+              folder, the fridge, or the relative who doesn&rsquo;t do links.{" "}
+              <a href="/briefing" className="text-primary-deep underline">
+                Open the briefing &rarr;
+              </a>
+            </p>
+          </Card>
+
           <Card tone="soft">
             <CardEyebrow>What the recipient sees</CardEyebrow>
             <p className="text-ink-soft mt-3">
