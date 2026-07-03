@@ -393,9 +393,15 @@ human approval gate; every family-level data point stays aggregate-only.*
   *Shipped 2026-07-03 on `/admin/partners`: per-partner codes-issued vs
   claims, with a founder-only nudge line when active codes sit at zero
   claims ("worth a friendly check-in with the coordinator").*
-- [ ] **[S] Automated aggregate-only partner activity digest email.** Periodic
+- [x] **[S] Automated aggregate-only partner activity digest email.** Periodic
   email to each partner with strictly aggregate counts. No names, no
   individual choices, no price data.
+  *Shipped 2026-07-03: monthly cron (/api/cron/partner-digest, 1st @ 15:00
+  UTC) building from CohortStats so the small-sample gate travels with the
+  numbers by construction; zero-activity partners get no email; per-partner
+  failures never block the rest. Kill-switch: PARTNER_DIGEST_ENABLED
+  (default off — founder flips it in Vercel env with CRON_SECRET already
+  set). 3 tests.*
 - [ ] **[M] The five pilot metrics, instrumented end to end.** The research's
   day-one measurement set, wired through the outcomes layer and the partner
   report: median $ saved **vs the metro median price** (not just vs the
