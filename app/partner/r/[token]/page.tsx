@@ -118,6 +118,25 @@ export default async function PartnerTokenReportPage({
       usedBy("obituaries"),
     ]);
 
+    // Families who received at least one bereavement check-in (the cron
+    // records milestones on profiles.anniversary_emails_sent).
+    let remindedUsers = new Set<string>();
+    if (userIds.length) {
+      const { data: profs } = await admin
+        .from("profiles")
+        .select("id, anniversary_emails_sent")
+        .in("id", userIds);
+      remindedUsers = new Set(
+        ((profs ?? []) as { id: string; anniversary_emails_sent: unknown }[])
+          .filter(
+            (p) =>
+              Array.isArray(p.anniversary_emails_sent) &&
+              p.anniversary_emails_sent.length > 0,
+          )
+          .map((p) => p.id),
+      );
+    }
+
     records = cases.map((c) => ({
       ...rowToCohortRecord({
         ...c,
@@ -128,6 +147,7 @@ export default async function PartnerTokenReportPage({
       usedChecker: checkerUsers.has(c.user_id),
       usedCertTracker: certUsers.has(c.user_id),
       usedObituary: obitUsers.has(c.user_id),
+      bereavementReminded: remindedUsers.has(c.user_id),
     }));
   } catch {
     records = [];

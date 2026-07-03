@@ -124,3 +124,19 @@ describe("emailFor (content guards)", () => {
     }
   });
 });
+
+
+describe("recurring bereavement-benefit nudge", () => {
+  it("the entitlement reminder appears at 3mo, 6mo, and 13mo — recurring, not one-shot", () => {
+    for (const m of ["3mo", "6mo", "13mo"] as const) {
+      const { text } = emailFor(m, "https://x/unsub");
+      expect(text.toLowerCase()).toContain("bereavement");
+      expect(text.toLowerCase()).toMatch(/hospice/);
+    }
+    // And it never promises counseling FROM US — we point at the hospice's own benefit.
+    for (const m of ["3mo", "6mo", "13mo"] as const) {
+      const { text } = emailFor(m, "https://x/unsub");
+      expect(text).not.toMatch(/our counselors|we offer counseling|counseling from us/i);
+    }
+  });
+});

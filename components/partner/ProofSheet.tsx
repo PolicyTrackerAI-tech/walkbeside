@@ -135,7 +135,7 @@ export function ProofSheet({
                     insurance, county). Satisfaction share = families rating
                     4&ndash;5 of 5.
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     <Metric
                       label="Median saved vs metro"
                       value={
@@ -163,6 +163,10 @@ export function ProofSheet({
                           ? `${stats.pilotMetrics.satisfactionPromoterPct}%`
                           : "—"
                       }
+                    />
+                    <Metric
+                      label="Reminded of hospice bereavement benefit"
+                      value={`${stats.pilotMetrics.bereavementRemindedPct}%`}
                     />
                   </div>
                 </Card>
