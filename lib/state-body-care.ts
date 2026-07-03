@@ -43,7 +43,7 @@ export interface StateBodyCareRow {
 export const NATIONAL_BASELINE = {
   headline: "No US state requires embalming for every death.",
   detail:
-    "Some states require embalming or refrigeration if burial or cremation doesn't happen within a set time (often 24–48 hours) — and refrigeration is a legal alternative wherever a time rule exists. If a funeral home says state law always requires embalming, that is false, and claiming so is itself an FTC Funeral Rule violation.",
+    "Some states have a time rule: embalm or refrigerate if burial or cremation waits past a set point — often 24 to 48 hours. Where a time rule exists, refrigeration is always a legal option. If a funeral home says state law always requires embalming, that is false. Saying so also breaks the FTC Funeral Rule.",
 } as const;
 
 /** Populated only with statute-verified rows — see the provenance rule above. */
