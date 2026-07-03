@@ -58,11 +58,11 @@ export default async function PartnerTokenReportPage({
   try {
     const { data: negs } = await admin
       .from("negotiations")
-      .select("id, savings_vs_listed_cents, satisfaction_score, created_at, outcome_recorded_at")
+      .select("id, user_id, savings_vs_listed_cents, satisfaction_score, created_at, outcome_recorded_at")
       .eq("partner_id", partner.id)
       .not("outcome_recorded_at", "is", null);
 
-    const cases = (negs ?? []) as (OutcomeRow & { id: string })[];
+    const cases = (negs ?? []) as (OutcomeRow & { id: string; user_id: string })[];
 
     // Hidden-fee findings per case (FTC proxy) from the case's outreach rows.
     const feeCount = new Map<string, number>();
@@ -83,9 +83,30 @@ export default async function PartnerTokenReportPage({
       }
     }
 
-    records = cases.map((c) =>
-      rowToCohortRecord({ ...c, hidden_fees_count: feeCount.get(c.id) ?? 0 }),
-    );
+    // Tool engagement — existence joins on the family's own saved artifacts.
+    // user_id is used ONLY to key these lookups; it never reaches the
+    // aggregate (rowToCohortRecord takes booleans, not identities).
+    const userIds = [...new Set(cases.map((c) => c.user_id))];
+    const usedBy = async (table: string): Promise<Set<string>> => {
+      if (!userIds.length) return new Set();
+      const { data } = await admin
+        .from(table)
+        .select("user_id")
+        .in("user_id", userIds);
+      return new Set(((data ?? []) as { user_id: string }[]).map((r) => r.user_id));
+    };
+    const [checkerUsers, certUsers, obitUsers] = await Promise.all([
+      usedBy("price_list_analyses"),
+      usedBy("cert_trackers"),
+      usedBy("obituaries"),
+    ]);
+
+    records = cases.map((c) => ({
+      ...rowToCohortRecord({ ...c, hidden_fees_count: feeCount.get(c.id) ?? 0 }),
+      usedChecker: checkerUsers.has(c.user_id),
+      usedCertTracker: certUsers.has(c.user_id),
+      usedObituary: obitUsers.has(c.user_id),
+    }));
   } catch {
     records = [];
   }

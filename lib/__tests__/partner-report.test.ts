@@ -17,6 +17,7 @@ describe("aggregateCohort", () => {
       ftcIssuesFlagged: 0,
       avgSatisfaction: null,
       medianResolutionDays: null,
+      toolEngagement: null,
       smallSample: true,
     });
   });
@@ -127,5 +128,33 @@ describe("rowToCohortRecord (real partner report mapping)", () => {
     const stats = aggregateCohort(many);
     expect(stats.smallSample).toBe(false);
     expect(stats.totalOverchargeCaughtCents).toBe(150000 * SMALL_SAMPLE_THRESHOLD);
+  });
+});
+
+describe("toolEngagement (aggregate-only, same suppression gate)", () => {
+  const rec = (used: boolean) => ({
+    overchargeCaughtCents: 0,
+    ftcIssues: 0,
+    usedChecker: used,
+    usedCertTracker: used,
+    usedObituary: false,
+  });
+
+  it("is null under the small-sample threshold — no bypass path exists", () => {
+    const few = Array.from({ length: SMALL_SAMPLE_THRESHOLD - 1 }, () => rec(true));
+    expect(aggregateCohort(few).toolEngagement).toBeNull();
+  });
+
+  it("reports rounded percentages once the sample is sufficient", () => {
+    const many = [
+      ...Array.from({ length: 3 }, () => rec(true)),
+      ...Array.from({ length: 2 }, () => rec(false)),
+    ];
+    const stats = aggregateCohort(many);
+    expect(stats.toolEngagement).toEqual({
+      checkerPct: 60,
+      certTrackerPct: 60,
+      obituaryPct: 0,
+    });
   });
 });
