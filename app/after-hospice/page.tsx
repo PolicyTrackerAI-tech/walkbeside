@@ -378,6 +378,38 @@ export default function AfterHospicePage() {
             the Social Security Administration directly.
           </p>
 
+          <Card>
+            <CardEyebrow>The second-guessing</CardEyebrow>
+            <CardTitle>
+              If you keep replaying the decisions, you&rsquo;re in good company.
+            </CardTitle>
+            <div className="text-ink-soft space-y-3 mt-3 text-sm leading-relaxed">
+              <p>
+                &ldquo;Did we start hospice too soon &mdash; or too late?&rdquo;
+                &ldquo;Should we have tried one more treatment?&rdquo;
+                &ldquo;Was the DNR right?&rdquo; Research on families after
+                end-of-life care consistently finds this kind of doubt to be
+                one of the most common experiences caregivers carry &mdash;
+                including after decisions that were, by every measure, made
+                with love and good information. Replaying them is your mind
+                trying to make sense of an impossible situation; it is not
+                evidence you chose wrong.
+              </p>
+              <p>
+                Two things help. Saying the doubt out loud to someone &mdash;
+                the hospice&rsquo;s free bereavement counselor has heard every
+                version of it, and that&rsquo;s exactly what they&rsquo;re
+                there for. And time-boxing it: if the same questions are still
+                looping months from now and getting heavier rather than
+                lighter, that&rsquo;s worth a real conversation &mdash; the{" "}
+                <Link href="/grief#self-check" className="text-primary-deep underline">
+                  quiet self-check on the grief page
+                </Link>{" "}
+                gives you an honest read and the right people to talk to.
+              </p>
+            </div>
+          </Card>
+
           <EmailCapture
             source="after-hospice"
             title="Save this for the days ahead."
