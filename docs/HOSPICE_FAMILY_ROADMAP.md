@@ -331,10 +331,20 @@ CAHPS-score repair — emotional support is already their highest score (91%).*
 B2B2C model runs on — every institutional money relationship stays behind a
 human approval gate; every family-level data point stays aggregate-only.*
 
-- [ ] **[L] Self-serve neutral referral code + claim-link system.** A hospice
+- [x] **[L] Self-serve neutral referral code + claim-link system.** A hospice
   coordinator generates their own referral link (no engineer, no SQL) that
   attributes a family's case to the institution for aggregate reporting only.
   Coordinator has zero visibility into which homes any family sees.
+  *Shipped 2026-07-03: the founder-issued report_token doubles as the
+  institution's credential — /partner/r/[token]/links creates/copies/revokes
+  codes (HF-XXXXXX, unambiguous alphabet) with aggregate claim counts ONLY.
+  Family side: ?ref=<code> on /plan-now or /analyzer is remembered on-device
+  30 days (`lib/referral-codes.ts`, cosmetic name-refs unaffected); the
+  negotiate wizard submits it; the API resolves ACTIVE codes → sets
+  partner_id + partner_code, best-effort (attribution never fails a family's
+  case), reporting-only (anti-steering untouched by construction).
+  **Founder action: run `supabase/migrations/2026-07-03-partner-codes.sql`**
+  (needs 2026-06-27-partners.sql first). 5 tests.*
 - [ ] **[M] Co-branded referral landing on `/negotiate/start`.** Hospice
   name/logo alongside a persistent, non-overridable Honest Funeral neutrality
   pledge — visible at the exact moment of trust-transfer.

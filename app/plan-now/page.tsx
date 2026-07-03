@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RememberReferral } from "@/components/RememberReferral";
 import { PlanNow } from "./PlanNow";
 
 export const metadata: Metadata = {
@@ -37,5 +38,10 @@ export default async function Page({
     }
     partner = titleize(decoded).slice(0, 60) || undefined;
   }
-  return <PlanNow partner={partner} />;
+  return (
+    <>
+      <RememberReferral code={ref} />
+      <PlanNow partner={partner} />
+    </>
+  );
 }

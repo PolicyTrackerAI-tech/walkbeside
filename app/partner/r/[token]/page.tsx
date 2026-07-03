@@ -90,5 +90,22 @@ export default async function PartnerTokenReportPage({
     records = [];
   }
 
-  return <ProofSheet name={partner.name} stats={aggregateCohort(records)} live />;
+  return (
+    <>
+      <ProofSheet name={partner.name} stats={aggregateCohort(records)} live />
+      <div className="max-w-2xl mx-auto px-5 pb-10 print:hidden">
+        <p className="text-sm text-ink-soft">
+          Coordinators:{" "}
+          <a
+            href={`/partner/r/${token}/links`}
+            className="text-primary-deep underline"
+          >
+            create and manage your referral links
+          </a>{" "}
+          — each one opens our free planning tools with your name on them, and
+          cases started through them count toward this report.
+        </p>
+      </div>
+    </>
+  );
 }
