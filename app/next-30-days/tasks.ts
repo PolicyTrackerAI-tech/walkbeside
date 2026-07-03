@@ -337,6 +337,18 @@ export const PHASES: Phase[] = [
         body: "Revocable living trust holding the assets → probate usually not required. Will only or no will → probate is. State rules vary. An estate attorney consult is usually worth an hour of their time.",
       },
       {
+        id: "m2-reverse-mortgage",
+        title: "Was there a reverse mortgage? That clock is the shortest one you have",
+        body: "The servicer's due-and-payable letter usually wants a response within 30 days — but heirs have real rights: extensions up to about a year, the option to keep the home for 95% of appraised value, and non-recourse protection (nobody inherits a shortfall). Respond in writing, even if the answer is \"we're deciding.\"",
+        help: {
+          kind: "internal-link",
+          label: "The heir's timeline, in plain English →",
+          href: "/reverse-mortgage",
+          description:
+            "The step-by-step HECM timeline, the two protections most families don't know they have, and what to send the servicer this week.",
+        },
+      },
+      {
         id: "m2-tax",
         title: "File their final income tax return",
         body: "A final 1040 covers the portion of the year they were alive. If the estate earns income after death (dividends, interest), that's a separate 1041 estate return.",

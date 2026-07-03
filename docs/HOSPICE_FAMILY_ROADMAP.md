@@ -190,11 +190,16 @@ adult children) hits with no help today.*
   *Shipped 2026-07-03: task `w2-partb-sep` in /next-30-days with an expander
   guide — the 8-month SEP, the COBRA trap named explicitly, CMS-40B +
   CMS-L564 forms, the under-65 branch.*
-- [ ] **[M] Reverse mortgage heir timeline guide.** HECM-scoped: loan due at
+- [x] **[M] Reverse mortgage heir timeline guide.** HECM-scoped: loan due at
   death, 30-day response to the due-and-payable notice, up to 6 months + two
   90-day extensions, the 95%-of-appraised-value payoff option, non-recourse
   protection. Note that proprietary (non-FHA) loans differ — confirm loan type
   with the servicer.
+  *Shipped 2026-07-03 as `/reverse-mortgage`: leads with the two
+  protections (95% payoff, non-recourse), the 5-step timeline, the
+  what-to-send-this-week list (incl. taxes/insurance lapse warning +
+  HUD-counselor free help), non-borrowing-spouse deferral flagged, proprietary
+  loans flagged top and bottom. Month-2 task `m2-reverse-mortgage` links it.*
 - [x] **[S] Bereavement-leave HR prompt.** One line added to the existing
   employer-notification task: ask HR what happens to your own PTO/leave if you
   were on caregiver leave at the time of death (~6 states mandate any
