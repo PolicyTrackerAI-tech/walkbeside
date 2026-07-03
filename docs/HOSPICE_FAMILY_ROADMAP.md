@@ -205,9 +205,15 @@ adult children) hits with no help today.*
   were on caregiver leave at the time of death (~6 states mandate any
   bereavement leave).
   *Shipped 2026-07-03 on the funeral-week "Tell the deceased's employer" task.*
-- [ ] **[S] Point-person designation for negotiation.** Family designates one
+- [x] **[S] Point-person designation for negotiation.** Family designates one
   member as the authorized contact on a negotiation thread; only that person's
   info is shared with homes. Lightweight consent confirmation.
+  *Shipped 2026-07-03: the wizard's name step reframed as "Who is the
+  family's point person?" with the exact-truth privacy note (homes see "the
+  Miller family"/"Sarah's family" + the shared reply address, nothing else)
+  and a required consent checkbox; API enforces `pointPersonConsent` server-
+  side (defaults false — hand-rolled requests can't skip it). Consent is
+  validated, not yet persisted — add a column in the next migration batch.*
 - [ ] **[L] Live shared household link.** Upgrade `/share` from a one-time
   snapshot to a durable, unguessable-slug live view of Vault/Notifications/
   Next-30-Days/negotiation state for multiple family members — with link

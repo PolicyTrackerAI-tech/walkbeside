@@ -48,6 +48,10 @@ const Body = z.object({
     .optional(),
   radiusMiles: z.number().int().min(5).max(100).default(25),
   authorizationAccepted: z.boolean().default(false),
+  // The named sender is the family's ONE authorized contact and consented to
+  // their first name appearing in outreach. Defaults false so an old client
+  // (or a hand-rolled request) can't skip the designation.
+  pointPersonConsent: z.boolean().default(false),
 });
 
 export async function POST(req: Request) {
@@ -70,6 +74,16 @@ export async function POST(req: Request) {
   if (!ctx.authorizationAccepted) {
     return NextResponse.json(
       { error: "authorization_required" },
+      { status: 400 },
+    );
+  }
+
+  // And the point-person designation: one named family contact who agreed to
+  // their first name being shared with the homes. Only that name ever goes
+  // out — the sender's email/phone and other family members never do.
+  if (!ctx.pointPersonConsent) {
+    return NextResponse.json(
+      { error: "point_person_consent_required" },
       { status: 400 },
     );
   }

@@ -113,6 +113,7 @@ function NegotiateStartWizard() {
           notes: state.notes || undefined,
           extras: state.extras || undefined,
           dateOfDeath: state.dateOfDeath || undefined,
+          pointPersonConsent: state.pointPersonConsent,
           authorizationAccepted: authorized,
         }),
       });
@@ -416,8 +417,8 @@ function NegotiateStartWizard() {
 
               {step === 6 && (
                 <Card>
-                  <Label htmlFor="first" hint="So the funeral home knows who to write back to.">
-                    Your name?
+                  <Label htmlFor="first" hint="One person speaks for the family here — it keeps the process calm and the funeral homes honest. Often the person named on the plan, but any adult the family trusts works.">
+                    Who is the family&rsquo;s point person?
                   </Label>
                   <div className="grid sm:grid-cols-2 gap-3 mt-2">
                     <Input
@@ -434,10 +435,35 @@ function NegotiateStartWizard() {
                       placeholder="Last (optional)"
                     />
                   </div>
+                  <p className="text-sm text-ink-soft mt-3">
+                    Funeral homes see only the name you enter here (as
+                    &ldquo;the Miller family&rdquo; or &ldquo;Sarah&rsquo;s
+                    family&rdquo;) and our shared reply address. Your email,
+                    phone number, and everyone else in the family stay private
+                    &mdash; always.
+                  </p>
+                  <label className="flex items-start gap-3 mt-4 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={state.pointPersonConsent}
+                      onChange={(e) =>
+                        update("pointPersonConsent", e.target.checked)
+                      }
+                      className="mt-1 h-4 w-4 accent-[var(--primary-deep,#2f5d50)]"
+                    />
+                    <span className="text-sm text-ink">
+                      I&rsquo;m the family&rsquo;s point person for this, and
+                      I&rsquo;m okay with the funeral homes we contact seeing
+                      this name.
+                    </span>
+                  </label>
                   <Button
                     size="lg"
                     onClick={next}
-                    disabled={state.senderFirstName.length === 0}
+                    disabled={
+                      state.senderFirstName.length === 0 ||
+                      !state.pointPersonConsent
+                    }
                     className="mt-5"
                   >
                     Continue →
