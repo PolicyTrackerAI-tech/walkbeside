@@ -4,6 +4,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { fmtUSD } from "@/lib/pricing-data";
 import { SMALL_SAMPLE_THRESHOLD, type CohortStats } from "@/lib/partner-report";
 import { PrintButton } from "@/components/partner/PrintButton";
+import { PrintHeader } from "@/components/print/PrintHeader";
 
 /**
  * The hospice / employer proof sheet — aggregate, de-identified outcomes for a
@@ -33,7 +34,11 @@ export function ProofSheet({
       </div>
 
       <section className="flex-1">
-        <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
+        <div className="max-w-3xl mx-auto px-5 py-10 space-y-6 print:py-0">
+          <PrintHeader
+            title={`Partner outcomes summary — ${name}`}
+            subtitle="Aggregate, de-identified family outcomes · prepared by Honest Funeral"
+          />
           {!live && (
             <div className="print:hidden rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft">
               <strong className="text-ink">Sample report.</strong> Illustrative
@@ -193,6 +198,29 @@ export function ProofSheet({
               homes or insurers. Free to families. We never steer.
             </p>
             {!empty && <PrintButton />}
+          </div>
+
+          {/* Methodology + scope footnote — print-visible on purpose: the
+              printed page travels without its URL context. */}
+          <div className="text-xs text-ink-muted leading-relaxed border-t border-border/60 pt-3 space-y-2">
+            <p>
+              <strong className="text-ink-soft">How these figures are made:</strong>{" "}
+              every number aggregates outcomes recorded on the referred
+              families&rsquo; own cases (savings measured against the
+              family&rsquo;s own original quote; satisfaction as reported by
+              the family). Cohorts under {SMALL_SAMPLE_THRESHOLD} families
+              suppress dollar and satisfaction figures so no individual family
+              is identifiable. Tool-engagement figures count server-recorded
+              artifacts only and understate real usage. Full methodology:
+              honestfuneral.co/methodology.
+            </p>
+            <p>
+              <strong className="text-ink-soft">What this is not:</strong>{" "}
+              an informational summary of aggregate family outcomes — not a
+              CMS or CAHPS instrument, not a compliance certification or
+              survey substitute, and it implies no endorsement by CMS or any
+              regulator.
+            </p>
           </div>
         </div>
       </section>
