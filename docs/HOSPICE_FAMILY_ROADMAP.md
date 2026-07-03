@@ -174,7 +174,7 @@ sourcing.*
 this population (older, Medicaid/reverse-mortgage-exposed, multiple remote
 adult children) hits with no help today.*
 
-- [ ] **[L] Medicaid Estate Recovery (MERP) navigator.** State-by-state guide:
+- [x] **[L] Medicaid Estate Recovery (MERP) navigator.** State-by-state guide:
   when a state can claim against a deceased Medicaid recipient's estate
   (usually the house), the Notice-of-Intent response window, and hardship-
   waiver categories (surviving spouse, disabled child, caregiver child). No
@@ -182,6 +182,16 @@ adult children) hits with no help today.*
   (mirror `lib/probate-by-state.ts` discipline) + a "confirm with a local
   elder-law attorney" disclaimer. Hospice decedents skew Medicaid/dual-
   eligible; families are blindsided by this. Zero coverage in the app today.
+  *Shipped 2026-07-03 as `/medicaid-estate-recovery`: all 51 jurisdictions in
+  `lib/merp-by-state.ts` (scope probate-only vs expanded, notice windows only
+  where codified, hardship criteria, agency, statute cite per row),
+  DOUBLE-verified — research → adversarial verify → second hostile pass on
+  the 30 riskiest rows, which caught Nevada's false "no pre-death lien" claim
+  (NRS 422.29306(1)(b)) and Missouri's scope framing. Federal-floor card
+  (42 U.S.C. §1396p(b)) leads; "before you pay or sign anything" steps;
+  elder-law-attorney disclaimer everywhere; audit trail in
+  docs/MERP_FINDINGS.md, queued for counsel review. Cross-linked from
+  /estate + the plan-now benefit sweep.*
 - [x] **[S] Surviving spouse's Medicare Part B deadline alert.** New
   context-aware task + short guide: 8-month Special Enrollment Period after
   losing coverage under the deceased's employer plan; COBRA does NOT extend
