@@ -28,11 +28,13 @@ export function hasRealOutcomeField(body: {
   negotiatedPriceCents?: number | null;
   amountPaidCents?: number | null;
   satisfactionScore?: number | null;
+  benefitDollarsRecoveredCents?: number | null;
 }): boolean {
   return (
     body.negotiatedPriceCents !== undefined ||
     body.amountPaidCents !== undefined ||
-    body.satisfactionScore !== undefined
+    body.satisfactionScore !== undefined ||
+    body.benefitDollarsRecoveredCents !== undefined
   );
 }
 
@@ -42,6 +44,9 @@ const CaseBody = z.object({
   negotiatedPriceCents: CENTS.nullable().optional(),
   amountPaidCents: CENTS.nullable().optional(),
   satisfactionScore: z.number().int().min(1).max(5).nullable().optional(),
+  // Pilot metric: benefit dollars the family actually recovered (VA/SSA/
+  // insurance/county) — admin-entered; aggregate-only on partner surfaces.
+  benefitDollarsRecoveredCents: CENTS.nullable().optional(),
   // Referring partner (hospice) for the partner report. Set AFTER the family
   // chose — a reporting label only, never read by selection/outreach.
   partnerId: z.string().uuid().nullable().optional(),
@@ -66,7 +71,7 @@ const HomeBody = z.object({
 const Body = z.discriminatedUnion("scope", [CaseBody, HomeBody]);
 
 const NEG_COLS =
-  "id, zip, service_type, status, target_home_estimate_cents, best_quote_cents, negotiated_price_cents, amount_paid_cents, satisfaction_score, savings_vs_listed_cents, outcome_recorded_at, created_at";
+  "id, zip, service_type, status, target_home_estimate_cents, best_quote_cents, negotiated_price_cents, amount_paid_cents, satisfaction_score, benefit_dollars_recovered_cents, savings_vs_listed_cents, outcome_recorded_at, created_at";
 const OUTREACH_COLS =
   "id, negotiation_id, home_name, quote_cents, chosen, listed_price_cents, negotiated_price_cents, hidden_fees, status";
 
@@ -101,6 +106,9 @@ export async function PATCH(req: Request) {
     }
     if (body.satisfactionScore !== undefined) {
       patch.satisfaction_score = body.satisfactionScore;
+    }
+    if (body.benefitDollarsRecoveredCents !== undefined) {
+      patch.benefit_dollars_recovered_cents = body.benefitDollarsRecoveredCents;
     }
     if (body.partnerId !== undefined) {
       patch.partner_id = body.partnerId;

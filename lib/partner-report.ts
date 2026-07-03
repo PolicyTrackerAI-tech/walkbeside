@@ -8,6 +8,8 @@
  * is AGGREGATE only — never per-home or per-family identifiable data.
  */
 
+import { SERVICE_TOTALS, adjustedRange } from "./pricing-data";
+
 export interface CohortRecord {
   /** Overcharge caught vs fair (cents) — maps to potential_savings_cents. */
   overchargeCaughtCents: number;
@@ -26,6 +28,17 @@ export interface CohortRecord {
   usedChecker?: boolean;
   usedCertTracker?: boolean;
   usedObituary?: boolean;
+  /**
+   * Pilot metrics (the research's day-one measurement set):
+   * savedVsMetroCents = the metro's median fair price for the case's service
+   * minus what the family actually paid — CAN be negative (paid above the
+   * metro median); the cohort median absorbs that honestly.
+   */
+  savedVsMetroCents?: number;
+  /** Quotes actually received on this case (outreach rows with a price). */
+  quotesReceived?: number;
+  /** Benefit dollars the family recovered (admin-entered in the pilot). */
+  benefitDollarsCents?: number;
 }
 
 /**
@@ -49,6 +62,19 @@ export interface CohortStats {
   medianResolutionDays: number | null;
   /** Aggregate tool engagement — null when smallSample (same gate as dollars). */
   toolEngagement: ToolEngagement | null;
+  /**
+   * The five pilot metrics (minus staff-minutes, which is an ops-side
+   * coordinator survey, not app data). null when smallSample — same gate,
+   * no bypass path. Individual fields are null when no case carries the
+   * underlying data yet.
+   */
+  pilotMetrics: {
+    medianSavedVsMetroCents: number | null;
+    avgQuotesPerFamily: number | null;
+    totalBenefitDollarsCents: number | null;
+    /** Share of rated families at 4–5 of 5 — the promoter share; deliberately NOT labeled NPS. */
+    satisfactionPromoterPct: number | null;
+  } | null;
   /** True when the sample is too small to present as a stable benchmark. */
   smallSample: boolean;
 }
@@ -97,8 +123,48 @@ export function aggregateCohort(records: CohortRecord[]): CohortStats {
           certTrackerPct: pct(records.filter((r) => r.usedCertTracker).length),
           obituaryPct: pct(records.filter((r) => r.usedObituary).length),
         },
+    pilotMetrics: smallSample
+      ? null
+      : (() => {
+          const vsMetro = records
+            .map((r) => r.savedVsMetroCents)
+            .filter((x): x is number => typeof x === "number");
+          const quotes = records
+            .map((r) => r.quotesReceived)
+            .filter((x): x is number => typeof x === "number");
+          const benefits = records
+            .map((r) => r.benefitDollarsCents)
+            .filter((x): x is number => typeof x === "number" && x > 0);
+          const promoters = sats.filter((s) => s >= 4).length;
+          return {
+            medianSavedVsMetroCents: median(vsMetro),
+            avgQuotesPerFamily: quotes.length
+              ? Math.round((quotes.reduce((a, b) => a + b, 0) / quotes.length) * 10) / 10
+              : null,
+            totalBenefitDollarsCents: benefits.length
+              ? benefits.reduce((a, b) => a + b, 0)
+              : null,
+            satisfactionPromoterPct: sats.length
+              ? Math.round((promoters / sats.length) * 100)
+              : null,
+          };
+        })(),
     smallSample,
   };
+}
+
+/**
+ * The metro's median fair price for a service near a zip — the pilot's
+ * "saved vs the metro median" baseline (research metric #1: savings vs the
+ * family's own quote alone overstates when the quote itself was inflated).
+ * Mid of the zip-adjusted fair band from the same benchmarks the checker
+ * uses; null when the service type is unknown.
+ */
+export function metroMedianCents(serviceType: string, zip: string): number | null {
+  const svc = SERVICE_TOTALS.find((s) => s.type === serviceType);
+  if (!svc) return null;
+  const [lo, hi] = adjustedRange(svc.fairLow, svc.fairHigh, zip);
+  return Math.round(((lo + hi) / 2) * 100);
 }
 
 /**
@@ -114,6 +180,14 @@ export interface OutcomeRow {
   outcome_recorded_at: string | null;
   /** Count of hidden-fee findings across this case's outreach rows (FTC proxy). */
   hidden_fees_count?: number;
+  /** What the family actually paid (cents) — enables the vs-metro metric. */
+  amount_paid_cents?: number | null;
+  /** Metro median for the case's service+zip, precomputed via metroMedianCents. */
+  metro_median_cents?: number | null;
+  /** Outreach rows with a real quote on this case. */
+  quote_count?: number;
+  /** Admin-entered benefit dollars recovered (pilot). */
+  benefit_dollars_recovered_cents?: number | null;
 }
 
 /**
@@ -136,6 +210,16 @@ export function rowToCohortRecord(row: OutcomeRow): CohortRecord {
     );
     if (Number.isFinite(days) && days >= 0) rec.resolutionDays = days;
   }
+  if (
+    typeof row.amount_paid_cents === "number" &&
+    typeof row.metro_median_cents === "number"
+  ) {
+    rec.savedVsMetroCents = row.metro_median_cents - row.amount_paid_cents;
+  }
+  if (typeof row.quote_count === "number") rec.quotesReceived = row.quote_count;
+  if (typeof row.benefit_dollars_recovered_cents === "number") {
+    rec.benefitDollarsCents = row.benefit_dollars_recovered_cents;
+  }
   return rec;
 }
 
@@ -146,19 +230,19 @@ export function rowToCohortRecord(row: OutcomeRow): CohortRecord {
  */
 export function sampleCohort(): CohortRecord[] {
   return [
-    { overchargeCaughtCents: 2345_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true },
-    { overchargeCaughtCents: 1820_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: true, usedObituary: false },
-    { overchargeCaughtCents: 980_00, ftcIssues: 0, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: false, usedObituary: false },
-    { overchargeCaughtCents: 3120_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true },
-    { overchargeCaughtCents: 1450_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: true },
-    { overchargeCaughtCents: 2675_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: false },
-    { overchargeCaughtCents: 740_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 7, usedChecker: false, usedCertTracker: true, usedObituary: false },
-    { overchargeCaughtCents: 1990_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false },
-    { overchargeCaughtCents: 0, ftcIssues: 0, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true },
-    { overchargeCaughtCents: 2210_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false },
-    { overchargeCaughtCents: 1675_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: true, usedObituary: false },
-    { overchargeCaughtCents: 880_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 8, usedChecker: false, usedCertTracker: false, usedObituary: false },
-    { overchargeCaughtCents: 3050_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true },
-    { overchargeCaughtCents: 1240_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: false },
+    { overchargeCaughtCents: 2345_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 61000, quotesReceived: 3, benefitDollarsCents: 25500 },
+    { overchargeCaughtCents: 1820_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 48000, quotesReceived: 4 },
+    { overchargeCaughtCents: 980_00, ftcIssues: 0, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 152000, quotesReceived: 2, benefitDollarsCents: 130000 },
+    { overchargeCaughtCents: 3120_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 98000, quotesReceived: 5, benefitDollarsCents: 25500 },
+    { overchargeCaughtCents: 1450_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: true, savedVsMetroCents: 30000, quotesReceived: 3 },
+    { overchargeCaughtCents: 2675_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 76000, quotesReceived: 4, benefitDollarsCents: 45000 },
+    { overchargeCaughtCents: 740_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 7, usedChecker: false, usedCertTracker: true, usedObituary: false, savedVsMetroCents: -12000, quotesReceived: 2, benefitDollarsCents: 25500 },
+    { overchargeCaughtCents: 1990_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 54000, quotesReceived: 3 },
+    { overchargeCaughtCents: 0, ftcIssues: 0, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 8000, quotesReceived: 5, benefitDollarsCents: 210000 },
+    { overchargeCaughtCents: 2210_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 67000, quotesReceived: 4 },
+    { overchargeCaughtCents: 1675_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 41000, quotesReceived: 3, benefitDollarsCents: 25500 },
+    { overchargeCaughtCents: 880_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 8, usedChecker: false, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 22000, quotesReceived: 2 },
+    { overchargeCaughtCents: 3050_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 110000, quotesReceived: 5, benefitDollarsCents: 89000 },
+    { overchargeCaughtCents: 1240_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 35000, quotesReceived: 3 },
   ];
 }

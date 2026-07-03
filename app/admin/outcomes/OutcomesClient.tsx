@@ -39,6 +39,7 @@ export interface OutcomeCase {
   negotiated_price_cents: number | null;
   amount_paid_cents: number | null;
   satisfaction_score: number | null;
+  benefit_dollars_recovered_cents?: number | null;
   savings_vs_listed_cents: number | null;
   outcome_recorded_at: string | null;
   partner_id: string | null;
@@ -259,11 +260,15 @@ function CaseRow({
   const [satisfaction, setSatisfaction] = React.useState(
     c.satisfaction_score == null ? "" : String(c.satisfaction_score),
   );
+  const [benefitDollars, setBenefitDollars] = React.useState(
+    centsToInput(c.benefit_dollars_recovered_cents ?? null),
+  );
 
   async function saveCase() {
     const np = inputToCents(negotiated);
     const ap = inputToCents(amountPaid);
-    if (Number.isNaN(np) || Number.isNaN(ap)) return;
+    const bd = inputToCents(benefitDollars);
+    if (Number.isNaN(np) || Number.isNaN(ap) || Number.isNaN(bd)) return;
     const res = await send(
       {
         scope: "case",
@@ -271,6 +276,7 @@ function CaseRow({
         negotiatedPriceCents: np,
         amountPaidCents: ap,
         satisfactionScore: satisfaction === "" ? null : Number(satisfaction),
+        benefitDollarsRecoveredCents: bd,
       },
       `case:${c.id}`,
     );
@@ -382,6 +388,16 @@ function CaseRow({
               </option>
             ))}
           </Select>
+        </div>
+        <div>
+          <Label htmlFor={`benefit-${c.id}`}>Benefit $ recovered</Label>
+          <Input
+            id={`benefit-${c.id}`}
+            inputMode="decimal"
+            placeholder="0.00"
+            value={benefitDollars}
+            onChange={(e) => setBenefitDollars(e.target.value)}
+          />
         </div>
         <Button onClick={saveCase} disabled={saving}>
           {saving ? "Saving…" : "Save case"}
