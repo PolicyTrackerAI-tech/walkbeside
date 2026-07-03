@@ -17,6 +17,26 @@ export interface CohortRecord {
   satisfaction?: number;
   /** Days from intake to resolution (optional). */
   resolutionDays?: number;
+  /**
+   * Tool engagement — server-knowable only (existence joins on the family's
+   * own saved artifacts: checker analyses, cert tracker, obituary). Most
+   * tools are deliberately on-device, so these read as an honest floor
+   * ("at least X% also used the checker"), never full usage.
+   */
+  usedChecker?: boolean;
+  usedCertTracker?: boolean;
+  usedObituary?: boolean;
+}
+
+/**
+ * Aggregate engagement percentages. Computed INSIDE aggregateCohort and null
+ * when the sample is small — there is deliberately no separate path to these
+ * numbers that could bypass the suppression gate.
+ */
+export interface ToolEngagement {
+  checkerPct: number;
+  certTrackerPct: number;
+  obituaryPct: number;
 }
 
 export interface CohortStats {
@@ -27,6 +47,8 @@ export interface CohortStats {
   ftcIssuesFlagged: number;
   avgSatisfaction: number | null;
   medianResolutionDays: number | null;
+  /** Aggregate tool engagement — null when smallSample (same gate as dollars). */
+  toolEngagement: ToolEngagement | null;
   /** True when the sample is too small to present as a stable benchmark. */
   smallSample: boolean;
 }
@@ -54,6 +76,9 @@ export function aggregateCohort(records: CohortRecord[]): CohortStats {
     .map((r) => r.resolutionDays)
     .filter((x): x is number => typeof x === "number");
 
+  const smallSample = n < SMALL_SAMPLE_THRESHOLD;
+  const pct = (count: number) => Math.round((count / n) * 100);
+
   return {
     familiesHelped: n,
     familiesWhoSaved: records.filter((r) => r.overchargeCaughtCents > 0).length,
@@ -64,7 +89,15 @@ export function aggregateCohort(records: CohortRecord[]): CohortStats {
       ? Math.round((sats.reduce((a, b) => a + b, 0) / sats.length) * 10) / 10
       : null,
     medianResolutionDays: median(days),
-    smallSample: n < SMALL_SAMPLE_THRESHOLD,
+    // Suppressed under the SAME gate as the dollar figures.
+    toolEngagement: smallSample
+      ? null
+      : {
+          checkerPct: pct(records.filter((r) => r.usedChecker).length),
+          certTrackerPct: pct(records.filter((r) => r.usedCertTracker).length),
+          obituaryPct: pct(records.filter((r) => r.usedObituary).length),
+        },
+    smallSample,
   };
 }
 

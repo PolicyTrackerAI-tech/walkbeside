@@ -119,6 +119,31 @@ export function ProofSheet({
                   }
                 />
               </div>
+
+              {stats.toolEngagement && (
+                <Card>
+                  <CardTitle>How families used the tools</CardTitle>
+                  <p className="text-xs text-ink-muted mt-1 mb-3">
+                    Server-recorded artifacts only — most tools run privately
+                    on the family&rsquo;s own device, so these are floors, not
+                    totals. Aggregate counts; never who.
+                  </p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <Metric
+                      label="Checked a price list"
+                      value={`${stats.toolEngagement.checkerPct}%`}
+                    />
+                    <Metric
+                      label="Tracked certificates"
+                      value={`${stats.toolEngagement.certTrackerPct}%`}
+                    />
+                    <Metric
+                      label="Wrote the obituary"
+                      value={`${stats.toolEngagement.obituaryPct}%`}
+                    />
+                  </div>
+                </Card>
+              )}
             </>
           )}
 

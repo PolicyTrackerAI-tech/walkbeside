@@ -356,10 +356,17 @@ human approval gate; every family-level data point stays aggregate-only.*
   shared / they see only anonymous totals." Live on /negotiate/start,
   /plan-now, /analyzer; code refs suppress the old titleized cosmetic banner
   so "Hf 7kq2md" never renders as a name.*
-- [ ] **[M] Aggregate-only "tool engagement" signal in the partner report.**
+- [x] **[M] Aggregate-only "tool engagement" signal in the partner report.**
   Usage counts (% who opened next-30-days, reached Month 2, used /estate) in
   the same small-sample-suppression path as the existing metrics — not a
   separate export that could bypass it.
+  *Shipped 2026-07-03: `toolEngagement` computed INSIDE `aggregateCohort` (no
+  bypass path exists by construction; null under SMALL_SAMPLE_THRESHOLD, 2
+  tests) from existence-joins on the family's own server artifacts — checker
+  analyses, cert tracker, obituary. Judgment call: next-30-days//estate opens
+  are deliberately NOT server-knowable (the tools are on-device by privacy
+  design and we won't add tracking to them), so the report frames these as
+  floors ("server-recorded artifacts only... floors, not totals").*
 - [ ] **[M] Printable partner outcomes summary.** Print-optimized export of
   the existing aggregate metrics with the methodology footnote and neutrality
   line. Explicitly NOT framed as a "CAHPS" or "compliance" artifact (no
