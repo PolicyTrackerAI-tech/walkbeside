@@ -39,6 +39,8 @@ export interface CohortRecord {
   quotesReceived?: number;
   /** Benefit dollars the family recovered (admin-entered in the pilot). */
   benefitDollarsCents?: number;
+  /** At least one bereavement check-in email has gone to this family. */
+  bereavementReminded?: boolean;
 }
 
 /**
@@ -74,6 +76,8 @@ export interface CohortStats {
     totalBenefitDollarsCents: number | null;
     /** Share of rated families at 4–5 of 5 — the promoter share; deliberately NOT labeled NPS. */
     satisfactionPromoterPct: number | null;
+    /** Share of families who received at least one bereavement check-in (we drive utilization of the HOSPICE's own required benefit — we never counsel). */
+    bereavementRemindedPct: number;
   } | null;
   /** True when the sample is too small to present as a stable benchmark. */
   smallSample: boolean;
@@ -147,6 +151,9 @@ export function aggregateCohort(records: CohortRecord[]): CohortStats {
             satisfactionPromoterPct: sats.length
               ? Math.round((promoters / sats.length) * 100)
               : null,
+            bereavementRemindedPct: pct(
+              records.filter((r) => r.bereavementReminded).length,
+            ),
           };
         })(),
     smallSample,
@@ -230,19 +237,19 @@ export function rowToCohortRecord(row: OutcomeRow): CohortRecord {
  */
 export function sampleCohort(): CohortRecord[] {
   return [
-    { overchargeCaughtCents: 2345_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 61000, quotesReceived: 3, benefitDollarsCents: 25500 },
-    { overchargeCaughtCents: 1820_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 48000, quotesReceived: 4 },
+    { overchargeCaughtCents: 2345_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 61000, quotesReceived: 3, benefitDollarsCents: 25500, bereavementReminded: true },
+    { overchargeCaughtCents: 1820_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 48000, quotesReceived: 4, bereavementReminded: true },
     { overchargeCaughtCents: 980_00, ftcIssues: 0, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 152000, quotesReceived: 2, benefitDollarsCents: 130000 },
-    { overchargeCaughtCents: 3120_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 98000, quotesReceived: 5, benefitDollarsCents: 25500 },
-    { overchargeCaughtCents: 1450_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: true, savedVsMetroCents: 30000, quotesReceived: 3 },
-    { overchargeCaughtCents: 2675_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 76000, quotesReceived: 4, benefitDollarsCents: 45000 },
+    { overchargeCaughtCents: 3120_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 98000, quotesReceived: 5, benefitDollarsCents: 25500, bereavementReminded: true },
+    { overchargeCaughtCents: 1450_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: true, savedVsMetroCents: 30000, quotesReceived: 3, bereavementReminded: true },
+    { overchargeCaughtCents: 2675_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 76000, quotesReceived: 4, benefitDollarsCents: 45000, bereavementReminded: true },
     { overchargeCaughtCents: 740_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 7, usedChecker: false, usedCertTracker: true, usedObituary: false, savedVsMetroCents: -12000, quotesReceived: 2, benefitDollarsCents: 25500 },
-    { overchargeCaughtCents: 1990_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 54000, quotesReceived: 3 },
-    { overchargeCaughtCents: 0, ftcIssues: 0, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 8000, quotesReceived: 5, benefitDollarsCents: 210000 },
-    { overchargeCaughtCents: 2210_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 67000, quotesReceived: 4 },
-    { overchargeCaughtCents: 1675_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 41000, quotesReceived: 3, benefitDollarsCents: 25500 },
+    { overchargeCaughtCents: 1990_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 54000, quotesReceived: 3, bereavementReminded: true },
+    { overchargeCaughtCents: 0, ftcIssues: 0, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 8000, quotesReceived: 5, benefitDollarsCents: 210000, bereavementReminded: true },
+    { overchargeCaughtCents: 2210_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 67000, quotesReceived: 4, bereavementReminded: true },
+    { overchargeCaughtCents: 1675_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: true, usedObituary: false, savedVsMetroCents: 41000, quotesReceived: 3, benefitDollarsCents: 25500, bereavementReminded: true },
     { overchargeCaughtCents: 880_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 8, usedChecker: false, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 22000, quotesReceived: 2 },
-    { overchargeCaughtCents: 3050_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 110000, quotesReceived: 5, benefitDollarsCents: 89000 },
-    { overchargeCaughtCents: 1240_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 35000, quotesReceived: 3 },
+    { overchargeCaughtCents: 3050_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true, savedVsMetroCents: 110000, quotesReceived: 5, benefitDollarsCents: 89000, bereavementReminded: true },
+    { overchargeCaughtCents: 1240_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: false, savedVsMetroCents: 35000, quotesReceived: 3, bereavementReminded: true },
   ];
 }

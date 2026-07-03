@@ -144,6 +144,8 @@ A few specific things at this stage that families often miss:
 
 — If the deceased was a veteran and the family hasn't claimed VA burial benefits yet, you have until 2 years after burial. ${url("/veterans")} walks through it.
 
+— And a reminder from the three-month note: if they were on hospice, that hospice still owes your family free bereavement support — counseling, groups, check-ins — through about the thirteen-month mark. Fewer than half of families ever use it. One call to the hospice's bereavement line starts it.
+
 If you'd rather not hear from us at the later marks, ${unsubscribeLink(unsubscribeUrl)}
 
 Take care,

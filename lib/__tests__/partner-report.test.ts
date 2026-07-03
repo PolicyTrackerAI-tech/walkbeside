@@ -196,6 +196,7 @@ describe("pilotMetrics (five-metrics instrumentation, same suppression gate)", (
       avgQuotesPerFamily: 3.6,
       totalBenefitDollarsCents: 155_500,
       satisfactionPromoterPct: 80, // 4 of 5 rated ≥4
+      bereavementRemindedPct: 0,
     });
   });
 
@@ -208,6 +209,7 @@ describe("pilotMetrics (five-metrics instrumentation, same suppression gate)", (
       avgQuotesPerFamily: null,
       totalBenefitDollarsCents: null,
       satisfactionPromoterPct: null,
+      bereavementRemindedPct: 0,
     });
   });
 });
@@ -240,5 +242,23 @@ describe("rowToCohortRecord pilot fields", () => {
     expect(
       rowToCohortRecord({ ...base, amount_paid_cents: 150_000 }).savedVsMetroCents,
     ).toBeUndefined();
+  });
+});
+
+
+describe("bereavementRemindedPct (drives the HOSPICE's own benefit — we never counsel)", () => {
+  it("counts families with at least one bereavement check-in, same gate", () => {
+    const rec = (reminded: boolean) => ({
+      overchargeCaughtCents: 0,
+      ftcIssues: 0,
+      bereavementReminded: reminded,
+    });
+    const stats = aggregateCohort([
+      rec(true), rec(true), rec(true), rec(false), rec(false),
+    ]);
+    expect(stats.pilotMetrics?.bereavementRemindedPct).toBe(60);
+    expect(
+      aggregateCohort([rec(true), rec(true)]).pilotMetrics,
+    ).toBeNull();
   });
 });
