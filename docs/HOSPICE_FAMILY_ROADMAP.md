@@ -230,9 +230,16 @@ adult children) hits with no help today.*
   (until then the card reports unavailable; nothing else breaks). Negotiation
   state deliberately NOT in v1 payload (owner-scoped RLS; needs its own
   design).*
-- [ ] **[S] Assignee field on Vault, Notifications, Next-30-Days.** Free-text
+- [x] **[S] Assignee field on Vault, Notifications, Next-30-Days.** Free-text
   "assigned to" + filter by assignee. Sibling division-of-labor is a real,
   named pain point; trivial addition to already-free tools.
+  *Shipped 2026-07-03: shared `lib/assignees.ts` (case-insensitive names +
+  filter, incl. Unassigned) + `AssigneeFilter` pills (hidden until someone is
+  named). Vault/Notifications: per-row input + filter; Notifications print
+  hand-off gains a "Who" column. Next-30-Days: assignee map
+  (`next30.assignees.v1`) with the input on the current-task card and badges
+  on upcoming/completed rows. Assignees flow into the live family view
+  ("Mike is on it") via the household payload.*
 - [ ] **[M] Consolidated print/export "family briefing" one-pager.** One print
   view rolling up the family's own Vault, Notifications, Next-30-Days, and
   certificate-count data — legible at a glance for an out-of-town relative or

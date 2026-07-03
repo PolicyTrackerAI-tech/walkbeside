@@ -10,12 +10,14 @@ export interface ViewVaultDoc {
   description: string;
   location: string;
   status: string;
+  assignee?: string;
 }
 
 export interface ViewContact {
   name: string;
   relationship: string;
   status: string;
+  assignee?: string;
 }
 
 export interface ViewTaskProgress {
@@ -27,6 +29,8 @@ export interface HouseholdView {
   vaultDocs: ViewVaultDoc[];
   contacts: ViewContact[];
   taskProgress: ViewTaskProgress;
+  /** task id -> assignee name — sibling division of labor. */
+  taskAssignees: Record<string, string>;
   /** From the decide flow, when present. */
   recommendedServiceType?: string;
 }
@@ -66,6 +70,7 @@ export function parseHouseholdView(
         description: str(d.description),
         location: str(d.location),
         status: str(d.status, 20) || "need-to-find",
+        ...(str(d.assignee, 40) ? { assignee: str(d.assignee, 40) } : {}),
       };
     },
     100,
@@ -80,6 +85,7 @@ export function parseHouseholdView(
         name,
         relationship: str(c.relationship, 80),
         status: str(c.status, 20) || "todo",
+        ...(str(c.assignee, 40) ? { assignee: str(c.assignee, 40) } : {}),
       };
     },
     200,
@@ -99,11 +105,27 @@ export function parseHouseholdView(
     taskProgress = {};
   }
 
+  let taskAssignees: Record<string, string> = {};
+  try {
+    const parsed = JSON.parse(
+      payload["honestfuneral.next30.assignees.v1"] ?? "",
+    ) as unknown;
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
+        const name = str(v, 40).trim();
+        if (name) taskAssignees[k.slice(0, 80)] = name;
+      }
+    }
+  } catch {
+    taskAssignees = {};
+  }
+
   const svc = payload["hf-decide:recommendedServiceType"];
   return {
     vaultDocs,
     contacts,
     taskProgress,
+    taskAssignees,
     recommendedServiceType: svc ? str(svc, 40) : undefined,
   };
 }
