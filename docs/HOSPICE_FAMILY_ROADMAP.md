@@ -261,9 +261,16 @@ adult children) hits with no help today.*
   per house convention; on-device only; cross-linked from /family with the
   live-link alternative noted. Cert-count rides the vault's death-certificate
   entry rather than the logged-in tracker (device-local coherence).*
-- [ ] **[M] Per-family-member task digest (email now, SMS later).** Read-only
+- [x] **[M] Per-family-member task digest (email now, SMS later).** Read-only
   digest to a delegated relative listing just their assigned tasks, no login
   required.
+  *Shipped 2026-07-03: the /family "email someone just their part of the
+  list" card + `POST /api/family/digest`. Privacy shape: the CLIENT filters
+  the on-device data to the one person's open items before anything reaches
+  the server — the rest of the plan never leaves the device; server formats,
+  sends via Resend (dry-run without a key), stores nothing, rate-limited
+  5/hr/IP. Quiet-friend tone with tests guarding it (no marketing phrases,
+  no FD tagline, "nothing else is expected of you"). SMS = later, as noted.*
 
 ## Phase 3 — Grief & bereavement support (legally owed, chronically under-delivered)
 
