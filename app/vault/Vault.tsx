@@ -9,6 +9,8 @@ import { Input, Label, Select } from "@/components/ui/Field";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { HelpFooter } from "@/components/HelpFooter";
 import { maybePublishHousehold } from "@/lib/household-link";
+import { AssigneeFilter } from "@/components/AssigneeFilter";
+import { assigneeNames, matchesAssignee } from "@/lib/assignees";
 
 const STORAGE_KEY = "honestfuneral.vault.v1";
 
@@ -20,6 +22,8 @@ interface VaultDoc {
   description: string;
   location: string;
   status: DocStatus;
+  /** Free-text "who's on it" — sibling division of labor. */
+  assignee?: string;
 }
 
 const STATUS_LABEL: Record<DocStatus, string> = {
@@ -110,6 +114,7 @@ export function Vault() {
   const [draftType, setDraftType] = useState("");
   const [draftLocation, setDraftLocation] = useState("");
   const [draftStatus, setDraftStatus] = useState<DocStatus>("have-it");
+  const [assigneeFilter, setAssigneeFilter] = useState("");
 
   useEffect(() => {
     try {
@@ -167,6 +172,12 @@ export function Vault() {
   function setStatus(id: string, status: DocStatus) {
     setDocs((prev) =>
       prev.map((d) => (d.id === id ? { ...d, status } : d)),
+    );
+  }
+
+  function setAssignee(id: string, assignee: string) {
+    setDocs((prev) =>
+      prev.map((d) => (d.id === id ? { ...d, assignee } : d)),
     );
   }
 
@@ -237,8 +248,13 @@ export function Vault() {
           {hydrated && docs.length > 0 && (
             <Card>
               <CardTitle>Your list</CardTitle>
+              <AssigneeFilter
+                names={assigneeNames(docs)}
+                active={assigneeFilter}
+                onChange={setAssigneeFilter}
+              />
               <ul className="mt-4 space-y-2">
-                {docs.map((d) => (
+                {docs.filter(matchesAssignee(assigneeFilter)).map((d) => (
                   <li key={d.id}>
                     <div
                       className={`rounded-xl border p-4 ${STATUS_TONE[d.status]}`}
@@ -264,11 +280,19 @@ export function Vault() {
                           Remove
                         </button>
                       </div>
-                      <Input
-                        placeholder="Where is it? (e.g. filing cabinet, attorney's office, safe deposit box)"
-                        value={d.location}
-                        onChange={(e) => setLocation(d.id, e.target.value)}
-                      />
+                      <div className="grid sm:grid-cols-[1fr_11rem] gap-2">
+                        <Input
+                          placeholder="Where is it? (e.g. filing cabinet, attorney's office, safe deposit box)"
+                          value={d.location}
+                          onChange={(e) => setLocation(d.id, e.target.value)}
+                        />
+                        <Input
+                          placeholder="Assigned to (optional)"
+                          value={d.assignee ?? ""}
+                          maxLength={40}
+                          onChange={(e) => setAssignee(d.id, e.target.value)}
+                        />
+                      </div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         {(["have-it", "need-to-find", "ordered", "lost"] as DocStatus[]).map(
                           (s) => (

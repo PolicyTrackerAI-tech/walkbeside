@@ -156,6 +156,9 @@ export default async function HouseholdPage({
                             </span>
                             <span className={view.taskProgress[t.id] === "skipped" ? "text-ink-muted line-through" : ""}>
                               {t.title}
+                              {view.taskAssignees[t.id] && (
+                                <span className="text-ink-muted"> — {view.taskAssignees[t.id]}</span>
+                              )}
                             </span>
                           </li>
                         ))}
@@ -180,6 +183,9 @@ export default async function HouseholdPage({
                       {c.relationship && (
                         <span className="text-ink-muted"> — {c.relationship}</span>
                       )}
+                      {c.assignee && (
+                        <span className="text-ink-muted"> · {c.assignee} is on it</span>
+                      )}
                     </span>
                     <span className={c.status === "todo" ? "text-warn" : "text-ink-muted"}>
                       {CONTACT_LABEL[c.status] ?? c.status}
@@ -202,6 +208,9 @@ export default async function HouseholdPage({
                       {d.type}
                       {d.location && (
                         <span className="text-ink-muted"> — {d.location}</span>
+                      )}
+                      {d.assignee && (
+                        <span className="text-ink-muted"> · {d.assignee} is on it</span>
                       )}
                     </span>
                     <span className={d.status === "have-it" ? "text-good" : "text-ink-muted"}>

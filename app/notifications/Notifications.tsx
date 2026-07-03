@@ -9,6 +9,8 @@ import { Input, Label, Select } from "@/components/ui/Field";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { HelpFooter } from "@/components/HelpFooter";
 import { maybePublishHousehold } from "@/lib/household-link";
+import { AssigneeFilter } from "@/components/AssigneeFilter";
+import { assigneeNames, matchesAssignee } from "@/lib/assignees";
 import { PrintHeader, PrintFooter } from "@/components/print/PrintHeader";
 
 const STORAGE_KEY = "honestfuneral.notifications.v1";
@@ -22,6 +24,8 @@ interface Contact {
   channel: string;
   status: Status;
   notes?: string;
+  /** Free-text "who's making this call" — sibling division of labor. */
+  assignee?: string;
 }
 
 const STATUS_LABEL: Record<Status, string> = {
@@ -57,6 +61,7 @@ export function Notifications() {
   const [draftName, setDraftName] = useState("");
   const [draftRelationship, setDraftRelationship] = useState("");
   const [draftChannel, setDraftChannel] = useState("phone");
+  const [assigneeFilter, setAssigneeFilter] = useState("");
 
   useEffect(() => {
     try {
@@ -101,6 +106,12 @@ export function Notifications() {
     );
   }
 
+  function setAssignee(id: string, assignee: string) {
+    setContacts((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, assignee } : c)),
+    );
+  }
+
   function remove(id: string) {
     setContacts((prev) => prev.filter((c) => c.id !== id));
   }
@@ -137,6 +148,9 @@ export function Notifications() {
       handleSubmit={handleSubmit}
       quickAdd={quickAdd}
       setStatus={setStatus}
+      setAssignee={setAssignee}
+      assigneeFilter={assigneeFilter}
+      setAssigneeFilter={setAssigneeFilter}
       remove={remove}
     />
   );
@@ -156,6 +170,9 @@ function NotificationsView({
   handleSubmit,
   quickAdd,
   setStatus,
+  setAssignee,
+  assigneeFilter,
+  setAssigneeFilter,
   remove,
 }: {
   contacts: Contact[];
@@ -171,6 +188,9 @@ function NotificationsView({
   handleSubmit: (e: React.FormEvent) => void;
   quickAdd: (cat: { name: string; relationship: string }) => void;
   setStatus: (id: string, status: Status) => void;
+  setAssignee: (id: string, assignee: string) => void;
+  assigneeFilter: string;
+  setAssigneeFilter: (filter: string) => void;
   remove: (id: string) => void;
 }) {
   return (
@@ -199,6 +219,7 @@ function NotificationsView({
                 <th style={{ textAlign: "left", padding: "6px 8px" }}>Name</th>
                 <th style={{ textAlign: "left", padding: "6px 8px" }}>Relationship</th>
                 <th style={{ textAlign: "left", padding: "6px 8px" }}>Best way</th>
+                <th style={{ textAlign: "left", padding: "6px 8px" }}>Who</th>
                 <th style={{ textAlign: "left", padding: "6px 8px" }}>Notes</th>
               </tr>
             </thead>
@@ -211,6 +232,7 @@ function NotificationsView({
                   <td style={{ padding: "8px", verticalAlign: "top" }}>{c.name}</td>
                   <td style={{ padding: "8px", verticalAlign: "top", color: "#555" }}>{c.relationship}</td>
                   <td style={{ padding: "8px", verticalAlign: "top", color: "#555" }}>{c.channel}</td>
+                  <td style={{ padding: "8px", verticalAlign: "top", color: "#555" }}>{c.assignee ?? ""}</td>
                   <td style={{ padding: "8px", verticalAlign: "top", color: "#555" }}>{c.notes ?? ""}</td>
                 </tr>
               ))}
@@ -268,8 +290,13 @@ function NotificationsView({
           {hydrated && contacts.length > 0 && (
             <Card>
               <CardTitle>Your list</CardTitle>
+              <AssigneeFilter
+                names={assigneeNames(contacts)}
+                active={assigneeFilter}
+                onChange={setAssigneeFilter}
+              />
               <ul className="mt-4 space-y-2">
-                {contacts.map((c) => (
+                {contacts.filter(matchesAssignee(assigneeFilter)).map((c) => (
                   <li key={c.id}>
                     <div
                       className={`rounded-xl border p-4 ${STATUS_TONE[c.status]}`}
@@ -296,6 +323,14 @@ function NotificationsView({
                         >
                           Remove
                         </button>
+                      </div>
+                      <div className="mt-3 max-w-[14rem]">
+                        <Input
+                          placeholder="Assigned to (optional)"
+                          value={c.assignee ?? ""}
+                          maxLength={40}
+                          onChange={(e) => setAssignee(c.id, e.target.value)}
+                        />
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         <StatusPill

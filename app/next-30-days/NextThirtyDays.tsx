@@ -20,9 +20,11 @@ import {
 
 const STORAGE_KEY = "honestfuneral.next30.v1";
 const EXPANDED_KEY = "honestfuneral.next30.expanded.v1";
+const ASSIGNEE_KEY = "honestfuneral.next30.assignees.v1";
 
 type Status = "todo" | "done" | "skipped";
 type StatusMap = Record<string, Status>;
+type AssigneeMap = Record<string, string>;
 type ExpandedOverrides = Record<string, boolean>;
 type HelpOpenMap = Record<string, boolean>;
 
@@ -71,6 +73,7 @@ function readUserContext(): UserContext {
 
 export function NextThirtyDays() {
   const [statuses, setStatuses] = useState<StatusMap>({});
+  const [assignees, setAssignees] = useState<AssigneeMap>({});
   const [expandedOverrides, setExpandedOverrides] = useState<ExpandedOverrides>(
     {},
   );
@@ -106,6 +109,17 @@ export function NextThirtyDays() {
     } catch {
       // ignore
     }
+    try {
+      const rawAsg = localStorage.getItem(ASSIGNEE_KEY);
+      if (rawAsg) {
+        const parsed = JSON.parse(rawAsg) as unknown;
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          setAssignees(parsed as AssigneeMap);
+        }
+      }
+    } catch {
+      // ignore
+    }
     setCtx(readUserContext());
     setHydrated(true);
   }, []);
@@ -119,6 +133,16 @@ export function NextThirtyDays() {
     }
     maybePublishHousehold();
   }, [statuses, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(ASSIGNEE_KEY, JSON.stringify(assignees));
+    } catch {
+      // ignore
+    }
+    maybePublishHousehold();
+  }, [assignees, hydrated]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -149,6 +173,10 @@ export function NextThirtyDays() {
     setStatuses((prev) => ({ ...prev, [taskId]: status }));
     // Closing help when user advances keeps the next task clean.
     setHelpOpen((prev) => ({ ...prev, [taskId]: false }));
+  }
+
+  function setAssignee(taskId: string, name: string) {
+    setAssignees((prev) => ({ ...prev, [taskId]: name }));
   }
 
   function togglePhase(phaseId: string, currentlyExpanded: boolean) {
@@ -218,9 +246,11 @@ export function NextThirtyDays() {
                   doneCount={phaseDone}
                   totalCount={phaseTotal}
                   statuses={statuses}
+                  assignees={assignees}
                   helpOpen={helpOpen}
                   ctx={ctx}
                   onSetStatus={setStatus}
+                  onAssign={setAssignee}
                   onTogglePhase={() => togglePhase(phase.id, expanded)}
                   onToggleHelp={toggleHelp}
                 />
@@ -344,9 +374,11 @@ function PhaseCard({
   doneCount,
   totalCount,
   statuses,
+  assignees,
   helpOpen,
   ctx,
   onSetStatus,
+  onAssign,
   onTogglePhase,
   onToggleHelp,
 }: {
@@ -358,9 +390,11 @@ function PhaseCard({
   doneCount: number;
   totalCount: number;
   statuses: StatusMap;
+  assignees: AssigneeMap;
   helpOpen: HelpOpenMap;
   ctx: UserContext;
   onSetStatus: (taskId: string, status: Status) => void;
+  onAssign: (taskId: string, name: string) => void;
   onTogglePhase: () => void;
   onToggleHelp: (taskId: string) => void;
 }) {
@@ -433,6 +467,7 @@ function PhaseCard({
                       <CompletedTaskRow
                         task={task}
                         status={status}
+                        assignee={assignees[task.id]}
                         onUndo={() => onSetStatus(task.id, "todo")}
                       />
                     </li>
@@ -445,6 +480,8 @@ function PhaseCard({
                         task={task}
                         ctx={ctx}
                         helpOpen={!!helpOpen[task.id]}
+                        assignee={assignees[task.id] ?? ""}
+                        onAssign={(name) => onAssign(task.id, name)}
                         onDone={() => onSetStatus(task.id, "done")}
                         onSkip={() => onSetStatus(task.id, "skipped")}
                         onToggleHelp={() => onToggleHelp(task.id)}
@@ -455,7 +492,7 @@ function PhaseCard({
                 // Not-yet-current todo task within this phase: collapsed preview.
                 return (
                   <li key={task.id}>
-                    <UpcomingTaskRow task={task} />
+                    <UpcomingTaskRow task={task} assignee={assignees[task.id]} />
                   </li>
                 );
               })}
@@ -482,6 +519,8 @@ function CurrentTaskCard({
   task,
   ctx,
   helpOpen,
+  assignee,
+  onAssign,
   onDone,
   onSkip,
   onToggleHelp,
@@ -489,6 +528,8 @@ function CurrentTaskCard({
   task: Task;
   ctx: UserContext;
   helpOpen: boolean;
+  assignee: string;
+  onAssign: (name: string) => void;
   onDone: () => void;
   onSkip: () => void;
   onToggleHelp: () => void;
@@ -523,11 +564,19 @@ function CurrentTaskCard({
         </div>
       )}
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 items-center">
         <Button onClick={onDone}>✓ Mark done</Button>
         <Button variant="ghost" onClick={onSkip}>
           Skip — doesn&rsquo;t apply to us
         </Button>
+        <input
+          value={assignee}
+          maxLength={40}
+          onChange={(e) => onAssign(e.target.value)}
+          placeholder="Assigned to (optional)"
+          className="ml-auto w-44 rounded-lg border border-border bg-surface px-3 py-1.5 text-sm text-ink placeholder:text-ink-muted focus:outline-none focus:border-primary"
+          aria-label={`Who is handling: ${task.title}`}
+        />
       </div>
     </div>
   );
@@ -536,10 +585,12 @@ function CurrentTaskCard({
 function CompletedTaskRow({
   task,
   status,
+  assignee,
   onUndo,
 }: {
   task: Task;
   status: "done" | "skipped";
+  assignee?: string;
   onUndo: () => void;
 }) {
   const isDone = status === "done";
@@ -563,6 +614,9 @@ function CompletedTaskRow({
         }`}
       >
         {task.title}
+        {assignee?.trim() && (
+          <span className="text-xs text-ink-muted"> — {assignee.trim()}</span>
+        )}
       </span>
       {!isDone && (
         <span className="text-xs text-ink-muted">(skipped)</span>
@@ -578,12 +632,13 @@ function CompletedTaskRow({
   );
 }
 
-function UpcomingTaskRow({ task }: { task: Task }) {
+function UpcomingTaskRow({ task, assignee }: { task: Task; assignee?: string }) {
   return (
     <div className="rounded-xl border border-border bg-surface-soft/50 px-4 py-3">
       <p className="text-sm text-ink-muted">
         <span className="font-medium text-ink-soft">Next up:</span>{" "}
         {task.title}
+        {assignee?.trim() && <span> — {assignee.trim()}</span>}
       </p>
     </div>
   );

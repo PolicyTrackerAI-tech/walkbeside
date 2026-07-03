@@ -33,6 +33,7 @@ export const HOUSEHOLD_KEYS = [
   "hf-decide:isVeteran",
   "hf-decide:recommendedServiceType",
   "honestfuneral.next30.v1",
+  "honestfuneral.next30.assignees.v1",
   "honestfuneral.notifications.v1",
   "honestfuneral.vault.v1",
 ] as const;
