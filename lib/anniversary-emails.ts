@@ -146,6 +146,8 @@ A few specific things at this stage that families often miss:
 
 — And a reminder from the three-month note: if they were on hospice, that hospice still owes your family free bereavement support — counseling, groups, check-ins — through about the thirteen-month mark. Fewer than half of families ever use it. One call to the hospice's bereavement line starts it.
 
+— If you're wondering whether what you're feeling at six months is "normal," our grief page has a quiet self-check — not a test, nothing saved — at ${url("/grief#self-check")}.
+
 If you'd rather not hear from us at the later marks, ${unsubscribeLink(unsubscribeUrl)}
 
 Take care,
@@ -169,6 +171,8 @@ A few practical notes for year-mark housekeeping:
 — Recurring charges that slipped through the cracks early on tend to surface around now. ${url("/subscriptions")} catches them if you want a fresh scan.
 
 — If you set up your own estate while you were thinking about it last year (a lot of families do), this is a good time to check that beneficiary designations are still right and your will is current.
+
+— And an honest check-in on the grief itself: if it still feels as consuming as the early months, the quiet self-check at ${url("/grief#self-check")} gives you an honest read and the right people to talk to. Past a year, that pattern is treatable — not something to white-knuckle.
 
 We'll send one last note in about a month, and then leave you in peace.
 

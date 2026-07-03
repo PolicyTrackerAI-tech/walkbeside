@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { SelfCheck } from "./SelfCheck";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
 import { EmailCapture } from "@/components/EmailCapture";
@@ -233,6 +234,8 @@ export default function GriefPage() {
               </p>
             </div>
           </Card>
+
+          <SelfCheck />
 
           <Card>
             <CardEyebrow>Finding a grief therapist</CardEyebrow>

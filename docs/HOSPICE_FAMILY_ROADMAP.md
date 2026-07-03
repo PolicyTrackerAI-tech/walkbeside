@@ -311,11 +311,21 @@ CAHPS-score repair — emotional support is already their highest score (91%).*
   suppression gate), counted from profiles.anniversary_emails_sent —
   "reminded" only; "engaged" would require click-tracking grieving families,
   which we won't add.*
-- [ ] **[M] Optional PG-13 grief self-check with escalation routing.**
+- [x] **[M] Optional PG-13 grief self-check with escalation routing.**
   Clearly non-diagnostic self-check on `/grief` built on the validated PG-13
   (Prolonged Grief) instrument, offered around the 6- and 12-month
   touchpoints; plain-language result + prominent human escalation paths
   (hospice bereavement counselor, 988, ADEC/Psychology Today directories).
+  *Shipped 2026-07-03 — with a defensibility judgment call: the PG-13 itself
+  is a COPYRIGHTED validated instrument (Prigerson & Maciejewski); shipping
+  it verbatim on a commercial site needs the authors' permission. v1 is
+  therefore a clearly-non-diagnostic self-reflection (`/grief#self-check`)
+  built on the public-domain DSM-5-TR PGD themes in plain words — no score,
+  nothing stored, duration-gated so early grief can NEVER produce an
+  alarming read (test-pinned), every path ending at a human (hospice
+  bereavement line / 988 / therapist directories). The 6mo and 1yr check-in
+  emails point to it. **Founder action: request PG-13 permission from the
+  Prigerson lab if the scored instrument is wanted later.** 5 tests.*
 - [ ] **[M] SMS opt-in channel for bereavement touchpoints.** Same content as
   the email touchpoints via Twilio opt-in; cost absorbed by Honest Funeral,
   never the family. This population skews older — SMS outperforms email here.
