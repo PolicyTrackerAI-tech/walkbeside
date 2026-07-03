@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { SmsOptIn } from "./SmsOptIn";
 
 export const metadata: Metadata = {
   title: "Email preferences",
@@ -65,6 +66,22 @@ export default async function PreferencesPage({
 
   if (!profile) return <NotFound />;
 
+  // SMS prefs — separate best-effort read so this page renders even before
+  // the 2026-07-03-bereavement-sms migration is applied.
+  let smsPhone = "";
+  let smsOptIn = false;
+  try {
+    const { data: smsPrefs } = await admin
+      .from("profiles")
+      .select("bereavement_sms_phone, bereavement_sms_opt_in")
+      .eq("id", id)
+      .maybeSingle();
+    smsPhone = (smsPrefs?.bereavement_sms_phone as string | null) ?? "";
+    smsOptIn = !!smsPrefs?.bereavement_sms_opt_in;
+  } catch {
+    // pre-migration: card still renders; saving surfaces the error state
+  }
+
   const subscribed = !!profile.anniversary_emails_opt_in;
 
   return (
@@ -82,9 +99,10 @@ export default async function PreferencesPage({
                 : "You won't get our check-in emails."}
             </h1>
             <p className="text-lg text-ink-soft">
-              We send three light check-ins over the year after a loss:
-              at one month, six months, and one year. Practical tips for
-              the stage you&rsquo;re in &mdash; nothing promotional.
+              We send five light check-ins across the thirteen months
+              after a loss &mdash; one month, three, six, the year mark,
+              and a last note just past it. Practical help for the stage
+              you&rsquo;re in; nothing promotional.
             </p>
           </div>
 
@@ -105,11 +123,13 @@ export default async function PreferencesPage({
             </LinkButton>
           </Card>
 
+          <SmsOptIn id={id} initialPhone={smsPhone} initialOptIn={smsOptIn} />
+
           <Card tone="soft">
             <p className="text-sm text-ink-soft">
               Your account stays open whether you&rsquo;re subscribed to
-              check-ins or not. This setting only controls the three
-              time-based emails.
+              check-ins or not. These settings only control the
+              time-based check-ins.
             </p>
           </Card>
 

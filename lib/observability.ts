@@ -5,6 +5,14 @@ import crypto from "node:crypto";
  * Redaction helpers — use these instead of logging raw PII. Email addresses,
  * full names, and message bodies must never land in plaintext logs/alerts.
  */
+/** "+18015550142" → "+1•••0142" — enough to debug, never enough to dial. */
+export function maskPhone(phone: string | null | undefined): string {
+  if (!phone) return "(none)";
+  const tail = phone.slice(-4);
+  const head = phone.startsWith("+") ? phone.slice(0, 2) : phone.slice(0, 1);
+  return `${head}\u2022\u2022\u2022${tail}`;
+}
+
 export function maskEmail(email: string | null | undefined): string {
   if (!email) return "(none)";
   const [local, domain] = email.split("@");

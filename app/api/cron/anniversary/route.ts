@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendEmail } from "@/lib/email";
+import { sendSms } from "@/lib/sms";
 import {
   dueMilestone,
   emailFor,
+  smsFor,
   markSent,
   MILESTONE_DAYS,
 } from "@/lib/anniversary-emails";
@@ -86,8 +88,36 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  // SMS channel (opt-in; separate migration): fetched best-effort so the
+  // email cadence never depends on the SMS columns existing.
+  const smsById = new Map<
+    string,
+    { phone: string; smsSent: string[] }
+  >();
+  if (process.env.BEREAVEMENT_SMS_ENABLED === "true" && (candidates ?? []).length) {
+    const { data: smsRows } = await admin
+      .from("profiles")
+      .select("id, bereavement_sms_phone, bereavement_sms_opt_in, anniversary_sms_sent")
+      .in("id", (candidates ?? []).map((c) => c.id as string))
+      .eq("bereavement_sms_opt_in", true)
+      .not("bereavement_sms_phone", "is", null);
+    for (const r of (smsRows ?? []) as {
+      id: string;
+      bereavement_sms_phone: string;
+      anniversary_sms_sent: unknown;
+    }[]) {
+      smsById.set(r.id, {
+        phone: r.bereavement_sms_phone,
+        smsSent: Array.isArray(r.anniversary_sms_sent)
+          ? (r.anniversary_sms_sent as string[])
+          : [],
+      });
+    }
+  }
+
   const now = Date.now();
   let sentCount = 0;
+  let smsCount = 0;
   const errors: { id: string; reason: string }[] = [];
 
   for (const profile of candidates ?? []) {
@@ -130,6 +160,25 @@ export async function GET(req: Request) {
         .update({ anniversary_emails_sent: markSent(sent, toSend) })
         .eq("id", profile.id);
       sentCount++;
+
+      // Same milestone via SMS, when the family opted in. Its own try —
+      // an SMS failure never marks the email un-sent or vice versa.
+      const sms = smsById.get(profile.id as string);
+      if (sms && !sms.smsSent.includes(toSend)) {
+        try {
+          await sendSms({ to: sms.phone, body: smsFor(toSend, unsubscribeUrl) });
+          await admin
+            .from("profiles")
+            .update({ anniversary_sms_sent: markSent(sms.smsSent, toSend) })
+            .eq("id", profile.id);
+          smsCount++;
+        } catch (e) {
+          errors.push({
+            id: profile.id as string,
+            reason: `sms: ${e instanceof Error ? e.message : "send failed"}`,
+          });
+        }
+      }
     } catch (e) {
       errors.push({
         id: profile.id as string,
@@ -141,6 +190,7 @@ export async function GET(req: Request) {
   logEvent("cron.anniversary", {
     candidates: candidates?.length ?? 0,
     sent: sentCount,
+    sms: smsCount,
     errorCount: errors.length,
   });
   if (errors.length) {
