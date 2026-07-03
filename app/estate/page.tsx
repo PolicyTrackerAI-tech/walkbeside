@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { HelpFooter } from "@/components/HelpFooter";
@@ -83,6 +84,25 @@ export default async function EstatePage() {
                 threshold of $50,000 to $200,000).
               </li>
             </ul>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-surface p-6">
+            <h2 className="font-serif text-xl text-ink mb-3">
+              Was your person on Medicaid?
+            </h2>
+            <p className="text-ink-soft">
+              The state may send a letter months from now claiming repayment
+              from the estate &mdash; usually against the house. It looks like
+              a bill; it isn&rsquo;t one, and federal law builds in real
+              protections. Read{" "}
+              <Link
+                href="/medicaid-estate-recovery"
+                className="text-primary-deep underline"
+              >
+                our calm guide to Medicaid estate recovery
+              </Link>{" "}
+              before paying or signing anything.
+            </p>
           </div>
 
           <div className="rounded-2xl border border-border bg-surface p-6">

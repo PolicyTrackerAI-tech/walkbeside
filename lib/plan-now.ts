@@ -146,8 +146,8 @@ export function benefitSweep(a: BenefitAnswers): BenefitItem[] {
     items.push({
       title: "County or state burial assistance",
       detail:
-        "Many counties and states offer burial or cremation assistance for people who received Medicaid or had limited means — amounts and rules are local, so ask the county human-services office directly. One thing worth knowing about, calmly and early: some states can later make a claim against a Medicaid recipient's estate (often the home). If there's a house involved, a short conversation with an elder-law attorney is worth it.",
-      action: "Your county human-services office",
+        "Many counties and states offer burial or cremation assistance for people who received Medicaid or had limited means — amounts and rules are local, so ask the county human-services office directly. One thing worth knowing about, calmly and early: some states can later make a claim against a Medicaid recipient's estate (often the home). If there's a house involved, our plain-English guide at honestfuneral.co/medicaid-estate-recovery covers the protections every family has, and a short conversation with an elder-law attorney is worth it.",
+      action: "Your county human-services office · honestfuneral.co/medicaid-estate-recovery",
     });
   }
 
