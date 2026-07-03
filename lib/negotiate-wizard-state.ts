@@ -22,6 +22,12 @@ export interface WizardState {
   extras: string;
   /** Optional YYYY-MM-DD date of the passing — anchors the bereavement check-ins. */
   dateOfDeath: string;
+  /**
+   * The named sender is the family's ONE authorized contact and consents to
+   * their first name appearing in outreach to funeral homes. Nothing else
+   * about the family is ever shared. Required before submission.
+   */
+  pointPersonConsent: boolean;
 }
 
 export const STORAGE_KEY = "honestfuneral.negotiate-wizard.v1";
@@ -39,6 +45,7 @@ export const DEFAULT_STATE: WizardState = {
   notes: "",
   extras: "",
   dateOfDeath: "",
+  pointPersonConsent: false,
 };
 
 export function readState(): WizardState | null {
@@ -46,7 +53,9 @@ export function readState(): WizardState | null {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as WizardState;
+    // Merge over defaults so sessions saved before a field existed (e.g.
+    // pointPersonConsent) hydrate with that field's default, not undefined.
+    return { ...DEFAULT_STATE, ...(JSON.parse(raw) as Partial<WizardState>) };
   } catch {
     return null;
   }
