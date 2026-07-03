@@ -146,19 +146,19 @@ export function rowToCohortRecord(row: OutcomeRow): CohortRecord {
  */
 export function sampleCohort(): CohortRecord[] {
   return [
-    { overchargeCaughtCents: 2345_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3 },
-    { overchargeCaughtCents: 1820_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 4 },
-    { overchargeCaughtCents: 980_00, ftcIssues: 0, satisfaction: 4, resolutionDays: 6 },
-    { overchargeCaughtCents: 3120_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 2 },
-    { overchargeCaughtCents: 1450_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 5 },
-    { overchargeCaughtCents: 2675_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3 },
-    { overchargeCaughtCents: 740_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 7 },
-    { overchargeCaughtCents: 1990_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 4 },
-    { overchargeCaughtCents: 0, ftcIssues: 0, satisfaction: 5, resolutionDays: 2 },
-    { overchargeCaughtCents: 2210_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 4 },
-    { overchargeCaughtCents: 1675_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 6 },
-    { overchargeCaughtCents: 880_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 8 },
-    { overchargeCaughtCents: 3050_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 3 },
-    { overchargeCaughtCents: 1240_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 5 },
+    { overchargeCaughtCents: 2345_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true },
+    { overchargeCaughtCents: 1820_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: true, usedObituary: false },
+    { overchargeCaughtCents: 980_00, ftcIssues: 0, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: false, usedObituary: false },
+    { overchargeCaughtCents: 3120_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true },
+    { overchargeCaughtCents: 1450_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: true },
+    { overchargeCaughtCents: 2675_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: false },
+    { overchargeCaughtCents: 740_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 7, usedChecker: false, usedCertTracker: true, usedObituary: false },
+    { overchargeCaughtCents: 1990_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false },
+    { overchargeCaughtCents: 0, ftcIssues: 0, satisfaction: 5, resolutionDays: 2, usedChecker: true, usedCertTracker: true, usedObituary: true },
+    { overchargeCaughtCents: 2210_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 4, usedChecker: true, usedCertTracker: false, usedObituary: false },
+    { overchargeCaughtCents: 1675_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 6, usedChecker: true, usedCertTracker: true, usedObituary: false },
+    { overchargeCaughtCents: 880_00, ftcIssues: 0, satisfaction: 5, resolutionDays: 8, usedChecker: false, usedCertTracker: false, usedObituary: false },
+    { overchargeCaughtCents: 3050_00, ftcIssues: 3, satisfaction: 5, resolutionDays: 3, usedChecker: true, usedCertTracker: true, usedObituary: true },
+    { overchargeCaughtCents: 1240_00, ftcIssues: 1, satisfaction: 5, resolutionDays: 5, usedChecker: true, usedCertTracker: false, usedObituary: false },
   ];
 }
