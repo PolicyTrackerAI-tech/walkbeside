@@ -297,13 +297,20 @@ CAHPS-score repair — emotional support is already their highest score (91%).*
   and a latent out-of-order-send bug fixed + regression-tested. To go live:
   founder applies `supabase/migrations/2026-07-01-bereavement-cadence.sql`
   and sets `ANNIVERSARY_EMAILS_ENABLED=true`.*
-- [ ] **[M] "Have you used your free bereavement benefit?" nudge + partner
+- [x] **[M] "Have you used your free bereavement benefit?" nudge + partner
   metric.** Recurring plain-worded reminder pointing the family back to their
   hospice's own Medicare-required bereavement counseling ("here's the number;
   you're entitled to this"), plus a new aggregate, small-sample-gated
   partner-report field ("% of referred families reminded/engaged"). Research:
   fewer than half of eligible families ever use the benefit they're owed. We
   drive utilization of the hospice's own service — we never provide counseling.
+  *Shipped 2026-07-03: the entitlement reminder recurs across the cadence —
+  3mo (full paragraph), 6mo (new reminder line + the fewer-than-half fact),
+  13mo (closing line) — test-pinned to recur AND to never promise counseling
+  from us. Partner metric: `bereavementRemindedPct` in `pilotMetrics` (same
+  suppression gate), counted from profiles.anniversary_emails_sent —
+  "reminded" only; "engaged" would require click-tracking grieving families,
+  which we won't add.*
 - [ ] **[M] Optional PG-13 grief self-check with escalation routing.**
   Clearly non-diagnostic self-check on `/grief` built on the validated PG-13
   (Prolonged Grief) instrument, offered around the 6- and 12-month
