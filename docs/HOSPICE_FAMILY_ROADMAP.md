@@ -214,10 +214,22 @@ adult children) hits with no help today.*
   and a required consent checkbox; API enforces `pointPersonConsent` server-
   side (defaults false — hand-rolled requests can't skip it). Consent is
   validated, not yet persisted — add a column in the next migration batch.*
-- [ ] **[L] Live shared household link.** Upgrade `/share` from a one-time
+- [x] **[L] Live shared household link.** Upgrade `/share` from a one-time
   snapshot to a durable, unguessable-slug live view of Vault/Notifications/
   Next-30-Days/negotiation state for multiple family members — with link
   expiry/rotation (sensitive data).
+  *Shipped 2026-07-03: owner-republished design (the tools are localStorage-
+  by-design, so "live" = the point person's device re-publishes on every tool
+  save, debounced). `household_links` table is service-role-ONLY (RLS with no
+  policies — unlike share_links' anon-select, which would leak the secret);
+  owner_secret returned once, gates update/rotate/revoke; 30-day rolling
+  expiry; rotation kills the old slug. Read-only viewer at /household/[id]
+  (checklist/contacts/documents; hostile-payload-safe parser, 6 tests) —
+  never hydrates the viewer's browser. /family gains the live-link card.
+  **Founder action: run `supabase/migrations/2026-07-03-household-links.sql`**
+  (until then the card reports unavailable; nothing else breaks). Negotiation
+  state deliberately NOT in v1 payload (owner-scoped RLS; needs its own
+  design).*
 - [ ] **[S] Assignee field on Vault, Notifications, Next-30-Days.** Free-text
   "assigned to" + filter by assignee. Sibling division-of-labor is a real,
   named pain point; trivial addition to already-free tools.

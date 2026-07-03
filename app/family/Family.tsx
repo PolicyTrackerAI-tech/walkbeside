@@ -6,6 +6,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { HouseholdLinkCard } from "./HouseholdLinkCard";
 
 const SHARE_KEYS = [
   "hf-decide:faith",
@@ -196,6 +197,8 @@ export function Family() {
               </div>
             )}
           </Card>
+
+          <HouseholdLinkCard />
 
           <Card tone="soft">
             <CardEyebrow>What the recipient sees</CardEyebrow>

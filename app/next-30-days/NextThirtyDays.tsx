@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { maybePublishHousehold } from "@/lib/household-link";
 import { DECIDE_STORAGE_KEYS, readDecide } from "@/lib/faith-storage";
 import type { ServiceType } from "@/lib/pricing-data";
 import {
@@ -116,6 +117,7 @@ export function NextThirtyDays() {
     } catch {
       // ignore
     }
+    maybePublishHousehold();
   }, [statuses, hydrated]);
 
   useEffect(() => {
