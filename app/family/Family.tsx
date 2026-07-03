@@ -7,6 +7,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { HouseholdLinkCard } from "./HouseholdLinkCard";
+import { DigestCard } from "./DigestCard";
 
 const SHARE_KEYS = [
   "hf-decide:faith",
@@ -199,6 +200,8 @@ export function Family() {
           </Card>
 
           <HouseholdLinkCard />
+
+          <DigestCard />
 
           <Card>
             <CardTitle>Prefer paper? Print the family briefing.</CardTitle>
