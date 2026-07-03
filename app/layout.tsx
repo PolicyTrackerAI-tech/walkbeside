@@ -3,6 +3,7 @@ import { Inter, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Brand";
 import { PhaseProvider } from "@/components/PhaseContext";
+import { ComfortModeToggle } from "@/components/ComfortModeToggle";
 
 const sans = Inter({
   variable: "--font-sans-stack",
@@ -57,6 +58,13 @@ export default function RootLayout({
       className={`${sans.variable} ${serif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-ink">
+        {/* Apply the saved comfort-mode choice before paint — no flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('honestfuneral.display.v1')==='comfort')document.documentElement.classList.add('comfort-mode')}catch(e){}",
+          }}
+        />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-2 focus:left-2 focus:rounded-lg focus:border focus:border-border focus:bg-surface focus:px-4 focus:py-2 focus:text-ink"
@@ -68,6 +76,7 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <ComfortModeToggle />
         </PhaseProvider>
       </body>
     </html>
