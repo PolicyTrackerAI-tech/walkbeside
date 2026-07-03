@@ -462,14 +462,25 @@ human approval gate; every family-level data point stays aggregate-only.*
 *Goal: widen who can actually use everything above — older, lower-tech-comfort
 users and language needs the site currently has zero support for.*
 
-- [ ] **[M] Site-wide low-vision / low-tech display mode.** Persistent toggle:
+- [x] **[M] Site-wide low-vision / low-tech display mode.** Persistent toggle:
   larger base font, higher contrast, simplified single-column layout —
   site-wide, not one page. Primary users are frequently 65–85+; today there is
   a fixed 17px base font and no control at all.
-- [ ] **[S] Public `/accessibility` statement + language-assistance notice.**
+  *Shipped 2026-07-03 as "comfort mode": a persistent Aa "Larger text" pill on
+  every page (root layout) toggling a class on <html> — 17px→21px type,
+  black-on-white ≥12:1 contrast palette, every multi-column grid collapses to
+  one column, louder focus rings. Persisted on-device; applied pre-paint by
+  an inline script (no flash).*
+- [x] **[S] Public `/accessibility` statement + language-assistance notice.**
   States a conformance *target* (not a claim of achieved compliance), known
   limitations, and how to request accommodation. Also de-risks a hospice's own
   Section 1557 concern about referring patients to a vendor tool.
+  *Shipped 2026-07-03: WCAG 2.1 AA stated as a TARGET ("not a certification
+  we claim"), what-works-today (incl. comfort mode + paper as an
+  accessibility feature), known limitations named honestly (English-only
+  with the Spanish work-in-progress + interim path; photo upload's typed
+  alternative), and the human accommodation path (email + the real phone
+  number, "no wrong way to ask").*
 - [ ] **[M] Readability lint gate on family-facing copy.** CI check scoring
   the family-facing content files against a Flesch-Kincaid grade 6–8 ceiling
   (citations/disclaimers excluded from scoring), failing any change that

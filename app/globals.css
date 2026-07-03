@@ -185,3 +185,52 @@ html, body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Comfort mode (site-wide low-vision / low-tech display; roadmap Phase 5).
+   Toggled by <ComfortModeToggle/> via a class on <html>, persisted in
+   localStorage, applied pre-hydration by an inline script in the root layout
+   so there is no flash. Three moves: bigger type, harder contrast, and
+   single-column layout (responsive grids collapse).
+--------------------------------------------------------------------------- */
+html.comfort-mode {
+  font-size: 21px;
+  line-height: 1.7;
+
+  /* Hard-contrast palette: black-on-white (21:1); muted text stays ≥ 12:1. */
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-soft: #f1f1f1;
+  --border: #767676;
+  --ink: #000000;
+  --ink-soft: #1a1a1a;
+  --ink-muted: #333333;
+  --primary: #1d4437;
+  --primary-deep: #123028;
+  --primary-soft: #e3ece6;
+  --good: #1d5c3d;
+  --good-soft: #e0eee5;
+  --warn: #7a3a07;
+  --warn-soft: #f6e8d8;
+  --bad: #871f18;
+}
+
+html.comfort-mode body {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Simplified single-column: any multi-column grid collapses. */
+html.comfort-mode [class*="grid-cols-2"],
+html.comfort-mode [class*="grid-cols-3"],
+html.comfort-mode [class*="grid-cols-4"],
+html.comfort-mode [class*="grid-cols-5"],
+html.comfort-mode [class*="grid-cols-["] {
+  grid-template-columns: 1fr !important;
+}
+
+/* Focus rings get louder — keyboard users benefit most from this mode. */
+html.comfort-mode :focus-visible {
+  outline: 3px solid #123028;
+  outline-offset: 2px;
+}
