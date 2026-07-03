@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { HelpFooter } from "@/components/HelpFooter";
+import { maybePublishHousehold } from "@/lib/household-link";
 import { PrintHeader, PrintFooter } from "@/components/print/PrintHeader";
 
 const STORAGE_KEY = "honestfuneral.notifications.v1";
@@ -77,6 +78,7 @@ export function Notifications() {
     } catch {
       // ignore
     }
+    maybePublishHousehold();
   }, [contacts, hydrated]);
 
   function addContact(name: string, relationship: string, channel: string) {

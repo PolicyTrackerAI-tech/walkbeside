@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { HelpFooter } from "@/components/HelpFooter";
+import { maybePublishHousehold } from "@/lib/household-link";
 
 const STORAGE_KEY = "honestfuneral.vault.v1";
 
