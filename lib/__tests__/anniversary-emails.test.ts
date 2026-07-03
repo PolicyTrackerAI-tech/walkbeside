@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   dueMilestone,
   emailFor,
+  smsFor,
   markSent,
   MILESTONE_DAYS,
   MILESTONE_ORDER,
@@ -138,5 +139,35 @@ describe("recurring bereavement-benefit nudge", () => {
       const { text } = emailFor(m, "https://x/unsub");
       expect(text).not.toMatch(/our counselors|we offer counseling|counseling from us/i);
     }
+  });
+});
+
+describe("smsFor (opt-in SMS channel)", () => {
+  it("every milestone has a short body with the STOP notice and our domain only", () => {
+    for (const m of MILESTONE_ORDER) {
+      const body = smsFor(m, "https://x/prefs");
+      expect(body.length).toBeLessThanOrEqual(320); // ~2 segments max
+      expect(body).toContain("Txt STOP to opt out.");
+      expect(body).toContain("Honest Funeral:");
+      // No links beyond our own domain — nothing that smells like spam.
+      const urls = body.match(/[a-z]+\.[a-z]{2,}\/?\S*/gi) ?? [];
+      for (const u of urls) expect(u).toContain("honestfuneral.co");
+    }
+  });
+
+  it("the 6mo text points at the grief self-check touchpoint", () => {
+    expect(smsFor("6mo", "https://x")).toContain("grief#self-check");
+  });
+});
+
+describe("normalizePhone", () => {
+  it("normalizes US formats to E.164 and rejects junk", async () => {
+    const { normalizePhone } = await import("@/lib/sms");
+    expect(normalizePhone("(801) 555-0142")).toBe("+18015550142");
+    expect(normalizePhone("1 801 555 0142")).toBe("+18015550142");
+    expect(normalizePhone("+18015550142")).toBe("+18015550142");
+    expect(normalizePhone("+447911123456")).toBe("+447911123456");
+    expect(normalizePhone("555-0142")).toBeNull();
+    expect(normalizePhone(42)).toBeNull();
   });
 });

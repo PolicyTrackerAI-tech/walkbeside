@@ -71,6 +71,25 @@ export interface EmailContent {
   text: string;
 }
 
+
+/**
+ * The SMS version of each check-in — same arc, ~2 segments max, opt-in only.
+ * "Txt STOP to opt out" rides every message (CTIA); Twilio also enforces
+ * STOP automatically. No links except ours; no marketing, ever.
+ */
+export function smsFor(milestone: Milestone, prefsUrl: string): string {
+  const stop = "Txt STOP to opt out.";
+  const map: Record<Milestone, string> = {
+    "1mo": `Honest Funeral: it's been about a month. No task here — just checking in. When you're ready, the after-death checklist is at honestfuneral.co/next-30-days. ${stop}`,
+    "3mo": `Honest Funeral: three months — often the quiet stretch. If they were on hospice, that hospice owes your family free grief support for ~13 months; one call starts it. More: honestfuneral.co/grief. ${stop}`,
+    "6mo": `Honest Funeral: six months in. If grief still feels heavy most days, our quiet self-check gives an honest read + who to talk to: honestfuneral.co/grief#self-check. ${stop}`,
+    "1yr": `Honest Funeral: one year. Anniversaries are their own thing — we hope you're taking it however you need. We're at honestfuneral.co if anything's undone. ${stop}`,
+    "13mo": `Honest Funeral: our last automated note. If grief still feels like the early months, that's treatable, not a failing — honestfuneral.co/grief lists people who genuinely help. Take care. ${stop}`,
+  };
+  void prefsUrl; // email carries the preferences link; SMS relies on STOP.
+  return map[milestone];
+}
+
 export function emailFor(
   milestone: Milestone,
   unsubscribeUrl: string,

@@ -326,9 +326,19 @@ CAHPS-score repair — emotional support is already their highest score (91%).*
   bereavement line / 988 / therapist directories). The 6mo and 1yr check-in
   emails point to it. **Founder action: request PG-13 permission from the
   Prigerson lab if the scored instrument is wanted later.** 5 tests.*
-- [ ] **[M] SMS opt-in channel for bereavement touchpoints.** Same content as
+- [x] **[M] SMS opt-in channel for bereavement touchpoints.** Same content as
   the email touchpoints via Twilio opt-in; cost absorbed by Honest Funeral,
   never the family. This population skews older — SMS outperforms email here.
+  *Shipped 2026-07-03: `smsFor` short bodies (≤2 segments, STOP notice, our
+  domain only — test-pinned), sent by the same anniversary cron for the same
+  milestone with independent tracking (anniversary_sms_sent; an SMS failure
+  never affects the email path). Opt-in on the /preferences page (phone +
+  explicit start; number used for check-ins and nothing else; STOP always
+  works). lib/sms.ts = Twilio REST via fetch, dry-run without creds. THREE
+  independent gates before a text ever sends: the migration, Twilio env
+  vars, and BEREAVEMENT_SMS_ENABLED=true. **Founder actions: run
+  `supabase/migrations/2026-07-03-bereavement-sms.sql`; create the Twilio
+  account + set TWILIO_ACCOUNT_SID/AUTH_TOKEN/FROM; flip the switch.***
 - [ ] **[S] Decisional-regret normalization content.** Short, sourced addition
   to `/after-hospice` and `/final-days` normalizing lingering doubt over
   end-of-life decisions (hospice timing, DNR, stopping treatment) as a common,
