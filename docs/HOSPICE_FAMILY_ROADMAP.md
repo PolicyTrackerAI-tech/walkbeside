@@ -481,11 +481,19 @@ users and language needs the site currently has zero support for.*
   with the Spanish work-in-progress + interim path; photo upload's typed
   alternative), and the human accommodation path (email + the real phone
   number, "no wrong way to ask").*
-- [ ] **[M] Readability lint gate on family-facing copy.** CI check scoring
+- [x] **[M] Readability lint gate on family-facing copy.** CI check scoring
   the family-facing content files against a Flesch-Kincaid grade 6–8 ceiling
   (citations/disclaimers excluded from scoring), failing any change that
   lowers the score by stripping the hedges that make a claim defensible.
   Acute grief measurably impairs reading comprehension.
+  *Shipped 2026-07-03: `lib/readability.ts` (FK grade + citation/URL/statute
+  stripping) + a vitest gate over seven importable copy sources (emails, SMS,
+  benefit sweep, self-check, digest, both legal baselines), ceiling 8.5. The
+  gate earned its keep on day one: three sources scored 9–12 and were
+  simplified by SHORTENING SENTENCES with every hedge kept (benefit sweep
+  10.4→7.4, MERP baseline 11.6→7.2, body-care baseline 12.1→6.8) — the
+  failure message itself instructs "shorten sentences (never strip hedges)".
+  `scripts/measure-readability.ts` = the calibration tool.*
 
 ---
 

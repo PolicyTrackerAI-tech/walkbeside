@@ -43,10 +43,10 @@ export const FEDERAL_BASELINE = {
   headline:
     "Medicaid estate recovery is a claim against the estate — never a bill your family personally owes.",
   points: [
-    "States must seek repayment of long-term-care Medicaid costs (nursing facility, home- and community-based services, and related hospital/prescription costs) for recipients who were 55 or older, from the recipient's estate — usually meaning the house.",
-    "Recovery is deferred while a surviving spouse is alive, or while the recipient's child under 21 — or a blind or disabled child of any age — survives. The state cannot recover during that time.",
-    "Every state must have an undue-hardship waiver process. If the recovery would leave an heir needing public assistance, or the asset is the family's livelihood, apply — waivers exist because Congress required them.",
-    "Recovery comes from the estate after death. Heirs are not personally liable, and a recovery claim is not a debt collector's bill — nobody should be paying it out of pocket.",
+    "States must seek repayment of long-term-care Medicaid costs for people who were 55 or older. That covers nursing-facility care, home care, and related hospital and drug costs. The money comes from the person's estate — usually meaning the house.",
+    "Recovery waits while a surviving spouse is alive. It also waits while a child under 21 — or a blind or disabled child of any age — survives. The state cannot recover during that time.",
+    "Every state must have an undue-hardship waiver process. Would the recovery leave an heir needing public assistance? Is the asset the family's livelihood? Then apply. Waivers exist because Congress required them.",
+    "Recovery comes from the estate after death. Heirs are not personally liable. A recovery claim is not a debt collector's bill. Nobody should be paying it out of pocket.",
   ],
   cite: "42 U.S.C. § 1396p(b)",
 } as const;
