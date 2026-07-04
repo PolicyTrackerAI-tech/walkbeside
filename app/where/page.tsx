@@ -7,7 +7,7 @@ import { HelpFooter } from "@/components/HelpFooter";
 export const metadata: Metadata = {
   title: "Where are you in this?",
   description:
-    "Three paths. Pick the one that fits. We help families before, during, and after a death.",
+    "Pick the path that fits. We help families before, during, and after a death.",
 };
 
 /**

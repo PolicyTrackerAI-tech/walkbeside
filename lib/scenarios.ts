@@ -93,7 +93,7 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
           label: "Compare funeral homes in 10 minutes →",
           href: "/decide",
           helperText:
-            "Three quick questions about what kind of service fits, then we send the request to a few homes in your area and bring back their prices side by side. Free until you actually pick one.",
+            "Three quick questions about what kind of service fits, then we send the request to a few homes in your area and bring back their prices side by side. Free to your family — always.",
         },
       },
       {
@@ -155,7 +155,7 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
           label: "Compare three homes in 10 minutes →",
           href: "/decide",
           helperText:
-            "Three quick questions about the kind of service that fits, then we send the comparison request to a few homes in your area and bring back their prices side by side. Families typically save thousands. Free until you actually pick one.",
+            "Three quick questions about the kind of service that fits, then we send the comparison request to a few homes in your area and bring back their prices side by side. Free to your family — always.",
         },
       },
       {
@@ -238,7 +238,7 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
           label: "I'm the one planning — compare homes →",
           href: "/decide",
           helperText:
-            "Three quick questions about the kind of service that fits, then we send the comparison to a few homes in your area. Free until you actually pick one.",
+            "Three quick questions about the kind of service that fits, then we send the comparison to a few homes in your area. Free to your family — always.",
         },
         shareAffordance: {
           copyUrl: "https://honestfuneral.co/where",

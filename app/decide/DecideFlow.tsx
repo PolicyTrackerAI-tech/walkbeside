@@ -421,7 +421,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
                 <strong>Heads up:</strong> Your disposition preference conflicts
                 with the tradition you chose. We weighted faith because it&rsquo;s
                 usually the harder constraint to change. If you want to override,
-                pick &ldquo;No religious preference&rdquo; at the top.
+                pick &ldquo;No religious tradition&rdquo; at the top.
               </p>
             </Card>
           )}
