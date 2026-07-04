@@ -140,6 +140,7 @@ create table if not exists public.price_list_analyses (
   total_fair_cents int,
   potential_savings_cents int,
   items jsonb,
+  zip text,                        -- regional benchmark aggregation (2026-07-02-benchmark-zip.sql)
   created_at timestamptz not null default now()
 );
 
@@ -659,3 +660,371 @@ grant update (opened_at) on public.share_links to authenticated;
 
 -- The existing RLS update policy (expiry-gated) still applies on top of this.
 alter table public.share_links enable row level security;
+
+
+-- ==============================================================================
+-- migrations/2026-06-22-negotiation-outcomes.sql
+-- ==============================================================================
+
+-- Negotiation outcomes instrumentation: capture what actually happened, per
+-- case and per home, so we can measure savings, choices, and satisfaction.
+-- Run this once in the Supabase SQL editor. Idempotent.
+--
+-- Why: today the schema records the INBOUND side — the family's original quote
+-- (negotiations.target_home_estimate_cents) and each home's quote
+-- (negotiation_outreach.quote_cents) — but nothing about the OUTCOME: which
+-- home was chosen, what was negotiated, what the family ultimately paid, what
+-- hidden fees surfaced, and how satisfied they were. This adds those columns.
+--
+-- Reuse, not duplication — these already exist and are kept as-is:
+--   listed_price (per case)  = negotiations.target_home_estimate_cents
+--   quoted_price (per home)  = negotiation_outreach.quote_cents
+--   best-quote rollup        = negotiations.best_quote_cents
+-- Only genuinely-missing outcome fields are added below.
+--
+-- Privacy: every new column sits on a row already protected by the existing
+-- owner-scoped RLS (negotiations_owner / outreach_owner, keyed on auth.uid()).
+-- No policy is loosened — outcome data stays private to the owning family. The
+-- internal admin view reads via the service-role key (like /admin/vetting).
+--
+-- The product is free to families (no advocate fee). amount_paid_cents below is
+-- the price the family paid the FUNERAL HOME — an analytics figure only.
+
+-- ---------------------------------------------------------------------------
+-- Per-home outcomes (negotiation_outreach)
+-- ---------------------------------------------------------------------------
+alter table public.negotiation_outreach
+  add column if not exists chosen boolean not null default false;
+
+alter table public.negotiation_outreach
+  add column if not exists listed_price_cents int;      -- this home's pre-negotiation list / sticker price
+
+alter table public.negotiation_outreach
+  add column if not exists negotiated_price_cents int;  -- price after we pushed back, for this home
+
+alter table public.negotiation_outreach
+  add column if not exists hidden_fees jsonb;           -- [{ "label": "...", "cents": 12345, "note": "..." }]
+
+comment on column public.negotiation_outreach.chosen is
+  'True for the single home the family selected. Set via /admin/outcomes (the founder runs pilot cases by hand); choosing a home in the product is free via /api/negotiate/choose.';
+comment on column public.negotiation_outreach.hidden_fees is
+  'Fees found beyond the quote. Shape: [{label, cents, note?}].';
+
+create index if not exists outreach_chosen_idx
+  on public.negotiation_outreach (negotiation_id, chosen);
+
+-- At most one chosen home per case, enforced at the database level. The admin
+-- API also clears siblings when marking a new choice (it sets the others false
+-- before setting the new one true, so this partial unique index is satisfied).
+create unique index if not exists negotiation_outreach_one_chosen_idx
+  on public.negotiation_outreach (negotiation_id) where chosen;
+
+-- ---------------------------------------------------------------------------
+-- Per-case outcomes (negotiations)
+-- ---------------------------------------------------------------------------
+alter table public.negotiations
+  add column if not exists negotiated_price_cents int;  -- final negotiated price on the chosen home
+
+alter table public.negotiations
+  add column if not exists amount_paid_cents int;       -- what the family paid the FUNERAL HOME (NOT the $199 fee)
+
+alter table public.negotiations
+  add column if not exists satisfaction_score smallint
+  check (satisfaction_score is null or satisfaction_score between 1 and 5);
+
+alter table public.negotiations
+  add column if not exists outcome_recorded_at timestamptz;
+
+-- Computed savings vs the family's original listed quote. Uses the amount
+-- actually paid when known, else the negotiated price. NULL until both a listed
+-- price and an outcome exist. (First generated column in the schema — chosen so
+-- the figure can never drift from its inputs. amount_paid_cents and
+-- negotiated_price_cents are added above so they exist when this is evaluated.)
+alter table public.negotiations
+  add column if not exists savings_vs_listed_cents int
+  generated always as (
+    target_home_estimate_cents - coalesce(amount_paid_cents, negotiated_price_cents)
+  ) stored;
+
+comment on column public.negotiations.amount_paid_cents is
+  'Analytics only: cents the family paid the funeral home. The product is free to families — there is no advocate fee.';
+comment on column public.negotiations.savings_vs_listed_cents is
+  'Generated: target_home_estimate_cents - coalesce(amount_paid_cents, negotiated_price_cents).';
+
+create index if not exists negotiations_outcome_idx
+  on public.negotiations (outcome_recorded_at desc) where outcome_recorded_at is not null;
+
+-- RLS is intentionally UNCHANGED. The new columns are covered by the existing
+-- owner-scoped policies (negotiations_owner, outreach_owner). No public read is
+-- added here — outcome data is family-private; the admin view uses service role.
+
+
+-- ==============================================================================
+-- migrations/2026-06-27-partners.sql
+-- ==============================================================================
+
+-- L3 Partner Layer — pilot #1. Idempotent, RLS-safe, employer-ready naming.
+-- Run once in the Supabase SQL editor, AFTER (or alongside) the still-unapplied
+-- outcomes migration (2026-06-22-negotiation-outcomes.sql). gen_random_uuid /
+-- gen_random_bytes are available on modern Supabase (pgcrypto).
+--
+-- Design + rationale: docs/P3_PARTNER_LAYER.md (judge-panel decision, 2026-06-27).
+
+-- 1) Tenant table. partner_type reserves the employer/insurer end-state so the
+--    later employer build is ADDITIVE, never a repaint.
+create table if not exists public.partners (
+  id            uuid primary key default gen_random_uuid(),
+  name          text not null,                       -- e.g. 'Canyon Home Hospice' (shown on the report)
+  partner_type  text not null default 'hospice'
+                  check (partner_type in ('hospice', 'employer', 'insurer')),
+  status        text not null default 'pilot'
+                  check (status in ('pilot', 'active', 'paused', 'archived')),
+  -- High-entropy capability token. Possession == authorization for the
+  -- read-only aggregate report. Rotate this column to revoke a shared link.
+  report_token  text not null unique default encode(gen_random_bytes(24), 'hex'),
+  active        boolean not null default true,
+  created_at    timestamptz not null default now()
+);
+
+create index if not exists partners_report_token_idx on public.partners (report_token);
+
+-- RLS ON, NO policies => deny-all to anon/authenticated. Only the service-role
+-- key reads it (admin tooling + the report page), exactly like /admin/outcomes
+-- and /admin/vetting.
+alter table public.partners enable row level security;
+
+-- 2) Attribution: tag a case to a referring partner. Nullable; most cases have
+--    none. ON DELETE SET NULL so removing a partner never destroys a family's
+--    case row.
+alter table public.negotiations
+  add column if not exists partner_id uuid references public.partners(id) on delete set null;
+
+create index if not exists negotiations_partner_idx
+  on public.negotiations (partner_id) where partner_id is not null;
+
+comment on column public.negotiations.partner_id is
+  'Referring partner (hospice). Set by the founder in /admin/outcomes AFTER the family has chosen a home. A reporting label ONLY — never read by /api/negotiate/choose, outreach, or home ranking (anti-steering is structural).';
+
+-- negotiations / price_list_analyses RLS is INTENTIONALLY UNCHANGED. The new
+-- column rides the existing owner-scoped policies; the partner report reads via
+-- the service-role key with an explicit .eq('partner_id', id) filter. No anon or
+-- public read is added anywhere.
+--
+-- DEFERRED (all additive later, FK onto partners(id) — zero repaint):
+--   partner_codes(code text primary key, partner_id uuid, label text)   -- N referral codes/tenant + ?ref= cookie attribution (wave 2)
+--   partner_members(partner_id uuid, email text, role text)             -- seats + magic-link / SSO for employers
+--   partners.brand_logo_url / brand_color                               -- per-tenant branding
+--   billing columns                                                     -- contracting
+
+
+-- ==============================================================================
+-- migrations/2026-07-01-bereavement-cadence.sql
+-- ==============================================================================
+
+-- Bereavement check-in cadence: re-anchor from the decommissioned paid_at to a
+-- real date_of_death. Run once in the Supabase SQL editor. Idempotent.
+--
+-- Why: the anniversary cron (app/api/cron/anniversary) selected candidates by
+-- profiles.paid_at — a column nothing writes since the family charge was
+-- decommissioned — so the bereavement touchpoint engine matched zero users and
+-- sent nothing. Milestones now anchor on the date of the death itself, which
+-- is also the clock Medicare's hospice bereavement requirement runs on
+-- (42 CFR 418.64 — support offered for up to ~13 months after the death).
+--
+-- The date is set ONLY when the family explicitly provides it (optional field
+-- in the /negotiate/start intake). Deliberately NO proxy fallback (signup date,
+-- negotiation date): a mis-anchored condolence email — e.g. to a /plan-ahead
+-- user whose person has not died — is the worst possible failure mode, so no
+-- date means no cadence. Under-claiming, as everywhere else in this product.
+--
+-- Privacy: rides the existing owner-scoped profiles RLS (profiles_self_read /
+-- profiles_self_write). The cron reads via the service-role key. No policy is
+-- loosened.
+
+alter table public.profiles
+  add column if not exists date_of_death date;
+
+comment on column public.profiles.date_of_death is
+  'Date of the loved one''s passing, provided explicitly by the family (optional intake field). Anchors the 1mo/3mo/6mo/1yr/13mo bereavement check-in cadence. Never inferred from signup or activity — no date, no cadence.';
+
+-- The cron's candidate query: opted-in profiles with a death date at least the
+-- shortest milestone (30 days) in the past.
+create index if not exists profiles_bereavement_idx
+  on public.profiles (date_of_death, anniversary_emails_opt_in)
+  where date_of_death is not null;
+
+-- The old paid_at-based partial index (profiles_anniversary_idx) is left in
+-- place — harmless, and paid_at remains a legacy read for old accounts.
+
+
+-- ==============================================================================
+-- migrations/2026-07-02-benchmark-zip.sql
+-- ==============================================================================
+
+-- Crowdsourced benchmark pipeline (roadmap Phase 1): region-aware aggregation
+-- needs the zip the family entered alongside the parsed items. Older rows
+-- (zip null) still aggregate nationally.
+--
+-- FOUNDER-APPLIED ONLY — run in the Supabase SQL editor, same as
+-- 2026-06-22-negotiation-outcomes.sql / 2026-06-27-partners.sql /
+-- 2026-07-01-bereavement-cadence.sql. The code path degrades gracefully
+-- until this is applied (insert retries without the column).
+
+alter table public.price_list_analyses
+  add column if not exists zip text;
+
+comment on column public.price_list_analyses.zip is
+  'Zip entered with the analysis; drives regional benchmark aggregation. De-identified use only.';
+
+
+-- ==============================================================================
+-- migrations/2026-07-03-bereavement-sms.sql
+-- ==============================================================================
+
+-- SMS opt-in channel for the bereavement touchpoints (roadmap Phase 3).
+-- Same content arc as the email cadence, opt-IN only, cost absorbed by
+-- Honest Funeral, never the family. This population skews older — SMS
+-- outperforms email here.
+--
+-- FOUNDER-APPLIED ONLY — run with the other pending migrations. Code
+-- degrades gracefully until applied AND Twilio env vars are set AND
+-- BEREAVEMENT_SMS_ENABLED=true (three independent gates).
+
+alter table public.profiles
+  add column if not exists bereavement_sms_phone text,
+  add column if not exists bereavement_sms_opt_in boolean not null default false,
+  add column if not exists anniversary_sms_sent text[] not null default '{}';
+
+comment on column public.profiles.bereavement_sms_phone is
+  'E.164 phone for opt-in bereavement check-in texts. Never used for anything else.';
+
+
+-- ==============================================================================
+-- migrations/2026-07-03-household-links.sql
+-- ==============================================================================
+
+-- Live shared household link (roadmap Phase 2). Upgrades the one-time
+-- /resume snapshot into a durable, owner-refreshable, read-only family view:
+-- the point person's device re-publishes the snapshot to a stable slug;
+-- relatives open /household/<id> and see the CURRENT state; the owner can
+-- refresh, rotate (new slug, old one dies), or revoke.
+--
+-- Security model — deliberately different from share_links: RLS is enabled
+-- with NO policies, so the anon/authed PostgREST surface cannot touch this
+-- table at all (share_links' anon-select pattern would leak owner_secret).
+-- Every read and write goes through our API routes using the service role,
+-- which checks owner_secret for mutations and strips it from reads.
+--
+-- FOUNDER-APPLIED ONLY — run in the Supabase SQL editor with the other
+-- pending migrations. Code degrades gracefully until applied (the /family
+-- card reports the live link as unavailable; nothing else breaks).
+
+create table if not exists public.household_links (
+  id uuid primary key default gen_random_uuid(),
+  -- Presented ONCE to the creating device and stored in its localStorage;
+  -- required for update/rotate/revoke. Never returned by any read path.
+  owner_secret uuid not null default gen_random_uuid(),
+  payload jsonb not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  -- Rolling expiry: refreshed to now() + 30 days on every owner update.
+  expires_at timestamptz not null default (now() + interval '30 days'),
+  revoked_at timestamptz,
+  -- Rotation trail: the row this one replaced (old slug is revoked).
+  rotated_from uuid
+);
+
+create index if not exists household_links_expiry_idx
+  on public.household_links (expires_at);
+
+alter table public.household_links enable row level security;
+-- No policies on purpose: service-role access only.
+
+comment on table public.household_links is
+  'Durable read-only family view slugs. Service-role only; owner_secret gates mutations. See app/api/household/*.';
+
+
+-- ==============================================================================
+-- migrations/2026-07-03-partner-codes.sql
+-- ==============================================================================
+
+-- Self-serve neutral referral codes (roadmap Phase 4, item 1).
+--
+-- A hospice coordinator — holding the partner's founder-issued report_token —
+-- generates their own referral links at /partner/r/<token>/links, no engineer
+-- involved. A family arriving through ?ref=<code> is attributed to the
+-- institution when (and only when) they start a negotiation, for AGGREGATE
+-- reporting only. Invariants preserved by construction:
+--   * partner_id/partner_code are reporting labels — never read by
+--     /api/negotiate/choose, outreach, or any home-selection logic.
+--   * The coordinator surface shows per-code claim COUNTS only; no case
+--     detail, no home names, no prices (zero-visibility rule).
+--   * Founder approval stays upstream: codes can only hang off a partners
+--     row, and partners rows are founder-created.
+--
+-- FOUNDER-APPLIED ONLY — run with the other pending migrations (requires
+-- 2026-06-27-partners.sql first). Code degrades gracefully until applied.
+
+create table if not exists public.partner_codes (
+  code text primary key,                       -- e.g. 'HF-7KQ2MD' (unambiguous alphabet)
+  partner_id uuid not null references public.partners(id) on delete cascade,
+  label text,                                  -- coordinator's own note, e.g. 'front-desk QR'
+  active boolean not null default true,
+  created_at timestamptz not null default now(),
+  revoked_at timestamptz
+);
+
+create index if not exists partner_codes_partner_idx
+  on public.partner_codes (partner_id, created_at desc);
+
+alter table public.partner_codes enable row level security;
+-- No policies on purpose: service-role access only, same as partners.
+
+-- The code a negotiation was claimed under (partner_id is derived from it at
+-- claim time and stays authoritative for reporting).
+alter table public.negotiations
+  add column if not exists partner_code text references public.partner_codes(code) on delete set null;
+
+comment on table public.partner_codes is
+  'Coordinator-generated referral codes. Reporting attribution only — never read by selection/outreach logic.';
+
+
+-- ==============================================================================
+-- migrations/2026-07-03-partner-onboarding.sql
+-- ==============================================================================
+
+-- Self-serve hospice partner onboarding (roadmap Phase 4): the application
+-- form writes a PENDING partners row (active=false — inert everywhere: the
+-- report page, the links manager, and code resolution all require active).
+-- A human — the founder — flips active on /admin/partners. Every new
+-- institutional money relationship keeps its human approval gate.
+--
+-- FOUNDER-APPLIED ONLY — run with the other pending migrations (requires
+-- 2026-06-27-partners.sql).
+
+alter table public.partners
+  add column if not exists contact_name text,
+  add column if not exists contact_email text,
+  add column if not exists application_notes text,
+  add column if not exists approved_at timestamptz;
+
+comment on column public.partners.approved_at is
+  'Set when the founder activates the partner on /admin/partners. active=false rows are pending applications.';
+
+
+-- ==============================================================================
+-- migrations/2026-07-03-pilot-metrics.sql
+-- ==============================================================================
+
+-- The five pilot metrics (roadmap Phase 4): benefit dollars recovered is the
+-- one metric with no existing column — admin-entered per case during the
+-- pilot (VA burial benefits, SSA lump sum, located life policies, county
+-- assistance actually claimed). Aggregate-only on every partner surface.
+--
+-- FOUNDER-APPLIED ONLY — run with the other pending migrations.
+
+alter table public.negotiations
+  add column if not exists benefit_dollars_recovered_cents int;
+
+comment on column public.negotiations.benefit_dollars_recovered_cents is
+  'Admin-entered during the pilot: benefit dollars the family actually recovered (VA/SSA/insurance/county). Reporting aggregate only.';
