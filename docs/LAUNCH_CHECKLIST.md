@@ -1,4 +1,14 @@
-> **⚠️ PARTIALLY SUPERSEDED (2026-06-24).** Technical/setup items (Supabase, Vercel, RLS, monitoring, QA) are still valid; the **pricing/refund/family-payment items are legacy**. The company now runs off [OPERATING_PLAN.md](OPERATING_PLAN.md) — free to families, institutions pay. The live execution plan is [ROADMAP.md](ROADMAP.md).
+> **⛔ FULLY SUPERSEDED (2026-07-04).** This entire document is historical. It was written 2026-06-09 around a $49-upfront-consumer-payment model that has since been **completely decommissioned** (no Stripe checkout, no webhook, no family charge exists in the code anymore — see `lib/stripe.ts`). Its "launch-day switch" (steps 3–5 below) describes flipping Stripe test→live keys and charging real families; none of that applies to the current B2B2C model (free to families forever, hospices/employers pay).
+>
+> **For what's actually left, read these instead:**
+> - [OPERATING_PLAN.md](OPERATING_PLAN.md) — the business-model bible (guardrails, who pays, the moat).
+> - [GO_TO_MARKET.md](GO_TO_MARKET.md) — **Phase 0** is the current "what's left before a real hospice pilot" gate list; treat it as this document's replacement.
+> - [ROADMAP.md](ROADMAP.md) — execution sequence against the Operating Plan.
+> - [ENGINEERING_BACKLOG.md](ENGINEERING_BACKLOG.md) — sized, sequenced code tickets against current `main`.
+> - [PROD_SETUP.md](PROD_SETUP.md) — copy-paste production infrastructure setup (Supabase, domain, env vars, deliverability) — the only part of this old checklist's *technical* setup content that's still genuinely load-bearing, and it's been updated to match the current model.
+> - [SCORECARD.md](SCORECARD.md) — weekly go/no-go metrics.
+>
+> Nothing below this line should be treated as current. Kept for history only.
 
 # Honest Funeral — Master Launch Checklist
 

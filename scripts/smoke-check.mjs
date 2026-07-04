@@ -84,22 +84,6 @@ function checkConfig() {
     "RESEND_WEBHOOK_SECRET missing — the bounce webhook requireServer()s it and will 500 while live",
   );
 
-  // Payments
-  const sk = process.env.STRIPE_SECRET_KEY ?? "";
-  if (!sk) {
-    warn("STRIPE_SECRET_KEY unset → checkout bypasses to a dev send");
-  } else if (sk.startsWith("sk_test_")) {
-    if (live) bad("STRIPE_SECRET_KEY is a TEST key but OUTREACH_LIVE=true");
-    else ok("STRIPE_SECRET_KEY = test key");
-  } else {
-    ok("STRIPE_SECRET_KEY = live key");
-  }
-  liveCritical(
-    "STRIPE_WEBHOOK_SECRET",
-    "STRIPE_WEBHOOK_SECRET set",
-    "STRIPE_WEBHOOK_SECRET missing (webhook can't verify)",
-  );
-
   // Ops
   liveCritical(
     "ADMIN_EMAILS",
