@@ -151,6 +151,7 @@ export function CrisisUnexpected() {
       if (raw) {
         const parsed = JSON.parse(raw) as StepStatus[];
         if (Array.isArray(parsed) && parsed.length === STEPS.length) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only localStorage hydration; state can't be read during SSR-safe render
           setStatuses(parsed);
         }
       }

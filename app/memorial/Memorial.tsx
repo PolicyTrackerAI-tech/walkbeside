@@ -61,6 +61,7 @@ export function Memorial() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as MemorialProgram;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only hydration from localStorage, which can't be read during SSR-safe render
         setData({ ...DEFAULT, ...parsed });
       }
     } catch {

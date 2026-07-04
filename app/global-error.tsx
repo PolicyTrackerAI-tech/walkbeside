@@ -57,6 +57,10 @@ export default function GlobalError({
             Try again
           </button>
           <p style={{ marginTop: 20 }}>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages --
+                intentional plain <a>: this boundary replaces the root layout
+                when IT failed, so it can't safely depend on next/link's
+                router context — a hard navigation is the reliable recovery. */}
             <a href="/" style={{ color: "#2f5d4f" }}>
               Go home
             </a>

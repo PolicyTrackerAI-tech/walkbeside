@@ -122,7 +122,6 @@ describe("checker pipeline (end-to-end, deterministic)", () => {
     // Print the rendered result on demand:
     //   PIPELINE_DEBUG=1 npx vitest run lib/__tests__/checker-pipeline.test.ts --disableConsoleIntercept
     if (process.env.PIPELINE_DEBUG) {
-      // eslint-disable-next-line no-console
       console.log(lines.join("\n"));
     }
 

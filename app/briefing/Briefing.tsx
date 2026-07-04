@@ -42,6 +42,7 @@ export function Briefing() {
   const [plan, setPlan] = useState<PlanState | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrating from sessionStorage/localStorage, which is only readable client-side after mount
     setView(parseHouseholdView(snapshotHousehold()));
     setPlan(readPlan());
   }, []);

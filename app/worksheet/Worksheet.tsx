@@ -158,6 +158,7 @@ export function Worksheet() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<WorksheetState>;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time localStorage hydration on mount, cannot read localStorage during SSR-safe render
         setState({ ...DEFAULTS, ...parsed });
       }
     } catch {

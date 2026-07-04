@@ -70,10 +70,12 @@ export function DigestCard() {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrating from sessionStorage/localStorage via snapshotHousehold(), which cannot be read during render
     setNames(knownAssignees());
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- re-reads sessionStorage/localStorage via buildItemsFor()/snapshotHousehold() when the selected assignee changes; not a pure derivation from in-memory state
     setCount(who ? buildItemsFor(who).length : 0);
     setState("idle");
   }, [who]);

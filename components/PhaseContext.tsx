@@ -30,6 +30,7 @@ export function PhaseProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const signals = readPhaseSignalsFromStorage();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- synchronizing with sessionStorage/localStorage, which can only be read client-side after mount; render must default to "crisis" for SSR safety.
     setPhase(detectPhase(signals));
 
     // Re-detect on storage change (covers same-tab updates from other

@@ -50,6 +50,7 @@ export function TimeCriticalBanner() {
       if (denom) {
         const sub = getFaith(denom as FaithKey);
         if (sub) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time localStorage hydration on mount, not a synchronous-render loop
           setFaith(sub);
           setHydrated(true);
           return;

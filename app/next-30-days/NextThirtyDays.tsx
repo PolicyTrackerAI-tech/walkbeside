@@ -98,6 +98,7 @@ export function NextThirtyDays() {
             migrated[k] = v;
           }
         }
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only localStorage hydration idiom; setState here seeds state from a source (localStorage) that can only be read outside of render.
         setStatuses(migrated);
       }
     } catch {

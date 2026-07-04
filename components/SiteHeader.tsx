@@ -140,6 +140,7 @@ function HeaderAuthButton() {
 
   useEffect(() => {
     if (!FEATURES.supabase()) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only effect synchronizing auth state from an external system (Supabase); this branch reflects the "no auth configured" state, mirroring the async setSignedIn calls below.
       setSignedIn(false);
       return;
     }

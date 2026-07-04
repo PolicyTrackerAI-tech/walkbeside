@@ -121,6 +121,7 @@ export function Vault() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as VaultDoc[];
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time localStorage hydration on mount; localStorage can't be read during SSR-safe render
         if (Array.isArray(parsed)) setDocs(parsed);
       }
     } catch {
@@ -136,6 +137,7 @@ export function Vault() {
     } catch {
       // ignore
     }
+    maybePublishHousehold();
   }, [docs, hydrated]);
 
   function quickAdd(starter: { type: string; description: string }) {

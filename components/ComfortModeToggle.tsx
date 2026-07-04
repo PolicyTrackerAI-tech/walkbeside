@@ -16,6 +16,7 @@ export function ComfortModeToggle() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reading DOM state (set by the pre-hydration inline script) is only possible after mount; this syncs it once, then flips `hydrated` to reveal the button.
     setOn(document.documentElement.classList.contains("comfort-mode"));
     setHydrated(true);
   }, []);

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
-import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
@@ -55,16 +53,16 @@ export default function DigitalLegacyPage() {
               <p>
                 It is tempting to just sign in with their password
                 and handle the accounts directly. In most US states
-                this violates the platform's terms of service and
+                this violates the platform&rsquo;s terms of service and
                 may violate the federal Computer Fraud and Abuse Act.
                 In practice no one is prosecuted for a family
-                member's account access, but the bigger problem is
+                member&rsquo;s account access, but the bigger problem is
                 practical: logging in can lock the account, trigger
                 fraud detection, or invalidate the formal closure
                 process you actually want to use.
               </p>
               <p>
-                Use the platforms' bereavement processes. They are
+                Use the platforms&rsquo; bereavement processes. They are
                 designed for this and they work. Each major platform
                 is below.
               </p>
@@ -136,7 +134,7 @@ export default function DigitalLegacyPage() {
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
                 <strong className="text-ink">Inactive Account Manager (set during life):</strong>{" "}
-                Google's standing offer to act on the user's
+                Google&rsquo;s standing offer to act on the user&rsquo;s
                 instructions after a defined period of inactivity
                 (typically 3&ndash;18 months). The deceased can
                 designate up to 10 trusted contacts to receive
@@ -166,7 +164,7 @@ export default function DigitalLegacyPage() {
                 releasing data. They typically grant funds in Google
                 Pay or AdSense balances, photo archives, and
                 Drive files. They are more reluctant to release
-                email contents unless there's a court order.
+                email contents unless there&rsquo;s a court order.
               </p>
             </div>
           </Card>
@@ -200,13 +198,13 @@ export default function DigitalLegacyPage() {
                 single biggest pain point in digital-legacy work
                 because Apple is the most locked-down major platform.
                 A probate court order for access to a specific Apple
-                ID's data costs $300&ndash;$1,500 in legal fees plus
+                ID&rsquo;s data costs $300&ndash;$1,500 in legal fees plus
                 court costs and typically takes 2&ndash;6 months.
               </p>
               <p>
                 <strong className="text-ink">Device passcodes:</strong>{" "}
                 if you know the iPhone or Mac passcode, you can use
-                the device. If you don't, Apple cannot unlock it
+                the device. If you don&rsquo;t, Apple cannot unlock it
                 regardless of court order &mdash; the encryption is
                 device-side. The data on the device is permanently
                 inaccessible unless iCloud backups exist.
@@ -229,7 +227,7 @@ export default function DigitalLegacyPage() {
                 >
                   account.microsoft.com/security/account-deceased
                 </a>
-                . Microsoft requires the deceased's email address,
+                . Microsoft requires the deceased&rsquo;s email address,
                 proof of death, proof of relationship, and a notarized
                 affidavit. Processing typically takes 6 to 8 weeks.
                 They deliver contents on a DVD by physical mail (yes,
@@ -293,7 +291,7 @@ export default function DigitalLegacyPage() {
                 <strong className="text-ink">Exchange-held crypto:</strong>{" "}
                 cryptocurrency on a regulated exchange (Coinbase,
                 Kraken, Gemini, Binance.US) is recoverable through
-                the exchange's bereavement process &mdash; the
+                the exchange&rsquo;s bereavement process &mdash; the
                 exchange holds the keys. Requirements typically:
                 death certificate, probate documents (letters
                 testamentary), and a request from the executor. Most
@@ -306,7 +304,7 @@ export default function DigitalLegacyPage() {
                 envelopes labeled &ldquo;in case of emergency&rdquo;,
                 a piece of paper with 12 or 24 words on it. Some
                 people split a seed phrase across multiple locations
-                using Shamir's Secret Sharing. If after exhaustive
+                using Shamir&rsquo;s Secret Sharing. If after exhaustive
                 search the seed phrase cannot be found, the funds
                 are gone.
               </p>
@@ -320,7 +318,7 @@ export default function DigitalLegacyPage() {
               <p>
                 The single most useful action in the first month is
                 a credit-card statement review. Pull the last 12
-                months of statements for the deceased's primary
+                months of statements for the deceased&rsquo;s primary
                 cards. Every recurring charge is an account that
                 needs to be canceled. Common entries: Netflix,
                 Spotify, Amazon Prime, Apple One, Hulu, Adobe
@@ -344,7 +342,7 @@ export default function DigitalLegacyPage() {
                 issuer with a death certificate; they freeze the
                 account and zero out the balance from the estate.
                 Joint cards stay open for the surviving cardholder
-                but the deceased's name is removed.
+                but the deceased&rsquo;s name is removed.
               </p>
             </div>
           </Card>
@@ -371,7 +369,7 @@ export default function DigitalLegacyPage() {
                   <strong className="text-ink">Hotel points:</strong>{" "}
                   Marriott, Hilton, IHG allow transfer with death
                   certificate. Time-sensitive &mdash; some expire
-                  points 12 months after the account holder's
+                  points 12 months after the account holder&rsquo;s
                   death.
                 </li>
                 <li>
@@ -408,7 +406,7 @@ export default function DigitalLegacyPage() {
                 Active online businesses (Etsy shops, eBay seller
                 accounts, Patreon, Substack, YouTube monetization)
                 generally require similar documentation and the
-                executor's involvement. Earnings continue accruing
+                executor&rsquo;s involvement. Earnings continue accruing
                 in many cases and are part of the estate.
               </p>
             </div>

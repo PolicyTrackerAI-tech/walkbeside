@@ -59,6 +59,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
   useEffect(() => {
     const f = readDecide(DECIDE_STORAGE_KEYS.faith);
     if (f && FAITH_DROPDOWN.some((o) => o.value === f)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only hydration from sessionStorage (readable only client-side), the codebase's standard idiom
       setFaith(f as FaithKey);
     }
     const c = readDecide(DECIDE_STORAGE_KEYS.customFaith);

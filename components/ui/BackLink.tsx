@@ -20,6 +20,7 @@ export function BackLink({ defaultHref = "/", defaultLabel = "← Back" }: Props
         url.origin === window.location.origin &&
         url.pathname !== window.location.pathname
       ) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- reads document.referrer/window.location, only available outside render (client-only), then syncs into state
         setHref(url.pathname + url.search);
       }
     } catch {}

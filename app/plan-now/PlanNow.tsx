@@ -110,6 +110,7 @@ export function PlanNow({ partner }: { partner?: string }) {
 
   useEffect(() => {
     const saved = readPlan();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only localStorage hydration; value can't be read during SSR-safe render
     if (saved) setPlan(saved);
     setHydrated(true);
   }, []);
