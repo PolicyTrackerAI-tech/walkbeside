@@ -36,7 +36,7 @@ green — from evidence and stability, not hope.
 | **Institutional revenue** | ≥1 paid recurring contract; a 2nd in pilot | 🔴 not started |
 | **Repeatable motion** | Converting >1 in ~5 hospice conversations | 🔴 no conversations yet |
 | **Family outcomes** | Documented savings + strong satisfaction across ~10+ cases | 🟡 instrumentation built, 0 cases recorded |
-| **Free-tool traction** | Organic traffic + first AI/press citations climbing | 🟡 L1 built, analytics not yet instrumented |
+| **Free-tool traction** | Organic traffic + first AI/press citations climbing | 🟡 L1 built + analytics now instrumented (2026-07-05), traffic still climbing from zero |
 | **Runway** | Revenue covers costs **OR** ~12–18 mo savings **OR** a raise | ⚪ founder to assess |
 
 Legend: 🟢 green · 🟡 partial · 🔴 not yet · ⚪ founder input needed.
@@ -53,8 +53,11 @@ Legend: 🟢 green · 🟡 partial · 🔴 not yet · ⚪ founder input needed.
 To make this dashboard real, these need wiring (none block the plan, but they
 gate honest measurement):
 
-- **Reach analytics** — no product analytics on the free tools yet (visitors,
-  tool uses, email subs). Add lightweight analytics (privacy-respecting).
+- ~~**Reach analytics**~~ — **DONE (2026-07-05).** Vercel Analytics wired
+  sitewide (`app/layout.tsx`) — cookie-free page views, plus custom events for
+  tool uses (`analyzer_completed`, `decide_recommended`, `obituary_generated`,
+  `plan_now_completed`, `negotiate_started`) and email subs (`email_signup`
+  on every `EmailCaptureForm`). Check the Vercel dashboard's Analytics tab.
 - **Outcomes data** — the outcomes migration must be applied before Service/Data
   rows populate (see [ROADMAP.md](ROADMAP.md) P1).
 - **Sales CRM** — even a spreadsheet; track every hospice through the 8 stages

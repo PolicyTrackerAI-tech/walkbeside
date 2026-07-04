@@ -1,3 +1,13 @@
+> **⛔ FULLY SUPERSEDED (2026-07-05).** Every ticket below — P1 (outcomes
+> layer), P2 (paywall decommission), P3 (partner portal), P4 (Fair-Price
+> Index + taxonomy expansion) — has shipped and is live on `main` (verified:
+> `/admin/outcomes`, no `app/api/stripe/`, `/partner/[code]` +
+> `/partner/r/[token]`, `/fair-price-index` + `/methodology`, a 38-item line
+> taxonomy). Kept for history only. For what's next, see
+> [`GO_TO_MARKET.md`](GO_TO_MARKET.md) Phase 0 (mostly founder-side legal/
+> sales actions now, not engineering) and the "Instrumentation gaps" section
+> of [`SCORECARD.md`](SCORECARD.md).
+
 # Engineering Backlog — plans to code
 
 Turns [`ROADMAP.md`](ROADMAP.md) P1–P4 into sequenced, sized tickets. Every claim

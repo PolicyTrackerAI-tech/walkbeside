@@ -12,6 +12,7 @@ import { readReferral } from "@/lib/referral-codes";
 import { ReferralCoBrand } from "@/components/ReferralCoBrand";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
 import { homesForRadius } from "@/lib/negotiation/sample-homes";
+import { trackTool } from "@/lib/analytics";
 import {
   DEFAULT_STATE,
   readState,
@@ -132,6 +133,7 @@ function NegotiateStartWizard() {
       const data = await r.json();
       if (!r.ok) throw new Error(JSON.stringify(data.error));
       clearState();
+      trackTool("negotiate_started", { serviceType: state.serviceType });
       // Free to the family — the outreach is already triggered server-side
       // (dry_run until OUTREACH_LIVE is on). Go straight to the status page.
       router.push(`/negotiate/${data.id}/status`);

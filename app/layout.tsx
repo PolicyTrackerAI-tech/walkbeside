@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Footer } from "@/components/Brand";
 import { PhaseProvider } from "@/components/PhaseContext";
@@ -78,6 +79,7 @@ export default function RootLayout({
           <Footer />
           <ComfortModeToggle />
         </PhaseProvider>
+        <Analytics />
       </body>
     </html>
   );

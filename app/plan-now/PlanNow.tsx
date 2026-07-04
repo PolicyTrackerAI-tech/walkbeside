@@ -24,6 +24,7 @@ import {
   type PlanState,
   type YesNoUnsure,
 } from "@/lib/plan-now";
+import { trackTool } from "@/lib/analytics";
 
 /**
  * The one-sitting plan for the hospice admission week (research opportunity
@@ -403,7 +404,14 @@ export function PlanNow({ partner }: { partner?: string }) {
                     />
                   </div>
                   <div className="flex gap-3 mt-5">
-                    <Button onClick={() => setStep(5)}>Continue →</Button>
+                    <Button
+                      onClick={() => {
+                        setStep(5);
+                        trackTool("plan_now_completed");
+                      }}
+                    >
+                      Continue →
+                    </Button>
                     <Button variant="ghost" onClick={() => setStep(3)}>
                       ← Back
                     </Button>

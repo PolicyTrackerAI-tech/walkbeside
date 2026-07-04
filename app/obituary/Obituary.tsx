@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
 import { OBITUARY_PROMPTS } from "@/lib/content";
 import { PrintHeader, PrintFooter } from "@/components/print/PrintHeader";
+import { trackTool } from "@/lib/analytics";
 
 const OBIT_STORAGE_KEY = "honestfuneral.obituary.draft.v1";
 
@@ -94,6 +95,7 @@ export function Obituary() {
       }
       const d = await r.json();
       setDraft(d.draft);
+      trackTool("obituary_generated");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not draft.");
     } finally {
