@@ -20,6 +20,7 @@ import {
   DEFAULT_PLAN,
   readPlan,
   writePlan,
+  type BenefitAnswers,
   type PlanState,
   type YesNoUnsure,
 } from "@/lib/plan-now";
@@ -126,6 +127,20 @@ export function PlanNow({ partner }: { partner?: string }) {
 
   function update<K extends keyof PlanState>(key: K, value: PlanState[K]) {
     setPlan((p) => ({ ...p, [key]: value }));
+  }
+
+  // Dedicated functional updater for the nested `benefits` object. A naive
+  // call site like `update("benefits", { ...plan.benefits, veteran: v })`
+  // reads `plan.benefits` from the render closure — if two of the five
+  // Yes/No/Unsure answers fire within the same React batch (fast clicks are
+  // enough), both spread the SAME stale pre-batch object and the second call
+  // silently discards whatever the first one set. Always merge from the
+  // previous state, not the render closure.
+  function updateBenefit<K extends keyof BenefitAnswers>(
+    key: K,
+    value: BenefitAnswers[K],
+  ) {
+    setPlan((p) => ({ ...p, benefits: { ...p.benefits, [key]: value } }));
   }
 
   const who = plan.personName.trim() || "your person";
@@ -358,7 +373,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       question="Receiving Social Security?"
                       value={plan.benefits.onSocialSecurity}
                       onChange={(v) =>
-                        update("benefits", { ...plan.benefits, onSocialSecurity: v })
+                        updateBenefit("onSocialSecurity", v)
                       }
                     />
                     <YesNoUnsureRow
@@ -366,7 +381,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       question="Is there life insurance?"
                       value={plan.benefits.lifeInsurance}
                       onChange={(v) =>
-                        update("benefits", { ...plan.benefits, lifeInsurance: v })
+                        updateBenefit("lifeInsurance", v)
                       }
                     />
                     <YesNoUnsureRow
@@ -374,7 +389,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       question="On Medicaid?"
                       value={plan.benefits.onMedicaid}
                       onChange={(v) =>
-                        update("benefits", { ...plan.benefits, onMedicaid: v })
+                        updateBenefit("onMedicaid", v)
                       }
                     />
                     <YesNoUnsureRow
@@ -382,7 +397,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       question="Employed (now or recently), or a union member?"
                       value={plan.benefits.wasEmployed}
                       onChange={(v) =>
-                        update("benefits", { ...plan.benefits, wasEmployed: v })
+                        updateBenefit("wasEmployed", v)
                       }
                     />
                   </div>
