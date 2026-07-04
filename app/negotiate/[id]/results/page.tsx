@@ -63,7 +63,7 @@ export default async function NegotiationResultsPage({
             <p className="text-ink-soft mt-2">
               {replies.length === 0
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
-                : "Pick the home you want. We’ll notify them and help schedule the arrangement meeting — no additional charge, it’s included in what you already paid. You’ll meet with the home in person to make final selections and sign."}
+                : "Pick the home you want — it costs nothing. We’ll notify them and help schedule the arrangement meeting. You’ll meet with the home in person to make final selections and sign."}
             </p>
             {replies.length >= 2 && (
               <div className="mt-3">

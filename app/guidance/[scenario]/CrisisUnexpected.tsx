@@ -392,7 +392,7 @@ export function CrisisUnexpected() {
                 Let&rsquo;s figure out what kind of service fits.
               </h2>
               <p className="text-ink-soft mb-5">
-                Four short questions. We&rsquo;ll recommend a service
+                Five short questions. We&rsquo;ll recommend a service
                 type that fits your faith, your family, and your budget.
                 No account, nothing saved.
               </p>

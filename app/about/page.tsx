@@ -158,6 +158,15 @@ export default function AboutPage() {
               What you can decline →
             </Link>
           </p>
+          <p className="mt-3 text-xs text-ink-muted">
+            Hospice, employer, or benefits team?{" "}
+            <Link
+              href="/partners/apply"
+              className="underline-offset-2 hover:underline"
+            >
+              Partner with us →
+            </Link>
+          </p>
         </div>
       </section>
     </main>

@@ -88,7 +88,7 @@ export default async function PlanningPage() {
           <Card tone="soft">
             <CardTitle>Not sure what type of service fits?</CardTitle>
             <p className="text-ink-soft mb-4">
-              Four short questions about faith, body, and budget. We&rsquo;ll
+              Five short questions about faith, body, and budget. We&rsquo;ll
               recommend a service type so you can move on to comparing prices
               with confidence.
             </p>

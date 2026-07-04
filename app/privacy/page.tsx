@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 
@@ -182,6 +183,23 @@ export default function PrivacyPage() {
             >
               safety@honestfuneral.co
             </a>
+            .
+          </p>
+          <p className="text-sm text-ink-muted">
+            See also our{" "}
+            <Link
+              href="/terms"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/accessibility"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              Accessibility Statement
+            </Link>
             .
           </p>
         </article>
