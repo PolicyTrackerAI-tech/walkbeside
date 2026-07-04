@@ -357,6 +357,20 @@ CAHPS-score repair — emotional support is already their highest score (91%).*
   pending-clergy-review exactly as English does. Zero non-English content
   exists today; language is the top named barrier for Hispanic hospice
   families.
+  *Status 2026-07-03: DRAFTS PREPARED, human-review gate still pending —
+  box stays unchecked until a bilingual reviewer signs off (per the hard
+  gate above; machine-only must not ship). Machine-translated drafts for
+  all six surfaces (272 strings) live in `docs/i18n-es/`, produced by a
+  translate → adversarial-fidelity-check pipeline: every draft passed with
+  zero hedge/disclaimer/legal-meaning/crisis-path defects (the checkers hunt
+  specifically for those). The pass also surfaced three unrelated ENGLISH
+  source bugs, fixed separately (PR #113): dead $49-era CTA copy in
+  `lib/scenarios.ts`, a stale "three paths" count on `/where`, and a
+  `/decide` conflict-warning referencing a dropdown option that didn't
+  exist. Review queue + standard + engineering sequencing:
+  `docs/SPANISH_REVIEW_QUEUE.md`. **Founder action: engage a bilingual
+  reviewer with the drafts as a starting point; record sign-off in that
+  file before any Spanish content goes live.***
 
 ## Phase 4 — Hospice-facing infrastructure
 
