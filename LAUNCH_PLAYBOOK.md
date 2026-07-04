@@ -1,4 +1,10 @@
-> **⚠️ PARTIALLY SUPERSEDED (2026-06-24).** The infra setup (Supabase, Vercel, Resend, domain) is still valid; the **$49 consumer-fee** parts are legacy. The company now runs off [docs/OPERATING_PLAN.md](docs/OPERATING_PLAN.md) — free to families, institutions pay. Live plan: [docs/ROADMAP.md](docs/ROADMAP.md).
+> **⛔ FULLY SUPERSEDED (2026-07-04).** This doc's infra steps still mix in
+> now-dead $49-consumer-fee/Stripe-webhook steps that were never fully split
+> out from the generic setup. Rather than maintain two overlapping infra
+> playbooks, use **[docs/PROD_SETUP.md](docs/PROD_SETUP.md)** instead — it's
+> the current, accurate, Stripe-free version of these same steps. Business
+> readiness gates: [docs/OPERATING_PLAN.md](docs/OPERATING_PLAN.md) and
+> [docs/GO_TO_MARKET.md](docs/GO_TO_MARKET.md). Kept for history only.
 
 # Launch Playbook — making Honest Funeral real
 
