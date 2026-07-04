@@ -31,7 +31,7 @@ export default async function DecidePage({
             Let&rsquo;s figure out what kind of service fits.
           </h1>
           <p className="text-ink-soft mb-8">
-            Four short questions. We&rsquo;ll recommend a type of service so you
+            Five short questions. We&rsquo;ll recommend a type of service so you
             can move on to comparing prices. No account, nothing saved.
           </p>
 

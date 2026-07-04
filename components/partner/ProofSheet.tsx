@@ -1,6 +1,7 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
+import { LinkButton } from "@/components/ui/Button";
 import { fmtUSD } from "@/lib/pricing-data";
 import { SMALL_SAMPLE_THRESHOLD, type CohortStats } from "@/lib/partner-report";
 import { PrintButton } from "@/components/partner/PrintButton";
@@ -25,7 +26,6 @@ export function ProofSheet({
   live: boolean;
 }) {
   const empty = live && stats.familiesHelped === 0;
-  const suppressed = live && !empty && stats.smallSample;
 
   return (
     <main className="flex-1 flex flex-col">
@@ -70,7 +70,7 @@ export function ProofSheet({
                 and time to resolution.
               </p>
             </Card>
-          ) : suppressed ? (
+          ) : stats.smallSample ? (
             <Card tone="primary">
               <CardEyebrow>Families helped so far</CardEyebrow>
               <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
@@ -226,16 +226,29 @@ export function ProofSheet({
           )}
 
           {!live && (
-            <div className="grid sm:grid-cols-2 gap-3">
-              <Quote
-                text="They caught a $2,000 overcharge on the casket and told me exactly what to say. I finally felt like someone was on my side."
-                who="Daughter of a patient · de-identified"
-              />
-              <Quote
-                text="I had no idea the death certificates were marked up. The checklist for the weeks after was the part I didn't know I needed."
-                who="Spouse · de-identified"
-              />
-            </div>
+            <>
+              <div className="grid sm:grid-cols-2 gap-3">
+                <Quote
+                  text="They caught a $2,000 overcharge on the casket and told me exactly what to say. I finally felt like someone was on my side."
+                  who="Daughter of a patient · de-identified"
+                />
+                <Quote
+                  text="I had no idea the death certificates were marked up. The checklist for the weeks after was the part I didn't know I needed."
+                  who="Spouse · de-identified"
+                />
+              </div>
+              <Card tone="primary">
+                <CardTitle>Want a live report for your own families?</CardTitle>
+                <p className="text-ink-soft mt-2 mb-4">
+                  Apply to partner with Honest Funeral &mdash; there&rsquo;s no
+                  cost to the families you refer, and this report starts
+                  filling in with their real outcomes.
+                </p>
+                <LinkButton href="/partners/apply">
+                  Apply to partner →
+                </LinkButton>
+              </Card>
+            </>
           )}
 
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-border/60">

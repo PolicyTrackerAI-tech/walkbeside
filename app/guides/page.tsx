@@ -96,7 +96,7 @@ const GUIDES: Guide[] = [
     href: "/decide",
     title: "What type of service fits?",
     description:
-      "Four questions about faith, body, and budget. We recommend a service type.",
+      "Five questions about faith, body, and budget. We recommend a service type.",
     category: "decisions",
   },
   {

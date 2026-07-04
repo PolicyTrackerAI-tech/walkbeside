@@ -9,7 +9,7 @@ import {
   type FaithKey,
   getFaith,
 } from "@/lib/faith-traditions";
-import { SERVICE_LABELS, SERVICE_TOTALS, fmtRange } from "@/lib/pricing-data";
+import { SERVICE_LABELS, SERVICE_TOTALS, fmtRange, fmtUSD } from "@/lib/pricing-data";
 import {
   DECIDE_STORAGE_KEYS,
   readDecide,
@@ -334,14 +334,13 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
             {totals && (
               <div className="mb-5 rounded-xl bg-good-soft border border-good/30 px-4 py-3">
                 <p className="text-sm text-ink">
+                  Comparing two or three homes instead of booking with the
+                  first one you call can avoid up to{" "}
                   <strong className="text-ink">
-                    Families like yours typically save $
-                    {Math.round(totals.maxSavings / 100) * 100} to $
-                    {Math.round((totals.maxSavings * 1.5) / 100) * 100}
+                    {fmtUSD(totals.maxSavings)}
                   </strong>{" "}
-                  on the funeral arrangement when they compare two or
-                  three homes with our help — versus walking into the
-                  first home they call.
+                  on this type of service — the gap between the fair and
+                  predatory ranges above, based on national benchmarks.
                 </p>
               </div>
             )}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 
@@ -149,9 +150,11 @@ export default function TermsPage() {
           <p>
             To the fullest extent permitted by law, Honest Funeral&rsquo;s total
             liability to you for any claim arising out of or relating to the
-            Service is limited to the fees you paid to Honest Funeral in the
-            twelve months preceding the claim. Honest Funeral is not liable for
-            indirect, incidental, consequential, or punitive damages.
+            Service is limited to $100. The Service is free to families &mdash;
+            we are funded by the institutions we partner with, not by fees you
+            pay us &mdash; so this cap is not tied to any amount you paid.
+            Honest Funeral is not liable for indirect, incidental,
+            consequential, or punitive damages.
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
@@ -210,6 +213,23 @@ export default function TermsPage() {
             >
               hello@honestfuneral.co
             </a>
+            .
+          </p>
+          <p className="text-sm text-ink-muted">
+            See also our{" "}
+            <Link
+              href="/privacy"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/accessibility"
+              className="text-primary-deep underline-offset-2 hover:underline"
+            >
+              Accessibility Statement
+            </Link>
             .
           </p>
         </article>

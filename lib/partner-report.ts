@@ -54,34 +54,51 @@ export interface ToolEngagement {
   obituaryPct: number;
 }
 
-export interface CohortStats {
+interface PilotMetrics {
+  medianSavedVsMetroCents: number | null;
+  avgQuotesPerFamily: number | null;
+  totalBenefitDollarsCents: number | null;
+  /** Share of rated families at 4–5 of 5 — the promoter share; deliberately NOT labeled NPS. */
+  satisfactionPromoterPct: number | null;
+  /** Share of families who received at least one bereavement check-in (we drive utilization of the HOSPICE's own required benefit — we never counsel). */
+  bereavementRemindedPct: number;
+}
+
+/**
+ * Below SMALL_SAMPLE_THRESHOLD, a discriminant literal (`smallSample: true`)
+ * forces every dollar/satisfaction/resolution/engagement field to `null` AT
+ * THE TYPE LEVEL — there is no field on this shape a caller could read to
+ * recover a small cohort's numbers, so the suppression gate can't be bypassed
+ * by a future consumer that forgets to re-check `smallSample` itself.
+ */
+export interface CohortStatsSuppressed {
   familiesHelped: number;
+  smallSample: true;
+  familiesWhoSaved: null;
+  totalOverchargeCaughtCents: null;
+  avgOverchargeCaughtCents: null;
+  ftcIssuesFlagged: null;
+  avgSatisfaction: null;
+  medianResolutionDays: null;
+  toolEngagement: null;
+  pilotMetrics: null;
+}
+
+export interface CohortStatsFull {
+  familiesHelped: number;
+  smallSample: false;
   familiesWhoSaved: number;
   totalOverchargeCaughtCents: number;
   avgOverchargeCaughtCents: number;
   ftcIssuesFlagged: number;
   avgSatisfaction: number | null;
   medianResolutionDays: number | null;
-  /** Aggregate tool engagement — null when smallSample (same gate as dollars). */
-  toolEngagement: ToolEngagement | null;
-  /**
-   * The five pilot metrics (minus staff-minutes, which is an ops-side
-   * coordinator survey, not app data). null when smallSample — same gate,
-   * no bypass path. Individual fields are null when no case carries the
-   * underlying data yet.
-   */
-  pilotMetrics: {
-    medianSavedVsMetroCents: number | null;
-    avgQuotesPerFamily: number | null;
-    totalBenefitDollarsCents: number | null;
-    /** Share of rated families at 4–5 of 5 — the promoter share; deliberately NOT labeled NPS. */
-    satisfactionPromoterPct: number | null;
-    /** Share of families who received at least one bereavement check-in (we drive utilization of the HOSPICE's own required benefit — we never counsel). */
-    bereavementRemindedPct: number;
-  } | null;
-  /** True when the sample is too small to present as a stable benchmark. */
-  smallSample: boolean;
+  toolEngagement: ToolEngagement;
+  /** Individual fields are null when no case carries the underlying data yet. */
+  pilotMetrics: PilotMetrics;
 }
+
+export type CohortStats = CohortStatsSuppressed | CohortStatsFull;
 
 /** Below this many families, label the report a small sample (guardrail #4). */
 export const SMALL_SAMPLE_THRESHOLD = 5;
@@ -95,6 +112,22 @@ function median(nums: number[]): number | null {
 
 export function aggregateCohort(records: CohortRecord[]): CohortStats {
   const n = records.length;
+
+  if (n < SMALL_SAMPLE_THRESHOLD) {
+    return {
+      familiesHelped: n,
+      smallSample: true,
+      familiesWhoSaved: null,
+      totalOverchargeCaughtCents: null,
+      avgOverchargeCaughtCents: null,
+      ftcIssuesFlagged: null,
+      avgSatisfaction: null,
+      medianResolutionDays: null,
+      toolEngagement: null,
+      pilotMetrics: null,
+    };
+  }
+
   const totalOver = records.reduce(
     (s, r) => s + Math.max(0, r.overchargeCaughtCents),
     0,
@@ -105,58 +138,50 @@ export function aggregateCohort(records: CohortRecord[]): CohortStats {
   const days = records
     .map((r) => r.resolutionDays)
     .filter((x): x is number => typeof x === "number");
-
-  const smallSample = n < SMALL_SAMPLE_THRESHOLD;
   const pct = (count: number) => Math.round((count / n) * 100);
+
+  const vsMetro = records
+    .map((r) => r.savedVsMetroCents)
+    .filter((x): x is number => typeof x === "number");
+  const quotes = records
+    .map((r) => r.quotesReceived)
+    .filter((x): x is number => typeof x === "number");
+  const benefits = records
+    .map((r) => r.benefitDollarsCents)
+    .filter((x): x is number => typeof x === "number" && x > 0);
+  const promoters = sats.filter((s) => s >= 4).length;
 
   return {
     familiesHelped: n,
+    smallSample: false,
     familiesWhoSaved: records.filter((r) => r.overchargeCaughtCents > 0).length,
     totalOverchargeCaughtCents: totalOver,
-    avgOverchargeCaughtCents: n ? Math.round(totalOver / n) : 0,
+    avgOverchargeCaughtCents: Math.round(totalOver / n),
     ftcIssuesFlagged: records.reduce((s, r) => s + Math.max(0, r.ftcIssues), 0),
     avgSatisfaction: sats.length
       ? Math.round((sats.reduce((a, b) => a + b, 0) / sats.length) * 10) / 10
       : null,
     medianResolutionDays: median(days),
-    // Suppressed under the SAME gate as the dollar figures.
-    toolEngagement: smallSample
-      ? null
-      : {
-          checkerPct: pct(records.filter((r) => r.usedChecker).length),
-          certTrackerPct: pct(records.filter((r) => r.usedCertTracker).length),
-          obituaryPct: pct(records.filter((r) => r.usedObituary).length),
-        },
-    pilotMetrics: smallSample
-      ? null
-      : (() => {
-          const vsMetro = records
-            .map((r) => r.savedVsMetroCents)
-            .filter((x): x is number => typeof x === "number");
-          const quotes = records
-            .map((r) => r.quotesReceived)
-            .filter((x): x is number => typeof x === "number");
-          const benefits = records
-            .map((r) => r.benefitDollarsCents)
-            .filter((x): x is number => typeof x === "number" && x > 0);
-          const promoters = sats.filter((s) => s >= 4).length;
-          return {
-            medianSavedVsMetroCents: median(vsMetro),
-            avgQuotesPerFamily: quotes.length
-              ? Math.round((quotes.reduce((a, b) => a + b, 0) / quotes.length) * 10) / 10
-              : null,
-            totalBenefitDollarsCents: benefits.length
-              ? benefits.reduce((a, b) => a + b, 0)
-              : null,
-            satisfactionPromoterPct: sats.length
-              ? Math.round((promoters / sats.length) * 100)
-              : null,
-            bereavementRemindedPct: pct(
-              records.filter((r) => r.bereavementReminded).length,
-            ),
-          };
-        })(),
-    smallSample,
+    toolEngagement: {
+      checkerPct: pct(records.filter((r) => r.usedChecker).length),
+      certTrackerPct: pct(records.filter((r) => r.usedCertTracker).length),
+      obituaryPct: pct(records.filter((r) => r.usedObituary).length),
+    },
+    pilotMetrics: {
+      medianSavedVsMetroCents: median(vsMetro),
+      avgQuotesPerFamily: quotes.length
+        ? Math.round((quotes.reduce((a, b) => a + b, 0) / quotes.length) * 10) / 10
+        : null,
+      totalBenefitDollarsCents: benefits.length
+        ? benefits.reduce((a, b) => a + b, 0)
+        : null,
+      satisfactionPromoterPct: sats.length
+        ? Math.round((promoters / sats.length) * 100)
+        : null,
+      bereavementRemindedPct: pct(
+        records.filter((r) => r.bereavementReminded).length,
+      ),
+    },
   };
 }
 

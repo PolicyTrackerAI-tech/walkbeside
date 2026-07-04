@@ -235,7 +235,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       href="/decide?mode=ahead"
                       className="text-primary-deep underline"
                     >
-                      Four short questions
+                      Five short questions
                     </Link>{" "}
                     recommend a path — then come back here.
                   </p>

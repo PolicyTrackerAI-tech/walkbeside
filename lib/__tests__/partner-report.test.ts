@@ -9,32 +9,36 @@ import {
 } from "@/lib/partner-report";
 
 describe("aggregateCohort", () => {
-  it("returns an all-zero, small-sample stat block for no records", () => {
+  it("returns a fully-suppressed stat block for no records — nulled at the source, not just zeroed", () => {
     expect(aggregateCohort([])).toEqual({
       familiesHelped: 0,
-      familiesWhoSaved: 0,
-      totalOverchargeCaughtCents: 0,
-      avgOverchargeCaughtCents: 0,
-      ftcIssuesFlagged: 0,
+      smallSample: true,
+      familiesWhoSaved: null,
+      totalOverchargeCaughtCents: null,
+      avgOverchargeCaughtCents: null,
+      ftcIssuesFlagged: null,
       avgSatisfaction: null,
       medianResolutionDays: null,
       toolEngagement: null,
       pilotMetrics: null,
-      smallSample: true,
     });
   });
 
   it("sums and averages overcharge, counts savers, and totals FTC issues", () => {
+    // n=5 (at the threshold) so this exercises the full/unsuppressed shape —
+    // the suppression gate itself has its own dedicated tests below.
     const recs: CohortRecord[] = [
       { overchargeCaughtCents: 100_00, ftcIssues: 2 },
       { overchargeCaughtCents: 300_00, ftcIssues: 1 },
       { overchargeCaughtCents: 0, ftcIssues: 0 },
+      { overchargeCaughtCents: 0, ftcIssues: 0 },
+      { overchargeCaughtCents: 0, ftcIssues: 0 },
     ];
     const s = aggregateCohort(recs);
-    expect(s.familiesHelped).toBe(3);
+    expect(s.familiesHelped).toBe(5);
     expect(s.familiesWhoSaved).toBe(2);
     expect(s.totalOverchargeCaughtCents).toBe(400_00);
-    expect(s.avgOverchargeCaughtCents).toBe(Math.round(40000 / 3));
+    expect(s.avgOverchargeCaughtCents).toBe(Math.round(40000 / 5));
     expect(s.ftcIssuesFlagged).toBe(3);
   });
 
@@ -42,6 +46,8 @@ describe("aggregateCohort", () => {
     const s = aggregateCohort([
       { overchargeCaughtCents: 1, ftcIssues: 0, satisfaction: 4, resolutionDays: 2 },
       { overchargeCaughtCents: 1, ftcIssues: 0, satisfaction: 5, resolutionDays: 8 },
+      { overchargeCaughtCents: 1, ftcIssues: 0 }, // no satisfaction/days
+      { overchargeCaughtCents: 1, ftcIssues: 0 }, // no satisfaction/days
       { overchargeCaughtCents: 1, ftcIssues: 0 }, // no satisfaction/days
     ]);
     expect(s.avgSatisfaction).toBe(4.5);
@@ -62,6 +68,9 @@ describe("aggregateCohort", () => {
     const s = aggregateCohort([
       { overchargeCaughtCents: 500_00, ftcIssues: 0 },
       { overchargeCaughtCents: -100_00, ftcIssues: 0 }, // defensive: clamp to 0
+      { overchargeCaughtCents: 0, ftcIssues: 0 },
+      { overchargeCaughtCents: 0, ftcIssues: 0 },
+      { overchargeCaughtCents: 0, ftcIssues: 0 },
     ]);
     expect(s.totalOverchargeCaughtCents).toBe(500_00);
     expect(s.familiesWhoSaved).toBe(1);

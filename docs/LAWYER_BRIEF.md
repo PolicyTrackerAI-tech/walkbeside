@@ -327,6 +327,13 @@ shipped product, that is a deception risk we need to fix before launch:
   individual family's data.
 - We disclaim legal/financial/medical advice site-wide.
 - We can **geo-gate** advocate outreach to cleared states if advised.
+- **Flagged for counsel:** the Terms' limitation-of-liability clause (§7) used
+  to cap our liability at "fees you paid in the twelve months preceding the
+  claim" — a leftover from the paid-consumer model that evaluated to $0 now
+  that the Service is free to families. We've replaced it with a flat **$100**
+  placeholder cap so the clause isn't vacuous, but counsel should set the
+  actual number (and confirm a fixed-dollar cap is the right structure for a
+  free-to-consumer, institution-funded product).
 
 *Open the meeting by asking counsel to red-team §5.L (the new institutional-
 payer/healthcare-referral question) and §5.B (licensing) — those are where the
