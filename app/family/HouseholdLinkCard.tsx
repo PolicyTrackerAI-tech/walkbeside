@@ -26,6 +26,7 @@ export function HouseholdLinkCard() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only localStorage hydration; can't read localStorage during SSR-safe render
     setRec(readHouseholdLink());
     setHydrated(true);
   }, []);

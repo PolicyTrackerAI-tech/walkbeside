@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ogImage } from "@/lib/og";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
-import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
+import { Card, CardEyebrow } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 import {
   getEntry,

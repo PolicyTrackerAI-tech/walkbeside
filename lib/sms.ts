@@ -36,7 +36,6 @@ export async function sendSms(msg: {
 }): Promise<{ id: string }> {
   if (!smsAvailable()) {
     const id = `smsdry_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    // eslint-disable-next-line no-console
     console.log("[sms:dryrun]", id, {
       to: maskPhone(msg.to),
       chars: msg.body.length,

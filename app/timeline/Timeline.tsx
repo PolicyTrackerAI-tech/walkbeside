@@ -90,6 +90,7 @@ export function Timeline() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as TimelineState;
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time localStorage hydration on mount; state can't be read during SSR-safe render
         setState({ ...DEFAULT, ...parsed });
       }
     } catch {

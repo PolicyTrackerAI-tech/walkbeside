@@ -40,7 +40,6 @@ export default async function UnsubscribePage({
       .update({ unsubscribed_at: new Date().toISOString() })
       .eq("email", email);
     if (error) {
-      // eslint-disable-next-line no-console
       console.error("[unsubscribe] update failed", error);
       status = "invalid";
     } else {

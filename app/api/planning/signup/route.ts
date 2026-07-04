@@ -65,7 +65,6 @@ export async function POST(request: NextRequest) {
     try {
       await sendEmail({ to: email, subject, html, text });
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error("[planning-signup] welcome email failed", {
         emailHash: hashId(email),
         source,

@@ -68,6 +68,7 @@ export function Notifications() {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as Contact[];
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time localStorage hydration on mount; can't read localStorage during SSR-safe render
         if (Array.isArray(parsed)) setContacts(parsed);
       }
     } catch {

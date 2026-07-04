@@ -86,7 +86,7 @@ export default function SuddenLossPage() {
                 <strong className="text-ink">Police arrive next or with them.</strong>{" "}
                 A patrol officer takes a brief statement and walks
                 through the scene. In sudden deaths at home, the
-                officer's job is to rule out foul play &mdash; they
+                officer&rsquo;s job is to rule out foul play &mdash; they
                 are looking for signs of struggle, intruders, or
                 medication misuse. You will be asked routine
                 questions: when did you last see them alive, what was
@@ -95,22 +95,22 @@ export default function SuddenLossPage() {
                 is procedural.
               </p>
               <p>
-                <strong className="text-ink">The medical examiner's office is notified.</strong>{" "}
+                <strong className="text-ink">The medical examiner&rsquo;s office is notified.</strong>{" "}
                 Once police clear the scene of foul play, the medical
                 examiner or coroner takes custody of the body. An
                 investigator (sometimes the ME themselves, more often
                 a deputy) arrives within 1&ndash;6 hours. The body is
                 photographed, identified, and transported to the
-                medical examiner's facility. From this point the
+                medical examiner&rsquo;s facility. From this point the
                 body is not at the home and is not at the funeral
-                home &mdash; it is in the ME's custody.
+                home &mdash; it is in the ME&rsquo;s custody.
               </p>
             </div>
           </Card>
 
           <Card>
             <CardEyebrow>Identifying the body</CardEyebrow>
-            <CardTitle>What "ID" actually involves.</CardTitle>
+            <CardTitle>What &ldquo;ID&rdquo; actually involves.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
                 When the deceased had ID on them and was found in
@@ -122,9 +122,9 @@ export default function SuddenLossPage() {
                 When ID is uncertain &mdash; accidents away from
                 home, no documents present, or condition that
                 prevents visual identification &mdash; the medical
-                examiner's office contacts next of kin and arranges
+                examiner&rsquo;s office contacts next of kin and arranges
                 ID. Most US medical examiners now use photographic
-                identification (a photo taken at the ME's office,
+                identification (a photo taken at the ME&rsquo;s office,
                 shown to next of kin via secure email or in a
                 viewing room) rather than in-person body viewing.
                 Dental records, fingerprints, or DNA are used when
@@ -160,7 +160,7 @@ export default function SuddenLossPage() {
                 without autopsy if the family physician will sign the
                 death certificate with a cause they can support
                 medically. The medical examiner will sometimes ask
-                the family's preference.{" "}
+                the family&rsquo;s preference.{" "}
                 <Link
                   href="/glossary/autopsy"
                   className="text-primary-deep underline"
@@ -178,7 +178,7 @@ export default function SuddenLossPage() {
           </Card>
 
           <Card tone="warn">
-            <CardEyebrow>The "pending" death certificate problem</CardEyebrow>
+            <CardEyebrow>The &ldquo;pending&rdquo; death certificate problem</CardEyebrow>
             <CardTitle>Life insurance and accounts often pause until cause is final.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
@@ -197,7 +197,7 @@ export default function SuddenLossPage() {
                 options: most life insurance policies will pay an
                 interim partial benefit on a documented pending
                 death; some employers will advance bereavement pay;
-                the deceased's bank accounts can sometimes release
+                the deceased&rsquo;s bank accounts can sometimes release
                 funds for funeral costs with the death certificate
                 even before cause is final.
               </p>
@@ -207,7 +207,7 @@ export default function SuddenLossPage() {
                 does not need to do anything to trigger this. New
                 certified copies will reflect the final cause; older
                 copies marked &ldquo;pending&rdquo; are still valid
-                for most purposes that don't require the final
+                for most purposes that don&rsquo;t require the final
                 cause.
               </p>
             </div>
@@ -221,17 +221,17 @@ export default function SuddenLossPage() {
                 Most bodies are released by the medical examiner
                 within 24&ndash;72 hours. If an autopsy is performed,
                 release usually follows the autopsy by a day or two.
-                The medical examiner's office calls the funeral home
+                The medical examiner&rsquo;s office calls the funeral home
                 the family has chosen and arranges transport. The
                 funeral home picks up the body and the personal
                 effects (clothing, jewelry, anything in pockets).
               </p>
               <p>
                 <strong className="text-ink">Choosing a funeral home under shock:</strong>{" "}
-                the medical examiner's office will often ask the
+                the medical examiner&rsquo;s office will often ask the
                 family which funeral home to release the body to,
                 sometimes within hours of death. You do not have to
-                answer immediately. Saying &ldquo;I'll call you back
+                answer immediately. Saying &ldquo;I&rsquo;ll call you back
                 in two hours&rdquo; is normal and accepted. Use those
                 two hours to compare prices at two or three homes
                 in the area.{" "}
@@ -248,7 +248,7 @@ export default function SuddenLossPage() {
                 clothing) travel with the body. The funeral home
                 returns them to the family at the arrangement
                 meeting. Items in the home or vehicle at the time of
-                death are not in the ME's custody &mdash; they
+                death are not in the ME&rsquo;s custody &mdash; they
                 remain wherever they were.
               </p>
             </div>
@@ -416,7 +416,7 @@ export default function SuddenLossPage() {
             legal, or financial advice. Medical-examiner procedures,
             insurance company rules, and state-specific laws vary.
             For a binding answer about a specific situation, contact
-            the medical examiner's office, your insurance company,
+            the medical examiner&rsquo;s office, your insurance company,
             and a local probate attorney as appropriate.
           </p>
 

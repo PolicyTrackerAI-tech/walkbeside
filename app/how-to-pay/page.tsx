@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
-import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
@@ -192,7 +191,7 @@ export default function HowToPayPage() {
                 drunk-driving deaths. Typical payment:
                 $3,000&ndash;$10,000 for funeral and related
                 expenses. Application is made through the state
-                attorney general's office or the prosecutor handling
+                attorney general&rsquo;s office or the prosecutor handling
                 the case.
               </p>
               <p>
@@ -223,7 +222,7 @@ export default function HowToPayPage() {
                 non-members in the community. Catholic dioceses
                 (parish poor box, St. Vincent de Paul societies),
                 Jewish chevra kadisha and burial societies, Islamic
-                burial societies, Mormon ward bishop's storehouse,
+                burial societies, Mormon ward bishop&rsquo;s storehouse,
                 and many independent congregations all maintain
                 some form of aid. Ask the religious leader, not
                 only the front office.
@@ -247,7 +246,7 @@ export default function HowToPayPage() {
                 >
                   finalsaluteinc.org
                 </a>
-                ) for women veterans; Children's Burial Assistance
+                ) for women veterans; Children&rsquo;s Burial Assistance
                 (
                 <a
                   href="https://childrensburial.org"
@@ -270,7 +269,7 @@ export default function HowToPayPage() {
                 ) for infant loss. The hospice agency social worker
                 or hospital case manager will often know about
                 regional funds specific to the cause of death or
-                the family's circumstances.
+                the family&rsquo;s circumstances.
               </p>
               <p>
                 <strong className="text-ink">Funeral home charity programs.</strong>{" "}

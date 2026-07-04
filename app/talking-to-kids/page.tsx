@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
@@ -76,7 +75,7 @@ export default function TalkingToKidsPage() {
                 <strong className="text-ink">&ldquo;Went to a better place&rdquo;</strong>{" "}
                 &mdash; if your family is religious and the child
                 already understands the framework, fine. If they
-                don't, leave it out for now. The location-of-the-soul
+                don&rsquo;t, leave it out for now. The location-of-the-soul
                 question can come later; the immediate question is
                 what death is.
               </p>
@@ -85,8 +84,8 @@ export default function TalkingToKidsPage() {
                 &mdash; OK as an addition, dangerous as the only
                 explanation. Young children who hear &ldquo;Grandma
                 got sick and died&rdquo; may believe their own minor
-                cold will kill them. Always specify: &ldquo;Grandma's
-                body was very, very old and stopped working. That's
+                cold will kill them. Always specify: &ldquo;Grandma&rsquo;s
+                body was very, very old and stopped working. That&rsquo;s
                 different from when you have a cold.&rdquo;
               </p>
               <p>
@@ -117,8 +116,8 @@ export default function TalkingToKidsPage() {
               <p>
                 <strong className="text-ink">What to say:</strong>{" "}
                 &ldquo;Grandpa died. That means his body stopped
-                working. He can't breathe or eat or talk or move
-                anymore. He can't come back. We won't see him again,
+                working. He can&rsquo;t breathe or eat or talk or move
+                anymore. He can&rsquo;t come back. We won&rsquo;t see him again,
                 and that makes us very sad.&rdquo;
               </p>
               <p>
@@ -127,8 +126,8 @@ export default function TalkingToKidsPage() {
               <ul className="space-y-2 list-disc pl-5">
                 <li>
                   &ldquo;When is Grandpa coming back?&rdquo; &mdash;{" "}
-                  &ldquo;He can't come back. When someone dies, they
-                  don't come back. I know that's really hard.&rdquo;
+                  &ldquo;He can&rsquo;t come back. When someone dies, they
+                  don&rsquo;t come back. I know that&rsquo;s really hard.&rdquo;
                 </li>
                 <li>
                   &ldquo;Will I die?&rdquo; &mdash; &ldquo;Yes, but
@@ -138,12 +137,12 @@ export default function TalkingToKidsPage() {
                 </li>
                 <li>
                   &ldquo;Will you die?&rdquo; &mdash; &ldquo;Someday,
-                  but not for a very long time. I'm planning to be
+                  but not for a very long time. I&rsquo;m planning to be
                   around for a long, long time.&rdquo;
                 </li>
                 <li>
                   &ldquo;Why did Grandpa die?&rdquo; &mdash; specific
-                  cause is fine if it doesn't generalize to ordinary
+                  cause is fine if it doesn&rsquo;t generalize to ordinary
                   childhood illnesses. &ldquo;His body was very old
                   and his heart stopped working&rdquo; is better
                   than &ldquo;he got sick.&rdquo;
@@ -168,17 +167,17 @@ export default function TalkingToKidsPage() {
                 is permanent and that it happens to everyone. They
                 often become intensely curious about the biology and
                 logistics: what happens to the body, what cremation
-                is, what a funeral is, what happens if you're buried,
+                is, what a funeral is, what happens if you&rsquo;re buried,
                 whether you can feel anything after you die. These
                 questions can sound morbid; they are normal.
               </p>
               <p>
                 Answer them. Honestly. Briefly. With a willingness to
-                say &ldquo;I don't know&rdquo; when you genuinely
-                don't (about, say, what happens after death &mdash;
-                your honest answer is fine, even if it's &ldquo;some
+                say &ldquo;I don&rsquo;t know&rdquo; when you genuinely
+                don&rsquo;t (about, say, what happens after death &mdash;
+                your honest answer is fine, even if it&rsquo;s &ldquo;some
                 people believe ___ and some people believe ___, and I
-                believe ___, and we don't know for sure&rdquo;).
+                believe ___, and we don&rsquo;t know for sure&rdquo;).
               </p>
               <p>
                 <strong className="text-ink">Common questions and answers:</strong>
@@ -186,7 +185,7 @@ export default function TalkingToKidsPage() {
               <ul className="space-y-2 list-disc pl-5">
                 <li>
                   &ldquo;What happens to the body?&rdquo; &mdash;
-                  honest, specific: &ldquo;Grandpa's body is at the
+                  honest, specific: &ldquo;Grandpa&rsquo;s body is at the
                   funeral home. They take care of bodies after
                   someone dies. Then the body will be cremated/
                   buried, which means ___.&rdquo;
@@ -201,7 +200,7 @@ export default function TalkingToKidsPage() {
                 <li>
                   &ldquo;Will Grandpa feel cold/lonely/scared?&rdquo;
                   &mdash; &ldquo;No. When someone dies, their body
-                  doesn't feel anything anymore. They can't feel cold
+                  doesn&rsquo;t feel anything anymore. They can&rsquo;t feel cold
                   or lonely or scared.&rdquo;
                 </li>
                 <li>
@@ -213,8 +212,8 @@ export default function TalkingToKidsPage() {
                   &ldquo;Could the doctors have saved him?&rdquo;
                   &mdash; for most natural deaths in old age, no
                   &mdash; &ldquo;sometimes bodies are just done, and
-                  there's nothing the doctors can do.&rdquo; For
-                  treatable conditions that weren't caught,
+                  there&rsquo;s nothing the doctors can do.&rdquo; For
+                  treatable conditions that weren&rsquo;t caught,
                   age-appropriate honesty is usually right.
                 </li>
               </ul>
@@ -243,14 +242,14 @@ export default function TalkingToKidsPage() {
                 than younger children, particularly with parents.
               </p>
               <p>
-                Make space. Don't force it. Include them in
+                Make space. Don&rsquo;t force it. Include them in
                 decisions: do they want to see the body, do they
                 want to speak at the service, do they want to choose
                 music or pictures. Offering choices respects them.
                 Insisting they participate often backfires.
               </p>
               <p>
-                Watch for what doesn't come out in conversation:
+                Watch for what doesn&rsquo;t come out in conversation:
               </p>
               <ul className="space-y-2 list-disc pl-5">
                 <li>
@@ -263,30 +262,30 @@ export default function TalkingToKidsPage() {
                 <li>
                   <strong className="text-ink">Anger outbursts.</strong>{" "}
                   Common, particularly in boys, and can be misread
-                  as &ldquo;he's not even grieving.&rdquo; The anger
+                  as &ldquo;he&rsquo;s not even grieving.&rdquo; The anger
                   is often the grief.
                 </li>
                 <li>
                   <strong className="text-ink">Risk-taking.</strong>{" "}
                   Sudden interest in drinking, drugs, reckless
                   driving, dangerous behavior. Real and serious.
-                  Statistically the risk increases after a parent's
+                  Statistically the risk increases after a parent&rsquo;s
                   death in particular.
                 </li>
                 <li>
                   <strong className="text-ink">Identification with the dead person.</strong>{" "}
                   Wearing their clothes, listening to their music,
                   imitating their habits. Common and often
-                  comforting. Concerning only if it's accompanied by
+                  comforting. Concerning only if it&rsquo;s accompanied by
                   expressed wishes to die or join them.
                 </li>
               </ul>
               <p>
                 Some teens grieve more openly with someone other than
                 a parent &mdash; an aunt, a coach, a school counselor,
-                a religious leader, a therapist. Don't take it
+                a religious leader, a therapist. Don&rsquo;t take it
                 personally. Make sure they have someone, even if it
-                isn't you.
+                isn&rsquo;t you.
               </p>
             </div>
           </Card>
@@ -313,7 +312,7 @@ export default function TalkingToKidsPage() {
                   who will be there, how long it will last, whether
                   the casket will be open or closed. Specific details
                   reduce anxiety: &ldquo;The room will be full of
-                  people. We'll walk in together. The casket will be
+                  people. We&rsquo;ll walk in together. The casket will be
                   at the front. It will be open and you will be able
                   to see Grandpa. He will look very still. We will
                   sit for about an hour. People will cry.&rdquo;
@@ -375,14 +374,14 @@ export default function TalkingToKidsPage() {
                 </li>
                 <li>
                   Persistent guilt or beliefs that the death was the
-                  child's fault.
+                  child&rsquo;s fault.
                 </li>
               </ul>
               <p>
                 The first resource for most families is the school
                 counselor, who has seen many grieving children and
                 can refer up to a specialist if needed. The Dougy
-                Center maintains a national directory of children's
+                Center maintains a national directory of children&rsquo;s
                 grief programs at{" "}
                 <a
                   href="https://www.dougy.org/grief-support-resources/find-support"
@@ -464,9 +463,9 @@ export default function TalkingToKidsPage() {
 
           <p className="text-xs text-ink-muted">
             This page is general consumer information, not medical
-            or psychological advice. Children's grief varies and
+            or psychological advice. Children&rsquo;s grief varies and
             individual situations may need professional support
-            beyond what's here. For acute concerns about a child's
+            beyond what&rsquo;s here. For acute concerns about a child&rsquo;s
             wellbeing, contact a pediatrician, school counselor, or
             licensed mental-health professional. In a crisis, call
             or text 988.

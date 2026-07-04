@@ -681,6 +681,9 @@ export type PriceDataSource =
  * V1: all zips return "national-adjusted" — sister's per-metro validation
  * work (launch city first) upgrades specific zips to "validated" over time.
  */
+// _zip is unused for now — kept for a stable call signature (see doc comment
+// above); callers already pass one for when per-metro validation lands.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function dataSourceForZip(_zip: string): PriceDataSource {
   return "national-adjusted";
 }

@@ -148,6 +148,7 @@ export function StepList({
             const firstHidden = padded.findIndex((s) => s === "hidden");
             if (firstHidden !== -1) padded[firstHidden] = "current";
           }
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrating from localStorage (only readable outside render) on mount; required setup, not a derived-render-value bug.
           setStatuses(padded);
         }
       }

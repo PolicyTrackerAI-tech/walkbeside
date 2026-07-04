@@ -59,7 +59,6 @@ const jsonLd = {
 export default function FairPriceIndexPage() {
   return (
     <main className="flex-1 flex flex-col">
-      {/* eslint-disable-next-line react/no-danger */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

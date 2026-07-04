@@ -61,6 +61,7 @@ export default function NegotiationStatusPage({
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetches from a remote API (not derivable during render) and polls it; the initial call plus interval are the same external sync, not a render-time computation.
     refresh();
     const t = setInterval(refresh, 6000);
     return () => clearInterval(t);

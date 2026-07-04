@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { US_STATES, type UsState } from "@/lib/us-states";
 
 interface Props {
@@ -37,10 +37,17 @@ export function StateCombobox({
   const [highlight, setHighlight] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const listboxId = useId();
+  const optionId = (i: number) => `${listboxId}-option-${i}`;
 
-  useEffect(() => {
+  // Keep the typed query in sync with the `value` prop when it changes
+  // externally (not from the user typing). Adjusted during render rather
+  // than in an effect, per https://react.dev/learn/you-might-not-need-an-effect.
+  const prevSelectedRef = useRef(selected);
+  if (prevSelectedRef.current !== selected) {
+    prevSelectedRef.current = selected;
     setQuery(selected?.name ?? "");
-  }, [selected]);
+  }
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -112,6 +119,10 @@ export function StateCombobox({
           role="combobox"
           aria-expanded={open}
           aria-autocomplete="list"
+          aria-controls={listboxId}
+          aria-activedescendant={
+            open && filtered.length ? optionId(highlight) : undefined
+          }
           className="w-full rounded-xl border border-border bg-surface px-3 py-2.5 pr-10 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
         />
         <button
@@ -143,6 +154,7 @@ export function StateCombobox({
 
       {open && (
         <ul
+          id={listboxId}
           role="listbox"
           className="absolute z-20 left-0 right-0 mt-1 max-h-72 overflow-auto rounded-xl border border-border bg-surface shadow-lg"
         >
@@ -157,6 +169,7 @@ export function StateCombobox({
               return (
                 <li
                   key={s.abbr}
+                  id={optionId(i)}
                   role="option"
                   aria-selected={selected?.abbr === s.abbr}
                   onMouseEnter={() => setHighlight(i)}

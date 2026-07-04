@@ -89,7 +89,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
         </ul>
         <p>
           Staying free to families is the only way to stay accountable to the
-          family. Every "free" service in this industry runs on commissions or
+          family. Every &ldquo;free&rdquo; service in this industry runs on commissions or
           kickbacks from funeral homes &mdash; which is why most of them route
           grieving families to whichever home paid for the placement. We
           don&rsquo;t play that game.

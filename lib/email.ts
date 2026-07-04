@@ -36,7 +36,6 @@ export interface OutboundEmail {
 export async function sendEmail(msg: OutboundEmail): Promise<{ id: string }> {
   if (!FEATURES.email()) {
     const id = `dryrun_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-    // eslint-disable-next-line no-console
     console.log("[email:dryrun]", id, {
       to: maskEmail(msg.to),
       subject: msg.subject,

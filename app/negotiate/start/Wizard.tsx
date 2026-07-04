@@ -50,6 +50,7 @@ function NegotiateStartWizard() {
       Object.entries(fromQuery).filter(([, v]) => v != null && v !== ""),
     );
     if (fromStorage && hasMeaningfulProgress(fromStorage)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only sessionStorage/query-param hydration; value can't be read during SSR-safe render
       setState({ ...fromStorage, ...cleanQuery });
       setShowResumePrompt(true);
     } else {
