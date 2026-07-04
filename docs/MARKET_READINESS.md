@@ -16,6 +16,9 @@ this, the planning is complete. The verdict is at the bottom.
       without it. *(FINANCE_FUNDRAISING, COMPLIANCE_ADDENDUM)*
 - [ ] **ToS + Privacy Policy** rewritten for the free-to-family + institutional
       model (the current ones assume the consumer-pay model). **GATE.**
+      *(Copy is already accurate — the 2026-07-04 audit scrubbed the last stale
+      consumer-fee clause from `/terms` — but neither has had a formal counsel
+      pass yet; that's the remaining gate.)*
 - [ ] **Contract templates** — the pilot agreement, an institutional MSA/order
       form, a de-identified data-use grant, and a BAA/DPA, drafted with counsel.
       **GATE** (the pilot agreement). *(COMPLIANCE_ADDENDUM)*
@@ -34,9 +37,9 @@ this, the planning is complete. The verdict is at the bottom.
 - [ ] **Faith/expert content sign-off** — clergy/expert validation of the faith
       profiles before they're treated as authoritative (disclaimers live in the
       meantime). **SOON.**
-- [ ] **Neutrality proof, public** — the "we take no money from funeral homes"
-      page + methodology + corrections page live and true (no $49 family copy
-      contradicting them). **GATE** — the whole pitch rests on this being visible.
+- [x] **Neutrality proof, public** — **DONE.** `/our-role`, `/methodology`,
+      `/corrections` all live and verified (2026-07-04) free of any $49/family-fee
+      contradiction.
 - [ ] **Social proof** — an ethical process to gather pilot-family + hospice
       testimonials (consent, no exploitation of grief). **SOON.**
 
@@ -49,20 +52,17 @@ this, the planning is complete. The verdict is at the bottom.
 
 ## D. Family-facing operations
 
-- [ ] **Family support SOP** — when a grieving family needs a human: channels
-      (the live phone + email), hours, response-time targets, escalation, who
-      answers. You're handing families a *service* — they need support behind it.
-      **GATE-ish.**
+- [x] **Family support SOP** — **DONE.** `docs/FAMILY_SUPPORT_SOP.md`, live
+      runbook, last reviewed 2026-06-24.
 - [ ] **Family journey / UX** — the end-to-end experience once the paywall is
       gone (referral → free tools → advocacy → outcome → after-death). **SOON**
       (overlaps PAYMENT_DECOMMISSION + the PLAN_OF_ATTACK §6B journey).
 
 ## E. Go-to-market depth
 
-- [ ] **Competitive battlecard** — positioning + objection handling vs **Empathy,
-      Trust & Will, Cake/comparison sites, and funeral homes themselves**, for the
-      hospice conversation. **SOON.** *(OPERATING_PLAN appendix has the graveyard
-      analysis to build from)*
+- [x] **Competitive battlecard** — **DONE.** `docs/BATTLECARD.md`. Flag: its
+      competitor figures are self-tagged "verify before external use" — confirm
+      against primary sources before quoting to an investor or hospice.
 - [ ] **Pilot success rubric** — explicit thresholds that define a "successful
       pilot" (avg savings, satisfaction ≥ X, ≥ N families, time-to-resolution) so
       the results review isn't subjective. **SOON.** *(SCORECARD, HOSPICE_GTM)*
@@ -71,16 +71,13 @@ this, the planning is complete. The verdict is at the bottom.
 
 ## F. Data, security, measurement
 
-- [ ] **Analytics implementation** — privacy-respecting product analytics
-      (visitors, tool uses, email subs), an event taxonomy, the scorecard
-      dashboard. Closes the SCORECARD instrumentation gaps. **SOON.**
-- [ ] **Data governance & retention** — what we collect / retain / delete, access
-      controls for outcomes + family data, tied to the new model (extends the
-      existing PRIVACY_RETENTION + SECURITY docs). **SOON.**
-- [ ] **Crisis / incident & corrections runbook** — breach response, a
-      published-error correction process, a PR-attack response. *"One exposed
-      exaggeration undoes the brand"* — this protects the only asset that matters.
-      **GATE-ish.** *(TRUST_SPINE corrections page + this runbook)*
+- [x] **Analytics implementation** — **DONE (2026-07-05).** Vercel Analytics
+      sitewide (page views + tool-use/email-signup custom events). Still open:
+      an actual scorecard *dashboard* view — right now the data lands in
+      Vercel's own Analytics tab, not a page inside the app.
+- [x] **Data governance & retention** — **DONE.** `docs/PRIVACY_RETENTION.md`.
+- [x] **Crisis / incident & corrections runbook** — **DONE.**
+      `docs/TRUST_OPS_RUNBOOK.md` + the live `/corrections` page.
 
 ## G. Content & authority engine
 
@@ -110,6 +107,12 @@ ToS/privacy + pilot-agreement template (lawyer); the public neutrality/trust
 pages live; a family support SOP; the collateral designed + printed; and Utah
 anti-steering cleared. Most are days of work plus the lawyer's lead time, and
 they run **in parallel** ([`GO_TO_MARKET.md`](GO_TO_MARKET.md) Phase 0).
+
+**Update 2026-07-05:** the public neutrality/trust pages and the family
+support SOP are confirmed live and already written — those two GATE items are
+cleared. What's left of the GATE list is squarely the lawyer's lane (entity,
+ToS/privacy counsel pass, pilot-agreement template, Utah anti-steering) plus
+printing the collateral.
 
 **Recommendation:** **stop planning strategy; start the GATE items now** — the
 legal pre-flight + entity formation have the longest lead time, so start them
