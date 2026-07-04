@@ -10,6 +10,7 @@ import {
   getFaith,
 } from "@/lib/faith-traditions";
 import { SERVICE_LABELS, SERVICE_TOTALS, fmtRange, fmtUSD } from "@/lib/pricing-data";
+import { trackTool } from "@/lib/analytics";
 import {
   DECIDE_STORAGE_KEYS,
   readDecide,
@@ -297,7 +298,15 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-3 items-center">
-          <Button size="lg" onClick={() => setSubmitted(true)}>
+          <Button
+            size="lg"
+            onClick={() => {
+              setSubmitted(true);
+              trackTool("decide_recommended", {
+                serviceType: recommendation.serviceType,
+              });
+            }}
+          >
             Show me what fits →
           </Button>
           {submitted && (

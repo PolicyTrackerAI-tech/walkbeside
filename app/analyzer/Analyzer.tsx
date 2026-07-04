@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
 import { PlanningAheadBanner } from "@/components/PlanningAheadBanner";
 import { fmtUSD, dataSourceForZip, DATA_SOURCE_LABEL } from "@/lib/pricing-data";
+import { trackTool } from "@/lib/analytics";
 import {
   overchargeCents,
   ftcFlagFor,
@@ -213,6 +214,7 @@ export function Analyzer({
         throw new Error(msg);
       }
       setResult(await r.json());
+      trackTool("analyzer_completed");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not analyze.");
     } finally {

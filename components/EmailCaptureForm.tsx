@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Field";
+import { trackTool } from "@/lib/analytics";
 
 interface Props {
   /** Identifies the page/surface that captured the email. Stored in planning_signups.source. */
@@ -66,6 +67,7 @@ export function EmailCaptureForm({
         return;
       }
       setState("ok");
+      trackTool("email_signup", { source });
     } catch {
       setState("err");
       setErrMsg("Network error. Try again.");
