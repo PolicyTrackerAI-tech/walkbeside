@@ -88,7 +88,7 @@ create table if not exists public.negotiations (
   service_type text not null,
   target_home_name text,           -- specific home the family is considering
   target_home_estimate_cents int,  -- price they were quoted (if any)
-  status text not null default 'started', -- 'started' | 'contacting' | 'received' | 'closed' | 'cancelled'
+  status text not null default 'started', -- 'started' | 'pending_payment' | 'contacting' | 'received' | 'closed' | 'cancelled' | 'no_homes_available'
   best_quote_cents int,
   savings_cents int,
   fee_cents int,
