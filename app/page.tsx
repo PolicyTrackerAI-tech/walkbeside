@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LinkButton } from "@/components/ui/Button";
 import { SiteHeader } from "@/components/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { HomeQuickCheck } from "@/components/HomeQuickCheck";
 
 const ORG_SCHEMA = {
   "@context": "https://schema.org",
@@ -142,6 +143,18 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
+          <div className="mt-8 flex flex-col items-center text-center">
+            <div className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-1">
+              Typical overcharge
+            </div>
+            <div className="font-serif text-4xl sm:text-5xl text-primary-deep leading-none">
+              $2,000&ndash;$5,000
+            </div>
+            <p className="text-sm text-ink-soft mt-2 max-w-sm">
+              per family, on the funeral arrangement alone. Knowing the fair
+              range up front is usually the whole difference.
+            </p>
+          </div>
           <p className="mt-8 text-center text-sm text-ink-soft">
             Everything is free to families — the tools and the funeral-home
             outreach. We contact homes on your behalf at no charge.
@@ -159,10 +172,14 @@ export default function HomePage() {
             check, or let us gather quotes for you &mdash; at no charge, ever.
           </p>
 
-          {/* The tip of the spear — the "is this quote fair?" checker. */}
+          <div className="mb-6">
+            <HomeQuickCheck />
+          </div>
+
+          {/* The "is this quote fair?" checker. */}
           <Link
             href="/analyzer"
-            className="block group bg-primary-soft border-2 border-primary rounded-2xl p-6 sm:p-8 mb-6 no-underline hover:no-underline"
+            className="block group bg-surface border border-border rounded-2xl p-6 sm:p-8 mb-6 no-underline hover:no-underline"
           >
             <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
               Is this quote fair? &middot; free, no account
