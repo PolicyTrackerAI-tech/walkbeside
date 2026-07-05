@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { resolvePartnerToken } from "@/lib/partner-auth";
 import {
   aggregateCohort,
   rowToCohortRecord,
@@ -31,27 +32,16 @@ export default async function PartnerTokenReportPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  if (!token || token.length < 16) notFound();
+
+  // Resolve the token → partner. A bad token, or the table not existing yet
+  // (migration unapplied), both 404 — we never confirm the route to a guesser.
+  const partner = await resolvePartnerToken(token);
+  if (!partner || partner.active === false) notFound();
 
   const admin = createServiceClient(
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
-
-  // Resolve the token → partner. A bad token, or the table not existing yet
-  // (migration unapplied), both 404 — we never confirm the route to a guesser.
-  let partner: { id: string; name: string; active: boolean } | null = null;
-  try {
-    const { data } = await admin
-      .from("partners")
-      .select("id, name, active")
-      .eq("report_token", token)
-      .single();
-    partner = data ?? null;
-  } catch {
-    partner = null;
-  }
-  if (!partner || partner.active === false) notFound();
 
   // Real aggregates for this partner's referred + completed cases. Any error
   // (e.g. the outcomes migration not yet applied) degrades to the empty state.
@@ -166,7 +156,15 @@ export default async function PartnerTokenReportPage({
             create and manage your referral links
           </a>{" "}
           — each one opens our free planning tools with your name on them, and
-          cases started through them count toward this report.
+          cases started through them count toward this report. Fielding an
+          &ldquo;is this quote fair?&rdquo; question in person?{" "}
+          <a
+            href={`/partner/r/${token}/check`}
+            className="text-primary-deep underline"
+          >
+            Check a family&rsquo;s quote
+          </a>{" "}
+          for an instant, grounded read.
         </p>
       </div>
     </>
