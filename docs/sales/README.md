@@ -25,4 +25,4 @@ Ready-to-use assets for booking and closing hospice pilots. Built off the value-
 ## Two route notes for the live demo
 
 - The family-facing routes (`/prices`, `/analyzer`, `/negotiate/start`, `/negotiate/[id]/compare`, `/negotiate/[id]/results`, `/negotiate/[id]/closed`) are live.
-- `/admin/outcomes` (the outcome-capture + proof-sheet beats) is **not deployed on this branch yet** — run Beats 5 & 6 on a mock/printed proof sheet until it ships, or you'll 404 mid-demo.
+- `/admin/outcomes` (the outcome-capture beat) is live — no mock needed. For the proof-report beat, a signed pilot with recorded cases has a live report at `/partner/r/[their-token]`; before any pilot has run, use the illustrative sample at `/partner/sample-hospice` instead of a printed mock.
