@@ -200,7 +200,7 @@ export default function OurRolePage() {
               funeral homes for you.
             </p>
             <div className="flex flex-wrap gap-3">
-              <LinkButton href="/decide">Start with the four questions</LinkButton>
+              <LinkButton href="/decide">Start with the five questions</LinkButton>
               <LinkButton href="/prices" variant="secondary">
                 Look up fair prices (free)
               </LinkButton>

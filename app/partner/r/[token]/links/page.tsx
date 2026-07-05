@@ -71,6 +71,13 @@ export default async function PartnerLinksPage({
     codes = [];
   }
 
+  // Cumulative, all-time, team-level — never time-boxed or framed as a
+  // personal-only number. The report_token this page shares with the org's
+  // aggregate report (docs/PARTNER_PORTAL_SPEC.md) means an ED could open
+  // this same page, so this has to read honestly as shared good news, not a
+  // private metric — and never a target to hit.
+  const totalClaims = codes.reduce((s, c) => s + c.claims, 0);
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
@@ -95,6 +102,32 @@ export default async function PartnerLinksPage({
           </div>
 
           <LinksClient token={token} initialCodes={codes} />
+
+          <Card tone="primary">
+            <CardEyebrow>
+              {totalClaims > 0 ? "Since you started sharing" : "Handing this over"}
+            </CardEyebrow>
+            {totalClaims > 0 ? (
+              <>
+                <div className="font-serif text-3xl text-primary-deep mt-1 leading-none">
+                  {totalClaims}
+                </div>
+                <p className="text-ink-soft mt-2 text-sm">
+                  {totalClaims === 1 ? "family has" : "families have"} used
+                  this on their own terms &mdash; no pitch needed, no
+                  follow-up required. Just something good to have handed
+                  over.
+                </p>
+              </>
+            ) : (
+              <p className="text-ink-soft mt-1 text-sm">
+                However you share it &mdash; a QR code at admission, a link
+                in an email &mdash; every family who opens it gets the same
+                free, neutral tools. No pitch needed, no follow-up required
+                from you.
+              </p>
+            )}
+          </Card>
 
           <Card tone="soft">
             <CardTitle>The neutrality pledge, in one paragraph</CardTitle>

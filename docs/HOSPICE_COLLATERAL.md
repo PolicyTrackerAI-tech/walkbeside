@@ -57,6 +57,41 @@ QR + claim code so they can self-enroll (no PHI to us).
 
 ---
 
+## 1.5. For the coordinator — the moment of handing this over
+
+**Use:** internal reassurance for the coordinator themselves, not shown to the
+family. This is what makes someone actually do this in the moment, rather than
+filing the one-pager in a drawer.
+
+**The moment feels bigger than it is.** You've just told a family someone
+died. Handing over something about funeral costs can feel, right then, like
+piling on. It isn't. A family this early is often relieved to have one
+concrete thing to hold onto when a decision this large is coming — you're not
+raising money, you're taking one thing off their plate.
+
+**Why it's fine to say, right here:** you're not selling anything, steering
+them anywhere, or asking for anything back. It's the same free, neutral
+resource described in the approved hand-off line above, word for word. Give it
+the way you'd give any other after-death resource — no pitch, no follow-up
+required from you.
+
+**It's legal and it's yours to give.** Honest Funeral takes no money from
+funeral homes or insurers and never recommends a specific one — that's what
+makes this different from a referral, and why anti-steering rules don't apply
+to it (see [`COMPLIANCE_ADDENDUM.md`](COMPLIANCE_ADDENDUM.md)). You're not
+vouching for an outcome; you're handing over a tool the family uses however
+helps, entirely on their own terms.
+
+**A script, if you want one:**
+> "Here's something a lot of families find useful for the funeral-costs part —
+> it's free, and they're not paid by any funeral home, so there's no catch.
+> Totally up to you whether you use it."
+
+No follow-up, no tracking who used it, no individual reporting — just
+something good to have said.
+
+---
+
 ## 2. Referral card (wallet-size)
 
 **Use:** a small card a social worker can hand over in seconds when a full

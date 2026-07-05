@@ -102,6 +102,19 @@ export default function HomePage() {
             institutions we partner with.
           </p>
 
+          <p className="mt-6 text-xs text-ink-muted max-w-md mx-auto">
+            If a hospice, employer, or care team told you about Honest
+            Funeral, here&rsquo;s{" "}
+            <Link href="/faq#why-did-my-hospice-or-employer-recommend-honest-funeral" className="underline-offset-2 hover:underline">
+              why they partner with us
+            </Link>{" "}
+            and{" "}
+            <Link href="/faq#is-this-endorsed-by-my-care-team" className="underline-offset-2 hover:underline">
+              what that means for you
+            </Link>
+            .
+          </p>
+
           <p className="mt-2 text-xs text-ink-muted">
             <Link href="/login?next=/dashboard" className="underline-offset-2 hover:underline">
               Already have an account? Sign in

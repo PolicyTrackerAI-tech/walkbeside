@@ -161,7 +161,7 @@ export default function AboutPage() {
           <p className="mt-3 text-xs text-ink-muted">
             Hospice, employer, or benefits team?{" "}
             <Link
-              href="/partners/apply"
+              href="/partners"
               className="underline-offset-2 hover:underline"
             >
               Partner with us →
