@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import { aggregateCohort, sampleCohort } from "@/lib/partner-report";
+// Only fallbackOutcomesDigest — NEVER buildOutcomesDigest or anything from
+// lib/claude. This route is a fully public, unauthenticated catch-all (any
+// slug renders a page); importing the Claude-calling function here would
+// make it a free, unlimited way to trigger real API calls.
+import { fallbackOutcomesDigest } from "@/lib/partner-report-digest";
 import { ProofSheet } from "@/components/partner/ProofSheet";
 
 export const metadata: Metadata = {
@@ -24,5 +29,11 @@ export default async function PartnerSampleReportPage({
 }) {
   const { code } = await params;
   const name = titleize(decodeURIComponent(code));
-  return <ProofSheet name={name} stats={aggregateCohort(sampleCohort())} live={false} />;
+  const stats = aggregateCohort(sampleCohort());
+  // Generic subject ("this hospice"), not the URL-decoded slug — this reads
+  // naturally regardless of what a visitor types into /partner/anything-at-all.
+  const digest = stats.smallSample
+    ? undefined
+    : fallbackOutcomesDigest("this hospice", stats);
+  return <ProofSheet name={name} stats={stats} live={false} digest={digest} />;
 }
