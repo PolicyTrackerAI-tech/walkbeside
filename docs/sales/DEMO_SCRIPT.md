@@ -4,7 +4,7 @@
 
 > **Before you dial:** Have the live product open in a browser, logged in, on a second monitor or a screen you can share. Have one realistic test case staged (a fictional family, a city in their service area, a sample price list to paste into the analyzer). Pull *their* Care Compare "emotional and spiritual support" score so you can reference it by number. Confirm screen-share works.
 >
-> **Route note (read before your first demo):** the outcome-capture and proof-sheet beats (Beat 5 + Beat 6) use `/admin/outcomes`, which is **not yet deployed** on this branch. Until it ships, run those two beats on a **mock/printed proof sheet**, not the live URL — don't navigate to it live or you'll hit a 404. The family-facing beats (1–4) are all live.
+> **Route note (read before your first demo):** `/admin/outcomes` (Beat 5, your founder/admin view) is live — navigate to it directly, no mock needed. Beat 6's live proof report (`/partner/r/[their-token]`) will show real numbers once a signed pilot has recorded cases; until then, use the illustrative sample report at `/partner/sample-hospice` instead of a printed mock — same component, computed live, clearly labeled as a sample. All beats (1–6) are live.
 >
 > **The one rule:** Lead with *their* reputation and referral engine, not our features. Every beat ends by handing the value back to them.
 
@@ -90,13 +90,13 @@
 
 ---
 
-## Beat 5 — Outcome capture (≈45 sec) — *mock until `/admin/outcomes` ships*
+## Beat 5 — Outcome capture (≈45 sec)
 
 **SAY:**
 > "Behind the scenes, on every single case, we record what the family was originally quoted, what each home offered, what they ended up paying, any hidden fees we caught, and how satisfied they were. That's not for us to brag — it's so I can hand *you* proof."
 
 **SHOW / CLICK:**
-- Briefly show the outcome-capture view (`/admin/outcomes` — your founder/admin view; **use a mock/screenshot until this route is deployed**, don't navigate live). Don't dwell, this isn't the family's screen.
+- Briefly show the outcome-capture view (`/admin/outcomes` — your founder/admin view, live). Don't dwell, this isn't the family's screen.
 - Point at the captured fields: *"Listed price, negotiated price, savings, satisfaction, time to resolution — one row per family."*
 
 **TRANSITION:**
@@ -104,13 +104,13 @@
 
 ---
 
-## Beat 6 — The hospice-facing proof report (≈90 sec — the payoff) — *mock until live data exists*
+## Beat 6 — The hospice-facing proof report (≈90 sec — the payoff)
 
 **SAY:**
 > "At the end of a pilot, this is what you get. One page. How many of your families we served, average savings per family, total savings, satisfaction score, average time to resolution, and how many hidden fees we caught. Two consented, de-identified family quotes at the bottom."
 
 **SHOW / CLICK:**
-- Show the proof-sheet view (hand-built from outcomes data, or your printed mock if the pilot hasn't run yet — this is the [`ROI_RESULTS_TEMPLATE.md`](ROI_RESULTS_TEMPLATE.md) filled in): walk the metrics row by row.
+- For a signed pilot with recorded cases, show their live report at `/partner/r/[their-token]`. Before any pilot has run, show the illustrative sample at `/partner/sample-hospice` instead — the same proof-sheet component, computed live from realistic numbers and clearly labeled as a sample, not a printed mock. Walk the metrics row by row either way.
 - *"Families served: [N]. Average savings: $[X]. Satisfaction: [X] out of 5."*
 
 **TRANSITION (the three ROI levers, in order):**
@@ -153,7 +153,7 @@
 ## Demo logistics checklist (run before every call)
 
 - [ ] Logged into the live product; `/prices`, `/analyzer`, `/negotiate/start`, `/negotiate/[id]/compare`, and `/negotiate/[id]/results` all load.
-- [ ] Outcome/proof-sheet beats (5 + 6): mock or printed proof sheet ready — `/admin/outcomes` is **not deployed on this branch yet**, so don't navigate to it live.
+- [ ] Confirmed you're logged in as an admin (`ADMIN_EMAILS` allowlist) so `/admin/outcomes` loads for Beat 5. For Beat 6, know whether this prospect has a signed pilot with real cases (`/partner/r/[their-token]`) or needs the illustrative sample (`/partner/sample-hospice`).
 - [ ] One staged test case ready (fictional family, **a city in their service area**, sample price list copied to clipboard for the analyzer).
 - [ ] **Their** Care Compare emotional-and-spiritual-support score written down — reference it as *reputation*, never as reimbursement.
 - [ ] Pilot one-pager attachment ready to send the moment they say "send me something."

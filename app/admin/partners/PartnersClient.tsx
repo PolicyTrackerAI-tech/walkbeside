@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Field";
+
+const STATUSES = ["pilot", "active", "paused", "archived"] as const;
 
 export interface PartnerRow {
   id: string;
@@ -64,6 +67,24 @@ export function PartnersClient({
     }
   }
 
+  async function setStatus(id: string, status: string) {
+    setBusy(id);
+    setError(null);
+    try {
+      const r = await fetch("/api/admin/partners", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      if (!r.ok) throw new Error();
+      setPartners((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
+    } catch {
+      setError("Couldn't update that partner's stage — try again.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   const pending = partners.filter((p) => !p.active);
   const activePartners = partners.filter((p) => p.active);
 
@@ -97,10 +118,22 @@ export function PartnersClient({
                 {p.application_notes && (
                   <p className="text-sm text-ink-muted mt-1">{p.application_notes}</p>
                 )}
-                <div className="mt-2">
+                <div className="mt-2 flex flex-wrap items-center gap-2">
                   <Button onClick={() => setActive(p.id, true)} disabled={busy === p.id}>
                     {busy === p.id ? "Working…" : "Approve →"}
                   </Button>
+                  <Select
+                    value={p.status}
+                    onChange={(e) => setStatus(p.id, e.target.value)}
+                    disabled={busy === p.id}
+                    className="w-auto text-sm"
+                  >
+                    {STATUSES.map((s) => (
+                      <option key={s} value={s}>
+                        {s[0].toUpperCase() + s.slice(1)}
+                      </option>
+                    ))}
+                  </Select>
                 </div>
               </li>
             ))}
@@ -142,10 +175,22 @@ export function PartnersClient({
                       claims — worth a friendly check-in with the coordinator.
                     </p>
                   )}
-                  <div className="mt-2">
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
                     <Button variant="ghost" onClick={() => setActive(p.id, false)} disabled={busy === p.id}>
                       Pause
                     </Button>
+                    <Select
+                      value={p.status}
+                      onChange={(e) => setStatus(p.id, e.target.value)}
+                      disabled={busy === p.id}
+                      className="w-auto text-sm"
+                    >
+                      {STATUSES.map((s) => (
+                        <option key={s} value={s}>
+                          {s[0].toUpperCase() + s.slice(1)}
+                        </option>
+                      ))}
+                    </Select>
                   </div>
                 </li>
               );
