@@ -5,6 +5,7 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { resolvePartnerToken } from "@/lib/partner-auth";
 import { LinksClient, type CodeRow } from "./LinksClient";
 
 export const metadata: Metadata = {
@@ -24,25 +25,14 @@ export default async function PartnerLinksPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  if (!token || token.length < 16) notFound();
+
+  const partner = await resolvePartnerToken(token);
+  if (!partner || partner.active === false) notFound();
 
   const admin = createServiceClient(
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
-
-  let partner: { id: string; name: string; active: boolean } | null = null;
-  try {
-    const { data } = await admin
-      .from("partners")
-      .select("id, name, active")
-      .eq("report_token", token)
-      .single();
-    partner = data ?? null;
-  } catch {
-    partner = null;
-  }
-  if (!partner || partner.active === false) notFound();
 
   // Codes + aggregate claim counts. Errors (e.g. the partner_codes migration
   // not applied yet) degrade to an empty list with the create flow available.
