@@ -9,6 +9,7 @@ import {
   metroMedianCents,
   type OutcomeRow,
 } from "@/lib/partner-report";
+import { buildOutcomesDigest } from "@/lib/partner-report-digest";
 import { ProofSheet } from "@/components/partner/ProofSheet";
 
 export const metadata: Metadata = {
@@ -143,9 +144,12 @@ export default async function PartnerTokenReportPage({
     records = [];
   }
 
+  const stats = aggregateCohort(records);
+  const digest = await buildOutcomesDigest(partner.name, stats);
+
   return (
     <>
-      <ProofSheet name={partner.name} stats={aggregateCohort(records)} live />
+      <ProofSheet name={partner.name} stats={stats} live digest={digest} />
       <div className="max-w-2xl mx-auto px-5 pb-10 print:hidden">
         <p className="text-sm text-ink-soft">
           Coordinators:{" "}

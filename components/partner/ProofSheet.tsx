@@ -20,10 +20,12 @@ export function ProofSheet({
   name,
   stats,
   live,
+  digest,
 }: {
   name: string;
   stats: CohortStats;
   live: boolean;
+  digest?: string;
 }) {
   const empty = live && stats.familiesHelped === 0;
 
@@ -197,6 +199,13 @@ export function ProofSheet({
                 </Card>
               )}
             </>
+          )}
+
+          {!empty && digest && (
+            <Card tone="primary">
+              <CardEyebrow>In plain English</CardEyebrow>
+              <p className="text-ink mt-1 leading-relaxed">{digest}</p>
+            </Card>
           )}
 
           {!empty && (

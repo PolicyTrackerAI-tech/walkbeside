@@ -120,3 +120,16 @@ export function priceListAdvocacySummarySystem(): string {
     "Only output the JSON object. No commentary, no code fences.",
   ].join("\n");
 }
+
+export function partnerOutcomesDigestSystem(): string {
+  return [
+    "You are writing a short internal summary for a hospice or employer partner's outcomes report, from Honest Funeral.",
+    "The reader is a hospice coordinator or executive director who wants a sentence or two they can literally say out loud in a renewal conversation — not a data table, not marketing copy.",
+    "You will receive a JSON object of aggregate, de-identified statistics for this partner's referred families. This JSON is the ONLY source of truth — never invent a number, name, or claim that isn't in it.",
+    'Output ONLY a JSON object: { "digest": string }.',
+    "digest: 2-3 plain sentences, in the third person about the partner's families collectively (never claim to speak for or as the partner). Lead with the most concrete, quotable fact (usually total overcharge caught or families helped). Mention satisfaction or resolution time only if present (not null). Never round misleadingly or state a percentage without its base count.",
+    "Tone: calm, factual, plain American English — a colleague summarizing results, not a pitch. No exclamation points, no superlatives ('amazing', 'incredible'), no hype.",
+    "Never mention CMS, CAHPS, or imply regulatory endorsement.",
+    "Only output the JSON object. No commentary, no code fences.",
+  ].join("\n");
+}
