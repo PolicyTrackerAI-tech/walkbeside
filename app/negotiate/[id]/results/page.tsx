@@ -65,6 +65,13 @@ export default async function NegotiationResultsPage({
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
                 : "Pick the home you want — it costs nothing. We’ll notify them and help schedule the arrangement meeting. You’ll meet with the home in person to make final selections and sign."}
             </p>
+            {replies.length > 0 && (
+              <p className="text-xs text-ink-muted mt-1">
+                Ranked by the price they quoted you &mdash; nothing else. We
+                take no money from any of these homes, so the order is never
+                influenced by who pays us.
+              </p>
+            )}
             {replies.length >= 2 && (
               <div className="mt-3">
                 <Link

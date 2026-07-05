@@ -98,6 +98,48 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
     ),
   },
   {
+    q: "Why did my hospice or employer recommend Honest Funeral?",
+    plain:
+      "Because we're funded by them, not by you. Hospices and employers pay us so their families get this free; we never take money from funeral homes or insurers, and we never charge the family. That funding model is what lets them hand this to you without steering you toward any particular funeral home — they have no financial stake in which one you pick, and neither do we.",
+    a: (
+      <>
+        <p>
+          Because we&rsquo;re funded by <strong>them</strong>, not by you.
+          Hospices and employers pay us so the families they serve get this
+          free &mdash; we never take money from funeral homes or insurers,
+          and we never charge you.
+        </p>
+        <p>
+          That funding model is exactly what lets them hand this to you
+          without steering you toward any particular funeral home: neither
+          they nor we have any financial stake in which one you pick. You
+          choose, always.
+        </p>
+      </>
+    ),
+  },
+  {
+    q: "Is this endorsed by my care team?",
+    plain:
+      "Your care team chose to partner with Honest Funeral because we're a free, neutral resource for their families — but the choices you make here are entirely your own, and your care team never sees them. We don't share any family's individual choices, homes, or prices with the institution that referred you — only anonymous, aggregate totals.",
+    a: (
+      <>
+        <p>
+          Your care team chose to partner with us because we&rsquo;re a
+          free, neutral resource they can hand to families &mdash; but
+          everything you decide here is entirely your own. There&rsquo;s no
+          rush, no wrong choice, and no obligation to use any of it.
+        </p>
+        <p>
+          Your care team never sees your individual choices. We only ever
+          share anonymous, aggregate totals with the institutions we partner
+          with &mdash; never a specific family&rsquo;s homes, prices, or
+          decisions.
+        </p>
+      </>
+    ),
+  },
+  {
     q: "Are you affiliated with any funeral homes?",
     plain:
       "No. Honest Funeral is a consumer advocate, not a directory or a broker. We don't take commissions or kickbacks from funeral homes. The incentives point at the family, not the home.",

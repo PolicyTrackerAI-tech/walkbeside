@@ -8,18 +8,11 @@ import { CaseSatisfaction } from "@/components/negotiate/CaseSatisfaction";
 
 export default async function NegotiationClosedPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{
-    dryrun?: string;
-    free?: string;
-    included?: string;
-  }>;
 }) {
   const { id } = await params;
   await requireSignedIn(`/negotiate/${id}/closed`);
-  const sp = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -56,13 +49,11 @@ export default async function NegotiationClosedPage({
             Choosing your home was free, and so was the outreach &mdash; Honest
             Funeral is free to families.
           </p>
-
-          {process.env.NODE_ENV !== "production" && sp.dryrun && (
-            <Card tone="warn">
-              <strong>Dev mode:</strong> Stripe isn&rsquo;t configured, so this
-              completed without a real payment.
-            </Card>
-          )}
+          <p className="text-xs text-ink-muted">
+            We never took a cut of what you were quoted, and this choice was
+            entirely yours &mdash; we don&rsquo;t get paid differently based
+            on which home you picked.
+          </p>
 
           <Card tone="primary">
             <CardTitle>Prep for the meeting</CardTitle>

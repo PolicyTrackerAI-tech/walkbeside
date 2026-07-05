@@ -137,7 +137,7 @@ export default async function HowItWorksPage() {
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/decide">
-                Start with the four questions
+                Start with the five questions
               </LinkButton>
               <LinkButton href="/prices" variant="secondary">
                 Or look up fair prices first (free)

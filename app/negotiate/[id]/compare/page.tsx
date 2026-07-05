@@ -69,6 +69,10 @@ export default async function NegotiationComparePage({
                 ? "Each cell is colored against fair-price ranges. Push back on amber and red lines, or substitute with a third-party vendor."
                 : "Quote totals only — no itemized breakdowns recorded yet. Once a home sends a General Price List with line items, this view shows fair-price ratings per row."}
             </p>
+            <p className="text-xs text-ink-muted mt-1">
+              Ordered by total price, colored against fair-price ranges only
+              &mdash; we take no money from any of these homes.
+            </p>
           </div>
 
           {matrix.columns.length === 0 && (
