@@ -63,10 +63,13 @@ export default function NegotiationStatusPage({
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetches from a remote API (not derivable during render) and polls it; the initial call plus interval are the same external sync, not a render-time computation.
     refresh();
+    // Nothing will change without a founder adding vetted homes to this ZIP —
+    // polling would just hammer the API forever for no reason.
+    if (neg?.status === "no_homes_available") return;
     const t = setInterval(refresh, 6000);
     return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, neg?.status]);
 
   if (error) {
     return (
@@ -84,6 +87,7 @@ export default function NegotiationStatusPage({
   }
 
   const someReplied = outreach.some((o) => o.quote_cents != null);
+  const noHomesAvailable = neg.status === "no_homes_available";
 
   return (
     <main className="flex-1 flex flex-col">
@@ -91,13 +95,18 @@ export default function NegotiationStatusPage({
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
           <div>
-            <CardEyebrow>Negotiation in progress</CardEyebrow>
+            <CardEyebrow>
+              {noHomesAvailable ? "No coverage yet" : "Negotiation in progress"}
+            </CardEyebrow>
             <h1 className="font-serif text-3xl text-ink">
-              We&rsquo;re contacting funeral homes for you.
+              {noHomesAvailable
+                ? <>We don&rsquo;t have vetted funeral homes in your area yet.</>
+                : <>We&rsquo;re contacting funeral homes for you.</>}
             </h1>
             <p className="text-ink-soft mt-2">
-              Most homes reply within 24 hours. We&rsquo;ll surface the best two or
-              three options as they come in. You can check back here any time.
+              {noHomesAvailable
+                ? <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back soon as we add coverage in your region.</>
+                : <>Most homes reply within 24 hours. We&rsquo;ll surface the best two or three options as they come in. You can check back here any time.</>}
             </p>
           </div>
 
@@ -128,35 +137,37 @@ export default function NegotiationStatusPage({
             </div>
           </Card>
 
-          <div>
-            <h2 className="font-serif text-xl text-ink mb-3">Outreach</h2>
-            <ul className="space-y-3">
-              {outreach.map((o) => (
-                <OutreachRow
-                  key={o.id}
-                  outreach={o}
-                  negotiationId={id}
-                  onSaved={refresh}
-                />
-              ))}
-              {outreach.length === 0 && (
-                <p className="text-ink-muted text-sm">
-                  We&rsquo;re contacting funeral homes now. First responses
-                  usually arrive within 4&ndash;24 hours. This page refreshes
-                  automatically every few seconds.
-                </p>
+          {!noHomesAvailable && (
+            <div>
+              <h2 className="font-serif text-xl text-ink mb-3">Outreach</h2>
+              <ul className="space-y-3">
+                {outreach.map((o) => (
+                  <OutreachRow
+                    key={o.id}
+                    outreach={o}
+                    negotiationId={id}
+                    onSaved={refresh}
+                  />
+                ))}
+                {outreach.length === 0 && (
+                  <p className="text-ink-muted text-sm">
+                    We&rsquo;re contacting funeral homes now. First responses
+                    usually arrive within 4&ndash;24 hours. This page refreshes
+                    automatically every few seconds.
+                  </p>
+                )}
+              </ul>
+              {outreach.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-3 text-xs text-ink-muted">
+                  <LegendDot label="Sent" className="bg-ink-muted" />
+                  <LegendDot label="Read" className="bg-primary" />
+                  <LegendDot label="Replied" className="bg-primary-deep" />
+                  <LegendDot label="Quoted" className="bg-good" />
+                  <LegendDot label="Declined" className="bg-bad" />
+                </div>
               )}
-            </ul>
-            {outreach.length > 0 && (
-              <div className="mt-4 flex flex-wrap gap-3 text-xs text-ink-muted">
-                <LegendDot label="Sent" className="bg-ink-muted" />
-                <LegendDot label="Read" className="bg-primary" />
-                <LegendDot label="Replied" className="bg-primary-deep" />
-                <LegendDot label="Quoted" className="bg-good" />
-                <LegendDot label="Declined" className="bg-bad" />
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {someReplied && (
             <Card tone="primary">

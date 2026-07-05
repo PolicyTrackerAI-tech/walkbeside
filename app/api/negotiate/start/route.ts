@@ -155,6 +155,19 @@ export async function POST(req: Request) {
 
   const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
+  // No real vetted homes in this ZIP yet. Never fabricate outreach against a
+  // home we haven't personally verified — tell the family honestly instead
+  // of silently pretending we're contacting someone. The negotiation row
+  // stays (for admin follow-up / re-running once the region gets coverage);
+  // we just skip outreach entirely.
+  if (homes.length === 0) {
+    await supabase
+      .from("negotiations")
+      .update({ status: "no_homes_available" })
+      .eq("id", neg.id);
+    return NextResponse.json({ id: neg.id, noHomesAvailable: true });
+  }
+
   // Build and STORE the outreach as `pending`. Honest Funeral is FREE to
   // families (Operating Plan guardrail #2) — there is no payment step. We then
   // trigger the send below directly. The send self-gates on OUTREACH_LIVE and,

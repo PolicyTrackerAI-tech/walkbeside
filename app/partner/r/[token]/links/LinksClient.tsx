@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import QRCode from "qrcode";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Field";
@@ -101,6 +102,21 @@ export function LinksClient({
     }
   }
 
+  async function downloadQr(code: string) {
+    try {
+      const dataUrl = await QRCode.toDataURL(urlFor(code), {
+        width: 512,
+        margin: 2,
+      });
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `honestfuneral-${code}.png`;
+      a.click();
+    } catch {
+      setError("Couldn't generate a QR code just now — try again.");
+    }
+  }
+
   return (
     <>
       <Card>
@@ -154,6 +170,9 @@ export function LinksClient({
                   <div className="mt-2 flex flex-wrap gap-2">
                     <Button variant="secondary" onClick={() => copy(c.code)}>
                       {copied === c.code ? "Copied ✓" : "Copy link"}
+                    </Button>
+                    <Button variant="secondary" onClick={() => downloadQr(c.code)}>
+                      Download QR
                     </Button>
                     <Button variant="ghost" onClick={() => revoke(c.code)} disabled={busy}>
                       Turn off
