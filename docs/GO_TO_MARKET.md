@@ -80,6 +80,15 @@ This is where the moat is born. **You personally run every case.** Per family:
 
 ## Phase 4 — Convert → then build the portal
 
+> **Update (2026-07-05):** the founder built the portal, marketing page
+> (`/partners`), demo-request lead capture, and a coordinator-facing AI tool
+> ahead of a signed pilot rather than waiting for Phase 4 — see
+> [`ENGINEERING_BACKLOG.md`](ENGINEERING_BACKLOG.md) for current state. The
+> sequencing logic below (prove it by hand first) is still sound advice for
+> *future* builds; it just wasn't followed for the portal itself, and that's
+> fine — the goal (a live report to hand a converting hospice) is met either
+> way.
+
 - Compile the pilot results into a one-page proof sheet.
 - Ask for the **paid annual contract** + intros to peer hospices.
 - **Only now** build the partner portal + reporting dashboard

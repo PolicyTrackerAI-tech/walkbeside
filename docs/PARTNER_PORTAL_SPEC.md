@@ -1,5 +1,19 @@
 # Partner Portal + Reporting Dashboard — L3 product spec
 
+> **⚠️ Partly superseded (2026-07-05).** The portal shipped, but with a
+> simpler schema than §1.2/§5.1 spec here: one `partners` table
+> (`report_token`-gated, no separate `institutions`/`partner_users` tables)
+> plus `partner_codes` for referral attribution — no
+> `2026-06-XX-partner-portal.sql` 4-table migration was ever written. Live
+> today: self-serve apply (`app/partners/apply/`) → founder approval
+> (`app/admin/partners/`, now with a `status` pipeline dropdown) → aggregate
+> report (`app/partner/r/[token]/`) → coordinator referral-link manager
+> (`.../links/`) → a coordinator-facing AI quote-check tool (`.../check/`) →
+> neutral `?ref=CODE` intake wired into `/plan-now`. Read §2–§4 below for the
+> *principles* (still load-bearing) but treat §1.2/§5.1's table names and
+> ticket list as historical, not a build target — see
+> [`ENGINEERING_BACKLOG.md`](ENGINEERING_BACKLOG.md) for what's actually next.
+>
 > **Build-priority #3** in the bible's order (after outcomes instrumentation and
 > the free price tool + trust spine). This is **the sellable product** — the
 > thing a hospice pays for. See [`OPERATING_PLAN.md`](OPERATING_PLAN.md) §3 (L3),
