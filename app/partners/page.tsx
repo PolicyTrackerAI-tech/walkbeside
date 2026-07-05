@@ -4,7 +4,38 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { fmtUSD } from "@/lib/pricing-data";
+import { aggregateCohort, sampleCohort } from "@/lib/partner-report";
+import { Metric } from "@/components/partner/ProofSheet";
 import { DemoRequestForm } from "./DemoRequestForm";
+
+const HOW_IT_WORKS = [
+  {
+    n: 1,
+    title: "You get a neutral link or card to hand out.",
+    body: "One link, printable or digital — no setup beyond that.",
+  },
+  {
+    n: 2,
+    title: "Families self-enroll — no PHI ever changes hands.",
+    body: "They activate it themselves, on their own time. Your systems transmit nothing to us.",
+  },
+  {
+    n: 3,
+    title: "They get a free, neutral funeral-price advocate.",
+    body: "Fair prices for their area, a quote checker, and a real advocate who contacts homes on their behalf. The family chooses, always.",
+  },
+  {
+    n: 4,
+    title: "We run every case by hand and capture outcomes.",
+    body: "Savings, satisfaction, time-to-resolution — recorded on every case that comes through.",
+  },
+  {
+    n: 5,
+    title: "At the agreed point, you get an aggregate report.",
+    body: "Families helped, savings, satisfaction, time-to-resolution — for your compliance file and referral conversations. Never a single family's details.",
+  },
+];
 
 export const metadata: Metadata = {
   title: "Partner with Honest Funeral — a free, neutral funeral-cost benefit for your families",
@@ -15,6 +46,8 @@ export const metadata: Metadata = {
 };
 
 export default function PartnersPage() {
+  const stats = aggregateCohort(sampleCohort());
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/" defaultLabel="← Home" />} />
@@ -41,6 +74,99 @@ export default function PartnersPage() {
               charge the family &mdash; which is the only reason you can
               ethically put us in a grieving family&rsquo;s hands.
             </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Card>
+              <CardEyebrow>Typical overcharge</CardEyebrow>
+              <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
+                $2,000&ndash;$5,000
+              </div>
+              <p className="text-sm text-ink-soft mt-2">
+                per family, on the funeral arrangement alone &mdash; national
+                benchmark, see{" "}
+                <Link
+                  href="/methodology"
+                  className="text-primary-deep underline-offset-2 hover:underline"
+                >
+                  methodology
+                </Link>
+                .
+              </p>
+            </Card>
+            <Card>
+              <CardEyebrow>Bereavement mandate</CardEyebrow>
+              <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
+                ~13 months
+              </div>
+              <p className="text-sm text-ink-soft mt-2">
+                of support Medicare requires per death (42 CFR 418.64) &mdash;
+                unfunded.
+              </p>
+            </Card>
+          </div>
+
+          <Card tone="primary">
+            <CardEyebrow>See it live &mdash; not a mockup</CardEyebrow>
+            <CardTitle>The exact report format your hospice would get.</CardTitle>
+            <p className="mt-2 mb-4">
+              This is the real proof-sheet component, computing real aggregate
+              math on an illustrative sample cohort &mdash; the same code path
+              that renders your hospice&rsquo;s real numbers once families
+              start coming through.
+            </p>
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              <Metric label="Families helped" value={stats.familiesHelped} />
+              <Metric
+                label="Overcharge caught"
+                value={
+                  stats.totalOverchargeCaughtCents != null
+                    ? fmtUSD(stats.totalOverchargeCaughtCents / 100)
+                    : "—"
+                }
+              />
+              <Metric
+                label="Avg satisfaction"
+                value={
+                  stats.avgSatisfaction != null
+                    ? `${stats.avgSatisfaction} / 5`
+                    : "—"
+                }
+              />
+            </div>
+            <p className="text-xs text-ink-muted mb-4">
+              Illustrative sample cohort &mdash; no customer has generated this
+              data yet.
+            </p>
+            <LinkButton href="/partner/sample-hospice" variant="secondary">
+              See the full live report →
+            </LinkButton>
+          </Card>
+
+          <div>
+            <h2 className="font-serif text-2xl text-ink mb-3">
+              How it works for you
+            </h2>
+            <ol className="space-y-4">
+              {HOW_IT_WORKS.map((s) => (
+                <li
+                  key={s.n}
+                  className="rounded-2xl border border-border bg-surface p-6"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-deep text-white font-serif text-sm shrink-0">
+                      {s.n}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-serif text-lg text-ink mb-1">
+                        {s.title}
+                      </h3>
+                      <p className="text-ink-soft">{s.body}</p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
 
           <Card tone="primary">
@@ -94,40 +220,34 @@ export default function PartnersPage() {
             </ul>
           </div>
 
-          <Card tone="soft">
-            <p className="text-ink">
-              Families often overpay by{" "}
-              <strong className="text-ink">$2,000 to $5,000</strong> on the
-              funeral arrangement alone. This reflects national benchmarks
-              adjusted for cost of living, not a promise about any one
-              family &mdash; see{" "}
-              <Link href="/methodology" className="text-primary-deep underline-offset-2 hover:underline">
-                our methodology
-              </Link>
-              .
-            </p>
-          </Card>
-
-          <Card>
-            <CardEyebrow>See it before you talk to us</CardEyebrow>
-            <CardTitle>A live, illustrative sample report.</CardTitle>
-            <p className="mt-2 mb-4">
-              The same aggregate proof-sheet format your own report would use
-              once families start coming through &mdash; families helped,
-              overcharges caught, satisfaction, time-to-resolution.
-            </p>
-            <LinkButton href="/partner/sample-hospice" variant="secondary">
-              See a sample report →
-            </LinkButton>
-          </Card>
-
           <div>
             <h2 className="font-serif text-2xl text-ink mb-3">
               Why you can trust this
             </h2>
-            <p>
-              We take no money from funeral homes, cemeteries, or insurers
-              &mdash; ever &mdash; and we never recommend a specific provider.
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Card tone="soft">
+                <div className="font-serif text-3xl text-primary-deep leading-none">
+                  $0
+                </div>
+                <p className="text-sm text-ink-soft mt-2">
+                  What families and funeral homes ever pay us &mdash; zero
+                  commissions, zero fees, ever.
+                </p>
+              </Card>
+              <Card tone="soft">
+                <p className="font-serif text-ink">Anti-steering by design.</p>
+                <p className="text-sm text-ink-soft mt-1">
+                  We present options side by side; the family chooses, always.
+                </p>
+              </Card>
+              <Card tone="soft">
+                <p className="font-serif text-ink">No PHI ever reaches us.</p>
+                <p className="text-sm text-ink-soft mt-1">
+                  Families self-enroll; your systems transmit nothing.
+                </p>
+              </Card>
+            </div>
+            <p className="text-sm mt-3">
               Read{" "}
               <Link href="/our-role" className="text-primary-deep underline-offset-2 hover:underline">
                 what we are and aren&rsquo;t
@@ -152,8 +272,10 @@ export default function PartnersPage() {
               Ready to move now?
             </h2>
             <p className="mb-4">
-              Apply for a free pilot &mdash; no cost to your families or to
-              you while we prove it out.
+              We&rsquo;re taking on our first pilot hospices now &mdash; a
+              free 60-day trial, no cost to your families or to you while we
+              prove it out. Every number on this page will be real, on your
+              families, or we won&rsquo;t publish it.
             </p>
             <LinkButton href="/partners/apply">Apply to partner →</LinkButton>
           </div>

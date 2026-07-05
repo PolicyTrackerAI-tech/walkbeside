@@ -297,7 +297,7 @@ export function ProofSheet({
   );
 }
 
-function Metric({ label, value }: { label: string; value: string | number }) {
+export function Metric({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="bg-surface-soft rounded-xl p-4">
       <div className="text-xs uppercase tracking-wider text-ink-muted">
