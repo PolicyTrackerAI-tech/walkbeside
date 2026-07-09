@@ -93,6 +93,12 @@ export default function PartnersPage() {
                 </Link>
                 .
               </p>
+              <p className="text-xs text-ink-muted mt-2">
+                Basis: NFDA General Price List survey medians, cost-of-living
+                adjusted by zip. National benchmark, not yet locally validated
+                for your service area &mdash; excludes cemetery/plot,
+                monument, and third-party fees.
+              </p>
             </Card>
             <Card>
               <CardEyebrow>Bereavement mandate</CardEyebrow>
@@ -102,6 +108,11 @@ export default function PartnersPage() {
               <p className="text-sm text-ink-soft mt-2">
                 of support Medicare requires per death (42 CFR 418.64) &mdash;
                 unfunded.
+              </p>
+              <p className="text-xs text-ink-muted mt-2">
+                Basis: federal Medicare hospice Conditions of Participation, 42
+                CFR 418.64(d) &mdash; applies to every Medicare-certified
+                hospice, not a survey estimate.
               </p>
             </Card>
           </div>
@@ -243,7 +254,12 @@ export default function PartnersPage() {
               <Card tone="soft">
                 <p className="font-serif text-ink">No PHI ever reaches us.</p>
                 <p className="text-sm text-ink-soft mt-1">
-                  Families self-enroll; your systems transmit nothing.
+                  Families self-enroll with a code you hand out. The only API
+                  call it triggers (<code className="text-xs">GET
+                  /api/partner/resolve</code>) returns your organization&rsquo;s
+                  display name &mdash; nothing else. We never receive a
+                  patient name, MRN, diagnosis, or admission date, and your
+                  systems never transmit one to us.
                 </p>
               </Card>
             </div>
