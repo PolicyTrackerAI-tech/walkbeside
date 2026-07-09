@@ -8,14 +8,16 @@ this when you want to know "what do I do next, and in what order."
 
 **You can start cold outreach to hospices before the product is finished.** The
 bible says you run the first pilots *by hand* ([`OPERATING_PLAN.md`](OPERATING_PLAN.md)
-§5, §11). The **partner portal (L3) is what you build *after* a hospice says
-yes**, to scale and onboard peer hospices. So the path to your first cold email
-is **short and mostly not engineering** — it's a pitch, collateral, a legal
-pre-flight, a way to run a family for free, and a pilot agreement.
+§5, §11). The **partner portal (L3) was originally scoped to be built *after* a
+hospice says yes** — but it's now already built (`app/partners`,
+`app/admin/partners`, `app/partner/[code]`, `app/partner/r/[token]` +
+`/links` + `/check`), ahead of a signed pilot. That's fine — it just means the
+path to your first cold email is now **entirely not engineering**: apply the
+prod migrations, retain counsel, and send a pitch.
 
-> **Defer until a hospice says yes:** the partner portal, the reporting
-> dashboard, the Fair-Price Index, programmatic SEO depth. Building L3 before
-> talking to a hospice is the classic founder time-sink. Talk first.
+> **Still deferred, correctly, until a hospice says yes:** the Fair-Price
+> Index and programmatic SEO depth. Those genuinely aren't needed yet — talk
+> first.
 
 ---
 
