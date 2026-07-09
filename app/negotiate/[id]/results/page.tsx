@@ -5,6 +5,7 @@ import { requireSignedIn } from "@/lib/require-signed-in";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { fmtCents } from "@/lib/stripe";
 
 export default async function NegotiationResultsPage({
@@ -32,9 +33,6 @@ export default async function NegotiationResultsPage({
     .single();
   if (!neg) redirect("/dashboard");
 
-  // Guard: an unpaid negotiation has no results to show — send them to pay.
-  if (neg.status === "pending_payment") redirect(`/negotiate/${id}/preview`);
-
   const { data: outreach } = await supabase
     .from("negotiation_outreach")
     .select("*")
@@ -55,6 +53,7 @@ export default async function NegotiationResultsPage({
 
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
+          <CaseStepper stage="results" />
           <div>
             <CardEyebrow>Your options</CardEyebrow>
             <h1 className="font-serif text-3xl text-ink">

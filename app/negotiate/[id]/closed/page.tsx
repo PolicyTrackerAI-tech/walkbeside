@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { CaseSatisfaction } from "@/components/negotiate/CaseSatisfaction";
+import { CaseStepper } from "@/components/negotiate/CaseStepper";
 
 export default async function NegotiationClosedPage({
   params,
@@ -34,6 +35,7 @@ export default async function NegotiationClosedPage({
       <SiteHeader backHref="/dashboard" backLabel="Dashboard" />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-12 space-y-6">
+          <CaseStepper stage="closed" />
           <CardEyebrow>Confirmed</CardEyebrow>
           <h1 className="font-serif text-3xl text-ink">
             That decision is made. Take a breath.

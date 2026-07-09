@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle, CardEyebrow } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
+import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { fmtCents } from "@/lib/stripe";
 
 interface Outreach {
@@ -94,6 +95,7 @@ export default function NegotiationStatusPage({
       <SiteHeader backHref="/dashboard" backLabel="Dashboard" />
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
+          <CaseStepper stage="contacting" />
           <div>
             <CardEyebrow>
               {noHomesAvailable ? "No coverage yet" : "Negotiation in progress"}
@@ -369,6 +371,7 @@ function OutreachRow({
   );
   const [notes, setNotes] = useState(outreach.notes ?? "");
   const [busy, setBusy] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
 
   async function save() {
     setBusy(true);
@@ -383,6 +386,8 @@ function OutreachRow({
         }),
       });
       setEditing(false);
+      setJustSaved(true);
+      setTimeout(() => setJustSaved(false), 2500);
       onSaved();
     } finally {
       setBusy(false);
@@ -403,9 +408,14 @@ function OutreachRow({
           </div>
         </div>
         {!editing && (
-          <Button variant="secondary" onClick={() => setEditing(true)}>
-            {outreach.quote_cents ? "Update quote" : "Record their quote"}
-          </Button>
+          <div className="flex items-center gap-2">
+            {justSaved && (
+              <span className="text-xs text-good font-medium">Saved ✓</span>
+            )}
+            <Button variant="secondary" onClick={() => setEditing(true)}>
+              {outreach.quote_cents ? "Update quote" : "Record their quote"}
+            </Button>
+          </div>
         )}
       </div>
       {editing && (
