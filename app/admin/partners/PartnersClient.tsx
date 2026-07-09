@@ -101,9 +101,26 @@ export function PartnersClient({
   const pending = partners.filter((p) => !p.active);
   const activePartners = partners.filter((p) => p.active);
 
+  // Captured once on mount — stable across re-renders (react-hooks/purity),
+  // and day-level granularity doesn't need a live clock.
+  const [now] = useState(() => Date.now());
+  const daysSince = (iso: string) =>
+    Math.max(0, Math.floor((now - new Date(iso).getTime()) / 86_400_000));
+
   return (
     <>
       {error && <p className="text-sm text-bad">{error}</p>}
+
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <PipelineStat label="Pending" value={pending.length} />
+        {STATUSES.map((s) => (
+          <PipelineStat
+            key={s}
+            label={s}
+            value={activePartners.filter((p) => p.status === s).length}
+          />
+        ))}
+      </div>
 
       <Card tone={pending.length > 0 ? "primary" : "soft"}>
         <CardTitle>
@@ -120,7 +137,10 @@ export function PartnersClient({
                     {p.name} <span className="text-ink-muted text-xs">({p.partner_type})</span>
                   </span>
                   <span className="text-xs text-ink-muted">
-                    {new Date(p.created_at).toLocaleDateString("en-US")}
+                    {new Date(p.created_at).toLocaleDateString("en-US")} ·{" "}
+                    {daysSince(p.created_at) === 0
+                      ? "today"
+                      : `waiting ${daysSince(p.created_at)}d`}
                   </span>
                 </div>
                 {(p.contact_name || p.contact_email) && (
@@ -224,5 +244,16 @@ export function PartnersClient({
         )}
       </Card>
     </>
+  );
+}
+
+function PipelineStat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="bg-surface-soft rounded-xl p-3">
+      <div className="text-xs uppercase tracking-wider text-ink-muted">
+        {label}
+      </div>
+      <div className="font-serif text-2xl text-ink mt-0.5">{value}</div>
+    </div>
   );
 }
