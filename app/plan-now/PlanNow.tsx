@@ -605,6 +605,20 @@ export function PlanNow({ partner }: { partner?: string }) {
                 walks every decision before anyone is across the table.
               </p>
 
+              <p className="text-sm text-ink-soft print:hidden">
+                Ready to go further? The{" "}
+                <Link href="/decide?mode=ahead" className="text-primary-deep underline">
+                  service decider
+                </Link>{" "}
+                helps you settle the type of service, and when you want real
+                numbers,{" "}
+                <Link href="/negotiate/start" className="text-primary-deep underline">
+                  we&rsquo;ll contact funeral homes for you
+                </Link>{" "}
+                and bring back itemized quotes to compare — free, like
+                everything else here.
+              </p>
+
               {/* Print footer — same convention as the analyzer. */}
               <div className="hidden print:block border-t border-border pt-3 mt-4 text-xs text-ink-muted leading-relaxed">
                 <p>

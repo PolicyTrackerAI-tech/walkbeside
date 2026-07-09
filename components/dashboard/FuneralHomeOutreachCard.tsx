@@ -1,5 +1,9 @@
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import {
+  CaseStepper,
+  stageForNegotiationStatus,
+} from "@/components/negotiate/CaseStepper";
 import { fmtCents } from "@/lib/stripe";
 
 export interface OutreachRow {
@@ -63,6 +67,10 @@ export function FuneralHomeOutreachCard({
       <CardEyebrow>Funeral-home outreach</CardEyebrow>
       <CardTitle>{headline}</CardTitle>
 
+      <div className="mb-4">
+        <CaseStepper stage={stageForNegotiationStatus(status)} />
+      </div>
+
       {justStarted && (
         <div className="mb-4 rounded-xl border border-primary/40 bg-white px-4 py-3 text-sm text-ink-soft">
           Outreach sent. Most homes reply within 24 hours. We&rsquo;ll surface
@@ -124,17 +132,25 @@ export function FuneralHomeOutreachCard({
           </LinkButton>
         </div>
       ) : (
-        <div className="flex flex-wrap gap-3">
-          <LinkButton href={`/negotiate/${negotiationId}/results`}>
-            {closed ? "View results" : "View results & choose a home →"}
-          </LinkButton>
-          <LinkButton
-            href={`/negotiate/${negotiationId}/status`}
-            variant="secondary"
-          >
-            Outreach detail
-          </LinkButton>
-        </div>
+        <>
+          <div className="flex flex-wrap gap-3">
+            <LinkButton href={`/negotiate/${negotiationId}/results`}>
+              {closed ? "View results" : "View results & choose a home →"}
+            </LinkButton>
+            <LinkButton
+              href={`/negotiate/${negotiationId}/status`}
+              variant="secondary"
+            >
+              Outreach detail
+            </LinkButton>
+          </div>
+          {!closed && (
+            <p className="text-xs text-ink-muted mt-3">
+              This is what we knew a moment ago &mdash; outreach detail has the
+              live view, updated as replies come in.
+            </p>
+          )}
+        </>
       )}
     </Card>
   );
