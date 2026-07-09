@@ -57,6 +57,25 @@ export default async function NegotiationClosedPage({
             on which home you picked.
           </p>
 
+          <Card tone="soft">
+            <CardEyebrow>What happens next</CardEyebrow>
+            <ul className="mt-2 space-y-2 text-sm text-ink-soft list-disc pl-5">
+              <li>
+                The home reaches out to schedule your arrangement meeting
+                &mdash; usually within a day or two. We&rsquo;ll loop you in
+                once a slot is set.
+              </li>
+              <li>
+                Bring the prep kit below. It covers what to bring, what to
+                expect, and which line items deserve pushback.
+              </li>
+              <li>
+                Questions before the meeting, or something feels off after
+                &mdash; reply to any email from us and a real person answers.
+              </li>
+            </ul>
+          </Card>
+
           <Card tone="primary">
             <CardTitle>Prep for the meeting</CardTitle>
             <p className="text-ink-soft mb-4">
