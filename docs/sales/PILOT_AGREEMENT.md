@@ -35,6 +35,7 @@ The Hospice is federally required to provide roughly 13 months of bereavement su
 - Honest Funeral takes **no money from funeral homes or insurers** — ever.
 - Honest Funeral **never steers** a family to any specific funeral home. We present neutral options and itemized prices; **the family decides everything.**
 - Honest Funeral makes **no paid referrals** and receives **no commission, kickback, or consideration** from any funeral provider in connection with a family.
+- The resource is offered to families **after admission only**. Neither party will use it, or refer to it, in the Hospice's pre-admission marketing or to encourage the selection of the Hospice.
 
 This is why the Hospice can ethically and lawfully put the resource in a grieving family's hands.
 
@@ -68,7 +69,9 @@ Honest Funeral will capture these outcomes per case and present a **one-page pro
 
 ## Use of outcomes data
 
-The Hospice grants Honest Funeral permission to use **de-identified, aggregate** outcomes from the pilot (e.g., average savings, satisfaction, time-to-resolution) to improve its service and report results. **No individual family's identity or private details** are included, and the Hospice's name will not be used in any public material without its written permission.
+The Hospice grants Honest Funeral a perpetual permission to use **de-identified, aggregate** outcomes from the pilot (e.g., average savings, satisfaction, time-to-resolution) to improve its service, report results, and include in Honest Funeral's **aggregate public pricing benchmarks and datasets** (such as a published fair-price index). **No individual family's identity or private details** are included, no figure traceable to the Hospice or to any family is published, and the Hospice's name will not be used in any public material without its written permission.
+
+The de-identified aggregate dataset Honest Funeral builds from outcomes across all of its partners remains **Honest Funeral's property**; nothing in this pilot gives either party ownership of the other's underlying data or methods.
 
 ---
 
