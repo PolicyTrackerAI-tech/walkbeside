@@ -105,7 +105,7 @@ export default function DeathCertificatesPage() {
                   Directly from the state later.
                 </strong>{" "}
                 If you run out, order more from the state vital records
-                office. Requires photo ID and proof of relationship for
+                office. Requires photo ID and proof of relationship in
                 most states. Processing times vary &mdash; typically two
                 weeks, sometimes much longer.
               </li>
@@ -152,7 +152,7 @@ export default function DeathCertificatesPage() {
               href="/next-30-days"
               className="text-ink-muted hover:text-ink-soft"
             >
-              Back to After the funeral
+              Back to the 30-day checklist
             </Link>
           </div>
         </div>

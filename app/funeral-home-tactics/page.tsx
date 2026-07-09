@@ -165,8 +165,7 @@ export default function FuneralHomeTacticsPage() {
               <p>
                 The implication: every minute of the arrangement
                 meeting that pushes you toward a casket upgrade,
-                a vault upgrade, or a service add-on is the highest-
-                value minute for the funeral home. The basic-services
+                a vault upgrade, or a service add-on is the highest-value minute for the funeral home. The basic-services
                 fee is fixed; the rest is where the meeting is
                 aimed.
               </p>
@@ -256,8 +255,7 @@ export default function FuneralHomeTacticsPage() {
               <p>
                 The FTC Funeral Rule explicitly prohibits funeral
                 homes from claiming that any casket or vault
-                preserves remains. There is no consumer-protective
-                or scientific evidence that sealing meaningfully
+                preserves remains. There is no scientific evidence that sealing meaningfully
                 extends preservation. In sealed containers, the
                 lack of oxygen can actually accelerate anaerobic
                 decomposition, often producing a worse outcome than
@@ -473,7 +471,7 @@ export default function FuneralHomeTacticsPage() {
                 </li>
                 <li>
                   <strong className="text-ink">They show you the lowest-priced casket without sighing about it.</strong>{" "}
-                  Or shipping a third-party casket. They treat the
+                  Or about accepting a third-party casket. They treat the
                   modest choice the same as the expensive one.
                 </li>
                 <li>

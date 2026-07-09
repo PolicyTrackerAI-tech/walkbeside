@@ -162,16 +162,16 @@ export default async function CityFuneralCostsPage({
 
           {/* CTA: see local homes */}
           <Card tone="primary">
-            <CardEyebrow>Local funeral homes</CardEyebrow>
-            <CardTitle>See what {city.name} families are paying.</CardTitle>
+            <CardEyebrow>Local fair pricing</CardEyebrow>
+            <CardTitle>See what&rsquo;s fair to pay in {city.name}.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
-              We maintain a directory of funeral homes in {city.name}{" "}
-              and the surrounding zip codes, with the prices they&rsquo;ve
-              quoted on their General Price Lists. Free to browse, no
-              account needed.
+              We&rsquo;ll show you what a fair quote looks like in {city.name}{" "}
+              and the surrounding zip codes &mdash; typical totals for the
+              most common service types, and what each line item should
+              cost. Free to browse, no account needed.
             </p>
             <LinkButton href={`/funeral-homes/${city.zipExample}`} size="lg">
-              See {city.name} funeral homes →
+              See fair prices near {city.name} →
             </LinkButton>
           </Card>
 
@@ -185,7 +185,7 @@ export default async function CityFuneralCostsPage({
               law (the FTC Funeral Rule) gives families the right to
               refuse them. The biggest savings: embalming
               (rarely required), a casket from the funeral home
-              (you can buy elsewhere for 40-70% less), and the
+              (you can buy elsewhere for 40&ndash;70% less), and the
               &ldquo;protective&rdquo; casket-and-vault upgrades.
             </p>
             <LinkButton href="/rights" variant="secondary">
@@ -222,7 +222,7 @@ export default async function CityFuneralCostsPage({
                 >
                   What type of service fits us?
                 </Link>{" "}
-                — four short questions, no account, no email.
+                — five short questions, no account, no email.
               </li>
               <li>
                 <Link

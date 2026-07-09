@@ -194,7 +194,7 @@ export default function BodyDonationPage() {
               </li>
               <li>
                 <strong className="text-ink">Memorial service (optional, anytime).</strong>{" "}
-                Families typically hold a memorial service at any
+                Families can hold a memorial service at any
                 time after death &mdash; immediately, when remains
                 are returned, or somewhere in between. Many medical
                 schools also host annual donor-memorial services.

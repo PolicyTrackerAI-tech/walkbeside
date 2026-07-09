@@ -256,7 +256,7 @@ export default function EstateBasicsPage() {
               href="/next-30-days"
               className="font-medium text-primary-deep hover:underline"
             >
-              Back to After the funeral (index)
+              Back to the 30-day checklist (index)
             </Link>
             <Link
               href="/after/accounts-to-close"

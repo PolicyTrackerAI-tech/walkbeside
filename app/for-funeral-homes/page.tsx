@@ -30,7 +30,7 @@ export default function ForFuneralHomesPage() {
             </h1>
             <p className="text-lg">
               We&rsquo;re a consumer advocacy service for families navigating
-              funeral arrangements. A family hired us to help them gather
+              funeral arrangements. A family asked us to help them gather
               prices from local funeral homes &mdash; including yours.
               We&rsquo;re not a competitor, not a broker, and we don&rsquo;t
               take a cent from your firm.
@@ -162,7 +162,7 @@ export default function ForFuneralHomesPage() {
                 <dt className="font-semibold text-ink">Who&rsquo;s behind
                 Honest Funeral?</dt>
                 <dd className="mt-1">
-                  An independent consumer-advocate team building the tool we
+                  An independent consumer advocate building the tool we
                   wish every family had. We&rsquo;re not affiliated with any
                   funeral home or chain and take no money from the industry.
                   See{" "}

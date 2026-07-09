@@ -100,7 +100,7 @@ export default function HomePage() {
           <p className="mt-3 text-sm text-ink-soft max-w-md mx-auto">
             <strong className="text-ink">No commissions. No kickbacks. No referral fees.</strong>{" "}
             We take no money from any funeral home, cemetery, or vendor on
-            this site. We keep families free and are funded by the
+            this site. We keep everything free for families and are funded by the
             institutions we partner with.
           </p>
 

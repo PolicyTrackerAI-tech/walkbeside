@@ -104,7 +104,7 @@ ${url}
 
 It'll be here whenever you need it. We'll send one calm email a month with new resources we've built. Never marketing, never shared.
 
-If this wasn't you, ignore this email and we'll remove the address.
+If this wasn't you, reply to this email and we'll remove the address.
 
 Honest Funeral — quiet help after a loss.
 

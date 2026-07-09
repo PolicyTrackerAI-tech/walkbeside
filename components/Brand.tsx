@@ -168,6 +168,9 @@ export function Footer() {
           <Link href="/privacy" className="hover:text-ink-soft">
             Privacy Policy
           </Link>
+          <Link href="/accessibility" className="hover:text-ink-soft">
+            Accessibility
+          </Link>
         </div>
         <p className="text-xs pt-2">&copy; 2026 Honest Funeral</p>
       </div>

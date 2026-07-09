@@ -278,7 +278,7 @@ export default function OutOfStateDeathPage() {
                 </li>
                 <li>
                   Pay both. Wire transfers are common. Expect
-                  6,000&ndash;15,000 dollars in wires across several
+                  $6,000&ndash;$15,000 in wires across several
                   recipients.
                 </li>
                 <li>
@@ -367,8 +367,8 @@ export default function OutOfStateDeathPage() {
                 where the ship docks.
               </p>
               <p>
-                If the ship is at sea long enough to require an
-                in-port emergency landing in a foreign country, the
+                If the ship has to make an
+                emergency stop at a port in a foreign country, the
                 international rules above apply.
               </p>
               <p>

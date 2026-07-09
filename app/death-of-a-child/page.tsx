@@ -80,8 +80,7 @@ export default function DeathOfAChildPage() {
                 what do I say?
               </p>
               <p>
-                The Compassionate Friends and decades of bereaved-
-                parent literature converge on a clear answer: yes.
+                The Compassionate Friends and decades of bereaved-parent literature converge on a clear answer: yes.
                 You are still your child&rsquo;s parent. Death does
                 not end parenthood. Many parents continue to
                 celebrate birthdays, talk about their child to
@@ -131,7 +130,7 @@ export default function DeathOfAChildPage() {
                 </li>
                 <li>
                   <strong className="text-ink">The marriage strain reality.</strong>{" "}
-                  The widely-repeated statistic that 80% of couples
+                  The widely repeated statistic that 80% of couples
                   divorce after losing a child is a myth, based on a
                   small 1970s study that was misquoted for decades.
                   The actual divorce rate after child loss is closer
@@ -331,8 +330,7 @@ export default function DeathOfAChildPage() {
                 Almost every long-term bereaved parent who has been
                 asked what helped most names the same thing: other
                 bereaved parents. Specifically, The Compassionate
-                Friends, which has been the central US bereaved-
-                parent organization for 50 years.
+                Friends, which has been the central US bereaved-parent organization for 50 years.
               </p>
               <ul className="space-y-3 list-disc pl-5">
                 <li>
@@ -455,9 +453,7 @@ export default function DeathOfAChildPage() {
                 </li>
                 <li>
                   If the death involved trauma (witnessed,
-                  homicide, suicide, sudden accident), trauma-
-                  focused therapy (EMDR or CPT) is the evidence-
-                  based response and runs in parallel with grief
+                  homicide, suicide, sudden accident), trauma-focused therapy (EMDR or CPT) is the evidence-based response and runs in parallel with grief
                   therapy.
                 </li>
               </ul>
@@ -492,8 +488,7 @@ export default function DeathOfAChildPage() {
                 </li>
                 <li>
                   <strong className="text-ink">For surviving siblings:</strong>{" "}
-                  &ldquo;The Empty Room&rdquo; by Elizabeth DeVita-
-                  Raeburn and TCF&rsquo;s sibling resources.
+                  &ldquo;The Empty Room&rdquo; by Elizabeth DeVita-Raeburn and TCF&rsquo;s sibling resources.
                 </li>
               </ul>
             </div>

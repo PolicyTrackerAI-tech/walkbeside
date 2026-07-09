@@ -37,7 +37,7 @@ export default async function DecidePage({
 
           {aheadMode && (
             <div className="mb-8">
-              <PlanningAheadBanner note="Deciding the type of service now — while nothing is urgent — is exactly the right order. Answer for the person you're planning for." />
+              <PlanningAheadBanner note="Deciding the type of service now — while nothing is urgent — is exactly the right order. Answer for the person you&rsquo;re planning for." />
             </div>
           )}
 

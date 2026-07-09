@@ -147,7 +147,7 @@ describe("smsFor (opt-in SMS channel)", () => {
     for (const m of MILESTONE_ORDER) {
       const body = smsFor(m, "https://x/prefs");
       expect(body.length).toBeLessThanOrEqual(320); // ~2 segments max
-      expect(body).toContain("Txt STOP to opt out.");
+      expect(body).toContain("Text STOP to opt out.");
       expect(body).toContain("Honest Funeral:");
       // No links beyond our own domain — nothing that smells like spam.
       const urls = body.match(/[a-z]+\.[a-z]{2,}\/?\S*/gi) ?? [];

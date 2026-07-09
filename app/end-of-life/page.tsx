@@ -95,8 +95,7 @@ export default function EndOfLifePage() {
                 </li>
                 <li>
                   Read the recent research on your specific
-                  diagnosis. Cancer.gov, PubMed abstracts, and disease-
-                  specific advocacy organizations (e.g. ALS
+                  diagnosis. Cancer.gov, PubMed abstracts, and disease-specific advocacy organizations (e.g. ALS
                   Association, Cystic Fibrosis Foundation) are the
                   most reliable sources. Avoid forum anecdotes and
                   pharmaceutical-company marketing pages.
@@ -345,7 +344,7 @@ export default function EndOfLifePage() {
                 <li>
                   <strong className="text-ink">Will + beneficiary designations.</strong>{" "}
                   This isn&rsquo;t for you, it&rsquo;s for your
-                  family &mdash; but it&rsquo;s for them to not be
+                  family &mdash; so they&rsquo;re not
                   ambushed by paperwork while they&rsquo;re grieving.
                   Update beneficiary forms on retirement accounts,
                   life insurance, and bank accounts (they override
@@ -583,7 +582,7 @@ export default function EndOfLifePage() {
                   .
                 </li>
                 <li>
-                  <strong className="text-ink">Conversations Project</strong>{" "}
+                  <strong className="text-ink">The Conversation Project</strong>{" "}
                   &mdash;{" "}
                   <a
                     href="https://theconversationproject.org"

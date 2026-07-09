@@ -479,7 +479,7 @@ export function Worksheet() {
             </Button>
             {savedAt && (
               <span className="text-sm text-ink-muted">
-                Saved at {savedAt}
+                {savedAt.startsWith("(") ? savedAt : `Saved at ${savedAt}`}
               </span>
             )}
           </div>

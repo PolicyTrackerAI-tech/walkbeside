@@ -131,8 +131,7 @@ export default function PrivacyPage() {
           </h2>
           <p>
             We use industry-standard safeguards: encryption in transit
-            (TLS), encrypted storage at rest, access controls, and least-
-            privilege access for our team. No system is perfect; if we
+            (TLS), encrypted storage at rest, access controls, and least-privilege access for our team. No system is perfect; if we
             learn of a breach affecting your information, we will notify
             you as required by law.
           </p>

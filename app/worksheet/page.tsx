@@ -49,7 +49,7 @@ function WorksheetView({ aheadMode }: { aheadMode: boolean }) {
 
           {aheadMode && (
             <div className="no-print mb-8">
-              <PlanningAheadBanner note="The worksheet works just as well before a death — the arrangement meeting hasn't happened yet, and filling this out now means it starts with your decisions already made. Skip anything that doesn't apply yet." />
+              <PlanningAheadBanner note="The worksheet works just as well before a death — the arrangement meeting hasn&rsquo;t happened yet, and filling this out now means it starts with your decisions already made. Skip anything that doesn&rsquo;t apply yet." />
             </div>
           )}
 

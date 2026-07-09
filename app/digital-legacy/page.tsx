@@ -161,7 +161,7 @@ export default function DigitalLegacyPage() {
               </p>
               <p>
                 Google is more conservative than most platforms about
-                releasing data. They typically grant funds in Google
+                releasing data. They typically release funds in Google
                 Pay or AdSense balances, photo archives, and
                 Drive files. They are more reluctant to release
                 email contents unless there&rsquo;s a court order.
@@ -214,7 +214,7 @@ export default function DigitalLegacyPage() {
 
           <Card>
             <CardEyebrow>Microsoft (Outlook, OneDrive, Xbox)</CardEyebrow>
-            <CardTitle>Custodian-of-Record process.</CardTitle>
+            <CardTitle>The next-of-kin process.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
                 Microsoft has a Next-of-Kin process to release account
@@ -331,16 +331,14 @@ export default function DigitalLegacyPage() {
               <p>
                 Most subscriptions cancel with the death certificate
                 and an email to support. Some refund the unused
-                portion; many do not. The credit-card company can
-                also dispute charges that post after the death date
-                with the certificate as evidence; the issuer will
+                portion; many do not. You can also ask the credit-card company to dispute charges that post after the death date, with the certificate as evidence; the issuer will
                 refund and the merchant will absorb the loss.
               </p>
               <p>
                 Closing the credit card itself stops all future
                 charges and is the cleanest approach. Notify the
                 issuer with a death certificate; they freeze the
-                account and zero out the balance from the estate.
+                account and collect any remaining balance from the estate.
                 Joint cards stay open for the surviving cardholder
                 but the deceased&rsquo;s name is removed.
               </p>

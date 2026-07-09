@@ -6,7 +6,7 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 
 export const metadata: Metadata = {
-  title: "A reverse mortgage after a death — the heir's timeline | Honest Funeral",
+  title: "A reverse mortgage after a death — the heir's timeline",
   description:
     "When the borrower on a reverse mortgage dies, the loan comes due — but heirs have real rights: a response window, extensions up to a year, the 95%-of-appraised-value payoff, and non-recourse protection. The timeline, in plain English, for FHA HECM loans.",
   alternates: { canonical: "/reverse-mortgage" },
@@ -47,7 +47,7 @@ export default function ReverseMortgagePage() {
               reverse mortgages. Proprietary (non-FHA &ldquo;jumbo&rdquo;)
               loans follow their own contracts:{" "}
               <strong className="text-ink">
-                first call, ask the servicer which type this is.
+                on your first call, ask the servicer which type this is.
               </strong>
             </p>
           </div>
@@ -97,7 +97,7 @@ export default function ReverseMortgagePage() {
               </li>
               <li>
                 <strong>Two 90-day extensions are possible</strong> (with HUD
-                approval, shown as actively marketing or closing the sale) —
+                approval, granted when the family can show the home is being actively marketed or a sale is closing) —
                 up to roughly a year in total. Ask for them in writing before
                 the current period ends.
               </li>

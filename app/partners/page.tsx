@@ -38,7 +38,7 @@ const HOW_IT_WORKS = [
 ];
 
 export const metadata: Metadata = {
-  title: "Partner with Honest Funeral — a free, neutral funeral-cost benefit for your families",
+  title: "Partner with us — a free, neutral funeral-cost benefit for your families",
   description:
     "Honest Funeral is free to families, funded by the hospices and employers we partner with — never by funeral homes or insurers. See a live sample report, schedule a call, or apply to run a free pilot.",
   alternates: { canonical: "/partners" },
@@ -195,7 +195,7 @@ export default function PartnersPage() {
               </li>
               <li>
                 The funeral-pricing and after-death questions your counselors
-                field every week were never resourced for &mdash; we absorb
+                field every week but were never resourced for &mdash; we absorb
                 that part, and complement your grief program instead of
                 replacing it.
               </li>

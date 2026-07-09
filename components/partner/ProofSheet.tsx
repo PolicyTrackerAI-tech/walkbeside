@@ -108,7 +108,7 @@ export function ProofSheet({
               <p className="text-ink-soft mt-2">
                 Your report is building. We hold the dollar and satisfaction
                 figures back until at least {SMALL_SAMPLE_THRESHOLD} families
-                have completed &mdash; both so the numbers are stable and so no
+                have completed their cases &mdash; both so the numbers are stable and so no
                 single family can be identified from them.
               </p>
             </Card>
@@ -302,7 +302,7 @@ export function ProofSheet({
             <p>
               <strong className="text-ink-soft">How these figures are made:</strong>{" "}
               every number aggregates outcomes recorded on the referred
-              families&rsquo; own cases (savings measured against the
+              families&rsquo; own cases (headline savings measured against the
               family&rsquo;s own original quote; satisfaction as reported by
               the family). Cohorts under {SMALL_SAMPLE_THRESHOLD} families
               suppress dollar and satisfaction figures so no individual family
@@ -311,7 +311,7 @@ export function ProofSheet({
               honestfuneral.co/methodology.
             </p>
             <p>
-              <strong className="text-ink-soft">What this is not:</strong>{" "}
+              <strong className="text-ink-soft">What this is:</strong>{" "}
               an informational summary of aggregate family outcomes — not a
               CMS or CAHPS instrument, not a compliance certification or
               survey substitute, and it implies no endorsement by CMS or any

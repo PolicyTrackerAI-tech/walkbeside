@@ -163,7 +163,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
       <Card>
         <div className="space-y-5">
           <div>
-            <Label htmlFor="faith" hint="Pick what guides decisions in your family. Pick 'No religious tradition' if none is in play.">
+            <Label htmlFor="faith" hint="Pick what guides decisions in your family. Pick &ldquo;No religious tradition&rdquo; if none is in play.">
               Faith tradition
             </Label>
             <Select
@@ -196,7 +196,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
               <div className="mt-3">
                 <Label
                   htmlFor="denomination"
-                  hint="Practice within this tradition varies by denomination. Pick the closest — or 'Not sure' if you don't know."
+                  hint="Practice within this tradition varies by denomination. Pick the closest — or &ldquo;Not sure&rdquo; if you don&rsquo;t know."
                 >
                   Which tradition?
                 </Label>
@@ -269,7 +269,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
           </div>
 
           <div>
-            <Label htmlFor="veteran" hint="Veterans qualify for free national cemetery burial, a burial allowance, and a flag — most families miss at least one. We'll surface them automatically if you answer yes.">
+            <Label htmlFor="veteran" hint="Veterans qualify for free national cemetery burial, a burial allowance, and a flag — most families miss at least one. We&rsquo;ll surface them automatically if you answer yes.">
               {aheadMode
                 ? "Have they served in the military?"
                 : "Did the deceased serve in the military?"}
@@ -281,7 +281,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
             >
               <option value="unsure">Not sure</option>
               <option value="yes">
-                {aheadMode ? "Yes — they're a veteran" : "Yes — they were a veteran"}
+                {aheadMode ? "Yes — they’re a veteran" : "Yes — they were a veteran"}
               </option>
               <option value="no">No</option>
             </Select>
@@ -345,7 +345,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
               <div className="mb-5 rounded-xl bg-good-soft border border-good/30 px-4 py-3">
                 <p className="text-sm text-ink">
                   Comparing two or three homes instead of booking with the
-                  first one you call can avoid up to{" "}
+                  first one you call can help you avoid overpaying by up to{" "}
                   <strong className="text-ink">
                     {fmtUSD(totals.maxSavings)}
                   </strong>{" "}

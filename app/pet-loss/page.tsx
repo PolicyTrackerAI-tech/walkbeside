@@ -116,7 +116,7 @@ export default function PetLossPage() {
                 </li>
                 <li>
                   <strong className="text-ink">M</strong>obility &mdash;
-                  able to stand, walk to outside or litter?
+                  able to stand, walk outside or to the litter box?
                 </li>
                 <li>
                   <strong className="text-ink">M</strong>ore good days
@@ -294,7 +294,7 @@ export default function PetLossPage() {
               </ol>
               <p>
                 <strong className="text-ink">Memorial keepsakes:</strong>{" "}
-                cremation gardens, paw-print impressions in clay or
+                memorial garden stones, paw-print impressions in clay or
                 metal, fur clippings preserved in lockets, pendants
                 with a small amount of ashes, custom portraits.
                 Vary widely in cost and meaning. None of these are

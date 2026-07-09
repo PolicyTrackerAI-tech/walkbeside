@@ -62,8 +62,7 @@ export default async function NegotiationClosedPage({
             <ul className="mt-2 space-y-2 text-sm text-ink-soft list-disc pl-5">
               <li>
                 The home reaches out to schedule your arrangement meeting
-                &mdash; usually within a day or two. We&rsquo;ll loop you in
-                once a slot is set.
+                &mdash; usually within a day or two.
               </li>
               <li>
                 Bring the prep kit below. It covers what to bring, what to

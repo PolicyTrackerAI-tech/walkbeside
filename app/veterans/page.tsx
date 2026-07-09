@@ -30,7 +30,7 @@ function VeteransView() {
             <p className="text-lg text-ink-soft">
               Most families of veterans claim one or two benefits and miss the
               rest. National cemetery burial, plot allowance, government
-              headstone, burial flag &mdash; these are real money the VA
+              headstone, burial flag &mdash; this is real money the VA
               already set aside, and the application is shorter than you
               think.
             </p>

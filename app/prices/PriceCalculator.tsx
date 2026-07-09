@@ -25,7 +25,7 @@ const REQUIRED_LABEL: Record<LineItem["required"], string> = {
   yes: "Required",
   no: "Optional",
   burial: "Required for burial",
-  cemetery: "Cemetery requires",
+  cemetery: "Required by cemetery",
   cremation: "Required for cremation",
 };
 
@@ -188,7 +188,7 @@ export function PriceCalculator() {
               {fmtRange(low, high)}
             </h2>
             <p className="text-ink-soft">
-              This is what most families pay for a{" "}
+              This is what most families pay for{" "}
               {SERVICE_LABELS[serviceType].toLowerCase()} in your area. A
               quote of {fmtUSD(totals.predatoryLow)}&ndash;
               {fmtUSD(totals.predatoryHigh)} is what predatory pricing looks
@@ -221,7 +221,7 @@ export function PriceCalculator() {
                 <div className="mt-5 rounded-xl border border-primary-deep/20 bg-surface p-5">
                   <h3 className="font-serif text-lg text-ink mb-2">
                     {dealRating.tone === "bad"
-                      ? "This home's quote is above the regional range."
+                      ? "This home’s quote is above the regional range."
                       : "This quote is at the high end of the regional range."}
                   </h3>
                   <p className="text-sm text-ink-soft mb-3">

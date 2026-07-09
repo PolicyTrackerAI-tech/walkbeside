@@ -6,7 +6,7 @@ import { HelpFooter } from "@/components/HelpFooter";
 import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
-  title: "All guides — Honest Funeral",
+  title: "All guides",
   description:
     "Every guide we've written, organized. Crisis-moment help, arrangement decisions, post-funeral paperwork, estate, grief, and a plain-language glossary of funeral industry terms.",
   openGraph: { images: [ogImage("Every guide we've written, in one place", "Reference")] },
@@ -80,7 +80,7 @@ const GUIDES: Guide[] = [
     href: "/after-hospice",
     title: "When someone dies in hospice",
     description:
-      "Don't call 911. What to expect in the final days and the hour of death.",
+      "Don’t call 911. What to expect in the final days and the hour of death.",
     category: "right-now",
   },
   {
@@ -124,7 +124,7 @@ const GUIDES: Guide[] = [
     href: "/rights",
     title: "What you can decline",
     description:
-      "Nine line items most families don't know they can refuse — embalming, vault upgrades, family limo, more.",
+      "Nine line items most families don’t know they can refuse — embalming, vault upgrades, family limo, more.",
     category: "decisions",
   },
   {
@@ -138,7 +138,7 @@ const GUIDES: Guide[] = [
     href: "/home-funeral",
     title: "Family-led home funerals",
     description:
-      "The family cares for the body at home. Legal in 41 states. What it is, what it isn't.",
+      "The family cares for the body at home. Legal in 41 states. What it is, what it isn’t.",
     category: "decisions",
   },
   {
@@ -182,7 +182,7 @@ const GUIDES: Guide[] = [
   // Money
   {
     href: "/how-to-pay",
-    title: "How to pay when you can't afford it",
+    title: "How to pay when you can’t afford it",
     description:
       "County indigent burial, FEMA, Medicaid, charitable aid, crowdfunding done right.",
     category: "money",
@@ -214,7 +214,7 @@ const GUIDES: Guide[] = [
   },
   {
     href: "/disenfranchised-grief",
-    title: "When the world doesn't recognize your loss",
+    title: "When the world doesn’t recognize your loss",
     description:
       "Miscarriage, ex-spouses, estranged family, unmarried partners, chosen family, pet loss. Grief that other content silently leaves out.",
     category: "grief",
@@ -223,7 +223,7 @@ const GUIDES: Guide[] = [
     href: "/pet-loss",
     title: "When the animal you loved dies",
     description:
-      "The euthanasia decision, in-home options, disposition paths, and resources for grief that isn’t 'just a pet.'",
+      "The euthanasia decision, in-home options, disposition paths, and resources for grief that isn’t “just a pet.”",
     category: "grief",
   },
   {
@@ -274,7 +274,7 @@ const GUIDES: Guide[] = [
   },
   {
     href: "/end-of-life",
-    title: "End of life — when you're the one dying",
+    title: "End of life — when you’re the one dying",
     description:
       "For people with a terminal diagnosis. Palliative vs hospice, MAID where legal, treatment decisions, what to actually do with the time.",
     category: "plan-ahead",
@@ -299,7 +299,7 @@ const GUIDES: Guide[] = [
     href: "/faq",
     title: "FAQ",
     description:
-      "How we make money, what we do, how we stay free for families, what we won't do.",
+      "How we make money, what we do, how we stay free for families, what we won’t do.",
     category: "reference",
   },
   {

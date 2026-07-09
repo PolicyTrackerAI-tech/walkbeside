@@ -221,7 +221,7 @@ export default function DisenfranchisedGriefPage() {
                   to be different from theirs but happens alongside it.
                   A few sessions with a family therapist or grief
                   counselor can help you parent through it without
-                  collapsing the two grieves into each other.{" "}
+                  collapsing the two griefs into each other.{" "}
                   <Link
                     href="/talking-to-kids"
                     className="text-primary-deep underline"
@@ -414,7 +414,7 @@ export default function DisenfranchisedGriefPage() {
             <CardTitle>The grief is the size of the relationship.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
-                The bereaved-pet-owner is one of the most consistently
+                The bereaved pet owner is one of the most consistently
                 dismissed grievers. &ldquo;It&rsquo;s just a dog&rdquo;
                 from a coworker. No bereavement leave at most
                 employers. No funeral. No casserole.
@@ -430,8 +430,7 @@ export default function DisenfranchisedGriefPage() {
               </p>
               <p>
                 Pet grief frequently includes a layer of guilt
-                specific to euthanasia decisions &mdash; second-
-                guessing whether it was time, whether more could have
+                specific to euthanasia decisions &mdash; second-guessing whether it was time, whether more could have
                 been done, the act of having made the choice.
               </p>
               <p>
@@ -538,7 +537,7 @@ export default function DisenfranchisedGriefPage() {
                 recognized grief, and the threshold for professional
                 help is the same. Don&rsquo;t let the &ldquo;it
                 doesn&rsquo;t count&rdquo; framing make you wait
-                longer than you would with a more publicly-recognized
+                longer than you would with a more publicly recognized
                 loss.
               </p>
               <p>Get help if:</p>

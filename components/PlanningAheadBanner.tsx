@@ -12,7 +12,7 @@ export function PlanningAheadBanner({ note }: { note?: string }) {
     <div className="print:hidden rounded-xl border border-primary/30 bg-primary-soft/50 px-4 py-3 text-sm text-ink">
       <span className="font-medium">You&rsquo;re planning ahead.</span>{" "}
       {note ??
-        "Nothing has happened yet, and nothing here commits you to anything — this tool works the same before a death. Skip any question that doesn't apply yet."}{" "}
+        "Nothing has happened yet, and nothing here commits you to anything — this tool works the same before a death. Skip any question that doesn’t apply yet."}{" "}
       When you&rsquo;re done, add what you learned to{" "}
       <Link href="/plan-now" className="underline underline-offset-2">
         your family plan

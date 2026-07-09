@@ -7,7 +7,7 @@ import { resolvePartnerToken } from "@/lib/partner-auth";
 import { CoordinatorCheck } from "./CoordinatorCheck";
 
 export const metadata: Metadata = {
-  title: "Quote check | Honest Funeral",
+  title: "Quote check",
   robots: { index: false, follow: false },
 };
 

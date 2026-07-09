@@ -212,7 +212,7 @@ export default function OverdoseLossPage() {
                   normally by life insurance. Deaths ruled
                   intentional fall under the same suicide-clause
                   rules as other suicides (excluded in the first
-                  2 years of policy, covered after). If a claim is
+                  2 years of the policy, covered after). If a claim is
                   denied, ask for the specific basis &mdash;
                   insurance companies sometimes deny in error or
                   on technicalities that can be appealed.
@@ -222,9 +222,7 @@ export default function OverdoseLossPage() {
                   More and more overdose-loss families openly state
                   the cause in the obituary: &ldquo;died of an
                   accidental drug overdose&rdquo; or &ldquo;died of
-                  the disease of addiction.&rdquo; This is one of
-                  the most-cited helpful things by long-term
-                  survivors. It reduces isolation, opens
+                  the disease of addiction.&rdquo; This is one of the things long-term survivors most often cite as helpful. It reduces isolation, opens
                   conversations, and refuses the shame the culture
                   tries to attach. You are not required to do this
                   and many families don&rsquo;t; both choices are
@@ -334,7 +332,7 @@ export default function OverdoseLossPage() {
               </p>
               <ul className="space-y-2 list-disc pl-5">
                 <li>
-                  <strong className="text-ink">Young children (3-7):</strong>{" "}
+                  <strong className="text-ink">Young children (3&ndash;7):</strong>{" "}
                   &ldquo;Daddy had a sickness in his brain that made
                   him take medicine that wasn&rsquo;t safe. The
                   medicine made his body stop working. The
@@ -421,8 +419,7 @@ export default function OverdoseLossPage() {
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
                 If you have another family member with a substance
-                use disorder, the overdose death may be the highest-
-                leverage moment of their life for entering treatment.
+                use disorder, the overdose death may be the highest-leverage moment of their life for entering treatment.
                 Researchers find that close family overdose deaths
                 are one of the most consistent triggers for treatment
                 engagement &mdash; even more than a person&rsquo;s
@@ -439,8 +436,7 @@ export default function OverdoseLossPage() {
               <p>
                 <strong className="text-ink">Naloxone in every relevant home.</strong>{" "}
                 If anyone in the broader family or social circle
-                uses opioids or could be exposed to fentanyl-
-                contaminated supply, Narcan should be in their
+                uses opioids or could be exposed to fentanyl-contaminated supply, Narcan should be in their
                 home and the people around them should know how to
                 use it. Free from most state health departments and
                 available OTC at most pharmacies. Not a betrayal

@@ -39,7 +39,7 @@ export default function HowToPayPage() {
               Every program, every free option, every cost-cutting move &mdash; in order.
             </h1>
             <p className="text-lg text-ink-soft">
-              The median US funeral costs $9,000&ndash;$15,000.
+              A typical US funeral costs $9,000&ndash;$15,000.
               Roughly 40% of US families can&rsquo;t cover an
               unexpected $400 expense, let alone that. There is a
               full menu of assistance programs, free options, and
@@ -83,7 +83,7 @@ export default function HowToPayPage() {
                   membership benefits. Many people have small
                   life-insurance policies (often $5,000&ndash;$25,000)
                   through work or as a card perk that they never
-                  mentioned. Death certificate is the only document
+                  mentioned. A death certificate is the only document
                   most claims need.
                 </li>
                 <li>
@@ -196,7 +196,7 @@ export default function HowToPayPage() {
               </p>
               <p>
                 <strong className="text-ink">Public-safety officer death benefits.</strong>{" "}
-                Federal Public Safety Officers Benefits program pays
+                The federal Public Safety Officers Benefits program pays
                 a large lump-sum benefit ($400,000+ in 2026) to the
                 survivors of police officers, firefighters, EMTs,
                 and corrections officers who die in the line of
@@ -362,12 +362,12 @@ export default function HowToPayPage() {
                 of what it covers; updates as donations come in;
                 thank-you notes. The most successful campaigns are
                 organized by a friend or relative, not the closest
-                next of kin who is often too overwhelmed.
+                next of kin, who is often too overwhelmed.
               </p>
               <p>
                 <strong className="text-ink">What doesn&rsquo;t:</strong>{" "}
                 vague goals (&ldquo;help us pay for the funeral&rdquo;
-                with no number), pressure tactics, sharing only on a
+                with no number), pressure tactics, sharing only within a
                 small social circle. Asking 3 close friends or
                 family to share the link with their networks
                 multiplies reach faster than the organizer can do
@@ -403,7 +403,7 @@ export default function HowToPayPage() {
                 Some online lenders specifically target families
                 paying for funerals with 15&ndash;30% APR
                 installment loans. These are predatory. A
-                higher-quality credit card (typically 18&ndash;25%
+                regular credit card (typically 18&ndash;25%
                 APR) is rarely worse, and a credit union personal
                 loan (8&ndash;15% APR) is much better. The county
                 indigent program, body donation, and direct

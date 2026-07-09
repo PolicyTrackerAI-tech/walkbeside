@@ -7,7 +7,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { LINE_ITEMS, PRICING_LAST_UPDATED, fmtUSD } from "@/lib/pricing-data";
 
 export const metadata: Metadata = {
-  title: "The Fair-Price Index — what funeral items should cost | Honest Funeral",
+  title: "The Fair-Price Index — what funeral items should cost",
   description:
     "A free, neutral reference for what each common funeral charge should cost: fair-price ranges for caskets, embalming, the basic services fee, vaults, cremation, death certificates, and more — sourced and adjusted for your region. Built by a service that takes no money from funeral homes or insurers.",
   alternates: { canonical: "/fair-price-index" },

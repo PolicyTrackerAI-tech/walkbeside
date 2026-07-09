@@ -14,7 +14,7 @@ import { ProofSheet } from "@/components/partner/ProofSheet";
 import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
 
 export const metadata: Metadata = {
-  title: "Partner report — Honest Funeral",
+  title: "Partner report",
   // Never index a bearer-token report URL.
   robots: { index: false, follow: false },
 };

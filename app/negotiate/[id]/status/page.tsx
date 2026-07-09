@@ -107,7 +107,7 @@ export default function NegotiationStatusPage({
             </h1>
             <p className="text-ink-soft mt-2">
               {noHomesAvailable
-                ? <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back soon as we add coverage in your region.</>
+                ? <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back as we add coverage in your region.</>
                 : <>Most homes reply within 24 hours. We&rsquo;ll surface the best two or three options as they come in. You can check back here any time.</>}
             </p>
           </div>
@@ -176,7 +176,7 @@ export default function NegotiationStatusPage({
               <CardTitle>Ready to see what we found?</CardTitle>
               <p className="text-ink-soft mb-4">
                 We&rsquo;ve received at least one quote. Choose the home you want and
-                we&rsquo;ll release the contact info.
+                we&rsquo;ll notify them and help schedule the arrangement meeting.
               </p>
               <LinkButton href={`/negotiate/${id}/results`}>
                 See results →

@@ -5,7 +5,7 @@ import { normalizeReferralCode } from "@/lib/referral-codes";
 import { PlanNow } from "./PlanNow";
 
 export const metadata: Metadata = {
-  title: "Make the plan now, calmly — before the first call | Honest Funeral",
+  title: "Make the plan now, calmly — before the first call",
   description:
     "A 20-minute guided plan for families on hospice: understand the options, see what's fair to pay near you, capture what matters, find the benefits you're owed, and decide who makes the first call — before the moment arrives. Free, private (nothing leaves your device), and neutral: no money from funeral homes or insurers.",
   alternates: { canonical: "/plan-now" },

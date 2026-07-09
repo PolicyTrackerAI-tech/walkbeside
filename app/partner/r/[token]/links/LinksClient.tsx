@@ -156,7 +156,7 @@ export function LinksClient({
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                   <span className="font-mono text-sm text-ink">{c.code}</span>
                   <span className="text-xs text-ink-muted">
-                    {c.claims} famil{c.claims === 1 ? "y" : "ies"} started a case
+                    {c.claims} {c.claims === 1 ? "family started a case" : "families started cases"}
                     {!c.active && " · turned off"}
                   </span>
                 </div>

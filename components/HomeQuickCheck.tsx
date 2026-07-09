@@ -90,7 +90,7 @@ export function HomeQuickCheck() {
             {fmtRange(low, high)}
           </div>
           <p className="text-ink-soft mt-2">
-            This is what most families pay for a{" "}
+            This is what most families pay for{" "}
             {SERVICE_LABELS[serviceType].toLowerCase()} in your area.
           </p>
           <p className="text-xs text-ink-muted mt-3">
