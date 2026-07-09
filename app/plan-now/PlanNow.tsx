@@ -367,7 +367,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       question={`Did ${who} serve in the military?`}
                       value={plan.benefits.veteran}
                       onChange={(v) =>
-                        update("benefits", { ...plan.benefits, veteran: v })
+                        updateBenefit("veteran", v)
                       }
                     />
                     <YesNoUnsureRow
