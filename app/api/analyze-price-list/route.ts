@@ -18,6 +18,7 @@ import {
   stripCodeFence,
   type RawItem,
 } from "@/lib/negotiation/price-list-parse";
+import { reconcileTotalQuoted } from "@/lib/analyzer-totals";
 import {
   fallbackAdvocacySummary,
   assessCoverage,
@@ -148,8 +149,14 @@ export async function POST(req: Request) {
   // range, alongside the third-party-purchase-rights flag from runRules.
   const priced = items.filter((i) => !i.isRange);
 
-  const totalQuoted =
-    extracted.total_cents ?? priced.reduce((s, i) => s + (i.cents || 0), 0);
+  // A model-extracted stated total is only trusted when it's consistent with
+  // the items we parsed — see reconcileTotalQuoted for the failure mode this
+  // guards (a hallucinated total below the item sum clamping the fair total
+  // to $0 on screen).
+  const totalQuoted = reconcileTotalQuoted(
+    extracted.total_cents,
+    priced.reduce((s, i) => s + (i.cents || 0), 0),
+  );
 
   // The headline "$X above fair" MUST equal the sum of the per-item overcharge
   // badges the family sees in the table — never `totalQuoted - totalFairMid`,
