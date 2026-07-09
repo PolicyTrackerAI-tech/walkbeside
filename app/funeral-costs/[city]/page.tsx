@@ -166,9 +166,9 @@ export default async function CityFuneralCostsPage({
             <CardTitle>See what&rsquo;s fair to pay in {city.name}.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               We&rsquo;ll show you what a fair quote looks like in {city.name}{" "}
-              and the surrounding zip codes &mdash; typical totals for the
-              most common service types, and what each line item should
-              cost. Free to browse, no account needed.
+              and the surrounding zip codes &mdash; benchmark ranges for the
+              most common service types and every line item, adjusted for
+              local cost of living. Free to browse, no account needed.
             </p>
             <LinkButton href={`/funeral-homes/${city.zipExample}`} size="lg">
               See fair prices near {city.name} →
