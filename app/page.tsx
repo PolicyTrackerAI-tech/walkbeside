@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LinkButton } from "@/components/ui/Button";
+import { Card, CardEyebrow } from "@/components/ui/Card";
 import { SiteHeader } from "@/components/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { HomeQuickCheck } from "@/components/HomeQuickCheck";
@@ -114,6 +115,13 @@ export default function HomePage() {
               what that means for you
             </Link>
             .
+          </p>
+
+          <p className="mt-3 text-xs text-ink-muted max-w-md mx-auto">
+            Represent a hospice, employer, or care organization?{" "}
+            <Link href="/partners" className="underline-offset-2 hover:underline">
+              See how partnering works &rarr;
+            </Link>
           </p>
 
           <p className="mt-2 text-xs text-ink-muted">
@@ -260,6 +268,51 @@ export default function HomePage() {
                 How we work for you →
               </Link>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-border bg-surface-soft">
+        <div className="max-w-3xl mx-auto px-5 py-14">
+          <p className="text-xs uppercase tracking-wider text-ink-muted mb-3 text-center">
+            For hospices &amp; employers
+          </p>
+          <h2 className="font-serif text-2xl sm:text-3xl text-ink text-center mb-4">
+            A funeral-cost benefit you can hand a grieving family without
+            worrying what it costs them.
+          </h2>
+          <p className="text-center text-ink-soft mb-8 max-w-xl mx-auto">
+            We take no money from funeral homes or insurers — your
+            organization pays us, so we have no reason to point a family
+            anywhere but where&rsquo;s right for them.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <Card>
+              <CardEyebrow>Typical overcharge</CardEyebrow>
+              <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
+                $2,000&ndash;$5,000
+              </div>
+              <p className="text-sm text-ink-soft mt-2">
+                per family, on the funeral arrangement alone.
+              </p>
+            </Card>
+            <Card>
+              <CardEyebrow>Bereavement mandate</CardEyebrow>
+              <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
+                ~13 months
+              </div>
+              <p className="text-sm text-ink-soft mt-2">
+                of support Medicare requires per death (42 CFR 418.64) &mdash;
+                unfunded.
+              </p>
+            </Card>
+          </div>
+
+          <div className="flex justify-center">
+            <LinkButton href="/partners" variant="secondary">
+              See how partnering works →
+            </LinkButton>
           </div>
         </div>
       </section>
