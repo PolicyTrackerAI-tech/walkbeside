@@ -8,7 +8,7 @@ import { LINE_ITEMS, PRICING_LAST_UPDATED } from "@/lib/pricing-data";
 import { RULES } from "@/lib/bundling-detection/rules";
 
 export const metadata: Metadata = {
-  title: "How we check a funeral quote — our methodology | Honest Funeral",
+  title: "How we check a funeral quote — our methodology",
   description:
     "Exactly how Honest Funeral decides whether a funeral price is fair: where our benchmark ranges come from, how we adjust for your region, the FTC Funeral Rule checks we run, and the limits of an estimate. No money from funeral homes or insurers.",
   alternates: { canonical: "/methodology" },

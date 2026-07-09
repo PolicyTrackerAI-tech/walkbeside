@@ -5,7 +5,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 
 export const metadata: Metadata = {
-  title: "For funeral homes — what Honest Funeral is and how we work with you",
+  title: { absolute: "For funeral homes — what Honest Funeral is and how we work with you" },
   description:
     "If you received an outreach email from Honest Funeral on behalf of a family — here's what we are, what we don't do, and how the flow works. We're not a competitor, we don't take commissions, and the family signs with you directly.",
   alternates: { canonical: "/for-funeral-homes" },

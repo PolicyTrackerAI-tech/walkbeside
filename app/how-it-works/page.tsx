@@ -9,7 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
 
 export const metadata: Metadata = {
-  title: "How Honest Funeral helps families",
+  title: { absolute: "How Honest Funeral helps families" },
   description:
     "A consumer advocate, not a funeral home. Everything is free to families — the tools and the funeral-home outreach. We contact homes on your behalf at no charge, and we keep families free because we're funded by the institutions we partner with.",
   alternates: { canonical: "/how-it-works" },

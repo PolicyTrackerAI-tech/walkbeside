@@ -12,7 +12,7 @@ import {
 } from "@/app/api/household/service";
 
 export const metadata: Metadata = {
-  title: "Family view | Honest Funeral",
+  title: "Family view",
   robots: { index: false, follow: false },
 };
 

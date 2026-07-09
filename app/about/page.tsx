@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { LinkButton } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
-  title: "About Honest Funeral",
+  title: { absolute: "About Honest Funeral" },
   description:
     "Why Honest Funeral exists: to put a grieving family on equal footing with the funeral industry. Independent and founder-built — free to families, funded by the institutions we partner with, and we take no money from funeral homes.",
   alternates: { canonical: "/about" },
