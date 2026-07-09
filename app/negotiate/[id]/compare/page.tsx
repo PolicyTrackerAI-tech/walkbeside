@@ -4,6 +4,7 @@ import { requireSignedIn } from "@/lib/require-signed-in";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { fmtCents } from "@/lib/stripe";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
 import {
@@ -58,6 +59,9 @@ export default async function NegotiationComparePage({
 
       <section className="flex-1">
         <div className="max-w-6xl mx-auto px-5 py-10 space-y-6">
+          <div className="max-w-3xl">
+            <CaseStepper stage="compare" />
+          </div>
           <div>
             <CardEyebrow>Side-by-side comparison</CardEyebrow>
             <h1 className="font-serif text-3xl text-ink">
@@ -78,14 +82,16 @@ export default async function NegotiationComparePage({
           {matrix.columns.length === 0 && (
             <Card tone="soft">
               <p className="text-ink-soft">
-                No quotes recorded yet. Head back to the{" "}
+                No quotes recorded yet &mdash; you&rsquo;re still at the
+                &ldquo;we reach out&rdquo; stage above. As homes reply, record
+                each quote on the{" "}
                 <a
                   href={`/negotiate/${id}/status`}
                   className="text-primary-deep underline"
                 >
                   status page
                 </a>{" "}
-                and record what each home sent.
+                and this comparison fills in.
               </p>
             </Card>
           )}

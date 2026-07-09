@@ -8,6 +8,7 @@ import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { HelpFooter } from "@/components/HelpFooter";
+import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { readReferral } from "@/lib/referral-codes";
 import { ReferralCoBrand } from "@/components/ReferralCoBrand";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
@@ -197,6 +198,8 @@ function NegotiateStartWizard() {
 
           {!showResumePrompt && hydrated && (
             <>
+              <CaseStepper stage="started" />
+
               {/* Progress bar */}
               <div>
                 <div className="flex items-center justify-between mb-2">
