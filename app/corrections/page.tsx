@@ -8,7 +8,7 @@ import { LINE_ITEMS } from "@/lib/pricing-data";
 import { RULES } from "@/lib/bundling-detection/rules";
 
 export const metadata: Metadata = {
-  title: "Corrections & accuracy — how we stay honest | Honest Funeral",
+  title: "Corrections & accuracy — how we stay honest",
   description:
     "How Honest Funeral keeps its funeral-price checker accurate: we'd rather under-claim than over-claim, we publish our corrections, and we take no money from funeral homes or insurers. Our standing accuracy commitment and correction log.",
   alternates: { canonical: "/corrections" },

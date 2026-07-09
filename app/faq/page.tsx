@@ -14,7 +14,7 @@ function slugify(s: string): string {
 }
 
 export const metadata: Metadata = {
-  title: "Questions families ask — Honest Funeral FAQ",
+  title: "Questions families ask",
   description:
     "Straight answers about how Honest Funeral works, how we make money, whether we're affiliated with funeral homes, and how we stay free for families.",
 };

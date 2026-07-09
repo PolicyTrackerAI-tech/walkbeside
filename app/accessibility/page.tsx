@@ -5,7 +5,7 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
 
 export const metadata: Metadata = {
-  title: "Accessibility | Honest Funeral",
+  title: "Accessibility",
   description:
     "Our accessibility target, what works today, known limitations, and how to ask for help or accommodation — including language assistance.",
   alternates: { canonical: "/accessibility" },
