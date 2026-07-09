@@ -10,7 +10,7 @@ import { FEATURES } from "@/lib/env";
 export const metadata: Metadata = {
   title: "Planning a funeral in advance",
   description:
-    "A few hours of research now saves your family thousands and hours of decisions at the worst moment of their lives. A short, practical cheat sheet — no account needed.",
+    "A few hours of research now saves your family thousands of dollars and hours of decisions at the worst moment of their lives. A short, practical cheat sheet — no account needed.",
 };
 
 async function getSignedIn(): Promise<boolean> {
@@ -42,7 +42,7 @@ export default async function PlanningPage() {
             <p className="text-lg text-ink-soft">
               Doing this now, when nothing is urgent, is one of the cheapest
               and kindest things you can do for the people you love. A few
-              hours of research saves your family thousands and hours of
+              hours of research saves your family thousands of dollars and hours of
               decisions at the worst moment of their lives.
             </p>
           </div>
@@ -63,7 +63,7 @@ export default async function PlanningPage() {
           </section>
 
           <Card tone="primary">
-            <CardEyebrow>The acquisition asset</CardEyebrow>
+            <CardEyebrow>Free cheat sheet</CardEyebrow>
             <CardTitle>The Honest Funeral arrangement cheat sheet.</CardTitle>
             <p className="text-ink-soft mb-5">
               One page. The nine things to ask any funeral home. The five
@@ -110,7 +110,7 @@ export default async function PlanningPage() {
           </Card>
 
           <Card>
-            <CardEyebrow>A note from the funeral director</CardEyebrow>
+            <CardEyebrow>Watch out</CardEyebrow>
             <CardTitle>On prepaid funeral plans.</CardTitle>
             <p className="text-ink-soft mb-3">
               Many families assume prepaying is the responsible move. It
@@ -154,8 +154,8 @@ export default async function PlanningPage() {
             <CardTitle>We can do the calling for you.</CardTitle>
             <p className="text-ink-soft mb-3">
               Planning ahead means your family won&rsquo;t be making cold
-              calls in the worst week of their life. Free to families &mdash; at
-              no charge &mdash; we contact funeral homes near them, pull written itemized quotes, and put
+              calls in the worst week of their life. Free to families &mdash;
+              we contact funeral homes near them, pull written itemized quotes, and put
               the options side by side in their dashboard. They make the
               call. We make sure they don&rsquo;t miss anything.
             </p>

@@ -81,7 +81,7 @@ export default function GriefPage() {
               </p>
               <p>
                 What researchers do find: grief is a wave that comes
-                in irregular intervals, gradually with longer gaps
+                at irregular intervals, with gradually longer gaps
                 between waves over years. Some weeks are nearly
                 normal. Some are wholly underwater. Triggers (a
                 song, a photo, an anniversary, a stranger&rsquo;s
@@ -145,15 +145,14 @@ export default function GriefPage() {
                 no longer freshly gone (the practical urgency is
                 over) but the person is still dead and they always
                 will be. Many bereaved spouses describe a
-                second-grief at the same time &mdash; grief for the
+                second grief at the same time &mdash; grief for the
                 self they used to be alongside the deceased, not
                 only grief for the person.
               </p>
               <p>
                 <strong className="text-ink">Months 9&ndash;12: the &ldquo;firsts.&rdquo;</strong>{" "}
                 The first birthday without them. The first
-                anniversary. The first holidays. The first season
-                turn. Each is harder than the bereaved usually
+                anniversary. The first holidays. The first turn of the seasons. Each is harder than the bereaved usually
                 expects. Planning the firsts in advance (where you
                 want to be, who you want with you, whether you want
                 to mark the day or escape it) helps.
@@ -261,7 +260,7 @@ export default function GriefPage() {
                 . Filter by zip code, insurance accepted, and
                 specialty &mdash; look for grief, bereavement, or
                 complicated grief. Free to use; therapists pay to
-                list. Most US therapists with online presence are
+                list. Most US therapists with an online presence are
                 here.
               </p>
               <p>
@@ -398,7 +397,7 @@ export default function GriefPage() {
                   community.
                 </li>
                 <li>
-                  <strong className="text-ink">M.E.N.D. (mommies enduring neonatal death)</strong>{" "}
+                  <strong className="text-ink">M.E.N.D. (Mommies Enduring Neonatal Death)</strong>{" "}
                   for stillbirth and infant loss specifically.
                 </li>
               </ul>

@@ -28,7 +28,7 @@ export default function PrepPage() {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader
-        rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />}
+        rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="← Dashboard" />}
         className="no-print"
       />
 

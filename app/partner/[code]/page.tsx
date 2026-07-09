@@ -8,7 +8,7 @@ import { fallbackOutcomesDigest } from "@/lib/partner-report-digest";
 import { ProofSheet } from "@/components/partner/ProofSheet";
 
 export const metadata: Metadata = {
-  title: "Partner report — Honest Funeral",
+  title: "Partner report",
   robots: { index: false, follow: false },
 };
 

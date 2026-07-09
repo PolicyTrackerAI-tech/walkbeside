@@ -84,7 +84,7 @@ export default function SurvivorBenefitsPage() {
               <p>
                 <strong className="text-ink">How to apply:</strong>{" "}
                 call the SSA at 1-800-772-1213 or visit a local SSA
-                office. You cannot apply for the lump-sum online; it
+                office. You cannot apply for the lump sum online; it
                 requires a phone call or in-person visit. Many funeral
                 homes will report the death to SSA on the family&rsquo;s
                 behalf, but reporting the death is not the same as
@@ -236,7 +236,7 @@ export default function SurvivorBenefitsPage() {
                 is a separate step.
               </p>
               <p>
-                <strong className="text-ink">2. Returning the last payment.</strong>{" "}
+                <strong className="text-ink">2. Spending the last payment.</strong>{" "}
                 If the deceased received a Social Security payment
                 for the month they died, that payment must be
                 returned (Social Security is paid in arrears, not in
@@ -275,8 +275,7 @@ export default function SurvivorBenefitsPage() {
                 <strong className="text-ink">Call SSA at 1-800-772-1213</strong>{" "}
                 or schedule an appointment at a local SSA office.
                 Survivor benefits cannot be applied for online (only
-                retirement and disability can). Hours: 8 AM &ndash; 7
-                PM local time, Monday&ndash;Friday. Expect a 30 to 90
+                retirement and disability can). Hours: 8 AM&ndash;7 PM local time, Monday&ndash;Friday. Expect a 30 to 90
                 minute wait on the phone; appointment scheduling
                 typically goes faster.
               </li>

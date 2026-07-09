@@ -259,7 +259,7 @@ function NegotiateStartWizard() {
 
               {step === 2 && (
                 <Card>
-                  <Label htmlFor="svc" hint="If you came from /decide, this is already set.">
+                  <Label htmlFor="svc" hint="If you came from the decision guide, this is already set.">
                     What kind of service?
                   </Label>
                   <Select

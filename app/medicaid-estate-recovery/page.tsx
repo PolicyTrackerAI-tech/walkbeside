@@ -7,7 +7,7 @@ import { FEDERAL_BASELINE } from "@/lib/merp-by-state";
 import { StateMerp } from "./StateMerp";
 
 export const metadata: Metadata = {
-  title: "Medicaid estate recovery, explained calmly | Honest Funeral",
+  title: "Medicaid estate recovery, explained calmly",
   description:
     "If your person was on Medicaid, the state may send a letter months after the death claiming repayment from the estate — usually the house. What the law actually allows, the protections every family has, your state's rules with citations, and what to do before paying anything.",
   alternates: { canonical: "/medicaid-estate-recovery" },
@@ -93,7 +93,7 @@ export default function MerpPage() {
               <li>
                 <strong>Talk to an elder-law attorney before responding.</strong>{" "}
                 Many offer free consultations; legal aid organizations handle
-                estate-recovery cases routinely. One hour of advice routinely
+                estate-recovery cases routinely. One hour of advice often
                 changes the outcome here.
               </li>
             </ol>

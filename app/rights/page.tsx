@@ -27,7 +27,7 @@ const RIGHTS: Right[] = [
   {
     title: "Embalming, in most states",
     law: "FTC Funeral Rule · 16 CFR 453.3 and 453.5",
-    body: "No US state requires embalming for every death. Some states require either embalming or refrigeration if disposition doesn't happen within a set time (often 24–48 hours), and a few have rules for cross-state transport or certain communicable diseases — refrigeration is an alternative wherever a time rule exists. If a funeral home tells you state law requires embalming, that is almost always false — and itself an FTC Funeral Rule violation. Look up your state's actual rule in the checker below the list.",
+    body: "No US state requires embalming for every death. Some states require either embalming or refrigeration if disposition doesn’t happen within a set time (often 24–48 hours), and a few have rules for cross-state transport or certain communicable diseases — refrigeration is an alternative wherever a time rule exists. If a funeral home tells you state law requires embalming, that is almost always false — and itself an FTC Funeral Rule violation. Look up your state’s actual rule in the checker below the list.",
     tellThem: "We’re not having embalming. We understand it isn’t legally required for the service we’re planning.",
   },
   {
@@ -50,7 +50,7 @@ const RIGHTS: Right[] = [
   {
     title: "A concrete burial vault (in most places)",
     law: "Cemetery rule, not law",
-    body: "Burial vaults or concrete grave liners are required by many cemeteries to keep the ground from settling. They are not required by law. Ask the cemetery for their minimum requirement, and buy the cheapest option that meets it. Upgrade ‘protective’ vaults are almost always optional.",
+    body: "Burial vaults or concrete grave liners are required by many cemeteries to keep the ground from settling. They are not required by law. Ask the cemetery for their minimum requirement, and buy the cheapest option that meets it. ‘Protective’ upgrade vaults are almost always optional.",
     tellThem: "We’d like the most basic liner that meets the cemetery’s minimum requirement. Please show us that option.",
   },
   {
@@ -152,8 +152,7 @@ export default function RightsPage() {
               upsells families face at burial &mdash; vaults, opening and
               closing, headstones, plot fees &mdash; come from the cemetery,
               not the funeral home. Those are governed by state law and the
-              cemetery&rsquo;s own contract. Ask the cemetery for its written
-              rules in writing before you sign anything.
+              cemetery&rsquo;s own contract. Ask the cemetery for its rules in writing before you sign anything.
             </p>
           </Card>
 

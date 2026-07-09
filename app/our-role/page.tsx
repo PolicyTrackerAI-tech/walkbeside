@@ -232,7 +232,7 @@ export default function OurRolePage() {
               href="/about"
               className="text-primary-deep underline-offset-2 hover:underline"
             >
-              About the team
+              About Honest Funeral
             </Link>
           </p>
         </article>

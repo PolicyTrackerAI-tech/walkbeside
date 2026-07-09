@@ -228,8 +228,7 @@ export default function SuicideLossPage() {
                   (sometimes 1 year) of the policy. After that
                   period, suicide deaths are covered normally. Check
                   the policy carefully. If denied within the clause
-                  period, ask for the specific clause and date of
-                  policy &mdash; sometimes denials are made in
+                  period, ask for the specific clause and the policy date &mdash; sometimes denials are made in
                   error.
                 </li>
                 <li>
@@ -403,7 +402,7 @@ export default function SuicideLossPage() {
               <p>
                 Generic grief therapy is often inadequate for
                 suicide loss. The specific challenges &mdash; the
-                &ldquo;why&rdquo;, the trauma if you were the one
+                &ldquo;why,&rdquo; the trauma if you were the one
                 to find the body, the anger, the stigma &mdash;
                 benefit from a therapist who has worked with
                 suicide loss specifically.
@@ -436,8 +435,7 @@ export default function SuicideLossPage() {
                 <li>
                   If you had intrusive flashbacks or were the one to
                   find the body, look specifically for EMDR or
-                  Cognitive Processing Therapy &mdash; trauma-
-                  focused modalities with evidence specifically for
+                  Cognitive Processing Therapy &mdash; trauma-focused modalities with evidence specifically for
                   death-scene trauma.
                 </li>
                 <li>
@@ -564,8 +562,7 @@ export default function SuicideLossPage() {
                 </li>
                 <li>
                   <strong className="text-ink">&ldquo;After Suicide Loss: Coping with Your Grief&rdquo;</strong>{" "}
-                  by Bob Baugher and Jack Jordan. Practical workbook-
-                  style, often used in support groups.
+                  by Bob Baugher and Jack Jordan. Practical workbook-style, often used in support groups.
                 </li>
                 <li>
                   <strong className="text-ink">&ldquo;History of a Suicide&rdquo;</strong>{" "}

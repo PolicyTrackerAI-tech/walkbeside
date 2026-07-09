@@ -183,7 +183,7 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
                           {it.highMarkup && (
                             <span
                               className="ml-2 text-xs text-warn"
-                              title="High-markup item — sister flagged"
+                              title="High-markup item — commonly padded"
                             >
                               ⚑ high markup
                             </span>

@@ -6,7 +6,7 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { ApplyForm } from "./ApplyForm";
 
 export const metadata: Metadata = {
-  title: "Partner with Honest Funeral — hospices & employers | Honest Funeral",
+  title: "Apply to partner — hospices & employers",
   description:
     "Give your families free, neutral funeral-price help — price checking, planning tools, and calm guidance, at no cost to them or to you during the pilot. Apply in two minutes; a person reviews every application.",
   alternates: { canonical: "/partners/apply" },

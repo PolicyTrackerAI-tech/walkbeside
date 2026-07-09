@@ -109,7 +109,7 @@ export default function FuneralEtiquettePage() {
                   &ldquo;Let me know if I can do anything.&rdquo;{" "}
                   (This sounds kind but puts the work on the
                   bereaved. See &ldquo;how to actually help&rdquo;
-                  below for better.)
+                  below for better options.)
                 </li>
                 <li>
                   Long stories about your own losses, comparing
@@ -188,7 +188,7 @@ export default function FuneralEtiquettePage() {
                   code (&ldquo;wear something colorful,&rdquo;
                   &ldquo;come as you are,&rdquo; &ldquo;wear his
                   favorite team&rsquo;s jersey&rdquo;). Follow it.
-                  If unsure, conservative business attire is safe
+                  If unsure, conservative business attire is a safe
                   default.
                 </li>
                 <li>
@@ -282,7 +282,7 @@ export default function FuneralEtiquettePage() {
                 <strong className="text-ink">For Jewish funerals:</strong>{" "}
                 flowers are traditionally not sent. A donation to a
                 charity the family supports is the standard
-                alternative. Sending a tree planted in Israel
+                alternative. Having a tree planted in Israel
                 through JNF is a common tradition.
               </p>
               <p>
@@ -452,7 +452,7 @@ export default function FuneralEtiquettePage() {
                 a private home, or a restaurant. Less formal.
                 Brings together everyone for food and conversation.
                 You can stay 30 min to a few hours depending on
-                relationship.
+                your relationship.
               </p>
             </div>
           </Card>

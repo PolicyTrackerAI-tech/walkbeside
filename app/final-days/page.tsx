@@ -306,7 +306,7 @@ export default function FinalDaysPage() {
                 <li>
                   <strong className="text-ink">Asking medical questions on Google.</strong>{" "}
                   Almost all of it has the wrong answer for the
-                  hospice-stage. Hospice has the right answer for
+                  hospice stage. Hospice has the right answer for
                   your specific person. Call them.
                 </li>
               </ul>
@@ -384,7 +384,7 @@ export default function FinalDaysPage() {
                 stepped out of the room. Nurses describe this as
                 common &mdash; some readings of it suggest the dying
                 person waited for the caregiver to be out so they
-                could go without protecting them through it. Whether
+                could go without putting them through it. Whether
                 that&rsquo;s right or not, missing the moment is not
                 a failure.
               </p>
@@ -484,7 +484,7 @@ export default function FinalDaysPage() {
               <p>
                 &ldquo;Did we start hospice too soon &mdash; or too late?&rdquo;
                 &ldquo;Should we have tried one more treatment?&rdquo;
-                &ldquo;Was the DNR right?&rdquo; When the time comes, research on families after
+                &ldquo;Was the DNR right?&rdquo; Research on families after
                 end-of-life care consistently finds this kind of doubt to be
                 one of the most common experiences caregivers carry &mdash;
                 including after decisions that were, by every measure, made

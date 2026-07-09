@@ -78,7 +78,7 @@ export interface EmailContent {
  * STOP automatically. No links except ours; no marketing, ever.
  */
 export function smsFor(milestone: Milestone, prefsUrl: string): string {
-  const stop = "Txt STOP to opt out.";
+  const stop = "Text STOP to opt out.";
   const map: Record<Milestone, string> = {
     "1mo": `Honest Funeral: it's been about a month. No task here — just checking in. When you're ready, the after-death checklist is at honestfuneral.co/next-30-days. ${stop}`,
     "3mo": `Honest Funeral: three months — often the quiet stretch. If they were on hospice, that hospice owes your family free grief support for ~13 months; one call starts it. More: honestfuneral.co/grief. ${stop}`,
@@ -189,7 +189,7 @@ A few practical notes for year-mark housekeeping:
 
 — Recurring charges that slipped through the cracks early on tend to surface around now. ${url("/subscriptions")} catches them if you want a fresh scan.
 
-— If you set up your own estate while you were thinking about it last year (a lot of families do), this is a good time to check that beneficiary designations are still right and your will is current.
+— If you set up your own estate plan while you were thinking about it last year (a lot of families do), this is a good time to check that beneficiary designations are still right and your will is current.
 
 — And an honest check-in on the grief itself: if it still feels as consuming as the early months, the quiet self-check at ${url("/grief#self-check")} gives you an honest read and the right people to talk to. Past a year, that pattern is treatable — not something to white-knuckle.
 

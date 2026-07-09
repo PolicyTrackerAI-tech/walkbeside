@@ -32,7 +32,7 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
     n: 1,
     title: "We find the funeral homes near you, and you approve the list.",
     body:
-      "We line up to nine homes in your area. You approve the list before anything goes out — we only contact homes once you're in.",
+      "We line up as many as nine homes in your area. You approve the list before anything goes out — we only contact homes once you're in.",
   },
   {
     n: 2,

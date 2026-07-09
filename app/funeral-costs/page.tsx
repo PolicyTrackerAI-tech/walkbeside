@@ -90,8 +90,8 @@ export default function FuneralCostsIndexPage() {
           <p className="text-xs text-ink-muted">
             Pricing data is based on national fair-price benchmarks
             adjusted for regional cost-of-living. Real quotes vary by
-            funeral home and by what&rsquo;s included. Comparison-
-            shopping at least two homes is the most reliable way to
+            funeral home and by what&rsquo;s included. Comparison-shopping
+            at least two homes is the most reliable way to
             find a fair price.
           </p>
 

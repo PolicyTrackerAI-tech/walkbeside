@@ -245,7 +245,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Will funeral homes know I used Honest Funeral?",
     plain:
-      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. When you have us call funeral homes for you (our outreach): yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
+      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. When you have us contact funeral homes for you (our outreach): yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
     a: (
       <>
         <p>
@@ -253,7 +253,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           side, and no home is contacted.
         </p>
         <p>
-          When you have us call funeral homes for you (our
+          When you have us contact funeral homes for you (our
           outreach): yes, and that&rsquo;s the point.{" "}
           <strong>
             We identify ourselves, by name, in every email.
@@ -343,11 +343,11 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What if I\u2019m not sure I need your help?",
     plain:
-      "Then don't pay us anything. Use the public guidance and the fair-price lookup to rate the quote you've been given against local data. Families often overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the lookup tells you the quote you've been given is already in range, you're done. Nothing else to do.",
+      "That's fine — everything here is free anyway. Use the public guidance and the fair-price lookup to rate the quote you've been given against local data. Families often overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the lookup tells you the quote you've been given is already in range, you're done. Nothing else to do.",
     a: (
       <>
         <p>
-          Then don&rsquo;t pay us anything. Use the public guidance and
+          That&rsquo;s fine &mdash; everything here is free anyway. Use the public guidance and
           the fair-price lookup to rate the quote you&rsquo;ve been given
           against local data.
         </p>

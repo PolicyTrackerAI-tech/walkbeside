@@ -39,7 +39,7 @@ const PHASES: {
       {
         name: "Primary bank account",
         detail:
-          "If the account is joint, it stays active with the survivor as primary. If solo, ask about pay-on-death beneficiary designations and how to access funds for funeral expenses. Don't close it until recurring deposits (pensions, benefits) stop.",
+          "If the account is joint, it stays active with the survivor as primary. If solo, ask about payable-on-death beneficiary designations and how to access funds for funeral expenses. Don't close it until recurring deposits (pensions, benefits) stop.",
       },
     ],
   },
@@ -231,7 +231,7 @@ export default function AccountsToClosePage() {
               href="/next-30-days"
               className="text-ink-muted hover:text-ink-soft"
             >
-              After the funeral (index)
+              The next 30 days (index)
             </Link>
           </div>
         </div>

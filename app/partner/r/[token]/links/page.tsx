@@ -10,7 +10,7 @@ import { resolvePartnerToken } from "@/lib/partner-auth";
 import { LinksClient, type CodeRow } from "./LinksClient";
 
 export const metadata: Metadata = {
-  title: "Referral links | Honest Funeral",
+  title: "Referral links",
   robots: { index: false, follow: false },
 };
 

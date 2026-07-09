@@ -282,7 +282,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       })}
                       <p className="text-sm text-ink-soft">
                         That&rsquo;s the fair range near you &mdash; a quote far
-                        above it deserves a &ldquo;why?&rdquo;. The same service
+                        above it deserves a &ldquo;why?&rdquo; The same service
                         can cost 2&ndash;3&times; more across town, and prices
                         are negotiable. Any funeral home must give you its
                         price list if you ask &mdash; and when you have one in
@@ -321,7 +321,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="wishes" hint="Anything they've said, or what you know they'd want. Simple is a complete answer.">
+                      <Label htmlFor="wishes" hint="Anything they’ve said, or what you know they’d want. Simple is a complete answer.">
                         Wishes and what matters
                       </Label>
                       <Textarea
@@ -602,7 +602,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                 <Link href="/worksheet?mode=ahead" className="text-primary-deep underline">
                   pre-meeting worksheet
                 </Link>{" "}
-                walks every decision before anyone is across the table.
+                walks you through every decision before anyone is across the table.
               </p>
 
               <p className="text-sm text-ink-soft print:hidden">

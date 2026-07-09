@@ -354,7 +354,7 @@ export function Analyzer({
   return (
     <main className="flex-1 flex flex-col">
       <div className="print:hidden">
-        <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="Dashboard" />} />
+        <SiteHeader rightSlot={<BackLink defaultHref="/dashboard" defaultLabel="← Dashboard" />} />
       </div>
       <section className="flex-1">
         <div className="max-w-3xl mx-auto px-5 py-10 space-y-6">
@@ -372,8 +372,8 @@ export function Analyzer({
             </h1>
             <p className="text-ink-soft">
               {aheadMode
-                ? "Upload a photo of a General Price List, or type the line items in. Any funeral home must give you its price list when you ask — that's a federal FTC rule, and asking now, before anything is urgent, is exactly how you compare homes on your terms."
-                : "Upload a photo of the General Price List they handed you, or type the line items in. We'll match each one to fair-market ranges for your region and flag likely FTC Funeral Rule problems — the most common violations and upsells."}
+                ? "Upload a photo of a General Price List, or type the line items in. Any funeral home must give you its price list when you ask — that’s a federal FTC rule, and asking now, before anything is urgent, is exactly how you compare homes on your terms."
+                : "Upload a photo of the General Price List they handed you, or type the line items in. We’ll match each one to fair-market ranges for your region and flag likely FTC Funeral Rule problems — the most common violations and upsells."}
             </p>
             {aheadMode ? (
               <div className="mt-3">
@@ -466,7 +466,7 @@ export function Analyzer({
               <div>
                 <Label
                   htmlFor="list"
-                  hint="One item per line, like 'Basic services fee  $2,495'."
+                  hint="One item per line, like &ldquo;Basic services fee $2,495&rdquo;."
                 >
                   Itemized price list
                 </Label>

@@ -17,7 +17,7 @@ import {
 export const metadata: Metadata = {
   title: "How much does a funeral cost? 2026 averages by service type",
   description:
-    "What a funeral actually costs in 2026: direct cremation $1,000–$2,500, traditional burial $8,000–$12,000, and more. Fair-price ranges by service type, what drives the cost, and the line items you can legally decline.",
+    "What a funeral actually costs in 2026: direct cremation $1,000–$2,200, traditional burial $8,000–$12,000, and more. Fair-price ranges by service type, what drives the cost, and the line items you can legally decline.",
   openGraph: {
     images: [ogImage("How much does a funeral cost?", "2026 averages")],
   },
@@ -252,7 +252,7 @@ export default function AverageFuneralCostPage() {
                 <Link href="/decide" className="text-primary-deep underline">
                   What service type fits us?
                 </Link>{" "}
-                — four short questions, no account.
+                — five short questions, no account.
               </li>
             </ul>
           </Card>

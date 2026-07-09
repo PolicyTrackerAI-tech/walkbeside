@@ -187,8 +187,7 @@ export default function TalkingToKidsPage() {
                   &ldquo;What happens to the body?&rdquo; &mdash;
                   honest, specific: &ldquo;Grandpa&rsquo;s body is at the
                   funeral home. They take care of bodies after
-                  someone dies. Then the body will be cremated/
-                  buried, which means ___.&rdquo;
+                  someone dies. Then the body will be cremated/buried, which means ___.&rdquo;
                 </li>
                 <li>
                   &ldquo;What is cremation?&rdquo; &mdash;

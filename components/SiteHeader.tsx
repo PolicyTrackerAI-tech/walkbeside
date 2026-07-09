@@ -84,7 +84,7 @@ export function SiteHeader({
 
         <button
           type="button"
-          aria-label="Open menu"
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((v) => !v)}
           className="md:hidden ml-auto inline-flex items-center justify-center w-10 h-10 rounded-lg border border-border text-ink-soft hover:text-ink"

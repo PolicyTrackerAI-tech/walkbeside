@@ -121,7 +121,7 @@ export default async function FaithPage({
               )}
               <p className="text-ink-soft mb-5">
                 This is the service type most families in this tradition
-                choose. You can refine with the four-question decision guide if
+                choose. You can refine with the five-question decision guide if
                 you want to weigh budget or other preferences.
               </p>
               <div className="flex flex-wrap gap-3">

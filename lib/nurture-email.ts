@@ -33,7 +33,7 @@ const SOURCE: Record<string, SourceContext> = {
     guideTitle: "How to pay for a funeral",
     guidePath: "/how-to-pay",
     step1Opener:
-      "It's been a week since you saved the paying-for-a-funeral guide. The programs we listed change occasionally — if anything in the guide became out of date, we'll fold it into a future update.",
+      "It's been a week since you saved the paying-for-a-funeral guide. The programs we listed change occasionally — if anything in the guide has gone out of date, we'll fix it in a future update.",
   },
   "talking-to-kids": {
     guideTitle: "Talking to children about death",
@@ -57,7 +57,7 @@ const SOURCE: Record<string, SourceContext> = {
     guideTitle: "When someone dies in hospice",
     guidePath: "/after-hospice",
     step1Opener:
-      "It's been a week. The paperwork that follows a hospice death is real — if any of it is feeling overwhelming, there's a related guide below.",
+      "It's been a week. The paperwork that follows a hospice death is real — if any of it feels overwhelming, the guide below walks you through it.",
   },
   "final-days": {
     guideTitle: "The final days",
@@ -99,7 +99,7 @@ const SOURCE: Record<string, SourceContext> = {
     guideTitle: "Overdose loss",
     guidePath: "/overdose-loss",
     step1Opener:
-      "It's been a week. Overdose loss carries a layer of stigma other losses don't — GRASP and similar peer communities help most. Link below.",
+      "It's been a week. Overdose loss carries a layer of stigma other losses don't — GRASP and similar peer communities help most — the guide below links to them.",
   },
   "death-of-a-child": {
     guideTitle: "Death of a child",
@@ -190,20 +190,20 @@ ${brandFooterText(email)}`;
   }
 
   // step 2
-  const subject = `If you ever need help with funeral arrangement`;
+  const subject = `If you ever need help with funeral arrangements`;
 
   const html = `<div style="background-color: #f9f7f3; padding: 32px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a1a;">
   <div style="max-width: 480px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; padding: 40px 32px;">
-    <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 400; color: #1a1a1a; margin: 0 0 20px 0; line-height: 1.35;">If you ever need help with funeral arrangement.</h1>
+    <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 400; color: #1a1a1a; margin: 0 0 20px 0; line-height: 1.35;">If you ever need help with funeral arrangements.</h1>
     <p style="font-size: 16px; line-height: 1.65; color: #4a4a4a; margin: 0 0 16px 0;">Quick note in case it's useful. We help families compare funeral homes before they sign anything — typical savings on the arrangement run $2,000 to $5,000.</p>
     <p style="font-size: 16px; line-height: 1.65; color: #4a4a4a; margin: 0 0 16px 0;">Free to families — we contact homes on your behalf at no charge. We take no commissions or kickbacks from any funeral home; we're funded by the institutions we partner with.</p>
     <a href="${SITE}/where" style="display: inline-block; background-color: #1f3d2c; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-weight: 500; font-size: 15px;">Start here when you need it →</a>
-    <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 24px 0 0 0;">This is the last nurture email we'll send. If you want updates when we publish new guides, stay subscribed — otherwise the one-click link below stops everything.</p>
+    <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 24px 0 0 0;">This is the last check-in email we'll send. If you want updates when we publish new guides, stay subscribed — otherwise the one-click link below stops everything.</p>
     ${brandFooter(email)}
   </div>
 </div>`;
 
-  const text = `If you ever need help with funeral arrangement.
+  const text = `If you ever need help with funeral arrangements.
 
 Quick note in case it's useful. We help families compare funeral homes before they sign anything — typical savings on the arrangement run $2,000 to $5,000.
 
@@ -212,7 +212,7 @@ Free to families — we contact homes on your behalf at no charge. We take no co
 Start here when you need it:
 ${SITE}/where
 
-This is the last nurture email we'll send. If you want updates when we publish new guides, stay subscribed — otherwise the one-click link below stops everything.
+This is the last check-in email we'll send. If you want updates when we publish new guides, stay subscribed — otherwise the one-click link below stops everything.
 ${brandFooterText(email)}`;
 
   return { subject, html, text };

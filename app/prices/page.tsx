@@ -89,12 +89,12 @@ function HowFairRangesWork() {
           <strong className="text-ink">Nothing is saved.</strong> Your zip,
           your quote, the home&rsquo;s name — none of it leaves your
           browser unless you choose to save it. No account, no email, no
-          tracking the results page.
+          tracking on the results page.
         </li>
       </ul>
       <p className="text-xs text-ink-muted pt-2">
         If you see a price estimate here that you think is wrong for your
-        area, email us. We update the data as families and funeral homes
+        area, email us at support@honestfuneral.co. We update the data as families and funeral homes
         share better information.
       </p>
     </div>
