@@ -21,18 +21,38 @@ export function ProofSheet({
   stats,
   live,
   digest,
+  portalNav,
+  token,
 }: {
   name: string;
   stats: CohortStats;
   live: boolean;
   digest?: string;
+  /**
+   * Portal chrome for the live token report (the PartnerPortalNav row).
+   * The sample page passes nothing and keeps the plain marketing-site
+   * header — the structural difference is what makes sample vs. real
+   * unmistakable at a glance.
+   */
+  portalNav?: React.ReactNode;
+  /** The report token, for in-portal links (only meaningful when live). */
+  token?: string;
 }) {
   const empty = live && stats.familiesHelped === 0;
 
   return (
     <main className="flex-1 flex flex-col">
       <div className="print:hidden">
-        <SiteHeader rightSlot={<BackLink defaultHref="/" defaultLabel="← Home" />} />
+        {portalNav ? (
+          <>
+            <SiteHeader navLinks={[]} />
+            <div className="max-w-3xl mx-auto px-5 pt-6">{portalNav}</div>
+          </>
+        ) : (
+          <SiteHeader
+            rightSlot={<BackLink defaultHref="/" defaultLabel="← Home" />}
+          />
+        )}
       </div>
 
       <section className="flex-1">
@@ -71,6 +91,13 @@ export function ProofSheet({
                 &mdash; total overcharge caught, how many saved, satisfaction,
                 and time to resolution.
               </p>
+              {live && token && (
+                <div className="mt-4">
+                  <LinkButton href={`/partner/r/${token}/links`}>
+                    Create your first referral link →
+                  </LinkButton>
+                </div>
+              )}
             </Card>
           ) : stats.smallSample ? (
             <Card tone="primary">

@@ -11,6 +11,7 @@ import {
 } from "@/lib/partner-report";
 import { buildOutcomesDigest } from "@/lib/partner-report-digest";
 import { ProofSheet } from "@/components/partner/ProofSheet";
+import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
 
 export const metadata: Metadata = {
   title: "Partner report — Honest Funeral",
@@ -149,7 +150,20 @@ export default async function PartnerTokenReportPage({
 
   return (
     <>
-      <ProofSheet name={partner.name} stats={stats} live digest={digest} />
+      <ProofSheet
+        name={partner.name}
+        stats={stats}
+        live
+        digest={digest}
+        token={token}
+        portalNav={
+          <PartnerPortalNav
+            token={token}
+            partnerName={partner.name}
+            active="report"
+          />
+        }
+      />
       <div className="max-w-2xl mx-auto px-5 pb-10 print:hidden">
         <p className="text-sm text-ink-soft">
           Coordinators:{" "}

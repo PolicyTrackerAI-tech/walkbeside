@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
+import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
 import { resolvePartnerToken } from "@/lib/partner-auth";
 import { CoordinatorCheck } from "./CoordinatorCheck";
 
@@ -30,11 +31,16 @@ export default async function PartnerCheckPage({
 
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader />
+      <SiteHeader navLinks={[]} />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
+          <PartnerPortalNav
+            token={token}
+            partnerName={partner.name}
+            active="check"
+          />
           <div>
-            <CardEyebrow>{partner.name} · quote check</CardEyebrow>
+            <CardEyebrow>Quote check</CardEyebrow>
             <h1 className="font-serif text-3xl text-ink leading-tight mb-2">
               Is this quote fair?
             </h1>
@@ -45,7 +51,7 @@ export default async function PartnerCheckPage({
               done.
             </p>
           </div>
-          <CoordinatorCheck />
+          <CoordinatorCheck token={token} />
         </div>
       </section>
     </main>

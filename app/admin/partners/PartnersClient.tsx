@@ -39,6 +39,19 @@ export function PartnersClient({
   const [partners, setPartners] = useState(initial);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  async function copyReportUrl(id: string, token: string) {
+    try {
+      await navigator.clipboard.writeText(
+        `https://honestfuneral.co/partner/r/${token}`,
+      );
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      // Clipboard unavailable — the truncated display stays as-is.
+    }
+  }
 
   async function setActive(id: string, active: boolean) {
     if (
@@ -166,8 +179,20 @@ export function PartnersClient({
                       {p.contact_name} · {p.contact_email}
                     </div>
                   )}
-                  <div className="text-xs text-ink-muted mt-1 break-all">
-                    Report + links: honestfuneral.co/partner/r/{p.report_token}
+                  <div className="text-xs text-ink-muted mt-1 flex flex-wrap items-center gap-2">
+                    <span>
+                      Report + links:{" "}
+                      <span className="font-mono">
+                        …/partner/r/{p.report_token.slice(0, 8)}…
+                      </span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => copyReportUrl(p.id, p.report_token)}
+                      className="text-primary-deep underline-offset-2 hover:underline"
+                    >
+                      {copiedId === p.id ? "Copied ✓" : "Copy full URL"}
+                    </button>
                   </div>
                   {unclaimed.length > 0 && (
                     <p className="text-xs text-warn mt-1">

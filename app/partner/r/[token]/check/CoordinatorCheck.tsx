@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Button, LinkButton } from "@/components/ui/Button";
 import { Label, Textarea } from "@/components/ui/Field";
 import { fmtCents } from "@/lib/stripe";
 import { ViolationsPanel } from "@/components/analyzer/ViolationsPanel";
@@ -16,7 +16,7 @@ interface CheckResult {
   violations?: Violation[];
 }
 
-export function CoordinatorCheck() {
+export function CoordinatorCheck({ token }: { token: string }) {
   const [text, setText] = useState("");
   const [result, setResult] = useState<CheckResult | null>(null);
   const [letter, setLetter] = useState<string | null>(null);
@@ -142,6 +142,18 @@ export function CoordinatorCheck() {
           <pre className="whitespace-pre-wrap text-sm text-ink mt-3 font-sans">
             {letter}
           </pre>
+        </Card>
+      )}
+
+      {result && (
+        <Card tone="soft">
+          <p className="text-sm text-ink-soft mb-3">
+            Done here? Nothing was saved &mdash; check another quote anytime,
+            or head back to your report.
+          </p>
+          <LinkButton href={`/partner/r/${token}`} variant="secondary">
+            Back to your report →
+          </LinkButton>
         </Card>
       )}
     </>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Card, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 
 export function ApplyForm() {
@@ -43,6 +43,11 @@ export function ApplyForm() {
           you at the address you gave, usually within a business day, with
           your report link and everything your team needs to share the tools.
         </p>
+        <div className="mt-4">
+          <LinkButton href="/partner/sample-hospice" variant="secondary">
+            See a sample report while you wait →
+          </LinkButton>
+        </div>
       </Card>
     );
   }
