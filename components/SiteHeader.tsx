@@ -20,9 +20,15 @@ interface Props {
   showBack?: boolean;
   /** Extra classes on the outer <header>. */
   className?: string;
+  /**
+   * Override the nav links. Pass [] to render no nav (the partner portal
+   * does this — a coordinator shouldn't see family-facing navigation).
+   * Defaults to the family-facing links.
+   */
+  navLinks?: { href: string; label: string }[];
 }
 
-const NAV_LINKS: { href: string; label: string }[] = [
+const DEFAULT_NAV_LINKS: { href: string; label: string }[] = [
   { href: "/", label: "Home" },
   { href: "/how-it-works", label: "How it works" },
   { href: "/guides", label: "Guides" },
@@ -36,6 +42,7 @@ export function SiteHeader({
   rightSlot,
   showBack = false,
   className = "",
+  navLinks = DEFAULT_NAV_LINKS,
 }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -59,7 +66,7 @@ export function SiteHeader({
         <Brand />
 
         <nav className="hidden md:flex items-center gap-5 text-sm text-ink-soft ml-6 flex-1">
-          {NAV_LINKS.map((l) => (
+          {navLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
@@ -112,7 +119,7 @@ export function SiteHeader({
       {mobileOpen && (
         <div className="md:hidden border-t border-border bg-surface">
           <div className="max-w-6xl mx-auto px-5 py-4 flex flex-col gap-3 text-base text-ink-soft">
-            {NAV_LINKS.map((l) => (
+            {navLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}

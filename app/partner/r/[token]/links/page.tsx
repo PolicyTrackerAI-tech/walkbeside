@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
+import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { resolvePartnerToken } from "@/lib/partner-auth";
 import { LinksClient, type CodeRow } from "./LinksClient";
@@ -70,11 +71,16 @@ export default async function PartnerLinksPage({
 
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader />
+      <SiteHeader navLinks={[]} />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
+          <PartnerPortalNav
+            token={token}
+            partnerName={partner.name}
+            active="links"
+          />
           <div>
-            <CardEyebrow>{partner.name} · referral links</CardEyebrow>
+            <CardEyebrow>Referral links</CardEyebrow>
             <h1 className="font-serif text-3xl text-ink leading-tight mb-2">
               Give families the calm way in.
             </h1>

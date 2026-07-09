@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default function PartnersApplyPage() {
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader rightSlot={<BackLink defaultHref="/for-funeral-homes" defaultLabel="← About us" />} />
+      <SiteHeader rightSlot={<BackLink defaultHref="/partners" defaultLabel="← Partners" />} />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           <div>
