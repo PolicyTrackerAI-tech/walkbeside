@@ -120,7 +120,12 @@ wants it public). **The outcomes layer is.** Instrument for it from day one.
 ## 3. The product
 
 Three layers. There's already a Next.js app with much of layer 1 built — extend
-it. Build layer 3 new; it's what you sell.
+it. Layer 3 (the partner portal + reporting dashboard) is now built too
+(`app/partners`, `app/admin/partners`, `app/partner/[code]`,
+`app/partner/r/[token]` + `/links` + `/check`) — it's what you sell, but it has
+never run a real hospice's real cohort. The gate on selling it is no longer
+engineering: apply the prod migrations, retain counsel, and run the first
+pilot through it.
 
 **Layer 1 — Free public (acquisition + data + authority)**
 - Fair-price lookup + "is this quote fair?" checker — the before-the-death hook

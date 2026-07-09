@@ -34,7 +34,11 @@ Any change that violates one of these is wrong, no matter how good it looks:
 - **L2 — Instrumented family service:** the at-need negotiate flow. Its real job
   is **data** (the outcomes layer). Kept free to families.
 - **L3 — Institutional (the sellable product):** partner portal + reporting
-  dashboard for hospices/employers. *Not built yet — this is the revenue.*
+  dashboard for hospices/employers. *Built* (`app/partners`, `app/admin/partners`,
+  `app/partner/[code]`, `app/partner/r/[token]` + `/links` + `/check`, the AI
+  digest cron) *but unproven — zero real cases have run through it. This is the
+  revenue; the gate now is applying the prod migrations, retaining counsel, and
+  naming a pilot hospice, not building more.*
 
 **Build priority order:** (1) outcomes instrumentation → (2) free price tool +
 3 pillar guides + trust spine → (3) partner portal + reporting dashboard for a

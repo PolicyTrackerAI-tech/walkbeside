@@ -168,17 +168,23 @@ export default function OurRolePage() {
               For regulators and press
             </h2>
             <p className="mb-3">
-              Honest Funeral is a free, neutral advocacy service for families.
-              Everything on the site is free, and we contact funeral homes on
-              your behalf at no charge — we’re funded by the institutions we
-              partner with. No portion of any funeral home&rsquo;s revenue
-              flows to us. We do not hold ourselves out as a funeral
-              establishment under the laws of any state.
+              Honest Funeral is a free, neutral source of funeral-pricing
+              truth. Every tool on the site is free to families and always
+              will be — no family is ever charged, and no funeral home ever
+              pays us for a referral, listing, or lead. Our revenue comes
+              from institutions that serve people at end of life, starting
+              with hospices, who license our tools as a family
+              bereavement-support resource.
             </p>
-            <p>
-              Comparable consumer-advocacy precedents include the Funeral
-              Consumers Alliance (national, non-profit), and online price
-              comparison services like Parting.com and Funeralwise.
+            <p className="mb-3">
+              We only ever act at a family&rsquo;s own initiation. A
+              partnering hospice may hand a family our link; we never
+              cold-contact a next of kin, and the family chooses whether and
+              when to use the tool. We never steer a family toward a specific
+              funeral home — we present neutral options gathered under the
+              family&rsquo;s own FTC Funeral Rule rights, and the family
+              decides. We do not hold ourselves out as a funeral
+              establishment under the laws of any state.
             </p>
             <p>
               Press, regulatory, or legal inquiries:{" "}
