@@ -101,7 +101,9 @@ export async function POST(req: Request) {
       service_type: ctx.serviceType,
       target_home_name: ctx.targetHomeName,
       target_home_estimate_cents: ctx.targetEstimateCents,
-      status: "pending_payment",
+      // Transient: the send below advances it to "contacting" in this same
+      // request. ("pending_payment" is the pre-decommission legacy label.)
+      status: "preparing",
     })
     .select()
     .single();

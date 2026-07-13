@@ -28,14 +28,17 @@ interface Row {
  * chains sendOutreachForNegotiation uses:
  *   from(t).select(..).eq(..).eq(..)            → { data }
  *   from(t).update(patch).eq("id", id)          → applies patch
- *   from("negotiations").update(..).eq().eq()   → applies patch if filters match
+ *   from("negotiations").update(..).eq().in()   → applies patch if filters match
  */
-function makeAdmin(rows: Row[], negStatus = "pending_payment") {
+function makeAdmin(rows: Row[], negStatus = "preparing") {
   const outreach = rows.map((r) => ({ ...r }));
   const negotiations = [{ id: NEG, status: negStatus }];
 
+  // An array filter value means IN-list semantics (from .in()).
   const matches = (row: Record<string, unknown>, f: Record<string, unknown>) =>
-    Object.entries(f).every(([k, v]) => row[k] === v);
+    Object.entries(f).every(([k, v]) =>
+      Array.isArray(v) ? v.includes(row[k]) : row[k] === v,
+    );
 
   function run(name: string, op: string, patch: Record<string, unknown> | undefined, filters: Record<string, unknown>) {
     const store: Record<string, unknown>[] =
@@ -49,6 +52,10 @@ function makeAdmin(rows: Row[], negStatus = "pending_payment") {
     const filters: Record<string, unknown> = {};
     const c = {
       eq(k: string, v: unknown) {
+        filters[k] = v;
+        return c;
+      },
+      in(k: string, v: unknown[]) {
         filters[k] = v;
         return c;
       },
@@ -137,11 +144,23 @@ describe("sendOutreachForNegotiation", () => {
     expect(sendEmailMock.mock.calls.every((c) => c[0].to !== "deny@h.com")).toBe(true);
   });
 
-  it("only flips the negotiation when it's in pending_payment", async () => {
-    // A negotiation already past payment must NOT be reset to 'contacting'.
+  it("only flips the negotiation when it's still preparing", async () => {
+    // A negotiation already past outreach must NOT be reset to 'contacting'.
     const admin = makeAdmin([pendingRow("o1", "a@h.com")], "closed");
     await sendOutreachForNegotiation(admin as never, NEG);
     expect(admin._negotiations[0].status).toBe("closed");
+  });
+
+  it("advances a fresh preparing negotiation to contacting", async () => {
+    const admin = makeAdmin([pendingRow("o1", "a@h.com")]);
+    await sendOutreachForNegotiation(admin as never, NEG);
+    expect(admin._negotiations[0].status).toBe("contacting");
+  });
+
+  it("still advances a legacy pending_payment negotiation", async () => {
+    const admin = makeAdmin([pendingRow("o1", "a@h.com")], "pending_payment");
+    await sendOutreachForNegotiation(admin as never, NEG);
+    expect(admin._negotiations[0].status).toBe("contacting");
   });
 
   it("a row with no email is declined, not sent", async () => {
