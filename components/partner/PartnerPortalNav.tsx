@@ -51,6 +51,13 @@ export function PartnerPortalNav({
           );
         })}
       </nav>
+      <p className="mt-2 text-xs text-ink-muted">
+        This link keeps working. Prefer signing in?{" "}
+        <Link href="/portal/login" className="text-primary-deep underline">
+          Your team&rsquo;s portal
+        </Link>{" "}
+        has the same report behind your own email.
+      </p>
     </div>
   );
 }

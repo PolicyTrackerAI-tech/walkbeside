@@ -31,8 +31,9 @@ function indexFor(stage: CaseStage): number {
 /**
  * Maps a negotiations.status value to the stage the family is actually in,
  * so the dashboard snapshot and the live status page always show the same
- * stage language. Unknown/legacy statuses ("started", "pending_payment")
- * fall back to the earliest sensible stage rather than throwing.
+ * stage language. "preparing" is the (transient) initial status; unknown/
+ * legacy statuses ("started", "pending_payment") fall back to the earliest
+ * sensible stage rather than throwing.
  */
 export function stageForNegotiationStatus(status: string): CaseStage {
   switch (status) {
@@ -43,6 +44,7 @@ export function stageForNegotiationStatus(status: string): CaseStage {
     case "contacting":
     case "no_homes_available":
       return "contacting";
+    case "preparing":
     default:
       return "started";
   }

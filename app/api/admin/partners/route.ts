@@ -52,8 +52,10 @@ export async function PATCH(req: Request) {
 
   // Heads-up to the coordinator that their dashboard is live — best-effort,
   // never blocks the approval itself. The row's `active` flag is the source
-  // of truth; this is a courtesy so the coordinator doesn't have to be told
-  // their report_token link by hand.
+  // of truth. Activation also seats the applicant as the org's OWNER in
+  // partner_members (idempotent via the unique partner+email index), so the
+  // sign-in portal works from the first login; the report_token quick link
+  // stays in the email as the no-account path for line staff.
   if (parsed.data.active) {
     try {
       const { data: partner } = await svc
@@ -62,15 +64,31 @@ export async function PATCH(req: Request) {
         .eq("id", parsed.data.id)
         .single();
       if (partner?.contact_email) {
+        const ownerEmail = partner.contact_email.trim().toLowerCase();
+        // Best-effort owner seat; a conflict (already seated) is success.
+        await svc
+          .from("partner_members")
+          .upsert(
+            {
+              partner_id: parsed.data.id,
+              invited_email: ownerEmail,
+              role: "owner",
+            },
+            { onConflict: "partner_id,invited_email", ignoreDuplicates: true },
+          );
         await sendEmail({
           to: partner.contact_email,
-          subject: "You're approved — your Honest Funeral dashboard",
+          subject: "You're approved — your Honest Funeral portal",
           text: [
             `${partner.name} is approved.`,
             ``,
-            `Your dashboard: ${PUBLIC.appUrl}/partner/r/${partner.report_token}`,
+            `Sign in to your portal: ${PUBLIC.appUrl}/portal/login`,
+            `Use this email address — we'll send you a sign-in link, no password needed. From there you can see your report and generate referral links for families.`,
             ``,
-            `This link is private to your organization — from there you can see your report and generate referral links for families.`,
+            `Prefer a no-account quick link for your team? This URL opens the same report and tools directly:`,
+            `${PUBLIC.appUrl}/partner/r/${partner.report_token}`,
+            ``,
+            `Both are private to your organization.`,
           ].join("\n"),
         });
       }

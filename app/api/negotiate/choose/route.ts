@@ -35,10 +35,13 @@ export async function POST(req: Request) {
     .single();
   if (!neg) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
-  // Must have already paid (outreach sent) — not still on the teaser.
-  if (neg.status === "pending_payment") {
+  // Outreach must have run before a home can be chosen. "preparing" only
+  // survives if the send failed mid-request (it normally flips to
+  // "contacting" in the same request that created the row); the status page
+  // is where that case recovers. "pending_payment" is the legacy label.
+  if (neg.status === "preparing" || neg.status === "pending_payment") {
     return NextResponse.redirect(
-      new URL(`/negotiate/${negotiationId}/preview`, req.url),
+      new URL(`/negotiate/${negotiationId}/status`, req.url),
       { status: 303 },
     );
   }

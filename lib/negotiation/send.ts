@@ -82,12 +82,14 @@ export async function sendOutreachForNegotiation(
     }
   }
 
-  // Advance the negotiation out of pending_payment once sending has run.
+  // Advance the negotiation out of "preparing" once sending has run. Legacy
+  // "pending_payment" rows (pre-decommission label) advance the same way; any
+  // other status is a later stage this idempotent guard must not reset.
   await admin
     .from("negotiations")
     .update({ status: "contacting" })
     .eq("id", negotiationId)
-    .eq("status", "pending_payment");
+    .in("status", ["preparing", "pending_payment"]);
 
   logEvent("outreach.run", {
     negotiationId,

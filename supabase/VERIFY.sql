@@ -1,9 +1,11 @@
 -- Post-BOOTSTRAP sanity check. Run in the prod Supabase SQL editor AFTER
 -- pasting BOOTSTRAP.sql, and paste the output back. Read-only.
 --
--- Expect ~11 tables, every one with rls_enabled = true and policies >= 1
--- (planning_signups has 1 insert-only policy; funeral_homes has 1 read policy
--- + column grants; the rest are owner-scoped).
+-- Expect ~15 tables, every one with rls_enabled = true. Most have
+-- policies >= 1 (planning_signups has 1 insert-only policy; funeral_homes has
+-- 1 read policy + column grants; the rest are owner-scoped) — EXCEPT the
+-- deny-all service-role-only tables, which correctly show policies = 0:
+-- partners, partner_codes, partner_members, partner_leads, api_cost_events.
 
 select
   c.relname                                                            as table_name,
@@ -21,3 +23,14 @@ from information_schema.columns
 where table_schema = 'public' and table_name = 'funeral_homes'
   and column_name in ('vetted','vetted_at','vetted_by','notes','email','active')
 order by column_name;
+
+-- Confirm the 2026-07-13 portal-identity migration landed (expect 8 rows):
+select table_name, column_name
+from information_schema.columns
+where table_schema = 'public'
+  and (
+    (table_name = 'partner_members'    and column_name in ('invited_email','role','user_id','deactivated_at'))
+    or (table_name = 'partners'        and column_name in ('brand_accent','notification_email'))
+    or (table_name = 'price_list_analyses' and column_name in ('partner_id','extraction_method'))
+  )
+order by table_name, column_name;
