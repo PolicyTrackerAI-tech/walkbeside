@@ -23,9 +23,25 @@ agreement) see **GO_TO_MARKET.md Phase 0** — `LAUNCH_CHECKLIST.md` is retired.
    `funeral_homes`.)
 4. **Storage bucket.** Storage → New bucket → name **`price-lists`**, **Private**.
 5. **Magic-link auth.** Authentication → Providers → Email → enable, with
-   **Magic Link** on. Edit the template subject to "Sign in to Honest Funeral."
+   **Magic Link** on. Then Authentication → **Email Templates**: in BOTH the
+   **Magic Link** and **Confirm signup** templates, make sure the one-time
+   code `{{ .Token }}` appears in the body alongside the link — the portal
+   login (`/portal/login`) asks users to TYPE that code, and a first-ever
+   sign-in sends the *Confirm signup* template, not Magic Link. Suggested
+   body for both:
+
+   ```html
+   <h2>Sign in to Honest Funeral</h2>
+   <p>Your one-time code: <strong style="font-size:24px">{{ .Token }}</strong></p>
+   <p>Type it on the sign-in page — or <a href="{{ .ConfirmationURL }}">click here to sign in directly</a>.
+   Only the newest email works.</p>
+   ```
 6. **Auth URL config.** Authentication → URL Configuration → **Site URL** =
-   `https://honestfuneral.co`; add the same to **Redirect URLs**.
+   `https://honestfuneral.co`; under **Redirect URLs** add the wildcard
+   `https://honestfuneral.co/**` (an exact `/auth/callback` entry is NOT
+   enough — sign-in links carry a `?next=` query and Supabase silently falls
+   back to the bare Site URL when the redirect doesn't match, which strands
+   users on the homepage).
 7. **Grab the keys** (Project Settings → API): Project URL, `anon` key,
    `service_role` key (secret — Vercel only, never commit).
 

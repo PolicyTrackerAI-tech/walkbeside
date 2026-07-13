@@ -14,13 +14,26 @@ function LoginForm() {
   const router = useRouter();
   const sp = useSearchParams();
   const next = sp.get("next") || "/dashboard";
-  const [mode, setMode] = useState<"signup" | "signin">("signup");
+  // The auth callback bounces sign-in failures here. Two flavors:
+  // link_failed = a dead email link (open in sign-in mode — they have an
+  // account); signin_incomplete = e.g. a cancelled Google consent screen
+  // (neutral copy, keep whatever mode they started in).
+  const urlError = sp.get("error");
+  const [mode, setMode] = useState<"signup" | "signin">(
+    urlError === "link_failed" ? "signin" : "signup",
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [googleBusy, setGoogleBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    urlError === "link_failed"
+      ? "That email link didn't work — it was probably expired or already used. Sign in below instead."
+      : urlError === "signin_incomplete"
+        ? "Sign-in didn't complete. No harm done — try again below."
+        : null,
+  );
   const [info, setInfo] = useState<string | null>(null);
 
   const supabaseSet = FEATURES.supabase();
