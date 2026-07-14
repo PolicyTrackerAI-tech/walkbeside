@@ -3,6 +3,7 @@ import {
   fallbackOutcomesDigest,
   smallSampleDigest,
 } from "@/lib/partner-report-digest";
+import { partnerOutcomesDigestSystem } from "@/lib/negotiation/prompts";
 import { SMALL_SAMPLE_THRESHOLD, type CohortStatsFull } from "@/lib/partner-report";
 
 const FULL_STATS: CohortStatsFull = {
@@ -87,5 +88,38 @@ describe("smallSampleDigest", () => {
     const out = smallSampleDigest();
     expect(out).toContain(String(SMALL_SAMPLE_THRESHOLD));
     expect(out.toLowerCase()).toContain("privacy");
+  });
+});
+
+describe("employer variant", () => {
+  it("fallback wording is byte-identical for both audiences — deliberately neutral", () => {
+    expect(fallbackOutcomesDigest("Acme Manufacturing", FULL_STATS, "employer")).toBe(
+      fallbackOutcomesDigest("Acme Manufacturing", FULL_STATS),
+    );
+    expect(fallbackOutcomesDigest("Acme Manufacturing", FULL_STATS, "hospice")).toBe(
+      fallbackOutcomesDigest("Acme Manufacturing", FULL_STATS),
+    );
+  });
+
+  it("system prompt swaps the reader line for an HR/benefits leader", () => {
+    const hospice = partnerOutcomesDigestSystem();
+    const employer = partnerOutcomesDigestSystem("employer");
+    expect(hospice).toContain("hospice coordinator or executive director");
+    expect(employer).toContain("HR or benefits leader");
+    expect(employer).toContain("benefits review");
+    expect(employer).not.toContain("hospice coordinator or executive director");
+    // Defaulting matches the explicit hospice arg — no third variant.
+    expect(partnerOutcomesDigestSystem("hospice")).toBe(hospice);
+  });
+
+  it("adds the employer-only Medicare/clinical rule and keeps the CMS/CAHPS guard for both", () => {
+    const hospice = partnerOutcomesDigestSystem();
+    const employer = partnerOutcomesDigestSystem("employer");
+    expect(employer).toContain(
+      "Never mention Medicare, hospices, or clinical compliance — this reader runs a workplace benefit.",
+    );
+    expect(hospice).not.toContain("workplace benefit");
+    expect(hospice).toContain("Never mention CMS, CAHPS, or imply regulatory endorsement.");
+    expect(employer).toContain("Never mention CMS, CAHPS, or imply regulatory endorsement.");
   });
 });

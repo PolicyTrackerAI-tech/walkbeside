@@ -29,12 +29,26 @@ export interface CodeStat {
   claims: number;
 }
 
+/** One partner_leads row — a "schedule a call" demo request, read-only. */
+export interface LeadRow {
+  id: string;
+  name: string | null;
+  org: string | null;
+  email: string;
+  note: string | null;
+  source: string;
+  handled_at: string | null;
+  created_at: string;
+}
+
 export function PartnersClient({
   partners: initial,
   codeStats,
+  leads,
 }: {
   partners: PartnerRow[];
   codeStats: CodeStat[];
+  leads: LeadRow[];
 }) {
   const [partners, setPartners] = useState(initial);
   const [busy, setBusy] = useState<string | null>(null);
@@ -121,6 +135,49 @@ export function PartnersClient({
           />
         ))}
       </div>
+
+      {leads.length > 0 && (
+        <Card tone="soft">
+          <CardTitle>
+            {leads.length} demo-request lead{leads.length === 1 ? "" : "s"}
+          </CardTitle>
+          <p className="text-sm text-ink-soft mt-1">
+            People who asked for a call but haven&apos;t applied. Read-only —
+            reply by email; approving happens below once they apply.
+          </p>
+          <ul className="mt-3 space-y-3">
+            {leads.map((l) => (
+              <li key={l.id} className="rounded-xl border border-border bg-surface px-4 py-3">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+                  <span className="font-medium text-ink">
+                    {l.name ?? "(no name)"}
+                    {l.org && (
+                      <span className="text-ink-muted font-normal"> — {l.org}</span>
+                    )}
+                  </span>
+                  <span className="text-xs text-ink-muted">
+                    {new Date(l.created_at).toLocaleDateString("en-US")} ·{" "}
+                    {daysSince(l.created_at) === 0
+                      ? "today"
+                      : `${daysSince(l.created_at)}d ago`}
+                  </span>
+                </div>
+                <div className="text-sm mt-1">
+                  <a
+                    href={`mailto:${l.email}`}
+                    className="text-primary-deep underline-offset-2 hover:underline"
+                  >
+                    {l.email}
+                  </a>
+                </div>
+                {l.note && (
+                  <p className="text-sm text-ink-soft mt-1 line-clamp-3">{l.note}</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
 
       <Card tone={pending.length > 0 ? "primary" : "soft"}>
         <CardTitle>

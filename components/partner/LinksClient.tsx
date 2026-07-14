@@ -19,13 +19,30 @@ export interface CodeRow {
  * Create / copy / revoke referral links. The shareable URL points at
  * /plan-now (the admission-week flow — where the research says the value
  * concentrates), with the code as ?ref=.
+ *
+ * Two credentials, one component: `mode="token"` sends the founder-issued
+ * report_token in each POST body (the token-gated /partner/r/[token]/links
+ * page); `mode="session"` omits the token entirely and the API resolves the
+ * signed-in partner member's session instead (/portal/links).
+ *
+ * The guidance copy defaults to the hospice voice; employer callers pass
+ * `shareHint` / `labelPlaceholder` so care-setting wording never renders on
+ * an employer org's page.
  */
 export function LinksClient({
+  mode,
   token,
   initialCodes,
+  shareHint = "Make one per place you’ll share it — the admission packet, the front-desk QR code, a social worker’s email signature — so you can see which ones families actually use.",
+  labelPlaceholder = "e.g. Admission packet",
 }: {
-  token: string;
+  mode: "token" | "session";
+  token?: string;
   initialCodes: CodeRow[];
+  /** Sentence under "Create a referral link" — where to share the links. */
+  shareHint?: string;
+  /** Placeholder for the label field. */
+  labelPlaceholder?: string;
 }) {
   const [codes, setCodes] = useState<CodeRow[]>(initialCodes);
   const [label, setLabel] = useState("");
@@ -39,6 +56,9 @@ export function LinksClient({
       : "https://honestfuneral.co";
   const urlFor = (code: string) => `${origin}/plan-now?ref=${code}`;
 
+  /** Session mode never puts the token on the wire. */
+  const credential = mode === "token" ? { token } : {};
+
   async function create() {
     setBusy(true);
     setError(null);
@@ -46,7 +66,7 @@ export function LinksClient({
       const r = await fetch("/api/partner/links", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ token, action: "create", label: label || undefined }),
+        body: JSON.stringify({ ...credential, action: "create", label: label || undefined }),
       });
       if (!r.ok) throw new Error();
       const d = (await r.json()) as { code: string };
@@ -79,7 +99,7 @@ export function LinksClient({
       const r = await fetch("/api/partner/links", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ token, action: "revoke", code }),
+        body: JSON.stringify({ ...credential, action: "revoke", code }),
       });
       if (!r.ok) throw new Error();
       setCodes((prev) =>
@@ -121,11 +141,7 @@ export function LinksClient({
     <>
       <Card>
         <CardTitle>Create a referral link</CardTitle>
-        <p className="text-sm text-ink-soft mt-1 mb-3">
-          Make one per place you&rsquo;ll share it — the admission packet, the
-          front-desk QR code, a social worker&rsquo;s email signature — so you
-          can see which ones families actually use.
-        </p>
+        <p className="text-sm text-ink-soft mt-1 mb-3">{shareHint}</p>
         <div className="flex flex-wrap items-end gap-3">
           <div className="flex-1 min-w-[14rem]">
             <Label htmlFor="link-label">Label (just for you)</Label>
@@ -133,7 +149,7 @@ export function LinksClient({
               id="link-label"
               value={label}
               maxLength={80}
-              placeholder="e.g. Admission packet"
+              placeholder={labelPlaceholder}
               onChange={(e) => setLabel(e.target.value)}
             />
           </div>

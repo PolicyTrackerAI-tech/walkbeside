@@ -16,7 +16,27 @@ interface CheckResult {
   violations?: Violation[];
 }
 
-export function CoordinatorCheck({ token }: { token: string }) {
+/**
+ * Coordinator quote check, shared by the token route
+ * (/partner/r/[token]/check) and the signed-in portal (/portal/check). It
+ * calls the same public analyzer endpoints the family tool uses — no partner
+ * credential is ever sent. One honesty wrinkle: /api/analyze-price-list
+ * persists a price_list_analyses row for any SIGNED-IN user, so the default
+ * "Nothing was saved" closing line is only true for anonymous (token-route)
+ * coordinators. Signed-in surfaces MUST pass `saveNote` with wording that is
+ * true for a signed-in session.
+ */
+export function CoordinatorCheck({
+  backHref,
+  backLabel,
+  saveNote,
+}: {
+  /** Where "done here" leads — the token report or /portal. */
+  backHref: string;
+  backLabel?: string;
+  /** Replaces the "Nothing was saved" sentence when the caller is signed in. */
+  saveNote?: string;
+}) {
   const [text, setText] = useState("");
   const [result, setResult] = useState<CheckResult | null>(null);
   const [letter, setLetter] = useState<string | null>(null);
@@ -148,11 +168,12 @@ export function CoordinatorCheck({ token }: { token: string }) {
       {result && (
         <Card tone="soft">
           <p className="text-sm text-ink-soft mb-3">
-            Done here? Nothing was saved &mdash; check another quote anytime,
-            or head back to your report.
+            Done here?{" "}
+            {saveNote ??
+              "Nothing was saved — check another quote anytime, or head back to your report."}
           </p>
-          <LinkButton href={`/partner/r/${token}`} variant="secondary">
-            Back to your report →
+          <LinkButton href={backHref} variant="secondary">
+            {backLabel ?? "Back to your report →"}
           </LinkButton>
         </Card>
       )}

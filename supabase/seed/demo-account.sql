@@ -1,7 +1,12 @@
 -- Honest Funeral demo account seed — fictional Johnson-family case.
 -- For founders who prefer to run seeds from the Supabase SQL editor
 -- rather than the Node script (scripts/seed-demo.mjs). Both produce
--- the same final state; either is fine.
+-- the same final state FOR THE FAMILY ACCOUNT; either is fine for that.
+--
+-- PARTNER DEMO ORGS ("Demo Hospice" / "Demo Employer", members, referral
+-- codes, closed-case cohort) are seeded by scripts/seed-demo.mjs ONLY —
+-- there is no SQL twin here, because those seats need auth users created
+-- through the admin API (the SQL editor can't hash passwords).
 --
 -- Usage:
 --   1. Create the auth user first — this SQL file does NOT touch

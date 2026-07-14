@@ -1,43 +1,36 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
-import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
-import { resolvePartnerToken } from "@/lib/partner-auth";
+import { PortalSessionNav } from "@/components/partner/PortalSessionNav";
+import { requirePartnerMember } from "@/lib/partner/auth";
 import { codesWithClaims } from "@/lib/partner/codes";
 import { LinksClient } from "@/components/partner/LinksClient";
 
 export const metadata: Metadata = {
   title: "Referral links",
-  robots: { index: false, follow: false },
 };
 
 /**
- * Coordinator self-serve referral links (roadmap Phase 4). Credential = the
- * partner's founder-issued report token, same as the report page one level
- * up. Everything shown here is aggregate: codes, labels, claim COUNTS.
- * Case-level anything is structurally absent (zero-visibility rule).
+ * Signed-in twin of /partner/r/[token]/links: same LinksClient, same shared
+ * codes fetch, but the credential is the member's session (mode="session" —
+ * no token ever leaves the server). Everything shown is aggregate: codes,
+ * labels, claim COUNTS. Case-level anything is structurally absent
+ * (zero-visibility rule).
  */
-export default async function PartnerLinksPage({
-  params,
-}: {
-  params: Promise<{ token: string }>;
-}) {
-  const { token } = await params;
+export default async function PortalLinksPage() {
+  const ctx = await requirePartnerMember("/portal/links");
+  const codes = await codesWithClaims(ctx.partner.id);
 
-  const partner = await resolvePartnerToken(token);
-  if (!partner || partner.active === false) notFound();
-
-  // Codes + aggregate claim counts (shared with /portal/links). Errors
-  // degrade to an empty list with the create flow available.
-  const codes = await codesWithClaims(partner.id);
+  // Only "employer" gets the employer voice; anything else coerces to the
+  // hospice default (the codebase convention). The rest of this page's copy
+  // is deliberately setting-neutral, so only LinksClient's hints branch.
+  const isEmployer = ctx.partner.partner_type === "employer";
 
   // Cumulative, all-time, team-level — never time-boxed or framed as a
-  // personal-only number. The report_token this page shares with the org's
-  // aggregate report (docs/PARTNER_PORTAL_SPEC.md) means an ED could open
-  // this same page, so this has to read honestly as shared good news, not a
-  // private metric — and never a target to hit.
+  // personal-only number. Anyone in the org can see this page, so it has to
+  // read honestly as shared good news, not a private metric — and never a
+  // target to hit.
   const totalClaims = codes.reduce((s, c) => s + c.claims, 0);
 
   return (
@@ -45,10 +38,10 @@ export default async function PartnerLinksPage({
       <SiteHeader navLinks={[]} />
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
-          <PartnerPortalNav
-            token={token}
-            partnerName={partner.name}
+          <PortalSessionNav
+            partnerName={ctx.partner.name}
             active="links"
+            role={ctx.member.role}
           />
           <div>
             <CardEyebrow>Referral links</CardEyebrow>
@@ -60,7 +53,7 @@ export default async function PartnerLinksPage({
               organization&rsquo;s name on them. Families use everything at
               their own pace; if they later ask us to gather quotes, the case
               counts toward your{" "}
-              <Link href={`/partner/r/${token}`} className="text-primary-deep underline">
+              <Link href="/portal" className="text-primary-deep underline">
                 aggregate report
               </Link>
               . You&rsquo;ll never see any family&rsquo;s choices, homes, or
@@ -68,7 +61,16 @@ export default async function PartnerLinksPage({
             </p>
           </div>
 
-          <LinksClient mode="token" token={token} initialCodes={codes} />
+          <LinksClient
+            mode="session"
+            initialCodes={codes}
+            shareHint={
+              isEmployer
+                ? "Make one per place you’ll share it — the benefits page, the HR handoff, a manager’s toolkit — so you can see which ones people actually use."
+                : undefined
+            }
+            labelPlaceholder={isEmployer ? "e.g. Benefits portal" : undefined}
+          />
 
           <Card tone="primary">
             <CardEyebrow>
@@ -88,10 +90,10 @@ export default async function PartnerLinksPage({
               </>
             ) : (
               <p className="text-ink-soft mt-1 text-sm">
-                However you share it &mdash; a QR code at admission, a link
-                in an email &mdash; every family who opens it gets the same
-                free, neutral tools. No pitch needed, no follow-up required
-                from you.
+                However you share it &mdash; a QR code on a printed card, a
+                link in an email &mdash; every family who opens it gets the
+                same free, neutral tools. No pitch needed, no follow-up
+                required from you.
               </p>
             )}
           </Card>
@@ -101,9 +103,9 @@ export default async function PartnerLinksPage({
             <p className="text-sm text-ink-soft mt-2">
               Honest Funeral is free to families and takes no money from
               funeral homes or insurers. Referral links never influence which
-              funeral homes a family sees — attribution exists solely so your
-              report can show aggregate outcomes. Families always come to us
-              by their own choice.
+              funeral homes a family sees &mdash; attribution exists solely so
+              your report can show aggregate outcomes. Families always come to
+              us by their own choice.
             </p>
           </Card>
         </div>

@@ -22,7 +22,8 @@ export function ProofSheet({
   live,
   digest,
   portalNav,
-  token,
+  linksHref,
+  partnerType = "hospice",
 }: {
   name: string;
   stats: CohortStats;
@@ -35,8 +36,19 @@ export function ProofSheet({
    * unmistakable at a glance.
    */
   portalNav?: React.ReactNode;
-  /** The report token, for in-portal links (only meaningful when live). */
-  token?: string;
+  /**
+   * Where the empty-state "Create your first referral link" button points
+   * (only meaningful when live). The token route passes its own token URL;
+   * the signed-in portal passes /portal/links so the org bearer credential
+   * never reaches member-visible HTML.
+   */
+  linksHref?: string;
+  /**
+   * Audience variant. "employer" swaps the Medicare/bereavement framing for
+   * workplace-benefit framing (an employer surface never says Medicare,
+   * CAHPS, CMS, or hospice). Callers coerce anything unknown to "hospice".
+   */
+  partnerType?: "hospice" | "employer";
 }) {
   const empty = live && stats.familiesHelped === 0;
 
@@ -77,8 +89,17 @@ export function ProofSheet({
               {name}
             </h1>
             <p className="text-ink-soft">
-              What your families experienced &mdash; funeral-pricing advocacy,
-              free to them and neutral by design.
+              {partnerType === "employer" ? (
+                <>
+                  What your employees&rsquo; families experienced &mdash;
+                  funeral-pricing advocacy, free to them and neutral by design.
+                </>
+              ) : (
+                <>
+                  What your families experienced &mdash; funeral-pricing
+                  advocacy, free to them and neutral by design.
+                </>
+              )}
             </p>
           </div>
 
@@ -91,9 +112,9 @@ export function ProofSheet({
                 &mdash; total overcharge caught, how many saved, satisfaction,
                 and time to resolution.
               </p>
-              {live && token && (
+              {live && linksHref && (
                 <div className="mt-4">
-                  <LinkButton href={`/partner/r/${token}/links`}>
+                  <LinkButton href={linksHref}>
                     Create your first referral link →
                   </LinkButton>
                 </div>
@@ -193,10 +214,12 @@ export function ProofSheet({
                           : "—"
                       }
                     />
-                    <Metric
-                      label="Reminded of hospice bereavement benefit"
-                      value={`${stats.pilotMetrics.bereavementRemindedPct}%`}
-                    />
+                    {partnerType !== "employer" && (
+                      <Metric
+                        label="Reminded of hospice bereavement benefit"
+                        value={`${stats.pilotMetrics.bereavementRemindedPct}%`}
+                      />
+                    )}
                   </div>
                 </Card>
               )}
@@ -239,24 +262,56 @@ export function ProofSheet({
             <Card>
               <CardTitle>What this means for {name}</CardTitle>
               <ul className="mt-3 space-y-3 text-sm text-ink-soft leading-relaxed">
-                <li>
-                  <strong className="text-ink">Referral reputation.</strong>{" "}
-                  Every family who felt genuinely supported through the funeral
-                  and the paperwork is the family who recommends you &mdash; and
-                  tells the hospital, the SNF, and the physician who refers to
-                  you.
-                </li>
-                <li>
-                  <strong className="text-ink">Documented mandate coverage.</strong>{" "}
-                  Evidence you supported families across the funeral-and-admin
-                  part of the ~13-month bereavement window Medicare requires (42
-                  CFR 418.64) and doesn&rsquo;t separately fund.
-                </li>
-                <li>
-                  <strong className="text-ink">Staff hours back.</strong> The
-                  funeral-pricing and after-death questions your counselors
-                  field but weren&rsquo;t resourced for &mdash; handled.
-                </li>
+                {partnerType === "employer" ? (
+                  <>
+                    <li>
+                      <strong className="text-ink">
+                        A benefit people actually feel.
+                      </strong>{" "}
+                      The week someone loses a person is the week support is
+                      remembered &mdash; and retold. This is the help employees
+                      describe to each other in plain terms.
+                    </li>
+                    <li>
+                      <strong className="text-ink">
+                        Documented benefit utilization.
+                      </strong>{" "}
+                      Evidence of real, used support &mdash; families helped
+                      and dollars kept &mdash; ready for a benefits review.
+                    </li>
+                    <li>
+                      <strong className="text-ink">HR hours back.</strong> The
+                      funeral-pricing and after-death questions managers and HR
+                      field but weren&rsquo;t resourced for &mdash; handled by
+                      a neutral advocate.
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <strong className="text-ink">Referral reputation.</strong>{" "}
+                      Every family who felt genuinely supported through the
+                      funeral and the paperwork is the family who recommends
+                      you &mdash; and tells the hospital, the SNF, and the
+                      physician who refers to you.
+                    </li>
+                    <li>
+                      <strong className="text-ink">
+                        Documented mandate coverage.
+                      </strong>{" "}
+                      Evidence you supported families across the
+                      funeral-and-admin part of the ~13-month bereavement
+                      window Medicare requires (42 CFR 418.64) and
+                      doesn&rsquo;t separately fund.
+                    </li>
+                    <li>
+                      <strong className="text-ink">Staff hours back.</strong>{" "}
+                      The funeral-pricing and after-death questions your
+                      counselors field but weren&rsquo;t resourced for &mdash;
+                      handled.
+                    </li>
+                  </>
+                )}
               </ul>
             </Card>
           )}
@@ -266,7 +321,11 @@ export function ProofSheet({
               <div className="grid sm:grid-cols-2 gap-3">
                 <Quote
                   text="They caught a $2,000 overcharge on the casket and told me exactly what to say. I finally felt like someone was on my side."
-                  who="Daughter of a patient · de-identified"
+                  who={
+                    partnerType === "employer"
+                      ? "Daughter of an employee · de-identified"
+                      : "Daughter of a patient · de-identified"
+                  }
                 />
                 <Quote
                   text="I had no idea the death certificates were marked up. The checklist for the weeks after was the part I didn't know I needed."
@@ -312,10 +371,20 @@ export function ProofSheet({
             </p>
             <p>
               <strong className="text-ink-soft">What this is:</strong>{" "}
-              an informational summary of aggregate family outcomes — not a
-              CMS or CAHPS instrument, not a compliance certification or
-              survey substitute, and it implies no endorsement by CMS or any
-              regulator.
+              {partnerType === "employer" ? (
+                <>
+                  an informational summary of aggregate family outcomes — not
+                  a benefits-compliance instrument or a survey, and it implies
+                  no endorsement by any regulator.
+                </>
+              ) : (
+                <>
+                  an informational summary of aggregate family outcomes — not
+                  a CMS or CAHPS instrument, not a compliance certification or
+                  survey substitute, and it implies no endorsement by CMS or
+                  any regulator.
+                </>
+              )}
             </p>
           </div>
         </div>

@@ -30,7 +30,11 @@ export interface PartnerReportData {
 export async function buildPartnerReportData(partner: {
   id: string;
   name: string;
+  /** partners.partner_type — anything but "employer" reads as "hospice". */
+  partner_type?: string;
 }): Promise<PartnerReportData> {
+  const partnerType: "hospice" | "employer" =
+    partner.partner_type === "employer" ? "employer" : "hospice";
   const admin = createServiceClient(
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
@@ -135,7 +139,7 @@ export async function buildPartnerReportData(partner: {
   }
 
   const stats = aggregateCohort(records);
-  const digest = await buildOutcomesDigest(partner.name, stats);
+  const digest = await buildOutcomesDigest(partner.name, stats, partnerType);
   return { stats, digest };
 }
 

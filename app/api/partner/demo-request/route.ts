@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { PUBLIC, requireServer, FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/email";
@@ -18,6 +20,12 @@ const Body = z.object({
  * institutional relationship (report tokens, referral codes), and a lead who
  * just wants a call hasn't entered that relationship yet. Keeping the two
  * paths apart means /admin/partners never fills with dead "just curious" rows.
+ *
+ * Leads DO persist now: a best-effort insert into `partner_leads`
+ * (insert-only, RLS deny-all, read-only strip on /admin/partners) so a
+ * missed founder email no longer loses the contact. Both the row and the
+ * email are best-effort — the request succeeds if either one landed, and
+ * only fails when both did.
  */
 export async function POST(req: Request) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
@@ -32,6 +40,29 @@ export async function POST(req: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: "invalid_request" }, { status: 400 });
 
+  // (a) Persist the lead. `source` is omitted on purpose — the DB default
+  // 'demo-request' applies.
+  let persisted = false;
+  if (FEATURES.supabase()) {
+    try {
+      const svc = createServiceClient(
+        PUBLIC.supabaseUrl,
+        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+      );
+      const { error } = await svc.from("partner_leads").insert({
+        name: parsed.data.name.trim(),
+        org: parsed.data.org.trim(),
+        email: parsed.data.email.trim(),
+        note: parsed.data.note?.trim() || null,
+      });
+      persisted = !error;
+    } catch {
+      // persisted stays false — the email below is the fallback.
+    }
+  }
+
+  // (b) Notify the founder.
+  let emailed = false;
   try {
     await sendEmail({
       to: process.env.PARTNER_APPLICATIONS_TO ?? "ryan@honestfuneral.co",
@@ -46,9 +77,13 @@ export async function POST(req: Request) {
         .filter(Boolean)
         .join("\n"),
     });
+    emailed = true;
   } catch {
-    return NextResponse.json({ error: "unavailable" }, { status: 503 });
+    // emailed stays false — the row above is the fallback.
   }
+
+  if (!persisted && !emailed)
+    return NextResponse.json({ error: "unavailable" }, { status: 503 });
 
   return NextResponse.json({ ok: true });
 }

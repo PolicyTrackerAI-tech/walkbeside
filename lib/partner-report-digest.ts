@@ -26,7 +26,14 @@ import { SMALL_SAMPLE_THRESHOLD, type CohortStats, type CohortStatsFull } from "
  * visual hierarchy (total caught -> FTC issues -> satisfaction -> resolution
  * time) so this text never contradicts the layout above it.
  */
-export function fallbackOutcomesDigest(name: string, stats: CohortStatsFull): string {
+export function fallbackOutcomesDigest(
+  name: string,
+  stats: CohortStatsFull,
+  // Signature parity with buildOutcomesDigest — the fallback wording is
+  // deliberately partner-neutral, so the audience variant changes nothing.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _partnerType: "hospice" | "employer" = "hospice",
+): string {
   const dollars = (cents: number) =>
     `$${Math.round(cents / 100).toLocaleString("en-US")}`;
   const parts: string[] = [
@@ -62,13 +69,21 @@ export function smallSampleDigest(): string {
 export async function buildOutcomesDigest(
   name: string,
   stats: CohortStats,
+  partnerType: "hospice" | "employer" = "hospice",
 ): Promise<string> {
   if (stats.smallSample) return smallSampleDigest();
-  if (!claudeAvailable()) return fallbackOutcomesDigest(name, stats);
+  if (!claudeAvailable()) return fallbackOutcomesDigest(name, stats, partnerType);
+
+  // For an employer, the bereavement-reminded metric never reaches the
+  // grounding JSON — the field NAME itself is hospice framing Claude could
+  // echo back into an employer-facing sentence.
+  const { bereavementRemindedPct, ...employerPilotMetrics } = stats.pilotMetrics;
+  void bereavementRemindedPct;
 
   // Compact structured findings — the ONLY ground truth Claude may reference.
   // All-numeric; nothing here is free text from any external party.
   const findings = {
+    partnerType,
     partnerName: name,
     familiesHelped: stats.familiesHelped,
     familiesWhoSaved: stats.familiesWhoSaved,
@@ -78,14 +93,15 @@ export async function buildOutcomesDigest(
     avgSatisfaction: stats.avgSatisfaction,
     medianResolutionDays: stats.medianResolutionDays,
     toolEngagement: stats.toolEngagement,
-    pilotMetrics: stats.pilotMetrics,
+    pilotMetrics:
+      partnerType === "employer" ? employerPilotMetrics : stats.pilotMetrics,
   };
 
   try {
     const msg = await anthropic().messages.create({
       model: MODEL,
       max_tokens: 300,
-      system: partnerOutcomesDigestSystem(),
+      system: partnerOutcomesDigestSystem(partnerType),
       messages: [{ role: "user", content: JSON.stringify(findings) }],
     });
     const out = msg.content
@@ -94,11 +110,11 @@ export async function buildOutcomesDigest(
       .join("");
     const parsed = JSON.parse(stripCodeFence(out)) as { digest?: unknown };
     if (typeof parsed.digest !== "string" || !parsed.digest.trim()) {
-      return fallbackOutcomesDigest(name, stats);
+      return fallbackOutcomesDigest(name, stats, partnerType);
     }
     // Defensive length cap — never let a runaway response reach the page.
     return parsed.digest.trim().slice(0, 600);
   } catch {
-    return fallbackOutcomesDigest(name, stats);
+    return fallbackOutcomesDigest(name, stats, partnerType);
   }
 }

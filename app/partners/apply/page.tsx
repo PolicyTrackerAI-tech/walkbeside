@@ -18,7 +18,15 @@ export const metadata: Metadata = {
  * institutional relationship keeps its human gate. The page also states the
  * two commitments that decide whether we're a fit, before anyone applies.
  */
-export default function PartnersApplyPage() {
+export default async function PartnersApplyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  // Only "employer" is honored; anything else falls back to hospice.
+  const defaultType = params.type === "employer" ? "employer" : "hospice";
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/partners" defaultLabel="← Partners" />} />
@@ -59,7 +67,7 @@ export default function PartnersApplyPage() {
             </ul>
           </Card>
 
-          <ApplyForm />
+          <ApplyForm defaultType={defaultType} />
 
           <p className="text-xs text-ink-muted">
             A person reviews every application — usually within a business

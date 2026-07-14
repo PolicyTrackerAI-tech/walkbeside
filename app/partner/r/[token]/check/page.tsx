@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
 import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
 import { resolvePartnerToken } from "@/lib/partner-auth";
-import { CoordinatorCheck } from "./CoordinatorCheck";
+import { CoordinatorCheck } from "@/components/partner/CoordinatorCheck";
 
 export const metadata: Metadata = {
   title: "Quote check",
@@ -51,7 +51,7 @@ export default async function PartnerCheckPage({
               done.
             </p>
           </div>
-          <CoordinatorCheck token={token} />
+          <CoordinatorCheck backHref={`/partner/r/${token}`} />
         </div>
       </section>
     </main>

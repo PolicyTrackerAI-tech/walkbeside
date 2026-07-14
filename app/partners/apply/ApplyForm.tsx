@@ -5,9 +5,13 @@ import { Card, CardTitle } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 
-export function ApplyForm() {
+export function ApplyForm({
+  defaultType,
+}: {
+  defaultType?: "hospice" | "employer";
+}) {
   const [org, setOrg] = useState("");
-  const [type, setType] = useState("hospice");
+  const [type, setType] = useState<string>(defaultType ?? "hospice");
   const [contactName, setContactName] = useState("");
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
