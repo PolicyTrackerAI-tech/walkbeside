@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { AnalyticsBeacon } from "@/components/analytics/AnalyticsBeacon";
 import "./globals.css";
 import { Footer } from "@/components/Brand";
 import { PhaseProvider } from "@/components/PhaseContext";
@@ -41,6 +41,12 @@ export const metadata: Metadata = {
       "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
   },
   robots: { index: true, follow: true },
+  // Google Search Console ownership verification. Set GOOGLE_SITE_VERIFICATION
+  // to the token from Search Console (Add property → URL prefix → "HTML tag"
+  // method → the content value); Next renders the meta tag. Unset → no tag.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 // Explicit viewport (Next injects a default + charset=utf-8 automatically; we
@@ -79,7 +85,7 @@ export default function RootLayout({
           <Footer />
           <ComfortModeToggle />
         </PhaseProvider>
-        <Analytics />
+        <AnalyticsBeacon />
       </body>
     </html>
   );
