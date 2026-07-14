@@ -169,7 +169,7 @@ export default async function DashboardPage({
                 No commissions or kickbacks, ever.
               </p>
               <LinkButton href="/negotiate/start" size="lg">
-                Have us contact funeral homes →
+                Have us contact funeral homes — free →
               </LinkButton>
             </Card>
           )}
@@ -234,8 +234,11 @@ export default async function DashboardPage({
             </Link>
           </Card>
 
-          <div>
-            <div className="mb-5">
+          {/* Named group: a bare `group` here would make every ToolTile's
+              unnamed group-hover fire whenever the pointer is anywhere in the
+              disclosure. */}
+          <details className="group/tools">
+            <summary className="cursor-pointer list-none mb-5">
               <CardEyebrow>Your tools</CardEyebrow>
               <h2 className="font-serif text-2xl text-ink leading-tight">
                 Every tool here is free.
@@ -245,7 +248,16 @@ export default async function DashboardPage({
                 Everything is free to families, including the funeral-home
                 outreach. Picking a home is free too.
               </p>
-            </div>
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-deep mt-3">
+                <span
+                  aria-hidden="true"
+                  className="inline-block leading-none group-open/tools:rotate-90 transition-transform"
+                >
+                  ▸
+                </span>
+                All tools
+              </span>
+            </summary>
 
             <div className="grid sm:grid-cols-2 gap-3">
               <ToolTile
@@ -339,7 +351,7 @@ export default async function DashboardPage({
                 blurb="Buy the headstone direct. Typically 30&ndash;60% less than funeral-home pricing."
               />
             </div>
-          </div>
+          </details>
 
           <HelpFooter />
         </div>
@@ -379,6 +391,24 @@ function AnonymousDashboard() {
             <p className="text-ink-soft mt-2">
               You&rsquo;re saved on this device. Sign in if you want to use this from somewhere else too.
             </p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <ToolTile
+              href="/analyzer"
+              title="Check a quote"
+              blurb="Snap a photo of any price list. We flag every line above fair."
+            />
+            <ToolTile
+              href="/prices"
+              title="See fair prices"
+              blurb="What a funeral should cost in your zip. No account, no email."
+            />
+            <ToolTile
+              href="/negotiate/start"
+              title="Have us contact funeral homes — free"
+              blurb="We collect itemized quotes on your behalf and bring them back side by side."
+            />
           </div>
 
           <Card tone="primary">

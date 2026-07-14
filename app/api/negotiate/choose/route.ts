@@ -60,6 +60,19 @@ export async function POST(req: Request) {
     .neq("status", "closed")
     .select("id");
   if (updated && updated.length > 0) {
+    // Record the family's own pick on the outreach row (same column the
+    // admin back-office uses; the partial unique index allows one chosen row
+    // per negotiation). Best-effort — closing and notifying must not fail
+    // over the marker.
+    try {
+      await admin
+        .from("negotiation_outreach")
+        .update({ chosen: true })
+        .eq("id", outreachId)
+        .eq("negotiation_id", negotiationId);
+    } catch {
+      // ignore
+    }
     const result = await notifyChosenHome({ admin, negotiationId, outreachId });
     console.info(
       `[choose] notifyChosenHome neg=${negotiationId} reason=${result.reason} sent=${result.sent}`,

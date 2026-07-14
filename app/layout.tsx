@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { Inter, Source_Serif_4 } from "next/font/google";
 import { AnalyticsBeacon } from "@/components/analytics/AnalyticsBeacon";
+import { RememberReferral } from "@/components/RememberReferral";
 import "./globals.css";
 import { Footer } from "@/components/Brand";
 import { PhaseProvider } from "@/components/PhaseContext";
@@ -86,6 +88,10 @@ export default function RootLayout({
           <ComfortModeToggle />
         </PhaseProvider>
         <AnalyticsBeacon />
+        {/* Suspense because it reads useSearchParams under a static layout. */}
+        <Suspense fallback={null}>
+          <RememberReferral />
+        </Suspense>
       </body>
     </html>
   );

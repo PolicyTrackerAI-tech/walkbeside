@@ -5,10 +5,16 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Textarea } from "@/components/ui/Field";
 import { PlanningAheadBanner } from "@/components/PlanningAheadBanner";
-import { fmtUSD, dataSourceForZip, DATA_SOURCE_LABEL } from "@/lib/pricing-data";
+import {
+  fmtUSD,
+  dataSourceForZip,
+  DATA_SOURCE_LABEL,
+  SERVICE_LABELS,
+} from "@/lib/pricing-data";
+import { readReferral } from "@/lib/referral-codes";
 import { trackTool } from "@/lib/analytics";
 import {
   overchargeCents,
@@ -117,6 +123,12 @@ export function Analyzer({
 }) {
   const [text, setText] = useState("");
   const [zip, setZip] = useState("");
+  // Feeds only the handoff to /negotiate/start — never the analyze POST.
+  const [homeName, setHomeName] = useState("");
+  // The serviceTypeHint the CURRENT result was analyzed with (opts.hint or the
+  // hf-decide sessionStorage value) — the bridge to /negotiate/start passes it
+  // along only when it's a real ServiceType key.
+  const [usedHint, setUsedHint] = useState<string | undefined>(undefined);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<AnalyzerResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -142,13 +154,20 @@ export function Analyzer({
     }
   }, [result]);
 
-  async function analyze(opts?: { text?: string; zip?: string; hint?: string }) {
+  async function analyze(opts?: {
+    text?: string;
+    zip?: string;
+    hint?: string;
+    sample?: boolean;
+  }) {
     const useText = opts?.text ?? text;
     const useZip = opts?.zip ?? zip;
+    const isSample = opts?.sample ?? false;
     setBusy(true);
     setError(null);
     setLetter(null);
     setLetterCopied(false);
+    setSample(isSample);
     try {
       // Pass the recommended service type from /decide if we have it —
       // it lets the bundling detector know things like 'this is a direct
@@ -173,6 +192,11 @@ export function Analyzer({
           text: useText,
           zip: useZip || undefined,
           serviceTypeHint,
+          // Attribution for the referring institution's AGGREGATE report only
+          // (remembered on-device from a ?ref= visit; absent for most
+          // families). The sample demo bill never attributes — it isn't a
+          // family's real quote.
+          referralCode: isSample ? undefined : (readReferral() ?? undefined),
         }),
       });
       if (!r.ok) {
@@ -185,6 +209,7 @@ export function Analyzer({
         throw new Error(msg);
       }
       setResult(await r.json());
+      setUsedHint(serviceTypeHint);
       trackTool("analyzer_completed");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not analyze.");
@@ -199,10 +224,14 @@ export function Analyzer({
     setImagePreviews([]);
     setText(SAMPLE_BILL);
     setZip("");
-    setSample(true);
     // Pass the service-type hint explicitly so the FTC casket-on-direct-cremation
     // finding fires for the demo no matter what's in sessionStorage.
-    void analyze({ text: SAMPLE_BILL, zip: "", hint: "direct-cremation" });
+    void analyze({
+      text: SAMPLE_BILL,
+      zip: "",
+      hint: "direct-cremation",
+      sample: true,
+    });
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -351,6 +380,37 @@ export function Analyzer({
     !!result &&
     (result.potentialSavings > 0 || (result.violations?.length ?? 0) > 0);
 
+  // Bridge to /negotiate/start. Only a hint that is a real ServiceType key is
+  // carried over — the wizard's <Select> can't render anything else.
+  const bridgeService =
+    usedHint !== undefined && usedHint in SERVICE_LABELS ? usedHint : undefined;
+  const bridgeParams = new URLSearchParams();
+  if (/^\d{5}$/.test(zip)) bridgeParams.set("zip", zip);
+  if (bridgeService) bridgeParams.set("svc", bridgeService);
+  const bridgeQuery = bridgeParams.toString();
+  const bridgeHref = bridgeQuery
+    ? `/negotiate/start?${bridgeQuery}`
+    : "/negotiate/start";
+
+  // Written synchronously in the CTA's onClick, before Link navigates; the
+  // wizard consumes it once on mount. Survives the sign-in redirect (same
+  // tab), unlike the query params above.
+  function writeAnalyzerHandoff() {
+    try {
+      window.sessionStorage.setItem(
+        "hf-analyzer:handoff",
+        JSON.stringify({
+          zip,
+          ...(bridgeService ? { serviceType: bridgeService } : {}),
+          totalCents: result?.totalQuoted,
+          ...(homeName.trim() ? { homeName: homeName.trim() } : {}),
+        }),
+      );
+    } catch {
+      // ignore
+    }
+  }
+
   return (
     <main className="flex-1 flex flex-col">
       <div className="print:hidden">
@@ -461,6 +521,19 @@ export function Analyzer({
                   onChange={(e) =>
                     setZip(e.target.value.replace(/[^0-9]/g, ""))
                   }
+                />
+              </div>
+              <div>
+                <Label
+                  htmlFor="home-name"
+                  hint="Optional &mdash; helps if you later want us to gather comparison quotes."
+                >
+                  Which funeral home is this from?
+                </Label>
+                <Input
+                  id="home-name"
+                  value={homeName}
+                  onChange={(e) => setHomeName(e.target.value)}
                 />
               </div>
               <div>
@@ -586,9 +659,32 @@ export function Analyzer({
                   <CoverageNote coverage={result.coverage} />
                 )}
 
+              {/* The sample demo bill never bridges — its fake $10,730 quote
+                  must not become a real case's savings baseline. */}
+              {!sample && (
+                <Card tone="primary" className="print:hidden">
+                  <CardTitle>
+                    Want comparison quotes? Free, from vetted homes near you.
+                  </CardTitle>
+                  <p className="text-ink-soft text-sm mt-1 mb-4">
+                    We&rsquo;ll contact 3&ndash;5 homes near you as your
+                    advocate, request itemized prices, and bring back the
+                    options to compare &mdash; you choose, always. What you
+                    found here comes along so you don&rsquo;t retype it.
+                  </p>
+                  <LinkButton href={bridgeHref} onClick={writeAnalyzerHandoff}>
+                    Have us contact funeral homes — free
+                  </LinkButton>
+                </Card>
+              )}
+
               <div className="flex flex-wrap gap-3 print:hidden">
                 {canDraft && (
-                  <Button onClick={draftLetter} disabled={letterBusy}>
+                  <Button
+                    variant="secondary"
+                    onClick={draftLetter}
+                    disabled={letterBusy}
+                  >
                     {letterBusy
                       ? "Writing…"
                       : letter

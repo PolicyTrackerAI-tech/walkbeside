@@ -25,7 +25,7 @@ export default async function PortalOverviewPage() {
   const ctx = await requirePartnerMember("/portal");
   const { partner } = ctx;
 
-  const [{ stats, digest }, codeCount] = await Promise.all([
+  const [{ stats, digest, priceListChecks }, codeCount] = await Promise.all([
     buildPartnerReportData(partner),
     activeCodeCount(partner.id),
   ]);
@@ -120,6 +120,7 @@ export default async function PortalOverviewPage() {
       digest={digest}
       linksHref="/portal/links"
       partnerType={partnerType}
+      priceListChecks={priceListChecks}
       portalNav={
         <div className="space-y-4">
           {nav}

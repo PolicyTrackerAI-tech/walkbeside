@@ -380,7 +380,7 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
                     href={`/negotiate/start?svc=${recommendation.serviceType}`}
                     size="lg"
                   >
-                    Have us compare funeral homes for you →
+                    Have us contact funeral homes — free →
                   </LinkButton>
                   <LinkButton
                     variant="secondary"

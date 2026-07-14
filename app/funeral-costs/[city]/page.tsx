@@ -285,7 +285,7 @@ export default async function CityFuneralCostsPage({
 
           {/* Brand close */}
           <Card tone="primary">
-            <CardTitle>If you want us to do the calling for you.</CardTitle>
+            <CardTitle>If you want us to contact funeral homes for you.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               We contact funeral homes in {city.name} as your
               authorized advocate, pull written itemized quotes, and

@@ -239,7 +239,7 @@ export function PriceCalculator() {
                     <LinkButton
                       href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}&home=${encodeURIComponent(quotedHome)}&q=${encodeURIComponent(String(quotedNum))}`}
                     >
-                      Have us call funeral homes for you &rarr;
+                      Have us contact funeral homes &mdash; free &rarr;
                     </LinkButton>
                     <LinkButton href="/how-it-works" variant="ghost">
                       How this works
@@ -336,7 +336,7 @@ export function PriceCalculator() {
           </Card>
 
           <Card tone="primary">
-            <CardTitle>Want us to do the calling for you?</CardTitle>
+            <CardTitle>Want us to do the outreach for you?</CardTitle>
             <p className="text-ink-soft mb-4">
               With your written authorization, we contact funeral homes in
               your area as your advocate, request their itemized General
@@ -348,7 +348,7 @@ export function PriceCalculator() {
               href={`/negotiate/start?zip=${encodeURIComponent(zip)}&svc=${encodeURIComponent(serviceType)}`}
               size="lg"
             >
-              Have us call funeral homes for you
+              Have us contact funeral homes &mdash; free
             </LinkButton>
           </Card>
         </>

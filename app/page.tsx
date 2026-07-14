@@ -74,7 +74,7 @@ export default function HomePage() {
           </p>
 
           <LinkButton href="/where" size="lg" className="w-full sm:w-auto">
-            Get started — it&rsquo;s free
+            Start here — it&rsquo;s free
           </LinkButton>
 
           <p className="mt-4 text-sm text-ink-soft">
@@ -204,7 +204,7 @@ export default function HomePage() {
               paid by the funeral homes.
             </p>
             <span className="text-sm font-medium text-primary-deep group-hover:underline underline-offset-2">
-              Check your quote now &rarr;
+              Check a quote &rarr;
             </span>
           </Link>
 
@@ -225,7 +225,7 @@ export default function HomePage() {
                 href="/funeral-homes"
                 className="text-sm font-medium text-primary-deep underline-offset-2 hover:underline"
               >
-                See what funerals should cost in your zip →
+                See fair prices for your zip →
               </Link>
             </article>
 

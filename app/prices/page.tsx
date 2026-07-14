@@ -32,14 +32,14 @@ export default function PricesPage() {
 
           <Card tone="primary">
             <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
-            <CardTitle>Want us to call homes for you?</CardTitle>
+            <CardTitle>Want us to contact homes for you?</CardTitle>
             <p className="text-ink-soft mb-4">
               Free to families &mdash; we contact homes on your behalf at no
               charge. Every other tool
               is free too.
             </p>
             <LinkButton href="/negotiate/start">
-              Have us call funeral homes for you
+              Have us contact funeral homes &mdash; free
             </LinkButton>
           </Card>
 

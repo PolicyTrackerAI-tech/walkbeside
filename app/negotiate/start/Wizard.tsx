@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
@@ -34,9 +34,24 @@ function NegotiateStartWizard() {
   const [step, setStep] = useState(1);
   const [hydrated, setHydrated] = useState(false);
   const [showResumePrompt, setShowResumePrompt] = useState(false);
+  // Which fields the analyzer handoff actually filled — the "from your quote
+  // check" note must never sit beside a value that came from storage or the
+  // URL instead.
+  const [fromAnalyzer, setFromAnalyzer] = useState({
+    zip: false,
+    quote: false,
+  });
   const [authorized, setAuthorized] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Holds the analyzer handoff after its one-shot sessionStorage read so the
+  // hydration effect stays idempotent when React StrictMode double-invokes it
+  // in dev (run two would otherwise find the key already consumed and clobber
+  // the merged values).
+  const handoffRef = useRef<{
+    present: boolean;
+    values: Partial<WizardState>;
+  } | null>(null);
 
   // Hydrate from sessionStorage + query params.
   useEffect(() => {
@@ -51,12 +66,76 @@ function NegotiateStartWizard() {
     const cleanQuery = Object.fromEntries(
       Object.entries(fromQuery).filter(([, v]) => v != null && v !== ""),
     );
-    if (fromStorage && hasMeaningfulProgress(fromStorage)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only sessionStorage/query-param hydration; value can't be read during SSR-safe render
+    // One-shot handoff written by the analyzer's "Have us contact funeral
+    // homes" CTA (survives the sign-in redirect, unlike query params).
+    // Consumed once — removed on read — and every field is validated before
+    // it can touch the wizard: the analyzer's total arrives in CENTS and
+    // targetEstimate is a raw DOLLARS string until submit.
+    if (handoffRef.current === null) {
+      const handoff: Partial<WizardState> = {};
+      let handoffPresent = false;
+      try {
+        const rawHandoff =
+          window.sessionStorage.getItem("hf-analyzer:handoff");
+        if (rawHandoff) {
+          window.sessionStorage.removeItem("hf-analyzer:handoff");
+          handoffPresent = true;
+          const h = JSON.parse(rawHandoff) as {
+            zip?: unknown;
+            serviceType?: unknown;
+            totalCents?: unknown;
+            homeName?: unknown;
+          };
+          if (typeof h.zip === "string" && /^\d{5}$/.test(h.zip)) {
+            handoff.zip = h.zip;
+          }
+          if (
+            typeof h.serviceType === "string" &&
+            h.serviceType in SERVICE_LABELS
+          ) {
+            handoff.serviceType = h.serviceType as ServiceType;
+          }
+          if (typeof h.homeName === "string" && h.homeName) {
+            handoff.targetHomeName = h.homeName;
+          }
+          if (
+            typeof h.totalCents === "number" &&
+            Number.isFinite(h.totalCents) &&
+            h.totalCents > 0
+          ) {
+            handoff.targetEstimate =
+              h.totalCents % 100 === 0
+                ? String(h.totalCents / 100)
+                : (h.totalCents / 100).toFixed(2);
+          }
+          if (handoff.targetHomeName || handoff.targetEstimate) {
+            handoff.hasQuote = "yes";
+            // The fresh check overrides BOTH quote fields wholesale so a new
+            // estimate can never pair with a stale stored home name (or vice
+            // versa) — mixed provenance would misstate the family's quote.
+            handoff.targetHomeName = handoff.targetHomeName ?? "";
+            handoff.targetEstimate = handoff.targetEstimate ?? "";
+          }
+        }
+      } catch {
+        // a malformed handoff never blocks the wizard
+      }
+      handoffRef.current = { present: handoffPresent, values: handoff };
+    }
+    const { present: handoffPresent, values: handoff } = handoffRef.current;
+    if (fromStorage && hasMeaningfulProgress(fromStorage) && !handoffPresent) {
       setState({ ...fromStorage, ...cleanQuery });
       setShowResumePrompt(true);
     } else {
-      setState({ ...DEFAULT_STATE, ...fromStorage, ...cleanQuery });
+      // The family arriving mid-flow from the checker isn't "resuming" — no
+      // resume prompt; their fresh answers merge over anything stale.
+      setState({ ...DEFAULT_STATE, ...fromStorage, ...handoff, ...cleanQuery });
+      setFromAnalyzer({
+        zip: handoff.zip !== undefined,
+        quote:
+          handoff.targetHomeName !== undefined ||
+          handoff.targetEstimate !== undefined,
+      });
     }
     setHydrated(true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,7 +237,7 @@ function NegotiateStartWizard() {
 
           <div>
             <h1 className="font-serif text-3xl text-ink mb-3">
-              Have us call funeral homes for you.
+              Have us contact funeral homes — free.
             </h1>
             <p className="text-ink-soft">
               We&rsquo;ll contact 3&ndash;5 homes near you as your advocate,
@@ -246,6 +325,11 @@ function NegotiateStartWizard() {
                     placeholder="44106"
                     autoFocus
                   />
+                  {fromAnalyzer.zip && state.zip.length === 5 && (
+                    <p className="text-xs text-ink-muted mt-2">
+                      from your quote check ✓
+                    </p>
+                  )}
                   <Button
                     size="lg"
                     onClick={next}
@@ -355,6 +439,13 @@ function NegotiateStartWizard() {
 
                   {state.hasQuote === "yes" && (
                     <div className="mt-6 space-y-4">
+                      {fromAnalyzer.quote &&
+                        (state.targetHomeName !== "" ||
+                          state.targetEstimate !== "") && (
+                          <p className="text-xs text-ink-muted">
+                            from your quote check ✓
+                          </p>
+                        )}
                       <div>
                         <Label htmlFor="home">
                           Which funeral home gave you the quote?
