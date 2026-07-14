@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Screen 2 — Three high-level paths. Kept intentionally short.
+ * Screen 2 — Five high-level paths. Kept intentionally short.
  * The "it just happened" path drills into where on the next screen
  * so this page stays uncluttered for a crying user.
  */
@@ -31,6 +31,11 @@ const PATHS: {
     href: "/decide",
     title: "We’re arranging the funeral",
     sub: "Decisions need to be made in the next few days. We help pick the service and avoid being overcharged.",
+  },
+  {
+    href: "/analyzer",
+    title: "Someone handed me a price list",
+    sub: "We check whether the quote is fair for your area and flag any overcharges — it takes about a minute.",
   },
   {
     href: "/next-30-days",

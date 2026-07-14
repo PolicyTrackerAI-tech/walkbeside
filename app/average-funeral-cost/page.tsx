@@ -259,7 +259,7 @@ export default function AverageFuneralCostPage() {
 
           {/* Advocate CTA */}
           <Card tone="primary">
-            <CardTitle>Or have us do the calling for you.</CardTitle>
+            <CardTitle>Or have us contact funeral homes for you.</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               We contact funeral homes in your area as your authorized
               advocate, pull written itemized quotes, and put the options side

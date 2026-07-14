@@ -151,7 +151,7 @@ export default async function PlanningPage() {
 
           <Card tone="primary">
             <CardEyebrow>When the time comes</CardEyebrow>
-            <CardTitle>We can do the calling for you.</CardTitle>
+            <CardTitle>We can contact funeral homes for them.</CardTitle>
             <p className="text-ink-soft mb-3">
               Planning ahead means your family won&rsquo;t be making cold
               calls in the worst week of their life. Free to families &mdash;

@@ -128,6 +128,26 @@ export function Footer() {
           medical, or financial advice. Price estimates are informational and
           based on regional data; actual prices vary.
         </p>
+        <div className="pt-2">
+          <p className="text-xs font-medium mb-2">Tools</p>
+          <div className="flex flex-wrap gap-4 text-xs">
+            <Link href="/analyzer" className="hover:text-ink-soft">
+              Check a quote
+            </Link>
+            <Link href="/prices" className="hover:text-ink-soft">
+              Fair prices
+            </Link>
+            <Link href="/negotiate/start" className="hover:text-ink-soft">
+              Have us contact homes
+            </Link>
+            <Link href="/plan-now" className="hover:text-ink-soft">
+              Plan ahead
+            </Link>
+            <Link href="/dashboard" className="hover:text-ink-soft">
+              Dashboard
+            </Link>
+          </div>
+        </div>
         <div className="flex flex-wrap gap-4 text-xs pt-2">
           <Link href="/" className="hover:text-ink-soft">
             Home

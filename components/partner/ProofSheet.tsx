@@ -24,6 +24,7 @@ export function ProofSheet({
   portalNav,
   linksHref,
   partnerType = "hospice",
+  priceListChecks = 0,
 }: {
   name: string;
   stats: CohortStats;
@@ -49,6 +50,13 @@ export function ProofSheet({
    * CAHPS, CMS, or hospice). Callers coerce anything unknown to "hospice".
    */
   partnerType?: "hospice" | "employer";
+  /**
+   * Analyses attributed to this partner's links — a non-identifying
+   * tool-usage count (no dollars, no satisfaction, no identities), shown
+   * even before any case completes and deliberately outside the n≥5
+   * suppression that gates dollar and satisfaction figures.
+   */
+  priceListChecks?: number;
 }) {
   const empty = live && stats.familiesHelped === 0;
 
@@ -112,6 +120,20 @@ export function ProofSheet({
                 &mdash; total overcharge caught, how many saved, satisfaction,
                 and time to resolution.
               </p>
+              {priceListChecks > 0 && (
+                <div className="mt-4 bg-surface-soft rounded-xl p-4">
+                  <div className="text-xs uppercase tracking-wider text-ink-muted">
+                    Price lists checked
+                  </div>
+                  <div className="font-serif text-2xl text-ink mt-1">
+                    {priceListChecks}
+                  </div>
+                  <p className="text-xs text-ink-muted mt-1">
+                    quotes families checked through your links &mdash; an early
+                    signal; completed-case outcomes will follow here.
+                  </p>
+                </div>
+              )}
               {live && linksHref && (
                 <div className="mt-4">
                   <LinkButton href={linksHref}>
@@ -128,10 +150,27 @@ export function ProofSheet({
               </div>
               <p className="text-ink-soft mt-2">
                 Your report is building. We hold the dollar and satisfaction
-                figures back until at least {SMALL_SAMPLE_THRESHOLD} families
-                have completed their cases &mdash; both so the numbers are stable and so no
-                single family can be identified from them.
+                figures back until at least {SMALL_SAMPLE_THRESHOLD}{" "}
+                families have completed their cases &mdash; both so the
+                numbers are stable and so no single family can be identified
+                from them.
               </p>
+              {/* Non-identifying usage count — deliberately outside the n≥5
+                  gate (same posture as familiesHelped above), so the number a
+                  partner saw at zero cases doesn't vanish at one. */}
+              {priceListChecks > 0 && (
+                <div className="mt-4 bg-surface-soft rounded-xl p-4">
+                  <div className="text-xs uppercase tracking-wider text-ink-muted">
+                    Price lists checked
+                  </div>
+                  <div className="font-serif text-2xl text-ink mt-1">
+                    {priceListChecks}
+                  </div>
+                  <p className="text-xs text-ink-muted mt-1">
+                    quotes families checked through your links
+                  </p>
+                </div>
+              )}
             </Card>
           ) : (
             <>
@@ -246,6 +285,19 @@ export function ProofSheet({
                       value={`${stats.toolEngagement.obituaryPct}%`}
                     />
                   </div>
+                </Card>
+              )}
+
+              {priceListChecks > 0 && (
+                <Card>
+                  <CardEyebrow>Price lists checked</CardEyebrow>
+                  <div className="font-serif text-3xl text-ink mt-1">
+                    {priceListChecks}
+                  </div>
+                  <p className="text-xs text-ink-muted mt-1">
+                    quotes families checked through your links &mdash; an
+                    aggregate count of checks, never who or where.
+                  </p>
                 </Card>
               )}
             </>

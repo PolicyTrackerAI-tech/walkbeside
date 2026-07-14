@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { RememberReferral } from "@/components/RememberReferral";
 import { ReferralCoBrand } from "@/components/ReferralCoBrand";
 import { normalizeReferralCode } from "@/lib/referral-codes";
 import { PlanNow } from "./PlanNow";
@@ -46,7 +45,6 @@ export default async function Page({
   if (normalizeReferralCode(ref)) partner = undefined;
   return (
     <>
-      <RememberReferral code={ref} />
       <div className="max-w-2xl mx-auto px-5 pt-4 empty:hidden">
         <ReferralCoBrand refParam={ref} />
       </div>

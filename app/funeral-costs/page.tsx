@@ -75,7 +75,7 @@ export default function FuneralCostsIndexPage() {
           </Card>
 
           <Card tone="primary">
-            <CardTitle>Want us to call funeral homes for you?</CardTitle>
+            <CardTitle>Want us to contact funeral homes for you?</CardTitle>
             <p className="text-ink-soft mt-3 mb-5">
               We contact homes in your area as your authorized
               advocate, pull written itemized quotes, and put the

@@ -40,7 +40,7 @@ export function deriveTasks(s: DashboardState): { phase: Phase; tasks: Task[] } 
     tasks.push({
       id: "negotiate",
       phase: "funeral",
-      title: "Have us call funeral homes for you",
+      title: "Have us contact funeral homes — free",
       detail: "We reach 3–5 as your named advocate — free to families, at no charge.",
       href: "/negotiate/start",
     });

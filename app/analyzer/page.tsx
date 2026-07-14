@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { isAheadMode } from "@/components/PlanningAheadBanner";
-import { RememberReferral } from "@/components/RememberReferral";
 import { ReferralCoBrand } from "@/components/ReferralCoBrand";
 import { normalizeReferralCode } from "@/lib/referral-codes";
 import { Analyzer } from "./Analyzer";
@@ -46,7 +45,6 @@ export default async function Page({
   if (normalizeReferralCode(ref)) partner = undefined;
   return (
     <>
-      <RememberReferral code={ref} />
       <div className="max-w-3xl mx-auto px-5 pt-4 empty:hidden">
         <ReferralCoBrand refParam={ref} />
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useRef, useState, use } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle, CardEyebrow } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
@@ -61,15 +61,52 @@ export default function NegotiationStatusPage({
     setMessages(d.messages ?? []);
   }
 
+  // When the page first loaded — not reset when the effect re-runs on a
+  // status change, so the fast-poll window is measured from the real mount.
+  const mountedAtRef = useRef<number | null>(null);
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetches from a remote API (not derivable during render) and polls it; the initial call plus interval are the same external sync, not a render-time computation.
+    mountedAtRef.current ??= Date.now();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetches from a remote API (not derivable during render) and polls it; the initial call plus the scheduled re-fetches are the same external sync, not a render-time computation.
     refresh();
-    // Nothing will change without a founder adding vetted homes to this ZIP —
-    // polling would just hammer the API forever for no reason.
-    if (neg?.status === "no_homes_available") return;
-    const t = setInterval(refresh, 6000);
-    return () => clearInterval(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Terminal states. no_homes_available won't change without a founder
+    // adding vetted homes to this ZIP, and closed/cancelled cases never
+    // change again — polling would just hammer the API for no reason.
+    if (
+      neg?.status === "no_homes_available" ||
+      neg?.status === "closed" ||
+      neg?.status === "cancelled"
+    ) {
+      return;
+    }
+
+    // Replies arrive over hours, not seconds — poll fast only while the
+    // family is likely still watching, then back off. Recursive setTimeout
+    // (not setInterval) so the cadence can change between ticks.
+    let timer: number | undefined;
+    const schedule = () => {
+      const delay =
+        Date.now() - (mountedAtRef.current ?? 0) < 5 * 60_000 ? 6_000 : 30_000;
+      timer = window.setTimeout(() => {
+        if (!document.hidden) refresh();
+        schedule();
+      }, delay);
+    };
+    schedule();
+
+    const onVisibilityChange = () => {
+      if (document.hidden) return;
+      refresh();
+      window.clearTimeout(timer);
+      schedule();
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh is re-created each render but only closes over `id`, which is already a dependency; listing it would tear down the poll schedule on every render.
   }, [id, neg?.status]);
 
   if (error) {
@@ -155,7 +192,7 @@ export default function NegotiationStatusPage({
                   <p className="text-ink-muted text-sm">
                     We&rsquo;re contacting funeral homes now. First responses
                     usually arrive within 4&ndash;24 hours. This page refreshes
-                    automatically every few seconds.
+                    automatically.
                   </p>
                 )}
               </ul>

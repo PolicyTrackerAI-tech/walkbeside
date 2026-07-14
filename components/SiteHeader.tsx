@@ -31,6 +31,8 @@ interface Props {
 const DEFAULT_NAV_LINKS: { href: string; label: string }[] = [
   { href: "/", label: "Home" },
   { href: "/how-it-works", label: "How it works" },
+  { href: "/analyzer", label: "Check a quote" },
+  { href: "/prices", label: "Fair prices" },
   { href: "/guides", label: "Guides" },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
@@ -65,19 +67,21 @@ export function SiteHeader({
       <div className="max-w-6xl mx-auto px-5 py-4 flex items-center gap-4">
         <Brand />
 
-        <nav className="hidden md:flex items-center gap-5 text-sm text-ink-soft ml-6 flex-1">
+        {/* lg, not md: seven links plus the brand and auth button wrap at
+            tablet widths, so 768–1024px uses the menu button instead. */}
+        <nav className="hidden lg:flex items-center gap-5 text-sm text-ink-soft ml-6 flex-1">
           {navLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="hover:text-ink underline-offset-2 hover:underline"
+              className="whitespace-nowrap hover:text-ink underline-offset-2 hover:underline"
             >
               {l.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3 ml-auto">
+        <div className="hidden lg:flex items-center gap-3 ml-auto">
           {legacyBack}
           <HeaderAuthButton />
         </div>
@@ -87,7 +91,7 @@ export function SiteHeader({
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((v) => !v)}
-          className="md:hidden ml-auto inline-flex items-center justify-center w-10 h-10 rounded-lg border border-border text-ink-soft hover:text-ink"
+          className="lg:hidden ml-auto inline-flex items-center justify-center w-10 h-10 rounded-lg border border-border text-ink-soft hover:text-ink"
         >
           <svg
             width="20"
@@ -117,7 +121,7 @@ export function SiteHeader({
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-surface">
+        <div className="lg:hidden border-t border-border bg-surface">
           <div className="max-w-6xl mx-auto px-5 py-4 flex flex-col gap-3 text-base text-ink-soft">
             {navLinks.map((l) => (
               <Link

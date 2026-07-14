@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { client as anthropic, MODEL, claudeAvailable } from "@/lib/claude";
 import {
   priceListAnalysisSystem,
@@ -25,13 +26,17 @@ import {
   savingsBreakdown,
 } from "@/lib/analyzer-display";
 import { runRules } from "@/lib/bundling-detection/rules";
-import { FEATURES } from "@/lib/env";
+import { FEATURES, PUBLIC, requireServer } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
+import { normalizeReferralCode } from "@/lib/referral-codes";
 
 const Body = z.object({
   text: z.string().min(20).max(20000),
   zip: z.string().min(3).max(10).optional(),
   serviceTypeHint: z.string().max(64).optional(),
+  // Optional referral attribution (HF-XXXXXX) remembered on-device from a
+  // ?ref= visit. Reporting-only; validated + resolved server-side.
+  referralCode: z.string().max(20).optional(),
 });
 
 interface ItemOut {
@@ -68,7 +73,7 @@ export async function POST(req: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
-  const { text, zip, serviceTypeHint } = parsed.data;
+  const { text, zip, serviceTypeHint, referralCode } = parsed.data;
 
   let extracted: { items: RawItem[]; total_cents?: number } = {
     items: [],
@@ -208,12 +213,70 @@ export async function POST(req: Request) {
       // zip drives the benchmark pipeline's regional aggregation. The column
       // ships in 2026-07-02-benchmark-zip.sql (founder-applied); until then
       // the insert with zip fails, so fall back to the legacy shape rather
-      // than silently losing the analysis.
-      const { error: insertError } = await supabase
+      // than silently losing the analysis. Persistence stays best-effort: if
+      // both inserts fail, the analysis response still returns.
+      let insertedId: string | null = null;
+      const { data: inserted, error: insertError } = await supabase
         .from("price_list_analyses")
-        .insert({ ...row, zip: zip ?? null });
+        .insert({ ...row, zip: zip ?? null })
+        .select("id")
+        .single();
       if (insertError) {
-        await supabase.from("price_list_analyses").insert(row);
+        const { data: legacyInserted } = await supabase
+          .from("price_list_analyses")
+          .insert(row)
+          .select("id")
+          .single();
+        insertedId = legacyInserted?.id ?? null;
+      } else {
+        insertedId = inserted?.id ?? null;
+      }
+
+      // Referral attribution — reporting label ONLY (never read by choose/
+      // outreach/ranking; anti-steering is structural). Best-effort: an
+      // invalid, revoked, or unknown code — or the partner columns migration
+      // not being applied yet — must never fail the family's own flow.
+      // Service role because partner tables are RLS-deny-all. Only the
+      // family-facing Analyzer sends referralCode; the portal coordinator
+      // check never does, so staff test checks stay out of the org's report.
+      const code = normalizeReferralCode(referralCode);
+      if (insertedId && code) {
+        try {
+          const svc = createServiceClient(
+            PUBLIC.supabaseUrl,
+            requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+          );
+          const { data: codeRow } = await svc
+            .from("partner_codes")
+            .select("code, partner_id, active")
+            .eq("code", code)
+            .maybeSingle();
+          // Partner staff carry their org's ?ref= memory from testing their
+          // own links; their checks must not inflate the org's engagement
+          // numbers, so any active portal member is excluded here.
+          let isPartnerStaff = false;
+          if (codeRow?.active) {
+            const { data: memberRow } = await svc
+              .from("partner_members")
+              .select("id")
+              .eq("user_id", user.id)
+              .is("deactivated_at", null)
+              .limit(1)
+              .maybeSingle();
+            isPartnerStaff = !!memberRow;
+          }
+          if (codeRow?.active && !isPartnerStaff) {
+            await svc
+              .from("price_list_analyses")
+              .update({
+                partner_id: codeRow.partner_id,
+                partner_code: codeRow.code,
+              })
+              .eq("id", insertedId);
+          }
+        } catch {
+          // attribution is never worth failing a family's analysis over
+        }
       }
     }
   }

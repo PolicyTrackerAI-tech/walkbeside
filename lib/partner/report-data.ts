@@ -25,6 +25,28 @@ import { buildOutcomesDigest } from "@/lib/partner-report-digest";
 export interface PartnerReportData {
   stats: CohortStats;
   digest: string;
+  /**
+   * Analyses stamped with this partner's id at check time. A non-identifying
+   * tool-usage count (no dollars, no satisfaction, no identities), so it is
+   * deliberately outside aggregateCohort and its n≥5 suppression — the same
+   * posture as familiesHelped. Dollar/satisfaction fields stay
+   * suppression-gated.
+   */
+  priceListChecks: number;
+}
+
+/**
+ * Union of the two checker-engagement signals: the legacy user-existence join
+ * (any saved analysis by a cohort family, pre-attribution rows included) and
+ * users whose analyses were stamped with the partner's id directly. Either
+ * signal alone marks a family as having used the checker; the union dedupes a
+ * family present in both.
+ */
+export function mergeCheckerUsers(
+  legacy: Set<string>,
+  attributed: Set<string>,
+): Set<string> {
+  return new Set([...legacy, ...attributed]);
 }
 
 export async function buildPartnerReportData(partner: {
@@ -39,6 +61,26 @@ export async function buildPartnerReportData(partner: {
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
+
+  // Direct attribution — analyses stamped with this partner's id at check
+  // time, including referred families who checked a quote but never started a
+  // case. Its OWN try/catch: the partner_id column ships in a founder-applied
+  // migration, and a missing column must degrade to zero checks, never zero
+  // the whole report below.
+  // Head-count query (mirrors activeCodeCount) — a row fetch would silently
+  // cap at PostgREST's max-rows (1000) and freeze the number there.
+  let priceListChecks = 0;
+  try {
+    const { count, error: countError } = await admin
+      .from("price_list_analyses")
+      .select("id", { count: "exact", head: true })
+      .eq("partner_id", partner.id);
+    if (!countError && typeof count === "number") {
+      priceListChecks = count;
+    }
+  } catch {
+    // degrade to zero checks
+  }
 
   let records: ReturnType<typeof rowToCohortRecord>[] = [];
   try {
@@ -103,6 +145,29 @@ export async function buildPartnerReportData(partner: {
       usedBy("obituaries"),
     ]);
 
+    // Cohort-bounded direct-attribution set (own try/catch — the partner_id
+    // column ships in a founder-applied migration, and a missing column must
+    // degrade to the legacy join, never zero the whole report).
+    let attributedCheckerUsers = new Set<string>();
+    if (userIds.length) {
+      try {
+        const { data: attributed, error: attributedError } = await admin
+          .from("price_list_analyses")
+          .select("user_id")
+          .eq("partner_id", partner.id)
+          .in("user_id", userIds);
+        if (!attributedError) {
+          attributedCheckerUsers = new Set(
+            ((attributed ?? []) as { user_id: string }[]).map(
+              (r) => r.user_id,
+            ),
+          );
+        }
+      } catch {
+        // legacy join already covers cohort families
+      }
+    }
+
     // Families who received at least one bereavement check-in (the cron
     // records milestones on profiles.anniversary_emails_sent).
     let remindedUsers = new Set<string>();
@@ -122,6 +187,12 @@ export async function buildPartnerReportData(partner: {
       );
     }
 
+    // The legacy user-existence join stays as the pre-migration fallback;
+    // directly-attributed analyses are merged in on top.
+    const allCheckerUsers = mergeCheckerUsers(
+      checkerUsers,
+      attributedCheckerUsers,
+    );
     records = cases.map((c) => ({
       ...rowToCohortRecord({
         ...c,
@@ -129,7 +200,7 @@ export async function buildPartnerReportData(partner: {
         quote_count: quoteCount.get(c.id) ?? 0,
         metro_median_cents: metroMedianCents(c.service_type, c.zip),
       }),
-      usedChecker: checkerUsers.has(c.user_id),
+      usedChecker: allCheckerUsers.has(c.user_id),
       usedCertTracker: certUsers.has(c.user_id),
       usedObituary: obitUsers.has(c.user_id),
       bereavementReminded: remindedUsers.has(c.user_id),
@@ -140,7 +211,7 @@ export async function buildPartnerReportData(partner: {
 
   const stats = aggregateCohort(records);
   const digest = await buildOutcomesDigest(partner.name, stats, partnerType);
-  return { stats, digest };
+  return { stats, digest, priceListChecks };
 }
 
 /**

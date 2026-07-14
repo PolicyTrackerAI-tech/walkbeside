@@ -95,6 +95,7 @@ export default async function NegotiationClosedPage({
           <CaseSatisfaction
             negotiationId={id}
             initialScore={neg.satisfaction_score ?? null}
+            initialAmountPaidCents={neg.amount_paid_cents ?? null}
           />
         </div>
       </section>
