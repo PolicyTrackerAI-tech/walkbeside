@@ -71,6 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/medicaid-estate-recovery`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/briefing`, priority: 0.6, changeFrequency: "monthly" },
       { url: `${SITE}/partners`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/employers`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/partners/apply`, priority: 0.6, changeFrequency: "monthly" },
       { url: `${SITE}/glossary`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/guides`, priority: 0.9, changeFrequency: "weekly" },

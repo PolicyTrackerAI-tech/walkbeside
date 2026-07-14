@@ -40,21 +40,41 @@ export async function GET(req: Request) {
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
-  let partners: {
+  type PartnerRow = {
     id: string;
     name: string;
     contact_email: string | null;
+    notification_email: string | null;
+    partner_type: string | null;
     report_token: string;
-  }[] = [];
-  try {
-    const { data } = await admin
+  };
+  let partners: PartnerRow[] = [];
+  const { data, error } = await admin
+    .from("partners")
+    .select(
+      "id, name, contact_email, notification_email, partner_type, report_token",
+    )
+    .eq("active", true);
+  if (error) {
+    // notification_email/partner_type arrive in a Day-1 migration; against a
+    // database that hasn't applied it the select above errors, so retry with
+    // the legacy column set rather than silently reporting sent: 0.
+    const legacy = await admin
       .from("partners")
       .select("id, name, contact_email, report_token")
       .eq("active", true)
       .not("contact_email", "is", null);
-    partners = (data as typeof partners | null) ?? [];
-  } catch {
-    return NextResponse.json({ sent: 0, reason: "partners unavailable" });
+    if (legacy.error) {
+      return NextResponse.json({ sent: 0, error: "partners_query_failed" });
+    }
+    partners = (
+      (legacy.data as Omit<
+        PartnerRow,
+        "notification_email" | "partner_type"
+      >[] | null) ?? []
+    ).map((p) => ({ ...p, notification_email: null, partner_type: "hospice" }));
+  } else {
+    partners = (data as PartnerRow[] | null) ?? [];
   }
 
   const periodStart = new Date();
@@ -68,6 +88,11 @@ export async function GET(req: Request) {
   let sent = 0;
   for (const partner of partners) {
     try {
+      // Owners can set a dedicated digest recipient in /portal/settings;
+      // fall back to the application contact. No address at all → skip.
+      const recipient = partner.notification_email ?? partner.contact_email;
+      if (!recipient) continue;
+
       const { count: started } = await admin
         .from("negotiations")
         .select("id", { count: "exact", head: true })
@@ -85,6 +110,9 @@ export async function GET(req: Request) {
 
       const input = {
         partnerName: partner.name,
+        partnerType: (partner.partner_type === "employer"
+          ? "employer"
+          : "hospice") as "hospice" | "employer",
         periodLabel,
         familiesStartedInPeriod: started ?? 0,
         cohort,
@@ -93,7 +121,7 @@ export async function GET(req: Request) {
       if (!shouldSendDigest(input)) continue;
 
       const { subject, text } = buildPartnerDigest(input);
-      await sendEmail({ to: partner.contact_email as string, subject, text });
+      await sendEmail({ to: recipient, subject, text });
       sent++;
     } catch {
       // one partner's failure never blocks the rest

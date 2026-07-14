@@ -5,9 +5,11 @@ import { PUBLIC, requireServer, FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
 import { rateLimit } from "@/lib/rate-limit";
 import { codeFromBytes, normalizeReferralCode } from "@/lib/referral-codes";
+import { requirePartnerApi } from "@/lib/partner/auth";
 
 const Body = z.object({
-  token: z.string().min(16).max(128),
+  /** Token path: the founder-issued report_token. Absent = session path. */
+  token: z.string().min(16).max(128).optional(),
   action: z.enum(["create", "revoke"]),
   /** create: the coordinator's own note for the link. */
   label: z.string().max(80).optional(),
@@ -18,10 +20,12 @@ const Body = z.object({
 /**
  * POST /api/partner/links — coordinator self-serve referral links.
  *
- * The credential is the partner's founder-issued report_token (possession =
- * the institution), so founder approval stays upstream: no partners row, no
- * token, no codes. Responses expose codes and aggregate claim counts only —
- * never case detail (zero-visibility rule).
+ * The credential is EITHER the partner's founder-issued report_token
+ * (possession = the institution; body.token) OR a signed-in partner member
+ * session (requirePartnerApi — /portal/links). Both resolve to the same
+ * partner_id, so founder approval stays upstream: no partners row, no
+ * credential, no codes. Responses expose codes and aggregate claim counts
+ * only — never case detail (zero-visibility rule).
  */
 export async function POST(req: Request) {
   if (!FEATURES.supabase())
@@ -44,15 +48,24 @@ export async function POST(req: Request) {
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
-  // Resolve the credential. Wrong/inactive token reads as 404, same as the
-  // report page — no oracle for valid tokens.
-  const { data: partner } = await svc
-    .from("partners")
-    .select("id, active")
-    .eq("report_token", parsed.data.token)
-    .maybeSingle();
-  if (!partner || !partner.active)
-    return NextResponse.json({ error: "not_found" }, { status: 404 });
+  // Resolve the credential. Token path: wrong/inactive token reads as 404,
+  // same as the report page — no oracle for valid tokens. Session path:
+  // requirePartnerApi (which already refuses paused/inactive orgs).
+  let partnerId: string;
+  if (parsed.data.token) {
+    const { data: partner } = await svc
+      .from("partners")
+      .select("id, active")
+      .eq("report_token", parsed.data.token)
+      .maybeSingle();
+    if (!partner || !partner.active)
+      return NextResponse.json({ error: "not_found" }, { status: 404 });
+    partnerId = partner.id;
+  } else {
+    const gate = await requirePartnerApi();
+    if (gate instanceof NextResponse) return gate;
+    partnerId = gate.partner.id;
+  }
 
   if (parsed.data.action === "create") {
     // Collision-safe: retry a few times on the (tiny) chance of a dup key.
@@ -62,7 +75,7 @@ export async function POST(req: Request) {
       const code = codeFromBytes(bytes);
       const { error } = await svc.from("partner_codes").insert({
         code,
-        partner_id: partner.id,
+        partner_id: partnerId,
         label: parsed.data.label?.trim() || null,
       });
       if (!error) return NextResponse.json({ ok: true, code });
@@ -79,7 +92,7 @@ export async function POST(req: Request) {
     .from("partner_codes")
     .update({ active: false, revoked_at: new Date().toISOString() })
     .eq("code", code)
-    .eq("partner_id", partner.id); // can only revoke your own
+    .eq("partner_id", partnerId); // can only revoke your own
   if (error)
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
   return NextResponse.json({ ok: true });

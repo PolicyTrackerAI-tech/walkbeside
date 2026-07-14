@@ -6,10 +6,13 @@ export interface PartnerLite {
   id: string;
   name: string;
   active: boolean;
+  /** "hospice" | "employer" | "insurer" — consumers coerce unknowns to "hospice". */
+  partner_type: string;
 }
 
 /**
- * Resolve a partner's report_token to their {id, name, active} row, or null
+ * Resolve a partner's report_token to their {id, name, active, partner_type}
+ * row, or null
  * if the token is malformed, unrecognized, or the partners table/migration
  * isn't applied yet. Callers must still check `active` themselves (kept
  * explicit rather than baked in) so a caller can choose notFound() or a
@@ -27,7 +30,7 @@ export async function resolvePartnerToken(
   try {
     const { data } = await admin
       .from("partners")
-      .select("id, name, active")
+      .select("id, name, active, partner_type")
       .eq("report_token", token)
       .single();
     return (data as PartnerLite | null) ?? null;

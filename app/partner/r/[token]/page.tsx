@@ -41,7 +41,10 @@ export default async function PartnerTokenReportPage({
         stats={stats}
         live
         digest={digest}
-        token={token}
+        linksHref={`/partner/r/${token}/links`}
+        partnerType={
+          partner.partner_type === "employer" ? "employer" : "hospice"
+        }
         portalNav={
           <PartnerPortalNav
             token={token}

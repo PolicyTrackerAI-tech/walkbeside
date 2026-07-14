@@ -3,28 +3,48 @@ import Link from "next/link";
 /**
  * Identity + navigation row for the SIGNED-IN partner portal (/portal).
  * Same visual system as the token-gated PartnerPortalNav so the two ways in
- * feel like one product. Referral links and the quote-check tool still live
- * on their token routes until their /portal-native pages land (Day 2) — the
- * member's session context carries the org's report_token, so linking there
- * grants nothing the member doesn't already have.
+ * feel like one product. Every tab is a native /portal route behind
+ * requirePartnerMember — the report_token quick links remain a separate,
+ * parallel way in. Team and Settings render for owners only (their pages
+ * and APIs enforce the role server-side regardless).
  */
 
-export type SessionTab = "overview" | "links" | "check";
+export type SessionTab =
+  | "overview"
+  | "links"
+  | "check"
+  | "team"
+  | "materials"
+  | "settings";
 
 export function PortalSessionNav({
-  token,
   partnerName,
   active,
+  role,
 }: {
-  token: string;
   partnerName: string;
   active: SessionTab;
+  role: "owner" | "member";
 }) {
-  const tabs: { key: SessionTab; label: string; href: string }[] = [
+  const tabs: {
+    key: SessionTab;
+    label: string;
+    href: string;
+    ownerOnly?: boolean;
+  }[] = [
     { key: "overview", label: "Overview", href: "/portal" },
-    { key: "links", label: "Referral links", href: `/partner/r/${token}/links` },
-    { key: "check", label: "Quote check", href: `/partner/r/${token}/check` },
+    { key: "links", label: "Referral links", href: "/portal/links" },
+    { key: "check", label: "Quote check", href: "/portal/check" },
+    { key: "materials", label: "Materials", href: "/portal/materials" },
+    { key: "team", label: "Team", href: "/portal/team", ownerOnly: true },
+    {
+      key: "settings",
+      label: "Settings",
+      href: "/portal/settings",
+      ownerOnly: true,
+    },
   ];
+  const visible = tabs.filter((t) => !t.ownerOnly || role === "owner");
   return (
     <div className="print:hidden">
       <div className="flex items-baseline justify-between gap-3 mb-2">
@@ -41,7 +61,7 @@ export function PortalSessionNav({
         </form>
       </div>
       <nav aria-label="Partner portal" className="flex flex-wrap gap-2">
-        {tabs.map((t) => {
+        {visible.map((t) => {
           const current = t.key === active;
           return (
             <Link

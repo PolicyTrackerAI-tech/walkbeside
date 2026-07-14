@@ -4,7 +4,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminPage } from "@/lib/admin-auth";
-import { PartnersClient, type PartnerRow, type CodeStat } from "./PartnersClient";
+import {
+  PartnersClient,
+  type PartnerRow,
+  type CodeStat,
+  type LeadRow,
+} from "./PartnersClient";
 
 export const metadata: Metadata = {
   title: "Partners — admin",
@@ -55,6 +60,21 @@ export default async function AdminPartnersPage() {
     // pre-migration: empty desk, page still renders
   }
 
+  // Demo-request leads (partner_leads) in their OWN try/catch — the table
+  // ships in a later migration than partners, so a missing table must not
+  // blank the whole desk.
+  let leads: LeadRow[] = [];
+  try {
+    const { data: leadRows } = await admin
+      .from("partner_leads")
+      .select("id, name, org, email, note, source, handled_at, created_at")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    leads = (leadRows as LeadRow[] | null) ?? [];
+  } catch {
+    // pre-migration: no leads strip, page still renders
+  }
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader />
@@ -75,7 +95,7 @@ export default async function AdminPartnersPage() {
             </p>
           </div>
 
-          <PartnersClient partners={partners} codeStats={codeStats} />
+          <PartnersClient partners={partners} codeStats={codeStats} leads={leads} />
         </div>
       </section>
     </main>

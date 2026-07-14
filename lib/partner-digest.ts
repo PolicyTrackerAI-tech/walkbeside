@@ -10,6 +10,14 @@ import type { CohortStats } from "./partner-report";
 
 export interface DigestInput {
   partnerName: string;
+  /**
+   * Audience variant, threaded from partners.partner_type (unknown values
+   * coerce to "hospice"). The digest body is deliberately partner-neutral
+   * today — no Medicare/CAHPS/hospice vocabulary to branch on — but the
+   * variant travels with the input so any future wording split can't forget
+   * the employer reader.
+   */
+  partnerType?: "hospice" | "employer";
   /** e.g. "June 2026". */
   periodLabel: string;
   /** Families who started a case via the partner's links during the period. */
