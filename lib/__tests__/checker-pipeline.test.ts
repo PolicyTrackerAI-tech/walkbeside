@@ -18,6 +18,9 @@ import {
 /**
  * End-to-end pipeline mirror of /api/analyze-price-list (deterministic path,
  * no Claude) so we can exercise — and see — the full result the demo renders.
+ * The prod route additionally consults regional_benchmarks overrides
+ * (lib/benchmarks-store) before classifying; with no override it is identical
+ * to this — the mirror pins the modeled (no-override) path.
  */
 type PItem = DisplayItem & {
   matchedItemId?: string;

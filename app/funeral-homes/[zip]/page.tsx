@@ -11,10 +11,11 @@ import {
   SERVICE_LABELS,
   fmtRange,
   adjustedRange,
-  dataSourceForZip,
   DATA_SOURCE_LABEL,
   PRICING_LAST_UPDATED,
 } from "@/lib/pricing-data";
+import { tierForZip, benchmarksForZip } from "@/lib/benchmarks-store";
+import { DataTierBadge } from "@/components/DataTierBadge";
 import {
   totalsForService,
   FEATURED_SERVICES,
@@ -61,7 +62,15 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
   // Validate zip — must be 5 digits, all numeric.
   if (!/^\d{5}$/.test(zip)) notFound();
 
-  const dataSource = dataSourceForZip(zip);
+  const tierInfo = await tierForZip(zip);
+  // Founder-promoted local overrides (CENTS; LINE_ITEMS are dollars). Only
+  // the line-item table consults these — the bundle-total cards are always
+  // modeled math and are labeled that way. Per-unit items (state fees) are
+  // never overridden, matching the checker's per-unit carve-out.
+  const overrides = await benchmarksForZip(zip);
+  const overrideRowCount = LINE_ITEMS.filter(
+    (it) => !it.perUnit && overrides.has(it.id),
+  ).length;
   const region = regionForZip(zip);
 
   return (
@@ -94,11 +103,10 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
             <p className="text-lg text-ink-soft">
               Below is what a fair quote looks like for the three most
               common service types in {region ? `${region.metro}, ${region.state}` : "your region"}.{" "}
-              {DATA_SOURCE_LABEL[dataSource]}.
-            </p>
-            <p className="text-xs text-ink-muted mt-2">
-              National benchmarks, last updated{" "}
-              {PRICING_LAST_UPDATED}.
+              {overrideRowCount > 0
+                ? "Where we hold real local price-list data, the line-item table below uses it; everything else is a modeled estimate from national benchmarks adjusted by a regional cost index"
+                : DATA_SOURCE_LABEL.modeled}
+              .
             </p>
           </div>
 
@@ -107,6 +115,12 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
             <h2 className="font-serif text-2xl text-ink">
               Three common scenarios
             </h2>
+            {/* Bundle totals are always modeled math (totalsForService), even
+                where line-item overrides exist — labeled unconditionally. */}
+            <p className="text-xs text-ink-muted">
+              <DataTierBadge tier="modeled" className="mr-2" />
+              National benchmarks, last updated {PRICING_LAST_UPDATED}.
+            </p>
             {FEATURED_SERVICES.map((s) => {
               const t = totalsForService(s, zip);
               return (
@@ -149,6 +163,29 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
               — especially on the items marked with a flag — is where
               bundling tricks live.
             </p>
+            <p className="text-xs text-ink-muted mb-5 -mt-2">
+              {overrideRowCount > 0 ? (
+                <>
+                  <DataTierBadge
+                    tier={tierInfo.tier}
+                    n={tierInfo.n}
+                    lastUpdated={tierInfo.lastUpdated}
+                    className="mr-2"
+                  />
+                  {tierInfo.tier === "verified"
+                    ? "Verified local price-list data"
+                    : "Community-reported local data"}{" "}
+                  covers {overrideRowCount} of {LINE_ITEMS.length} items
+                  below; the rest are modeled estimates.
+                </>
+              ) : (
+                <>
+                  <DataTierBadge tier="modeled" className="mr-2" />
+                  {DATA_SOURCE_LABEL.modeled} &middot; Last updated{" "}
+                  {PRICING_LAST_UPDATED}.
+                </>
+              )}
+            </p>
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase tracking-wider text-ink-muted border-b border-border">
@@ -159,7 +196,15 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
               </thead>
               <tbody>
                 {LINE_ITEMS.map((it) => {
-                  const [lo, hi] = adjustedRange(it.fairLow, it.fairHigh, zip);
+                  // Override ranges are CENTS; the table renders dollars.
+                  // Per-unit items (state fees) never take an override.
+                  const ov = it.perUnit ? undefined : overrides.get(it.id);
+                  const [lo, hi] = ov
+                    ? [
+                        Math.round(ov.fairLowCents / 100),
+                        Math.round(ov.fairHighCents / 100),
+                      ]
+                    : adjustedRange(it.fairLow, it.fairHigh, zip);
                   const requiredLabel =
                     it.required === "yes"
                       ? "Yes"

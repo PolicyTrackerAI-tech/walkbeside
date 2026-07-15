@@ -20,6 +20,7 @@ import {
   type RawItem,
 } from "@/lib/negotiation/price-list-parse";
 import { reconcileTotalQuoted } from "@/lib/analyzer-totals";
+import { benchmarksForZip } from "@/lib/benchmarks-store";
 import {
   extractionConfidence,
   NAIVE_EXTRACTION_CONFIDENCE,
@@ -105,6 +106,20 @@ export async function POST(req: Request) {
     extracted = naiveExtract(text);
   }
 
+  // Founder-promoted local overrides (regional_benchmarks, n≥5 per row) for
+  // this zip — empty Map when none match or the table isn't applied yet, so
+  // the modeled path below runs unchanged. All override amounts are CENTS.
+  const overrides = await benchmarksForZip(zip ?? "");
+  // The overrides actually APPLIED to an item below — they decide the tier
+  // label on the verdict, so it reflects this analysis, not just the zip.
+  const appliedOverrides: { tier: "verified" | "community"; n: number }[] = [];
+  // Items judged against a benchmark an override COULD cover — the denominator
+  // for honest coverage reporting ("verified data covers X of Y items").
+  // Per-unit items (death certificates) are excluded from both the numerator
+  // and this denominator: they're judged against flat state-fee ranges and no
+  // local override ever applies, so counting them would misstate coverage.
+  let itemsBenchmarked = 0;
+
   const items: ItemOut[] = extracted.items.map((raw) => {
     // The extractor may fold a non-priced section header into the name
     // ("Direct cremation arrangement — Basic services fee"). Strip it back to
@@ -131,13 +146,33 @@ export async function POST(req: Request) {
     // Per-unit items (e.g. death certificates) are a fixed government/state fee,
     // NOT metro-cost-of-living sensitive — a certificate costs the same state
     // fee in rural Utah as in San Francisco — so benchmark them against the
-    // NATIONAL range, not a COLA-adjusted one. Everything else is zip-adjusted.
+    // NATIONAL range, not a COLA-adjusted one (and never a local override).
+    // Everything else is zip-adjusted — unless a regional_benchmarks override
+    // covers the item, in which case the real local range replaces the model.
+    const override = matched.perUnit ? undefined : overrides.get(matched.id);
+    if (!matched.perUnit) itemsBenchmarked += 1;
+    if (override) appliedOverrides.push({ tier: override.tier, n: override.n });
     const [lo, hi, predatory] = matched.perUnit
       ? [matched.fairLow, matched.fairHigh, matched.predatoryAt]
-      : [
-          ...adjustedRange(matched.fairLow, matched.fairHigh, zip),
-          Math.round(matched.predatoryAt * m),
-        ];
+      : override
+        ? [
+            override.fairLowCents / 100,
+            override.fairHighCents / 100,
+            // When a local override has no predatory line, the COLA-adjusted
+            // national ceiling is still the best available — clamped so the
+            // predatory cutoff always clears the local fair-high (otherwise a
+            // price a dollar above a verified fair range would read predatory).
+            override.predatoryAtCents != null
+              ? override.predatoryAtCents / 100
+              : Math.max(
+                  Math.round(matched.predatoryAt * m),
+                  Math.ceil(override.fairHighCents / 100) + 1,
+                ),
+          ]
+        : [
+            ...adjustedRange(matched.fairLow, matched.fairHigh, zip),
+            Math.round(matched.predatoryAt * m),
+          ];
     // Per-unit items are quoted as a total for N copies; judge the PER-UNIT
     // price against the per-each range, so $250 for 10 certificates ($25 each)
     // reads as fair, not a $225 overcharge.
@@ -148,11 +183,39 @@ export async function POST(req: Request) {
       cents,
       matchedItemId: matched.id,
       classification: classifyAgainst(perUnitDollars, lo, hi, predatory),
-      fairCentsLow: lo * 100,
-      fairCentsHigh: hi * 100,
+      // Override cents pass through exactly (lo/hi were derived from them, and
+      // float ÷100·×100 can drift a fraction of a cent on odd amounts).
+      fairCentsLow: override ? override.fairLowCents : lo * 100,
+      fairCentsHigh: override ? override.fairHighCents : hi * 100,
       ...(qty ? { qty } : {}),
     };
   });
+
+  // The data tier THIS verdict was computed with: verified beats community
+  // when both applied; modeled when no override touched an item. n is the
+  // MINIMUM n across the winning tier's applied overrides — the most
+  // conservative count, the only one we can defend (guardrail #4). The same
+  // guardrail forces coverage reporting: one verified item among twenty modeled
+  // ones must not label the whole verdict "verified", so itemsCovered counts
+  // only the winning tier's applied overrides and itemsBenchmarked is the
+  // denominator the UI states it against.
+  const usedVerified = appliedOverrides.filter((o) => o.tier === "verified");
+  const usedWinning = usedVerified.length
+    ? usedVerified
+    : appliedOverrides.filter((o) => o.tier === "community");
+  const dataTier: {
+    tier: "verified" | "community" | "modeled";
+    n: number | null;
+    itemsCovered: number;
+    itemsBenchmarked: number;
+  } = usedWinning.length
+    ? {
+        tier: usedWinning[0].tier,
+        n: Math.min(...usedWinning.map((o) => o.n)),
+        itemsCovered: usedWinning.length,
+        itemsBenchmarked,
+      }
+    : { tier: "modeled", n: null, itemsCovered: 0, itemsBenchmarked };
 
   // Range/selection items (caskets, vaults, urns) are excluded from the quoted
   // subtotal and savings math — there's no single price to sum or benchmark
@@ -329,6 +392,7 @@ export async function POST(req: Request) {
     violations,
     summary,
     coverage,
+    dataTier,
   });
 }
 

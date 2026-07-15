@@ -23,6 +23,7 @@ import {
   buildShareText,
 } from "@/lib/analyzer-display";
 import { ViolationsPanel } from "@/components/analyzer/ViolationsPanel";
+import { DataTierBadge } from "@/components/DataTierBadge";
 import { TONES, type AnalyzerItem, type Violation } from "@/components/analyzer/types";
 
 interface AdvocacyMove {
@@ -52,6 +53,15 @@ interface AnalyzerResult {
     reassurance: string;
   };
   coverage?: Coverage;
+  /** Which benchmark tier the verdict was computed with (route-reported). */
+  dataTier?: {
+    tier: "verified" | "community" | "modeled";
+    n: number | null;
+    /** Benchmarked items classified against the winning tier's local data. */
+    itemsCovered?: number;
+    /** Benchmarked items in total (per-unit state-fee items excluded). */
+    itemsBenchmarked?: number;
+  };
 }
 
 /**
@@ -305,11 +315,30 @@ export function Analyzer({
   const breakdown = result
     ? savingsBreakdown(result.items, result.violations)
     : null;
+  // The tier the RESULT was actually computed with wins; before a result
+  // exists (or on the modeled fallback) the static note describes the model.
+  // Flows into the copied summary and the print footer, so the artifact a
+  // family carries states its own data tier.
   const dataSource = dataSourceForZip(zip);
+  const modeledNote = `${DATA_SOURCE_LABEL[dataSource]} — an estimate, not yet locally validated for your metro.`;
+  // Coverage-honest source note: local data that touched only some benchmarked
+  // items must say so — one verified item among twenty modeled ones is not a
+  // "verified verdict" (guardrail #4).
+  const covered = result?.dataTier?.itemsCovered ?? 0;
+  const benchmarked = result?.dataTier?.itemsBenchmarked ?? 0;
+  const partialCoverage = covered > 0 && covered < benchmarked;
   const sourceNote =
-    dataSource === "national-adjusted"
-      ? `${DATA_SOURCE_LABEL[dataSource]} — an estimate, not yet locally validated for your metro.`
-      : DATA_SOURCE_LABEL[dataSource];
+    result?.dataTier?.tier === "verified"
+      ? partialCoverage
+        ? `Verified local price-list data${result.dataTier.n ? ` (${result.dataTier.n} lists)` : ""} covers ${covered} of ${benchmarked} benchmarked items; the rest are modeled estimates.`
+        : result.dataTier.n
+          ? `Verified — based on ${result.dataTier.n} real price lists in this area.`
+          : "Verified — based on real price lists in this area."
+      : result?.dataTier?.tier === "community"
+        ? partialCoverage
+          ? `Community-reported data covers ${covered} of ${benchmarked} benchmarked items; the rest are modeled estimates.`
+          : "Community data — reported by families in this area."
+        : modeledNote;
 
   async function copyResults() {
     if (!result) return;
@@ -645,6 +674,8 @@ export function Analyzer({
               <ResultHero
                 savings={result.potentialSavings}
                 sourceNote={sourceNote}
+                dataTier={result.dataTier}
+                partial={partialCoverage}
               />
 
               {pageWarning && (
@@ -958,9 +989,14 @@ export function Analyzer({
 function ResultHero({
   savings,
   sourceNote,
+  dataTier,
+  partial,
 }: {
   savings: number;
   sourceNote: string;
+  dataTier?: AnalyzerResult["dataTier"];
+  /** Local data covered only some benchmarked items — badge must say so. */
+  partial?: boolean;
 }) {
   const over = savings > 0;
   return (
@@ -990,12 +1026,17 @@ function ResultHero({
             </p>
           </>
         )}
-        <p className="text-xs text-ink-muted mt-3">
-          {sourceNote}{" "}
-          <Link href="/methodology" className="underline hover:text-ink-soft print:hidden">
-            How we calculate this
-          </Link>
-        </p>
+        {/* The badge carries the /methodology link, so no separate text link
+            here. Print-hidden: the print footer already states the tier
+            (sourceNote) and the methodology URL. */}
+        <div className="mt-3 print:hidden">
+          <DataTierBadge
+            tier={dataTier?.tier ?? "modeled"}
+            n={dataTier?.n}
+            partial={partial}
+          />
+        </div>
+        <p className="text-xs text-ink-muted mt-2">{sourceNote}</p>
       </div>
     </Card>
   );

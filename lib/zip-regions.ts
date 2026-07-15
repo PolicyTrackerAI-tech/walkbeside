@@ -15,10 +15,12 @@
  *   - General cost-of-living indexes (Numbeo, BestPlaces, etc.)
  *   - Industry knowledge of funeral-pricing variation per region
  *
- * NOT validated against actual General Price Lists. dataSourceForZip()
- * still returns "national-adjusted" for all zips. When Sarah validates
- * a metro with real GPL data (≥20 line-item samples), individual
- * prefixes upgrade to "metro-average" or "validated".
+ * NOT validated against actual General Price Lists — these multipliers
+ * power the "modeled" data tier (dataSourceForZip's static answer).
+ * Regions upgrade to "verified"/"community" via regional_benchmarks
+ * override rows, founder-promoted at n≥5 on /admin/benchmarks and read
+ * by lib/benchmarks-store.ts (metro-scoped rows match on the exact
+ * metro labels below).
  *
  * Range: 0.75 (rural Mississippi / Appalachian KY) to 1.50 (Manhattan,
  * SF, Honolulu).

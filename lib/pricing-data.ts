@@ -672,25 +672,39 @@ export function adjustedRange(
 export const PRICING_LAST_UPDATED = "2026-06-26";
 
 export type PriceDataSource =
-  | "validated" // GPL-validated per-zip data (≥20 data points / line item)
-  | "metro-average" // Metro-level validated average
-  | "national-adjusted"; // National benchmark with coarse regional multiplier
+  | "verified" // aggregated from n≥5 real local price lists (a regional_benchmarks row, founder-promoted)
+  | "community" // reported by families in the area, n≥5, founder-promoted
+  | "modeled" // national benchmarks × regional cost index — the universal fallback
+  // DEPRECATED aliases — kept so persisted values and legacy comparisons
+  // never break. "national-adjusted" maps to "modeled".
+  | "validated"
+  | "metro-average"
+  | "national-adjusted";
 
 /**
- * Returns the source quality of pricing data for a given zip.
- * V1: all zips return "national-adjusted" — sister's per-metro validation
- * work (launch city first) upgrades specific zips to "validated" over time.
+ * Static (sync) data-tier fallback for a zip: always "modeled" — the national
+ * benchmarks × regional cost index estimate every zip gets on day one. The
+ * live answer is dataSourceForZipLive() in lib/benchmarks-store.ts, which
+ * returns "verified"/"community" when a regional_benchmarks override matches
+ * (rows are founder-promoted at n≥5 via /admin/benchmarks). Client components
+ * call this one as the static fallback.
  */
-// _zip is unused for now — kept for a stable call signature (see doc comment
-// above); callers already pass one for when per-metro validation lands.
+// _zip is unused — kept for a stable call signature so client call sites
+// match dataSourceForZipLive(zip) when they move to the DB-backed answer.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function dataSourceForZip(_zip: string): PriceDataSource {
-  return "national-adjusted";
+  return "modeled";
 }
 
 export const DATA_SOURCE_LABEL: Record<PriceDataSource, string> = {
+  verified: "Verified — aggregated from real price lists in this area",
+  community: "Community — reported by families in this area",
+  modeled:
+    "Modeled estimate — national benchmarks adjusted by a regional cost index",
+  // Deprecated aliases: validated/metro-average keep their legacy strings for
+  // any persisted value; national-adjusted is the old name for modeled.
   validated: "Validated against local General Price Lists",
   "metro-average": "Based on your metro's validated average",
   "national-adjusted":
-    "Based on national benchmarks adjusted for your region",
+    "Modeled estimate — national benchmarks adjusted by a regional cost index",
 };

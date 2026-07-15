@@ -71,11 +71,42 @@ export default function MethodologyPage() {
               above which we call the price <strong className="text-ink">overpriced</strong>.
             </p>
             <p>
-              Those ranges are built from published national funeral-cost data and
-              real General Price Lists. They are a benchmark, not a single &ldquo;right&rdquo;
-              price &mdash; honest homes vary, and we treat anything inside the range as
-              fair. Our reference data was last reviewed in{" "}
-              <strong className="text-ink">{LAST_UPDATED}</strong>.
+              Every range you see carries one of three data tiers, and the
+              result is labeled with the tier it came from:
+            </p>
+            <ul className="space-y-2">
+              <li>
+                <strong className="text-ink">Modeled</strong> &mdash; the
+                default today. National fair-price ranges built from published
+                national funeral-cost data &mdash; General Price List survey
+                medians from the National Funeral Directors Association,
+                Funeral Consumers Alliance price surveys, and a sample of real
+                General Price Lists &mdash; multiplied by a regional cost
+                index estimated from public cost-of-living data. The regional
+                index is an estimate; it has not been validated against local
+                price lists. Last reviewed in{" "}
+                <strong className="text-ink">{LAST_UPDATED}</strong>.
+              </li>
+              <li>
+                <strong className="text-ink">Verified</strong> &mdash; a metro
+                or region is upgraded when at least 5 real price observations
+                for a line item accumulate and a person reviews the
+                sample&rsquo;s source mix and range before it publishes with
+                its sample size and a version number. The badge on your result
+                shows which tier you&rsquo;re seeing.
+              </li>
+              <li>
+                <strong className="text-ink">Community</strong> &mdash; ranges
+                built from prices families report to us, under the same gate:
+                at least 5 reports and a human review before anything
+                publishes. Our policy is to label family-reported prices
+                Community, not Verified &mdash; a family&rsquo;s report
+                isn&rsquo;t a printed price list.
+              </li>
+            </ul>
+            <p>
+              A range is a benchmark, not a single &ldquo;right&rdquo; price &mdash; honest
+              homes vary, and we treat anything inside the range as fair.
             </p>
             <p>
               As families check real quotes with us, those de-identified prices
@@ -88,7 +119,7 @@ export default function MethodologyPage() {
                 corrections page
               </Link>{" "}
               with the old range, the new range, and the sample size. Until an
-              item crosses that bar, it stays on the published survey baseline.
+              item crosses that bar, it stays on the Modeled baseline.
             </p>
           </div>
 
@@ -198,12 +229,12 @@ export default function MethodologyPage() {
             <CardTitle>What this is not</CardTitle>
             <p className="mt-2">
               This is an informational estimate, not legal or financial advice, and
-              not an appraisal of any specific funeral home. Our regional ranges are
-              national benchmarks adjusted for cost of living &mdash; they are not yet
-              validated against local price lists in every metro, and where they
-              aren&rsquo;t, the result says so. Actual fair prices vary by home and by
-              what you choose. Use this to ask better questions, not as the last
-              word.
+              not an appraisal of any specific funeral home. Most zip codes are on
+              Modeled ranges today &mdash; national benchmarks times an estimated
+              regional cost index, not yet checked against local price lists &mdash;
+              and the tier badge on your result tells you that honestly. Actual
+              fair prices vary by home and by what you choose. Use this to ask
+              better questions, not as the last word.
             </p>
           </Card>
 
