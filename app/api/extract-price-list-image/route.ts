@@ -4,6 +4,7 @@ import {
   client as anthropic,
   MODEL,
   claudeAvailable,
+  recordUsage,
   textOf,
 } from "@/lib/claude";
 import { priceListImageExtractionSystem } from "@/lib/negotiation/prompts";
@@ -96,6 +97,9 @@ export async function POST(req: Request) {
         },
       ],
     });
+    // Vision content blocks don't fit the string-only callClaude wrapper —
+    // this site keeps its direct client() call and cost-tags via recordUsage.
+    recordUsage("extract-price-list-image", msg);
 
     const extracted = textOf(msg).trim();
 

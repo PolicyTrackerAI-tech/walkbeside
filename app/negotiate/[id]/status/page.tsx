@@ -25,6 +25,19 @@ interface Message {
   subject: string | null;
   body_text: string | null;
   created_at: string;
+  // AI-proposed quote parsed from an inbound reply (2026-07-16 migration).
+  // Absent on a pre-migration schema — every read is null-guarded.
+  ai_quote_cents?: number | null;
+  ai_quote_items?: { name: string; cents: number }[] | null;
+  ai_parse_confidence?: number | null;
+  ai_confirmed_at?: string | null;
+}
+
+/** An unconfirmed AI-parsed quote attached to one outreach row. */
+interface AiProposal {
+  messageId: string;
+  cents: number;
+  itemCount: number;
 }
 
 interface NegotiationView {
@@ -127,6 +140,34 @@ export default function NegotiationStatusPage({
   const someReplied = outreach.some((o) => o.quote_cents != null);
   const noHomesAvailable = neg.status === "no_homes_available";
 
+  // Latest unconfirmed AI-parsed quote for a home that has no recorded quote
+  // yet. Matched by the webhook's outreach link first, then by sender email.
+  // Display-only until the family clicks "Use this" (which posts the same
+  // quote route a hand-typed quote uses).
+  const proposalFor = (o: Outreach): AiProposal | null => {
+    if (o.quote_cents != null) return null;
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const m = messages[i];
+      if (m.direction !== "inbound_fd") continue;
+      if (m.ai_quote_cents == null || m.ai_confirmed_at) continue;
+      const matchesHome =
+        m.outreach_id === o.id ||
+        (!!m.from_address &&
+          !!o.home_email &&
+          m.from_address.toLowerCase() === o.home_email.toLowerCase());
+      if (matchesHome) {
+        return {
+          messageId: m.id,
+          cents: m.ai_quote_cents,
+          itemCount: Array.isArray(m.ai_quote_items)
+            ? m.ai_quote_items.length
+            : 0,
+        };
+      }
+    }
+    return null;
+  };
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader backHref="/dashboard" backLabel="Dashboard" />
@@ -185,6 +226,7 @@ export default function NegotiationStatusPage({
                     key={o.id}
                     outreach={o}
                     negotiationId={id}
+                    proposal={proposalFor(o)}
                     onSaved={refresh}
                   />
                 ))}
@@ -396,10 +438,12 @@ function LegendDot({ label, className }: { label: string; className: string }) {
 function OutreachRow({
   outreach,
   negotiationId,
+  proposal,
   onSaved,
 }: {
   outreach: Outreach;
   negotiationId: string;
+  proposal: AiProposal | null;
   onSaved: () => void;
 }) {
   const [editing, setEditing] = useState(false);
@@ -409,6 +453,38 @@ function OutreachRow({
   const [notes, setNotes] = useState(outreach.notes ?? "");
   const [busy, setBusy] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
+
+  // One-click confirm of the AI-parsed quote — posts the SAME route a
+  // hand-typed quote uses (plus confirmMessageId so the source message gets
+  // ai_confirmed_at stamped). The proposal itself is never the record.
+  async function useProposal() {
+    if (!proposal) return;
+    setBusy(true);
+    setConfirmError(null);
+    try {
+      const r = await fetch(`/api/negotiate/${negotiationId}/quote`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          outreachId: outreach.id,
+          quoteCents: proposal.cents,
+          confirmMessageId: proposal.messageId,
+        }),
+      });
+      if (!r.ok) {
+        setConfirmError(
+          "Couldn't save that quote — try again, or record it manually.",
+        );
+        return;
+      }
+      setJustSaved(true);
+      setTimeout(() => setJustSaved(false), 2500);
+      onSaved();
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function save() {
     setBusy(true);
@@ -455,6 +531,38 @@ function OutreachRow({
           </div>
         )}
       </div>
+      {proposal && !editing && (
+        <div className="mt-3 rounded-xl border border-border bg-surface-soft px-4 py-3">
+          <div className="text-[10px] uppercase tracking-wider text-ink-muted font-semibold mb-1">
+            We read their reply
+          </div>
+          <p className="text-sm text-ink">
+            Their email looks like a quote of{" "}
+            <strong>{fmtCents(proposal.cents)}</strong>
+            {proposal.itemCount > 0
+              ? ` (${proposal.itemCount} item${proposal.itemCount === 1 ? "" : "s"})`
+              : ""}
+            . Nothing is recorded until you confirm it.
+          </p>
+          {confirmError && (
+            <p className="text-bad text-sm mt-2">{confirmError}</p>
+          )}
+          <div className="mt-3 flex gap-2">
+            <Button onClick={useProposal} disabled={busy}>
+              {busy ? "Saving…" : "Use this"}
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setQuote(String(proposal.cents / 100));
+                setEditing(true);
+              }}
+            >
+              Edit first
+            </Button>
+          </div>
+        </div>
+      )}
       {editing && (
         <div className="mt-4 grid sm:grid-cols-3 gap-3">
           <div>

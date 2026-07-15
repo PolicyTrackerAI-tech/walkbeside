@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { client as anthropic, MODEL, claudeAvailable, textOf } from "@/lib/claude";
+import { callClaude, claudeAvailable } from "@/lib/claude";
 import { priceListPushbackLetterSystem } from "@/lib/negotiation/prompts";
 import { fallbackPushbackLetter, type RangeAwareItem } from "@/lib/analyzer-display";
 import { readLimitedJson } from "@/lib/http-guards";
@@ -90,13 +90,12 @@ export async function POST(req: Request) {
   };
 
   try {
-    const msg = await anthropic().messages.create({
-      model: MODEL,
-      max_tokens: 700,
+    const out = await callClaude({
+      feature: "draft-letter",
       system: priceListPushbackLetterSystem(),
-      messages: [{ role: "user", content: JSON.stringify(findings) }],
+      user: JSON.stringify(findings),
+      maxTokens: 700,
     });
-    const out = textOf(msg).trim();
     if (out.length < 40) return NextResponse.json({ letter: fallback() });
     return NextResponse.json({ letter: out });
   } catch {

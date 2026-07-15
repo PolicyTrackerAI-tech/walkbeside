@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { rateLimit, clientIp, __resetRateLimit } from "@/lib/rate-limit";
+import {
+  RATE_LIMITS,
+  rateLimit,
+  clientIp,
+  __resetRateLimit,
+} from "@/lib/rate-limit";
 
 const RULE = { limit: 3, windowMs: 60_000 };
 
@@ -32,6 +37,36 @@ describe("rateLimit token bucket", () => {
     expect(rateLimit("a:/x", RULE, t).ok).toBe(false);
     // Different key is unaffected.
     expect(rateLimit("b:/x", RULE, t).ok).toBe(true);
+  });
+});
+
+describe("RATE_LIMITS coverage", () => {
+  // Every public POST endpoint that reaches Claude must have a rule — the
+  // proxy matches exact pathnames, so a sub-path like draft-letter is NOT
+  // covered by its parent's entry (that gap shipped once; keep it closed).
+  it("covers every Claude-calling public endpoint", () => {
+    for (const path of [
+      "/api/analyze-price-list",
+      "/api/analyze-price-list/draft-letter",
+      "/api/analyze-price-list/explain",
+      "/api/compare-bill",
+      "/api/extract-price-list-image",
+      "/api/subscription-finder",
+      "/api/eulogy",
+      "/api/obituary",
+    ]) {
+      expect(RATE_LIMITS[path], `${path} missing from RATE_LIMITS`).toBeDefined();
+    }
+  });
+
+  it("throttles the draft-letter rule past its limit", () => {
+    const rule = RATE_LIMITS["/api/analyze-price-list/draft-letter"];
+    const t = 4_000_000;
+    for (let i = 0; i < rule.limit; i++) {
+      expect(rateLimit("ip:/api/analyze-price-list/draft-letter", rule, t).ok).toBe(true);
+    }
+    // The 9th call inside the same minute is rejected.
+    expect(rateLimit("ip:/api/analyze-price-list/draft-letter", rule, t).ok).toBe(false);
   });
 });
 

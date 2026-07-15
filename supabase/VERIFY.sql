@@ -34,3 +34,13 @@ where table_schema = 'public'
     or (table_name = 'price_list_analyses' and column_name in ('partner_id','extraction_method'))
   )
 order by table_name, column_name;
+
+-- Confirm the 2026-07-16 inbound-ai-parse migration landed (expect 5 rows):
+select column_name
+from information_schema.columns
+where table_schema = 'public' and table_name = 'negotiation_messages'
+  and column_name in (
+    'ai_quote_cents', 'ai_quote_items', 'ai_parse_confidence',
+    'ai_parsed_at', 'ai_confirmed_at'
+  )
+order by column_name;

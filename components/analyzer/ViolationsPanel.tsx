@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import type { Severity, Violation } from "./types";
 
@@ -89,6 +92,94 @@ function ViolationRow({ v }: { v: Violation }) {
           </p>
         </div>
       )}
+      <ExplainToggle v={v} />
     </li>
+  );
+}
+
+/**
+ * "Why does this matter?" — expands into a plain-English, citation-grounded
+ * explanation of this one finding (Day 4). Fetched once, then toggled
+ * locally; any fetch problem falls back to the finding's own script so the
+ * expander never dead-ends.
+ */
+function ExplainToggle({ v }: { v: Violation }) {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [explanation, setExplanation] = useState<string | null>(null);
+
+  async function toggle() {
+    if (open) {
+      setOpen(false);
+      return;
+    }
+    setOpen(true);
+    if (explanation || loading) return;
+    setLoading(true);
+    try {
+      const r = await fetch("/api/analyze-price-list/explain", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          ruleId: v.ruleId,
+          title: v.title,
+          description: v.description,
+          ftcReference: v.ftcReference,
+          evidence: v.evidence,
+          whatToSay: v.whatToSay,
+          itemName: v.evidence,
+        }),
+      });
+      if (r.ok) {
+        const d = (await r.json()) as { explanation?: string };
+        if (d.explanation) {
+          setExplanation(d.explanation);
+          return;
+        }
+      }
+      // Rate-limited, offline, or malformed — the finding's own script is
+      // always a truthful answer.
+      setExplanation(
+        v.whatToSay
+          ? `If you want to raise it, you can say: “${v.whatToSay}”`
+          : v.description,
+      );
+    } catch {
+      setExplanation(
+        v.whatToSay
+          ? `If you want to raise it, you can say: “${v.whatToSay}”`
+          : v.description,
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="mt-2">
+      <button
+        type="button"
+        onClick={toggle}
+        className="text-xs font-medium text-primary-deep underline underline-offset-2 hover:no-underline"
+        aria-expanded={open}
+      >
+        {open ? "Hide explanation" : "Why does this matter?"}
+      </button>
+      {open && (
+        <div className="mt-2 rounded-lg bg-surface border border-border px-3 py-2">
+          {loading ? (
+            <div className="space-y-1.5 animate-pulse" aria-hidden>
+              <div className="h-3 rounded bg-border/60 w-11/12" />
+              <div className="h-3 rounded bg-border/60 w-4/5" />
+              <div className="h-3 rounded bg-border/60 w-2/3" />
+            </div>
+          ) : (
+            <p className="text-sm text-ink-soft leading-relaxed">
+              {explanation}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

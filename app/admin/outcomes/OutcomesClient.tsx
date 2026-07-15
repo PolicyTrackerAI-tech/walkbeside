@@ -29,6 +29,19 @@ export interface PartnerLite {
   name: string;
 }
 
+/**
+ * An unconfirmed AI-parsed quote from an inbound reply (Day 4, P7).
+ * Read-only here — the family's "Use this" click on their status page is the
+ * only path that turns a proposal into a recorded quote.
+ */
+export interface AiQuoteProposal {
+  negotiation_id: string;
+  outreach_id: string | null;
+  cents: number;
+  itemCount: number;
+  confidence: number | null;
+}
+
 export interface OutcomeCase {
   id: string;
   zip: string;
@@ -69,9 +82,11 @@ function inputToCents(v: string): number | null {
 export function OutcomesClient({
   initial,
   partners = [],
+  aiProposals = [],
 }: {
   initial: OutcomeCase[];
   partners?: PartnerLite[];
+  aiProposals?: AiQuoteProposal[];
 }) {
   const [cases, setCases] = React.useState<OutcomeCase[]>(initial);
   const [filter, setFilter] = React.useState<Filter>("all");
@@ -215,6 +230,7 @@ export function OutcomesClient({
               <CaseRow
                 c={c}
                 partners={partners}
+                proposals={aiProposals.filter((p) => p.negotiation_id === c.id)}
                 busy={busy}
                 send={send}
                 patchCaseLocal={patchCaseLocal}
@@ -231,6 +247,7 @@ export function OutcomesClient({
 function CaseRow({
   c,
   partners,
+  proposals,
   busy,
   send,
   patchCaseLocal,
@@ -238,6 +255,7 @@ function CaseRow({
 }: {
   c: OutcomeCase;
   partners: PartnerLite[];
+  proposals: AiQuoteProposal[];
   busy: Record<string, boolean>;
   send: (
     payload: Record<string, unknown>,
@@ -415,11 +433,25 @@ function CaseRow({
               key={h.id}
               c={c}
               h={h}
+              proposal={proposals.find((p) => p.outreach_id === h.id) ?? null}
               busy={busy}
               send={send}
               patchHomeLocal={patchHomeLocal}
             />
           ))}
+          {/* Proposals from senders the webhook couldn't match to a home. */}
+          {proposals
+            .filter((p) => !p.outreach_id)
+            .map((p, i) => (
+              <div
+                key={`unmatched-${i}`}
+                className="text-xs text-ink-muted px-1"
+              >
+                An inbound reply from an unmatched sender reads like a quote of{" "}
+                {money(p.cents)} (AI parse, unconfirmed) — link it via the SQL
+                editor if it belongs to one of these homes.
+              </div>
+            ))}
         </div>
       )}
     </Card>
@@ -429,12 +461,14 @@ function CaseRow({
 function HomeRow({
   c,
   h,
+  proposal,
   busy,
   send,
   patchHomeLocal,
 }: {
   c: OutcomeCase;
   h: OutcomeHome;
+  proposal: AiQuoteProposal | null;
   busy: Record<string, boolean>;
   send: (
     payload: Record<string, unknown>,
@@ -523,6 +557,15 @@ function HomeRow({
           quote {money(h.quote_cents)} · {h.status}
         </div>
       </div>
+      {proposal && h.quote_cents == null && (
+        <div className="mt-2 text-xs text-ink-soft">
+          <span className="font-medium text-ink">
+            AI read their reply: {money(proposal.cents)}
+          </span>
+          {proposal.itemCount > 0 && ` (${proposal.itemCount} items)`} —
+          unconfirmed proposal; the family confirms it on their status page.
+        </div>
+      )}
       <div className="grid gap-2 sm:grid-cols-4 mt-3 items-end">
         <div>
           <Label htmlFor={`hl-${h.id}`}>Listed $</Label>

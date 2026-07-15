@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { client as anthropic, MODEL, textOf, claudeAvailable } from "@/lib/claude";
+import { callClaude, claudeAvailable } from "@/lib/claude";
 import { eulogySystem } from "@/lib/negotiation/prompts";
 import { readLimitedJson } from "@/lib/http-guards";
 
@@ -28,18 +28,15 @@ export async function POST(req: Request) {
       .join("\n");
     // Rough word-count target: ~140 words per minute spoken.
     const wordTarget = durationMinutes * 140;
-    const msg = await anthropic().messages.create({
-      model: MODEL,
-      max_tokens: 1200,
+    // eulogySystem(tone) has three byte-stable variants (one per tone) — each
+    // gets its own cache entry, which is fine.
+    draft = await callClaude({
+      feature: "eulogy",
       system: eulogySystem(tone),
-      messages: [
-        {
-          role: "user",
-          content: `Write a eulogy for the speaker to read aloud. Plain prose. Aim for ~${wordTarget} words (about ${durationMinutes} minute${durationMinutes === 1 ? "" : "s"} when spoken).\n\nFacts and stories the speaker shared:\n${lines}`,
-        },
-      ],
+      user: `Write a eulogy for the speaker to read aloud. Plain prose. Aim for ~${wordTarget} words (about ${durationMinutes} minute${durationMinutes === 1 ? "" : "s"} when spoken).\n\nFacts and stories the speaker shared:\n${lines}`,
+      maxTokens: 1200,
+      cacheSystem: true,
     });
-    draft = textOf(msg);
   } else {
     draft = fallbackEulogy(inputs);
   }

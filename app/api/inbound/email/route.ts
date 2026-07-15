@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { notifyFamilyOfReply } from "@/lib/negotiation/notify-family-of-reply";
+import { claudeAvailable } from "@/lib/claude";
+import { parseInboundQuote } from "@/lib/negotiation/parse-reply";
 import { readLimitedJson } from "@/lib/http-guards";
 
 export const runtime = "nodejs";
@@ -112,10 +114,15 @@ export async function POST(req: Request) {
     inbound_message_id: inboundMessageId || null,
   };
 
-  const { error } = await admin.from("negotiation_messages").insert(insert);
+  const { data: insertedMsg, error } = await admin
+    .from("negotiation_messages")
+    .insert(insert)
+    .select("id")
+    .single();
   if (error) {
     // Unique-violation on inbound_message_id = retry of an already-stored
-    // message. Treat as success.
+    // message. Treat as success. (A Postmark retry therefore never re-runs
+    // the AI parse below — it only runs after a fresh insert.)
     if (error.code === "23505") {
       return NextResponse.json({ accepted: true, deduped: true });
     }
@@ -126,6 +133,44 @@ export async function POST(req: Request) {
   console.info(
     `[inbound] stored msg neg=${negotiationId} outreach=${outreachId ?? "unmatched"}`,
   );
+
+  // Best-effort AI parse of the reply into a PROPOSED quote (Day 4, P7).
+  // Strictly time-bounded (parseInboundQuote caps the call at 15s, no
+  // retries) so the webhook's fast-200 contract to Postmark holds; any
+  // failure — Claude down, junk JSON, pre-migration schema without the ai_*
+  // columns — leaves the message exactly as stored. The proposal is never
+  // ground truth: the family confirms it through the existing quote route
+  // (D6 — no AI write counts without a human click).
+  if (claudeAvailable() && (payload.TextBody ?? "").length > 40) {
+    try {
+      const proposal = await parseInboundQuote(
+        payload.TextBody ?? "",
+        negotiationId,
+      );
+      if (proposal && insertedMsg?.id) {
+        const { error: aiError } = await admin
+          .from("negotiation_messages")
+          .update({
+            ai_quote_cents: proposal.cents,
+            ai_quote_items: proposal.items,
+            ai_parse_confidence: proposal.confidence,
+            ai_parsed_at: new Date().toISOString(),
+          })
+          .eq("id", insertedMsg.id);
+        if (aiError) {
+          console.warn(
+            `[inbound] ai parse not stored neg=${negotiationId}: ${aiError.message}`,
+          );
+        } else {
+          console.info(
+            `[inbound] ai parse neg=${negotiationId} cents=${proposal.cents} conf=${proposal.confidence}`,
+          );
+        }
+      }
+    } catch {
+      // Parse is best-effort — the stored message and the 200 are untouched.
+    }
+  }
 
   // Best-effort family notification — failure here doesn't fail the webhook
   // since the message is already stored and will surface on /status next refresh.

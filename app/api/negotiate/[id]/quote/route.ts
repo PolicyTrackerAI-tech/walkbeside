@@ -1,15 +1,22 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
+import { PUBLIC, requireServer } from "@/lib/env";
 
 /**
- * Family records a manual quote received from a specific funeral home.
- * (Inbound email parsing is V2; for V1 we let the family forward/copy quotes.)
+ * Family records a quote received from a specific funeral home — typed in by
+ * hand, or one-click confirmed from an AI-parsed inbound reply ("Use this" on
+ * the status page). Both paths write the same way; the AI columns are never
+ * ground truth. When confirmMessageId is present, the source message gets
+ * ai_confirmed_at stamped after the quote is saved.
  */
 const Body = z.object({
   outreachId: z.string().uuid(),
   quoteCents: z.number().int().nonnegative(),
   notes: z.string().max(2000).optional(),
+  /** The negotiation_messages row whose AI proposal this quote confirms. */
+  confirmMessageId: z.string().uuid().optional(),
 });
 
 export async function POST(
@@ -71,6 +78,27 @@ export async function POST(
       updated_at: new Date().toISOString(),
     })
     .eq("id", id);
+
+  // "Use this" confirmations: stamp ai_confirmed_at on the source message.
+  // Service role because negotiation_messages has no family UPDATE policy
+  // (it's an audit log); the negotiation_id filter pins the stamp to this
+  // family's own case, whose ownership was verified above. Best-effort —
+  // the quote is already saved, so a stamp failure never fails the request.
+  if (parsed.data.confirmMessageId) {
+    try {
+      const svc = createServiceClient(
+        PUBLIC.supabaseUrl,
+        requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+      );
+      await svc
+        .from("negotiation_messages")
+        .update({ ai_confirmed_at: new Date().toISOString() })
+        .eq("id", parsed.data.confirmMessageId)
+        .eq("negotiation_id", id);
+    } catch {
+      // bookkeeping only
+    }
+  }
 
   return NextResponse.json({ best_quote_cents: best, savings_cents: savings });
 }
