@@ -50,8 +50,13 @@ export async function POST(req: Request) {
   const f = parsed.data;
 
   // The finding must correspond to a real rule — this endpoint explains OUR
-  // findings, not arbitrary client-supplied text.
-  if (!RULES.some((r) => r.id === f.ruleId)) {
+  // findings, not arbitrary client-supplied text. runRules also synthesizes
+  // one detection outside the RULES array (the cemetery/monument scope
+  // notice), so that id is allowlisted explicitly.
+  if (
+    f.ruleId !== "cemetery-scope-notice" &&
+    !RULES.some((r) => r.id === f.ruleId)
+  ) {
     return NextResponse.json({ error: "unknown_rule" }, { status: 400 });
   }
 

@@ -481,6 +481,12 @@ function OutreachRow({
       setJustSaved(true);
       setTimeout(() => setJustSaved(false), 2500);
       onSaved();
+    } catch {
+      // Network-level failure (offline, connection reset) — same message as
+      // an HTTP error so the tap never fails silently.
+      setConfirmError(
+        "Couldn't save that quote — try again, or record it manually.",
+      );
     } finally {
       setBusy(false);
     }

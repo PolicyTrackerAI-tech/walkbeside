@@ -28,16 +28,54 @@ describe("interpretQuotePayload", () => {
     expect(p!.items).toHaveLength(0);
   });
 
-  it("replaces a hallucinated stated total below the item sum", () => {
+  it("declines a stated total far below the item sum (ambiguous)", () => {
+    // Could be a misparse, could be a discount we can't verify — either way
+    // we can't tell which number is the quote. Silence over wrong.
+    expect(
+      interpretQuotePayload({
+        items: [
+          { name: "Services", cents: 300000 },
+          { name: "Casket", cents: 200000 },
+        ],
+        total_cents: 189900,
+      }),
+    ).toBeNull();
+  });
+
+  it("trusts a small stated discount below the item sum", () => {
     const p = interpretQuotePayload({
       items: [
-        { name: "Services", cents: 300000 },
+        { name: "Services", cents: 100000 },
         { name: "Casket", cents: 200000 },
       ],
-      total_cents: 189900, // below the sum — same defense the analyzer uses
+      total_cents: 285000, // ~5% below the sum — a plausible package price
     });
     expect(p).not.toBeNull();
-    expect(p!.cents).toBe(500000);
+    expect(p!.cents).toBe(285000);
+  });
+
+  it("trusts the stated all-in total over a partial itemization", () => {
+    // The routine email shape: one example line plus the real all-in figure.
+    // Proposing the item sum here ($1,000) would be materially wrong.
+    const p = interpretQuotePayload({
+      items: [{ name: "Casket", cents: 100000 }],
+      total_cents: 399500,
+    });
+    expect(p).not.toBeNull();
+    expect(p!.cents).toBe(399500);
+  });
+
+  it("declines when a fuller itemization is wildly contradicted by the total", () => {
+    expect(
+      interpretQuotePayload({
+        items: [
+          { name: "Basic services", cents: 40000 },
+          { name: "Transfer", cents: 30000 },
+          { name: "Refrigeration", cents: 30000 },
+        ],
+        total_cents: 500000, // 5x the sum of a complete-looking itemization
+      }),
+    ).toBeNull();
   });
 
   it("declines non-USD quotes", () => {

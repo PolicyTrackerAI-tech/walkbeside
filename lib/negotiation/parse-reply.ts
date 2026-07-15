@@ -1,7 +1,6 @@
 import { callClaude, claudeAvailable } from "@/lib/claude";
 import { summarizeQuoteSystem } from "@/lib/negotiation/prompts";
 import { stripCodeFence } from "@/lib/negotiation/price-list-parse";
-import { reconcileTotalQuoted } from "@/lib/analyzer-totals";
 import { extractionConfidence } from "@/lib/extraction-confidence";
 
 /**
@@ -75,9 +74,36 @@ export function interpretQuotePayload(raw: unknown): ParsedInboundQuote | null {
   const itemSum = items.reduce((s, it) => s + it.cents, 0);
   if (itemSum <= 0 && (statedTotal == null || statedTotal <= 0)) return null;
 
-  // Same hallucinated-total defense the analyzer uses: a stated total below
-  // the item sum or wildly above it is replaced by the item sum.
-  const cents = reconcileTotalQuoted(statedTotal, itemSum);
+  // Reply-specific total reconciliation — deliberately NOT the analyzer's
+  // reconcileTotalQuoted. A GPL should itemize everything, so there a stated
+  // total wildly above the item sum smells hallucinated and the item sum
+  // wins. An email reply is the opposite: homes routinely quote one or two
+  // example lines and then the real all-in figure ("Casket: $1,000 … our
+  // all-in total is $3,995"), so the STATED total is the quote and the item
+  // sum would be a materially wrong number to propose. When the two versions
+  // of reality genuinely contradict, decline — silence over wrong.
+  let cents: number;
+  if (itemSum <= 0) {
+    cents = statedTotal!; // bare all-in total, no itemization
+  } else if (statedTotal == null || statedTotal <= 0) {
+    cents = itemSum; // itemization only
+  } else {
+    const ratio = statedTotal / itemSum;
+    if (ratio < 0.9) {
+      // Stated total far below what we parsed — a misparse or a discount we
+      // can't verify. Ambiguous; decline.
+      return null;
+    }
+    if (ratio <= 3 || items.length <= 2) {
+      // Normal email shape: stated all-in ≥ a partial itemization. With only
+      // 1-2 example lines, even a large gap is expected.
+      cents = statedTotal;
+    } else {
+      // A fairly complete-looking itemization contradicted 3x+ by the stated
+      // total — one of them is wrong and we can't tell which. Decline.
+      return null;
+    }
+  }
   if (cents < MIN_PLAUSIBLE_CENTS || cents > MAX_PLAUSIBLE_CENTS) return null;
 
   const confidence = extractionConfidence({

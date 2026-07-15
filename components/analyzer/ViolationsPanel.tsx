@@ -120,14 +120,18 @@ function ExplainToggle({ v }: { v: Violation }) {
       const r = await fetch("/api/analyze-price-list/explain", {
         method: "POST",
         headers: { "content-type": "application/json" },
+        // No itemName: a finding's evidence is a quoted line (sometimes
+        // several item names joined together), not a catalog item name — a
+        // lookup keyed on it grounds the wrong fair range. The finding +
+        // citation are the grounding. Evidence is clipped to the API's cap
+        // so a long joined line can't 400 the request.
         body: JSON.stringify({
           ruleId: v.ruleId,
           title: v.title,
           description: v.description,
           ftcReference: v.ftcReference,
-          evidence: v.evidence,
+          evidence: v.evidence?.slice(0, 500),
           whatToSay: v.whatToSay,
-          itemName: v.evidence,
         }),
       });
       if (r.ok) {
