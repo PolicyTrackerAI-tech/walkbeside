@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
-import { client as anthropic, MODEL, claudeAvailable } from "@/lib/claude";
+import { callClaude, claudeAvailable } from "@/lib/claude";
 import {
   priceListAnalysisSystem,
   priceListAdvocacySummarySystem,
@@ -20,6 +20,11 @@ import {
   type RawItem,
 } from "@/lib/negotiation/price-list-parse";
 import { reconcileTotalQuoted } from "@/lib/analyzer-totals";
+import {
+  extractionConfidence,
+  NAIVE_EXTRACTION_CONFIDENCE,
+} from "@/lib/extraction-confidence";
+import { redactContact } from "@/lib/redact";
 import {
   fallbackAdvocacySummary,
   assessCoverage,
@@ -78,20 +83,21 @@ export async function POST(req: Request) {
   let extracted: { items: RawItem[]; total_cents?: number } = {
     items: [],
   };
+  // Which parser produced the items — persisted with the analysis so the
+  // benchmark pipeline can weigh naive-regex rows differently from Claude rows.
+  let extractionMethod: "claude" | "naive" = "naive";
 
   if (claudeAvailable()) {
     try {
-      const msg = await anthropic().messages.create({
-        model: MODEL,
-        max_tokens: 1500,
+      const out = await callClaude({
+        feature: "analyzer-extract",
         system: priceListAnalysisSystem(),
-        messages: [{ role: "user", content: text }],
+        user: text,
+        maxTokens: 1500,
+        cacheSystem: true,
       });
-      const out = msg.content
-        .filter((b) => b.type === "text")
-        .map((b) => (b as { text: string }).text)
-        .join("");
       extracted = JSON.parse(stripCodeFence(out));
+      extractionMethod = "claude";
     } catch {
       extracted = naiveExtract(text);
     }
@@ -158,10 +164,21 @@ export async function POST(req: Request) {
   // the items we parsed — see reconcileTotalQuoted for the failure mode this
   // guards (a hallucinated total below the item sum clamping the fair total
   // to $0 on screen).
-  const totalQuoted = reconcileTotalQuoted(
-    extracted.total_cents,
-    priced.reduce((s, i) => s + (i.cents || 0), 0),
-  );
+  const pricedSumCents = priced.reduce((s, i) => s + (i.cents || 0), 0);
+  const totalQuoted = reconcileTotalQuoted(extracted.total_cents, pricedSumCents);
+
+  // Extraction provenance (persisted with the analysis below): naive regex
+  // rows carry a fixed low score; Claude rows are scored on item count +
+  // stated-total consistency — the same heuristic the inbound reply parser
+  // uses (lib/extraction-confidence.ts).
+  const confidence =
+    extractionMethod === "claude"
+      ? extractionConfidence({
+          itemCount: extracted.items.length,
+          statedTotalCents: extracted.total_cents ?? null,
+          itemSumCents: pricedSumCents,
+        })
+      : NAIVE_EXTRACTION_CONFIDENCE;
 
   // The headline "$X above fair" MUST equal the sum of the per-item overcharge
   // badges the family sees in the table — never `totalQuoted - totalFairMid`,
@@ -204,21 +221,31 @@ export async function POST(req: Request) {
     if (user) {
       const row = {
         user_id: user.id,
-        raw_text: text.slice(0, 5000),
+        // Stored text is contact-redacted (emails/phones/SSNs/account runs →
+        // "[redacted]") — the benchmark pipeline needs prices, not contacts.
+        // The in-memory `text` used for extraction/rules above stays raw.
+        raw_text: redactContact(text).slice(0, 5000),
         total_quoted_cents: totalQuoted,
         total_fair_cents: totalFairMid,
         potential_savings_cents: potentialSavings,
         items,
       };
-      // zip drives the benchmark pipeline's regional aggregation. The column
-      // ships in 2026-07-02-benchmark-zip.sql (founder-applied); until then
-      // the insert with zip fails, so fall back to the legacy shape rather
-      // than silently losing the analysis. Persistence stays best-effort: if
-      // both inserts fail, the analysis response still returns.
+      // zip drives the benchmark pipeline's regional aggregation (column from
+      // 2026-07-02-benchmark-zip.sql); confidence/extraction_method are the
+      // provenance columns from 2026-07-13-portal-identity.sql. All three ride
+      // the first attempt only — if that fails on a pre-migration schema, fall
+      // back to the legacy shape rather than silently losing the analysis.
+      // Persistence stays best-effort: if both inserts fail, the analysis
+      // response still returns.
       let insertedId: string | null = null;
       const { data: inserted, error: insertError } = await supabase
         .from("price_list_analyses")
-        .insert({ ...row, zip: zip ?? null })
+        .insert({
+          ...row,
+          zip: zip ?? null,
+          confidence,
+          extraction_method: extractionMethod,
+        })
         .select("id")
         .single();
       if (insertError) {
@@ -353,16 +380,13 @@ async function buildAdvocacySummary(input: {
   };
 
   try {
-    const msg = await anthropic().messages.create({
-      model: MODEL,
-      max_tokens: 700,
+    const out = await callClaude({
+      feature: "advocacy-summary",
       system: priceListAdvocacySummarySystem(),
-      messages: [{ role: "user", content: JSON.stringify(findings) }],
+      user: JSON.stringify(findings),
+      maxTokens: 700,
+      cacheSystem: true,
     });
-    const out = msg.content
-      .filter((b) => b.type === "text")
-      .map((b) => (b as { text: string }).text)
-      .join("");
     const parsed = JSON.parse(stripCodeFence(out)) as {
       bottomLine?: unknown;
       moves?: unknown;

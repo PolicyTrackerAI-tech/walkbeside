@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { client as anthropic, MODEL, claudeAvailable } from "@/lib/claude";
+import { callClaude, claudeAvailable } from "@/lib/claude";
 import { priceListAnalysisSystem } from "@/lib/negotiation/prompts";
 import {
   naiveExtract,
@@ -27,16 +27,15 @@ const Body = z.object({
 async function parseDoc(text: string): Promise<RawItem[]> {
   if (claudeAvailable()) {
     try {
-      const msg = await anthropic().messages.create({
-        model: MODEL,
-        max_tokens: 1500,
+      // Same byte-stable system prompt as the analyzer — cacheSystem so the
+      // two parseDoc calls per request (quote + bill) share one cache entry.
+      const out = await callClaude({
+        feature: "compare-bill",
         system: priceListAnalysisSystem(),
-        messages: [{ role: "user", content: text }],
+        user: text,
+        maxTokens: 1500,
+        cacheSystem: true,
       });
-      const out = msg.content
-        .filter((b) => b.type === "text")
-        .map((b) => (b as { text: string }).text)
-        .join("");
       const parsed = JSON.parse(stripCodeFence(out)) as { items?: RawItem[] };
       if (Array.isArray(parsed.items)) return parsed.items;
     } catch {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { client as anthropic, MODEL, textOf, claudeAvailable } from "@/lib/claude";
+import { callClaude, claudeAvailable } from "@/lib/claude";
+import { redactContact } from "@/lib/redact";
 import { readLimitedJson } from "@/lib/http-guards";
 
 const Body = z.object({
@@ -54,13 +55,15 @@ export async function POST(req: Request) {
   }
 
   try {
-    const msg = await anthropic().messages.create({
-      model: MODEL,
-      max_tokens: 2000,
+    // The statement text carries account numbers, card digits, and contact
+    // details Claude doesn't need to spot recurring merchants — redact before
+    // it leaves our server (dollar amounts and merchant names survive).
+    const out = await callClaude({
+      feature: "subscription-finder",
       system: SYSTEM,
-      messages: [{ role: "user", content: text }],
+      user: redactContact(text),
+      maxTokens: 2000,
     });
-    const out = textOf(msg);
     const cleaned = out
       .replace(/^```(?:json)?\s*/i, "")
       .replace(/```\s*$/i, "")

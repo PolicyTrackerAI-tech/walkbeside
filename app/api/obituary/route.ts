@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { client as anthropic, MODEL, textOf, claudeAvailable } from "@/lib/claude";
+import { callClaude, claudeAvailable } from "@/lib/claude";
 import { obituarySystem } from "@/lib/negotiation/prompts";
 import { FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
@@ -40,18 +40,13 @@ export async function POST(req: Request) {
         : length === "full"
           ? "Room for a story or two and a real sense of their personality."
           : "A warm, standard-length obituary.";
-    const msg = await anthropic().messages.create({
-      model: MODEL,
-      max_tokens: 800,
+    draft = await callClaude({
+      feature: "obituary",
       system: obituarySystem(),
-      messages: [
-        {
-          role: "user",
-          content: `Write the obituary using these facts. Plain text, single paragraph, about ${words} words. ${shape}\n\n${lines}`,
-        },
-      ],
+      user: `Write the obituary using these facts. Plain text, single paragraph, about ${words} words. ${shape}\n\n${lines}`,
+      maxTokens: 800,
+      cacheSystem: true,
     });
-    draft = textOf(msg);
   } else {
     draft = fallbackObituary(inputs);
   }

@@ -6,6 +6,7 @@ import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminPage } from "@/lib/admin-auth";
 import {
   OutcomesClient,
+  type AiQuoteProposal,
   type OutcomeCase,
   type OutcomeHome,
   type PartnerLite,
@@ -61,6 +62,38 @@ export default async function AdminOutcomesPage() {
     ),
   }));
 
+  // Unconfirmed AI-parsed quotes from inbound replies — the founder sees the
+  // same proposal the family's status page shows (Day 4, P7). Read-only here:
+  // confirmation stays the family's one click. Tolerant of a pre-migration
+  // schema (query errors → data null → no chips).
+  let aiProposals: AiQuoteProposal[] = [];
+  if (ids.length) {
+    const { data: aiRows } = await admin
+      .from("negotiation_messages")
+      .select(
+        "negotiation_id, outreach_id, ai_quote_cents, ai_quote_items, ai_parse_confidence",
+      )
+      .in("negotiation_id", ids)
+      .not("ai_quote_cents", "is", null)
+      .is("ai_confirmed_at", null)
+      .order("created_at", { ascending: false });
+    aiProposals = (
+      (aiRows as Array<{
+        negotiation_id: string;
+        outreach_id: string | null;
+        ai_quote_cents: number;
+        ai_quote_items: unknown;
+        ai_parse_confidence: number | null;
+      }> | null) ?? []
+    ).map((r) => ({
+      negotiation_id: r.negotiation_id,
+      outreach_id: r.outreach_id,
+      cents: r.ai_quote_cents,
+      itemCount: Array.isArray(r.ai_quote_items) ? r.ai_quote_items.length : 0,
+      confidence: r.ai_parse_confidence,
+    }));
+  }
+
   // The list of partners to tag cases to. Tolerant: if the partners table isn't
   // there yet (migration unapplied), the selector just shows "no partners yet".
   let partners: PartnerLite[] = [];
@@ -112,7 +145,11 @@ export default async function AdminOutcomesPage() {
                   partner&rsquo;s report.
                 </div>
               )}
-              <OutcomesClient initial={cases} partners={partners} />
+              <OutcomesClient
+                initial={cases}
+                partners={partners}
+                aiProposals={aiProposals}
+              />
             </>
           )}
         </div>

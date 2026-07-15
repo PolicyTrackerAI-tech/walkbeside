@@ -14,7 +14,7 @@
  * import only fallbackOutcomesDigest, never this function or anything from
  * lib/claude, so the public route can't reach a real Claude call.
  */
-import { client as anthropic, MODEL, claudeAvailable } from "@/lib/claude";
+import { callClaude, claudeAvailable } from "@/lib/claude";
 import { partnerOutcomesDigestSystem } from "@/lib/negotiation/prompts";
 import { stripCodeFence } from "@/lib/negotiation/price-list-parse";
 import { SMALL_SAMPLE_THRESHOLD, type CohortStats, type CohortStatsFull } from "@/lib/partner-report";
@@ -98,16 +98,12 @@ export async function buildOutcomesDigest(
   };
 
   try {
-    const msg = await anthropic().messages.create({
-      model: MODEL,
-      max_tokens: 300,
+    const out = await callClaude({
+      feature: "partner-digest",
       system: partnerOutcomesDigestSystem(partnerType),
-      messages: [{ role: "user", content: JSON.stringify(findings) }],
+      user: JSON.stringify(findings),
+      maxTokens: 300,
     });
-    const out = msg.content
-      .filter((b) => b.type === "text")
-      .map((b) => (b as { text: string }).text)
-      .join("");
     const parsed = JSON.parse(stripCodeFence(out)) as { digest?: unknown };
     if (typeof parsed.digest !== "string" || !parsed.digest.trim()) {
       return fallbackOutcomesDigest(name, stats, partnerType);
