@@ -40,13 +40,20 @@ export async function POST(req: Request) {
         : length === "full"
           ? "Room for a story or two and a real sense of their personality."
           : "A warm, standard-length obituary.";
-    draft = await callClaude({
-      feature: "obituary",
-      system: obituarySystem(),
-      user: `Write the obituary using these facts. Plain text, single paragraph, about ${words} words. ${shape}\n\n${lines}`,
-      maxTokens: 800,
-      cacheSystem: true,
-    });
+    // A Claude failure must never 500 a grieving family — fall back to the
+    // same deterministic draft the Claude-off branch uses (the pattern every
+    // other AI feature follows, e.g. buildAdvocacySummary).
+    try {
+      draft = await callClaude({
+        feature: "obituary",
+        system: obituarySystem(),
+        user: `Write the obituary using these facts. Plain text, single paragraph, about ${words} words. ${shape}\n\n${lines}`,
+        maxTokens: 800,
+        cacheSystem: true,
+      });
+    } catch {
+      draft = fallbackObituary(inputs);
+    }
   } else {
     draft = fallbackObituary(inputs);
   }
