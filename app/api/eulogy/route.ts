@@ -29,14 +29,20 @@ export async function POST(req: Request) {
     // Rough word-count target: ~140 words per minute spoken.
     const wordTarget = durationMinutes * 140;
     // eulogySystem(tone) has three byte-stable variants (one per tone) — each
-    // gets its own cache entry, which is fine.
-    draft = await callClaude({
-      feature: "eulogy",
-      system: eulogySystem(tone),
-      user: `Write a eulogy for the speaker to read aloud. Plain prose. Aim for ~${wordTarget} words (about ${durationMinutes} minute${durationMinutes === 1 ? "" : "s"} when spoken).\n\nFacts and stories the speaker shared:\n${lines}`,
-      maxTokens: 1200,
-      cacheSystem: true,
-    });
+    // gets its own cache entry, which is fine. A Claude failure must never
+    // 500 a grieving family — fall back to the same deterministic draft the
+    // Claude-off branch uses.
+    try {
+      draft = await callClaude({
+        feature: "eulogy",
+        system: eulogySystem(tone),
+        user: `Write a eulogy for the speaker to read aloud. Plain prose. Aim for ~${wordTarget} words (about ${durationMinutes} minute${durationMinutes === 1 ? "" : "s"} when spoken).\n\nFacts and stories the speaker shared:\n${lines}`,
+        maxTokens: 1200,
+        cacheSystem: true,
+      });
+    } catch {
+      draft = fallbackEulogy(inputs);
+    }
   } else {
     draft = fallbackEulogy(inputs);
   }
