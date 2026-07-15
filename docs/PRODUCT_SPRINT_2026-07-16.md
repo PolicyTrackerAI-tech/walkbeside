@@ -1,5 +1,10 @@
 # Product Sprint — Thu Jul 16 → Sat Jul 25, 2026 (10 days)
 
+> This sprint is **Phase 1 of the 13-week master plan** —
+> [`PRODUCT_PLAN_2026-Q3.md`](PRODUCT_PLAN_2026-Q3.md) (Jul 16 → Oct 16:
+> this sprint + Rename Day, then pilot-readiness, reach/moat engines, and
+> the prove-and-repeat phase ending at the 90-day scoreboard).
+
 **Mission:** make "one hospice paying" mechanically possible and commercially
 credible — from the product side only. By EOD Sat Jul 25: a hospice can **pay
 us in-product** (Stripe, institutional only, never families); the **verified
