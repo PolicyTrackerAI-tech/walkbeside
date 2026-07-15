@@ -1,5 +1,21 @@
 # Naming sprint — keep "Honest Funeral" or rename? (2026-07-15)
 
+> **DECISION — 2026-07-15, same evening: RENAME TO "OPEN FAREWELL."** The
+> founder purchased the domain inventory (all Squarespace, expiring
+> 2027-07-15 — verify auto-renew is ON for each): `openfarewell.com`,
+> `openfarewell.co`, `openfarewell.net`, `openfarewell.org`,
+> `open-farewell.com`, `openfairwell.com/.net/.org` (misspell set), and
+> secured `@openfarewell` on Instagram, Facebook, LinkedIn, and X
+> (TikTok/YouTube/Reddit/Pinterest recommended, status with founder). A
+> second creative sweep confirmed every abstractly-better name is captive
+> (`fairwell.com`, `walkbeside.com`, the metaphor class — all registered).
+> **Rename Day is scheduled: Mon Jul 27** (see §5 runbook +
+> `PRODUCT_SPRINT_2026-07-16.md` §4.1), gated only on counsel's TESS
+> knockout of "Open Farewell" — commission it now; if it surfaces a
+> blocker, the fallback is Plain Farewell (stack unpurchased, re-verify
+> availability first). The Sat Jul 25 checkpoint becomes a final confirm,
+> not a decision.
+
 **Why this exists:** `honestfuneral.com` is squatted by an adult site. GoDaddy
 brokerage failed; the owner is unreachable. A hospice administrator or a
 grieving family member who hears the name and types `.com` lands on porn —
@@ -107,9 +123,17 @@ a pushed GitHub doc are exactly the kind of thing domain-tasting bots
 register. Buying is yours to do (registrar of your choice, WHOIS privacy
 on); nothing here commits you to the rename.
 
-## 5. If the answer is rename — execution inventory (one day, next sprint)
+## 5. Rename Day runbook (Mon Jul 27 — "namechange everything everywhere")
 
-1. **Domains:** buy the stack; point `.com` at Vercel; 301 the rest.
+Registrar reality: the stack lives at **Squarespace Domains**. DNS stays
+managed there (don't transfer registrars mid-rename): point
+`openfarewell.com` at Vercel per Vercel's domain instructions (A/CNAME or
+delegate nameservers), and add the Google Workspace MX + Resend/Postmark
+DKIM/SPF records in Squarespace DNS. The seven other domains get Squarespace
+domain-forwarding (301) to `openfarewell.com`.
+
+1. **Domains:** point `openfarewell.com` at Vercel; 301-forward `.co/.net/
+   .org`, `open-farewell.com`, and the `openfairwell.*` misspells.
 2. **Old domain lives forever:** `honestfuneral.co` 301s page-for-page to
    the new domain — *except* inbound email. In-flight negotiations carry
    `reply+<hash>@` reply-to addresses on the current domain: **Postmark
@@ -136,11 +160,14 @@ on); nothing here commits you to the rename.
    redirect allowlist (`/auth/callback` origin check), Postmark webhook
    Basic-auth URL.
 
-## 6. Founder checklist (before Sat Jul 25)
+## 6. Founder checklist (updated post-decision)
 
-- [ ] Say the top three out loud in the pilot-pitch sentence; sleep on it.
-- [ ] Defensively register the top-two full stacks (§4, ~$100).
-- [ ] If leaning rename: ask counsel for a TESS knockout on the pick
-      (days, cheap, prevents a very expensive redo).
-- [ ] Decide at the Sat Jul 25 checkpoint; if rename, execution day gets
-      scheduled first thing next sprint.
+- [x] Register the stack (done 2026-07-15 — 8 domains, Squarespace).
+- [x] Secure social handles (IG/FB/LinkedIn/X done 2026-07-15).
+- [ ] **Verify auto-renew ON + WHOIS privacy ON for all 8** in Squarespace.
+- [ ] **Commission the TESS knockout on "Open Farewell" now** (counsel,
+      days) — the only remaining gate before Rename Day.
+- [ ] TikTok / YouTube / Reddit / Pinterest handles if not yet grabbed.
+- [ ] Sat Jul 25: final confirm at the sprint checkpoint (TESS back?).
+- [ ] Mon Jul 27: Rename Day (§5 runbook), with the session driving and
+      you doing the registrar/Workspace/Search-Console clicks.

@@ -12,10 +12,13 @@ a hospice reference layer with claim-your-page); the partner subscription
 **re-oriented around the B2B2C model** — it speaks to the hospice buyer
 researching us AND to the person who heard about us from someone who used it,
 with built-in loops that let both spread it (family → their hospice, hospice →
-families, family → family, report → next hospice). A **naming sprint** runs in
-parallel: honestfuneral.com is squatted by an adult site, so candidate names
-with clean, verified-available domains get delivered for a keep-vs-rename
-decision. Product work only — no legal tasks, no sales-process tasks.
+families, family → family, report → next hospice). And the **rename is
+decided**: honestfuneral.com is squatted by an adult site, the naming sprint
+ran 2026-07-15, and the founder committed to **Open Farewell** the same
+evening (8 domains + 4 social handles secured). Every day of this sprint
+builds rename-ready (`lib/brand.ts` from Day 1), and **Rename Day is Mon
+Jul 27** (§4.1), gated only on counsel's trademark knockout. Product work
+only — no legal tasks, no sales-process tasks.
 
 Written 2026-07-15 from a two-agent audit of `origin/main` @ `ff05d5d` (all of
 Product Week Jul 13–17 merged: Days 1–5, PRs #148–#156). Every task references
@@ -268,22 +271,25 @@ anywhere; hospice-facing copy stays bereavement-support procurement. Copy
 pass runs site-wide so "referral link" reads as what it is: attribution +
 sponsorship, never access.
 
-**D12 — Naming sprint: decide with data, execute later.** Deliverable (in
-this repo, running in parallel with build days):
-`docs/NAMING_SPRINT_2026-07.md` — criteria, ~70 candidates with
-registry-verified (RDAP) `.com/.org/.net` availability, a collision sweep
-(existing death-care companies, trademark hits best-effort, unsavory
-associations, social handles), and a **keep-vs-rename analysis**: Option A =
-keep Honest Funeral, register defensive domains (`honestfuneralguide.com`,
-`gethonestfuneral.com` — both verified available), accept the squatted `.com`
-risk; Option B = rename to a clean full-stack name. Includes the rename
-execution inventory (domain/DNS, Vercel, Google Workspace + 9 aliases,
-Resend/Postmark, env/app-url constants, OG images, copy constants, legal
-name) so the cost is visible before deciding. **Founder decision checkpoint
-Sat Jul 25; rename execution — if chosen — is its own day early next sprint,
-not inside these 10.** Until decided, no new copy hardcodes the name where a
-constant can carry it (`lib/brand.ts` name constant ships with Wednesday's
-copy pass so a future rename is a one-file change for text).
+**D12 — The rename is DECIDED: Honest Funeral → Open Farewell. Rename Day is
+Mon Jul 27.** Decided 2026-07-15 the same evening the analysis landed: the
+founder purchased the full domain inventory (`openfarewell.com/.co/.net/
+.org`, `open-farewell.com`, the `openfairwell.*` misspell set — Squarespace,
+renew 2027-07-15) and secured `@openfarewell` on Instagram/Facebook/
+LinkedIn/X. `docs/NAMING_SPRINT_2026-07.md` holds the analysis, the decision
+record, and the **§5 Rename Day runbook** ("namechange everything
+everywhere": DNS→Vercel, 301s from all 7 secondary domains AND
+honestfuneral.co page-for-page, Google Workspace + aliases, Resend DKIM,
+**Postmark inbound stays live on the old domain for in-flight reply-to
+hashes**, `NEXT_PUBLIC_APP_URL`, `lib/brand.ts`, OG images/letterheads/
+JSON-LD/sitemap, Search Console change-of-address, Stripe display name
+before `BILLING_LIVE`, socials, collateral). Sole remaining gate: counsel's
+TESS knockout (commission immediately; Sat Jul 25 checkpoint = final
+confirm). **Sprint consequence, effective Day 1:** `lib/brand.ts`
+(SITE_NAME, SITE_URL, support address) ships in Thursday's pre-flight — NOT
+Wednesday — and every surface this sprint builds or touches reads the
+constant, never the literal string, so Rename Day's code half is one file +
+a grep, not an archaeology dig.
 
 ---
 
@@ -291,7 +297,7 @@ copy pass so a future rename is a one-file change for text).
 
 | Day | Build | Gate before stopping |
 |---|---|---|
-| **Thu Jul 16** | Pre-flight: worktree cleanup (D10). **`/admin/ingest-gpl`** (D2): paste/photo → parse → review table (editable names/cents/matched-id) → Save; `gpl_url`/`last_verified_at` stamping; promote-form metro **dropdown** from `zip-regions` labels (kills the typo'd-label silent miss); `revalidatePath` on promote for `/funeral-costs/*`. | Founder ingests a sample GPL end-to-end in dev; saved row appears in `/admin/benchmarks`; promote → city page updates after revalidate. Suite green. |
+| **Thu Jul 16** | Pre-flight: worktree cleanup (D10) + **`lib/brand.ts`** (D12 — SITE_NAME/SITE_URL/support constants; new code this sprint never hardcodes the name). **`/admin/ingest-gpl`** (D2): paste/photo → parse → review table (editable names/cents/matched-id) → Save; `gpl_url`/`last_verified_at` stamping; promote-form metro **dropdown** from `zip-regions` labels (kills the typo'd-label silent miss); `revalidatePath` on promote for `/funeral-costs/*`. | Founder ingests a sample GPL end-to-end in dev; saved row appears in `/admin/benchmarks`; promote → city page updates after revalidate. Suite green. |
 | **Fri Jul 17** | **Eval harness** (D3): fixtures + golden files + `scripts/eval-analyzer.mjs` + `npm run eval:analyzer`; baseline run on sonnet-4-6 committed as `test/evals/BASELINE.md`. Then, behind it: sonnet-5 re-baseline branch (explicit thinking config, max_tokens re-baseline) + Haiku-4.5 on subscription-finder — **ships only if eval ≥ baseline; otherwise we stay put and the harness was the deliverable.** | Eval report reproducible; model PR carries before/after output; suite green. |
 | **Sat 18–Sun 19** | **Founder data days** (product on-call only): fill `utah-homes.csv` → `npm run import:homes` → vet in `/admin/vetting`; ingest every collectable Utah GPL via the new tool; promote SLC/Provo groups that cross n≥5; start CA (SB 658 = homes must post GPLs online). | ≥2 verified metro×item groups live with visible n; every verified row carries sources. |
 | **Mon Jul 20** | **Migration A** (hospices + `contributed`). `scripts/import-hospices.mjs` (CMS CSV); apply-form autocomplete; **analyzer consent checkbox** + `benchmark-sources` filter (D8). | Founder applies Migration A; import runs against prod (~5–6k rows); consented/unconsented analyses provably split in the benchmark feed. |
@@ -299,12 +305,29 @@ copy pass so a future rename is a one-file change for text).
 | **Wed Jul 22** | **Audience re-architecture + the four loops** (D11, G13): homepage dual-lane rework (family hero untouched in spirit; hospice/employer buyer lane in header + section; "Is your hospice offering this?" module over Monday's `hospices` table); **nominate-your-hospice flow** (user-sent mailto/copy intro + consented `partner_leads` source `family_nomination`); analyzer-result + guide share affordances; co-brand sponsorship line; proof-sheet buyer-path footer; `lib/brand.ts` name constant (D12 prep); site-wide copy pass ("referral = sponsorship, never access"); loop analytics events (nominate_submitted, hospice_intro_copied, share_clicked, partner_cta_clicked). | Both personas reach their lane from `/` in one click; nominate writes a lead + the leads strip shows source; a family with no referral sees, verbatim, that everything is free without one; channel-survival grep (no family cold-contact path, no pre-admission framing); copy reads calm on a phone. |
 | **Thu Jul 23** | **Migration B + billing** (D1): Stripe checkout/webhook/portal-link routes; `/portal/settings` Billing card; `/admin/partners` billing state; `BILLING_LIVE` gate; insurer exclusion test. | Test-mode subscription completes end-to-end in dev; webhook updates `billing_status`; zero family surface imports Stripe; founder applies Migration B. |
 | **Fri Jul 24** | **Hospice pages** (D5): `/hospices/[state]` (indexed) + `/hospices/[state]/[ccn]` (noindexed) + claim-your-page → `partner_leads` + email; `/admin/partners` leads strip shows source; homepage hospice-finder module links each hospice to its page. **Digest email AI paragraph + test-render** (D6). | 50 state pages render with real aggregates; claim flow writes a lead; facility pages noindexed (verify robots meta); word-ban grep clean on all new pages; test digest renders with AI paragraph + suppression. |
-| **Sat Jul 25** | **QA + ship + truth + naming**: full §5 QA below; docs truth pass (D10); DEMO_SCRIPT.md additions (ingest beat, billing beat, nominate beat); run the §2 demo on prod; **naming decision checkpoint** (D12 — review `docs/NAMING_SPRINT_2026-07.md`, pick keep-vs-rename; if rename: buy the domain stack same day, execution scheduled next sprint); buffer for anything slipped. | The §2 demo, clean, on production; a named go/no-go on the rename. |
+| **Sat Jul 25** | **QA + ship + truth**: full §5 QA below; docs truth pass (D10); DEMO_SCRIPT.md additions (ingest beat, billing beat, nominate beat); run the §2 demo on prod; **rename final-confirm** (D12 — TESS result back? runbook prepped, redirects staged); buffer for anything slipped. | The §2 demo, clean, on production; Rename Day cleared for Monday. |
 
 Mechanics unchanged from last week: fresh worktree per day off current
 `origin/main`, PR per day, founder merge; every day ends with
 `npm run typecheck && npm run lint && npm run build && npx vitest run` + the
 guardrail grep; migrations only on their scheduled day.
+
+### 4.1 Rename Day — Mon Jul 27 (scheduled, immediately after the sprint)
+
+**Honest Funeral → Open Farewell, everything everywhere, one day.** The full
+runbook is `docs/NAMING_SPRINT_2026-07.md` §5; the session drives the code
+half (env/app-url, `lib/brand.ts`, hardcoded-string grep, OG images,
+letterheads, JSON-LD, sitemap, email templates, `docs/sales/*`), the founder
+drives the account half (Squarespace DNS → Vercel, 301-forward the 7
+secondary domains, Google Workspace domain + aliases, Resend DKIM, Search
+Console change-of-address, Stripe display name, social handles live). Two
+things that must NOT change that day: `honestfuneral.co` 301s page-for-page
+**but its Postmark inbound stays live indefinitely** (in-flight negotiations
+carry reply-to hashes on the old domain), and `OUTREACH_LIVE` stays off like
+every other day. Gate: counsel's TESS knockout returned clean by Sat Jul 25.
+End-of-day proof: the §2 demo re-run on `openfarewell.com`, an old-domain
+deep link landing on its new-domain twin, and a seeded reply to an old-domain
+case still threading correctly.
 
 ---
 
@@ -381,22 +404,19 @@ honesty · the naming decision checkpoint · the §2 demo.
    be ready Thursday evening.
 6. **`PARTNER_DIGEST_ENABLED`**: flip only when a real partner should get
    monthly mail (after Fri Jul 24 you can preview the email safely).
-7. **The name (Sat Jul 25, the big one):** keep Honest Funeral (+ defensive
-   `honestfuneralguide.com`/`gethonestfuneral.com` redirects, accepting the
-   squatted `.com`) or rename to a clean full-stack candidate from
-   `docs/NAMING_SPRINT_2026-07.md`. Deciding is cheap now and gets costlier
-   weekly; if rename, buy the `.com/.co/.org/.net` the same day you pick —
-   available ≠ reserved.
+7. **The name — DECIDED 2026-07-15: Open Farewell** (domains + handles
+   purchased same evening). Your two remaining actions: (a) **commission
+   counsel's TESS knockout now** — it's the only gate on Rename Day
+   (Mon Jul 27, §4.1); (b) verify auto-renew + WHOIS privacy on all 8
+   Squarespace domains.
 
 ---
 
 ## 8. What this sets up (deliberately after Jul 25)
 
 Real billing going live with the first pilot (flip `BILLING_LIVE`, real price
-IDs) · **rename execution day if the Sat-25 decision is "rename"** (domain +
-DNS + Vercel + Google Workspace/aliases + Resend/Postmark + env/app-url +
-`lib/brand.ts` + OG images + redirects from honestfuneral.co — the inventory
-lives in the naming doc) · `followUpSystem` wiring + transparency v1 UI +
+IDs) · **Rename Day executes Mon Jul 27 (§4.1 — already scheduled, not
+conditional)** · `followUpSystem` wiring + transparency v1 UI +
 funnel deepening (deferred from this sprint) · community-tier density →
 public community ranges · the quarterly Fair-Price-Index stat engine
 (`index_cells`) once verified metros exist · `directory.ts` indexed zip/geo
