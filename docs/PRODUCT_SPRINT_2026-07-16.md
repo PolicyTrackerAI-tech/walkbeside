@@ -7,9 +7,15 @@ tier holds real Utah data** collected through a founder ingest tool instead of
 hand-crafted SQL; the AI layer has the **eval harness** that was the last
 missing Phase-0 foundation, and the model upgrade ships *behind* it; the
 **reach engines turn on** (metro pages that actually read `regional_benchmarks`,
-a hospice reference layer with claim-your-page); and the partner subscription
-*feels alive* (monthly email carries the AI outcomes digest). Product work
-only — no legal tasks, no sales-process tasks.
+a hospice reference layer with claim-your-page); the partner subscription
+*feels alive* (monthly email carries the AI outcomes digest); and the site is
+**re-oriented around the B2B2C model** — it speaks to the hospice buyer
+researching us AND to the person who heard about us from someone who used it,
+with built-in loops that let both spread it (family → their hospice, hospice →
+families, family → family, report → next hospice). A **naming sprint** runs in
+parallel: honestfuneral.com is squatted by an adult site, so candidate names
+with clean, verified-available domains get delivered for a keep-vs-rename
+decision. Product work only — no legal tasks, no sales-process tasks.
 
 Written 2026-07-15 from a two-agent audit of `origin/main` @ `ff05d5d` (all of
 Product Week Jul 13–17 merged: Days 1–5, PRs #148–#156). Every task references
@@ -57,6 +63,8 @@ the store) is now also law.
 | G10 | **`lib/negotiation/directory.ts` selects all rows and filters zip in memory** — fine at 193 homes, breaks at national scale (DATA_PLAN §8). | docs audit §4 |
 | G11 | **Funnel analytics are coarse**: 6 events, no wizard-step events, no portal events, no admin funnel view. | code audit §15 |
 | G12 | **The strategy docs lie about the present.** ROADMAP/GO_TO_MARKET/ENGINEERING_BACKLOG still list shipped work as open (methodology page, AI digest, explain, inbound parse, paywall decommission — the "remnants" are deliberate tombstone redirects). Future sessions will re-plan shipped work unless the docs get a truth pass. | both audits |
+| G13 | **The site still speaks to the old model** — an individual who found us directly. The two people the business model actually depends on have no clear path: the **hospice buyer** researching whether to offer this (institutional lane is buried below a family-first page) and the **heard-about-it person** ("someone I know used this") who wants in AND could carry it to their hospice. There is no share loop, no tell-your-hospice flow, no is-my-hospice-offering-this answer. Organic spread has no product surface to travel on. | founder direction 2026-07-15 |
+| G14 | **honestfuneral.com is squatted by an adult site** (GoDaddy brokerage failed; owner unreachable). A hospice buyer or grieving family who types `.com` lands on porn — a trust-killing failure mode for exactly this brand. A rename may be needed; either way defensive domains + a decision are required, and every week of content/brand accrual makes renaming costlier. | founder direction 2026-07-15 |
 
 ### Explicitly NOT these 10 days
 Grief/crisis concierge chat (**highest-risk item in the roadmap; blocked on a
@@ -101,8 +109,18 @@ Runs clean on production:
 7. `npm run eval:analyzer` prints a scored report against the golden GPL
    fixtures; the model config in prod is whatever the eval said was safe.
 8. The analyzer asks consent before a checked quote contributes to the
-   dataset; the directory shows a transparency signal derived from real
-   fields.
+   dataset.
+9. **The two new visitors both find their door in one click from `/`:** a
+   hospice administrator lands → "Offer this to every family you serve" →
+   `/partners` with buyer-grade proof and a demo CTA; a person whose friend
+   used the site lands → "Is your hospice offering this?" → types their
+   hospice's name → either "ask your coordinator for their link — or start
+   free right now" or the **nominate flow**: a prefilled intro they send
+   themselves (plus an optional consented "introduce us" that lands in the
+   `/admin/partners` leads strip as `family_nomination`).
+10. A family finishing an analyzer run can share the tool plainly ("send
+   this to someone arranging a funeral") — no codes, no gates, nothing to
+   sign up for.
 
 ---
 
@@ -215,6 +233,58 @@ tombstones, ai-costs, dashboard focus) so no future session re-plans shipped
 work. Pre-flight Thursday: remove the stale day-2 worktree still holding the
 `main` ref (unblocks local `gh pr merge`).
 
+**D11 — Dual-audience re-architecture: family-first face, two more lanes, four
+loops.** The grieving visitor must never feel sold to — the hero stays family
+utility (check a quote / get help now, free, no referral needed, ever). Around
+it, two explicit lanes: (a) **the hospice/employer buyer** — header + a
+homepage section ("Offer this to every family you serve — free to them,
+documented impact for you") routing hard to `/partners` (+`/employers`), which
+gain buyer-grade proof (live sample report link, tier-badge credibility,
+demo CTA); (b) **the heard-about-it person** — a compact "Is your hospice
+offering this?" module (autocomplete over Monday's `hospices` table): partner
+hospice → "ask your bereavement coordinator for their link — or just start
+now, it's free either way"; non-partner → the **nominate flow**. Four organic
+loops, each with a product surface:
+1. **Family → their hospice (nominate):** a prefilled intro *the user sends*
+   (mailto + copy button — authentic, zero-spam-risk) plus an optional
+   consented "or let us introduce ourselves" → `partner_leads
+   (source:'family_nomination')` + founder email. **We never auto-email the
+   hospice this sprint** — the founder works the leads strip.
+2. **Hospice → families:** the existing referral links/QR/materials —
+   unchanged, but the co-brand banner gains one line ("Your hospice provides
+   this free to every family it serves") that makes the sponsorship legible.
+3. **Family → family:** tasteful share affordances on the analyzer result and
+   guide pages ("Send this to someone arranging a funeral" — plain link copy,
+   no personal referral codes, no growth-hack mechanics in grief).
+4. **Report → next hospice:** the proof sheet/portal footer gains "Offered by
+   [Partner] · Honest Funeral partners with hospices and employers —
+   yourhospicecan.honestfuneral.co/partners"-style line (exact copy TBD) so
+   every artifact a partner prints or forwards carries the buyer path.
+Channel-survival constraints are law on every loop: the family always uses
+everything free without any referral (no fake gating); we never cold-contact
+a family; the nominate flow contacts a *hospice* only via the user's own
+email or a consented founder intro; no pre-admission inducement framing
+anywhere; hospice-facing copy stays bereavement-support procurement. Copy
+pass runs site-wide so "referral link" reads as what it is: attribution +
+sponsorship, never access.
+
+**D12 — Naming sprint: decide with data, execute later.** Deliverable (in
+this repo, running in parallel with build days):
+`docs/NAMING_SPRINT_2026-07.md` — criteria, ~70 candidates with
+registry-verified (RDAP) `.com/.org/.net` availability, a collision sweep
+(existing death-care companies, trademark hits best-effort, unsavory
+associations, social handles), and a **keep-vs-rename analysis**: Option A =
+keep Honest Funeral, register defensive domains (`honestfuneralguide.com`,
+`gethonestfuneral.com` — both verified available), accept the squatted `.com`
+risk; Option B = rename to a clean full-stack name. Includes the rename
+execution inventory (domain/DNS, Vercel, Google Workspace + 9 aliases,
+Resend/Postmark, env/app-url constants, OG images, copy constants, legal
+name) so the cost is visible before deciding. **Founder decision checkpoint
+Sat Jul 25; rename execution — if chosen — is its own day early next sprint,
+not inside these 10.** Until decided, no new copy hardcodes the name where a
+constant can carry it (`lib/brand.ts` name constant ships with Wednesday's
+copy pass so a future rename is a one-file change for text).
+
 ---
 
 ## 4. Day-by-day
@@ -226,10 +296,10 @@ work. Pre-flight Thursday: remove the stale day-2 worktree still holding the
 | **Sat 18–Sun 19** | **Founder data days** (product on-call only): fill `utah-homes.csv` → `npm run import:homes` → vet in `/admin/vetting`; ingest every collectable Utah GPL via the new tool; promote SLC/Provo groups that cross n≥5; start CA (SB 658 = homes must post GPLs online). | ≥2 verified metro×item groups live with visible n; every verified row carries sources. |
 | **Mon Jul 20** | **Migration A** (hospices + `contributed`). `scripts/import-hospices.mjs` (CMS CSV); apply-form autocomplete; **analyzer consent checkbox** + `benchmark-sources` filter (D8). | Founder applies Migration A; import runs against prod (~5–6k rows); consented/unconsented analyses provably split in the benchmark feed. |
 | **Tue Jul 21** | **Programmatic reach** (D4): city pages read the store + ISR; fair-price-index verified-metros section + CSV/JSON + cite-this; sitemap. | SLC city page shows the weekend's verified ranges with badges + n, no deploy needed after a promotion (ISR proof); badge-honesty grep clean. |
-| **Wed Jul 22** | **Hospice pages** (D5): `/hospices/[state]` (indexed) + `/hospices/[state]/[ccn]` (noindexed) + claim-your-page → `partner_leads` + email; `/admin/partners` leads strip shows source. | 50 state pages render with real aggregates; claim flow writes a lead; facility pages noindexed (verify robots meta); word-ban grep clean on all new pages. |
+| **Wed Jul 22** | **Audience re-architecture + the four loops** (D11, G13): homepage dual-lane rework (family hero untouched in spirit; hospice/employer buyer lane in header + section; "Is your hospice offering this?" module over Monday's `hospices` table); **nominate-your-hospice flow** (user-sent mailto/copy intro + consented `partner_leads` source `family_nomination`); analyzer-result + guide share affordances; co-brand sponsorship line; proof-sheet buyer-path footer; `lib/brand.ts` name constant (D12 prep); site-wide copy pass ("referral = sponsorship, never access"); loop analytics events (nominate_submitted, hospice_intro_copied, share_clicked, partner_cta_clicked). | Both personas reach their lane from `/` in one click; nominate writes a lead + the leads strip shows source; a family with no referral sees, verbatim, that everything is free without one; channel-survival grep (no family cold-contact path, no pre-admission framing); copy reads calm on a phone. |
 | **Thu Jul 23** | **Migration B + billing** (D1): Stripe checkout/webhook/portal-link routes; `/portal/settings` Billing card; `/admin/partners` billing state; `BILLING_LIVE` gate; insurer exclusion test. | Test-mode subscription completes end-to-end in dev; webhook updates `billing_status`; zero family surface imports Stripe; founder applies Migration B. |
-| **Fri Jul 24** | **Retention + ops**: digest email + AI paragraph + test-render (D6); `followUpSystem` behind `/admin/outcomes` review (D7, dry-run proof); transparency v1 on directory + `/methodology` note (D8); funnel events (wizard steps, portal actions, bridge-click) (G11). | Test digest renders with AI paragraph + suppression; follow-up draft→approve→`dry_run` row; transparency badge renders from real fields; events visible in Vercel Analytics debug. |
-| **Sat Jul 25** | **QA + ship + truth**: full §5 QA below; docs truth pass (D10); DEMO_SCRIPT.md additions (ingest beat, billing beat); run the §2 demo on prod; buffer for anything slipped. | The §2 demo, clean, on production. |
+| **Fri Jul 24** | **Hospice pages** (D5): `/hospices/[state]` (indexed) + `/hospices/[state]/[ccn]` (noindexed) + claim-your-page → `partner_leads` + email; `/admin/partners` leads strip shows source; homepage hospice-finder module links each hospice to its page. **Digest email AI paragraph + test-render** (D6). | 50 state pages render with real aggregates; claim flow writes a lead; facility pages noindexed (verify robots meta); word-ban grep clean on all new pages; test digest renders with AI paragraph + suppression. |
+| **Sat Jul 25** | **QA + ship + truth + naming**: full §5 QA below; docs truth pass (D10); DEMO_SCRIPT.md additions (ingest beat, billing beat, nominate beat); run the §2 demo on prod; **naming decision checkpoint** (D12 — review `docs/NAMING_SPRINT_2026-07.md`, pick keep-vs-rename; if rename: buy the domain stack same day, execution scheduled next sprint); buffer for anything slipped. | The §2 demo, clean, on production; a named go/no-go on the rename. |
 
 Mechanics unchanged from last week: fresh worktree per day off current
 `origin/main`, PR per day, founder merge; every day ends with
@@ -270,19 +340,24 @@ guardrail grep; migrations only on their scheduled day.
 
 ## 6. Cut lines (drop in this order if Jul 25 is at risk)
 
-1. Funnel-event deepening (G11) → next sprint.
-2. Transparency v1 display → keep the lib, defer the UI.
-3. `followUpSystem` wiring → next sprint (prompt keeps waiting fine).
-4. Fair-price-index CSV/JSON + cite-this → keep the verified-metros section.
-5. Facility-level hospice pages → state pages only (keep import + claim CTA
-   on state pages).
-6. Digest email AI paragraph → deterministic email keeps shipping.
-7. Sonnet-5/Haiku re-baseline → the eval harness alone is the Friday
+*Already deferred to next sprint by the Wed re-slot:* `followUpSystem` wiring
+(D7), transparency v1 UI (D8 keeps the consent half), generic funnel-event
+deepening (G11 — Wednesday's loop events ship instead).
+
+1. Proof-sheet buyer-path footer + co-brand sponsorship line → keep nominate
+   + homepage lanes (the loops that create leads).
+2. Fair-price-index CSV/JSON + cite-this → keep the verified-metros section.
+3. Facility-level hospice pages → state pages only (keep import + claim CTA
+   on state pages; the homepage finder links the state page instead).
+4. Digest email AI paragraph → deterministic email keeps shipping.
+5. Sonnet-5/Haiku re-baseline → the eval harness alone is the Friday
    deliverable (explicitly acceptable).
+6. Share affordances on guide pages → analyzer-result share only.
 
 **Never cut:** `/admin/ingest-gpl` (the weekend depends on it) · the eval
 harness · Migration A+B discipline · billing end-to-end in test mode · metro
-pages reading the store with ISR · badge honesty · the §2 demo.
+pages reading the store with ISR · homepage dual-lane + nominate flow · badge
+honesty · the naming decision checkpoint · the §2 demo.
 
 ---
 
@@ -306,16 +381,27 @@ pages reading the store with ISR · badge honesty · the §2 demo.
    be ready Thursday evening.
 6. **`PARTNER_DIGEST_ENABLED`**: flip only when a real partner should get
    monthly mail (after Fri Jul 24 you can preview the email safely).
+7. **The name (Sat Jul 25, the big one):** keep Honest Funeral (+ defensive
+   `honestfuneralguide.com`/`gethonestfuneral.com` redirects, accepting the
+   squatted `.com`) or rename to a clean full-stack candidate from
+   `docs/NAMING_SPRINT_2026-07.md`. Deciding is cheap now and gets costlier
+   weekly; if rename, buy the `.com/.co/.org/.net` the same day you pick —
+   available ≠ reserved.
 
 ---
 
 ## 8. What this sets up (deliberately after Jul 25)
 
 Real billing going live with the first pilot (flip `BILLING_LIVE`, real price
-IDs) · community-tier density → public community ranges · the quarterly
-Fair-Price-Index stat engine (`index_cells`) once verified metros exist ·
-`directory.ts` indexed zip/geo query + national homes ingestion (DATA_PLAN
-§4/§8) as the directory grows past Utah · facility-page indexing once
-enriched · reputation profiles / negotiation coach / grounding-audit when
-real outcome density exists · the BAA staff-assisted variant and grief
-concierge stay parked behind counsel/safety reviews.
+IDs) · **rename execution day if the Sat-25 decision is "rename"** (domain +
+DNS + Vercel + Google Workspace/aliases + Resend/Postmark + env/app-url +
+`lib/brand.ts` + OG images + redirects from honestfuneral.co — the inventory
+lives in the naming doc) · `followUpSystem` wiring + transparency v1 UI +
+funnel deepening (deferred from this sprint) · community-tier density →
+public community ranges · the quarterly Fair-Price-Index stat engine
+(`index_cells`) once verified metros exist · `directory.ts` indexed zip/geo
+query + national homes ingestion (DATA_PLAN §4/§8) as the directory grows
+past Utah · facility-page indexing once enriched · reputation profiles /
+negotiation coach / grounding-audit when real outcome density exists · the
+BAA staff-assisted variant and grief concierge stay parked behind
+counsel/safety reviews.
