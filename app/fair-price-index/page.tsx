@@ -5,6 +5,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { LINE_ITEMS, PRICING_LAST_UPDATED, fmtUSD } from "@/lib/pricing-data";
+import { DataTierBadge } from "@/components/DataTierBadge";
 
 export const metadata: Metadata = {
   title: "The Fair-Price Index — what funeral items should cost",
@@ -136,14 +137,22 @@ export default function FairPriceIndexPage() {
           ))}
 
           <Card tone="warn">
+            <div className="mb-3">
+              <DataTierBadge tier="modeled" />
+            </div>
             <p>
               These are national fair-price ranges &mdash; an informational
               reference, not an appraisal of any specific funeral home, and not
-              legal or financial advice. Your region adjusts them up or down, and
-              they aren&rsquo;t yet validated against local price lists in every
-              metro. Fixed government fees (like death certificates) are the same
-              everywhere; merchandise like caskets and urns you can buy from any
-              third party. Last reviewed {LAST_UPDATED}. Where each number comes
+              legal or financial advice. The whole index is the modeled tier:
+              national benchmarks adjusted by a regional cost index. As real
+              price lists accumulate for a metro (at least five, and a person
+              reviews the range before it publishes), its ranges upgrade to
+              Verified &mdash; the
+              data-tier badge on any zip&rsquo;s price page tells you which
+              you&rsquo;re seeing. Fixed government fees (like death
+              certificates) are the same everywhere; merchandise like caskets
+              and urns you can buy from any third party. Last reviewed{" "}
+              {LAST_UPDATED}. Where each number comes
               from, and the limits, are on the{" "}
               <Link href="/methodology" className="text-primary-deep underline">
                 methodology page

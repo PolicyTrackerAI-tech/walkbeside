@@ -5,6 +5,10 @@
  * by service-type category and applies the regional cost-of-living multiplier
  * via adjustedRange().
  *
+ * Every number here must trace to a LINE_ITEMS entry (the audited catalog
+ * with sources) — no side-channel constants. Guardrail #4: never publish a
+ * number we can't defend.
+ *
  * "Typical bundle" = the items most families end up paying for — required
  * items plus the common optional pieces (e.g. casket for traditional burial).
  * "Stripped bundle" = required-only minimum.
@@ -28,9 +32,10 @@ export interface ServiceTotals {
 /**
  * For each service type, the optional line-item IDs that are typically
  * included in a "real" funeral total. The remaining optional items are
- * up-sells that families decline with the toolkit.
+ * up-sells that families decline with the toolkit. Every id must exist in
+ * LINE_ITEMS (pinned by lib/__tests__/funeral-homes-pricing.test.ts).
  */
-const TYPICAL_OPTIONAL_BY_SERVICE: Record<ServiceType, string[]> = {
+export const TYPICAL_OPTIONAL_BY_SERVICE: Record<ServiceType, string[]> = {
   "direct-cremation": [],
   "cremation-with-service": [
     "body-prep",
@@ -43,39 +48,29 @@ const TYPICAL_OPTIONAL_BY_SERVICE: Record<ServiceType, string[]> = {
     "viewing",
     "service-facility",
     "graveside",
-    "casket-basic",
-    "vault-basic",
+    "casket-metal",
+    "vault",
   ],
-  "graveside-burial": ["graveside", "casket-basic", "vault-basic"],
-  "green-burial": ["graveside", "casket-basic"],
+  "graveside-burial": ["graveside", "casket-metal", "vault"],
+  "green-burial": ["graveside", "casket-metal"],
   "aquamation": ["urn"],
   "body-donation": [],
   "memorial-no-body": ["service-facility"],
 };
 
 /**
- * Estimate cremation cost (the cremation itself, not the service around it).
- * Hard-coded fair range per Sarah's national benchmarks — not in LINE_ITEMS
- * because cremation is its own line item handled by some homes via a
- * "cremation fee" while others bundle it into "basic services."
- */
-const CREMATION_COST = { low: 70_000, high: 100_000 }; // cents
-const PREDATORY_CREMATION_CEILING = 200_000; // $2,000+
-
-const CASKET_BASIC = { low: 80_000, high: 200_000, predatory: 800_000 };
-const VAULT_BASIC = { low: 90_000, high: 180_000, predatory: 350_000 };
-const RENTAL_CASKET = { low: 60_000, high: 120_000, predatory: 250_000 };
-const URN_FAIR = { low: 5_000, high: 30_000, predatory: 100_000 };
-
-/**
  * Computes the three pricing bands for a given service type at a given zip.
- * All numbers in cents.
+ * All numbers in cents. Predatory totals use the raw (non-zip-adjusted)
+ * predatoryAt ceilings — a deliberate judgment call: the ceiling marks
+ * exploitation anywhere, not a local market rate.
  */
 export function totalsForService(
   serviceType: ServiceType,
   zip: string,
 ): ServiceTotals {
-  // Sum all required items for this service type
+  // Sum all required items for this service type — including the
+  // required:"cremation" catalog entries (cremation process fee + container),
+  // so the cremation itself is never added as a separate unsourced constant.
   const requiredItems = LINE_ITEMS.filter(
     (it) =>
       it.categories.includes(serviceType) &&
@@ -101,17 +96,6 @@ export function totalsForService(
     predatoryTotal += it.predatoryAt * 100;
   }
 
-  // Add cremation cost for cremation services
-  if (
-    serviceType === "direct-cremation" ||
-    serviceType === "cremation-with-service" ||
-    serviceType === "aquamation"
-  ) {
-    strippedLow += CREMATION_COST.low;
-    strippedHigh += CREMATION_COST.high;
-    predatoryTotal += PREDATORY_CREMATION_CEILING;
-  }
-
   // Typical optional items
   const optionalIds = TYPICAL_OPTIONAL_BY_SERVICE[serviceType];
   let optionalLow = 0;
@@ -119,30 +103,12 @@ export function totalsForService(
   let optionalPredatory = 0;
 
   for (const id of optionalIds) {
-    if (id === "casket-basic") {
-      optionalLow += CASKET_BASIC.low;
-      optionalHigh += CASKET_BASIC.high;
-      optionalPredatory += CASKET_BASIC.predatory;
-    } else if (id === "vault-basic") {
-      optionalLow += VAULT_BASIC.low;
-      optionalHigh += VAULT_BASIC.high;
-      optionalPredatory += VAULT_BASIC.predatory;
-    } else if (id === "rental-casket") {
-      optionalLow += RENTAL_CASKET.low;
-      optionalHigh += RENTAL_CASKET.high;
-      optionalPredatory += RENTAL_CASKET.predatory;
-    } else if (id === "urn") {
-      optionalLow += URN_FAIR.low;
-      optionalHigh += URN_FAIR.high;
-      optionalPredatory += URN_FAIR.predatory;
-    } else {
-      const item = LINE_ITEMS.find((it) => it.id === id);
-      if (item) {
-        const [lo, hi] = adjustedRange(item.fairLow, item.fairHigh, zip);
-        optionalLow += lo * 100;
-        optionalHigh += hi * 100;
-        optionalPredatory += item.predatoryAt * 100;
-      }
+    const item = LINE_ITEMS.find((it) => it.id === id);
+    if (item) {
+      const [lo, hi] = adjustedRange(item.fairLow, item.fairHigh, zip);
+      optionalLow += lo * 100;
+      optionalHigh += hi * 100;
+      optionalPredatory += item.predatoryAt * 100;
     }
   }
 

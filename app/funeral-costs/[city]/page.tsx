@@ -11,6 +11,7 @@ import { ArticleSchema } from "@/components/seo/ArticleSchema";
 import { getCity, listCitySlugs, CITIES } from "@/lib/city-pages";
 import { regionForZip } from "@/lib/zip-regions";
 import { SERVICE_TOTALS, SERVICE_LABELS } from "@/lib/pricing-data";
+import { DataTierBadge } from "@/components/DataTierBadge";
 import { listStateSlugs } from "@/lib/probate-by-state";
 
 export async function generateStaticParams() {
@@ -151,10 +152,16 @@ export default async function CityFuneralCostsPage({
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-ink-muted mt-4">
-              Source: national pricing benchmarks, adjusted by a regional
-              cost-of-living multiplier of {multiplier.toFixed(2)}x for the{" "}
-              {metroLabel} market. Real quotes vary by funeral home and
+            <div className="mt-4">
+              {/* Always modeled: this table is whole-service bands × the
+                  regional multiplier — per-item local overrides can't apply
+                  to it, and the page is statically generated (no DB read). */}
+              <DataTierBadge tier="modeled" />
+            </div>
+            <p className="text-xs text-ink-muted mt-2">
+              Source: national pricing benchmarks, adjusted by an
+              estimated regional cost index for the {metroLabel} market
+              (modeled). Real quotes vary by funeral home and
               by what&rsquo;s included. Comparison-shopping at least
               two homes is the most reliable way to find a fair price.
             </p>

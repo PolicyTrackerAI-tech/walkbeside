@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select } from "@/components/ui/Field";
+import { DataTierBadge } from "@/components/DataTierBadge";
 import {
   LINE_ITEMS,
   SERVICE_TOTALS,
@@ -13,13 +15,18 @@ import {
   fmtUSD,
   PRICING_LAST_UPDATED,
   DATA_SOURCE_LABEL,
-  dataSourceForZip,
   type LineItem,
   type ServiceType,
 } from "@/lib/pricing-data";
 import { FIVE_QUESTIONS } from "@/lib/scenarios";
 
 type Mode = "no-quote" | "has-quote";
+
+interface TierInfo {
+  tier: "verified" | "community" | "modeled";
+  n?: number | null;
+  lastUpdated?: string | null;
+}
 
 const REQUIRED_LABEL: Record<LineItem["required"], string> = {
   yes: "Required",
@@ -36,6 +43,38 @@ export function PriceCalculator() {
   const [quotedHome, setQuotedHome] = useState("");
   const [quotedPrice, setQuotedPrice] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [fetchedTier, setFetchedTier] = useState<{
+    zip: string;
+    info: TierInfo;
+  } | null>(null);
+
+  // Every number this calculator shows is modeled math from the static
+  // catalog, so its badge is always "modeled". The live tier endpoint only
+  // powers the note pointing at /analyzer (which does consult the verified
+  // store); any failure just hides the note. Never fires per keystroke — a
+  // partial zip just returns.
+  useEffect(() => {
+    if (zip.length !== 5) return;
+    const ctrl = new AbortController();
+    fetch(`/api/benchmarks/tier?zip=${zip}`, { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((t: TierInfo | null) => {
+        if (
+          t &&
+          (t.tier === "verified" ||
+            t.tier === "community" ||
+            t.tier === "modeled")
+        ) {
+          setFetchedTier({ zip, info: t });
+        }
+      })
+      .catch(() => {});
+    return () => ctrl.abort();
+  }, [zip]);
+
+  // Derived, keyed by zip so a stale fetch for a prior zip never shows.
+  const tierInfo: TierInfo =
+    fetchedTier?.zip === zip ? fetchedTier.info : { tier: "modeled" };
 
   const totals = SERVICE_TOTALS.find((t) => t.type === serviceType)!;
   const [low, high] = adjustedRange(totals.fairLow, totals.fairHigh, zip);
@@ -83,7 +122,7 @@ export function PriceCalculator() {
       <Card>
         <div className="grid sm:grid-cols-2 gap-5">
           <div>
-            <Label htmlFor="zip" hint="Used only to adjust the numbers for your region. Never saved.">
+            <Label htmlFor="zip" hint="Used to adjust the numbers for your region and check our data coverage there. Never saved.">
               Your zip code
             </Label>
             <Input
@@ -195,9 +234,25 @@ export function PriceCalculator() {
               like for this service type.
             </p>
             <p className="text-xs text-ink-muted mt-4">
-              {DATA_SOURCE_LABEL[dataSourceForZip(zip)]} &middot; Last
-              updated {PRICING_LAST_UPDATED}
+              <DataTierBadge tier="modeled" className="mr-2" />
+              {DATA_SOURCE_LABEL.modeled} &middot; Last updated{" "}
+              {PRICING_LAST_UPDATED}
             </p>
+            {tierInfo.tier !== "modeled" && (
+              <p className="text-xs text-ink-muted mt-2">
+                {tierInfo.tier === "verified"
+                  ? "Real price lists from this area now back"
+                  : "Family-reported prices from this area now back"}{" "}
+                <Link
+                  href="/analyzer"
+                  className="underline text-primary-deep"
+                >
+                  our quote checker
+                </Link>{" "}
+                &mdash; {tierInfo.tier === "verified" ? "verified" : "those local"}{" "}
+                ranges appear there first.
+              </p>
+            )}
           </Card>
 
           {mode === "has-quote" && dealRating && quotedNum > 0 && (

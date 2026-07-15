@@ -4,7 +4,7 @@
 
 > **Before you dial:** Have the live product open in a browser, logged in, on a second monitor or a screen you can share. Have one realistic test case staged (a fictional family, a city in their service area, and the staged price list from [`SAMPLE_GPL_DEMO.md`](SAMPLE_GPL_DEMO.md) copied to your clipboard — verified to flag ≈$9,000 of overcharge every time). Pull *their* Care Compare "emotional and spiritual support" score so you can reference it by number. Confirm screen-share works.
 >
-> **One-time demo-partner setup (do once, reuse forever):** the coordinator-portal beats below need a real partner token. Create an internal demo partner in about two minutes: (1) submit the form at `/partners/apply` as "Demo Hospice (internal)" with your own email; (2) approve it at `/admin/partners`; (3) use "Copy full URL" on its row — that's your demo portal, bookmark it; (4) open `[that URL]/links`, create a referral code labeled "Demo", and note the `?ref=` link and QR it generates. None of this touches a real family or a real hospice.
+> **One-time demo-partner setup (do once, reuse forever):** the coordinator-portal beats below need a real partner account. Create an internal demo partner in about two minutes: (1) submit the form at `/partners/apply` as "Demo Hospice (internal)" with your own email; (2) approve it at `/admin/partners` — the contact email gets a sign-in invite; (3) sign in at `/portal/login` (magic link, no password) — `/portal` is now your demo portal; (4) open `/portal/links`, create a referral code labeled "Demo", and note the `?ref=` link and QR it generates. The token quick-link (`/partner/r/[token]`, "Copy full URL" on the admin row) still works too — it's the no-account fallback you'll point to when a coordinator asks how line staff use it without a login. None of this touches a real family or a real hospice.
 >
 > **Route note (read before your first demo):** `/admin/outcomes` (Beat 5, your founder/admin view) is live — navigate to it directly, no mock needed. Beat 6's live proof report (`/partner/r/[their-token]`) will show real numbers once a signed pilot has recorded cases; until then, use the illustrative sample report at `/partner/sample-hospice` instead of a printed mock — same component, computed live, clearly labeled as a sample. All beats (1–6) are live.
 >
@@ -35,6 +35,7 @@
 - Read the headline aloud — *"See what you should expect to pay."*
 - Enter **their** local city / ZIP in the calculator. Let the fair-price range render.
 - Point at the itemized breakdown: *"This is the cremation fee, this is the basic services fee, this is what's reasonable here — and this is what's often padded."*
+- Point at the data-tier badge next to the price: *"And we tell you exactly how we know — this badge says whether the number is modeled from national data or verified from real local price lists, and it links to the published methodology. We never dress an estimate up as a fact."*
 
 **TRANSITION (back to their ROI):**
 > "Notice there's no upsell, no funeral home being pushed. That's deliberate — and it's the whole reason you can hand this to a family. For you, this is the first ten minutes of bereavement support your counselors don't have to staff."
@@ -52,6 +53,7 @@
 - Go to **`/analyzer`**.
 - Paste the staged price list from [`SAMPLE_GPL_DEMO.md`](SAMPLE_GPL_DEMO.md) (already on your clipboard — don't fumble live).
 - Walk the output: *"Quoted $18,975. Fair for Salt Lake is about $10,000. There's nearly $9,000 flagged on this one list — the $3,495 basic services fee that no one can decline, $495-a-day refrigeration that should be about $60, and a fee for bringing your own casket that federal law says they can't charge at all."*
+- Point at the tier badge on the verdict: *"And the verdict says HOW we know — whether this comparison is modeled from national data or verified against real price lists from this area, with the sample size right there. Click it and you get the full methodology. No black box."*
 
 **TRANSITION (back to their ROI):**
 > "This is exactly the conversation your bereavement coordinator gets pulled into — 'Is this normal? Am I being ripped off?' — and it's a conversation you're not funded or staffed to have. We take it off your plate, and the family remembers that it was [Hospice] who handed them the thing that saved them."
@@ -66,7 +68,7 @@
 > "And your team doesn't have to wait for any of this. The moment we start, your coordinators get their own version of that checker. A family shows your social worker a price list in the hallway — she pastes it in, gets the same read in ten seconds, nothing saved, nothing tied to the family. That's day-one value, before we've served a single case."
 
 **SHOW / CLICK:**
-- Go to your demo portal's **quote check** (`/partner/r/[demo-token]/check`).
+- Go to your demo portal's **quote check** — `/portal/check` if you're signed in, or the token quick-link `/partner/r/[demo-token]/check` (either works live; the token link is also your answer when they ask how line staff use it without an account).
 - Point at the portal identity line — *"this is your team's area, not the family site."*
 - Paste the same staged list; let the result render again. *"Same engine, your team's hands."*
 
@@ -132,6 +134,7 @@
 **SHOW / CLICK:**
 - Briefly show the outcome-capture view (`/admin/outcomes` — your founder/admin view, live). Don't dwell, this isn't the family's screen.
 - Point at the captured fields: *"Listed price, negotiated price, savings, satisfaction, time to resolution — one row per family."*
+- If a parsed reply is on screen, point at it: *"When a funeral home replies by email, the quote is read automatically and shows up here as a proposal — I review it and confirm with one click. Nothing goes to the family until a human has looked at it."*
 
 **TRANSITION:**
 > "Which brings me to the only screen that's really *for you*."
@@ -163,7 +166,7 @@
 ## The pilot ask (≈45 sec — close every demo here)
 
 **SAY:**
-> "So here's what I'd love to do. A **free 60-day pilot** — no cost to you, no cost to your families, no budget conversation. You hand a neutral card to ten or fifteen families; they enroll themselves, so nothing crosses your desk and we never touch your patient records. I run every single case by hand. At the end, I bring you back this exact proof sheet, built on *your* families — and then we decide together whether it's worth a simple annual agreement that costs less than the staff hours it just saved you.
+> "So here's what I'd love to do. A **free 60-day pilot** — no cost to you, no cost to your families, no budget conversation. You hand a neutral card to ten or fifteen families; they enroll themselves, so nothing crosses your desk and we never touch your patient records. I personally watch every single case — when a funeral home replies, the quote is read automatically and I review and confirm it before the family sees a thing. At the end, I bring you back this exact proof sheet, built on *your* families — and then we decide together whether it's worth a simple annual agreement that costs less than the staff hours it just saved you.
 >
 > If the numbers don't prove out, we shake hands and you owe nothing. Can we pick ten or fifteen families to start?"
 
@@ -178,7 +181,7 @@
 | **"Is this steering / a kickback?"** | "It can't be — we present every option, the family chooses, and we take no funeral-home money. That's precisely *why* a hospice can use us. You saw the side-by-side: nobody's ranked by who pays us, because nobody pays us." |
 | **"We have no budget."** | "Then this is perfect — the pilot is free for 60 days, and we're exploring aging and bereavement grant funding that may help cover it afterward. 'No budget' shouldn't be the thing that decides this." |
 | **"We already do bereavement."** | "Your counselors do the grief work, and they're good at it. We don't replace them — we handle the *funeral-pricing and after-death admin maze* they aren't resourced for, and we hand you the report. We make your program look more complete, not redundant." |
-| **"How do we know the prices are right?"** | "Published methodology and real itemized price-list data — and in the pilot you'll watch it work on *your own* families, not a brochure number. You saw the analyzer flag real overcharges live just now." |
+| **"How do we know the prices are right?"** | "Every price on the site carries a badge that says exactly where it came from — Modeled from national benchmarks adjusted for the region, Community from prices families reported, or Verified from real itemized price lists, with the sample size shown. We never publish a local claim we can't defend, the badge links straight to the published methodology, and in the pilot you'll watch it work on *your own* families, not a brochure number." |
 | **"What about our families' privacy?"** | "Families enroll themselves from a card you hand them — no patient data ever comes to us. You get aggregate outcomes only, never anyone's private case. If you ever *want* to share more, we put a BAA in place first." |
 | **"Send me something."** | *Good signal.* "Done — I'll send the one-page pilot outline today. Can we hold 15 minutes on [day] to walk through it?" |
 
@@ -188,7 +191,7 @@
 
 - [ ] Logged into the live product; `/prices`, `/analyzer`, `/negotiate/start`, `/negotiate/[id]/compare`, and `/negotiate/[id]/results` all load.
 - [ ] Confirmed you're logged in as an admin (`ADMIN_EMAILS` allowlist) so `/admin/outcomes` loads for Beat 5. For Beat 6, know whether this prospect has a signed pilot with real cases (`/partner/r/[their-token]`) or needs the illustrative sample (`/partner/sample-hospice`).
-- [ ] Demo-partner portal bookmarked (see one-time setup above); its **quote check** and **referral links** pages load, and the demo `?ref=` link shows the co-brand banner (Beats 2b/2c).
+- [ ] Signed in to the demo portal at `/portal` in a separate browser profile or tab (see one-time setup above); its **quote check** and **referral links** pages load, and the demo `?ref=` link shows the co-brand banner (Beats 2b/2c). Keep the token quick-link handy as the no-login fallback.
 - [ ] The staged price list from [`SAMPLE_GPL_DEMO.md`](SAMPLE_GPL_DEMO.md) copied to clipboard — paste the line items only, no total line.
 - [ ] One staged test case ready (fictional family, **a city in their service area**).
 - [ ] If you'll walk Beat 3 live with **their** zip: pre-check it in the wizard first — a zip with no vetted homes shows the honest "no coverage yet" state, which is the wrong surprise mid-demo. Vet 3–5 homes near the prospect in `/admin/vetting` beforehand, or demo with a zip you know has coverage.

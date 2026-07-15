@@ -1,15 +1,21 @@
 /**
  * Crowdsourced benchmark refinement pipeline (roadmap Phase 1 — the moat).
  *
- * Aggregates de-identified line items from stored price-list analyses into
- * per-item (and, where the sample allows, per-region) observed price
+ * Aggregates de-identified line items from stored price-list analyses — and,
+ * via aggregateAllBenchmarks, itemized quotes from negotiation outreach —
+ * into per-item (and, where the sample allows, per-region) observed price
  * distributions, and compares them against the current survey-baseline
  * benchmarks in lib/pricing-data.ts.
  *
  * NON-NEGOTIABLES (the moat is defensible only if these never slip):
- * - This module PROPOSES; it never applies. Benchmarks live in code and only
- *   change through a founder-reviewed PR that also adds a /corrections entry
- *   (old range → new range, sample size, date). No auto-apply path exists.
+ * - This module PROPOSES; it never auto-applies a CODE benchmark change.
+ *   LINE_ITEMS ranges live in lib/pricing-data.ts and only change through a
+ *   founder-reviewed PR that also adds a /corrections entry (old range → new
+ *   range, sample size, date). The separate promote path
+ *   (/api/admin/benchmarks/promote) writes tier rows to the
+ *   regional_benchmarks DATA table — behind a server-recomputed n≥5 gate
+ *   with no override, only when the founder clicks publish. That is a gated
+ *   human publish, not an auto-apply.
  * - Minimum sample size per group: SMALL_SAMPLE_THRESHOLD (shared with the
  *   partner proof report). Below it, the group reports data but no proposal.
  * - Per-unit items (death certificates etc.) are compared per-each and are
@@ -43,6 +49,19 @@ export interface AnalysisRecord {
   }>;
 }
 
+/**
+ * The slice of a negotiation_outreach row this pipeline needs — a real
+ * itemized quote from a home. quote_items carry no qty/isRange: each entry
+ * is already a single transacted per-each price.
+ */
+export interface OutreachQuoteRecord {
+  /** Outreach row id — scopes dedupe (outreach rows carry no userId). */
+  outreachId: string;
+  /** The parent negotiation's zip. */
+  zip: string;
+  items: Array<{ lineItemId: string; name: string; cents: number }>;
+}
+
 export interface GroupStats {
   itemId: string;
   itemName: string;
@@ -67,6 +86,8 @@ export interface GroupStats {
     /** Relative drift of the observed median from the range midpoint. */
     driftPct: number;
   };
+  /** Post-dedupe observations per feed — set by aggregateAllBenchmarks only. */
+  sources?: { analyses: number; outreach: number };
 }
 
 /** Median shift (vs the current range midpoint) below which we propose nothing. */
@@ -86,12 +107,29 @@ function roundTo5Dollars(cents: number): number {
   return Math.round(cents / 500) * 500;
 }
 
-export function aggregateBenchmarks(records: AnalysisRecord[]): GroupStats[] {
+/** One group's observations plus how many survived dedupe from each feed. */
+interface Bucket {
+  values: number[];
+  analyses: number;
+  outreach: number;
+}
+
+function collectObservations(
+  analyses: AnalysisRecord[],
+  outreach: OutreachQuoteRecord[],
+): Map<string, Bucket> {
   // observation buckets: `${itemId}|${region}` -> normalized cents[]
-  const buckets = new Map<string, number[]>();
+  const buckets = new Map<string, Bucket>();
   const seen = new Set<string>();
 
-  for (const rec of records) {
+  const push = (key: string, cents: number, source: "analyses" | "outreach") => {
+    const bucket = buckets.get(key) ?? { values: [], analyses: 0, outreach: 0 };
+    bucket.values.push(cents);
+    bucket[source] += 1;
+    buckets.set(key, bucket);
+  };
+
+  for (const rec of analyses) {
     const zip = (rec.zip ?? "").trim();
     const metro = zip ? regionForZip(zip)?.metro : undefined;
     for (const item of rec.items ?? []) {
@@ -113,26 +151,50 @@ export function aggregateBenchmarks(records: AnalysisRecord[]): GroupStats[] {
         ? perEach
         : Math.round(perEach / regionMultiplier(zip));
 
-      const push = (region: string) => {
-        const key = `${item.matchedItemId}|${region}`;
-        const arr = buckets.get(key);
-        if (arr) arr.push(normalized);
-        else buckets.set(key, [normalized]);
-      };
-      push("national");
+      push(`${item.matchedItemId}|national`, normalized, "analyses");
       // Region groups get the RAW observed price (families compare locally),
       // except per-unit items, which are national by definition.
       if (metro && !def.perUnit) {
-        const key = `${item.matchedItemId}|${metro}`;
-        const arr = buckets.get(key);
-        if (arr) arr.push(perEach);
-        else buckets.set(key, [perEach]);
+        push(`${item.matchedItemId}|${metro}`, perEach, "analyses");
       }
     }
   }
 
+  for (const rec of outreach) {
+    const zip = (rec.zip ?? "").trim();
+    const metro = zip ? regionForZip(zip)?.metro : undefined;
+    for (const item of rec.items ?? []) {
+      if (!item.lineItemId || !item.cents || item.cents <= 0) continue;
+      const def = LINE_ITEMS.find((l) => l.id === item.lineItemId);
+      if (!def) continue;
+
+      const dedupeKey = `${rec.outreachId}|${item.lineItemId}|${item.cents}`;
+      if (seen.has(dedupeKey)) continue;
+      seen.add(dedupeKey);
+
+      // quote_items carry no qty — cents are already per-each; per-unit is
+      // never COLA-normalized (same carve-out as the analyses path above).
+      const normalized = def.perUnit
+        ? item.cents
+        : Math.round(item.cents / regionMultiplier(zip));
+
+      push(`${item.lineItemId}|national`, normalized, "outreach");
+      if (metro && !def.perUnit) {
+        push(`${item.lineItemId}|${metro}`, item.cents, "outreach");
+      }
+    }
+  }
+
+  return buckets;
+}
+
+function summarize(
+  buckets: Map<string, Bucket>,
+  withSources: boolean,
+): GroupStats[] {
   const out: GroupStats[] = [];
-  for (const [key, values] of buckets) {
+  for (const [key, bucket] of buckets) {
+    const values = bucket.values;
     const [itemId, region] = key.split("|");
     const def = LINE_ITEMS.find((l) => l.id === itemId);
     if (!def) continue;
@@ -174,6 +236,9 @@ export function aggregateBenchmarks(records: AnalysisRecord[]): GroupStats[] {
         driftPct: Math.round(driftPct * 100) / 100,
       };
     }
+    if (withSources) {
+      stats.sources = { analyses: bucket.analyses, outreach: bucket.outreach };
+    }
     out.push(stats);
   }
 
@@ -184,6 +249,22 @@ export function aggregateBenchmarks(records: AnalysisRecord[]): GroupStats[] {
       a.itemId.localeCompare(b.itemId) ||
       (a.region === "national" ? -1 : 1),
   );
+}
+
+export function aggregateBenchmarks(records: AnalysisRecord[]): GroupStats[] {
+  return summarize(collectObservations(records, []), false);
+}
+
+/**
+ * Both feeds — checker analyses AND real outreach quotes — through the same
+ * bucket logic. Groups carry a per-source observation count so surfaces can
+ * label the mix.
+ */
+export function aggregateAllBenchmarks(
+  analyses: AnalysisRecord[],
+  outreach: OutreachQuoteRecord[],
+): GroupStats[] {
+  return summarize(collectObservations(analyses, outreach), true);
 }
 
 /**

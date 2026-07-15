@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
@@ -67,17 +68,23 @@ function HowFairRangesWork() {
           <strong className="text-ink">Adjusted for your area.</strong>{" "}
           We start from national pricing benchmarks and adjust for your
           region&rsquo;s cost of living, because funeral prices vary more
-          than 3&times; between zips. As we collect real local price lists,
-          the range for that metro gets sharper.
+          than 3&times; between zips. A metro upgrades to Verified data when
+          at least 5 independent real price lists accumulate for an item and
+          a person reviews the range &mdash; the tier badge on the calculator
+          tells you which you&rsquo;re seeing today.
         </li>
         <li>
           <strong className="text-ink">
             Grounded in the FTC Funeral Rule.
           </strong>{" "}
           Every funeral home must provide an itemized General Price List on
-          request. Today our ranges are built from national benchmarks and
-          public pricing reports; as advocate outreach collects real local
-          GPLs, those numbers tighten the ranges for your area over time.
+          request. Those real GPLs are what move a metro from Modeled ranges
+          to Verified ones; until an item crosses that bar, it stays on the
+          national baseline. How every range is built:{" "}
+          <Link href="/methodology" className="text-primary-deep underline">
+            our methodology
+          </Link>
+          .
         </li>
         <li>
           <strong className="text-ink">A range, not a single number.</strong>{" "}
@@ -86,10 +93,11 @@ function HowFairRangesWork() {
           range is fair. Above it is a negotiation signal.
         </li>
         <li>
-          <strong className="text-ink">Nothing is saved.</strong> Your zip,
-          your quote, the home&rsquo;s name — none of it leaves your
-          browser unless you choose to save it. No account, no email, no
-          tracking on the results page.
+          <strong className="text-ink">Nothing is saved.</strong> Your
+          quote and the home&rsquo;s name never leave your browser unless
+          you choose to save them. Your zip is sent only to look up your
+          area&rsquo;s data coverage and is never stored. No account, no
+          email, no tracking on the results page.
         </li>
       </ul>
       <p className="text-xs text-ink-muted pt-2">

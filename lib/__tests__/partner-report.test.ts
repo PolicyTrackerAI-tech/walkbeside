@@ -64,6 +64,48 @@ describe("aggregateCohort", () => {
     expect(aggregateCohort(many).smallSample).toBe(false);
   });
 
+  // QA pin: "n≥5 suppression verified at n=4 and n=6" — literal counts on
+  // purpose, so a threshold change breaks these two tests by name.
+  it("suppresses at exactly n=4: smallSample true, every dollar/satisfaction stat null", () => {
+    const four: CohortRecord[] = Array.from({ length: 4 }, () => ({
+      overchargeCaughtCents: 250_00,
+      ftcIssues: 1,
+      satisfaction: 5,
+      resolutionDays: 3,
+    }));
+    const s = aggregateCohort(four);
+    expect(s.familiesHelped).toBe(4);
+    expect(s.smallSample).toBe(true);
+    expect(s.familiesWhoSaved).toBeNull();
+    expect(s.totalOverchargeCaughtCents).toBeNull();
+    expect(s.avgOverchargeCaughtCents).toBeNull();
+    expect(s.ftcIssuesFlagged).toBeNull();
+    expect(s.avgSatisfaction).toBeNull();
+    expect(s.medianResolutionDays).toBeNull();
+    expect(s.toolEngagement).toBeNull();
+    expect(s.pilotMetrics).toBeNull();
+  });
+
+  it("publishes at exactly n=6: smallSample false, stats match hand math", () => {
+    const six: CohortRecord[] = [
+      { overchargeCaughtCents: 120_00, ftcIssues: 2, satisfaction: 5, resolutionDays: 2 },
+      { overchargeCaughtCents: 240_00, ftcIssues: 1, satisfaction: 4, resolutionDays: 6 },
+      { overchargeCaughtCents: 0, ftcIssues: 0, satisfaction: 5 },
+      { overchargeCaughtCents: 60_00, ftcIssues: 0, satisfaction: 4 },
+      { overchargeCaughtCents: 0, ftcIssues: 0 },
+      { overchargeCaughtCents: 180_00, ftcIssues: 1 },
+    ];
+    const s = aggregateCohort(six);
+    expect(s.familiesHelped).toBe(6);
+    expect(s.smallSample).toBe(false);
+    expect(s.familiesWhoSaved).toBe(4);
+    expect(s.totalOverchargeCaughtCents).toBe(600_00); // 120+240+60+180 dollars
+    expect(s.avgOverchargeCaughtCents).toBe(100_00); // 60000 / 6
+    expect(s.ftcIssuesFlagged).toBe(4);
+    expect(s.avgSatisfaction).toBe(4.5); // (5+4+5+4)/4
+    expect(s.medianResolutionDays).toBe(4); // (2+6)/2
+  });
+
   it("never lets a negative overcharge drag the total below the real sum", () => {
     const s = aggregateCohort([
       { overchargeCaughtCents: 500_00, ftcIssues: 0 },
