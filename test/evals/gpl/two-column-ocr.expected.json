@@ -1,0 +1,53 @@
+{
+  "description": "Two-column GPL collapsed by OCR: two side-by-side lines must each split into TWO items, while 'Casket (a $2,000 value) $1,500' must stay ONE item with no phantom $2,000 item.",
+  "items": [
+    {
+      "match": "basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 215000
+    },
+    {
+      "match": "embalming",
+      "matchedItemId": "embalming",
+      "cents": 89500
+    },
+    {
+      "match": "dressing",
+      "matchedItemId": null,
+      "cents": 25000,
+      "name": "Dressing and casketing"
+    },
+    {
+      "match": "transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 32500
+    },
+    {
+      "match": "register book",
+      "matchedItemId": "register-book",
+      "cents": 4500
+    },
+    {
+      "match": "value",
+      "matchedItemId": "casket-metal",
+      "cents": 150000,
+      "name": "Casket (a $2,000 value)"
+    },
+    {
+      "match": "graveside",
+      "matchedItemId": "graveside",
+      "cents": 35000,
+      "name": "Graveside service"
+    }
+  ],
+  "mustFlagRuleIds": [
+    "embalming-no-disclosure",
+    "third-party-merchandise-rights",
+    "dressing-casketing-billed-on-top-of-prep"
+  ],
+  "mustNotFlagRuleIds": [
+    "predatory-line-items",
+    "no-gpl-attestation",
+    "casket-required-for-direct-cremation"
+  ]
+}

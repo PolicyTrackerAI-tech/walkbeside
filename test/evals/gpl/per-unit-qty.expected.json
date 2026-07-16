@@ -1,0 +1,55 @@
+{
+  "description": "Per-unit qty semantics: counted death certificates (10) quoted as a $250 total, the 'N @ $unit' certified-copies column form (2 @ $25 -> qty 2, cents 5000), per-day refrigeration quoted as a 5-day $425 total, and a stated $25-each rate that carries no qty; no total line.",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 245000
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 34000
+    },
+    {
+      "match": "Refrigeration",
+      "matchedItemId": "refrigeration-shelter",
+      "cents": 42500,
+      "qty": 5,
+      "name": "Refrigeration of remains (5 days)"
+    },
+    {
+      "match": "Register book",
+      "matchedItemId": "register-book",
+      "cents": 4500
+    },
+    {
+      "match": "Certified death certificates",
+      "matchedItemId": "death-cert",
+      "cents": 25000,
+      "qty": 10,
+      "name": "Certified death certificates (10)"
+    },
+    {
+      "match": "certified copies",
+      "name": "Death certificates, certified copies",
+      "matchedItemId": "death-cert",
+      "cents": 5000,
+      "qty": 2
+    },
+    {
+      "match": "Additional death certificates",
+      "matchedItemId": "death-cert",
+      "cents": 2500
+    }
+  ],
+  "mustFlagRuleIds": [],
+  "mustNotFlagRuleIds": [
+    "death-certificate-marked-up",
+    "cash-advance-no-disclosure",
+    "declinable-item-required-by-law-claim",
+    "duplicate-permit-filing-fee",
+    "predatory-line-items",
+    "no-gpl-attestation"
+  ]
+}

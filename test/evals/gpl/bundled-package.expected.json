@@ -1,0 +1,53 @@
+{
+  "description": "A package-quote GPL: one priced direct-cremation package with a non-priced 'Package includes' prose block (must not become items), plus a la carte extras — an urn selection range, a witness fee, counted death certificates (qty), and an unbenchmarked merchandise line. No casket, no total line.",
+  "post": {
+    "serviceTypeHint": "direct-cremation"
+  },
+  "items": [
+    {
+      "match": "Direct Cremation Package",
+      "matchedItemId": "direct-cremation-fee",
+      "cents": 249500
+    },
+    {
+      "match": "Urns",
+      "matchedItemId": null,
+      "isRange": true,
+      "centsLow": 9500,
+      "centsHigh": 120000
+    },
+    {
+      "match": "Witness cremation",
+      "matchedItemId": "witness-cremation-fee",
+      "cents": 35000,
+      "name": "Witness cremation fee"
+    },
+    {
+      "match": "Death certificates",
+      "matchedItemId": "death-cert",
+      "cents": 10000,
+      "qty": 4,
+      "name": "Death certificates (4)"
+    },
+    {
+      "match": "Memorial folders",
+      "matchedItemId": null,
+      "cents": 12500,
+      "name": "Memorial folders (set of 50)"
+    }
+  ],
+  "mustFlagRuleIds": [
+    "service-charge-bundled",
+    "cash-advance-no-disclosure",
+    "third-party-merchandise-rights"
+  ],
+  "mustNotFlagRuleIds": [
+    "casket-required-for-direct-cremation",
+    "cremation-casket-asserted-required",
+    "casket-required-by-law-claim",
+    "vault-required-for-cremation",
+    "death-certificate-marked-up",
+    "alternative-container-not-offered",
+    "predatory-line-items"
+  ]
+}

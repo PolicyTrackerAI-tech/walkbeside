@@ -94,7 +94,7 @@ export async function POST(req: Request) {
       feature: "draft-letter",
       system: priceListPushbackLetterSystem(),
       user: JSON.stringify(findings),
-      maxTokens: 700,
+      maxTokens: 1000, // re-baselined 700→1000 (sonnet-5 tokenizer)
     });
     if (out.length < 40) return NextResponse.json({ letter: fallback() });
     return NextResponse.json({ letter: out });

@@ -1,0 +1,66 @@
+{
+  "description": "Direct-cremation quote that charges a casket (the classic FTC 453.4(a)(2) violation); alternative container present so only the item-based casket rule fires; per-day refrigeration qty and counted death-cert qty; dot leaders; section headers must not fold onto self-describing items.",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 199500
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 32500,
+      "name": "Transfer of remains to crematory"
+    },
+    {
+      "match": "Crematory fee",
+      "matchedItemId": "cremation-process-fee",
+      "cents": 35000
+    },
+    {
+      "match": "Refrigeration",
+      "matchedItemId": "refrigeration-shelter",
+      "cents": 25500,
+      "qty": 3,
+      "name": "Refrigeration of remains (3 days)"
+    },
+    {
+      "match": "Metal casket",
+      "matchedItemId": "casket-metal",
+      "cents": 300000
+    },
+    {
+      "match": "Cremation container",
+      "matchedItemId": "cremation-container",
+      "cents": 15000,
+      "name": "Cremation container (cardboard)"
+    },
+    {
+      "match": "Basic urn",
+      "matchedItemId": "urn",
+      "cents": 19500
+    },
+    {
+      "match": "Certified death certificates",
+      "matchedItemId": "death-cert",
+      "cents": 7500,
+      "qty": 5,
+      "name": "Certified death certificates (5)"
+    }
+  ],
+  "statedTotalCents": 634500,
+  "mustFlagRuleIds": [
+    "casket-required-for-direct-cremation",
+    "rental-casket-sold-as-purchase",
+    "third-party-merchandise-rights"
+  ],
+  "mustNotFlagRuleIds": [
+    "casket-required-by-law-claim",
+    "cremation-casket-asserted-required",
+    "alternative-container-not-offered",
+    "alternative-container-overpriced",
+    "cash-advance-no-disclosure",
+    "death-certificate-marked-up",
+    "predatory-line-items"
+  ]
+}

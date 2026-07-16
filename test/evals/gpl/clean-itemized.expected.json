@@ -1,0 +1,80 @@
+{
+  "description": "Clean, well-behaved itemized full-service burial GPL: 10 benchmarked lines at fair national prices, 2 unbenchmarked add-ons, compliant embalming + cash-advance disclosures - no rule fires.",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 219500,
+      "name": "Basic services fee (funeral director and staff)"
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 32500,
+      "name": "Transfer of remains to funeral home"
+    },
+    {
+      "match": "Embalming",
+      "matchedItemId": "embalming",
+      "cents": 79500,
+      "name": "Embalming (not required by state law, family authorized in writing)"
+    },
+    {
+      "match": "Other preparation",
+      "matchedItemId": "body-prep",
+      "cents": 29500,
+      "name": "Other preparation of the body"
+    },
+    {
+      "match": "staff for viewing",
+      "matchedItemId": "viewing",
+      "cents": 42500,
+      "name": "Use of facilities and staff for viewing"
+    },
+    {
+      "match": "staff for funeral ceremony",
+      "matchedItemId": "service-facility",
+      "cents": 49500,
+      "name": "Use of facilities and staff for funeral ceremony"
+    },
+    {
+      "match": "Hearse",
+      "matchedItemId": "hearse",
+      "cents": 35000
+    },
+    {
+      "match": "Register book",
+      "matchedItemId": "register-book",
+      "cents": 4500
+    },
+    {
+      "match": "Memorial programs",
+      "matchedItemId": "programs",
+      "cents": 11500
+    },
+    {
+      "match": "Death certificates",
+      "matchedItemId": "death-cert",
+      "cents": 2400,
+      "name": "Death certificates (each)"
+    },
+    {
+      "match": "Motorcycle escort",
+      "matchedItemId": null,
+      "cents": 15000
+    },
+    {
+      "match": "Dove release",
+      "matchedItemId": null,
+      "cents": 22500
+    }
+  ],
+  "mustFlagRuleIds": [],
+  "mustNotFlagRuleIds": [
+    "embalming-no-disclosure",
+    "cash-advance-no-disclosure",
+    "death-certificate-marked-up",
+    "predatory-line-items",
+    "no-gpl-attestation"
+  ]
+}

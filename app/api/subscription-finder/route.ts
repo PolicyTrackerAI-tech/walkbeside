@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { callClaude, claudeAvailable } from "@/lib/claude";
+import { callClaude, claudeAvailable, CLASSIFIER_MODEL } from "@/lib/claude";
 import { redactContact } from "@/lib/redact";
 import { readLimitedJson } from "@/lib/http-guards";
 
@@ -58,8 +58,11 @@ export async function POST(req: Request) {
     // The statement text carries account numbers, card digits, and contact
     // details Claude doesn't need to spot recurring merchants — redact before
     // it leaves our server (dollar amounts and merchant names survive).
+    // Classification-shaped (recurring-charge list from a statement), not the
+    // benchmarked GPL pipeline — runs on the cheap classifier tier (D3).
     const out = await callClaude({
       feature: "subscription-finder",
+      model: CLASSIFIER_MODEL,
       system: SYSTEM,
       user: redactContact(text),
       maxTokens: 2000,

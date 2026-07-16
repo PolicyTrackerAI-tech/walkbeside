@@ -1,0 +1,63 @@
+{
+  "description": "Same GPL shape with the FTC-compliant regression-pinned disclosure ('not required by state law, family authorized in writing') plus disclosed cash-advance death certificates (qty 4) — no rule may fire.",
+  "items": [
+    {
+      "match": "basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 199500
+    },
+    {
+      "match": "embalming",
+      "matchedItemId": "embalming",
+      "cents": 89500,
+      "name": "Embalming (not required by state law, family authorized in writing)"
+    },
+    {
+      "match": "transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 29500
+    },
+    {
+      "match": "visitation",
+      "matchedItemId": "viewing",
+      "cents": 39500,
+      "name": "Viewing and visitation"
+    },
+    {
+      "match": "graveside",
+      "matchedItemId": "graveside",
+      "cents": 27500,
+      "name": "Graveside service"
+    },
+    {
+      "match": "hearse",
+      "matchedItemId": "hearse",
+      "cents": 32500,
+      "name": "Hearse (local)"
+    },
+    {
+      "match": "register book",
+      "matchedItemId": "register-book",
+      "cents": 4000
+    },
+    {
+      "match": "death certificates",
+      "matchedItemId": "death-cert",
+      "cents": 10000,
+      "qty": 4,
+      "name": "Certified death certificates (4)"
+    }
+  ],
+  "mustFlagRuleIds": [],
+  "mustNotFlagRuleIds": [
+    "embalming-no-disclosure",
+    "cash-advance-no-disclosure",
+    "death-certificate-marked-up",
+    "vault-required-by-law-claim",
+    "casket-required-by-law-claim",
+    "declinable-item-required-by-law-claim",
+    "basic-services-fee-high",
+    "predatory-line-items",
+    "no-gpl-attestation"
+  ]
+}

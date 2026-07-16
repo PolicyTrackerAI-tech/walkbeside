@@ -1,0 +1,40 @@
+{
+  "description": "Floor prices (from / starting at / and up) collapse to single values, footnote markers after real money are stripped, and year/hours/address/accounting noise lines must produce no items; no total line.",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 219500
+    },
+    {
+      "match": "Embalming",
+      "matchedItemId": "embalming",
+      "cents": 89500
+    },
+    {
+      "match": "Cremation fee",
+      "matchedItemId": null,
+      "cents": 39500
+    },
+    {
+      "match": "Caskets",
+      "matchedItemId": null,
+      "cents": 129500
+    },
+    {
+      "match": "Urns",
+      "matchedItemId": null,
+      "cents": 9500
+    }
+  ],
+  "mustFlagRuleIds": [
+    "embalming-no-disclosure",
+    "third-party-merchandise-rights"
+  ],
+  "mustNotFlagRuleIds": [
+    "casket-required-for-direct-cremation",
+    "rental-casket-sold-as-purchase",
+    "basic-services-fee-high",
+    "no-gpl-attestation"
+  ]
+}

@@ -75,7 +75,12 @@ export async function POST(req: Request) {
   try {
     const msg = await anthropic().messages.create({
       model: MODEL,
-      max_tokens: 2000,
+      // Same explicit config as callClaude: sonnet-5 runs ADAPTIVE thinking
+      // when the param is omitted, spending thinking tokens inside
+      // max_tokens. max_tokens re-baselined 2000→2700 (sonnet-5 tokenizer,
+      // ~1.35x like every other call site).
+      thinking: { type: "disabled" },
+      max_tokens: 2700,
       system: priceListImageExtractionSystem(),
       messages: [
         {

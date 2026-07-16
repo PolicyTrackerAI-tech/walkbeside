@@ -130,7 +130,7 @@ export async function parseInboundQuote(
       feature: "inbound-quote-parse",
       system: summarizeQuoteSystem(),
       user: body.slice(0, 6000),
-      maxTokens: 1000,
+      maxTokens: 1300, // re-baselined 1000→1300 (sonnet-5 tokenizer)
       negotiationId,
       timeoutMs: 15_000,
     });

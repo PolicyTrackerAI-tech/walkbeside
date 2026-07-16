@@ -1,0 +1,51 @@
+{
+  "description": "Section-header folding: top-level PROFESSIONAL SERVICES must NOT fold into self-describing items; non-priced merchandise sub-headers (Acknowledgement cards / Register books) MUST fold into their indented variant lines.",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 210000
+    },
+    {
+      "match": "Embalming",
+      "matchedItemId": "embalming",
+      "cents": 79500
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 29500
+    },
+    {
+      "match": "Type A (per 25)",
+      "matchedItemId": "acknowledgement-cards",
+      "cents": 1800,
+      "name": "Acknowledgement cards — Type A (per 25)"
+    },
+    {
+      "match": "With picture",
+      "matchedItemId": "acknowledgement-cards",
+      "cents": 2400,
+      "name": "Acknowledgement cards — With picture (per 25)"
+    },
+    {
+      "match": "Standard",
+      "matchedItemId": "register-book",
+      "cents": 3200,
+      "name": "Register books — Standard"
+    },
+    {
+      "match": "Deluxe embossed",
+      "matchedItemId": "register-book",
+      "cents": 4800,
+      "name": "Register books — Deluxe embossed"
+    }
+  ],
+  "mustFlagRuleIds": [],
+  "mustNotFlagRuleIds": [
+    "embalming-no-disclosure",
+    "declinable-item-required-by-law-claim",
+    "single-professional-services-no-itemization",
+    "no-gpl-attestation"
+  ]
+}

@@ -43,6 +43,14 @@ const Body = z.object({
   // Optional referral attribution (HF-XXXXXX) remembered on-device from a
   // ?ref= visit. Reporting-only; validated + resolved server-side.
   referralCode: z.string().max(20).optional(),
+  // Eval-harness knobs (scripts/eval-analyzer.mjs). Honored ONLY on a dev
+  // server (NODE_ENV !== "production") — a production build silently ignores
+  // both, so no public caller can pick our model or re-tag our cost ledger.
+  // evalRun tags the run's Claude calls "eval" in api_cost_events and adds
+  // extractionMethod to the response; evalModel additionally overrides the
+  // model for this request (the harness's --model comparison flag).
+  evalRun: z.boolean().optional(),
+  evalModel: z.string().max(64).optional(),
 });
 
 interface ItemOut {
@@ -80,6 +88,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
   const { text, zip, serviceTypeHint, referralCode } = parsed.data;
+  const isEvalRun =
+    process.env.NODE_ENV !== "production" && parsed.data.evalRun === true;
+  const evalModel = isEvalRun ? parsed.data.evalModel : undefined;
 
   let extracted: { items: RawItem[]; total_cents?: number } = {
     items: [],
@@ -91,13 +102,22 @@ export async function POST(req: Request) {
   if (claudeAvailable()) {
     try {
       const out = await callClaude({
-        feature: "analyzer-extract",
+        feature: isEvalRun ? "eval" : "analyzer-extract",
         system: priceListAnalysisSystem(),
         user: text,
-        maxTokens: 1500,
+        maxTokens: 2000, // re-baselined 1500→2000 for the sonnet-5 tokenizer (~30% more tokens/text)
         cacheSystem: true,
+        ...(evalModel ? { model: evalModel } : {}),
       });
-      extracted = JSON.parse(stripCodeFence(out));
+      const parsedOut = JSON.parse(stripCodeFence(out)) as {
+        items?: unknown;
+        total_cents?: number;
+      };
+      // Valid JSON but not the expected shape (a bare array, an {error}
+      // object, a quoted string) must degrade to the regex parser exactly
+      // like a parse throw — .map on undefined would 500 the family instead.
+      if (!Array.isArray(parsedOut.items)) throw new Error("unexpected shape");
+      extracted = parsedOut as { items: RawItem[]; total_cents?: number };
       extractionMethod = "claude";
     } catch {
       extracted = naiveExtract(text);
@@ -380,6 +400,8 @@ export async function POST(req: Request) {
     violations,
     totalQuoted,
     potentialSavings,
+    isEvalRun,
+    evalModel,
   });
 
   return NextResponse.json({
@@ -393,6 +415,9 @@ export async function POST(req: Request) {
     summary,
     coverage,
     dataTier,
+    // Dev-only eval runs need to know whether the model or the naive regex
+    // fallback produced the items — a naive row isn't measuring the model.
+    ...(isEvalRun ? { extractionMethod } : {}),
   });
 }
 
@@ -401,6 +426,8 @@ async function buildAdvocacySummary(input: {
   violations: { title: string; severity: string; whatToSay?: string }[];
   totalQuoted: number;
   potentialSavings: number;
+  isEvalRun?: boolean;
+  evalModel?: string;
 }): Promise<AdvocacySummary> {
   // Deterministic safety net — the checker must never show a blank "what to do".
   const fallback = () =>
@@ -445,11 +472,12 @@ async function buildAdvocacySummary(input: {
 
   try {
     const out = await callClaude({
-      feature: "advocacy-summary",
+      feature: input.isEvalRun ? "eval" : "advocacy-summary",
       system: priceListAdvocacySummarySystem(),
       user: JSON.stringify(findings),
-      maxTokens: 700,
+      maxTokens: 1000, // re-baselined 700→1000 (sonnet-5 tokenizer)
       cacheSystem: true,
+      ...(input.evalModel ? { model: input.evalModel } : {}),
     });
     const parsed = JSON.parse(stripCodeFence(out)) as {
       bottomLine?: unknown;
