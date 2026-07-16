@@ -12,6 +12,7 @@
     "import:homes": "node --env-file-if-exists=.env.local scripts/import-funeral-homes.mjs",
     "smoke:check": "node --env-file-if-exists=.env.local scripts/smoke-check.mjs",
     "build:bootstrap": "node scripts/build-bootstrap-sql.mjs",
+    "eval:analyzer": "node scripts/eval-analyzer.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

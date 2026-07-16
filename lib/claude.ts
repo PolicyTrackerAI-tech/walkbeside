@@ -46,6 +46,14 @@ export interface CallOpts {
   feature: string;
   system: string;
   user: string;
+  /**
+   * Per-call model override (defaults to MODEL). Only two callers may use it:
+   * cheap classification features pinned to a smaller model, and the eval
+   * harness's dev-only comparison flag (scripts/eval-analyzer.mjs --model=X).
+   * Any change to which model a feature runs on ships only in a PR carrying
+   * before/after `npm run eval:analyzer` output.
+   */
+  model?: string;
   maxTokens?: number;
   /** Attributes the spend to a case in api_cost_events when known. */
   negotiationId?: string;
@@ -73,7 +81,7 @@ export interface CallOpts {
 export async function callClaude(o: CallOpts): Promise<string> {
   const msg = await client().messages.create(
     {
-      model: MODEL,
+      model: o.model ?? MODEL,
       max_tokens: o.maxTokens ?? 1000,
       system: o.cacheSystem
         ? [
