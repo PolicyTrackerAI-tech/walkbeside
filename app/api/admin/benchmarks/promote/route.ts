@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
@@ -6,6 +7,7 @@ import { requireAdminApi } from "@/lib/admin-auth";
 import { fetchBenchmarkRecords } from "@/lib/benchmark-sources";
 import { aggregateAllBenchmarks } from "@/lib/benchmark-pipeline";
 import { SMALL_SAMPLE_THRESHOLD } from "@/lib/partner-report";
+import { citySlugsForMetro } from "@/lib/city-pages";
 
 /**
  * Promote a metro group to the verified/community DATA tier — the only write
@@ -163,6 +165,22 @@ export async function POST(req: Request) {
       { status: 500 },
     );
   }
+
+  // Purge the public pages that render this metro's data so a founder
+  // promotion surfaces without a deploy — the city pages in the metro plus
+  // the index. (/funeral-homes/[zip] is dynamic and the tier API is
+  // 1h-cached; neither needs a purge.) Best-effort by design: the
+  // regional_benchmarks row is already published, so a revalidation failure
+  // must never turn a successful promotion into an error response.
+  try {
+    for (const slug of citySlugsForMetro(body.scopeValue)) {
+      revalidatePath(`/funeral-costs/${slug}`);
+    }
+    revalidatePath("/fair-price-index");
+  } catch (e) {
+    console.error("post-promote revalidation failed", e);
+  }
+
   return NextResponse.json({
     ok: true,
     id: newId,

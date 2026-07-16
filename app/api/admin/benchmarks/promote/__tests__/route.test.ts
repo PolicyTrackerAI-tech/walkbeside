@@ -11,7 +11,10 @@ vi.mock("@/lib/env", () => ({
   PUBLIC: { supabaseUrl: "http://test.local" },
   requireServer: () => "service-key",
 }));
+// revalidatePath needs a Next request scope that doesn't exist under vitest.
+vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
 import { requireAdminApi } from "@/lib/admin-auth";
 import { fetchBenchmarkRecords } from "@/lib/benchmark-sources";
@@ -24,6 +27,7 @@ import { POST } from "../route";
 const requireAdminApiMock = vi.mocked(requireAdminApi);
 const fetchMock = vi.mocked(fetchBenchmarkRecords);
 const createClientMock = vi.mocked(createClient);
+const revalidatePathMock = vi.mocked(revalidatePath);
 
 const basic = LINE_ITEMS.find((l) => l.id === "basic-services")!;
 const ZIP = "84101";
@@ -119,6 +123,7 @@ beforeEach(() => {
   requireAdminApiMock.mockResolvedValue(null);
   fetchMock.mockReset();
   createClientMock.mockReset();
+  revalidatePathMock.mockReset();
 });
 
 describe("POST /api/admin/benchmarks/promote", () => {
@@ -191,6 +196,20 @@ describe("POST /api/admin/benchmarks/promote", () => {
       active: true,
     });
     expect(calls[1].neqFilters).toEqual({ id: "row-1" });
+
+    // A promotion must surface on public pages without a deploy: the metro's
+    // city page(s) and the index get purged (ZIP=84101 → Salt Lake City →
+    // the salt-lake-city city page).
+    const revalidated = revalidatePathMock.mock.calls.map((c) => c[0]);
+    expect(revalidated).toContain("/funeral-costs/salt-lake-city");
+    expect(revalidated).toContain("/fair-price-index");
+  });
+
+  it("never revalidates when the n-gate rejects", async () => {
+    fetchMock.mockResolvedValue(feeds(4));
+    scriptSvc([]);
+    await post(validBody());
+    expect(revalidatePathMock).not.toHaveBeenCalled();
   });
 
   it("rejects a body smuggling an n (strict schema — no override exists)", async () => {
