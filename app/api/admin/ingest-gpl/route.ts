@@ -156,8 +156,16 @@ async function handleParse(text: string) {
   return NextResponse.json({
     items,
     // Present ONLY when the document printed a total line (prompt contract) —
-    // the review UI computes its displayed total from the item rows.
-    statedTotalCents: extracted.total_cents ?? null,
+    // the review UI computes its displayed total from the item rows. A
+    // non-positive or fractional value (OCR'd "Total $0.00", a malformed
+    // model number) is dropped: the save schema requires a positive int, so
+    // passing one through would strand the founder in an unsaveable state.
+    statedTotalCents:
+      typeof extracted.total_cents === "number" &&
+      Number.isInteger(extracted.total_cents) &&
+      extracted.total_cents > 0
+        ? extracted.total_cents
+        : null,
     extractionMethod,
   });
 }
@@ -241,8 +249,14 @@ async function handleSave(body: z.infer<typeof SaveBody>) {
   let warning: string | undefined;
   if (body.sourceUrl) {
     // Escape ilike metacharacters so a home name containing %/_ can't widen
-    // the match.
-    const pattern = `%${body.homeName.replace(/[\\%_]/g, (ch) => `\\${ch}`)}%`;
+    // the match. `*` needs the same treatment: PostgREST rewrites every `*`
+    // in a like/ilike filter value to `%` before it reaches SQL, so a real
+    // name like "A*1 Cremation" would silently widen and could stamp the
+    // WRONG home's gpl_url. Escaped, `\*` arrives as `\%` — a literal-%
+    // match that can only produce the no-match warning (the safe failure).
+    const pattern = `%${body.homeName
+      .replace(/[\\%_]/g, (ch) => `\\${ch}`)
+      .replace(/\*/g, "\\*")}%`;
     const { data: homes, error: homesError } = await admin
       .from("funeral_homes")
       .select("id, name")

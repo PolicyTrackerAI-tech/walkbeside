@@ -212,6 +212,25 @@ describe("POST /api/admin/benchmarks/promote", () => {
     expect(revalidatePathMock).not.toHaveBeenCalled();
   });
 
+  it("a revalidation failure never fails the already-published promotion (best-effort law)", async () => {
+    fetchMock.mockResolvedValue(feeds(6));
+    scriptSvc([
+      { data: { id: "row-1" }, error: null }, // insert
+      { error: null }, // retire
+    ]);
+    revalidatePathMock.mockImplementation(() => {
+      throw new Error("no request scope");
+    });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const res = await post(validBody());
+    // The regional_benchmarks row is published at this point — surfacing a
+    // 500 would report failure for a promotion that succeeded.
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true, id: "row-1", n: 6 });
+    expect(errSpy).toHaveBeenCalled();
+    errSpy.mockRestore();
+  });
+
   it("rejects a body smuggling an n (strict schema — no override exists)", async () => {
     fetchMock.mockResolvedValue(feeds(6));
     const calls = scriptSvc([]);

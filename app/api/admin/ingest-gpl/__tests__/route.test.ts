@@ -23,6 +23,8 @@ import { getUser } from "@/lib/supabase/server";
 import { callClaude, claudeAvailable } from "@/lib/claude";
 import { LINE_ITEMS } from "@/lib/pricing-data";
 import { matchLineItem } from "@/lib/negotiation/price-list-parse";
+import { priceListAnalysisSystem } from "@/lib/negotiation/prompts";
+import { extractionConfidence } from "@/lib/extraction-confidence";
 import { POST } from "../route";
 
 const requireAdminApiMock = vi.mocked(requireAdminApi);
@@ -253,12 +255,35 @@ describe("POST /api/admin/ingest-gpl — parse", () => {
     expect(callClaudeMock).not.toHaveBeenCalled();
   });
 
-  it("tags the call founder-ingest at the analyzer's re-baselined cap", async () => {
+  it("runs the analyzer's exact chain: founder-ingest tag, re-baselined cap, eval-gated prompt, cached system", async () => {
     callClaudeMock.mockResolvedValue(JSON.stringify({ items: [] }));
     await post({ action: "parse", text: GPL_TEXT });
+    // Any drift here silently diverges founder-ingested benchmark data from
+    // the eval-gated analyzer prompt (or drops prompt caching on weekend
+    // volume) — pin the whole call shape.
     expect(callClaudeMock).toHaveBeenCalledWith(
-      expect.objectContaining({ feature: "founder-ingest", maxTokens: 2000 }),
+      expect.objectContaining({
+        feature: "founder-ingest",
+        maxTokens: 2000,
+        system: priceListAnalysisSystem(),
+        cacheSystem: true,
+        user: GPL_TEXT,
+      }),
     );
+  });
+
+  it("drops a non-positive document total instead of stranding the save", async () => {
+    // naiveExtract can route "Total ... $0.00" into total_cents; the save
+    // schema requires a positive int, so passing 0 through would make the
+    // review unsaveable.
+    callClaudeMock.mockResolvedValue(
+      JSON.stringify({
+        items: [{ name: "Basic services fee", cents: 219500 }],
+        total_cents: 0,
+      }),
+    );
+    const res = await post({ action: "parse", text: GPL_TEXT });
+    expect((await res.json()).statedTotalCents).toBeNull();
   });
 });
 
@@ -292,6 +317,23 @@ describe("POST /api/admin/ingest-gpl — save", () => {
     expect(rawText).not.toContain("(801) 555-0142");
     expect(rawText).toContain("[redacted]");
     expect(rawText).toContain("Basic services fee");
+    // Confidence is the buildsheet-specced extractionConfidence over the
+    // reviewed rows (3 items, no stated total, range excluded from the sum).
+    expect(calls[0].values!.confidence).toBe(
+      extractionConfidence({
+        itemCount: 3,
+        statedTotalCents: null,
+        itemSumCents: 219500 + 89500,
+      }),
+    );
+  });
+
+  it("caps stored raw_text at 5000 chars", async () => {
+    const calls = scriptSvc([{ data: { id: "analysis-1" }, error: null }]);
+    const longText = `Basic services fee $2,195\n${"filler line for the raw-text cap test\n".repeat(300)}`;
+    expect(longText.length).toBeGreaterThan(5000);
+    await post(validSave({ text: longText }));
+    expect((calls[0].values!.raw_text as string).length).toBeLessThanOrEqual(5000);
   });
 
   it("drops a matchedItemId that isn't a real LINE_ITEMS id", async () => {
@@ -371,18 +413,23 @@ describe("POST /api/admin/ingest-gpl — save", () => {
     expect(calls.map((c) => c.table)).toEqual(["price_list_analyses"]);
   });
 
-  it("escapes ilike metacharacters in the home name", async () => {
+  it("escapes ilike metacharacters — including PostgREST's * wildcard alias — in the home name", async () => {
     const calls = scriptSvc([
       { data: { id: "analysis-1" }, error: null },
       { data: [], error: null },
     ]);
     await post(
       validSave({
-        homeName: "100% Local_Home",
+        homeName: "100% Local_Home *Star*",
         sourceUrl: "https://example.test/gpl",
       }),
     );
-    expect(calls[1].ilikeFilters).toEqual({ name: "%100\\% Local\\_Home%" });
+    // % and _ are LIKE metacharacters; * is rewritten to % by PostgREST
+    // before it reaches SQL — unescaped, a real name containing * would
+    // silently widen the match and could stamp the wrong home's gpl_url.
+    expect(calls[1].ilikeFilters).toEqual({
+      name: "%100\\% Local\\_Home \\*Star\\*%",
+    });
   });
 
   it("returns a generic 500 on an insert error", async () => {

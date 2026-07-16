@@ -80,6 +80,35 @@ describe("aggregateBenchmarks", () => {
     expect(g.n).toBe(1);
   });
 
+  it("counts identical prices as distinct observations across dedupe scopes (founder ingest: one user, many homes)", () => {
+    // Death certificates are a fixed state fee — every home in a state
+    // prints the identical per-copy total. Founder-ingested rows all share
+    // the founder's user id, so without a per-document scope they'd
+    // collapse to n=1 and the n≥5 promote gate could never open.
+    const records: AnalysisRecord[] = ["doc-1", "doc-2", "doc-3"].map((id) => ({
+      userId: "founder",
+      dedupeScope: id,
+      items: [{ matchedItemId: basic.id, cents: 2195_00 }],
+    }));
+    const g = aggregateBenchmarks(records).find((x) => x.region === "national")!;
+    expect(g.n).toBe(3);
+  });
+
+  it("still collapses duplicates within one dedupe scope", () => {
+    const records: AnalysisRecord[] = [
+      {
+        userId: "founder",
+        dedupeScope: "doc-1",
+        items: [
+          { matchedItemId: basic.id, cents: 2195_00 },
+          { matchedItemId: basic.id, cents: 2195_00 },
+        ],
+      },
+    ];
+    const g = aggregateBenchmarks(records).find((x) => x.region === "national")!;
+    expect(g.n).toBe(1);
+  });
+
   it("excludes selection-range items and unmatched items entirely", () => {
     const records: AnalysisRecord[] = [
       { userId: "u1", items: [{ matchedItemId: basic.id, cents: 1000_00, isRange: true }] },

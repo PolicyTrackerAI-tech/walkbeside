@@ -42,6 +42,9 @@ const centsToDollars = (c: number): string =>
   c % 100 === 0 ? String(c / 100) : (c / 100).toFixed(2);
 
 const dollarsToCents = (d: string): number | null => {
+  // Number("") is 0, which would let a cleared price field silently save a
+  // $0 row instead of tripping the "bad price" row error.
+  if (d.trim() === "") return null;
   const n = Number(d);
   if (!Number.isFinite(n) || n < 0) return null;
   return Math.round(n * 100);
@@ -121,19 +124,26 @@ export function IngestClient() {
       const pages: string[] = [];
       let failed = 0;
       for (const file of Array.from(files)) {
-        const { dataUrl, mediaType } = await downscaleImage(file);
-        const r = await fetch("/api/extract-price-list-image", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ image: dataUrl, mediaType }),
-        });
-        const d = await r.json().catch(() => ({}) as Record<string, unknown>);
-        const pageText = typeof d?.text === "string" ? d.text.trim() : "";
-        if (!r.ok || !pageText) {
+        // Per-file failure isolation: one undecodable file (HEIC, corrupt
+        // download) counts as a failed page — it must not throw away pages
+        // that were already OCR'd.
+        try {
+          const { dataUrl, mediaType } = await downscaleImage(file);
+          const r = await fetch("/api/extract-price-list-image", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ image: dataUrl, mediaType }),
+          });
+          const d = await r.json().catch(() => ({}) as Record<string, unknown>);
+          const pageText = typeof d?.text === "string" ? d.text.trim() : "";
+          if (!r.ok || !pageText) {
+            failed++;
+            continue;
+          }
+          pages.push(pageText);
+        } catch {
           failed++;
-          continue;
         }
-        pages.push(pageText);
       }
       if (pages.length === 0) {
         setError("Couldn't read the photo(s) — paste the price list instead.");
@@ -185,8 +195,13 @@ export function IngestClient() {
           dollarsHigh: i.centsHigh != null ? centsToDollars(i.centsHigh) : "",
         })),
       );
+      // The route already drops non-positive totals; keep the client
+      // defensive too — the save schema requires a positive int, and a bad
+      // value here would make Save impossible.
       setStatedTotalCents(
-        typeof j.statedTotalCents === "number" ? j.statedTotalCents : null,
+        typeof j.statedTotalCents === "number" && j.statedTotalCents > 0
+          ? Math.round(j.statedTotalCents)
+          : null,
       );
       setExtractionMethod(
         j.extractionMethod === "claude" || j.extractionMethod === "naive"

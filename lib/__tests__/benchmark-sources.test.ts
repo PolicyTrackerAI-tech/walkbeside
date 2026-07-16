@@ -75,3 +75,36 @@ describe("fetchBenchmarkRecords staff exclusion", () => {
     expect(analyses.map((a) => a.userId)).toEqual(["family-1", "staff-1"]);
   });
 });
+
+describe("fetchBenchmarkRecords dedupe scope", () => {
+  it("gives founder_ingest rows a per-document dedupe scope; checker rows stay owner-scoped", async () => {
+    // Founder-ingested rows all carry the founder's one user id while each
+    // row is a different home's GPL — without a per-row scope, identical
+    // prices across homes (fixed state death-cert fees) would dedupe to n=1
+    // in the pipeline.
+    const admin = fakeClient({
+      price_list_analyses: {
+        data: [
+          {
+            id: "row-1",
+            extraction_method: "founder_ingest",
+            ...analysisRow("founder"),
+          },
+          {
+            id: "row-2",
+            extraction_method: "founder_ingest",
+            ...analysisRow("founder"),
+          },
+          { id: "row-3", extraction_method: "claude", ...analysisRow("family-1") },
+        ],
+      },
+      partner_members: { data: [] },
+    });
+    const { analyses } = await fetchBenchmarkRecords(admin);
+    expect(analyses.map((a) => a.dedupeScope)).toEqual([
+      "row-1",
+      "row-2",
+      undefined,
+    ]);
+  });
+});

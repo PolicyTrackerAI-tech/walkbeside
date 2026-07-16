@@ -166,12 +166,16 @@ export async function POST(req: Request) {
     );
   }
 
-  // Purge the public pages that render this metro's data so a founder
-  // promotion surfaces without a deploy — the city pages in the metro plus
-  // the index. (/funeral-homes/[zip] is dynamic and the tier API is
-  // 1h-cached; neither needs a purge.) Best-effort by design: the
-  // regional_benchmarks row is already published, so a revalidation failure
-  // must never turn a successful promotion into an error response.
+  // Purge the metro's city pages + the index. NOTE: as of Day 2 those pages
+  // are still fully static (modeled-only) and don't read regional_benchmarks
+  // — the purge is inert until Day 4 (sprint D4) wires them to
+  // benchmarksForZip with ISR. The hook ships with the write path so that
+  // once the pages read the store, a weekend promotion surfaces within the
+  // hour with no deploy and no change here. (/funeral-homes/[zip] is dynamic
+  // and the tier API is 1h-cached; neither needs a purge.) Best-effort by
+  // design: the regional_benchmarks row is already published, so a
+  // revalidation failure must never turn a successful promotion into an
+  // error response.
   try {
     for (const slug of citySlugsForMetro(body.scopeValue)) {
       revalidatePath(`/funeral-costs/${slug}`);

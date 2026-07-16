@@ -39,6 +39,17 @@ import { SMALL_SAMPLE_THRESHOLD } from "./partner-report";
 export interface AnalysisRecord {
   /** Owner — used only for dedupe, never surfaced. */
   userId: string;
+  /**
+   * Overrides userId as the dedupe scope. Family checker rows dedupe by
+   * OWNER (the same family re-checking the same quote counts once) — but
+   * founder-ingest rows all share the founder's one user id while each row
+   * is a DIFFERENT home's GPL, so owner-scoped dedupe would collapse two
+   * homes that print the same price (death certificates are a fixed state
+   * fee — every home in a state prints the identical per-copy total, and
+   * n would sit at 1 forever). Those rows dedupe per ingested document
+   * instead, exactly like the outreach feed's outreachId scope below.
+   */
+  dedupeScope?: string;
   /** Zip if captured (column added 2026-07-02; older rows have none). */
   zip?: string | null;
   items: Array<{
@@ -138,7 +149,7 @@ function collectObservations(
       const def = LINE_ITEMS.find((l) => l.id === item.matchedItemId);
       if (!def) continue;
 
-      const dedupeKey = `${rec.userId}|${item.matchedItemId}|${item.cents}`;
+      const dedupeKey = `${rec.dedupeScope ?? rec.userId}|${item.matchedItemId}|${item.cents}`;
       if (seen.has(dedupeKey)) continue;
       seen.add(dedupeKey);
 
