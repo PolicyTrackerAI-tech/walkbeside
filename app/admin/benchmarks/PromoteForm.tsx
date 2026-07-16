@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
+import { ZIP_REGIONS } from "@/lib/zip-regions";
+
+// benchmarksForZip matches metro scope_values against zip-regions labels
+// EXACTLY — a typo'd free-text label would publish a row no lookup ever hits
+// (a silent miss). The dropdown is built once from the same table the store
+// reads, so whatever the founder picks is a label lookups can actually match.
+const METRO_OPTIONS = Array.from(
+  new Set(Object.values(ZIP_REGIONS).map((r) => r.metro)),
+).sort((a, b) => a.localeCompare(b));
 
 /**
  * Inline promote-to-data-tier form for one sufficient metro group on
@@ -111,16 +120,28 @@ export function PromoteForm({
         <div>
           <Label
             htmlFor={`${idBase}-scope-value`}
-            hint="must exactly match the lib/zip-regions.ts metro label for store lookups to hit"
+            hint="labels come from lib/zip-regions.ts — store lookups match them exactly"
           >
             Scope value
           </Label>
-          <Input
+          <Select
             id={`${idBase}-scope-value`}
             value={scopeValue}
             onChange={(e) => setScopeValue(e.target.value)}
             required
-          />
+          >
+            {/* A group label that somehow isn't in today's table (e.g. rows
+                aggregated before a zip-regions relabel) still renders, so the
+                form can't strand a promotable group. */}
+            {!METRO_OPTIONS.includes(scopeValue) && (
+              <option value={scopeValue}>{scopeValue}</option>
+            )}
+            {METRO_OPTIONS.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
+          </Select>
         </div>
         <div>
           <Label htmlFor={`${idBase}-low`}>Fair low ($)</Label>

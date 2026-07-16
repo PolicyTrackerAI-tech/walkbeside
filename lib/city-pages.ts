@@ -10,6 +10,8 @@
  * funeral-home directory expands.
  */
 
+import { regionForZip } from "./zip-regions";
+
 export interface CityEntry {
   /** URL slug, e.g. "atlanta" (no state suffix unless disambiguation needed). */
   slug: string;
@@ -354,4 +356,17 @@ export function getCity(slug: string): CityEntry | undefined {
 
 export function listCitySlugs(): string[] {
   return CITIES.map((c) => c.slug);
+}
+
+/**
+ * City pages whose representative zip sits in the given zip-regions metro —
+ * i.e. the public pages that render that metro's pricing. Used by the
+ * benchmark promote endpoint to revalidate exactly the city pages a
+ * promotion changes (metro labels match exactly, same as
+ * lib/benchmarks-store.ts lookups).
+ */
+export function citySlugsForMetro(metro: string): string[] {
+  return CITIES.filter((c) => regionForZip(c.zipExample)?.metro === metro).map(
+    (c) => c.slug,
+  );
 }

@@ -29,6 +29,13 @@ export async function fetchBenchmarkRecords(admin: SupabaseClient): Promise<{
     analyses = ((data as Array<Record<string, unknown>> | null) ?? []).map(
       (r) => ({
         userId: String(r.user_id ?? ""),
+        // Founder-ingested rows all share the founder's user id but each is
+        // a DIFFERENT home's GPL — dedupe them per document (row id), like
+        // the outreach feed, or identical prices across homes (fixed state
+        // death-cert fees, common price points) would collapse to n=1.
+        ...(r.extraction_method === "founder_ingest" && typeof r.id === "string"
+          ? { dedupeScope: r.id }
+          : {}),
         zip: (r.zip as string | null) ?? null,
         items: Array.isArray(r.items)
           ? (r.items as AnalysisRecord["items"])
