@@ -37,7 +37,12 @@ export async function POST(req: Request) {
         feature: "eulogy",
         system: eulogySystem(tone),
         user: `Write a eulogy for the speaker to read aloud. Plain prose. Aim for ~${wordTarget} words (about ${durationMinutes} minute${durationMinutes === 1 ? "" : "s"} when spoken).\n\nFacts and stories the speaker shared:\n${lines}`,
-        maxTokens: 1600, // re-baselined 1200→1600 (sonnet-5 tokenizer)
+        // Sized to the LONGEST request the UI allows, not the average: 15
+        // minutes × 140 wpm = 2100 words ≈ ~3,600 sonnet-5 tokens. The old
+        // 1600 cap (and 1200 before it) silently cut every eulogy ≥ ~7
+        // minutes mid-sentence; callClaude now throws on that truncation
+        // (→ deterministic fallback), so the cap must clear the real range.
+        maxTokens: 3800,
         cacheSystem: true,
       });
     } catch {
