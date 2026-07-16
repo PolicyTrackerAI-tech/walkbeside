@@ -13,6 +13,11 @@ export function summarizeQuoteSystem(): string {
     "You will receive an email body from a funeral home that contains pricing.",
     "Extract a JSON object: { items: [{ name, cents }], total_cents, currency }.",
     "Cents must be integers. If a line item is given as a range, take the midpoint.",
+    // Same contract as priceListAnalysisSystem (fix 2026-07-16, eval-gated):
+    // the caller PREFERS a stated total over its own item sum, so a
+    // model-computed sum here would ride straight into the family's proposed
+    // quote carrying only arithmetic error.
+    "Include total_cents ONLY when the email itself states a total or all-in price. If no total is stated, OMIT total_cents — never compute or sum one yourself.",
     "Only output JSON. No prose.",
   ].join("\n");
 }
@@ -33,7 +38,12 @@ export function priceListAnalysisSystem(): string {
     "A floor price ('From $1,295', 'Starting at $95', '$895 and up', '$895+') is a single value — emit { name, cents } using the stated number; never invent an upper bound.",
     "A trailing unit ('$25 each', '$25/copy', '$150 per hour') means cents is the PER-UNIT price — emit that number, not a multiplied total; for counted per-each items also set qty to the count.",
     "Never emit an item for bare years, addresses, phone numbers, business hours, or accounting/payment lines (Balance due, Amount due, Subtotal, Deposit, Sales tax, gratuity) — but DO keep a real charge that merely contains such a word (Tax preparation, Paid notice in the paper).",
-    "If you also see a stated 'total' or 'grand total', include it as total_cents — otherwise sum the items. A 'grand total' outranks a 'subtotal'.",
+    // Contract fix 2026-07-16 (eval-gated): the old wording ("otherwise sum
+    // the items") invited the model to compute its own total, which the
+    // caller then treats as a DOCUMENT-STATED total and reconciles against —
+    // a model-summed total adds only arithmetic error (sonnet-5's literal
+    // instruction-following exposed this on 8/14 golden fixtures).
+    "Include total_cents ONLY when the document itself prints a total line ('total', 'grand total'); a 'grand total' outranks a 'subtotal'. If no total line is printed, OMIT total_cents entirely — never compute, estimate, or sum a total yourself.",
     "Only output JSON. No commentary.",
   ].join("\n");
 }

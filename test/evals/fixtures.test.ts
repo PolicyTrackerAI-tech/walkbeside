@@ -178,6 +178,15 @@ describe("eval golden fixtures", () => {
 
     it("matchedItemId claims agree with matchLineItem(cleanItemName(...))", () => {
       for (const item of f.expected.items) {
+        if (item.isRange) {
+          // Route invariant: selection-range items return early without ever
+          // calling matchLineItem — they can never carry a benchmark id.
+          expect(
+            item.matchedItemId,
+            `"${item.match}" is a range item — matchedItemId must be null`,
+          ).toBeNull();
+          continue;
+        }
         expect(
           benchmarkFor(item),
           `"${item.match}" → expected benchmark ${item.matchedItemId ?? "null"}`,

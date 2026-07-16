@@ -33,7 +33,7 @@ async function parseDoc(text: string): Promise<RawItem[]> {
         feature: "compare-bill",
         system: priceListAnalysisSystem(),
         user: text,
-        maxTokens: 1500,
+        maxTokens: 2000, // re-baselined 1500→2000 (sonnet-5 tokenizer)
         cacheSystem: true,
       });
       const parsed = JSON.parse(stripCodeFence(out)) as { items?: RawItem[] };

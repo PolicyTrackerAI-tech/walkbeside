@@ -22,7 +22,7 @@ The strategy is *deliberately* capital-light. We are an advice + data layer (gua
 |---|---|---|---|
 | **Infra — hosting** | Vercel (Next.js app), Supabase (Postgres + RLS + auth) | Free tier → low **tens of $/mo** | Traffic; flat for a long time |
 | **Infra — email** | Resend (send) + Postmark Inbound (receive) | Free / low tens of $/mo | Send volume |
-| **AI — per case** | Claude (`lib/claude.ts`, currently `claude-sonnet-4-6`): GPL vision OCR + analysis + outreach drafting + follow-ups | **~$1–2 per advocacy case** | Cases run |
+| **AI — per case** | Claude (`lib/claude.ts`, currently `claude-sonnet-5`; `claude-haiku-4-5` for cheap classification): GPL vision OCR + analysis + outreach drafting + follow-ups | **~$1–2 per advocacy case** | Cases run |
 | **AI — free tools** | Obituary/eulogy/analyzer drafts (trust features, not cost centers) | **~$0.02 / draft**; pennies/mo at pilot scale | Tool uses |
 | **Domain / DNS / misc SaaS** | honestfuneral.co, CRM spreadsheet/Airtable, analytics | Low tens of $/mo | Flat |
 | **Legal (one-time, lumpy)** | Startup counsel: anti-steering opinion, pilot agreement, MSA/order form, BAA template, ToS/privacy (see [`LAWYER_BRIEF.md`](LAWYER_BRIEF.md), [`HOSPICE_GTM.md`](HOSPICE_GTM.md) Part D.2) | **One-time $X,000s**, not recurring | Milestones, not volume |

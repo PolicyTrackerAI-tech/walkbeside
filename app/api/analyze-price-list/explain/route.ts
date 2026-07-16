@@ -93,7 +93,7 @@ export async function POST(req: Request) {
       feature: "line-item-explain",
       system: EXPLAIN_SYSTEM,
       user: JSON.stringify(grounding),
-      maxTokens: 300,
+      maxTokens: 400, // re-baselined 300→400 (sonnet-5 tokenizer)
     });
     if (out.length < 20) {
       return NextResponse.json({ explanation: fallback(), source: "fallback" });

@@ -105,11 +105,19 @@ export async function POST(req: Request) {
         feature: isEvalRun ? "eval" : "analyzer-extract",
         system: priceListAnalysisSystem(),
         user: text,
-        maxTokens: 1500,
+        maxTokens: 2000, // re-baselined 1500→2000 for the sonnet-5 tokenizer (~30% more tokens/text)
         cacheSystem: true,
         ...(evalModel ? { model: evalModel } : {}),
       });
-      extracted = JSON.parse(stripCodeFence(out));
+      const parsedOut = JSON.parse(stripCodeFence(out)) as {
+        items?: unknown;
+        total_cents?: number;
+      };
+      // Valid JSON but not the expected shape (a bare array, an {error}
+      // object, a quoted string) must degrade to the regex parser exactly
+      // like a parse throw — .map on undefined would 500 the family instead.
+      if (!Array.isArray(parsedOut.items)) throw new Error("unexpected shape");
+      extracted = parsedOut as { items: RawItem[]; total_cents?: number };
       extractionMethod = "claude";
     } catch {
       extracted = naiveExtract(text);
@@ -467,7 +475,7 @@ async function buildAdvocacySummary(input: {
       feature: input.isEvalRun ? "eval" : "advocacy-summary",
       system: priceListAdvocacySummarySystem(),
       user: JSON.stringify(findings),
-      maxTokens: 700,
+      maxTokens: 1000, // re-baselined 700→1000 (sonnet-5 tokenizer)
       cacheSystem: true,
       ...(input.evalModel ? { model: input.evalModel } : {}),
     });

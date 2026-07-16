@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         feature: "eulogy",
         system: eulogySystem(tone),
         user: `Write a eulogy for the speaker to read aloud. Plain prose. Aim for ~${wordTarget} words (about ${durationMinutes} minute${durationMinutes === 1 ? "" : "s"} when spoken).\n\nFacts and stories the speaker shared:\n${lines}`,
-        maxTokens: 1200,
+        maxTokens: 1600, // re-baselined 1200→1600 (sonnet-5 tokenizer)
         cacheSystem: true,
       });
     } catch {

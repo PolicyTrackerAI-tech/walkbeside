@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         feature: "obituary",
         system: obituarySystem(),
         user: `Write the obituary using these facts. Plain text, single paragraph, about ${words} words. ${shape}\n\n${lines}`,
-        maxTokens: 800,
+        maxTokens: 1100, // re-baselined 800→1100 (sonnet-5 tokenizer)
         cacheSystem: true,
       });
     } catch {

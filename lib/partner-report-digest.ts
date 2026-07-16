@@ -102,7 +102,7 @@ export async function buildOutcomesDigest(
       feature: "partner-digest",
       system: partnerOutcomesDigestSystem(partnerType),
       user: JSON.stringify(findings),
-      maxTokens: 300,
+      maxTokens: 400, // re-baselined 300→400 (sonnet-5 tokenizer)
     });
     const parsed = JSON.parse(stripCodeFence(out)) as { digest?: unknown };
     if (typeof parsed.digest !== "string" || !parsed.digest.trim()) {
