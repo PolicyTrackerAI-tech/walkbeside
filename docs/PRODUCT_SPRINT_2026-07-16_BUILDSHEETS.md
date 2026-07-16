@@ -28,11 +28,17 @@ family · fresh worktrees don't get `.env.local` — copy from
 
 ---
 
-## DAY 1 — Thu Jul 16 · `/admin/ingest-gpl` + rename-ready foundations (D2, D12)
+## DAY 1 — Thu Jul 16 · Eval harness, then the model behind it (D3)
 
-**Objective:** the founder can turn a GPL into a benchmark-feeding analysis
-row in 90 seconds, promotions refresh public pages without a deploy, and
-from today no new code hardcodes the brand name.
+*(Order swapped with the ingest day 2026-07-15, founder call: run the evals
+first so the extraction chain is measured — and on its verified model
+config — before the weekend trusts it with real GPL volume. This is also
+the sprint's designated ultracode day; the ingest day runs as a normal
+session on Friday.)*
+
+**Objective:** extraction quality becomes measurable, the measurement gates
+every future model/prompt change, and the sonnet-5/Haiku re-baseline ships
+only if the numbers say so.
 
 ### Pre-flight (30 min)
 1. `git worktree list` — remove stale sprint worktrees under
@@ -45,6 +51,71 @@ from today no new code hardcodes the brand name.
    "support@honestfuneral.co" } as const` (shapes final; values flip on
    Rename Day). Today: import it in everything NEW; do NOT sweep existing
    strings (that's Rename Day's grep, one atomic pass).
+
+### Tasks
+**1. Fixtures** — `test/evals/gpl/` : 12–15 fictional-but-realistic GPLs as
+`.txt` with paired `.expected.json`. Must cover: a clean itemized GPL; a
+bundled/package quote; selection ranges (caskets $995–$4,500); per-unit
+death certs with qty ("Death certificates (10) ... $250"); the embalming
+disclosure phrasings the rules suite pins (`lib/bundling-detection/__tests__/
+rules.test.ts` — reuse its scenarios so eval and unit fixtures agree); OCR
+noise (broken columns, `$ 1 , 2 9 5`); a stated total that contradicts the
+item sum; `docs/SAMPLE_GPL_DEMO.md`'s list (the demo must never regress).
+`expected.json` shape: `{ items: [{ match: "substring", matchedItemId?,
+cents?, qty?, isRange? }], statedTotalCents?, mustFlagRuleIds?: [],
+mustNotFlagRuleIds?: [] }`.
+
+**2. `scripts/eval-analyzer.mjs`** — plain Node, hits the REAL endpoint
+(`EVAL_BASE_URL ?? http://localhost:3000` + `/api/analyze-price-list`) so it
+scores the production pipeline end-to-end (a Node script can't import the TS
+libs — same constraint that made ingest an admin page). Sequential with a
+~6s delay (the route is rate-limited 12/min, `lib/rate-limit.ts`). Scores
+per fixture: item recall + precision on (matchedItemId, cents) pairs, qty
+detection, range detection, stated-total reconciliation, rule must/mustNot
+hits. Output: per-fixture table + aggregate, exit non-zero under a
+threshold flag (`--min-recall=0.9`). `npm run eval:analyzer` script in
+package.json. Run it; commit the output as `test/evals/BASELINE.md`
+(sonnet-4-6). Note in the README block: runs cost real API cents and appear
+in `/admin/ai-costs` under the analyzer features; not part of vitest/CI.
+
+**3. The re-baseline, behind the harness** — read `lib/claude.ts:9-21`
+first: it documents exactly why the string can't just be swapped (sonnet-5
+adaptive thinking spends inside `max_tokens`; tokenizer counts ~30% more).
+Consult the claude-api skill for current model ids/params. Changes:
+`CallOpts` gains `model?: string`; sonnet-5 config gets an explicit thinking
+setting + re-baselined `max_tokens` for the extraction features; Haiku 4.5
+on `app/api/subscription-finder/route.ts:61-63` (classification-shaped).
+Run the eval before/after on a branch; **ship only if ≥ baseline on every
+aggregate metric; otherwise revert to sonnet-4-6 and the harness alone is
+the day's deliverable — say so plainly in the PR.** Either way the PR body
+carries both eval outputs.
+
+### Acceptance gate
+`npm run eval:analyzer` reproducible against a dev server; BASELINE.md
+committed; `lib/brand.ts` exists (pre-flight); if the model changed, before/after tables in the PR and
+checker-pipeline + rules suites green; `/admin/ai-costs` shows the eval
+run's tokens.
+
+### Founder actions
+Commission the **TESS knockout** if not already done (gates Jul 27).
+Optional: skim BASELINE.md — the per-fixture failures are the honest map of
+what the checker still misses.
+
+### Cut inside Day 1
+Model re-baseline → next week (harness is the deliverable). Never cut the
+harness.
+
+---
+
+## DAY 2 — Fri Jul 17 · `/admin/ingest-gpl` + rename-ready foundations (D2, D12)
+
+**⚠ Weekend-critical, zero slack:** Saturday's data collection depends on
+this tool existing by tonight. If the day runs long, the cut lines below
+are the pressure valve — cut scope, never the date.
+
+**Objective:** the founder can turn a GPL into a benchmark-feeding analysis
+row in 90 seconds, and promotions refresh public pages without a deploy.
+(`lib/brand.ts` + worktree cleanup shipped with Day 1's pre-flight.)
 
 ### Tasks
 **1. `/admin/ingest-gpl` (the day's centerpiece).**
@@ -106,77 +177,17 @@ Mechanical suite green. Dev walkthrough: paste a sample GPL → parsed items
 render → edit one, unmatch one → Save → row visible in `/admin/benchmarks`
 groups with `founder_ingest` provenance → promote a group (n≥5 via repeated
 distinct ingests or the seeded data) → the matching city page updates after
-revalidate. `lib/brand.ts` exists and today's new files import it.
+revalidate.
 
 ### Founder actions today
 Evening: run one real Utah GPL through the tool on the preview deploy;
-confirm the review-table workflow feels fast enough for weekend volume.
-Commission the **TESS knockout** if not already done (gates Jul 27).
+confirm the review-table workflow feels fast enough for weekend volume
+(tomorrow depends on it).
 
 ### Cut inside Day 1
 Photo path → paste-only (the extract endpoint keeps working standalone).
 Metro dropdown → keep free text + a red warning banner. Never cut: the
-ingest save path + brand.ts.
-
----
-
-## DAY 2 — Fri Jul 17 · Eval harness, then the model behind it (D3)
-
-**Objective:** extraction quality becomes measurable, the measurement gates
-every future model/prompt change, and the sonnet-5/Haiku re-baseline ships
-only if the numbers say so.
-
-### Tasks
-**1. Fixtures** — `test/evals/gpl/` : 12–15 fictional-but-realistic GPLs as
-`.txt` with paired `.expected.json`. Must cover: a clean itemized GPL; a
-bundled/package quote; selection ranges (caskets $995–$4,500); per-unit
-death certs with qty ("Death certificates (10) ... $250"); the embalming
-disclosure phrasings the rules suite pins (`lib/bundling-detection/__tests__/
-rules.test.ts` — reuse its scenarios so eval and unit fixtures agree); OCR
-noise (broken columns, `$ 1 , 2 9 5`); a stated total that contradicts the
-item sum; `docs/SAMPLE_GPL_DEMO.md`'s list (the demo must never regress).
-`expected.json` shape: `{ items: [{ match: "substring", matchedItemId?,
-cents?, qty?, isRange? }], statedTotalCents?, mustFlagRuleIds?: [],
-mustNotFlagRuleIds?: [] }`.
-
-**2. `scripts/eval-analyzer.mjs`** — plain Node, hits the REAL endpoint
-(`EVAL_BASE_URL ?? http://localhost:3000` + `/api/analyze-price-list`) so it
-scores the production pipeline end-to-end (a Node script can't import the TS
-libs — same constraint that made ingest an admin page). Sequential with a
-~6s delay (the route is rate-limited 12/min, `lib/rate-limit.ts`). Scores
-per fixture: item recall + precision on (matchedItemId, cents) pairs, qty
-detection, range detection, stated-total reconciliation, rule must/mustNot
-hits. Output: per-fixture table + aggregate, exit non-zero under a
-threshold flag (`--min-recall=0.9`). `npm run eval:analyzer` script in
-package.json. Run it; commit the output as `test/evals/BASELINE.md`
-(sonnet-4-6). Note in the README block: runs cost real API cents and appear
-in `/admin/ai-costs` under the analyzer features; not part of vitest/CI.
-
-**3. The re-baseline, behind the harness** — read `lib/claude.ts:9-21`
-first: it documents exactly why the string can't just be swapped (sonnet-5
-adaptive thinking spends inside `max_tokens`; tokenizer counts ~30% more).
-Consult the claude-api skill for current model ids/params. Changes:
-`CallOpts` gains `model?: string`; sonnet-5 config gets an explicit thinking
-setting + re-baselined `max_tokens` for the extraction features; Haiku 4.5
-on `app/api/subscription-finder/route.ts:61-63` (classification-shaped).
-Run the eval before/after on a branch; **ship only if ≥ baseline on every
-aggregate metric; otherwise revert to sonnet-4-6 and the harness alone is
-the day's deliverable — say so plainly in the PR.** Either way the PR body
-carries both eval outputs.
-
-### Acceptance gate
-`npm run eval:analyzer` reproducible against a dev server; BASELINE.md
-committed; if the model changed, before/after tables in the PR and
-checker-pipeline + rules suites green; `/admin/ai-costs` shows the eval
-run's tokens.
-
-### Founder actions
-None required. Optional: skim BASELINE.md — the per-fixture failures are
-the honest map of what the checker still misses.
-
-### Cut inside Day 2
-Model re-baseline → next week (harness is the deliverable). Never cut the
-harness.
+ingest save path (the weekend is tomorrow).
 
 ---
 
@@ -616,8 +627,8 @@ old domain never stopped working — that's the design.
 
 | Day | Your actions |
 |---|---|
-| Thu 16 | Commission TESS (if not done) · evening: ingest one real GPL on preview |
-| Fri 17 | Optional: read BASELINE.md |
+| Thu 16 | Commission TESS (if not done) · optional: read BASELINE.md |
+| Fri 17 | Evening: ingest one real GPL on preview (the weekend depends on the tool) |
 | Sat–Sun | Utah CSV → import → vet · ingest GPLs · promote SLC/Provo · start CA |
 | Mon 20 | **Apply Migration A** (morning) · download CMS hospice CSV · run import |
 | Tue 21 | Click the verified section on the SLC city page once it's live |
