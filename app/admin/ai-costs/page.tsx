@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminPage } from "@/lib/admin-auth";
+import { estUsdForEvent, SONNET_5_INTRO_END } from "@/lib/ai-costs";
 
 export const metadata: Metadata = {
   title: "AI costs — admin",
@@ -14,14 +15,11 @@ export const metadata: Metadata = {
  * The AI cost ledger, feature × day (Day 4, P12). Read-only over
  * api_cost_events (RLS deny-all; service-role read behind the admin gate,
  * same pattern as /admin/benchmarks). Token counts are exact; the dollar
- * column is an ESTIMATE at claude-sonnet-4-6 list prices and exists to spot
- * a runaway feature, not to reconcile an invoice.
+ * column is an ESTIMATE priced per row by the model that served the call
+ * (lib/ai-costs.ts — the fleet is mixed since the 2026-07-16 tiering:
+ * sonnet-5 for extraction/drafting, haiku-4-5 for classification) and
+ * exists to spot a runaway feature, not to reconcile an invoice.
  */
-
-// claude-sonnet-4-6 list prices per million tokens (checked 2026-07-14).
-const USD_PER_M_INPUT = 3;
-const USD_PER_M_OUTPUT = 15;
-const USD_PER_M_CACHE_READ = 0.3;
 
 // Shown window: the most recent active days present in the ledger (derived
 // from the data, not the clock — the render stays pure) over the latest
@@ -31,6 +29,7 @@ const FETCH_LIMIT = 10_000;
 
 interface CostEvent {
   feature: string;
+  model: string | null;
   input_tokens: number;
   output_tokens: number;
   cache_read_tokens: number;
@@ -44,14 +43,8 @@ interface Agg {
   inputTokens: number;
   outputTokens: number;
   cacheReadTokens: number;
-}
-
-function estUsd(a: Pick<Agg, "inputTokens" | "outputTokens" | "cacheReadTokens">): number {
-  return (
-    (a.inputTokens / 1_000_000) * USD_PER_M_INPUT +
-    (a.outputTokens / 1_000_000) * USD_PER_M_OUTPUT +
-    (a.cacheReadTokens / 1_000_000) * USD_PER_M_CACHE_READ
-  );
+  /** Summed per event, each priced by its own model + day. */
+  estUsd: number;
 }
 
 const fmtUsd = (n: number) =>
@@ -68,7 +61,9 @@ export default async function AdminAiCostsPage() {
 
   const { data, error } = await admin
     .from("api_cost_events")
-    .select("feature, input_tokens, output_tokens, cache_read_tokens, created_at")
+    .select(
+      "feature, model, input_tokens, output_tokens, cache_read_tokens, created_at",
+    )
     .order("created_at", { ascending: false })
     .limit(FETCH_LIMIT);
 
@@ -88,11 +83,15 @@ export default async function AdminAiCostsPage() {
         inputTokens: 0,
         outputTokens: 0,
         cacheReadTokens: 0,
+        estUsd: 0,
       } as Agg);
     agg.calls += 1;
     agg.inputTokens += e.input_tokens ?? 0;
     agg.outputTokens += e.output_tokens ?? 0;
     agg.cacheReadTokens += e.cache_read_tokens ?? 0;
+    // Priced per event: one feature-day can mix models (e.g. a feature
+    // re-tiered mid-day), so the aggregate can't be priced after the fact.
+    agg.estUsd += estUsdForEvent(e);
     byKey.set(key, agg);
   }
   const allRows = [...byKey.values()].sort(
@@ -109,8 +108,9 @@ export default async function AdminAiCostsPage() {
       inputTokens: t.inputTokens + r.inputTokens,
       outputTokens: t.outputTokens + r.outputTokens,
       cacheReadTokens: t.cacheReadTokens + r.cacheReadTokens,
+      estUsd: t.estUsd + r.estUsd,
     }),
-    { calls: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0 },
+    { calls: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, estUsd: 0 },
   );
 
   return (
@@ -128,7 +128,7 @@ export default async function AdminAiCostsPage() {
               api_cost_events ledger (every call through lib/claude.ts logs
               one row). {total.calls} calls · {fmtTok(total.inputTokens)}{" "}
               input / {fmtTok(total.outputTokens)} output tokens · roughly{" "}
-              {fmtUsd(estUsd(total))} at list prices.
+              {fmtUsd(total.estUsd)} at per-model list prices.
             </p>
           </div>
 
@@ -181,7 +181,7 @@ export default async function AdminAiCostsPage() {
                           {fmtTok(r.cacheReadTokens)}
                         </td>
                         <td className="py-2 text-right">
-                          {fmtUsd(estUsd(r))}
+                          {fmtUsd(r.estUsd)}
                         </td>
                       </tr>
                     ))}
@@ -189,10 +189,11 @@ export default async function AdminAiCostsPage() {
                 </table>
               </div>
               <p className="text-xs text-ink-muted mt-3">
-                Est. cost = tokens × claude-sonnet-4-6 list prices ($
-                {USD_PER_M_INPUT}/M input, ${USD_PER_M_OUTPUT}/M output, $
-                {USD_PER_M_CACHE_READ}/M cache reads) — a triage number, not a
-                bill.
+                Est. cost = each call&rsquo;s tokens × the list prices of the
+                model that served it (sonnet-5 intro-priced through{" "}
+                {SONNET_5_INTRO_END}; haiku for classification; unknown models
+                priced at the most expensive tier so a surprise can only read
+                high) — a triage number, not a bill.
               </p>
             </Card>
           )}
