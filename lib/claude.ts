@@ -90,6 +90,10 @@ export interface CallOpts {
  * through: one messages.create + usage recorded to api_cost_events + one
  * structured log line, then textOf(). Call sites with non-string content
  * (vision blocks) keep calling client() directly and add recordUsage().
+ *
+ * CONTRACT: throws on API failure AND on max_tokens truncation — a cut-off
+ * response is never returned as success. Every caller must wrap in try/catch
+ * with a deterministic fallback (all ten current callers do).
  */
 export async function callClaude(o: CallOpts): Promise<string> {
   const msg = await client().messages.create(
@@ -114,18 +118,25 @@ export async function callClaude(o: CallOpts): Promise<string> {
     },
     o.timeoutMs ? { timeout: o.timeoutMs, maxRetries: 0 } : undefined,
   );
-  // Truncation is otherwise invisible: JSON callers surface it as a parse
-  // failure, but prose callers (obituary/eulogy/draft-letter) would serve a
-  // mid-sentence draft as if complete. Log-only — the caps were re-baselined
-  // so this should be rare; a recurring feature here means its cap is wrong.
+  // A response cut off at max_tokens is a FAILED call, not a short success:
+  // JSON callers would fail at JSON.parse anyway, but prose callers
+  // (obituary/eulogy/draft-letter/explain) would otherwise serve a
+  // mid-sentence draft to a grieving family as if complete. Every caller
+  // wraps callClaude in try/catch with a deterministic fallback, so throwing
+  // routes truncation into the same safety net as an API outage. The usage
+  // is still recorded first — truncated calls are still billed calls. A
+  // recurring feature in this log means that feature's cap is mis-sized.
+  await persistUsage(o.feature, msg, o.negotiationId);
   if (msg.stop_reason === "max_tokens") {
     logWarn("ai.truncated_at_max_tokens", {
       feature: o.feature,
       model: msg.model,
       maxTokens: o.maxTokens ?? 1300,
     });
+    throw new Error(
+      `Claude response truncated at max_tokens (feature: ${o.feature})`,
+    );
   }
-  await persistUsage(o.feature, msg, o.negotiationId);
   return textOf(msg);
 }
 
