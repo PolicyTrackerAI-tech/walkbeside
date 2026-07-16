@@ -1,0 +1,57 @@
+{
+  "description": "Embalming charged with a false 'required by state law' claim (exact phrasing pinned in rules.test.ts) — embalming-no-disclosure must fire at violation severity; six unremarkable fair-priced companions.",
+  "items": [
+    {
+      "match": "basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 219500
+    },
+    {
+      "match": "embalming",
+      "matchedItemId": "embalming",
+      "cents": 89500,
+      "name": "Embalming — required by state law"
+    },
+    {
+      "match": "transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 32500
+    },
+    {
+      "match": "visitation",
+      "matchedItemId": "viewing",
+      "cents": 42500,
+      "name": "Viewing and visitation"
+    },
+    {
+      "match": "graveside",
+      "matchedItemId": "graveside",
+      "cents": 30000,
+      "name": "Graveside service"
+    },
+    {
+      "match": "hearse",
+      "matchedItemId": "hearse",
+      "cents": 35000,
+      "name": "Hearse (local)"
+    },
+    {
+      "match": "register book",
+      "matchedItemId": "register-book",
+      "cents": 4500
+    }
+  ],
+  "mustFlagRuleIds": [
+    "embalming-no-disclosure"
+  ],
+  "mustNotFlagRuleIds": [
+    "vault-required-by-law-claim",
+    "casket-required-by-law-claim",
+    "declinable-item-required-by-law-claim",
+    "embalming-on-no-viewing-arrangement",
+    "cash-advance-no-disclosure",
+    "basic-services-fee-high",
+    "predatory-line-items",
+    "no-gpl-attestation"
+  ]
+}

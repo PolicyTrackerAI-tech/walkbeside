@@ -1,0 +1,79 @@
+{
+  "description": "Cremation statement: ten items summing to $4,000 with Subtotal $4,000.00 and Grand total $4,850.00 (grand total outranks subtotal, kept because it is above the sum but under 3x) — Subtotal, Grand total, and Balance due must not become items",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 184500
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 32500,
+      "name": "Transfer of remains to the funeral home"
+    },
+    {
+      "match": "Crematory fee",
+      "matchedItemId": "cremation-process-fee",
+      "cents": 39500
+    },
+    {
+      "match": "Cremation container",
+      "matchedItemId": "cremation-container",
+      "cents": 19500,
+      "name": "Cremation container (cardboard)"
+    },
+    {
+      "match": "chapel",
+      "matchedItemId": "service-facility",
+      "cents": 49500,
+      "name": "Use of chapel for memorial service"
+    },
+    {
+      "match": "Witness cremation",
+      "matchedItemId": "witness-cremation-fee",
+      "cents": 17500,
+      "name": "Witness cremation fee"
+    },
+    {
+      "match": "Urn",
+      "matchedItemId": "urn",
+      "cents": 25000,
+      "name": "Urn (selected from catalog)"
+    },
+    {
+      "match": "Memorial programs",
+      "matchedItemId": "programs",
+      "cents": 15000,
+      "name": "Memorial programs (set of 100)"
+    },
+    {
+      "match": "Register book",
+      "matchedItemId": "register-book",
+      "cents": 4500
+    },
+    {
+      "match": "death certificates",
+      "matchedItemId": "death-cert",
+      "cents": 12500,
+      "qty": 5,
+      "name": "Certified death certificates (5)"
+    }
+  ],
+  "statedTotalCents": 485000,
+  "mustFlagRuleIds": [
+    "third-party-merchandise-rights",
+    "no-gpl-attestation"
+  ],
+  "mustNotFlagRuleIds": [
+    "cash-advance-no-disclosure",
+    "death-certificate-marked-up",
+    "vault-required-for-cremation",
+    "casket-required-for-direct-cremation",
+    "alternative-container-overpriced",
+    "viewing-witness-id-fee-tied-to-cremation",
+    "rental-casket-sold-as-purchase",
+    "predatory-line-items",
+    "service-charge-bundled"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "description": "Nine priced burial items summing to $11,910 against a stated Total line of $1,200 (far below, e.g. OCR dropped digits) — the reconciled total must be the item sum, not the stated total",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 249500
+    },
+    {
+      "match": "Embalming",
+      "matchedItemId": "embalming",
+      "cents": 89500
+    },
+    {
+      "match": "cosmetology",
+      "matchedItemId": "body-prep",
+      "cents": 39500,
+      "name": "Dressing, cosmetology, and casketing"
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 49500,
+      "name": "Transfer of remains to funeral home"
+    },
+    {
+      "match": "facilities and staff",
+      "matchedItemId": "service-facility",
+      "cents": 99500,
+      "name": "Use of facilities and staff for the funeral ceremony"
+    },
+    {
+      "match": "Hearse",
+      "matchedItemId": "hearse",
+      "cents": 39500,
+      "name": "Hearse (local)"
+    },
+    {
+      "match": "Limousine",
+      "matchedItemId": "limo",
+      "cents": 45000
+    },
+    {
+      "match": "Metal casket",
+      "matchedItemId": "casket-metal",
+      "cents": 399500,
+      "name": "Metal casket (20-gauge steel)"
+    },
+    {
+      "match": "burial vault",
+      "matchedItemId": "vault",
+      "cents": 179500,
+      "name": "Concrete burial vault"
+    }
+  ],
+  "statedTotalCents": 120000,
+  "mustFlagRuleIds": [
+    "third-party-merchandise-rights",
+    "dressing-casketing-billed-on-top-of-prep"
+  ],
+  "mustNotFlagRuleIds": [
+    "predatory-line-items",
+    "embalming-no-disclosure",
+    "casket-required-for-direct-cremation",
+    "vault-required-for-cremation",
+    "casket-required-by-law-claim",
+    "vault-required-by-law-claim",
+    "basic-services-fee-high",
+    "service-charge-bundled",
+    "no-gpl-attestation"
+  ]
+}

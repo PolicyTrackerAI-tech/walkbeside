@@ -1,0 +1,59 @@
+{
+  "description": "Bad phone-photo OCR: dot leaders, a spaced-digit price, a name/price split across two lines, page-artifact and phone-number noise lines, and a footnote-marked price.",
+  "items": [
+    {
+      "match": "services of funeral director",
+      "matchedItemId": null,
+      "cents": 199500,
+      "name": "Basic services of funeral director and staff"
+    },
+    {
+      "match": "embalming",
+      "matchedItemId": "embalming",
+      "cents": 89500
+    },
+    {
+      "match": "dressing",
+      "matchedItemId": "body-prep",
+      "cents": 35000,
+      "name": "Dressing and cosmetology"
+    },
+    {
+      "match": "transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 39500
+    },
+    {
+      "match": "staff for funeral",
+      "matchedItemId": "service-facility",
+      "cents": 99500,
+      "name": "Use of facilities and staff for funeral ceremony"
+    },
+    {
+      "match": "visitation",
+      "matchedItemId": "viewing",
+      "cents": 42500,
+      "name": "Evening visitation"
+    },
+    {
+      "match": "hearse",
+      "matchedItemId": "hearse",
+      "cents": 37500
+    },
+    {
+      "match": "acknowledgement",
+      "matchedItemId": "acknowledgement-cards",
+      "cents": 2200,
+      "name": "Acknowledgement cards (box of 25)"
+    }
+  ],
+  "mustFlagRuleIds": [
+    "embalming-no-disclosure",
+    "dressing-casketing-billed-on-top-of-prep"
+  ],
+  "mustNotFlagRuleIds": [
+    "no-gpl-attestation",
+    "predatory-line-items",
+    "third-party-merchandise-rights"
+  ]
+}

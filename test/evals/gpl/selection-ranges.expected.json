@@ -1,0 +1,60 @@
+{
+  "description": "Selection ranges: a dash range (Caskets $995 - $4,500), a worded from/to range (Urns), and a between/and range (outer burial containers) must extract as isRange with centsLow/centsHigh and no single cents, alongside four normal single-priced items; no total line.",
+  "items": [
+    {
+      "match": "Basic services fee",
+      "matchedItemId": "basic-services",
+      "cents": 219500
+    },
+    {
+      "match": "Embalming",
+      "matchedItemId": "embalming",
+      "cents": 89500,
+      "name": "Embalming (not required by law; family authorized in writing)"
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 32500
+    },
+    {
+      "match": "Hearse",
+      "matchedItemId": "hearse",
+      "cents": 35000,
+      "name": "Hearse and driver (local)"
+    },
+    {
+      "match": "Caskets",
+      "matchedItemId": null,
+      "isRange": true,
+      "centsLow": 99500,
+      "centsHigh": 450000
+    },
+    {
+      "match": "Urns",
+      "matchedItemId": null,
+      "isRange": true,
+      "centsLow": 9500,
+      "centsHigh": 120000
+    },
+    {
+      "match": "Outer burial containers",
+      "matchedItemId": null,
+      "isRange": true,
+      "centsLow": 80000,
+      "centsHigh": 1000000
+    }
+  ],
+  "mustFlagRuleIds": [
+    "third-party-merchandise-rights"
+  ],
+  "mustNotFlagRuleIds": [
+    "embalming-no-disclosure",
+    "vault-required-for-cremation",
+    "vault-required-by-law-claim",
+    "casket-required-by-law-claim",
+    "protective-casket-pitched",
+    "predatory-line-items",
+    "no-gpl-attestation"
+  ]
+}

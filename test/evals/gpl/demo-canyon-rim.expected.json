@@ -1,0 +1,127 @@
+{
+  "description": "The sales-demo GPL (docs/sales/SAMPLE_GPL_DEMO.md verbatim) — 18 priced lines with dot leaders, a two-line wrapped item, per-day and per-copy rates, deliberately no total line; the demo must never regress.",
+  "items": [
+    {
+      "match": "Basic services of funeral director",
+      "matchedItemId": null,
+      "cents": 349500,
+      "name": "Basic services of funeral director and staff"
+    },
+    {
+      "match": "Embalming",
+      "matchedItemId": "embalming",
+      "cents": 139500
+    },
+    {
+      "match": "Other preparation",
+      "matchedItemId": "body-prep",
+      "cents": 59500,
+      "name": "Other preparation of the body (cosmetology, dressing)"
+    },
+    {
+      "match": "Refrigeration",
+      "matchedItemId": "refrigeration-shelter",
+      "cents": 49500,
+      "name": "Refrigeration / sheltering of remains (per day)"
+    },
+    {
+      "match": "staff for viewing",
+      "matchedItemId": "viewing",
+      "cents": 89500,
+      "name": "Use of facilities and staff for viewing"
+    },
+    {
+      "match": "staff for funeral ceremony",
+      "matchedItemId": "service-facility",
+      "cents": 109500,
+      "name": "Use of facilities and staff for funeral ceremony"
+    },
+    {
+      "match": "Transfer of remains",
+      "matchedItemId": "transfer",
+      "cents": 59500,
+      "name": "Transfer of remains to funeral home"
+    },
+    {
+      "match": "Hearse",
+      "matchedItemId": "hearse",
+      "cents": 52500
+    },
+    {
+      "match": "Utility vehicle",
+      "matchedItemId": null,
+      "cents": 29500
+    },
+    {
+      "match": "Homestead",
+      "matchedItemId": "casket-metal",
+      "cents": 489500,
+      "name": "Casket — \"Homestead\" solid oak"
+    },
+    {
+      "match": "Protective sealer",
+      "matchedItemId": "casket-metal",
+      "cents": 79500,
+      "name": "Protective sealer casket upgrade"
+    },
+    {
+      "match": "Outside casket handling",
+      "matchedItemId": "service-facility",
+      "cents": 49500,
+      "name": "Outside casket handling fee (caskets not purchased from Canyon Rim Memorial Chapel)"
+    },
+    {
+      "match": "Guardian",
+      "matchedItemId": "vault",
+      "cents": 239500,
+      "name": "Burial vault — \"Guardian\" protective"
+    },
+    {
+      "match": "Register book",
+      "matchedItemId": "register-book",
+      "cents": 12500
+    },
+    {
+      "match": "Acknowledgement cards",
+      "matchedItemId": "acknowledgement-cards",
+      "cents": 9500,
+      "name": "Acknowledgement cards (box of 25)"
+    },
+    {
+      "match": "Memorial folders",
+      "matchedItemId": "programs",
+      "cents": 39500,
+      "name": "Memorial folders / programs (100)"
+    },
+    {
+      "match": "Obituary placement",
+      "matchedItemId": "obituary-newspaper",
+      "cents": 35000,
+      "name": "Obituary placement service"
+    },
+    {
+      "match": "Death certificate handling",
+      "matchedItemId": null,
+      "cents": 4500,
+      "name": "Death certificate handling (per certified copy)"
+    }
+  ],
+  "mustFlagRuleIds": [
+    "embalming-no-disclosure",
+    "cash-advance-no-disclosure",
+    "protective-casket-pitched",
+    "predatory-line-items",
+    "third-party-merchandise-rights",
+    "dressing-casketing-billed-on-top-of-prep"
+  ],
+  "mustNotFlagRuleIds": [
+    "casket-required-for-direct-cremation",
+    "vault-required-for-cremation",
+    "casket-required-by-law-claim",
+    "vault-required-by-law-claim",
+    "basic-services-fee-high",
+    "service-charge-bundled",
+    "no-gpl-attestation",
+    "cash-advance-item-above-benchmark"
+  ]
+}
