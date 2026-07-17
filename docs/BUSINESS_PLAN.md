@@ -366,7 +366,7 @@ assignment. Grief-phase features come later; admission-week is first.
 5. **The channel's scar tissue is our entry ticket.** Grace's 2019 collapse (§4.7)
    taught hospices exactly what to fear; a vendor architecturally incapable of the
    Grace failure is not just acceptable — it is the compliant answer to a question
-   (["who should we call?"](MR p5)) that hospice staff are ethically barred from
+   ("who should we call?" — MR p5) that hospice staff are ethically barred from
    answering with a referral.
 
 ### 4.6 Market size — bottom-up, honestly
@@ -841,7 +841,7 @@ business).
 
 Families: nothing, ever, for anything. Funeral homes: nothing — no placement, no
 leads, no "featured" listings, no data sales. Insurers: nothing — no license, no
-concierge contract, no data feed. Media/researchers/公众: the Index and the public
+concierge contract, no data feed. Media, researchers, and the public: the Index and the public
 dataset stay free and citable (that's the citation engine; monetizing it would
 shrink the moat it builds). These aren't concessions; they are what the paid
 product's buyer is buying — a partner whose neutrality survives diligence.
