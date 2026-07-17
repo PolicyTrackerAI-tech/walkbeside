@@ -324,14 +324,8 @@ export async function POST(req: Request) {
       // provenance columns from 2026-07-13-portal-identity.sql; contributed is
       // the consent flag from 2026-07-20-hospices-consent.sql (absent in the
       // body → false: no checkbox shown means no consent given). All ride the
-      // first attempt only — if that fails on a pre-migration schema, fall
-      // back to the legacy shape rather than silently losing the analysis.
-      // The fallback lands contributed NULL even for a NEW submission with an
-      // unchecked box — acceptable only because the fallback exists solely
-      // for pre-migration schemas, where the consent column (and the filter
-      // that reads it) doesn't exist yet either. Persistence stays
-      // best-effort: if both inserts fail, the analysis response still
-      // returns.
+      // first attempt only. Persistence stays best-effort: if no insert
+      // lands, the analysis response still returns.
       let insertedId: string | null = null;
       const { data: inserted, error: insertError } = await supabase
         .from("price_list_analyses")
@@ -345,12 +339,26 @@ export async function POST(req: Request) {
         .select("id")
         .single();
       if (insertError) {
-        const { data: legacyInserted } = await supabase
-          .from("price_list_analyses")
-          .insert(row)
-          .select("id")
-          .single();
-        insertedId = legacyInserted?.id ?? null;
+        // The legacy-shape fallback exists solely for pre-migration schemas
+        // (unknown column: PostgREST PGRST204 / Postgres 42703 — also seen
+        // for a few minutes of schema-cache lag right after a migration).
+        // It can't record `contributed`, so the row would land NULL — which
+        // lib/benchmark-sources.ts aggregates as a grandfathered legacy row.
+        // That's only tolerable when the family actually consented; for a
+        // decline (or a consent-less caller, treated as a decline above),
+        // dropping the best-effort persist is the acceptable failure mode —
+        // aggregating a declined row never is. Non-schema errors don't
+        // retry: a transient failure must not launder the consent flag.
+        const missingColumn =
+          insertError.code === "PGRST204" || insertError.code === "42703";
+        if (missingColumn && contributed === true) {
+          const { data: legacyInserted } = await supabase
+            .from("price_list_analyses")
+            .insert(row)
+            .select("id")
+            .single();
+          insertedId = legacyInserted?.id ?? null;
+        }
       } else {
         insertedId = inserted?.id ?? null;
       }

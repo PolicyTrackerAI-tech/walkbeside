@@ -309,9 +309,12 @@ async function main() {
   {
     const PAGE = 1000;
     for (let from = 0; ; from += PAGE) {
+      // Ordered: OFFSET paging without ORDER BY has no stable row order, and
+      // an overlapped/skipped page would corrupt the insert/update counts.
       const { data, error } = await admin
         .from("hospices")
         .select("ccn")
+        .order("ccn")
         .range(from, from + PAGE - 1);
       if (error) {
         die(

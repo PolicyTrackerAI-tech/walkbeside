@@ -38,13 +38,17 @@ export function ApplyForm({
         const body = (await r.json()) as {
           hospices?: { name: string; city: string | null; state: string | null }[];
         };
-        setSuggestions(
-          (body.hospices ?? []).map((h) =>
-            [h.name, [h.city, h.state].filter(Boolean).join(", ")]
-              .filter(Boolean)
-              .join(" — "),
+        // Deduped: CMS chains can list several CCNs under one name+city, and
+        // identical datalist options (also React keys) are useless noise.
+        setSuggestions([
+          ...new Set(
+            (body.hospices ?? []).map((h) =>
+              [h.name, [h.city, h.state].filter(Boolean).join(", ")]
+                .filter(Boolean)
+                .join(" — "),
+            ),
           ),
-        );
+        ]);
       } catch {
         // Suggestions are a nicety — typing free text is the real path.
       }

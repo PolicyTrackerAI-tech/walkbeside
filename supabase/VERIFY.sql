@@ -1,7 +1,7 @@
 -- Post-BOOTSTRAP sanity check. Run in the prod Supabase SQL editor AFTER
 -- pasting BOOTSTRAP.sql, and paste the output back. Read-only.
 --
--- Expect ~16 tables, every one with rls_enabled = true. Most have
+-- Expect 19 tables, every one with rls_enabled = true. Most have
 -- policies >= 1 (planning_signups has 1 insert-only policy; funeral_homes has
 -- 1 read policy + column grants; the rest are owner-scoped) — EXCEPT the
 -- deny-all service-role-only tables, which correctly show policies = 0:

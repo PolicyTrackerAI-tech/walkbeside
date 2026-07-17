@@ -61,9 +61,11 @@ export async function GET(req: Request) {
     );
   } catch {
     // Pre-migration schema or a transient read failure — an empty list keeps
-    // the autocomplete quiet instead of erroring the form (never a 500).
+    // the autocomplete quiet instead of erroring the form (never a 500). But
+    // NOT cached: a failure-shaped empty pinned for an hour would keep a
+    // query looking blank long after the table (or the connection) recovers.
     return NextResponse.json(EMPTY, {
-      headers: { "Cache-Control": "public, max-age=3600" },
+      headers: { "Cache-Control": "no-store" },
     });
   }
 }
