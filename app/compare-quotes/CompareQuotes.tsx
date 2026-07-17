@@ -42,6 +42,11 @@ export function CompareQuotes() {
   ]);
   const [zip, setZip] = useState("");
   const [busy, setBusy] = useState(false);
+  // Explicit opt-in to contribute these checks' de-identified prices to the
+  // benchmark feed — one box for the whole comparison (every quote here is
+  // the same family's own gathered data). Unchecked by default; without it
+  // the route stores contributed=false and the rows never feed aggregation.
+  const [contribute, setContribute] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<(SlotResult | null)[] | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
@@ -71,7 +76,11 @@ export function CompareQuotes() {
           const r = await fetch("/api/analyze-price-list", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ text: s.text, zip: zip || undefined }),
+            body: JSON.stringify({
+              text: s.text,
+              zip: zip || undefined,
+              contributed: contribute,
+            }),
           });
           if (!r.ok) return null;
           return (await r.json()) as SlotResult;
@@ -176,10 +185,23 @@ export function CompareQuotes() {
                 {error}
               </div>
             )}
+            <label className="mt-5 flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={contribute}
+                onChange={(e) => setContribute(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-[var(--primary-deep,#2f5d50)] shrink-0"
+              />
+              <span className="text-sm text-ink-soft">
+                Add my de-identified prices to the public fair-price data
+                &mdash; optional. Your name, contact details, and anything
+                personal are never included either way.
+              </span>
+            </label>
             <Button
               onClick={compare}
               disabled={busy || filled.length < 2}
-              className="mt-5"
+              className="mt-4"
             >
               {busy ? "Checking each quote…" : "Compare the quotes"}
             </Button>
