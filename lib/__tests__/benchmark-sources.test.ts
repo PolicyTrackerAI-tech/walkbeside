@@ -76,6 +76,32 @@ describe("fetchBenchmarkRecords staff exclusion", () => {
   });
 });
 
+describe("fetchBenchmarkRecords contribute consent", () => {
+  it("excludes contributed=false; keeps true, NULL, and pre-migration rows", async () => {
+    // Three-state pin (2026-07-20-hospices-consent.sql): false = the family
+    // explicitly declined (excluded); true = consented; NULL — and absent,
+    // on a pre-migration schema where select(*) returns no such key — is a
+    // legacy row grandfathered under the original disclosure (included).
+    const admin = fakeClient({
+      price_list_analyses: {
+        data: [
+          { contributed: true, ...analysisRow("consented") },
+          { contributed: false, ...analysisRow("declined") },
+          { contributed: null, ...analysisRow("legacy-null") },
+          analysisRow("pre-migration"),
+        ],
+      },
+      partner_members: { data: [] },
+    });
+    const { analyses } = await fetchBenchmarkRecords(admin);
+    expect(analyses.map((a) => a.userId)).toEqual([
+      "consented",
+      "legacy-null",
+      "pre-migration",
+    ]);
+  });
+});
+
 describe("fetchBenchmarkRecords dedupe scope", () => {
   it("gives founder_ingest rows a per-document dedupe scope; checker rows stay owner-scoped", async () => {
     // Founder-ingested rows all carry the founder's one user id while each

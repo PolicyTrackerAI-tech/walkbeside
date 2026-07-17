@@ -43,6 +43,12 @@ const Body = z.object({
   // Optional referral attribution (HF-XXXXXX) remembered on-device from a
   // ?ref= visit. Reporting-only; validated + resolved server-side.
   referralCode: z.string().max(20).optional(),
+  // Explicit "add my de-identified prices to the public fair-price data"
+  // opt-in (D8). Optional so callers without the checkbox (compare-quotes,
+  // the portal coordinator check) keep working — absent is treated as false
+  // below: no checkbox shown means no consent given, and only true or a
+  // provably pre-consent NULL row ever feeds the benchmark aggregation.
+  contributed: z.boolean().optional(),
   // Eval-harness knobs (scripts/eval-analyzer.mjs). Honored ONLY on a dev
   // server (NODE_ENV !== "production") — a production build silently ignores
   // both, so no public caller can pick our model or re-tag our cost ledger.
@@ -87,7 +93,7 @@ export async function POST(req: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
-  const { text, zip, serviceTypeHint, referralCode } = parsed.data;
+  const { text, zip, serviceTypeHint, referralCode, contributed } = parsed.data;
   const isEvalRun =
     process.env.NODE_ENV !== "production" && parsed.data.evalRun === true;
   const evalModel = isEvalRun ? parsed.data.evalModel : undefined;
@@ -315,11 +321,17 @@ export async function POST(req: Request) {
       };
       // zip drives the benchmark pipeline's regional aggregation (column from
       // 2026-07-02-benchmark-zip.sql); confidence/extraction_method are the
-      // provenance columns from 2026-07-13-portal-identity.sql. All three ride
-      // the first attempt only — if that fails on a pre-migration schema, fall
+      // provenance columns from 2026-07-13-portal-identity.sql; contributed is
+      // the consent flag from 2026-07-20-hospices-consent.sql (absent in the
+      // body → false: no checkbox shown means no consent given). All ride the
+      // first attempt only — if that fails on a pre-migration schema, fall
       // back to the legacy shape rather than silently losing the analysis.
-      // Persistence stays best-effort: if both inserts fail, the analysis
-      // response still returns.
+      // The fallback lands contributed NULL even for a NEW submission with an
+      // unchecked box — acceptable only because the fallback exists solely
+      // for pre-migration schemas, where the consent column (and the filter
+      // that reads it) doesn't exist yet either. Persistence stays
+      // best-effort: if both inserts fail, the analysis response still
+      // returns.
       let insertedId: string | null = null;
       const { data: inserted, error: insertError } = await supabase
         .from("price_list_analyses")
@@ -328,6 +340,7 @@ export async function POST(req: Request) {
           zip: zip ?? null,
           confidence,
           extraction_method: extractionMethod,
+          contributed: contributed ?? false,
         })
         .select("id")
         .single();

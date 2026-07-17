@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "seed:demo": "node --env-file-if-exists=.env.local scripts/seed-demo.mjs",
     "import:homes": "node --env-file-if-exists=.env.local scripts/import-funeral-homes.mjs",
+    "import:hospices": "node --env-file-if-exists=.env.local scripts/import-hospices.mjs",
     "smoke:check": "node --env-file-if-exists=.env.local scripts/smoke-check.mjs",
     "build:bootstrap": "node scripts/build-bootstrap-sql.mjs",
     "eval:analyzer": "node scripts/eval-analyzer.mjs",

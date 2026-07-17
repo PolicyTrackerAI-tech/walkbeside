@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
@@ -16,6 +16,44 @@ export function ApplyForm({
   const [email, setEmail] = useState("");
   const [notes, setNotes] = useState("");
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  // CMS-directory suggestions for the org field (hospices only). Purely
+  // additive — a datalist never restricts what can be typed, so an org that
+  // isn't in the CMS file (or an employer) still applies with free text.
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  // Suggestions render only while this holds (gated in the JSX below, so the
+  // effect never has to clear state synchronously).
+  const suggestible = type === "hospice" && org.trim().length >= 2;
+
+  useEffect(() => {
+    if (!suggestible) return;
+    const controller = new AbortController();
+    const t = setTimeout(async () => {
+      try {
+        const r = await fetch(
+          `/api/hospices/search?q=${encodeURIComponent(org.trim().slice(0, 80))}`,
+          { signal: controller.signal },
+        );
+        if (!r.ok) return;
+        const body = (await r.json()) as {
+          hospices?: { name: string; city: string | null; state: string | null }[];
+        };
+        setSuggestions(
+          (body.hospices ?? []).map((h) =>
+            [h.name, [h.city, h.state].filter(Boolean).join(", ")]
+              .filter(Boolean)
+              .join(" — "),
+          ),
+        );
+      } catch {
+        // Suggestions are a nicety — typing free text is the real path.
+      }
+    }, 250);
+    return () => {
+      controller.abort();
+      clearTimeout(t);
+    };
+  }, [org, type, suggestible]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,7 +101,20 @@ export function ApplyForm({
         <div className="grid sm:grid-cols-2 gap-3">
           <div>
             <Label htmlFor="org">Organization</Label>
-            <Input id="org" value={org} maxLength={120} required onChange={(e) => setOrg(e.target.value)} />
+            <Input
+              id="org"
+              value={org}
+              maxLength={120}
+              required
+              list="hospice-suggestions"
+              autoComplete="off"
+              onChange={(e) => setOrg(e.target.value)}
+            />
+            <datalist id="hospice-suggestions">
+              {(suggestible ? suggestions : []).map((s) => (
+                <option key={s} value={s} />
+              ))}
+            </datalist>
           </div>
           <div>
             <Label htmlFor="type">Type</Label>

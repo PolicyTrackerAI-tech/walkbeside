@@ -26,8 +26,14 @@ export async function fetchBenchmarkRecords(admin: SupabaseClient): Promise<{
       .select("*")
       .order("created_at", { ascending: false })
       .limit(2000);
-    analyses = ((data as Array<Record<string, unknown>> | null) ?? []).map(
-      (r) => ({
+    analyses = ((data as Array<Record<string, unknown>> | null) ?? [])
+      // Contribute-consent (2026-07-20-hospices-consent.sql): false = the
+      // family explicitly declined — excluded. true = consented. NULL (and
+      // absent, pre-migration) = legacy row grandfathered under the original
+      // de-identified-accumulation disclosure — still included. So the filter
+      // is `!== false`, not `=== true`.
+      .filter((r) => r.contributed !== false)
+      .map((r) => ({
         userId: String(r.user_id ?? ""),
         // Founder-ingested rows all share the founder's user id but each is
         // a DIFFERENT home's GPL — dedupe them per document (row id), like
