@@ -28,6 +28,128 @@ family · fresh worktrees don't get `.env.local` — copy from
 
 ---
 
+## ⚡ REPLAN 2026-07-17 — READ THIS FIRST (day order changed)
+
+Founder call at the end of Day 3 (Fri Jul 17, Days 1–3 built — #163/#164
+open): the remaining days are **resequenced to front-load the
+model-heavy work** while Fable 5 ultracode capacity lasts, to move the
+**dual-audience landing rework** (the founder's top interest — the site
+must read right for the two customer levels: the family who is never sold
+to, and the institution that pays) to the front, and to give **product
+delivery** (hospice → coordinator → family hand-off) its own day. The
+founder's weekend GPL collection did NOT happen Jul 18–19 — it is now a
+decoupled founder track; only new-Day-7's payoff gate reads it, with a
+dev-data fallback.
+
+**The new order (sprint doc §4 is the authority; sections below are the
+task depth):**
+
+| New day | Date | Run with | Content — open this section |
+|---|---|---|---|
+| **Day 4** | Mon Jul 20 | 🔥 **Fable 5 ultracode (max)** | Morning: Migration-A close-out gate (runbook in PR #163: apply → VERIFY 19 tables → import ~6,852 → search live → consent walkthrough → merge #163 then #164). Then: **§DAY 5 (Wed Jul 22 · Audience re-architecture)** below, in full. |
+| **Day 5** | Tue Jul 21 | 🔥 Fable 5 ultracode | **§DAY 5-REPLAN · Delivery day** (fresh buildsheet, next section — do NOT open old §DAY 5 for this). |
+| **Day 6** | Wed Jul 22 | 🔥 ultracode if capacity remains | **§DAY 7 (Fri Jul 24 · Hospice pages)** tasks 1–4 only — task 5 (digest) ships on Day 5 instead; task 6 (DNS pre-staging) moves to Day 8/Fri. |
+| **Day 7** | Thu Jul 23 | standard model | **§DAY 4 (Tue Jul 21 · Programmatic reach)** — gate amended: if the founder data track hasn't produced a real SLC promotion yet, the gate is the write-free dev-data ISR proof + unit pins (Day-2 precedent); the live-SLC beat joins the §2 demo when data lands. |
+| **Day 8** | Fri Jul 24 | standard model | **§DAY 6 (Thu Jul 23 · Migration B + billing)** — Migration B now applies Fri morning; pricing decision #1 due today; founder ALSO runs the rename DNS pre-staging (old §DAY 7 founder actions). |
+| **Day 9** | Sat Jul 25 | standard model | **§DAY 8 (QA + docs truth + rename confirm)** — unchanged. |
+| Rename Day | Mon Jul 27 | standard model | **§RENAME DAY** — unchanged. |
+
+**In-day ordering rule:** run the ultracode fan-outs FIRST (multi-agent
+design/copy/adversarial passes), mechanical wiring after — if capacity dies
+mid-day, the intelligence is banked. Old day headers below carry a
+`⚡ REPLAN` line pointing back here; dates in those headers are the OLD
+schedule.
+
+**Monday's kickoff prompt (paste to open Day 4, ultracode on):**
+
+> ultracode. git fetch. Read CLAUDE.md, docs/PRODUCT_SPRINT_2026-07-16.md
+> (§4 replanned table), and the REPLAN banner + §DAY 5 (audience
+> re-architecture) section of
+> docs/PRODUCT_SPRINT_2026-07-16_BUILDSHEETS.md. First: walk me through
+> the Migration-A close-out gate from PR #163's runbook (I'll apply the
+> SQL, you run import/verify/walkthrough), then I merge #163 and #164.
+> Then branch off the updated origin/main and execute **new Day 4** —
+> the dual-lane homepage + four loops — exactly as specced, ultracode
+> fan-outs (IA/copy/adversarial channel-survival) before mechanical
+> wiring. Day gate before done; PR; no merge without my go.
+
+---
+
+## DAY 5-REPLAN — Tue Jul 21 · Delivery day: the hand-off, both directions (NEW)
+
+**Objective:** the product's delivery path is real and proven — a hospice
+that says yes can put the tool in a family's hands the same day, and the
+family's first screen from that hand-off is calm, free, and legible. Every
+surface exists (`/portal`, `/portal/materials`, `/portal/links`,
+`/partner/[code]`, `/partner/r/[token]`) but has processed **zero real
+cases** — this day is polish + proof, not greenfield. Channel-survival is
+law throughout: family-initiated activation only, post-admission delivery
+only, the hospice transmits nothing, navigation-never-arranging.
+
+### Tasks
+
+**1. Hospice-side: the handoff kit (`/portal/materials` — make it the one
+page a bereavement coordinator needs).** Audit what renders today, then
+build to this contract: (a) a **print one-pager** (PrintButton/ProofSheet
+conventions: letterhead, QR + short link for the org's referral code,
+"give this to a family after admission" framing — bereavement-support
+procurement language, never marketing to prospects); (b) a **coordinator
+script block** — 3–4 sentences a coordinator can say verbatim when handing
+it over (family-initiated: the family activates, the coordinator only
+hands the card/link); (c) the **link kit** — the org's referral link +
+QR download + a prefilled email the COORDINATOR sends internally (to their
+own team, never to families — grep-enforceable: no family-recipient mailto
+on any portal surface); (d) a "what your families see" preview link
+(`/partner/[code]` in a new tab). Copy law: "free to every family you
+serve, with or without this link" appears verbatim.
+
+**2. Hospice-side: portal first-run.** `/portal` (page.tsx) gains a
+first-visit empty-state: when the org has zero referral activity, the
+dashboard's top card becomes "Start here: share the tools" → materials
+page, with the 3-step hand-off (approve → print/share → families
+activate). No new tables — presence of activity decides which card leads.
+
+**3. Family-side: the arrival screen.** `/partner/[code]/page.tsx` is the
+family's first impression from a hospice hand-off. Phone-first pass:
+sponsorship co-brand legible (`ReferralCoBrand` + the Day-4 sponsorship
+line), the free-forever sentence verbatim ("Everything here is free for
+you — with or without this link"), one primary action (check a quote /
+get help now), zero data asked before value, `NeutralityPledge` visible.
+Verify the `?ref` referral memory writes (existing `readReferral` path)
+and the attribution stays reporting-only.
+
+**4. The monthly delivery TO the hospice (D6, pulled from old Day 7):**
+`app/api/cron/partner-digest/route.ts` builds the email with the
+deterministic stats (`lib/partner-digest.ts:36-81`) PLUS
+`buildOutcomesDigest(stats, partnerType)` (`lib/partner-report-digest.ts:69`
+— deterministic fallback + suppression built in); flag stays off
+(`route.ts:31`). Admin dry-run: `GET /api/cron/partner-digest?test=<partnerId>`
+gated by `requireAdminApi` (NOT the cron bearer), returns rendered text,
+sends nothing.
+
+**5. Delivery analytics:** minimal events on the seam (existing
+`lib/analytics.ts` conventions): `materials_printed`, `partner_landing_viewed`
+(+ the Day-4 loop events if Day 4 slipped any).
+
+### Acceptance gate
+A full dry-run delivery in dev against a demo partner: founder plays
+coordinator (portal first-run → materials → print the one-pager → copy the
+link kit), then plays family (opens `/partner/[code]` on a phone-width
+viewport → co-brand + free-forever visible → runs a check; a second run
+WITHOUT the link shows the identical free product). Digest test-render
+returns AI paragraph + stats with suppression respected. Channel-survival
+grep: no code path emails a family, no family-recipient mailto on portal
+surfaces, no pre-admission framing on any new copy. `PARTNER_DIGEST_ENABLED`
+off → cron returns `{disabled:true}`. Suite green.
+
+### Cut inside Day 5-REPLAN
+Delivery analytics events → cut first. Portal first-run empty-state →
+static tip card. **Never cut:** the materials one-pager + link kit, the
+`/partner/[code]` phone pass, the free-without-referral sentence, the
+digest dry-run (it's the paying-partner deliverable).
+
+---
+
 ## DAY 1 — Thu Jul 16 · Eval harness, then the model behind it (D3)
 
 *(Order swapped with the ingest day 2026-07-15, founder call: run the evals
@@ -282,6 +404,10 @@ the import against prod.
 
 ## DAY 4 — Tue Jul 21 · Programmatic reach (D4)
 
+*⚡ REPLAN 2026-07-17: this section now runs **Thu Jul 23 as Day 7**
+(standard model). Gate amendment in the replan banner: dev-data ISR proof
+suffices if the founder data track hasn't produced a real promotion yet.*
+
 **Objective:** founder promotions surface on SEO pages within the hour, and
 the index becomes citable.
 
@@ -322,6 +448,13 @@ surface). Never cut the ISR revalidate.
 ---
 
 ## DAY 5 — Wed Jul 22 · Audience re-architecture + the four loops (D11) — biggest day
+
+*⚡ REPLAN 2026-07-17: this section now runs **Mon Jul 20 as Day 4**, 🔥
+with Fable 5 ultracode (max) — AFTER the Migration-A morning close-out
+gate (runbook in PR #163). It is the founder's top-priority day: the
+landing site re-formed around the two customer levels. The old
+"Day 5" number in this header is the OLD schedule; the fresh delivery-day
+buildsheet (§DAY 5-REPLAN, top of file) is what runs Tue Jul 21.*
 
 **Objective:** both new personas find their door in one click, and every
 loop has a product surface. Copy law all day: **referral = attribution +
@@ -391,6 +524,11 @@ Guide-page share → analyzer-only. ProofSheet footer + co-brand line → keep
 ---
 
 ## DAY 6 — Thu Jul 23 · Migration B + institutional billing (D1)
+
+*⚡ REPLAN 2026-07-17: this section now runs **Fri Jul 24 as Day 8**
+(standard model). Migration B is founder-applied Fri morning; pricing
+decision #1 is due that day; the founder also runs the rename DNS
+pre-staging (from old §DAY 7's founder actions) the same day.*
 
 **Objective:** a hospice can subscribe in-product, in test mode,
 end-to-end — with families structurally unable to ever see it.
@@ -468,6 +606,12 @@ Never cut: webhook signature verification, insurer exclusion, flag gate.
 
 ## DAY 7 — Fri Jul 24 · Hospice pages + claim + digest email (D5, D6)
 
+*⚡ REPLAN 2026-07-17: tasks 1–4 of this section now run **Wed Jul 22 as
+Day 6** (🔥 ultracode if capacity remains — the 50-state content + copy is
+the spend). Task 5 (digest email) ships Tue Jul 21 with §DAY 5-REPLAN.
+Task 6 / the founder DNS pre-staging actions stay on **Fri Jul 24** (now
+Day 8) — records need the 24–72h either way.*
+
 **Objective:** the partner pipeline gets a product-side top of funnel, and
 the monthly email reads like the web report.
 
@@ -531,6 +675,9 @@ reminds).
 ---
 
 ## DAY 8 — Sat Jul 25 · QA + docs truth + rename confirm
+
+*⚡ REPLAN 2026-07-17: unchanged date — runs Sat Jul 25 as **Day 9**
+(standard model).*
 
 **Objective:** the sprint's §5 QA passes on prod, the strategy docs stop
 lying, and Monday is fully cleared.
@@ -623,21 +770,23 @@ old domain never stopped working — that's the design.
 
 ---
 
-## The founder's 11 days at a glance
+## The founder's 11 days at a glance — REPLANNED 2026-07-17
 
 | Day | Your actions |
 |---|---|
-| Thu 16 | Commission TESS (if not done) · optional: read BASELINE.md |
-| Fri 17 | Evening: ingest one real GPL on preview (the weekend depends on the tool) |
-| Sat–Sun | Utah CSV → import → vet · ingest GPLs · promote SLC/Provo · start CA |
-| Mon 20 | **Apply Migration A** (morning) · download CMS hospice CSV · run import |
-| Tue 21 | Click the verified section on the SLC city page once it's live |
-| Wed 22 | Phone-walk the homepage lanes + nominate flow; flag copy |
-| Thu 23 | **Apply Migration B** · Stripe test-mode product + price (**pricing decision due**) · env keys · click test checkout |
-| Fri 24 | **Rename pre-staging: Squarespace DNS records (Workspace MX, Resend DKIM, Vercel), Workspace secondary domain** · chase TESS |
+| Thu 16 ✅ | Commission TESS (if not done) · optional: read BASELINE.md |
+| Fri 17 ✅ | Days 2 AND 3 built (a day ahead) · replan decided — heavy days front-loaded |
+| Sat–Sun 18–19 | **Optional but valuable: the data track** — Utah CSV → import → vet · ingest GPLs via `/admin/ingest-gpl` · promote what crosses n≥5. Slippable; only new-Day-7 (Thu) reads it, with a fallback. |
+| Mon 20 | **Morning: apply Migration A** (runbook in PR #163) · run the CMS import · merge #163 then #164 · then the session runs the **dual-lane homepage day on Fable 5 ultracode — your top ask, phone-walk the lanes + nominate flow at EOD** |
+| Tue 21 | **Delivery day (ultracode):** play coordinator (portal → print materials), then play family (open the link on your phone) · flag any beat that confuses |
+| Wed 22 | Hospice pages day (last ultracode day) · skim 3–4 state pages for tone |
+| Thu 23 | Programmatic reach (standard model) · if you've promoted real data by now, click the verified section on the SLC page |
+| Fri 24 | **Apply Migration B** · Stripe test-mode product + price (**pricing decision due**) · env keys · click test checkout · **Rename pre-staging: Squarespace DNS (Workspace MX, Resend DKIM, Vercel), Workspace secondary domain** · chase TESS |
 | Sat 25 | QA hour together · record the demo · clear the rename checklist |
 | Mon 27 | **Rename Day**: the console flips (§2 above), with the session driving verification |
 
 Standing all 11 days: merge nothing without your go (PR per day) ·
 `OUTREACH_LIVE`, `PARTNER_DIGEST_ENABLED`, `BILLING_LIVE` stay off ·
-every day ends with the mechanical suite + guardrail grep.
+every day ends with the mechanical suite + guardrail grep · **spend
+remaining Fable 5 ultracode Mon → Tue → Wed, in that order; having any
+left for Thu is gravy, and Fri–Sat don't need it.**

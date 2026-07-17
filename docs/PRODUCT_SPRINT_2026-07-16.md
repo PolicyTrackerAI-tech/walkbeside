@@ -5,6 +5,24 @@
 > this sprint + Rename Day, then pilot-readiness, reach/moat engines, and
 > the prove-and-repeat phase ending at the 90-day scoreboard).
 
+> **⚡ REPLANNED 2026-07-17 (founder call, end of Day 3).** The remaining
+> days are RESEQUENCED — §4's table below is the new order; the buildsheets
+> file carries the matching banner + a fresh Day-5 (delivery) buildsheet.
+> Three drivers: **(1) front-load the model-heavy work** — the founder's
+> Fable 5 ultracode capacity is finite and running out, so the days that
+> most need maximal-intelligence multi-agent work (homepage re-architecture,
+> delivery, hospice-page content) run FIRST and the mechanical days (ISR
+> wiring, Stripe plumbing, QA) run last on any model; **(2) the dual-audience
+> landing rework is the founder's top interest** — the site must read right
+> for the two customer levels (the family who must never feel sold to, and
+> the institution that pays) — it moves from Wed to Monday; **(3) product
+> delivery becomes its own day** — the hand-off path hospice → family
+> (portal materials → coordinator → family's first screen) is built but
+> unproven, and proving/polishing it end-to-end is now Day 5. The weekend
+> GPL data days did NOT happen as scheduled (founder, Fri Jul 17) — data
+> collection is now a decoupled founder track; only the programmatic-reach
+> payoff gate reads it, with an explicit dev-data fallback.
+
 **Mission:** make "one hospice paying" mechanically possible and commercially
 credible — from the product side only. By EOD Sat Jul 25: a hospice can **pay
 us in-product** (Stripe, institutional only, never families); the **verified
@@ -298,24 +316,34 @@ a grep, not an archaeology dig.
 
 ---
 
-## 4. Day-by-day
+## 4. Day-by-day — REPLANNED 2026-07-17 (remaining days resequenced)
+
+**Model budget rule (the reason for this order):** spend the remaining
+Fable 5 ultracode on Days 4 → 5 → 6, in that order — they are the
+judgment-heavy days (positioning, copy, delivery UX, 50-state content +
+adversarial channel-survival review). Days 7–9 are mechanical
+(wiring/plumbing/QA) and run fine on Opus/Sonnet solo. Within every day:
+run the ultracode fan-outs FIRST (design/copy/adversarial passes), the
+mechanical wiring after — if capacity dies mid-day, the intelligence is
+already banked.
 
 | Day | Build | Gate before stopping |
 |---|---|---|
-| **Thu Jul 16** | Pre-flight: worktree cleanup (D10) + **`lib/brand.ts`** (D12 — new code this sprint never hardcodes the name). **Eval harness** (D3, the sprint's ultracode day — order swapped with ingest by founder call): fixtures + golden files + `scripts/eval-analyzer.mjs`; baseline on sonnet-4-6 committed as `test/evals/BASELINE.md`. Then, behind it: sonnet-5 re-baseline (explicit thinking config, max_tokens re-baseline) + Haiku-4.5 on subscription-finder — **ships only if eval ≥ baseline; otherwise we stay put and the harness was the deliverable.** | Eval report reproducible; model PR carries before/after output; suite green. |
-| **Fri Jul 17** | **`/admin/ingest-gpl`** (D2 — ⚠ weekend-critical, zero slack; cut scope, never the date): paste/photo → parse → review table (editable names/cents/matched-id) → Save; `gpl_url`/`last_verified_at` stamping; promote-form metro **dropdown** from `zip-regions` labels (kills the typo'd-label silent miss); `revalidatePath` on promote for `/funeral-costs/*`. Runs on the eval-verified model config from Day 1. | Founder ingests a sample GPL end-to-end in dev; saved row appears in `/admin/benchmarks`; promote → city page updates after revalidate. Suite green. |
-| **Sat 18–Sun 19** | **Founder data days** (product on-call only): fill `utah-homes.csv` → `npm run import:homes` → vet in `/admin/vetting`; ingest every collectable Utah GPL via the new tool; promote SLC/Provo groups that cross n≥5; start CA (SB 658 = homes must post GPLs online). | ≥2 verified metro×item groups live with visible n; every verified row carries sources. |
-| **Mon Jul 20** | **Migration A** (hospices + `contributed`). `scripts/import-hospices.mjs` (CMS CSV); apply-form autocomplete; **analyzer consent checkbox** + `benchmark-sources` filter (D8). | Founder applies Migration A; import runs against prod (~5–6k rows); consented/unconsented analyses provably split in the benchmark feed. |
-| **Tue Jul 21** | **Programmatic reach** (D4): city pages read the store + ISR; fair-price-index verified-metros section + CSV/JSON + cite-this; sitemap. | SLC city page shows the weekend's verified ranges with badges + n, no deploy needed after a promotion (ISR proof); badge-honesty grep clean. |
-| **Wed Jul 22** | **Audience re-architecture + the four loops** (D11, G13): homepage dual-lane rework (family hero untouched in spirit; hospice/employer buyer lane in header + section; "Is your hospice offering this?" module over Monday's `hospices` table); **nominate-your-hospice flow** (user-sent mailto/copy intro + consented `partner_leads` source `family_nomination`); analyzer-result + guide share affordances; co-brand sponsorship line; proof-sheet buyer-path footer; `lib/brand.ts` name constant (D12 prep); site-wide copy pass ("referral = sponsorship, never access"); loop analytics events (nominate_submitted, hospice_intro_copied, share_clicked, partner_cta_clicked). | Both personas reach their lane from `/` in one click; nominate writes a lead + the leads strip shows source; a family with no referral sees, verbatim, that everything is free without one; channel-survival grep (no family cold-contact path, no pre-admission framing); copy reads calm on a phone. |
-| **Thu Jul 23** | **Migration B + billing** (D1): Stripe checkout/webhook/portal-link routes; `/portal/settings` Billing card; `/admin/partners` billing state; `BILLING_LIVE` gate; insurer exclusion test. | Test-mode subscription completes end-to-end in dev; webhook updates `billing_status`; zero family surface imports Stripe; founder applies Migration B. |
-| **Fri Jul 24** | **Hospice pages** (D5): `/hospices/[state]` (indexed) + `/hospices/[state]/[ccn]` (noindexed) + claim-your-page → `partner_leads` + email; `/admin/partners` leads strip shows source; homepage hospice-finder module links each hospice to its page. **Digest email AI paragraph + test-render** (D6). | 50 state pages render with real aggregates; claim flow writes a lead; facility pages noindexed (verify robots meta); word-ban grep clean on all new pages; test digest renders with AI paragraph + suppression. |
-| **Sat Jul 25** | **QA + ship + truth**: full §5 QA below; docs truth pass (D10); DEMO_SCRIPT.md additions (ingest beat, billing beat, nominate beat); run the §2 demo on prod; **rename final-confirm** (D12 — TESS result back? runbook prepped, redirects staged); buffer for anything slipped. | The §2 demo, clean, on production; Rename Day cleared for Monday. |
+| **Thu Jul 16** ✅ | Pre-flight + `lib/brand.ts` + **eval harness** (D3) + eval-gated sonnet-5/haiku swap. *Merged #158/#160/#161.* | ✅ 100% on all 11 aggregates; model PR carried before/after eval output. |
+| **Fri Jul 16–17** ✅ | **`/admin/ingest-gpl`** (D2) + promote metro dropdown + post-promote revalidation. *Merged #162.* **Day 3 built early (Fri):** Migration A written + CMS import + search API + consent (D8) — **PR #163 + stacked #164 OPEN, unmerged.** | ✅ Static gate green; live half waits on the Monday-morning apply (runbook in #163). |
+| **Founder data track** (decoupled — any day, the sooner the better) | Fill `utah-homes.csv` → `npm run import:homes` → vet; ingest Utah GPLs via `/admin/ingest-gpl`; promote SLC/Provo groups crossing n≥5; start CA (SB 658). **Did not happen Jul 18–19 as originally scheduled — nothing below blocks on it except Day 7's payoff gate, which has a dev-data fallback.** | ≥2 verified metro×item groups live with visible n, whenever collected; every verified row carries sources. |
+| **Mon Jul 20 — Day 4** 🔥 ULTRACODE MAX | **Morning gate first (~30 min, founder + session):** apply Migration A in bhadjv → VERIFY (19 tables, expect-7 block) → CMS import (~6,852 rows) → search API live → consent walkthrough + cleanup → merge #163 then #164 (stacked). **Then the day: audience re-architecture + the four loops** (D11, G13 — moved up from Wed): dual-lane homepage for the **two customer levels** — the family/individual (free, never sold to; hero untouched in spirit) and the institutional buyer (hospice/employer lane in header + section → `/partners`/`/employers`); "Is your hospice offering this?" finder module over the morning's `hospices` table; **nominate-your-hospice flow**; share affordances; co-brand sponsorship line; proof-sheet buyer-path footer; site-wide copy pass ("referral = sponsorship, never access"); loop analytics events. Buildsheet: §DAY 5 (Wed) section + replan banner deltas. | Morning gate: import + search + consent split proven live. Day: both personas reach their lane from `/` in one click; nominate writes a lead; a family with no referral sees, verbatim, that everything is free without one; channel-survival grep; copy calm on a phone. |
+| **Tue Jul 21 — Day 5** 🔥 ULTRACODE | **Delivery day (NEW — the product's hand-off, both directions).** Hospice-side: `/portal` first-run + `/portal/materials` become a real handoff kit (print one-pager with QR + link, coordinator script, link kit) a bereavement coordinator can use the day their org is approved. Family-side: the arrival experience from a hospice link (`/partner/[code]` → analyzer) — mobile-first, calm, sponsorship legible, free-forever explicit. Digest email AI paragraph (D6, pulled from Fri) — the monthly delivery TO the hospice. Full fresh buildsheet in the buildsheets file (§DAY 5-REPLAN). | A dry-run delivery: founder plays coordinator (portal → print/send materials) then plays family (opens the link on a phone → runs a check) with zero confusing beats; digest test-render carries the AI paragraph + suppression; no new data path hospice→platform (channel-survival grep). |
+| **Wed Jul 22 — Day 6** 🔥 ULTRACODE (last heavy day) | **Hospice pages + claim** (D5 — moved up from Fri): `/hospices/[state]` (indexed, real CMS aggregates + family-facing education) + `/hospices/[state]/[ccn]` (noindexed) + claim-your-page → `partner_leads` + founder email; homepage finder rows link their pages. Content quality + channel-survival copy at 50-state scale is the ultracode spend; adversarial review pass on the copy. Buildsheet: §DAY 7 tasks 1–4 (digest already shipped Day 5). | 50 state pages render with real aggregates; claim writes a `hospice_claim` lead; facility pages noindexed (verify robots meta); word-ban grep clean; suite green. |
+| **Thu Jul 23 — Day 7** (standard model fine) | **Programmatic reach** (D4 — moved back from Tue; mechanical): city pages read the store + ISR `revalidate=3600`; fair-price-index verified-metros section + CSV/JSON dataset + cite-this; sitemap check. Buildsheet: §DAY 4. | **If real promotions exist by now** (founder data track): SLC city page shows verified ranges + badges + n via ISR, no deploy. **If not:** the Day-2 precedent applies — write-free dev-data ISR proof + unit pins, and the live-SLC beat joins the §2 demo whenever data lands. Badge-honesty grep clean either way. |
+| **Fri Jul 24 — Day 8** (standard model fine) | **Migration B + institutional billing** (D1 — moved back from Thu; well-specified plumbing): Stripe checkout/webhook/portal-link routes; `/portal/settings` Billing card; `/admin/partners` billing column; `BILLING_LIVE` gate; insurer-exclusion + scope pins. Buildsheet: §DAY 6. Founder also runs the **rename DNS pre-staging** today (unchanged from the old plan — records need 24–72h). | Test-mode subscription end-to-end in dev; webhook updates `billing_status`; zero family surface imports Stripe; founder applies Migration B; **pricing decision #1 due today**; DNS pre-staging done. |
+| **Sat Jul 25 — Day 9** | **QA + ship + truth** (unchanged date): full §5 QA; docs truth pass (D10); DEMO_SCRIPT.md additions; §2 demo on prod; rename final-confirm. Buildsheet: §DAY 8. | The §2 demo, clean, on production; Rename Day cleared for Monday. |
 
 Mechanics unchanged from last week: fresh worktree per day off current
 `origin/main`, PR per day, founder merge; every day ends with
 `npm run typecheck && npm run lint && npm run build && npx vitest run` + the
-guardrail grep; migrations only on their scheduled day.
+guardrail grep; migrations only on their scheduled day (Migration A applies
+Mon Jul 20 morning; **Migration B moves to Fri Jul 24**).
 
 ### 4.1 Rename Day — Mon Jul 27 (scheduled, immediately after the sprint)
 
