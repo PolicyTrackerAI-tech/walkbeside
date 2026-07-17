@@ -43,6 +43,12 @@ const Body = z.object({
   // Optional referral attribution (HF-XXXXXX) remembered on-device from a
   // ?ref= visit. Reporting-only; validated + resolved server-side.
   referralCode: z.string().max(20).optional(),
+  // Explicit "add my de-identified prices to the public fair-price data"
+  // opt-in (D8). Optional so callers without the checkbox (compare-quotes,
+  // the portal coordinator check) keep working — absent is treated as false
+  // below: no checkbox shown means no consent given, and only true or a
+  // provably pre-consent NULL row ever feeds the benchmark aggregation.
+  contributed: z.boolean().optional(),
   // Eval-harness knobs (scripts/eval-analyzer.mjs). Honored ONLY on a dev
   // server (NODE_ENV !== "production") — a production build silently ignores
   // both, so no public caller can pick our model or re-tag our cost ledger.
@@ -87,7 +93,7 @@ export async function POST(req: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
-  const { text, zip, serviceTypeHint, referralCode } = parsed.data;
+  const { text, zip, serviceTypeHint, referralCode, contributed } = parsed.data;
   const isEvalRun =
     process.env.NODE_ENV !== "production" && parsed.data.evalRun === true;
   const evalModel = isEvalRun ? parsed.data.evalModel : undefined;
@@ -315,11 +321,11 @@ export async function POST(req: Request) {
       };
       // zip drives the benchmark pipeline's regional aggregation (column from
       // 2026-07-02-benchmark-zip.sql); confidence/extraction_method are the
-      // provenance columns from 2026-07-13-portal-identity.sql. All three ride
-      // the first attempt only — if that fails on a pre-migration schema, fall
-      // back to the legacy shape rather than silently losing the analysis.
-      // Persistence stays best-effort: if both inserts fail, the analysis
-      // response still returns.
+      // provenance columns from 2026-07-13-portal-identity.sql; contributed is
+      // the consent flag from 2026-07-20-hospices-consent.sql (absent in the
+      // body → false: no checkbox shown means no consent given). All ride the
+      // first attempt only. Persistence stays best-effort: if no insert
+      // lands, the analysis response still returns.
       let insertedId: string | null = null;
       const { data: inserted, error: insertError } = await supabase
         .from("price_list_analyses")
@@ -328,16 +334,31 @@ export async function POST(req: Request) {
           zip: zip ?? null,
           confidence,
           extraction_method: extractionMethod,
+          contributed: contributed ?? false,
         })
         .select("id")
         .single();
       if (insertError) {
-        const { data: legacyInserted } = await supabase
-          .from("price_list_analyses")
-          .insert(row)
-          .select("id")
-          .single();
-        insertedId = legacyInserted?.id ?? null;
+        // The legacy-shape fallback exists solely for pre-migration schemas
+        // (unknown column: PostgREST PGRST204 / Postgres 42703 — also seen
+        // for a few minutes of schema-cache lag right after a migration).
+        // It can't record `contributed`, so the row would land NULL — which
+        // lib/benchmark-sources.ts aggregates as a grandfathered legacy row.
+        // That's only tolerable when the family actually consented; for a
+        // decline (or a consent-less caller, treated as a decline above),
+        // dropping the best-effort persist is the acceptable failure mode —
+        // aggregating a declined row never is. Non-schema errors don't
+        // retry: a transient failure must not launder the consent flag.
+        const missingColumn =
+          insertError.code === "PGRST204" || insertError.code === "42703";
+        if (missingColumn && contributed === true) {
+          const { data: legacyInserted } = await supabase
+            .from("price_list_analyses")
+            .insert(row)
+            .select("id")
+            .single();
+          insertedId = legacyInserted?.id ?? null;
+        }
       } else {
         insertedId = inserted?.id ?? null;
       }

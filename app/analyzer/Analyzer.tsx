@@ -146,6 +146,9 @@ export function Analyzer({
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [copied, setCopied] = useState(false);
   const [sample, setSample] = useState(false);
+  // Explicit opt-in to contribute this check's de-identified prices to the
+  // benchmark feed (D8). Unchecked by default — consent is never assumed.
+  const [contribute, setContribute] = useState(false);
   const [letter, setLetter] = useState<string | null>(null);
   const [letterBusy, setLetterBusy] = useState(false);
   const [letterCopied, setLetterCopied] = useState(false);
@@ -207,6 +210,10 @@ export function Analyzer({
           // families). The sample demo bill never attributes — it isn't a
           // family's real quote.
           referralCode: isSample ? undefined : (readReferral() ?? undefined),
+          // The explicit consent checkbox. The sample is always false — its
+          // fixed demo prices are not the family's data and must never feed
+          // the benchmark aggregation, whatever the box says.
+          contributed: isSample ? false : contribute,
         }),
       });
       if (!r.ok) {
@@ -602,6 +609,19 @@ export function Analyzer({
                   {pageWarning}
                 </div>
               )}
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={contribute}
+                  onChange={(e) => setContribute(e.target.checked)}
+                  className="mt-1 h-4 w-4 accent-[var(--primary-deep,#2f5d50)] shrink-0"
+                />
+                <span className="text-sm text-ink-soft">
+                  Add my de-identified prices to the public fair-price data
+                  &mdash; optional. Your name, contact details, and anything
+                  personal are never included either way.
+                </span>
+              </label>
               <div className="flex flex-wrap items-center gap-3">
                 <Button
                   onClick={() => analyze()}
