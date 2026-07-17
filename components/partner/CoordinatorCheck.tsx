@@ -50,6 +50,10 @@ export function CoordinatorCheck({
     setResult(null);
     setLetter(null);
     try {
+      // Deliberately NO `contributed` field (and never add the consent
+      // checkbox here): absent → the route stores contributed=false, so a
+      // coordinator's staged/test check can never feed the public fair-price
+      // aggregation. Only a family can consent to contributing their data.
       const r = await fetch("/api/analyze-price-list", {
         method: "POST",
         headers: { "content-type": "application/json" },
