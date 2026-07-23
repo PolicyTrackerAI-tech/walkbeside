@@ -183,8 +183,10 @@ export function PartnersClient({
                     </span>
                   )}
                 </div>
+                {/* No clamp: the route caps notes at 600 chars, and a clipped
+                    nomination note has no expand affordance here. */}
                 {l.note && (
-                  <p className="text-sm text-ink-soft mt-1 line-clamp-3 whitespace-pre-line">{l.note}</p>
+                  <p className="text-sm text-ink-soft mt-1 whitespace-pre-line">{l.note}</p>
                 )}
               </li>
             ))}

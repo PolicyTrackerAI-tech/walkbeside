@@ -3,12 +3,14 @@ import { z } from "zod";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer, FEATURES } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/email";
 import { BRAND } from "@/lib/brand";
 
 const Body = z.object({
-  /** The hospice being nominated (finder-prefilled or typed). */
-  hospice: z.string().min(2).max(160),
+  /** The hospice being nominated (finder-prefilled or typed). Length is
+   * checked post-trim so whitespace padding can't produce an empty org. */
+  hospice: z.string().trim().min(2).max(160),
   city: z.string().max(80).optional(),
   state: z.string().max(40).optional(),
   note: z.string().max(600).optional(),
@@ -60,9 +62,19 @@ export function buildNominationLead(data: NominateBody): {
  * The family-driven path (the prefilled intro on /tell-your-hospice) goes
  * through the family's own mail client; it never touches this route.
  *
- * Rate-limited by the proxy via RATE_LIMITS["/api/partner/nominate"].
+ * Rate-limited twice: the proxy's RATE_LIMITS entry (5/min burst guard) plus
+ * the in-route hourly cap below, mirroring /api/partner/demo-request — this
+ * endpoint sends a founder email and writes a row, so a per-minute-only
+ * limit would still allow 300 rows/hour per IP.
  */
 export async function POST(req: Request) {
+  const rl = rateLimit(`partner-nominate:${clientIp(req.headers)}`, {
+    limit: 5,
+    windowMs: 60 * 60_000,
+  });
+  if (!rl.ok)
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+
   const limited = await readLimitedJson(req, 10);
   if (!limited.ok)
     return NextResponse.json({ error: limited.error }, { status: limited.status });
@@ -88,24 +100,36 @@ export async function POST(req: Request) {
   }
 
   // (b) Internal founder notification — never the hospice, never the family.
+  // Every user-controlled fragment is newline-flattened and label-prefixed so
+  // a crafted note/name can't forge lines that read as route-generated (the
+  // "Submitter (consented…)" line especially).
+  const flat = (s: string) => s.replace(/\s*[\r\n]+\s*/g, " ").trim();
+  const location = [parsed.data.city?.trim(), parsed.data.state?.trim()]
+    .filter(Boolean)
+    .join(", ");
+  const userNote = parsed.data.note?.trim();
   let emailed = false;
   try {
     await sendEmail({
       to: BRAND.supportEmail,
-      subject: `Hospice nomination: ${lead.org}`,
+      subject: `Hospice nomination: ${flat(lead.org)}`,
       text: [
         `A family nominated a hospice to offer the tools (no partners row created — this is a lead).`,
         ``,
-        `Hospice: ${lead.org}`,
-        lead.note ? lead.note : ``,
+        `Hospice: ${flat(lead.org)}`,
+        location ? `Location: ${flat(location)}` : ``,
+        userNote ? `Note: ${flat(userNote)}` : ``,
         lead.email
-          ? `Submitter (consented to contact): ${lead.email}`
+          ? `Submitter (consented to contact): ${flat(lead.email)}`
           : `Submitter: no contact info left (or no consent) — do not follow up with anyone.`,
       ]
         .filter(Boolean)
         .join("\n"),
     });
-    emailed = true;
+    // A dry-run send (no Resend key) must not count as the fallback having
+    // landed — otherwise persist-failure + email-unconfigured returns ok:true
+    // while the nomination vanishes.
+    emailed = FEATURES.email();
   } catch {
     // emailed stays false — the row above is the fallback.
   }

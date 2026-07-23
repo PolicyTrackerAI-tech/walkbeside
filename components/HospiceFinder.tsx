@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { FREE_FOR_EVERY_FAMILY } from "@/lib/copy";
@@ -31,6 +31,25 @@ export function HospiceFinder() {
   const [status, setStatus] = useState<SearchStatus>("idle");
   const [hospices, setHospices] = useState<Hospice[]>([]);
   const [selected, setSelected] = useState<Hospice | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const hadSelection = useRef(false);
+  // What the user most recently typed — responses for anything else are
+  // stale and must not touch state, even if they land in the gap between
+  // React's commit and the effect cleanup's abort().
+  const latestQ = useRef("");
+
+  // Selecting a result (and "Search again") unmounts the focused button —
+  // move focus to the panel / back to the input so keyboard users aren't
+  // dropped to <body>.
+  useEffect(() => {
+    if (selected) {
+      hadSelection.current = true;
+      panelRef.current?.focus();
+    } else if (hadSelection.current) {
+      inputRef.current?.focus();
+    }
+  }, [selected]);
 
   useEffect(() => {
     // The <2-char reset happens in the input's onChange, not here — the
@@ -44,6 +63,11 @@ export function HospiceFinder() {
           `/api/hospices/search?q=${encodeURIComponent(query.slice(0, 80))}`,
           { signal: controller.signal },
         );
+        // A settled response can still land after the cleanup aborted this
+        // controller (or after the query shrank below 2 chars) — never let a
+        // stale response repopulate state under a query it doesn't match.
+        if (controller.signal.aborted || latestQ.current.trim() !== query)
+          return;
         if (!r.ok) {
           // 429 or an unexpected status — the search is unavailable, the
           // product is not.
@@ -52,6 +76,8 @@ export function HospiceFinder() {
           return;
         }
         const body = (await r.json()) as { hospices?: Hospice[] };
+        if (controller.signal.aborted || latestQ.current.trim() !== query)
+          return;
         const found = body.hospices ?? [];
         setHospices(found);
         setStatus(found.length > 0 ? "results" : "none");
@@ -87,7 +113,7 @@ export function HospiceFinder() {
       </p>
 
       {selected ? (
-        <div className="space-y-4">
+        <div ref={panelRef} tabIndex={-1} className="space-y-4 outline-none">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <div className="font-medium text-ink">
               {displayName}
@@ -103,6 +129,7 @@ export function HospiceFinder() {
               type="button"
               onClick={() => {
                 setSelected(null);
+                latestQ.current = "";
                 setQ("");
                 setStatus("idle");
                 setHospices([]);
@@ -146,8 +173,10 @@ export function HospiceFinder() {
         <div>
           <Input
             value={q}
+            ref={inputRef}
             onChange={(e) => {
               const value = e.target.value;
+              latestQ.current = value;
               setQ(value);
               if (value.trim().length < 2) {
                 setStatus("idle");
@@ -158,6 +187,17 @@ export function HospiceFinder() {
             aria-label="Search the national directory of Medicare-certified hospices by name or city"
             maxLength={80}
           />
+          {/* Non-visual outcome announcement — the list/none/unavailable
+              states below are otherwise silent to a screen reader. */}
+          {status !== "idle" && (
+            <p role="status" aria-live="polite" className="sr-only">
+              {status === "results"
+                ? `${hospices.length} hospice${hospices.length === 1 ? "" : "s"} found — results are listed below.`
+                : status === "none"
+                  ? "No matching hospice found."
+                  : "Search is unavailable right now."}
+            </p>
+          )}
           {status === "idle" && (
             <p className="text-xs text-ink-muted mt-2">
               We search the national directory of Medicare-certified hospices.

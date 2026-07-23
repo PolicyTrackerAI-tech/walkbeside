@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { trackTool } from "@/lib/analytics";
@@ -46,8 +46,16 @@ export function TellYourHospice({
   const [email, setEmail] = useState("");
   const [contactOk, setContactOk] = useState(false);
   const [formState, setFormState] = useState<
-    "idle" | "sending" | "sent" | "error"
+    "idle" | "sending" | "sent" | "invalid" | "error"
   >("idle");
+  const sentRef = useRef<HTMLDivElement>(null);
+
+  // Move focus to the confirmation when the form card is replaced — the
+  // focused submit button unmounts, and silence reads as a broken page to
+  // assistive tech.
+  useEffect(() => {
+    if (formState === "sent") sentRef.current?.focus();
+  }, [formState]);
 
   async function copyNote() {
     // Fire on intent, before the clipboard await — a pending permission
@@ -72,6 +80,12 @@ export function TellYourHospice({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    // Mirror the route's zod floor so a too-short name gets a fixable
+    // message, not a 400 dressed up as a server fault.
+    if (hospice.trim().length < 2) {
+      setFormState("invalid");
+      return;
+    }
     setFormState("sending");
     try {
       const r = await fetch("/api/partner/nominate", {
@@ -87,7 +101,7 @@ export function TellYourHospice({
         }),
       });
       if (!r.ok) {
-        setFormState("error");
+        setFormState(r.status === 400 ? "invalid" : "error");
         return;
       }
       setFormState("sent");
@@ -127,21 +141,23 @@ export function TellYourHospice({
       </Card>
 
       {formState === "sent" ? (
-        <Card tone="primary">
-          <CardTitle>Thank you &mdash; we have it.</CardTitle>
-          <p className="text-ink-soft mt-2 text-sm">
-            When we reach out to a hospice, it&rsquo;s our founder personally
-            &mdash; and you and your family are never mentioned. We&rsquo;ll
-            only contact you if you checked the box. Meanwhile, everything
-            here is already free to you &mdash;{" "}
-            <Link
-              href="/analyzer"
-              className="font-medium text-primary-deep underline-offset-2 hover:underline"
-            >
-              check a quote &rarr;
-            </Link>
-          </p>
-        </Card>
+        <div ref={sentRef} tabIndex={-1} role="status" className="outline-none">
+          <Card tone="primary">
+            <CardTitle>Thank you &mdash; we have it.</CardTitle>
+            <p className="text-ink-soft mt-2 text-sm">
+              When we reach out to a hospice, it&rsquo;s our founder personally
+              &mdash; and you and your family are never mentioned. We&rsquo;ll
+              only contact you if you checked the box. Meanwhile, everything
+              here is already free to you &mdash;{" "}
+              <Link
+                href="/analyzer"
+                className="font-medium text-primary-deep underline-offset-2 hover:underline"
+              >
+                check a quote &rarr;
+              </Link>
+            </p>
+          </Card>
+        </div>
       ) : (
         <Card>
           <CardTitle>Rather not send it yourself?</CardTitle>
@@ -156,6 +172,7 @@ export function TellYourHospice({
               <Input
                 id="nom-hospice"
                 value={hospice}
+                minLength={2}
                 maxLength={160}
                 required
                 onChange={(e) => setHospice(e.target.value)}
@@ -217,8 +234,15 @@ export function TellYourHospice({
             <Button type="submit" disabled={formState === "sending"}>
               {formState === "sending" ? "Sending…" : "Send this to our team"}
             </Button>
+            {formState === "invalid" && (
+              <p role="alert" className="text-sm text-bad">
+                Please check the hospice name and location &mdash; the name
+                needs at least a couple of characters, and shorter is fine for
+                the rest.
+              </p>
+            )}
             {formState === "error" && (
-              <p className="text-sm text-bad">
+              <p role="alert" className="text-sm text-bad">
                 That didn&rsquo;t go through &mdash; our fault, not yours. Try
                 again in a minute, or send the note above from your own email;
                 it does the same job.

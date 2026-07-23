@@ -442,9 +442,23 @@ export function ProofSheet({
             {/* The buyer-path line (loop #4) — print-VISIBLE on purpose: its
                 whole job is the printed sheet that travels to the next
                 institution's desk. Word order keeps "through {BRAND.name}"
-                ahead of the audience so the page can't be misread cold. */}
+                ahead of the audience so the page can't be misread cold.
+                Gated on `live`: the sample page must state capability, never
+                a present-tense adoption fact about a partner that doesn't
+                exist (guardrail #4). */}
             <p>
-              {partnerType === "employer" ? (
+              {!live ? (
+                <>
+                  Hospices and employers can offer this through {BRAND.name}{" "}
+                  to the families they serve &middot;{" "}
+                  <a
+                    href={`${BRAND.url}/partners`}
+                    className="underline-offset-2 hover:underline"
+                  >
+                    {BRAND.domain}/partners
+                  </a>
+                </>
+              ) : partnerType === "employer" ? (
                 <>
                   {name} offers this through {BRAND.name}{" "}
                   to employees&rsquo; families &middot; for hospices and

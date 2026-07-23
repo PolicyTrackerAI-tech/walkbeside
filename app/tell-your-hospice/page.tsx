@@ -27,15 +27,23 @@ export default async function TellYourHospicePage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const sp = await searchParams;
-  const raw = (key: string) => {
+  // Each prefill is clamped to its /api/partner/nominate zod bound — a
+  // crafted over-long param must not render an unsubmittable form (maxLength
+  // never truncates programmatic values). Sliced again after display-casing
+  // because case mapping can grow strings (ß → SS).
+  const raw = (key: string, max: number) => {
     const v = sp[key];
-    return typeof v === "string" ? v.slice(0, 160) : "";
+    return typeof v === "string" ? v.slice(0, max) : "";
   };
   // Finder-prefilled values arrive verbatim from the CMS directory —
   // display-case them; whatever ends up in the field is what the lead takes.
-  const hospice = raw("hospice") ? displayHospiceName(raw("hospice")) : "";
-  const city = raw("city") ? displayHospiceName(raw("city")) : "";
-  const state = raw("state");
+  const hospice = raw("hospice", 160)
+    ? displayHospiceName(raw("hospice", 160)).slice(0, 160)
+    : "";
+  const city = raw("city", 80)
+    ? displayHospiceName(raw("city", 80)).slice(0, 80)
+    : "";
+  const state = raw("state", 40);
 
   return (
     <main className="flex-1 flex flex-col">
