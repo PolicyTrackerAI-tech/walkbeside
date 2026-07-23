@@ -5,6 +5,7 @@ import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ShareThisPage } from "@/components/ShareThisPage";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
 import {
@@ -277,6 +278,8 @@ export default function AverageFuneralCostPage() {
             Confirm specific prices directly with the funeral home before
             relying on anything here for a financial decision.
           </p>
+
+          <ShareThisPage surface="guide" />
 
           <HelpFooter />
         </div>

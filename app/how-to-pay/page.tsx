@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ShareThisPage } from "@/components/ShareThisPage";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
 import { EmailCapture } from "@/components/EmailCapture";
@@ -463,6 +464,8 @@ export default function HowToPayPage() {
             buttonLabel="Email me this guide"
             successMessage="It's in your inbox. Take care."
           />
+
+          <ShareThisPage surface="guide" />
 
           <HelpFooter />
         </div>

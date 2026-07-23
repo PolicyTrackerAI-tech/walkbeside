@@ -11,7 +11,13 @@ export type ToolEvent =
   | "obituary_generated"
   | "plan_now_completed"
   | "email_signup"
-  | "negotiate_started";
+  | "negotiate_started"
+  // Loop events (sprint Day 4): the four organic loops' seams. Aggregate
+  // counts only, like everything above — no codes, no identities.
+  | "nominate_submitted"
+  | "hospice_intro_copied"
+  | "share_clicked"
+  | "partner_cta_clicked";
 
 export function trackTool(
   event: ToolEvent,

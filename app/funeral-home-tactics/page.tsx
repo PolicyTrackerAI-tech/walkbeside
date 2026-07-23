@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { ShareThisPage } from "@/components/ShareThisPage";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
@@ -726,6 +727,8 @@ export default function FuneralHomeTacticsPage() {
             about any specific funeral home. Many honest funeral
             homes operate without using any of them.
           </p>
+
+          <ShareThisPage surface="guide" />
 
           <HelpFooter />
         </div>
