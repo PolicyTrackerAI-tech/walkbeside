@@ -2,6 +2,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
+import { BRAND } from "@/lib/brand";
 import { fmtUSD } from "@/lib/pricing-data";
 import { SMALL_SAMPLE_THRESHOLD, type CohortStats } from "@/lib/partner-report";
 import { PrintButton } from "@/components/partner/PrintButton";
@@ -435,6 +436,37 @@ export function ProofSheet({
                   a CMS or CAHPS instrument, not a compliance certification or
                   survey substitute, and it implies no endorsement by CMS or
                   any regulator.
+                </>
+              )}
+            </p>
+            {/* The buyer-path line (loop #4) — print-VISIBLE on purpose: its
+                whole job is the printed sheet that travels to the next
+                institution's desk. Word order keeps "through {BRAND.name}"
+                ahead of the audience so the page can't be misread cold. */}
+            <p>
+              {partnerType === "employer" ? (
+                <>
+                  {name} offers this through {BRAND.name}{" "}
+                  to employees&rsquo; families &middot; for hospices and
+                  employers:{" "}
+                  <a
+                    href={`${BRAND.url}/partners`}
+                    className="underline-offset-2 hover:underline"
+                  >
+                    {BRAND.domain}/partners
+                  </a>
+                </>
+              ) : (
+                <>
+                  {name} offers this through {BRAND.name}{" "}
+                  to the families it serves &middot; for hospices and
+                  employers:{" "}
+                  <a
+                    href={`${BRAND.url}/partners`}
+                    className="underline-offset-2 hover:underline"
+                  >
+                    {BRAND.domain}/partners
+                  </a>
                 </>
               )}
             </p>

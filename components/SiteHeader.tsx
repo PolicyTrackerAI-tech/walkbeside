@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Brand } from "./Brand";
 import { createClient } from "@/lib/supabase/client";
 import { FEATURES } from "@/lib/env";
+import { trackTool } from "@/lib/analytics";
 
 interface Props {
   /** Legacy: href for the right-side back link. */
@@ -37,6 +38,14 @@ const DEFAULT_NAV_LINKS: { href: string; label: string }[] = [
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
 ];
+
+/**
+ * The institutional lane's door (sprint Day 4). Kept out of
+ * DEFAULT_NAV_LINKS so the family links stay a closed set: desktop renders
+ * it last, the mobile menu renders it under its own divider, and surfaces
+ * that pass navLinks={[]} (the portal, token reports) get neither.
+ */
+const PARTNER_NAV_LINK = { href: "/partners", label: "For hospices" };
 
 export function SiteHeader({
   backHref,
@@ -79,6 +88,15 @@ export function SiteHeader({
               {l.label}
             </Link>
           ))}
+          {navLinks.length > 0 && (
+            <Link
+              href={PARTNER_NAV_LINK.href}
+              onClick={() => trackTool("partner_cta_clicked", { surface: "header" })}
+              className="whitespace-nowrap hover:text-ink underline-offset-2 hover:underline"
+            >
+              {PARTNER_NAV_LINK.label}
+            </Link>
+          )}
         </nav>
 
         <div className="hidden lg:flex items-center gap-3 ml-auto">
@@ -133,6 +151,20 @@ export function SiteHeader({
                 {l.label}
               </Link>
             ))}
+            {navLinks.length > 0 && (
+              <div className="pt-2 border-t border-border">
+                <Link
+                  href={PARTNER_NAV_LINK.href}
+                  onClick={() => {
+                    setMobileOpen(false);
+                    trackTool("partner_cta_clicked", { surface: "header" });
+                  }}
+                  className="py-1 hover:text-ink"
+                >
+                  {PARTNER_NAV_LINK.label}
+                </Link>
+              </div>
+            )}
             <div className="pt-2 border-t border-border flex items-center justify-between gap-3">
               {legacyBack}
               <HeaderAuthButton />
