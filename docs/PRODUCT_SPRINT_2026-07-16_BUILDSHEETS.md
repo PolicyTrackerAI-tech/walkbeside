@@ -28,6 +28,20 @@ family · fresh worktrees don't get `.env.local` — copy from
 
 ---
 
+## ⚡⚡ SUPERSEDED FOR DAYS 5–9 + RENAME DAY (2026-07-26) — READ THIS FIRST
+
+**Days 1–4 are shipped and merged** (Day 4 = PR #168, main @ b19983a). For every
+remaining day — Day 5 (delivery), Day 6 (hospice pages), Day 7 (programmatic
+reach), Day 8 (Migration B + billing), Day 9 (QA + truth), Rename Day —
+**execute from [`SPRINT_DAYS_5-9_BUILDSHEETS.md`](SPRINT_DAYS_5-9_BUILDSHEETS.md)
+only.** That file was re-verified line-by-line against post-Day-4 main and
+corrects real drift in the sections below (most notably: the old §DAY 5-REPLAN's
+family arrival surface is wrong — referral links land on `/plan-now?ref=`, not
+`/partner/[code]`). The day sections below stay for history; never execute from
+them.
+
+---
+
 ## ⚡ REPLAN 2026-07-17 — READ THIS FIRST (day order changed)
 
 Founder call at the end of Day 3 (Fri Jul 17, Days 1–3 built — #163/#164
