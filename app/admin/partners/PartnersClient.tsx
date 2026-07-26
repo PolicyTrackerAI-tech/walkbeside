@@ -139,21 +139,28 @@ export function PartnersClient({
       {leads.length > 0 && (
         <Card tone="soft">
           <CardTitle>
-            {leads.length} demo-request lead{leads.length === 1 ? "" : "s"}
+            {leads.length} lead{leads.length === 1 ? "" : "s"}
           </CardTitle>
           <p className="text-sm text-ink-soft mt-1">
-            People who asked for a call but haven&apos;t applied. Read-only —
-            reply by email; approving happens below once they apply.
+            Demo requests from institutions and hospice nominations from
+            families. Read-only — reply by email where one was left; approving
+            happens below once an institution applies. Never contact a
+            nominated hospice&apos;s families.
           </p>
           <ul className="mt-3 space-y-3">
             {leads.map((l) => (
               <li key={l.id} className="rounded-xl border border-border bg-surface px-4 py-3">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                   <span className="font-medium text-ink">
-                    {l.name ?? "(no name)"}
-                    {l.org && (
+                    {l.name ?? (l.source === "family_nomination" ? l.org ?? "(no org)" : "(no name)")}
+                    {l.org && l.name && (
                       <span className="text-ink-muted font-normal"> — {l.org}</span>
                     )}
+                    <span className="ml-2 align-middle text-[11px] uppercase tracking-wider text-ink-muted font-normal border border-border rounded-full px-2 py-0.5">
+                      {l.source === "family_nomination"
+                        ? "family nomination"
+                        : "demo request"}
+                    </span>
                   </span>
                   <span className="text-xs text-ink-muted">
                     {new Date(l.created_at).toLocaleDateString("en-US")} ·{" "}
@@ -163,15 +170,23 @@ export function PartnersClient({
                   </span>
                 </div>
                 <div className="text-sm mt-1">
-                  <a
-                    href={`mailto:${l.email}`}
-                    className="text-primary-deep underline-offset-2 hover:underline"
-                  >
-                    {l.email}
-                  </a>
+                  {l.email ? (
+                    <a
+                      href={`mailto:${l.email}`}
+                      className="text-primary-deep underline-offset-2 hover:underline"
+                    >
+                      {l.email}
+                    </a>
+                  ) : (
+                    <span className="text-ink-muted">
+                      No contact left — do not follow up with anyone.
+                    </span>
+                  )}
                 </div>
+                {/* No clamp: the route caps notes at 600 chars, and a clipped
+                    nomination note has no expand affordance here. */}
                 {l.note && (
-                  <p className="text-sm text-ink-soft mt-1 line-clamp-3">{l.note}</p>
+                  <p className="text-sm text-ink-soft mt-1 whitespace-pre-line">{l.note}</p>
                 )}
               </li>
             ))}

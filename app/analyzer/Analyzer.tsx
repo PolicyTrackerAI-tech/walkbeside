@@ -23,6 +23,7 @@ import {
   buildShareText,
 } from "@/lib/analyzer-display";
 import { ViolationsPanel } from "@/components/analyzer/ViolationsPanel";
+import { ShareThisPage } from "@/components/ShareThisPage";
 import { DataTierBadge } from "@/components/DataTierBadge";
 import { TONES, type AnalyzerItem, type Violation } from "@/components/analyzer/types";
 
@@ -750,6 +751,8 @@ export function Analyzer({
                   Print / Save as PDF
                 </Button>
               </div>
+
+              <ShareThisPage surface="analyzer" />
 
               {letter && (
                 <Card tone="primary" className="print:hidden">

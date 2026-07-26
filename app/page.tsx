@@ -5,6 +5,9 @@ import { Card, CardEyebrow } from "@/components/ui/Card";
 import { SiteHeader } from "@/components/SiteHeader";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { HomeQuickCheck } from "@/components/HomeQuickCheck";
+import { HospiceFinder } from "@/components/HospiceFinder";
+import { PartnerCtaLink } from "@/components/PartnerCtaLink";
+import { FREE_FOR_EVERY_FAMILY } from "@/lib/copy";
 
 const ORG_SCHEMA = {
   "@context": "https://schema.org",
@@ -101,7 +104,8 @@ export default function HomePage() {
             <strong className="text-ink">No commissions. No kickbacks. No referral fees.</strong>{" "}
             We take no money from any funeral home, cemetery, or vendor on
             this site. We keep everything free for families and are funded by the
-            institutions we partner with.
+            institutions we partner with.{" "}
+            <strong className="text-ink">{FREE_FOR_EVERY_FAMILY}</strong>
           </p>
 
           <p className="mt-6 text-xs text-ink-muted max-w-md mx-auto">
@@ -200,8 +204,8 @@ export default function HomePage() {
               violations, and exactly how much you&rsquo;re paying{" "}
               <strong className="text-ink">above fair</strong>{" "}for your
               region.
-              No one else can tell you that &mdash; every comparison site is
-              paid by the funeral homes.
+              We can tell you that because no one with a stake in your bill
+              pays us.
             </p>
             <span className="text-sm font-medium text-primary-deep group-hover:underline underline-offset-2">
               Check a quote &rarr;
@@ -272,19 +276,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-t border-border bg-surface">
+        <div className="max-w-3xl mx-auto px-5 py-14">
+          <HospiceFinder />
+        </div>
+      </section>
+
       <section className="border-t border-border bg-surface-soft">
         <div className="max-w-3xl mx-auto px-5 py-14">
           <p className="text-xs uppercase tracking-wider text-ink-muted mb-3 text-center">
             For hospices &amp; employers
           </p>
           <h2 className="font-serif text-2xl sm:text-3xl text-ink text-center mb-4">
-            A funeral-cost benefit you can hand a grieving family without
-            worrying what it costs them.
+            Offer this to every family you serve &mdash; free to them,
+            documented outcomes for you.
           </h2>
           <p className="text-center text-ink-soft mb-8 max-w-xl mx-auto">
-            We take no money from funeral homes or insurers — your
-            organization pays us, so we have no reason to point a family
-            anywhere but where&rsquo;s right for them.
+            Your organization funds the support; the family never pays a cent
+            and is never steered anywhere. You get aggregate, de-identified
+            outcomes &mdash; families supported, savings found, satisfaction
+            &mdash; for your bereavement or benefits file, never any single
+            family&rsquo;s details.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -309,10 +321,13 @@ export default function HomePage() {
             </Card>
           </div>
 
-          <div className="flex justify-center">
-            <LinkButton href="/partners" variant="secondary">
-              See how partnering works →
-            </LinkButton>
+          <div className="flex flex-wrap justify-center gap-3">
+            <PartnerCtaLink href="/partners" surface="home-institutional">
+              How it works for hospices →
+            </PartnerCtaLink>
+            <PartnerCtaLink href="/employers" surface="home-institutional">
+              How it works for employers →
+            </PartnerCtaLink>
           </div>
         </div>
       </section>

@@ -37,6 +37,12 @@ export function ReferralCoBrand({ refParam }: { refParam?: string }) {
   return (
     <div className="print:hidden rounded-xl border border-primary/30 bg-primary-soft/50 px-4 py-3 text-sm text-ink">
       <NeutralityPledge name={name} />
+      {/* Institution-type-neutral on purpose: /api/partner/resolve returns the
+          name only, and the partner may be an employer, not a hospice. */}
+      <p className="mt-1 text-xs text-ink-muted">
+        It&rsquo;s free for everyone they serve, link or no link &mdash; the
+        link never unlocks anything.
+      </p>
     </div>
   );
 }
