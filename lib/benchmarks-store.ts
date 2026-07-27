@@ -4,6 +4,7 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { regionForZip } from "@/lib/zip-regions";
 import type { PriceDataSource } from "@/lib/pricing-data";
+import { SMALL_SAMPLE_THRESHOLD } from "@/lib/partner-report";
 
 /**
  * Server-side reads of regional_benchmarks — the founder-promoted
@@ -171,4 +172,82 @@ export async function dataSourceForZipLive(
   zip: string,
 ): Promise<PriceDataSource> {
   return (await tierForZip(zip)).tier;
+}
+
+export interface ActiveBenchmarkRow extends RegionalBenchmark {
+  scopeValue: string;
+  sources: { name: string; url?: string; kind?: string; accessed?: string }[];
+}
+
+interface ActiveRowRaw extends BenchmarkRow {
+  sources: unknown;
+}
+
+/**
+ * Sources are provenance, never prices: keep only the four known string
+ * fields per entry and drop everything else, so a numeric or price-like
+ * field in the jsonb can never reach a public payload.
+ */
+function sanitizeSources(raw: unknown): ActiveBenchmarkRow["sources"] {
+  if (!Array.isArray(raw)) return [];
+  const out: ActiveBenchmarkRow["sources"] = [];
+  for (const entry of raw) {
+    if (!entry || typeof entry !== "object" || Array.isArray(entry)) continue;
+    const e = entry as Record<string, unknown>;
+    if (typeof e.name !== "string" || !e.name) continue;
+    const clean: ActiveBenchmarkRow["sources"][number] = { name: e.name };
+    if (typeof e.url === "string") clean.url = e.url;
+    if (typeof e.kind === "string") clean.kind = e.kind;
+    if (typeof e.accessed === "string") clean.accessed = e.accessed;
+    out.push(clean);
+  }
+  return out;
+}
+
+/**
+ * Every active benchmark row, all scopes — the read behind the public
+ * Fair-Price Index surfaces (verified-metros section + the data endpoint).
+ * Aggregates plus sanitized provenance only; same degrade-to-empty posture
+ * as benchmarksForZip (missing table/env ⇒ [], never a throw). Ordered by
+ * scope_value, then line_item_id.
+ *
+ * The n≥SMALL_SAMPLE_THRESHOLD floor is re-applied here even though the
+ * promote route already gates it: the migration has no CHECK constraint and
+ * hand-SQL inserts exist in the real workflow, so a sub-threshold row must
+ * die at this read edge rather than reach a public payload (guardrail #4).
+ */
+export async function listActiveBenchmarks(): Promise<ActiveBenchmarkRow[]> {
+  try {
+    const svc = createServiceClient(
+      PUBLIC.supabaseUrl,
+      requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+    );
+    const { data, error } = await svc
+      .from("regional_benchmarks")
+      .select(
+        "line_item_id, scope, scope_value, fair_low_cents, fair_high_cents, predatory_at_cents, tier, n_data_points, version, effective_at, sources",
+      )
+      .eq("active", true)
+      .order("scope_value")
+      .order("line_item_id");
+    if (error) return [];
+    return ((data ?? []) as ActiveRowRaw[])
+      .filter((row) => row.n_data_points >= SMALL_SAMPLE_THRESHOLD)
+      .map((row) => ({
+      lineItemId: row.line_item_id,
+      fairLowCents: row.fair_low_cents,
+      fairHighCents: row.fair_high_cents,
+      predatoryAtCents: row.predatory_at_cents,
+      tier: row.tier,
+      n: row.n_data_points,
+      version: row.version,
+      effectiveAt: row.effective_at,
+      scope: row.scope,
+      scopeValue: row.scope_value,
+      sources: sanitizeSources(row.sources),
+    }));
+  } catch {
+    // table not applied yet / env missing → nothing to list
+    return [];
+  }
 }

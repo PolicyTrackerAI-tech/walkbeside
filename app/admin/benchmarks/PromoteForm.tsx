@@ -214,6 +214,11 @@ export function PromoteForm({
             placeholder="e.g. 6 GPLs collected 2026-07, Salt Lake City homes' published price lists"
             required
           />
+          <p className="text-xs text-ink-muted mt-1">
+            Provenance only &mdash; describe the source without naming a
+            funeral home or quoting a price. This note ships verbatim in the
+            public dataset.
+          </p>
         </div>
         <div className="sm:col-span-2 flex items-center gap-3">
           <Button type="submit" disabled={busy}>
