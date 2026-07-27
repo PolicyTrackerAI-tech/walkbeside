@@ -25,6 +25,7 @@ import {
   type YesNoUnsure,
 } from "@/lib/plan-now";
 import { trackTool } from "@/lib/analytics";
+import { FREE_WITH_OR_WITHOUT_LINK } from "@/lib/copy";
 
 /**
  * The one-sitting plan for the hospice admission week (research opportunity
@@ -158,29 +159,42 @@ export function PlanNow({ partner }: { partner?: string }) {
         <div className="max-w-2xl mx-auto px-5 py-10 space-y-6">
           {partner && (
             <div className="print:hidden rounded-xl border border-primary/30 bg-primary-soft/50 px-4 py-3 text-sm text-ink">
+              {/* The cosmetic twin of ReferralCoBrand's banner: renders only
+                  for slug-style ?ref= values, where ReferralCoBrand returns
+                  null (app/plan-now/page.tsx suppresses this one whenever a
+                  real code resolves, so the two never stack). The constant is
+                  verbatim law — render it, never retype it. Both {" "} are
+                  required: Turbopack eats a bare space at a line boundary
+                  after a tag or an expression. */}
               <span className="font-medium">Provided to you free by {partner}.</span>{" "}
               Neutral, private help — Honest Funeral takes no money from funeral
               homes or insurers, and nothing you enter here is shared with
-              anyone.
+              anyone.{" "}
+              <span className="font-medium">{FREE_WITH_OR_WITHOUT_LINK}</span>
             </div>
           )}
 
           {!showPlan && (
             <>
               <div className="print:hidden">
-                <CardEyebrow>The plan — about 20 minutes</CardEyebrow>
+                {/* Sprint Day 5 phone pass: with the referral banner present
+                    the step-1 path cards must still reach above the 375px
+                    fold, and the fix is paid for in words, not spacing — the
+                    intro keeps only the trap (the reason to do the plan at
+                    all); the promise lives in the h1 above, and the
+                    privacy/no-signup reassurances render at each point data
+                    is actually asked (the step-2 zip hint and step-3 name
+                    hint). The step counter rides the eyebrow — one source
+                    line, so no {" "} is needed. */}
+                <CardEyebrow>
+                  The plan — about 20 minutes · Step {step} of {TOTAL_STEPS}
+                </CardEyebrow>
                 <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
                   Decide calmly now, so the first call is easy later.
                 </h1>
                 <p className="text-ink-soft">
-                  When someone dies, the funeral home that picks up the body
-                  usually becomes the funeral home — decided in one rushed phone
-                  call. Doing this short plan now, while nothing is urgent,
-                  means that call happens on your terms. Everything stays on
-                  your device; there&rsquo;s nothing to sign up for.
-                </p>
-                <p className="text-xs text-ink-muted mt-2">
-                  Step {step} of {TOTAL_STEPS}
+                  When someone dies, whoever picks up the body usually becomes
+                  the funeral home — decided in one rushed call.
                 </p>
               </div>
 

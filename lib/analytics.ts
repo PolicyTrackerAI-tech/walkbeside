@@ -17,7 +17,13 @@ export type ToolEvent =
   | "nominate_submitted"
   | "hospice_intro_copied"
   | "share_clicked"
-  | "partner_cta_clicked";
+  | "partner_cta_clicked"
+  // Delivery events (sprint Day 5): the two seams of the hand-off itself —
+  // a coordinator printing family materials, and a family arriving on a
+  // referral. Both fire with NO properties: no referral code, no partner
+  // name, nothing that could re-identify an institution or a family.
+  | "materials_printed"
+  | "partner_landing_viewed";
 
 export function trackTool(
   event: ToolEvent,
