@@ -5,6 +5,8 @@ import { PUBLIC, requireServer } from "@/lib/env";
 import { regionForZip } from "@/lib/zip-regions";
 import type { PriceDataSource } from "@/lib/pricing-data";
 import { SMALL_SAMPLE_THRESHOLD } from "@/lib/partner-report";
+import { LINE_ITEMS } from "@/lib/pricing-data";
+import { compareBenchmarkVersions } from "@/lib/verified-metros";
 
 /**
  * Server-side reads of regional_benchmarks — the founder-promoted
@@ -183,10 +185,17 @@ interface ActiveRowRaw extends BenchmarkRow {
   sources: unknown;
 }
 
+// Price-like text in a free-text provenance field ($1,395 / 1,395 / 1395.00)
+// — deliberately over-matches (fail closed): losing a provenance note is
+// safe, publishing a price inside one is not.
+const PRICE_LIKE = /\$\s*\d|\b\d{1,3},\d{3}\b|\b\d+\.\d{2}\b/;
+
 /**
  * Sources are provenance, never prices: keep only the four known string
- * fields per entry and drop everything else, so a numeric or price-like
- * field in the jsonb can never reach a public payload.
+ * fields per entry and drop everything else — and drop the whole entry when
+ * any of its free-text fields contains price-like text, so neither a
+ * numeric field nor a price written inside a string can reach a public
+ * payload (guardrail #4; the sources note is founder free text).
  */
 function sanitizeSources(raw: unknown): ActiveBenchmarkRow["sources"] {
   if (!Array.isArray(raw)) return [];
@@ -199,29 +208,53 @@ function sanitizeSources(raw: unknown): ActiveBenchmarkRow["sources"] {
     if (typeof e.url === "string") clean.url = e.url;
     if (typeof e.kind === "string") clean.kind = e.kind;
     if (typeof e.accessed === "string") clean.accessed = e.accessed;
+    if (
+      [clean.name, clean.url ?? "", clean.kind ?? ""].some((v) =>
+        PRICE_LIKE.test(v),
+      )
+    ) {
+      continue;
+    }
     out.push(clean);
   }
   return out;
 }
 
+const CATALOG_IDS = new Set(LINE_ITEMS.map((it) => it.id));
+const ACTIVE_PAGE = 1000;
+
 /**
- * Every active benchmark row, all scopes — the read behind the public
+ * Every publishable benchmark row, all scopes — the read behind the public
  * Fair-Price Index surfaces (verified-metros section + the data endpoint).
- * Aggregates plus sanitized provenance only; same degrade-to-empty posture
- * as benchmarksForZip (missing table/env ⇒ [], never a throw). Ordered by
- * scope_value, then line_item_id.
+ * Aggregates plus sanitized provenance only. Throws on any read failure —
+ * use listActiveBenchmarks() for the degrade-to-empty posture; the data
+ * endpoint calls this directly so a store failure is distinguishable from
+ * a genuinely empty dataset (and can be served uncached).
  *
- * The n≥SMALL_SAMPLE_THRESHOLD floor is re-applied here even though the
- * promote route already gates it: the migration has no CHECK constraint and
- * hand-SQL inserts exist in the real workflow, so a sub-threshold row must
- * die at this read edge rather than reach a public payload (guardrail #4).
+ * Publishability is re-enforced at this read edge even though the promote
+ * route already gates it (the migration has no CHECK constraint and
+ * hand-SQL inserts exist in the real workflow — guardrail #4):
+ * - n ≥ SMALL_SAMPLE_THRESHOLD, or the row dies here;
+ * - only line_item_ids in the LINE_ITEMS catalog (rendered surfaces skip
+ *   unknown ids, so the citable dataset must too);
+ * - one winner per (scope, scope_value, line_item_id): latest effective_at,
+ *   numeric-aware version tiebreak — a failed retire can leave duplicate
+ *   active rows, and the dataset must never contradict the pages' counts.
+ *
+ * Paged reads (Supabase caps a single select at 1,000 rows — silent
+ * truncation would corrupt published counts at scale). Ordered by
+ * scope_value, then line_item_id.
  */
-export async function listActiveBenchmarks(): Promise<ActiveBenchmarkRow[]> {
-  try {
-    const svc = createServiceClient(
-      PUBLIC.supabaseUrl,
-      requireServer("SUPABASE_SERVICE_ROLE_KEY"),
-    );
+export async function listActiveBenchmarksOrThrow(): Promise<
+  ActiveBenchmarkRow[]
+> {
+  const svc = createServiceClient(
+    PUBLIC.supabaseUrl,
+    requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+  );
+  const raw: ActiveRowRaw[] = [];
+  let from = 0;
+  for (;;) {
     const { data, error } = await svc
       .from("regional_benchmarks")
       .select(
@@ -229,11 +262,42 @@ export async function listActiveBenchmarks(): Promise<ActiveBenchmarkRow[]> {
       )
       .eq("active", true)
       .order("scope_value")
-      .order("line_item_id");
-    if (error) return [];
-    return ((data ?? []) as ActiveRowRaw[])
-      .filter((row) => row.n_data_points >= SMALL_SAMPLE_THRESHOLD)
-      .map((row) => ({
+      .order("line_item_id")
+      .order("version")
+      .range(from, from + ACTIVE_PAGE - 1);
+    if (error) {
+      throw new Error(`regional_benchmarks read failed: ${error.message}`);
+    }
+    const page = (data ?? []) as ActiveRowRaw[];
+    raw.push(...page);
+    if (page.length < ACTIVE_PAGE) break;
+    from += ACTIVE_PAGE;
+  }
+
+  const winners = new Map<string, ActiveRowRaw>();
+  for (const row of raw) {
+    if (row.n_data_points < SMALL_SAMPLE_THRESHOLD) continue;
+    if (!CATALOG_IDS.has(row.line_item_id)) continue;
+    const key = `${row.scope}|${row.scope_value}|${row.line_item_id}`;
+    const prev = winners.get(key);
+    if (
+      prev &&
+      (prev.effective_at > row.effective_at ||
+        (prev.effective_at === row.effective_at &&
+          compareBenchmarkVersions(prev.version, row.version) >= 0))
+    ) {
+      continue;
+    }
+    winners.set(key, row);
+  }
+
+  return [...winners.values()]
+    .sort((a, b) =>
+      a.scope_value === b.scope_value
+        ? a.line_item_id.localeCompare(b.line_item_id)
+        : a.scope_value.localeCompare(b.scope_value),
+    )
+    .map((row) => ({
       lineItemId: row.line_item_id,
       fairLowCents: row.fair_low_cents,
       fairHighCents: row.fair_high_cents,
@@ -246,6 +310,12 @@ export async function listActiveBenchmarks(): Promise<ActiveBenchmarkRow[]> {
       scopeValue: row.scope_value,
       sources: sanitizeSources(row.sources),
     }));
+}
+
+/** listActiveBenchmarksOrThrow with the pages' degrade-to-empty posture. */
+export async function listActiveBenchmarks(): Promise<ActiveBenchmarkRow[]> {
+  try {
+    return await listActiveBenchmarksOrThrow();
   } catch {
     // table not applied yet / env missing → nothing to list
     return [];

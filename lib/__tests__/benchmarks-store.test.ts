@@ -43,6 +43,10 @@ async function load(
           orderings.push(k);
           return q;
         },
+        range: (fromIdx: number, toIdx: number) => {
+          call.filters.range = [fromIdx, toIdx];
+          return q;
+        },
         then: (resolve: (r: { data: unknown; error: unknown }) => void) => {
           const r = results.shift() ?? { data: null };
           resolve({ data: r.data, error: r.error ?? null });
@@ -216,7 +220,7 @@ describe("listActiveBenchmarks", () => {
     const rows = await store.listActiveBenchmarks();
     expect(calls[0].table).toBe("regional_benchmarks");
     expect(calls[0].filters.active).toBe(true);
-    expect(orderings).toEqual(["scope_value", "line_item_id"]);
+    expect(orderings).toEqual(["scope_value", "line_item_id", "version"]);
     expect(rows).toEqual([
       {
         lineItemId: "basic-services",
@@ -278,6 +282,79 @@ describe("listActiveBenchmarks", () => {
       { name: "Minimal" },
     ]);
     expect(rows[1].sources).toEqual([]);
+  });
+
+  it("pages past Supabase's 1,000-row cap (no silent truncation)", async () => {
+    const page1 = Array.from({ length: 1000 }, (_, i) =>
+      row({ scope: "metro", scope_value: `Metro ${String(i).padStart(4, "0")}`, sources: [] }),
+    );
+    const page2 = [
+      row({ scope: "metro", scope_value: "Metro 9999", sources: [] }),
+    ];
+    const { store, calls } = await load([{ data: page1 }, { data: page2 }]);
+    const rows = await store.listActiveBenchmarks();
+    expect(rows).toHaveLength(1001);
+    expect(calls).toHaveLength(2);
+    expect(calls[0].filters.range).toEqual([0, 999]);
+    expect(calls[1].filters.range).toEqual([1000, 1999]);
+  });
+
+  it("dedupes duplicate active rows per scope×item — latest effective_at wins, numeric version tiebreak", async () => {
+    const { store } = await load([
+      {
+        data: [
+          // Failed-retire duplicate: v2 is newer and must be the only survivor.
+          row({ scope: "metro", scope_value: "Salt Lake City", version: "2026-07-v1", effective_at: "2026-07-01T00:00:00+00:00", fair_low_cents: 140000, sources: [] }),
+          row({ scope: "metro", scope_value: "Salt Lake City", version: "2026-07-v2", effective_at: "2026-07-20T00:00:00+00:00", fair_low_cents: 150000, sources: [] }),
+          // Identical effective_at: v10 must beat v9 (numeric, not lexicographic).
+          row({ line_item_id: "embalming", scope: "metro", scope_value: "Salt Lake City", version: "2026-07-v9", effective_at: "2026-07-20", n_data_points: 5, sources: [] }),
+          row({ line_item_id: "embalming", scope: "metro", scope_value: "Salt Lake City", version: "2026-07-v10", effective_at: "2026-07-20", n_data_points: 12, sources: [] }),
+        ],
+      },
+    ]);
+    const rows = await store.listActiveBenchmarks();
+    expect(rows).toHaveLength(2);
+    const basic = rows.find((r) => r.lineItemId === "basic-services")!;
+    expect(basic.version).toBe("2026-07-v2");
+    expect(basic.fairLowCents).toBe(150000);
+    const embalming = rows.find((r) => r.lineItemId === "embalming")!;
+    expect(embalming.version).toBe("2026-07-v10");
+    expect(embalming.n).toBe(12);
+  });
+
+  it("filters out rows whose item id is not in the LINE_ITEMS catalog", async () => {
+    const { store } = await load([
+      {
+        data: [
+          row({ line_item_id: "not-a-real-item", scope: "metro", scope_value: "Salt Lake City", sources: [] }),
+          row({ line_item_id: "embalming", scope: "metro", scope_value: "Salt Lake City", sources: [] }),
+        ],
+      },
+    ]);
+    const rows = await store.listActiveBenchmarks();
+    expect(rows.map((r) => r.lineItemId)).toEqual(["embalming"]);
+  });
+
+  it("drops source entries carrying price-like free text (name, url or kind)", async () => {
+    const { store } = await load([
+      {
+        data: [
+          row({
+            scope: "metro",
+            scope_value: "Salt Lake City",
+            sources: [
+              { name: "SLC homes quoted $1,395 for this" },
+              { name: "Clean note", url: "https://example.com/gpl?price=1299.00" },
+              { name: "Kept", kind: "founder-note", accessed: "2026-07-20" },
+            ],
+          }),
+        ],
+      },
+    ]);
+    const rows = await store.listActiveBenchmarks();
+    expect(rows[0].sources).toEqual([
+      { name: "Kept", kind: "founder-note", accessed: "2026-07-20" },
+    ]);
   });
 
   it("re-applies the n≥5 floor at the read edge (hand-SQL rows below it never serialize)", async () => {

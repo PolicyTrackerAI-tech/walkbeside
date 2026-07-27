@@ -14,7 +14,10 @@ import { SERVICE_TOTALS, SERVICE_LABELS, LINE_ITEMS, fmtUSD } from "@/lib/pricin
 import { DataTierBadge } from "@/components/DataTierBadge";
 import { listStateSlugs } from "@/lib/probate-by-state";
 import { benchmarksForZip } from "@/lib/benchmarks-store";
-import { verifiedLocalRows } from "@/lib/verified-local-prices";
+import {
+  verifiedLocalRows,
+  localCountLine,
+} from "@/lib/verified-local-prices";
 
 export async function generateStaticParams() {
   return listCitySlugs().map((slug) => ({ city: slug }));
@@ -68,15 +71,13 @@ export default async function CityFuneralCostsPage({
   const overrides = await benchmarksForZip(city.zipExample);
   const local = verifiedLocalRows(overrides);
 
-  // The count line is verbatim law (guardrail #4): "price lists" only ever
-  // describes verified rows, "prices reported by families in the area" only
-  // ever describes community rows; mixed metros count the tiers separately.
-  const countLine =
-    local.verifiedCount > 0 && local.communityCount > 0
-      ? `${local.verifiedCount} of the ${LINE_ITEMS.length} benchmarked items in this metro come from real price lists; ${local.communityCount} come from prices reported by families in the area; the rest are modeled.`
-      : local.verifiedCount > 0
-        ? `${local.verifiedCount} of the ${LINE_ITEMS.length} benchmarked items in this metro come from real price lists; the rest are modeled.`
-        : `${local.communityCount} of the ${LINE_ITEMS.length} benchmarked items in this metro come from prices reported by families in the area; the rest are modeled.`;
+  // Verbatim law (guardrail #4) — the wording lives in localCountLine and
+  // is pinned character-for-character by its unit tests.
+  const countLine = localCountLine(
+    local.verifiedCount,
+    local.communityCount,
+    LINE_ITEMS.length,
+  );
 
   const region = regionForZip(city.zipExample);
   const multiplier = region?.multiplier ?? 1.0;

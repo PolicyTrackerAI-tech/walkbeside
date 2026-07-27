@@ -30,6 +30,15 @@ export interface VerifiedMetroSummary {
 
 const CATALOG_IDS = new Set(LINE_ITEMS.map((it) => it.id));
 
+/**
+ * Numeric-aware version comparison: "2026-07-v10" must beat "2026-07-v9"
+ * (plain string comparison would rank v10 < v2). Shared with the store's
+ * dedupe so every surface picks the same winner.
+ */
+export function compareBenchmarkVersions(a: string, b: string): number {
+  return a.localeCompare(b, "en", { numeric: true });
+}
+
 export function groupVerifiedMetros(
   rows: ActiveBenchmarkRow[],
 ): VerifiedMetroSummary[] {
@@ -46,7 +55,8 @@ export function groupVerifiedMetros(
     if (
       prev &&
       (prev.effectiveAt > row.effectiveAt ||
-        (prev.effectiveAt === row.effectiveAt && prev.version >= row.version))
+        (prev.effectiveAt === row.effectiveAt &&
+          compareBenchmarkVersions(prev.version, row.version) >= 0))
     ) {
       continue;
     }
@@ -59,7 +69,8 @@ export function groupVerifiedMetros(
     if (!winners.length) continue;
     const newest = winners.reduce((a, b) =>
       b.effectiveAt > a.effectiveAt ||
-      (b.effectiveAt === a.effectiveAt && b.version > a.version)
+      (b.effectiveAt === a.effectiveAt &&
+        compareBenchmarkVersions(b.version, a.version) > 0)
         ? b
         : a,
     );

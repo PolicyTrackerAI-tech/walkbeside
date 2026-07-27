@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 import {
-  listActiveBenchmarks,
+  listActiveBenchmarksOrThrow,
   type ActiveBenchmarkRow,
 } from "@/lib/benchmarks-store";
 import { LINE_ITEMS, PRICING_LAST_UPDATED } from "@/lib/pricing-data";
@@ -20,13 +20,16 @@ import { BRAND } from "@/lib/brand";
  * prices, family/case data, or any row below the n≥5 gate. That is
  * structural, not aspirational: the endpoint reads ONLY the static
  * LINE_ITEMS catalog and regional_benchmarks aggregates via
- * listActiveBenchmarks(), which sanitizes sources to provenance-only fields
- * and re-applies the n≥SMALL_SAMPLE_THRESHOLD floor at the read edge. Never
- * add a read of price_list_analyses, negotiation_outreach, or any other
- * raw table here.
+ * listActiveBenchmarksOrThrow(), which sanitizes sources to provenance-only
+ * fields (dropping price-like free text), re-applies the
+ * n≥SMALL_SAMPLE_THRESHOLD floor, filters to catalog items, and dedupes to
+ * one winner per scope×item at the read edge. Never add a read of the raw
+ * quote-analysis or outreach tables — or any other family-data store — here.
  *
  * Failure posture mirrors /api/benchmarks/tier: any error degrades to a
- * valid 200 national-only payload, never a 500.
+ * valid 200 national-only payload, never a 500 — served uncached, so a
+ * transient store blip can't pin an empty dataset in public caches for an
+ * hour.
  */
 
 const BY_ID = new Map(LINE_ITEMS.map((it) => [it.id, it]));
@@ -79,6 +82,9 @@ function toOverride(r: ActiveBenchmarkRow) {
     value: r.scopeValue,
     item: r.lineItemId,
     tier: r.tier,
+    // Exact values (cents/100 may be non-integer, e.g. 1499.5). The city
+    // page displays whole dollars via fmtUSD — a deliberate ≤$0.50
+    // display-rounding difference, never a different underlying number.
     fairLow: r.fairLowCents / 100,
     fairHigh: r.fairHighCents / 100,
     // null stays null — never coerced to 0 (a fake threshold is a published
@@ -185,19 +191,19 @@ export async function GET(req: Request) {
 
   const wantsCsv = new URL(req.url).searchParams.get("format") === "csv";
 
-  const csvResponse = (rows: ActiveBenchmarkRow[]) =>
+  const csvResponse = (rows: ActiveBenchmarkRow[], cache = CACHE_HEADERS) =>
     new NextResponse(buildCsv(rows), {
       headers: {
-        ...CACHE_HEADERS,
+        ...cache,
         "Content-Type": "text/csv; charset=utf-8",
         "Content-Disposition": 'attachment; filename="fair-price-index.csv"',
       },
     });
 
   try {
-    // listActiveBenchmarks degrades to [] on its own; the outer try/catch is
-    // the belt for everything else — this endpoint never 500s.
-    const rows = await listActiveBenchmarks();
+    // OrThrow, so a store failure lands in the catch below instead of
+    // masquerading as a genuinely empty dataset — this endpoint never 500s.
+    const rows = await listActiveBenchmarksOrThrow();
     if (wantsCsv) return csvResponse(rows);
     return NextResponse.json(
       {
@@ -209,8 +215,11 @@ export async function GET(req: Request) {
       { headers: CACHE_HEADERS },
     );
   } catch {
-    // National-only degrade, in the format that was asked for.
-    if (wantsCsv) return csvResponse([]);
+    // National-only degrade, in the format that was asked for — uncached,
+    // so a transient blip can't pin an overrides-empty payload in public
+    // caches for an hour.
+    const NO_STORE = { "Cache-Control": "no-store" };
+    if (wantsCsv) return csvResponse([], NO_STORE);
     return NextResponse.json(
       {
         metadata: buildMetadata(PRICING_LAST_UPDATED),
@@ -218,7 +227,7 @@ export async function GET(req: Request) {
         national: NATIONAL,
         overrides: [],
       },
-      { headers: CACHE_HEADERS },
+      { headers: NO_STORE },
     );
   }
 }

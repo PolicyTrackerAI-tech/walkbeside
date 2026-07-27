@@ -70,6 +70,17 @@ describe("groupVerifiedMetros", () => {
     expect(out[0].latestVersion).toBe("2026-07-v2");
   });
 
+  it("breaks effective_at ties numerically: v10 beats v9 in both insertion orders", () => {
+    const v9 = row({ version: "2026-07-v9", n: 5, effectiveAt: "2026-07-20" });
+    const v10 = row({ version: "2026-07-v10", n: 12, effectiveAt: "2026-07-20" });
+    for (const order of [[v9, v10], [v10, v9]]) {
+      const out = groupVerifiedMetros(order);
+      expect(out[0].latestVersion).toBe("2026-07-v10");
+      expect(out[0].minN).toBe(12);
+      expect(out[0].itemCount).toBe(1);
+    }
+  });
+
   it("skips ids missing from the LINE_ITEMS catalog", () => {
     const out = groupVerifiedMetros([
       row({ lineItemId: "not-a-real-item" }),

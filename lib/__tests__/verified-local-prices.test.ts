@@ -4,6 +4,7 @@ import type { RegionalBenchmark } from "@/lib/benchmarks-store";
 import {
   verifiedLocalRows,
   displayItemName,
+  localCountLine,
 } from "@/lib/verified-local-prices";
 
 const bench = (
@@ -91,6 +92,38 @@ describe("verifiedLocalRows", () => {
     const { rows } = verifiedLocalRows(asMap([bench("basic-services")]));
     const item = LINE_ITEMS.find((it) => it.id === "basic-services")!;
     expect(rows[0].name).toBe(displayItemName(item.name));
-    expect(rows[0].name).not.toMatch(/[/—]/);
+    expect(rows[0].name).not.toContain("/");
+  });
+
+  it("keeps the em-dash qualifier so the two caskets stay distinct", () => {
+    const { rows } = verifiedLocalRows(
+      asMap([bench("casket-metal"), bench("casket-wood")]),
+    );
+    const names = rows.map((r) => r.name);
+    expect(new Set(names).size).toBe(2);
+    expect(names).toContain("Casket — 18-gauge metal");
+    expect(names).toContain("Casket — wood");
+  });
+});
+
+describe("localCountLine (verbatim law — every character pinned)", () => {
+  it("verified-only", () => {
+    expect(localCountLine(4, 0, 30)).toBe(
+      "4 of the 30 benchmarked items in this metro come from real price lists; the rest are modeled.",
+    );
+  });
+
+  it('community-only — never says "price lists"', () => {
+    const line = localCountLine(0, 3, 30);
+    expect(line).toBe(
+      "3 of the 30 benchmarked items in this metro come from prices reported by families in the area; the rest are modeled.",
+    );
+    expect(line).not.toContain("price lists");
+  });
+
+  it("mixed — tiers counted separately, semicolon-chained", () => {
+    expect(localCountLine(4, 3, 30)).toBe(
+      "4 of the 30 benchmarked items in this metro come from real price lists; 3 come from prices reported by families in the area; the rest are modeled.",
+    );
   });
 });
