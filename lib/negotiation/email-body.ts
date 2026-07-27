@@ -5,6 +5,7 @@
  */
 
 import crypto from "node:crypto";
+import { unsubscribeSecret } from "@/lib/unsubscribe-secret";
 import { postalAddressLine } from "@/lib/postal-address";
 
 const SITE = "https://honestfuneral.co";
@@ -148,7 +149,7 @@ export function familyLabelFromOutreachBody(body: string): string | null {
  * can't be replayed to opt a funeral home out, or vice versa.
  */
 export function funeralHomeOptOutUrl(email: string): string {
-  const secret = process.env.UNSUBSCRIBE_SECRET ?? "fallback-please-set";
+  const secret = unsubscribeSecret();
   const token = crypto
     .createHmac("sha256", secret)
     .update(`fd:${email.toLowerCase()}`)
@@ -162,7 +163,7 @@ export function verifyFuneralHomeOptOutToken(
   email: string,
   token: string,
 ): boolean {
-  const secret = process.env.UNSUBSCRIBE_SECRET ?? "fallback-please-set";
+  const secret = unsubscribeSecret();
   const expected = crypto
     .createHmac("sha256", secret)
     .update(`fd:${email.toLowerCase()}`)

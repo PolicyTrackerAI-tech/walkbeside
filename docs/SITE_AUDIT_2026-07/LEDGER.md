@@ -12,9 +12,9 @@ is a LEAD until its audit day verifies it live.
 
 | ID | Day | Sev | Crit | Finding | Status |
 |---|---|---|---|---|---|
-| A1-01 | A1 | P0? | F | `ADMIN_EMAILS` unset in prod would make EVERY logged-in user admin (`lib/admin.ts:34` permissive default; `lib/env.ts` only enforces under `OUTREACH_LIVE=true`, which is off). Exposes /admin/outcomes family data, benchmark publish, partner approval. Founder: check Vercel env; then live-probe with a non-admin session. | LEAD |
-| A1-02 | A1 | P0 | F | `/funeral-home-opt-out` performs the DB opt-out write on GET — mail-scanner link prefetch (Outlook SafeLinks) can silently opt homes out on delivery; could zero the vetted directory when OUTREACH_LIVE flips on. Needs confirm-POST. | LEAD |
-| A1-03 | A1 | P0 | F | `/preferences/[id]?action=unsubscribe` applies on GET via service role — link scanners silently unsubscribe families from opted-in check-ins (and resubscribe in reverse). Same leaked-link trust level lets anyone set `bereavement_sms_phone` to an arbitrary number. | LEAD |
+| A1-01 | A1 | P0 | F | `ADMIN_EMAILS` unset in prod would make EVERY logged-in user admin (`lib/admin.ts:34` permissive default; `lib/env.ts` only enforced under `OUTREACH_LIVE=true`, off). **FIXED (code): prod now fails closed** — unset allowlist denies everyone; dev stays permissive; test pins both branches; boot warning added. **FOUNDER: set `ADMIN_EMAILS` in Vercel before merge** (else team loses /admin). | FIXED + FOUNDER |
+| A1-02 | A1 | P0 | F | `/funeral-home-opt-out` performed the `active=false` write on GET render — mail-scanner prefetch of the tokenized link could deactivate homes before a human clicked. **FIXED: confirm-button POST (server action); GET only validates + renders.** No live links exist yet (OUTREACH_LIVE never on). | FIXED |
+| A1-03 | A1 | P1 | F | `/preferences/[id]` unsubscribe applied on GET via service role. **Downgraded P0→P1:** the anniversary email embeds the bare `/preferences/[id]` URL (verified `cron/anniversary/route.ts:149`), NOT `?action=unsubscribe`, so the email link never silently unsubscribed. **FIXED anyway: converted to POST server action.** The uuid-as-capability SMS-number concern (`/api/preferences/sms`) is a separate design tradeoff → A4. | FIXED |
 | A2-01 | A2 | P0 | C/U | Negotiate flow completable by a real family today with "we're contacting funeral homes / most reply within 24 hours" while OUTREACH_LIVE is off — rows record `dry_run`, nothing sends, and the status page prints the literal string `dry_run` (status/page.tsx:521-527). Promoted from homepage, dashboard, analyzer, /prices, nurture email. | LEAD |
 | A8-01 | A8 | P0 | C | `/privacy` dated April 2026 — predates the B2B2C pivot; zero mention of institutional partners, referral attribution, or aggregate de-identified partner reporting (grep-confirmed). The pilot's data flow is undisclosed in the governing document. | LEAD |
 
@@ -22,9 +22,9 @@ is a LEAD until its audit day verifies it live.
 
 | ID | Day | Sev | Crit | Finding | Status |
 |---|---|---|---|---|---|
-| A1-04 | A1 | P1 | F | `/api/share/create`: anonymous, NO rate limit, 100KB payloads (abuse/storage); `ResumeClient` hydrates EVERY payload key into sessionStorage with no allowlist — crafted share link injects arbitrary session state. | LEAD |
-| A1-05 | A1 | P1 | F | `/og` renders arbitrary query text under the brand mark — anyone can mint official-looking cards making any claim (e.g. about a named funeral home). | LEAD |
-| A1-06 | A1 | P1 | F | `UNSUBSCRIBE_SECRET` falls back to `"fallback-please-set"` (nurture-email.ts:125); env validator only requires it when OUTREACH_LIVE=true — nurture could go live with forgeable unsubscribe tokens. | LEAD |
+| A1-04 | A1 | P1 | F | `/api/share/create`: anonymous, NO rate limit, 100KB payloads; `ResumeClient` hydrated EVERY payload key into sessionStorage. **FIXED: 5/hr/IP rate limit + `/resume/[id]` hydrates only `SHARE_KEYS` (extracted to `lib/share-keys.ts`, which had already drifted between two copies).** | FIXED |
+| A1-05 | A1 | P2 | F | `/og` renders arbitrary query text under the brand mark — anyone can mint official-looking cards. **Downgraded P1→P2 (brand-abuse, not data breach).** Fix = sign OG URLs (helper + reject unsigned), touches all metadata call sites → decision + A6. | QUEUE |
+| A1-06 | A1 | P1 | F | `UNSUBSCRIBE_SECRET ?? "fallback-please-set"` at 4 token sites (nurture-email.ts, negotiation/email-body.ts) = forgeable tokens. **FIXED: `lib/unsubscribe-secret.ts` prefers the env var, else derives a high-entropy secret from the service-role key (always set in prod); literal is dev-only.** | FIXED |
 | A1-07 | A1 | P1 | F | `/api/family/digest` + `/api/planning/signup`: anonymous endpoints that email arbitrary addresses (digest carries attacker text in titles); per-instance in-memory rate limits are the only brake; domain reputation risk. Verify limits + consider origin checks. | LEAD |
 | A2-02 | A2 | P1 | C | "Reach out to N homes" (9/14/20) in the wizard is template fiction from `sample-homes.ts` `homesForRadius` — contradicts intro's "3–5" and the actual vetted count (possibly 0). | LEAD |
 | A2-03 | A2 | P1 | C | /how-it-works: "Sent from advocate@honestfuneral.co" vs code default `arrangements@` (email-body.ts:116) unless OUTREACH_FROM overrides in prod. | LEAD |
@@ -82,4 +82,10 @@ is a LEAD until its audit day verifies it live.
 
 ## Verified / closed
 
-*(empty — audit days append here)*
+### A1 (2026-07-27) — verified CLEAN (no action needed)
+
+| ID | Finding | Evidence |
+|---|---|---|
+| A1-C1 | **RLS airtight across all 19 tables** — anon key gets 0 rows from every owner-scoped/deny-all table incl. `hospices` (~6,852 rows, proving denial not emptiness); non-granted `funeral_homes` columns → 401; anon INSERT → 401 RLS violation. | Live anon-key probe of prod `bhadjvukoyvfbzbcqunp.supabase.co` |
+| A1-C2 | **Outreach kill-switch holds** — all 3 home-directed sends gated on `OUTREACH_LIVE`; the 18-site `sendEmail` census found no ungated home send (`notify-family-of-reply` is family-directed). | Code review + grep |
+| A1-08 | Postmark webhook non-timing-safe compare; Resend webhook no timestamp-freshness (replay = re-deactivate inactive home, negligible). Batched to A10. | Code review → QUEUE |

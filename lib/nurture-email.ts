@@ -11,6 +11,7 @@
  */
 
 import crypto from "node:crypto";
+import { unsubscribeSecret } from "@/lib/unsubscribe-secret";
 import { postalAddressLine } from "@/lib/postal-address";
 
 const SITE = "https://honestfuneral.co";
@@ -122,7 +123,7 @@ const FALLBACK: SourceContext = {
 };
 
 function unsubscribeUrl(email: string): string {
-  const secret = process.env.UNSUBSCRIBE_SECRET ?? "fallback-please-set";
+  const secret = unsubscribeSecret();
   const token = crypto
     .createHmac("sha256", secret)
     .update(email.toLowerCase())
@@ -133,7 +134,7 @@ function unsubscribeUrl(email: string): string {
 }
 
 export function verifyUnsubscribeToken(email: string, token: string): boolean {
-  const secret = process.env.UNSUBSCRIBE_SECRET ?? "fallback-please-set";
+  const secret = unsubscribeSecret();
   const expected = crypto
     .createHmac("sha256", secret)
     .update(email.toLowerCase())
