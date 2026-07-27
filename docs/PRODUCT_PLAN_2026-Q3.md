@@ -7,6 +7,12 @@ Written 2026-07-15, the night Product Week (Days 1–5, PRs #148–#156) shipped
 and the **Open Farewell rename was decided** (domains + handles secured;
 Rename Day Mon Jul 27, gated on counsel's TESS knockout).
 
+> **⛔ RENAME ON HOLD (2026-07-27, supersedes every Rename-Day reference in this
+> plan).** The founder rejected the "Open Farewell" name and is waiting — Rename Day
+> is unscheduled, the post-rename audit/SEO items are inert, and no phase gates on
+> the rename. Read every "Rename Day" mention below as "on hold, name TBD". The
+> `lib/brand.ts` no-hardcoded-brand rule stays in force regardless.
+
 How to read this: **Phase 1 is day-level** (it's next week — see
 `PRODUCT_SPRINT_2026-07-16.md` for the full build sheets). **Phases 2–3 are
 week-level.** **Phase 4 is milestone-level** — pretending to know day-level

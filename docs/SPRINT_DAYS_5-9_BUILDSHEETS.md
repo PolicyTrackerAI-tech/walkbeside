@@ -1,8 +1,18 @@
-# SPRINT DAYS 5–9 + RENAME DAY — EXECUTION BUILDSHEETS (FINAL)
+# SPRINT DAYS 5–9 — EXECUTION BUILDSHEETS (FINAL) · RENAME ON HOLD
+
+> **⛔ RENAME ON HOLD (founder decision 2026-07-27).** The founder does not like the
+> "Open Farewell" name and is waiting. Every rename-related item in this file is
+> **inert until the founder re-decides**: Day-8 founder action C (DNS pre-staging) —
+> skip; Day-9 rename-clearance checklist + Rename-Day PR prep (old Tasks 5–6, Lane C)
+> — skip; the §RENAME DAY section — do not execute, do not schedule. The
+> `lib/brand.ts` BRAND-constant rule **stays law** (it is name-agnostic; it is what
+> makes whatever name is eventually chosen a one-file flip). The openfarewell domain
+> stack/socials stay purchased (sunk; renew 2027-07-15). The §RENAME DAY mechanics
+> below are kept as reference for a future rename under whatever name wins.
 
 **What this file is.** The execution spec for the remaining sprint days — Day 5 (delivery),
 Day 6 (hospice pages + claim), Day 7 (ISR city pages + citable index), Day 8 (Migration B +
-institutional billing), Day 9 (QA + docs truth + rename clearance), and Rename Day. This
+institutional billing), Day 9 (QA + docs truth), and (ON HOLD) Rename Day. This
 document **supersedes those day sections of `docs/PRODUCT_SPRINT_2026-07-16_BUILDSHEETS.md`**
 (which stays in the repo for history — never execute from it for these days). Every repo fact
 in this file was verified against `origin/main @ b19983a` on **2026-07-26**, then corrected by
@@ -12,7 +22,8 @@ line anchors drift as prior days merge.
 **Executor contract (every day):**
 - Each day = ONE fresh Opus 5 session in a fresh worktree off **current** `origin/main`
   (`git fetch` first). Days 5, 6 run **ultracode**; Day 7 runs **standard model** (its sheet
-  says so — do not burn ultracode there); Days 8, 9 and Rename Day run as their sheets state.
+  says so — do not burn ultracode there); Days 8 and 9 run as their sheets state
+  (Rename Day: ON HOLD, do not schedule).
 - Copy `/Users/ryancurrie/FH/.env.local` into the worktree (worktrees don't inherit it), then
   `npm install`.
 - Fan-outs FIRST (design/copy proposals → judge → adversarial channel-survival/word-ban review),
@@ -27,17 +38,13 @@ line anchors drift as prior days merge.
 
 The original calendar dates (Jul 21–27) in the source specs are **stale** — Day 4 merged
 2026-07-23 and Days 5–8 have not run as of this file's assembly (2026-07-26). Days are
-**ordinal now**: run strictly in order **Day 5 → Day 6 → Day 7 → Day 8 → Day 9 → Rename Day**,
+**ordinal now**: run strictly in order **Day 5 → Day 6 → Day 7 → Day 8 → Day 9**,
 one session per day, at whatever real-world pace the founder sets.
 
-Two date-coupled exceptions:
-1. **Rename Day** is additionally gated on the Day-9 clearance checklist + counsel's TESS
-   answer, and targets **the Monday after Day 9 goes green (Mon Aug 3 on the current
-   schedule)**. If ANY clearance item is red, **the rename slips one week (to Mon Aug 10)
-   before anything else slips** — say it out loud; the founder decides.
-2. **DNS pre-staging** (Day 8 founder actions, block C) needs 24–72h propagation. It is
-   time-critical INDEPENDENT of session pacing — the founder should do it as early as
-   possible, outside any session, regardless of when Day 8 actually runs.
+~~Two date-coupled exceptions~~ **Removed 2026-07-27 — the rename is ON HOLD** (see the
+banner at the top of this file). The former exceptions here were (1) Rename Day's
+clearance gate/target date and (2) the Day-8 DNS pre-staging urgency; both are inert
+until the founder picks a name they like. Nothing in Days 8–9 is time-coupled anymore.
 
 ---
 
@@ -277,7 +284,7 @@ npm run typecheck && npm run lint && npm run build && npx vitest run
 ### Founder actions (none block the day)
 
 - After the PR: skim 3 state pages + 1 facility page on the preview deploy (tone check — this is public SEO surface), delete the "TEST — founder delete" `partner_leads` row, ignore the matching support@ email, then give the merge go.
-- Reminder only (not today's work): the rename DNS pre-staging (Day 8 founder actions, block C) is time-critical — do it as early as possible.
+- ~~Rename DNS pre-staging reminder~~ removed 2026-07-27 — the rename is ON HOLD (top-of-file banner).
 
 ### Kickoff prompt (paste to open the session)
 
@@ -508,7 +515,7 @@ order by column_name;
   - Card-level comment: families never see this — the page is `requirePartnerMember("/portal/settings", "owner")`-gated; the card must never be extracted to a shared component.
 - **`/admin/partners` billing column.** `app/admin/partners/PartnersClient.tsx` **changed on Day 4** (leads badges, `source: "family_nomination"` handling) and again on Day 6 (`hospice_claim` badge) — read the current file before touching it. Add optional `billing_status?: string | null` to `PartnerRow`; in `app/admin/partners/page.tsx` fetch `id, billing_status` in a **separate** try/catch query and merge by id (same pre-migration-safety reason as above; the existing select at page.tsx:39 stays untouched). Render a small "Billing" cell/chip in the active-partners table: `active` / `past due` / `—` (for none/undefined). Display only — no admin mutation of billing state this sprint.
 
-*Traps:* JSX prose in the new card — the Next 16.2.4/Turbopack compiler eats the space after inline `{expr}` mid-sentence; use explicit `{" "}` and verify the **rendered DOM**. Brand: any copy needing the product name reads `BRAND` from `lib/brand.ts`, never the literal (Rename Day is imminent).
+*Traps:* JSX prose in the new card — the Next 16.2.4/Turbopack compiler eats the space after inline `{expr}` mid-sentence; use explicit `{" "}` and verify the **rendered DOM**. Brand: any copy needing the product name reads `BRAND` from `lib/brand.ts`, never the literal (any future rename must stay a one-file flip).
 
 **5. Guardrail pins — new `lib/__tests__/billing-guardrails.test.ts`:**
 
@@ -552,17 +559,16 @@ Live (dev, with founder's test-mode keys in `.env.local` + `BILLING_LIVE=true` +
 
 **Never cut:** webhook signature verification · insurer exclusion (guardrail #1 pin) · the `BILLING_LIVE` gate · the fs-scan scope pin (guardrail #2, structural).
 
-### Founder actions (three blocks — A and B on Day 8 itself; C is time-critical EARLIER)
+### Founder actions (two blocks, both on Day 8 itself — the former block C is gone)
 
 **A. Migration B (morning, before the live gate):** run `supabase/migrations/<apply-date>-partner-billing.sql` in the **bhadjv** SQL editor, then the new VERIFY block (expect 4 rows).
 
-**B. Stripe + pricing decision #1 (due today):** read Business Plan v2.0 §7.3 first — it lives on OPEN PR #167 (branch `claude/honest-funeral-business-plan-4eb258`), not yet on main; read it from the PR diff or merge #167 first. Restated here so the decision isn't blocked: recommended census tiers **$4,800 / $9,600 / $18,000 per year** (pilot $0, founding-partner −20%, per-family $60 fallback). In Stripe **TEST MODE**: create one product named with the locked channel-survival framing — **"Bereavement support program — pilot subscription"** (D1 locks invoice-line copy as "bereavement support program" per `docs/PRODUCT_SPRINT_2026-07-16.md` §3 D1; the name shows on checkout and invoices, and it stays brand-neutral because the rename lands right after) — with one **monthly** recurring price at your chosen tier ÷ 12 (e.g. smallest tier → $400/mo). Put `STRIPE_SECRET_KEY` (test `sk_test_…`), `STRIPE_PRICE_PILOT` (the `price_…` id), `STRIPE_WEBHOOK_SECRET`, and `BILLING_LIVE=true` into Vercel **Preview env only** (production gets none of these this sprint), and into your dev `.env.local` for the gate. Click the test checkout yourself on the preview deploy. The session will walk you through the Stripe CLI forward for the webhook half.
+**B. Stripe + pricing decision #1 (due today):** read Business Plan v2.0 §7.3 first — it lives on OPEN PR #167 (branch `claude/honest-funeral-business-plan-4eb258`), not yet on main; read it from the PR diff or merge #167 first. Restated here so the decision isn't blocked: recommended census tiers **$4,800 / $9,600 / $18,000 per year** (pilot $0, founding-partner −20%, per-family $60 fallback). In Stripe **TEST MODE**: create one product named with the locked channel-survival framing — **"Bereavement support program — pilot subscription"** (D1 locks invoice-line copy as "bereavement support program" per `docs/PRODUCT_SPRINT_2026-07-16.md` §3 D1; the name shows on checkout and invoices, and staying brand-neutral also keeps it safe under any future rename) — with one **monthly** recurring price at your chosen tier ÷ 12 (e.g. smallest tier → $400/mo). Put `STRIPE_SECRET_KEY` (test `sk_test_…`), `STRIPE_PRICE_PILOT` (the `price_…` id), `STRIPE_WEBHOOK_SECRET`, and `BILLING_LIVE=true` into Vercel **Preview env only** (production gets none of these this sprint), and into your dev `.env.local` for the gate. Click the test checkout yourself on the preview deploy. The session will walk you through the Stripe CLI forward for the webhook half.
 
-**C. Rename-Day DNS pre-staging (carried from old §DAY 7 — records need 24–72h).**
-⚠ **This block is time-critical INDEPENDENT of Day 8:** DNS records need 24–72h to propagate and Rename Day (the Monday after Day 9 clears — target Mon Aug 3) gates on them — do the pre-staging as soon as you read this, outside any session, or expect Rename Day to slip by the propagation window.
-1. Squarespace DNS for `openfarewell.com`: add the **Google Workspace MX records** and the **Resend DKIM/SPF records** (start verification in Resend), and add the domain in **Vercel** (it shows the A/CNAME values to set). Nothing user-visible changes — this makes the flip instant instead of blocked on propagation.
-2. Google Workspace: add `openfarewell.com` as a secondary domain; recreate the alias set.
-3. Chase counsel for the TESS result (it gates Rename Day).
+**C. ~~Rename-Day DNS pre-staging~~ REMOVED (2026-07-27).** The rename is ON HOLD —
+the founder is reconsidering the name. Do not stage openfarewell DNS, Workspace, or
+Resend records, and do not chase counsel's TESS unless the founder asks. (The old
+block's steps live in git history and §RENAME DAY if ever needed again.)
 
 ### Kickoff prompt (paste to open the session)
 
@@ -572,11 +578,11 @@ ultracode. git fetch and branch off current origin/main in a fresh worktree (cop
 
 ---
 
-## DAY 9 — QA + docs truth + rename clearance
+## DAY 9 — QA + docs truth (rename-clearance lanes REMOVED — rename on hold)
 
 **Source lineage:** successor to old `docs/PRODUCT_SPRINT_2026-07-16_BUILDSHEETS.md` §DAY 8 (the QA/truth day) — this section supersedes it. QA scope = the sprint doc's §5 checklist + §2 demo (`docs/PRODUCT_SPRINT_2026-07-16.md`).
 
-**Objective:** every line of the sprint's §5 QA passes on production with command-level evidence (a ✓, a filed fix, or an N/A-with-reason — never a vibe); the strategy docs stop lying about what's shipped; the §2 demo is recorded on prod; and Rename Day (the Monday after Day 9 goes green — target Mon Aug 3 on the current schedule) is either cleared all-green or explicitly slipped one week (to Mon Aug 10). **The slip rule, out loud: if ANY clearance item is red, the rename slips one week — the plan slips the rename before it slips anything else. Say it in the PR body first; the founder decides.**
+**Objective:** every line of the sprint's §5 QA passes on production with command-level evidence (a ✓, a filed fix, or an N/A-with-reason — never a vibe); the strategy docs stop lying about what's shipped; and the §2 demo is recorded on prod. *(The former rename-clearance objective is REMOVED — rename on hold per the top-of-file banner. The docs-truth lane should also sweep stale "Rename Day" scheduling claims in the strategy docs to "on hold".)*
 
 **Executor context:** line numbers below were verified at `origin/main` @ `b19983a` (Days 1–4 merged). Days 5–8 artifacts (delivery kit, hospice pages, city-page ISR, billing) are referenced by contract from their buildsheets — they should be on main by this morning. This sheet lives in `docs/SPRINT_DAYS_5-9_BUILDSHEETS.md`, which lands on main with the sprint-replan docs PR — if it is somehow absent from your worktree, stop and tell the founder rather than falling back to the older §DAY 8 sheet in `docs/PRODUCT_SPRINT_2026-07-16_BUILDSHEETS.md` (this sheet supersedes it). **Scout first:** confirm each referenced artifact exists; if a prior day cut something, mark its QA lines N/A-with-reason (cite the cut), never silently skip and never build the missing thing today. This is a QA day: copy/meta/doc fixes land today; anything structural gets FILED (a GitHub issue or PR-body list), not built.
 
@@ -584,17 +590,17 @@ ultracode. git fetch and branch off current origin/main in a fresh worktree (cop
 1. Days 5–8 PRs merged to `origin/main` (founder merges any stragglers first, or names which stay open — QA then runs against main and notes the gap).
 2. Prod migrations applied: all pre-sprint migrations through `2026-07-17-regional-benchmarks` + Migration A (`2026-07-20-hospices-consent.sql` — applied at the Day-4 morning gate; hospice search verified live in prod) + Migration B (the partner-billing migration, filename dated for its actual apply day per §DAY 8 Task 1, founder-applied on Day 8). VERIFY.sql is the authoritative check.
 3. Stripe **test-mode** keys + `STRIPE_PRICE_PILOT` in Vercel **preview** env only (Day 8 founder action) — needed for the billing demo beat. `BILLING_LIVE` absent from production.
-4. Rename DNS pre-staging done on Day 8 (Workspace MX, Resend DKIM/SPF, domain added in Vercel) and a TESS answer from counsel exists (even if the answer is "not back" — that's a red item, not a blocker to the QA day).
+4. ~~Rename DNS pre-staging / TESS~~ removed 2026-07-27 — rename on hold; nothing to verify.
 5. Founder available ~1–2h: VERIFY.sql, Vercel env eyeball, console checks, demo recording.
-6. Mechanics: fresh worktree off current `origin/main`; **copy `/Users/ryancurrie/FH/.env.local` in** (worktrees don't inherit it) and `npm install`. Branch `claude/day-9-qa-truth-rename`. A **second** branch today for the Rename-Day PR (Task 6).
+6. Mechanics: fresh worktree off current `origin/main`; **copy `/Users/ryancurrie/FH/.env.local` in** (worktrees don't inherit it) and `npm install`. Branch `claude/day-9-qa-truth`. One branch, one PR (the former second rename branch is removed).
 
 ### Ultracode orchestration
 Scout pass first (one agent): confirm Days 5–8 artifacts on main; re-verify every file:line in this sheet against today's HEAD (they drift — correct silently). Then **four parallel lanes**:
 - **Lane A — QA evidence squad:** one agent per §5 category (7 agents), each running the exact commands in Task 1 and returning a `command → output → verdict` row set. No agent may mark ✓ without pasted output.
 - **Lane B — docs truth:** one agent per doc (ROADMAP, ENGINEERING_BACKLOG, GO_TO_MARKET, AI_STRATEGY, sprint docs), each diffing the doc's claims against the tree and proposing minimal truth edits.
-- **Lane C — Rename-Day PR prep** on the second branch (Task 6).
+- ~~Lane C — Rename-Day PR prep~~ removed (rename on hold).
 - **Lane D — DEMO_SCRIPT copy fan-out:** 2–3 independent placement/copy proposals for the new beats → judge → adversarial channel-survival + word-ban + CAHPS-rule review (this doc is spoken sales copy; the ban applies to it).
-Then apply trivial fixes, then the **adversarial multi-lens diff review over BOTH branches** (lenses: guardrails, channel-survival, word-ban/CAHPS, docs-accuracy, rename-completeness, JSX-space trap) **before** the gate — this caught real bugs on every one of Days 1–8.
+Then apply trivial fixes, then the **adversarial multi-lens diff review** (lenses: guardrails, channel-survival, word-ban/CAHPS, docs-accuracy, JSX-space trap) **before** the gate — this caught real bugs on every one of Days 1–8.
 
 ### Tasks
 
@@ -658,7 +664,7 @@ Then apply trivial fixes, then the **adversarial multi-lens diff review over BOT
 - **Billing beat** (test-mode subscribe on `/portal/settings`) — belongs near the pilot ask: "when the pilot converts, the subscription is self-serve; invoicing by arrangement until then."
 - **Ingest beat** (the 90-second GPL: `/admin/ingest-gpl` → parsed → verified tier) — a data-credibility beat or the logistics appendix.
 - **Delivery beat** if Day 5 shipped the handoff kit (`/portal/materials` print one-pager + QR → family's first screen on a phone).
-Copy law in this doc: never CAHPS-as-money (the doc's own Beat-6 note is the rule); no present-tense adoption claims about any named partner; word-ban direction rules apply to spoken lines; brand literals are fine here today (docs/sales is a listed Rename-Day sweep hotspot).
+Copy law in this doc: never CAHPS-as-money (the doc's own Beat-6 note is the rule); no present-tense adoption claims about any named partner; word-ban direction rules apply to spoken lines; brand literals are fine here today (docs/sales gets swept whenever a future rename happens).
 
 **4. The §2 demo, top-to-bottom on prod, recorded.** Founder records; the session drives the checklist (the 10 beats of sprint doc §2, lines 110–150). Amendments:
 - Beat 2 (SLC verified badge via ISR): only if the founder data track produced a real promotion; otherwise record the write-free dev-data ISR proof and state on camera that the live-SLC beat joins when data lands (the Day-7 amendment).
@@ -667,19 +673,9 @@ Copy law in this doc: never CAHPS-as-money (the doc's own Beat-6 note is the rul
 - Beat 6 (hospice pages + claim): use a real state page; claim writes a `hospice_claim` lead — verify the row appears in the `/admin/partners` leads strip, then note in the PR body that it is a founder test (the leads strip is read-only by design; the founder may delete the row in the SQL editor afterwards).
 - Gate = the recording exists and is named/linked in the PR body.
 
-**5. Rename clearance checklist** — verdict stated explicitly in the PR body, one line per item, ALL GREEN or "the rename slips one week (target Mon Aug 3 → Mon Aug 10)":
-1. **TESS clean** — counsel's word; record the verbatim answer. Not back = RED.
-2. **Vercel** shows `openfarewell.com` + `www` verified (founder console; session probes `dig +short openfarewell.com`); records pre-staged on Day 8 in Squarespace — the 24–72h propagation window should have elapsed.
-3. **Workspace + Resend records green** (pre-staged on Day 8) — `dig MX openfarewell.com +short` shows Google MX; `dig TXT resend._domainkey.openfarewell.com +short` (exact record name per the Resend dashboard) returns the DKIM key; founder confirms both consoles show verified.
-4. **The Rename-Day code PR is prepared on a branch today** (Task 6) — a Day-9 deliverable, not a Rename-Day task.
-5. **Rollback note written** in the rename PR body: Vercel primary back to `honestfuneral.co`; revert the code PR; DNS untouched (it's additive). Postmark inbound on the old domain never moved, so in-flight cases are safe either way.
+**5. ~~Rename clearance checklist~~ REMOVED (2026-07-27 — rename on hold).** No clearance items to check, no verdict to state; do not probe openfarewell DNS or ask about TESS. (History in git.)
 
-**6. Prepare the Rename-Day code PR** (second branch, e.g. `claude/rename-day-open-farewell`; **draft PR labeled DO NOT MERGE — merges first thing on Rename Day, rebased onto main after the Day-9 PR lands**). Contract from this doc's §RENAME DAY Task 1 + `docs/NAMING_SPRINT_2026-07.md` §5:
-- `lib/brand.ts` flip: `name: "Open Farewell"`, `domain: "openfarewell.com"`, `supportEmail` per the founder's Workspace alias set; `url` stays `PUBLIC.appUrl`. PR body carries the Rename-Day env action: `NEXT_PUBLIC_APP_URL → https://openfarewell.com` (Vercel, all environments).
-- Literal sweep: `grep -rn "Honest Funeral\|honestfuneral" app lib components docs scripts supabase --include="*.ts*" --include="*.md"` — every hit becomes a `BRAND` read, a kept old-domain config (301/inbound — KEEP), or an annotated docs/history reference (annotate, don't rewrite history). Hotspots: `lib/og.ts`, print letterheads (analyzer + ProofSheet), `app/sitemap.ts` host, JSON-LD (fair-price-index, methodology), `lib/email.ts` + welcome/nurture/anniversary/digest bodies, `docs/sales/*`, `scripts/seed-demo.mjs`. **PLUS two Day-4 additions the old hotspot list pre-dates:** the `app/faq/page.tsx` question "Why did my hospice or employer recommend Honest Funeral?" AND its anchor slug `#why-did-my-hospice-or-employer-recommend-honest-funeral` hardcoded in `app/page.tsx` — the heading and the slug must change together or the homepage link fragment breaks.
-- Host redirect in **`proxy.ts`** (this repo's middleware file — verified it exists; there is no `middleware.ts`): `host === "honestfuneral.co"` → 308 to `https://openfarewell.com` + same path, **EXCEPT paths under `/api/`** (Postmark webhooks, cron, inbound must never bounce through a redirect).
-- Brand-literal enforcement lands with the PR per §RENAME DAY Task 1g: `scripts/check-brand-literals.mjs` + `scripts/brand-literal-allowlist.json` + `"check:brand"` in `package.json`, run in the day gate (a vitest fs-scan pin in the house billing-guardrails style is an acceptable equivalent if folded into the suite instead). Note: this repo has no `.github/workflows/` — the gate run IS the enforcement; do not scaffold GitHub Actions today. Full suite green on the branch.
-- TRAPS: any new inline `{BRAND.name}` mid-sentence in JSX prose needs explicit `{" "}` after it (the Turbopack space-eating bug — verify rendered DOM, not source). `OUTREACH_LIVE` stays off on this branch like every other day.
+**6. ~~Prepare the Rename-Day code PR~~ REMOVED (2026-07-27 — rename on hold).** Do not create a rename branch or draft PR. When the founder eventually picks a name, the §RENAME DAY reference section + `docs/NAMING_SPRINT_2026-07.md` carry the mechanics (literal-sweep hotspots, 308 host redirect, Postmark-inbound invariant) — they are name-agnostic apart from the domain strings.
 
 ### Acceptance gate (run before declaring done)
 ```
@@ -689,34 +685,40 @@ plus, all of:
 - The PR-body evidence table covers **every** §5 line (1.1–1.7 + the demo) with ✓ / filed-fix link / N/A-with-reason — zero blank rows.
 - The word-ban grep output pasted with each hit dispositioned against the allowlist; the `/partners` CAHPS-as-money reword is in the diff.
 - The demo recording exists and is named in the PR body.
-- The clearance verdict is stated explicitly: "ALL GREEN — Rename Day proceeds Mon Aug 3" or "RED on <item> — the rename slips to Mon Aug 10" (the slip is called before anything else slips).
-- Two PRs open: the Day-9 QA+docs PR (mergeable on founder go) and the draft Rename-Day PR (DO NOT MERGE).
-- Adversarial multi-lens diff review ran over BOTH branches; findings applied or explicitly rejected in the PR body.
+- One PR open: the Day-9 QA+docs PR (mergeable on founder go).
+- Adversarial multi-lens diff review ran; findings applied or explicitly rejected in the PR body.
 
 ### Cut lines (in drop order)
 1. Lighthouse runs → record `/` and `/hospices/utah` only; file the rest.
 2. The DEMO_SCRIPT ingest beat → keep nominate + billing (delivery only if Day 5 shipped it).
 3. Docs-truth breadth → the four named docs are the floor; sprint-table checkmarks can slip.
 4. PR #127 disposition → drops to a one-line recommendation in the PR body.
-**Never cut:** the §5 evidence table (every line dispositioned) · the demo recording · the explicit clearance verdict (including saying the slip out loud) · the Rename-Day PR branch prep · the CAHPS-as-money fix.
+**Never cut:** the §5 evidence table (every line dispositioned) · the demo recording · the CAHPS-as-money fix.
 
 ### Founder actions (today)
 1. Morning: merge any unmerged Day 5–8 PRs (or name which stay open).
 2. QA hour with the session: run `supabase/VERIFY.sql` in the bhadjv SQL editor; eyeball Vercel prod env (`OUTREACH_LIVE`, `OUTREACH_NOTIFICATIONS_ENABLED`, `PARTNER_DIGEST_ENABLED`, `BILLING_LIVE` all unset); confirm Stripe test keys live in preview only; run the digest curl with `CRON_SECRET`.
 3. Record the §2 demo (the session cues each beat; billing beat on the preview deploy).
-4. Consoles for clearance: Vercel domain status, Workspace MX, Resend DKIM — and report counsel's TESS answer verbatim.
+4. ~~Consoles for clearance~~ removed — rename on hold.
 5. Decide: PR #127 close-vs-refresh; approve the `/partners` CAHPS reword.
-6. Merge the Day-9 PR on your go. Leave the Rename-Day PR as a draft. If any clearance item is red, the rename moves from Mon Aug 3 to Mon Aug 10 — decide and say so today, not on Rename-Day morning.
+6. Merge the Day-9 PR on your go.
 
 ### Kickoff prompt (paste to open the session)
 
 ```text
-ultracode. git fetch and branch off current origin/main. Read CLAUDE.md and docs/SPRINT_DAYS_5-9_BUILDSHEETS.md §DAY 9 — execute Day 9 only, exactly as specced: scout first that Days 5–8 actually landed on main, then fan out the four lanes in parallel (§5 QA evidence squad, docs truth, Rename-Day PR branch, DEMO_SCRIPT copy fan-out), trivial fixes only today (file anything structural), adversarial multi-lens diff review over BOTH branches before the gate. Every §5 line ends in the PR body as ✓ with pasted command output, a filed fix, or an N/A-with-reason — no vibes. Cue me for VERIFY.sql, the Vercel env eyeballs, the console checks, and the demo recording. Day gate before done; two PRs — the Day-9 QA+docs PR plus the draft Rename-Day PR (DO NOT MERGE the draft); no merge without my go. If any rename-clearance item is red, say "the rename slips a week" out loud before anything else.
+ultracode. git fetch and branch off current origin/main. Read CLAUDE.md and docs/SPRINT_DAYS_5-9_BUILDSHEETS.md §DAY 9 — execute Day 9 only, exactly as specced. The rename is ON HOLD (top-of-file banner): no rename lanes, no clearance checks, no second branch. Scout first that Days 5–8 actually landed on main, then fan out the three lanes in parallel (§5 QA evidence squad, docs truth — including sweeping stale Rename-Day scheduling claims to "on hold" — and the DEMO_SCRIPT copy fan-out), trivial fixes only today (file anything structural), adversarial multi-lens diff review before the gate. Every §5 line ends in the PR body as ✓ with pasted command output, a filed fix, or an N/A-with-reason — no vibes. Cue me for VERIFY.sql, the Vercel env eyeballs, and the demo recording. Day gate before done; one PR; no merge without my go.
 ```
 
 ---
 
-## RENAME DAY — Honest Funeral → Open Farewell, everything everywhere (the Monday after Day 9 clears — target Mon Aug 3)
+## RENAME DAY — ⛔ ON HOLD (founder decision 2026-07-27) — kept as name-agnostic reference only
+
+> **DO NOT EXECUTE OR SCHEDULE.** The founder rejected the "Open Farewell" name and is
+> waiting. This section survives only as the mechanical playbook for whenever a rename
+> DOES happen under a name the founder likes — the literal-sweep hotspots, 308 host
+> redirect, Postmark-inbound invariant, and console split-of-labor are name-agnostic;
+> swap the domain strings. Everything below reads as written for Open Farewell; treat
+> every date and gate in it as void.
 
 **Objective:** by end of day, `https://openfarewell.com` IS the product — every rendered surface, email fallback, OG image, JSON-LD block, sitemap, and print letterhead says Open Farewell; every old-domain page URL 308s to its new-domain twin with path+query preserved; and the one thing that must not blink — Postmark inbound on `reply.honestfuneral.co` (in-flight `advocate+<hash>@` reply-tos) — provably did not blink. Sources reconciled: this section is the execution law; `docs/NAMING_SPRINT_2026-07.md` §5 and old buildsheet §RENAME DAY (lines 715–772) agree with it except where noted inline (⚠ RECONCILE markers) — where you find any further conflict, **flag it to the founder, never guess**.
 

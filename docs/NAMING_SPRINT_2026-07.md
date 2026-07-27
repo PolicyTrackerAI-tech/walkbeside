@@ -1,5 +1,11 @@
 # Naming sprint — keep "Honest Funeral" or rename? (2026-07-15)
 
+> **⛔ ON HOLD (2026-07-27).** The founder does not like "Open Farewell" and has put the
+> rename on hold — do not execute the §5 runbook, stage DNS, or chase TESS unless the
+> founder re-opens naming. The candidate research below stays valuable for round two;
+> the purchased domain stack (renews 2027-07-15) keeps the option open.
+
+
 > **DECISION — 2026-07-15, same evening: RENAME TO "OPEN FAREWELL."** The
 > founder purchased the domain inventory (all Squarespace, expiring
 > 2027-07-15 — verify auto-renew is ON for each): `openfarewell.com`,
