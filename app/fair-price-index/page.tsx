@@ -6,6 +6,16 @@ import { Card, CardEyebrow } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { LINE_ITEMS, PRICING_LAST_UPDATED, fmtUSD } from "@/lib/pricing-data";
 import { DataTierBadge } from "@/components/DataTierBadge";
+import { BRAND } from "@/lib/brand";
+import { listActiveBenchmarks } from "@/lib/benchmarks-store";
+import { datasetLastUpdated } from "@/lib/fair-price-dataset";
+import { groupVerifiedMetros, metroSummaryLine } from "@/lib/verified-metros";
+import { citySlugsForMetro } from "@/lib/city-pages";
+
+// ISR: statically generated, revalidated hourly — and purged immediately by
+// the benchmark promote route, so a founder promotion lists its metro here
+// within the hour with no deploy.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "The Fair-Price Index — what funeral items should cost",
@@ -44,20 +54,43 @@ function unitSuffix(id: string): string {
   return "";
 }
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Dataset",
-  name: "Honest Funeral Fair-Price Index",
-  description:
-    "Fair-price ranges for the common charges on a US funeral home's General Price List, used by Honest Funeral's free quote checker.",
-  creator: { "@type": "Organization", name: "Honest Funeral", url: "https://honestfuneral.co" },
-  url: "https://honestfuneral.co/fair-price-index",
-  dateModified: PRICING_LAST_UPDATED,
-  isAccessibleForFree: true,
-  license: "https://honestfuneral.co/methodology",
-};
+export default async function FairPriceIndexPage() {
+  // Founder-promoted overrides (empty array when none exist or the read
+  // degrades — the verified-metros section is then completely absent and the
+  // disclaimer reads exactly as before).
+  const active = await listActiveBenchmarks();
+  const verifiedMetros = groupVerifiedMetros(active);
+  const lastUpdated = datasetLastUpdated(active);
 
-export default function FairPriceIndexPage() {
+  // Built per-render: dateModified tracks the newest promoted row. The
+  // hardcoded "Honest Funeral"/honestfuneral.co literals predate lib/brand
+  // and are swept atomically on Rename Day (lib/brand.ts header) — only the
+  // NEW distribution fields read BRAND.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: "Honest Funeral Fair-Price Index",
+    description:
+      "Fair-price ranges for the common charges on a US funeral home's General Price List, used by Honest Funeral's free quote checker.",
+    creator: { "@type": "Organization", name: "Honest Funeral", url: "https://honestfuneral.co" },
+    url: "https://honestfuneral.co/fair-price-index",
+    dateModified: lastUpdated,
+    isAccessibleForFree: true,
+    license: "https://honestfuneral.co/methodology",
+    distribution: [
+      {
+        "@type": "DataDownload",
+        encodingFormat: "application/json",
+        contentUrl: `${BRAND.url}/api/fair-price-index/data`,
+      },
+      {
+        "@type": "DataDownload",
+        encodingFormat: "text/csv",
+        contentUrl: `${BRAND.url}/api/fair-price-index/data?format=csv`,
+      },
+    ],
+  };
+
   return (
     <main className="flex-1 flex flex-col">
       <script
@@ -136,6 +169,39 @@ export default function FairPriceIndexPage() {
             </div>
           ))}
 
+          {/* Verified metros — completely absent when no metro-scope rows
+              exist (or the store read degraded): the empty-store render is
+              byte-identical to the pre-Day-7 page here. */}
+          {verifiedMetros.length > 0 && (
+            <div className="space-y-3">
+              <h2 className="font-serif text-2xl text-ink">Verified metros</h2>
+              <p>
+                Metros where real local data has replaced the modeled range
+                for some items.
+              </p>
+              <ul className="divide-y divide-border rounded-2xl border border-border bg-surface overflow-hidden">
+                {verifiedMetros.map((m) => {
+                  const slug = citySlugsForMetro(m.metro)[0];
+                  return (
+                    <li key={m.metro} className="px-5 py-4">
+                      {slug ? (
+                        <Link
+                          href={`/funeral-costs/${slug}`}
+                          className="text-primary-deep underline font-medium"
+                        >
+                          {m.metro}
+                        </Link>
+                      ) : (
+                        <span className="text-ink font-medium">{m.metro}</span>
+                      )}{" "}
+                      &mdash; {metroSummaryLine(m, LINE_ITEMS.length)}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+
           <Card tone="warn">
             <div className="mb-3">
               <DataTierBadge tier="modeled" />
@@ -149,7 +215,15 @@ export default function FairPriceIndexPage() {
               reviews the range before it publishes), its ranges upgrade to
               Verified &mdash; the
               data-tier badge on any zip&rsquo;s price page tells you which
-              you&rsquo;re seeing. Fixed government fees (like death
+              you&rsquo;re seeing.
+              {verifiedMetros.length > 0 && (
+                <>
+                  {" "}The metros listed above are the exception &mdash; for
+                  some items there, real local data has replaced the modeled
+                  range.
+                </>
+              )}{" "}
+              Fixed government fees (like death
               certificates) are the same everywhere; merchandise like caskets
               and urns you can buy from any third party. Last reviewed{" "}
               {LAST_UPDATED}. Where each number comes
@@ -162,6 +236,28 @@ export default function FairPriceIndexPage() {
                 corrections page
               </Link>
               .
+            </p>
+          </Card>
+
+          {/* Cite-this — the citability payoff. Always present (it cites the
+              modeled index too); the date tracks the newest promoted row. */}
+          <Card tone="soft">
+            <CardEyebrow>To cite this index</CardEyebrow>
+            <p className="mt-2 text-sm text-ink">
+              {BRAND.name}. The Fair-Price Index &mdash; what funeral items
+              should cost.{" "}
+              <span className="break-all">{BRAND.url}/fair-price-index</span>.
+              Updated {lastUpdated}.
+            </p>
+            <p className="mt-2 text-sm">
+              Machine-readable data:{" "}
+              <a
+                href="/api/fair-price-index/data"
+                className="text-primary-deep underline break-all"
+              >
+                {BRAND.url}/api/fair-price-index/data
+              </a>{" "}
+              (JSON, or add <code>?format=csv</code> for CSV).
             </p>
           </Card>
 
