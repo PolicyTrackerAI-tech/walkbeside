@@ -27,9 +27,10 @@ export default async function PartnersApplyPage({
   // Only "employer" is honored; anything else falls back to hospice.
   const defaultType = params.type === "employer" ? "employer" : "hospice";
   // Org prefill (facility-page "Is this your organization?" path). Strings
-  // only, bounded — anything else is ignored and the field starts empty.
+  // only, bounded to the same 120-char cap as the input and the API schema —
+  // a longer prefill could only ever submit to a 400.
   const defaultOrg =
-    typeof params.org === "string" ? params.org.slice(0, 160) : undefined;
+    typeof params.org === "string" ? params.org.slice(0, 120) : undefined;
 
   return (
     <main className="flex-1 flex flex-col">

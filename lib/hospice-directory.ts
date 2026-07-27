@@ -1,3 +1,4 @@
+import "server-only";
 import { cache } from "react";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";

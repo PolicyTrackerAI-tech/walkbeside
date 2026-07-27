@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
-import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
+import { Card, CardEyebrow } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -50,13 +50,15 @@ export async function generateMetadata({
   if (!entry) return {};
   // cache()-shared with the page body — one read, counts can never disagree.
   const rows = await listHospicesByState(entry.abbr);
+  // Honest degrade: NEVER render a wrong or ZERO count into indexed metadata
+  // — an empty-but-successful read ([]) degrades exactly like a failed one.
+  const counted = rows !== null && rows.length > 0;
   return {
-    // Honest degrade: NEVER render a wrong or zero count into indexed metadata.
-    title: rows
-      ? `Hospices in ${entry.name} — all ${rows.length} Medicare-certified providers`
+    title: counted
+      ? `Hospices in ${entry.name} — all ${rows!.length} Medicare-certified providers`
       : `Hospices in ${entry.name} — the Medicare-certified directory`,
-    description: rows
-      ? `All ${rows.length} Medicare-certified hospices in ${entry.name}, from the CMS Provider Data Catalog — grouped by city, each with its own public-record page — plus questions families can ask their own hospice about after-death support.`
+    description: counted
+      ? `All ${rows!.length} Medicare-certified hospices in ${entry.name}, from the CMS Provider Data Catalog — grouped by city, each with its own public-record page — plus questions families can ask their own hospice about after-death support.`
       : `The Medicare-certified hospice directory for ${entry.name}, from the CMS Provider Data Catalog, plus questions families can ask their own hospice about after-death support.`,
     alternates: { canonical: `/hospices/${state}` },
     openGraph: { images: [ogImage(`Hospices in ${entry.name}`, "Directory")] },
@@ -178,7 +180,7 @@ export default async function HospiceStatePage({
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               Hospices in {entry.name}.
             </h1>
-            {rows ? (
+            {rows && rows.length > 0 ? (
               <p className="text-lg text-ink-soft mb-3">
                 {entry.name} has {rows.length}{" "}
                 Medicare-certified hospices, per the CMS Provider Data Catalog
@@ -225,9 +227,11 @@ export default async function HospiceStatePage({
               <CardEyebrow>
                 If a hospice is caring for your family now
               </CardEyebrow>
-              <CardTitle>
+              {/* h2, not CardTitle's h3 — this is the first section heading
+                  after the h1 and must not skip a level. */}
+              <h2 className="font-serif text-xl text-ink mb-2">
                 Six questions to ask the hospice caring for your family
-              </CardTitle>
+              </h2>
               <p className="text-ink-soft mt-1 mb-4">
                 After-death support is part of hospice care, but it&rsquo;s a
                 part many families haven&rsquo;t heard much about ahead of
@@ -266,7 +270,7 @@ export default async function HospiceStatePage({
             </Card>
           </div>
 
-          {rows && cityGroups ? (
+          {rows && rows.length > 0 && cityGroups ? (
             <section id="directory" aria-labelledby="directory-h" className="scroll-mt-4">
               <h2
                 id="directory-h"
@@ -354,7 +358,7 @@ export default async function HospiceStatePage({
               <p className="text-ink-soft">
                 {rows && rows.length === 0
                   ? `We don't have CMS directory rows for ${entry.name} right now.`
-                  : "The directory list isn't available right now. It will be back shortly — and everything else on this page works without it."}{" "}
+                  : "The directory list isn't available right now — everything else on this page works without it."}{" "}
                 <Link
                   href="/analyzer"
                   className="font-medium text-primary-deep underline-offset-2 hover:underline"
@@ -368,7 +372,9 @@ export default async function HospiceStatePage({
           <div id="for-hospice-teams" className="scroll-mt-4">
             <Card tone="soft">
               <CardEyebrow>For hospice teams</CardEyebrow>
-              <CardTitle>Do you operate one of these hospices?</CardTitle>
+              <h2 className="font-serif text-xl text-ink mb-2">
+                Do you operate one of these hospices?
+              </h2>
               <p className="text-ink-soft mt-1 mb-4">
                 Hospices can offer {BRAND.name}{" "}
                 to every family in their care — free planning help and a

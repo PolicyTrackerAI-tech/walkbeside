@@ -28,6 +28,7 @@ export function ClaimPanel({
     "idle" | "sending" | "sent" | "error"
   >("idle");
   const sentRef = useRef<HTMLParagraphElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
 
   // Move focus to the confirmation when the form is replaced — the focused
   // submit button unmounts, and silence reads as a broken page to AT.
@@ -39,6 +40,7 @@ export function ClaimPanel({
     e.preventDefault();
     if (contactOk && email.trim() === "") {
       setNeedEmail(true);
+      emailRef.current?.focus();
       return;
     }
     setNeedEmail(false);
@@ -91,9 +93,12 @@ export function ClaimPanel({
           </Label>
           <Input
             id="claim-email"
+            ref={emailRef}
             type="email"
             value={email}
             maxLength={254}
+            aria-invalid={needEmail || undefined}
+            aria-describedby={needEmail ? "claim-email-error" : undefined}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -135,12 +140,12 @@ export function ClaimPanel({
           {formState === "sending" ? "Sending…" : "Send claim"}
         </Button>
         {needEmail && (
-          <p role="alert" className="text-sm text-bad">
+          <p id="claim-email-error" role="alert" className="text-sm text-bad">
             Add your work email so we can reach you.
           </p>
         )}
         {formState === "error" && (
-          <p role="status" className="text-sm text-bad">
+          <p role="alert" className="text-sm text-bad">
             That didn&rsquo;t go through. Try again in a minute, or email{" "}
             {BRAND.supportEmail}{" "}
             and mention this page.

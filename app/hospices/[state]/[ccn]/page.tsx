@@ -101,14 +101,15 @@ export default async function HospiceFacilityPage({
               >
                 Hospice directory
               </Link>{" "}
-              ·{" "}
+              <span aria-hidden>·</span>{" "}
               <Link
                 href={`/hospices/${entry.slug}`}
                 className="underline-offset-2 hover:underline"
               >
                 {entry.name}
               </Link>{" "}
-              · <span aria-current="page">{display}</span>
+              <span aria-hidden>·</span>{" "}
+              <span aria-current="page">{display}</span>
             </nav>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
               {display}
