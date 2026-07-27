@@ -152,14 +152,20 @@ export function PartnersClient({
               <li key={l.id} className="rounded-xl border border-border bg-surface px-4 py-3">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                   <span className="font-medium text-ink">
-                    {l.name ?? (l.source === "family_nomination" ? l.org ?? "(no org)" : "(no name)")}
+                    {l.name ??
+                      (l.source === "family_nomination" ||
+                      l.source === "hospice_claim"
+                        ? l.org ?? "(no org)"
+                        : "(no name)")}
                     {l.org && l.name && (
                       <span className="text-ink-muted font-normal"> — {l.org}</span>
                     )}
                     <span className="ml-2 align-middle text-[11px] uppercase tracking-wider text-ink-muted font-normal border border-border rounded-full px-2 py-0.5">
                       {l.source === "family_nomination"
                         ? "family nomination"
-                        : "demo request"}
+                        : l.source === "hospice_claim"
+                          ? "hospice claim"
+                          : "demo request"}
                     </span>
                   </span>
                   <span className="text-xs text-ink-muted">

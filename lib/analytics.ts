@@ -23,7 +23,11 @@ export type ToolEvent =
   // referral. Both fire with NO properties: no referral code, no partner
   // name, nothing that could re-identify an institution or a family.
   | "materials_printed"
-  | "partner_landing_viewed";
+  | "partner_landing_viewed"
+  // Directory event (sprint Day 6): someone claims a hospice's facility page
+  // (/hospices/[state]/[ccn]). Fires with NO properties — no CCN, no org
+  // name, nothing that could identify which hospice was claimed.
+  | "hospice_claim_submitted";
 
 export function trackTool(
   event: ToolEvent,
