@@ -8,11 +8,19 @@
  * this text is cosmetic copy, never the ground truth (stats.* remain the
  * only numbers ProofSheet renders directly).
  *
- * Callers decide WHETHER to call buildOutcomesDigest at all. Only
- * app/partner/r/[token]/page.tsx (the real, report_token-gated report) may
- * import it — app/partner/[code]/page.tsx (the public sample report) must
+ * Callers decide WHETHER to call buildOutcomesDigest at all, and the set of
+ * permitted importers is deliberately short — every one of them is gated:
+ *
+ *   1. lib/partner/report-data.ts (buildPartnerReportData), which serves the
+ *      auth-gated /portal overview and the report_token-gated
+ *      /partner/r/[token] report.
+ *   2. app/api/cron/partner-digest/route.ts — the monthly digest: cron-bearer
+ *      gated on the send path, admin-session gated on the ?test dry-run.
+ *
+ * app/partner/[code]/page.tsx (the public, unauthenticated SAMPLE report) must
  * import only fallbackOutcomesDigest, never this function or anything from
- * lib/claude, so the public route can't reach a real Claude call.
+ * lib/claude, so the public route can't reach a real Claude call. That ban is
+ * grep-pinned in the sprint Day-5 acceptance gate.
  */
 import { callClaude, claudeAvailable } from "@/lib/claude";
 import { partnerOutcomesDigestSystem } from "@/lib/negotiation/prompts";
@@ -70,6 +78,17 @@ export async function buildOutcomesDigest(
   name: string,
   stats: CohortStats,
   partnerType: "hospice" | "employer" = "hospice",
+  opts?: {
+    /**
+     * Bound the Claude call for latency-sensitive callers. The cron digest
+     * loop passes this because it awaits one call PER PARTNER sequentially
+     * under the route's maxDuration — without a bound, the SDK's default
+     * ~10-minute timeout means one degraded call kills the invocation and
+     * silently drops every remaining partner's digest for the month. On
+     * timeout the catch below serves the deterministic fallback instead.
+     */
+    timeoutMs?: number;
+  },
 ): Promise<string> {
   if (stats.smallSample) return smallSampleDigest();
   if (!claudeAvailable()) return fallbackOutcomesDigest(name, stats, partnerType);
@@ -103,6 +122,7 @@ export async function buildOutcomesDigest(
       system: partnerOutcomesDigestSystem(partnerType),
       user: JSON.stringify(findings),
       maxTokens: 400, // re-baselined 300→400 (sonnet-5 tokenizer)
+      timeoutMs: opts?.timeoutMs,
     });
     const parsed = JSON.parse(stripCodeFence(out)) as { digest?: unknown };
     if (typeof parsed.digest !== "string" || !parsed.digest.trim()) {

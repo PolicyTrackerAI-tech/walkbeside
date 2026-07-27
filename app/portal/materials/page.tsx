@@ -9,6 +9,8 @@ import { PrintHeader } from "@/components/print/PrintHeader";
 import { NeutralityPledge, pledgeText } from "@/components/partner/NeutralityPledge";
 import { requirePartnerMember } from "@/lib/partner/auth";
 import { codesWithClaims } from "@/lib/partner/codes";
+import { BRAND } from "@/lib/brand";
+import { FREE_WITH_OR_WITHOUT_LINK } from "@/lib/copy";
 import { PUBLIC } from "@/lib/env";
 import { CopySnippet } from "./CopySnippet";
 
@@ -64,6 +66,68 @@ export default async function PortalMaterialsPage() {
     ? `We share this with our people, free: Honest Funeral, an independent guide to funeral prices. It shows fair prices for your area, checks any quote you're given, and — if you ask — will contact funeral homes to gather comparison quotes, all free. It takes no money from funeral homes, and there's no sign-up required to look: ${snippetUrl}\n\n${pledgeText(partner.name)}`
     : `One resource we share with the families we serve: Honest Funeral, a free, independent guide to funeral prices. It shows fair prices for your area, checks any quote you're given, and — if you ask — will contact funeral homes to gather comparison quotes, all free. It takes no money from funeral homes, and there's no sign-up required to look: ${snippetUrl}\n\n${pledgeText(partner.name)}`;
 
+  // Internal staff email — pasted by the coordinator to their OWN colleagues,
+  // never to a family (hence a CopySnippet, never a mailto). Joined explicitly
+  // so every line starts at column 0: CopySnippet copies `text` verbatim and
+  // renders it whitespace-pre-wrap, so source indentation from a multi-line
+  // template literal would land in the pasted email.
+  //
+  // Bullet 1 differs by audience on purpose. Post-admission-only delivery AND
+  // display is a hospice rule, because inducing HOSPICE selection is the
+  // Anti-Kickback vector; there is no employer analogue, and app/employers
+  // sells a standing benefits-page/EAP placement, so the employer arm must not
+  // forbid it. New copy reads BRAND.name — the pre-existing literals in
+  // handoffScript/emailParagraph above are swept atomically on Rename Day.
+  const teamEmail = (
+    isEmployer
+      ? [
+          `Subject: Something to hand people after a death — our part is one link`,
+          ``,
+          `When someone here loses a family member, we approve the leave and say we're sorry. Now there's one more thing to hand over.`,
+          ``,
+          `${BRAND.name} is a free, independent guide to funeral prices. It shows what things fairly cost in their area, reads an itemized quote they were given, and flags what's out of line. It takes no money from funeral homes or insurers, and it never charges the family or points anyone toward a particular provider. Nobody on our team is paid for handing it over, and no funeral home pays to be in it.`,
+          ``,
+          `Our part is small:`,
+          ``,
+          `- Put it where people already look — the benefits page, the EAP, the manager toolkit — and hand it over directly when someone loses a family member.`,
+          `- Send the link or the printed one-pager. They open it themselves; there's nothing for us to set up.`,
+          `- Never enter anything about anyone into it. The family enters whatever they choose to, themselves; we send over nothing but the link, and nobody hears from ${BRAND.name} unless they went there first.`,
+          ``,
+          `The link to hand over:`,
+          snippetUrl,
+          ``,
+          `It doesn't unlock anything — the site is free either way. Ask me for printed one-pagers with the same QR code if paper is easier.`,
+        ]
+      : [
+          `Subject: Something to hand families after admission — our part is one link`,
+          ``,
+          `Families ask us what a funeral should cost. We haven't had a good answer. Now there's something to hand them.`,
+          ``,
+          `${BRAND.name} is a free, independent guide to funeral prices. It shows what things fairly cost around here, reads an itemized quote a family was handed, and flags what's out of line. It takes no money from funeral homes or insurers, and it never charges families or points anyone toward a particular home. Nobody on our team is paid for handing it over, and no funeral home pays to be in it.`,
+          ``,
+          `Our part is small:`,
+          ``,
+          `- Hand it over, or post it, only where families already in our care will see it — the admission packet or any time after is fine. Never where families who haven't chosen us yet would see it, and never in anything we use to bring families in.`,
+          `- Give them the link or the printed one-pager. They open it themselves; there's nothing for us to set up.`,
+          `- Never put anything about a family into it. The family enters whatever they choose to, themselves; we send over nothing but the link, and nobody hears from ${BRAND.name} unless they went there first.`,
+          ``,
+          `The link to hand over:`,
+          snippetUrl,
+          ``,
+          `It doesn't unlock anything — the site is free either way. Ask me for printed one-pagers with the same QR code if paper is easier.`,
+        ]
+  ).join("\n");
+
+  // Coordinator-voice twin of the family sentence. The hospice arm carries the
+  // reviewed phrase verbatim on one unbroken source line — the acceptance-gate
+  // grep pins it, so never let a tidy-up wrap it. Branched because this is the
+  // FIRST line an employer's benefits lead reads, and "families you serve"
+  // describes a care relationship an employer does not have (see the file
+  // invariant above: the employer voice never references care settings).
+  const coordinatorFraming = isEmployer
+    ? `${BRAND.name} is free to the family of everyone you employ, with or without this link.`
+    : `${BRAND.name} is free to every family you serve, with or without this link.`;
+
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader navLinks={[]} />
@@ -82,13 +146,25 @@ export default async function PortalMaterialsPage() {
             <h1 className="font-serif text-3xl text-ink leading-tight mb-2">
               Ready to hand over.
             </h1>
+            {/* The trust claim comes before the inventory: a coordinator's
+                question here is not what is in the kit, it is what they are
+                putting their organization's name on. The {" "} after the
+                expression is required — Turbopack eats a bare space at a line
+                boundary after an expression. */}
+            <p className="text-ink text-sm mb-3">
+              {coordinatorFraming}{" "}
+              Handing it over costs a family nothing, and nothing is withheld
+              from a family who never gets it &mdash; the link only puts your
+              name on their screen and counts the case toward your aggregate
+              report. It is not a discount, and it is not a gate.
+            </p>
             <p className="text-ink-soft text-sm mb-3">
               A one-pager and QR posters that print cleanly, plus short
               snippets you can paste into an email. Everything carries your
               organization&rsquo;s name next to the same neutrality pledge
               families see on the site.
             </p>
-            <PrintButton />
+            <PrintButton track="materials_printed" />
           </div>
 
           {activeCodes.length === 0 ? (
@@ -173,6 +249,17 @@ export default async function PortalMaterialsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* The closing statement of page 1, placed AFTER the QR block
+                    on purpose: the printed URL visibly ends in ?ref=HF-XXXXXX,
+                    which reads as a tracking code — the answer lands hardest
+                    straight after the thing that raised the question. Verbatim
+                    law: render the constant, never retype the sentence.
+                    Deliberately NOT on the QR posters below — a poster is taped
+                    to a wall, not handed to a person. */}
+                <p className="mt-4 text-sm font-semibold text-ink print-keep-together">
+                  {FREE_WITH_OR_WITHOUT_LINK}
+                </p>
               </Card>
 
               {/* ---- One QR poster per active link ---- */}
@@ -216,6 +303,26 @@ export default async function PortalMaterialsPage() {
           {/* ---- Copy-paste snippets (screen only; need a link to be useful) ---- */}
           {activeCodes.length > 0 ? (
             <div className="print:hidden space-y-6">
+              {/* Screen-only: a coordinator should be able to see the exact
+                  screen a family lands on before handing the link to anyone.
+                  New tab, so they don't lose this page. */}
+              <Card tone="soft">
+                <CardTitle>What your families see</CardTitle>
+                <p className="text-sm text-ink-soft mt-1">
+                  Open your link the way a family would. It is the same free
+                  tools everyone else gets, with your organization&rsquo;s name
+                  and the neutrality pledge at the top.
+                </p>
+                <a
+                  href={snippetUrl}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-block mt-3 text-sm text-primary-deep underline"
+                >
+                  Preview the family&rsquo;s arrival screen
+                </a>
+              </Card>
+
               <div>
                 <CardEyebrow>Copy-paste snippets</CardEyebrow>
                 <p className="text-ink-soft text-sm">
@@ -223,8 +330,15 @@ export default async function PortalMaterialsPage() {
                   paste it into an email.
                 </p>
               </div>
-              <CopySnippet title="Hand-off script (spoken)" text={handoffScript} />
+              {/* The hospice string is words said TO A FAMILY; the employer
+                  string is words said TO A MANAGER about a third party. Same
+                  text, different addressee — so the title branches. */}
+              <CopySnippet
+                title={isEmployer ? "What to tell a manager (spoken)" : "Hand-off script (spoken)"}
+                text={handoffScript}
+              />
               <CopySnippet title="Email paragraph (for families)" text={emailParagraph} />
+              <CopySnippet title="Email to your team (internal)" text={teamEmail} />
             </div>
           ) : (
             <p className="print:hidden text-sm text-ink-muted">

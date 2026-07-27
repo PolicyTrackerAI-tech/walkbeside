@@ -24,6 +24,23 @@ export interface DigestInput {
   familiesStartedInPeriod: number;
   /** Lifetime aggregate — already suppression-gated. */
   cohort: CohortStats;
+  /**
+   * Optional plain-English paragraph from lib/partner-report-digest.ts's
+   * buildOutcomesDigest (Claude, with a deterministic fallback, and the static
+   * forward-looking line under the small-sample gate). It is grounded in the
+   * SAME suppression-gated cohort the bullets come from, but it draws on more
+   * of it than the bullets print — fallbackOutcomesDigest alone states
+   * familiesWhoSaved, average overcharge caught, FTC issues flagged and median
+   * resolution days, none of which appear above it. So it may state figures
+   * this email does not itemize; every one of them is visible on the partner's
+   * own report, whose URL is the next thing in the email. It never invents a
+   * number and never makes a new claim.
+   *
+   * Absent or whitespace-only → the paragraph is omitted entirely. When
+   * present it prints BARE, with no lead-in label — see the insertion comment
+   * in buildPartnerDigest for why.
+   */
+  outcomesDigest?: string;
   /** The partner's own live report URL. */
   reportUrl: string;
 }
@@ -38,6 +55,7 @@ export function buildPartnerDigest(input: DigestInput): {
   text: string;
 } {
   const { cohort } = input;
+  const outcomesDigest = input.outcomesDigest?.trim();
   const lines: string[] = [
     `Hello,`,
     ``,
@@ -62,6 +80,21 @@ export function buildPartnerDigest(input: DigestInput): {
         lines.push(`  - ${cohort.avgSatisfaction}/5 average family satisfaction`);
       }
     }
+  }
+
+  // Plain-English colour on the same suppression-gated cohort the bullets are
+  // built from. It may restate or extend those figures — the deterministic
+  // fallback prints families-who-saved, average overcharge, FTC issues and
+  // median resolution days, which no bullet above prints — but it never
+  // invents a number and never makes a new claim, and the report URL that
+  // corroborates every figure is the next line of the email. Deliberately
+  // unlabeled: the bullets are two-space indented, so dropping to a flush-left
+  // paragraph is already an unmistakable block change in plain text, and no
+  // lead-in reads correctly for all three possible strings (the small-sample
+  // one summarizes nothing yet — it looks forward). The blank line above comes
+  // from here; the blank line below comes from the tail push that follows.
+  if (outcomesDigest) {
+    lines.push(``, outcomesDigest);
   }
 
   lines.push(

@@ -124,6 +124,47 @@ export default async function PortalOverviewPage() {
       portalNav={
         <div className="space-y-4">
           {nav}
+          {/* Middle state: links exist, no family has finished a case yet — so
+              the report below is still empty. Lead with the hand-off instead
+              of an empty scoreboard. Disappears the moment a case completes. */}
+          {stats.familiesHelped === 0 && codeCount > 0 && (
+            <Card tone="soft">
+              <CardTitle>Start here: share the tools</CardTitle>
+              <p className="text-sm text-ink-soft mt-1">
+                Your referral link is live. Nothing appears in the report below
+                until a family uses it, and that starts with a hand-off.
+              </p>
+              <ol className="mt-3 space-y-2 text-sm text-ink-soft list-decimal pl-5">
+                <li>
+                  Read the one-pager. If family-facing materials need sign-off
+                  where you work, that page is the thing to circulate.
+                </li>
+                {partnerType === "employer" ? (
+                  <li>
+                    Print it, or paste the ready-made wording wherever your
+                    people already find bereavement-leave and EAP information.
+                  </li>
+                ) : (
+                  <li>
+                    Print it, or paste the ready-made wording into an email —
+                    after admission, alongside the resources you already share
+                    with families.
+                  </li>
+                )}
+                <li>
+                  The family opens it themselves, whenever they&rsquo;re ready.
+                  You never enter anything about them, and we never contact
+                  anyone who didn&rsquo;t come to us first.
+                </li>
+              </ol>
+              <Link
+                href="/portal/materials"
+                className="inline-block mt-4 rounded-xl border-2 border-primary bg-primary-soft px-4 py-2 text-sm text-primary-deep no-underline font-medium"
+              >
+                Get the materials
+              </Link>
+            </Card>
+          )}
           {stats.familiesHelped > 0 && (
             <div className="flex justify-end">
               <CsvExportButton

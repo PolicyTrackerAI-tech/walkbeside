@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { buildPartnerDigest, shouldSendDigest } from "@/lib/partner-digest";
 import { aggregateCohort, SMALL_SAMPLE_THRESHOLD } from "@/lib/partner-report";
+import { smallSampleDigest } from "@/lib/partner-report-digest";
 
 const base = {
   partnerName: "Canyon Home Hospice",
@@ -86,6 +87,10 @@ describe("buildPartnerDigest", () => {
         partnerType: "employer",
         familiesStartedInPeriod: 3,
         cohort,
+        // The AI paragraph reaches this body too — exercise the ban through it,
+        // not just through the deterministic lines.
+        outcomesDigest:
+          "5 families referred through Acme Manufacturing completed cases, and 5 of them caught an overcharge — $5,000 total, $1,000 on average.",
       });
       const all = `${subject}\n${text}`.toLowerCase();
       for (const banned of [
@@ -100,6 +105,68 @@ describe("buildPartnerDigest", () => {
       ]) {
         expect(all).not.toContain(banned);
       }
+    });
+  });
+
+  describe("the outcomes paragraph", () => {
+    const fullCohort = aggregateCohort(
+      Array.from({ length: SMALL_SAMPLE_THRESHOLD }, () => ({
+        overchargeCaughtCents: 100_000,
+        ftcIssues: 1,
+        satisfaction: 4,
+      })),
+    );
+    const smallCohort = aggregateCohort(
+      Array.from({ length: SMALL_SAMPLE_THRESHOLD - 2 }, () => ({
+        overchargeCaughtCents: 100_000,
+        ftcIssues: 1,
+        satisfaction: 5,
+      })),
+    );
+
+    it("prints bare as its own paragraph, with no lead-in label", () => {
+      const digest =
+        "Five families referred through Canyon Home Hospice completed cases.";
+      const { text } = buildPartnerDigest({
+        ...base,
+        familiesStartedInPeriod: 4,
+        cohort: fullCohort,
+        outcomesDigest: digest,
+      });
+      // Exactly one blank line above it, exactly one below (the tail block
+      // opens with its own empty entry).
+      expect(text).toContain(`\n\n${digest}\n\nThe full picture`);
+      expect(text).not.toMatch(/In plain (words|English)|The short version|Summary:/);
+    });
+
+    it("omits the paragraph entirely when absent or whitespace-only", () => {
+      const withoutField = buildPartnerDigest({
+        ...base,
+        familiesStartedInPeriod: 4,
+        cohort: fullCohort,
+      }).text;
+      const whitespaceOnly = buildPartnerDigest({
+        ...base,
+        familiesStartedInPeriod: 4,
+        cohort: fullCohort,
+        outcomesDigest: "   \n  ",
+      }).text;
+      // No stray blank line from a whitespace-only value.
+      expect(whitespaceOnly).toBe(withoutField);
+      expect(withoutField).toMatch(/satisfaction\n\nThe full picture/);
+    });
+
+    it("carries no dollar figures through for a small-sample cohort", () => {
+      const { text } = buildPartnerDigest({
+        ...base,
+        familiesStartedInPeriod: 2,
+        cohort: smallCohort,
+        outcomesDigest: smallSampleDigest(),
+      });
+      expect(text).toContain("stays suppressed");
+      expect(text).toContain("so no single family is identifiable");
+      expect(text).toContain("we'll summarize outcomes here");
+      expect(text).not.toMatch(/\$\d/);
     });
   });
 });
