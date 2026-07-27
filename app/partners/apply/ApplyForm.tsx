@@ -7,10 +7,13 @@ import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 
 export function ApplyForm({
   defaultType,
+  defaultOrg,
 }: {
   defaultType?: "hospice" | "employer";
+  defaultOrg?: string;
 }) {
-  const [org, setOrg] = useState("");
+  // A prefilled org ≥2 chars fires the suggestions fetch on mount — harmless.
+  const [org, setOrg] = useState(defaultOrg ?? "");
   const [type, setType] = useState<string>(defaultType ?? "hospice");
   const [contactName, setContactName] = useState("");
   const [email, setEmail] = useState("");

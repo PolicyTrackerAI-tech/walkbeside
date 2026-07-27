@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { FREE_FOR_EVERY_FAMILY } from "@/lib/copy";
 import { displayHospiceName } from "@/lib/hospice-display";
+import { US_STATES } from "@/lib/us-states";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Field";
 import { LinkButton } from "@/components/ui/Button";
@@ -94,6 +95,18 @@ export function HospiceFinder() {
   }, [q]);
 
   const displayName = selected ? displayHospiceName(selected.name) : null;
+  // The selected hospice's facility page (/hospices/[state]/[ccn]). Lives in
+  // the panel, not on the result rows: a nested link inside a select <button>
+  // is invalid HTML and a keyboard trap, and the panel is where both paths
+  // already reveal — this is a third, quieter affordance there. Omitted when
+  // the state is null/unmapped (territories have no pages).
+  const facilityState = selected?.state
+    ? US_STATES.find((s) => s.abbr === selected.state)
+    : undefined;
+  const facilityHref =
+    selected && facilityState
+      ? `/hospices/${facilityState.slug}/${selected.ccn}`
+      : null;
   const nominateHref = selected
     ? `/tell-your-hospice?hospice=${encodeURIComponent(selected.name)}${
         selected.city ? `&city=${encodeURIComponent(selected.city)}` : ""
@@ -123,6 +136,14 @@ export function HospiceFinder() {
                   &middot; {displayHospiceName(selected.city)}
                   {selected.state ? `, ${selected.state}` : ""}
                 </span>
+              )}
+              {facilityHref && (
+                <Link
+                  href={facilityHref}
+                  className="block text-sm font-normal text-primary-deep underline-offset-2 hover:underline mt-0.5"
+                >
+                  See this hospice&rsquo;s page &rarr;
+                </Link>
               )}
             </div>
             <button

@@ -3,6 +3,7 @@ import { FAITH_TRADITIONS } from "@/lib/faith-traditions";
 import { listStateSlugs } from "@/lib/probate-by-state";
 import { listSlugs as listGlossarySlugs } from "@/lib/glossary";
 import { listCitySlugs } from "@/lib/city-pages";
+import { US_STATES } from "@/lib/us-states";
 
 const SITE = "https://honestfuneral.co";
 
@@ -126,6 +127,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
+  // The hospice directory: the index + the 51 state pages ONLY. Facility
+  // pages (/hospices/[state]/[ccn]) are noindexed and must NEVER appear here
+  // — a sitemap entry contradicting robots is a crawler smell.
+  const hospiceRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE}/hospices`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    ...US_STATES.map((s) => ({
+      url: `${SITE}/hospices/${s.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
+
   return [
     ...staticRoutes,
     ...scenarioRoutes,
@@ -134,5 +153,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...estateRoutes,
     ...glossaryRoutes,
     ...cityRoutes,
+    ...hospiceRoutes,
   ];
 }

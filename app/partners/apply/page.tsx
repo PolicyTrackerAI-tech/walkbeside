@@ -21,11 +21,15 @@ export const metadata: Metadata = {
 export default async function PartnersApplyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string | string[] }>;
+  searchParams: Promise<{ type?: string | string[]; org?: string | string[] }>;
 }) {
   const params = await searchParams;
   // Only "employer" is honored; anything else falls back to hospice.
   const defaultType = params.type === "employer" ? "employer" : "hospice";
+  // Org prefill (facility-page "Is this your organization?" path). Strings
+  // only, bounded — anything else is ignored and the field starts empty.
+  const defaultOrg =
+    typeof params.org === "string" ? params.org.slice(0, 160) : undefined;
 
   return (
     <main className="flex-1 flex flex-col">
@@ -67,7 +71,7 @@ export default async function PartnersApplyPage({
             </ul>
           </Card>
 
-          <ApplyForm defaultType={defaultType} />
+          <ApplyForm defaultType={defaultType} defaultOrg={defaultOrg} />
 
           <p className="text-xs text-ink-muted">
             A person reviews every application — usually within a business
