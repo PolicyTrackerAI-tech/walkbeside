@@ -97,9 +97,9 @@ the neutral service it wraps).**
 
 | Layer | Who it's for | What it is | Status |
 |---|---|---|---|
-| **L1 — Free source of truth** | Families (free) | Fair-price lookup, "is this quote fair?" checker, pillar guides, glossary, city pages, the Fair-Price Index | **Largely built** (87 city pages, 63-term glossary, head-term page, analyzer) — extend |
-| **L2 — Instrumented family service** | Families (free) | At-need advocacy (invoke the family's FTC right to itemized quotes; neutral side-by-side) + after-death navigation. Its real job is **DATA** | Negotiate flow live; **outcomes instrumentation built, pending its PR** |
-| **L3 — Institutional** | Hospices (paid) | Partner portal (enroll/refer families to a neutral tool) + reporting dashboard (families served, satisfaction, savings, time-to-resolution) | **Not built — this is what we sell; build after a hospice yes** |
+| **L1 — Free source of truth** | Families (free) | Fair-price lookup, "is this quote fair?" checker, pillar guides, glossary, city pages, the Fair-Price Index | **Built** (city pages, glossary, head-term page, analyzer, `/fair-price-index` + `/methodology`) — extend |
+| **L2 — Instrumented family service** | Families (free) | At-need advocacy (invoke the family's FTC right to itemized quotes; neutral side-by-side) + after-death navigation. Its real job is **DATA** | **Built and live.** Negotiate flow + outcomes instrumentation (`/admin/outcomes`) shipped and applied; a region with zero vetted homes now surfaces that honestly (`no_homes_available`) instead of the fake-home fallback bug that used to run |
+| **L3 — Institutional** | Hospices (paid) | Partner portal (enroll/refer families to a neutral tool) + reporting dashboard (families served, satisfaction, savings, time-to-resolution) | **Built ahead of the first yes** — `/partners` marketing + demo request, `/partners/apply`, `/partner/[code]` + `/partner/r/[token]` referral flow, a coordinator-facing AI quote-check tool, `/admin/partners` status pipeline. **Still 0 signed hospices** — the gate is now sales, not engineering |
 
 **What the hospice is actually buying** (frame the sale around this, not
 "software"): a way to **deliver their unfunded 13-month bereavement mandate**
@@ -143,9 +143,11 @@ nowhere else. See §7.
   (2) data/Index licensing to non-conflicted buyers — later, highest margin;
   (3) lean/free consumer — proof + data, not a revenue target. **NEVER:**
   funeral-home fees, insurer-as-payer.
-- **Today's consumer fee is legacy:** the live `FLAT_FEE_CENTS = 49_00` ($49
-  pay-to-send) is being removed ([`PAYMENT_DECOMMISSION.md`](PAYMENT_DECOMMISSION.md))
-  — it contradicts guardrail #2.
+- **The consumer fee is dead, not "being removed":** the $49 pay-to-send charge
+  and all Stripe checkout/webhook code are fully decommissioned (shipped
+  2026-06-25/26, [`PAYMENT_DECOMMISSION.md`](PAYMENT_DECOMMISSION.md)) — no
+  `app/api/stripe/` route exists on `main`. Guardrail #2 is honored today, not
+  pending.
 - **Valuation drivers (build for these):** recurring revenue (data/SaaS ~6–9× vs
   ~1–3× for content), proprietary outcomes data, the neutral brand, signed
   distribution. Look like a recurring data business, not a blog.
@@ -223,7 +225,9 @@ born. Every step honors guardrail #3 (never steer).
 > **Safety:** outreach to homes stays **OFF** (`OUTREACH_LIVE` off). In early
 > pilots, "contacting homes" can be **you, by hand** (phone/email). The single
 > code send path (`lib/negotiation/send.ts`) won't email anyone until the switch
-> is deliberately flipped — a separate, explicit decision.
+> is deliberately flipped — a separate, explicit decision. If a region has zero
+> vetted homes, the flow now reports that honestly (`status: no_homes_available`)
+> instead of silently substituting fake homes — a real bug fixed 2026-07-04.
 
 ### 6C. How they interlock (the B2B2C flywheel)
 
@@ -240,7 +244,8 @@ moat deeper.
 
 - **The outcomes layer** (per case: listed/quoted/negotiated/paid/chosen/hidden
   fees/satisfaction) is the gold — it scales with the family service and exists
-  nowhere else. Already instrumented (pending its PR).
+  nowhere else. Instrumented, merged, and live (`/admin/outcomes`); the current
+  gap is **volume** (0 cases recorded — no pilot has run yet), not code.
 - **Four collection channels:** (1) our own advocacy (the gold); (2) **mystery
   shopping** GPLs metro-by-metro (FTC entitles anyone); (3) **crowdsourcing**
   ("upload the price list you were given"); (4) **public postings** (states
@@ -305,23 +310,37 @@ institutional contract or any PHI**. The pivot's load-bearing items
 
 ## 10. The technology — built, building, deferred
 
-Verified state on `main` (2026-06-24):
+**Verified state on `main` (2026-07-05) — P1–P4 below all shipped.** Engineering
+now moves faster than this doc; re-check
+[`ENGINEERING_BACKLOG.md`](ENGINEERING_BACKLOG.md) for anything newer than this
+edit before treating the list below as exhaustive.
 
 - **Built (L1 + the rails):** the free price tools, guides, glossary, city pages,
-  analyzer; the negotiate flow; the funeral-home directory with a **vetting gate**
-  (`active AND vetted`) + the `/admin/vetting` tool; Stripe (checkout + webhook),
-  Resend send + Postmark inbound; a **vitest suite** (config + 9 test files).
-- **Built, pending its PR (L2 moat):** outcomes instrumentation — the migration,
-  `/admin/outcomes`, the family satisfaction capture. **On a separate branch, not
-  yet merged to `main`.** This is the **#1 engineering blocker** — it unblocks the
-  scorecard, the pilot proof, and the moat. **Apply it first.**
-- **To build, in order ([`ENGINEERING_BACKLOG.md`](ENGINEERING_BACKLOG.md)):**
-  **P1** land outcomes → **P2** payment decommission (free families) + trust spine
-  pages → **P3** partner-portal MVP (only after a hospice yes) → **P4** Fair-Price
-  Index page. Plus reach analytics.
+  analyzer; the funeral-home directory with a **vetting gate** (`active AND
+  vetted`) + the `/admin/vetting` tool; a **31-file vitest suite**. The consumer
+  paywall is fully gone — no Stripe route exists on `main`.
+- **Built (L2 — the moat, merged and applied, not "pending its PR"):** outcomes
+  instrumentation — the migration, `/admin/outcomes`, family satisfaction
+  capture — has been live for weeks. The negotiate flow no longer fakes homes
+  when a region has none vetted; it honestly reports `no_homes_available`.
+- **Built (L3 — institutional, ahead of the first hospice yes, not "build after
+  a hospice yes"):** `/partners` (marketing page + demo-request capture),
+  `/partners/apply`, the `/partner/[code]` + `/partner/r/[token]` referral flow,
+  a coordinator-facing AI quote-check tool at `/partner/r/[token]/check`, an
+  illustrative sample report at `/partner/sample-hospice`, and `/admin/partners`
+  with the pilot/active/paused/archived status pipeline. **The gate now is sales
+  (a signed hospice), not engineering.**
+- **Built (P4 — the data asset):** `/fair-price-index` + `/methodology` are
+  live; the line-item taxonomy is at **38 items** (past the original 21→24
+  target); Vercel Analytics is wired sitewide, closing the reach-analytics gap.
+- **What's actually next:** see the current backlog in
+  [`ENGINEERING_BACKLOG.md`](ENGINEERING_BACKLOG.md). Engineering is no longer
+  the bottleneck — §11 below still describes the *sales/legal* sequence
+  accurately, but its engineering framing ("deferred until a hospice yes") is
+  superseded by the above.
 - **Safety invariant on every outreach ticket:** the only email-to-a-home path is
   `sendOutreachForNegotiation`, gated by `OUTREACH_LIVE` (kept **off**). Nothing
-  in the backlog flips it.
+  shipped has flipped it.
 
 ---
 
@@ -333,43 +352,52 @@ everything.** Pilots are run by hand; the portal comes after a yes. Full path:
 
 ### Phase 0 — Pre-flight gate (start now; mostly NOT engineering)
 Start the **legal** item first (longest lead time). The gate to the first cold
-email:
+email — **status per [`MARKET_READINESS.md`](MARKET_READINESS.md), verified
+2026-07-05:**
 
 - [ ] **Legal:** counsel clears Utah anti-steering + confirms self-enrollment
-      avoids a BAA.
-- [ ] **Free family:** a pilot family pays $0 (free tools already free; run the
-      advocacy free via the existing bypass while decommission lands).
-- [ ] **Trust:** the "no funeral-home money" story is true + visible, with the
-      $49 family copy scrubbed.
-- [ ] **Pitch:** memorized, with objection handling.
+      avoids a BAA. **Still open — the lawyer's lane.**
+- [x] **Free family:** a pilot family pays $0 — the payment decommission
+      shipped; there is no charge anywhere in the code.
+- [x] **Trust:** the "no funeral-home money" story is true + visible; the $49
+      family copy is scrubbed sitewide and `/our-role`, `/methodology`,
+      `/corrections` are live.
+- [ ] **Pitch:** memorized, with objection handling. **Still open.**
 - [ ] **Collateral:** family one-pager + hospice leave-behind + cold-email/call
-      copy, printed.
-- [ ] **Pilot agreement:** one-page, free 60 days, ~10–15 families, metrics +
-      data grant.
-- [ ] **Outcomes recording works** (apply the migration).
-- [ ] **Target list:** 20–30 Utah hospices with contacts.
+      copy — drafted, **not yet designed/printed.**
+- [ ] **Entity + contracts:** Delaware C-corp, the pilot agreement, an
+      institutional MSA/order form, a de-identified data-use grant — drafted
+      with counsel. **Still open — the lawyer's lane**
+      ([`MARKET_READINESS.md`](MARKET_READINESS.md) §A).
+- [x] **Outcomes recording works** — the migration is applied; `/admin/outcomes`
+      has been live for weeks.
+- [ ] **Target list:** 20–30 Utah hospices with contacts. **Still open.**
 
 ### Weeks 1–4 — Foundation & first data
-Start the legal pre-flight **today** (longest lead time); **in parallel** finalize
-pitch + collateral; scrub the $49 copy; apply the outcomes migration; build the
-target list; **first 10 hospice outreaches**; optionally a first Utah
-price-disclosure mini-survey.
-**Done by week 4:** ✓ legal pre-flight underway · ✓ pitch + collateral printed ·
-✓ outcomes migration applied · ✓ $49 family copy scrubbed · ✓ 20–30 hospice list
-· ✓ first 10 outreaches sent.
+The engineering items in this phase are **done** (outcomes applied, $49 copy
+scrubbed, partner portal + Fair-Price Index built — see §10). What's left is the
+founder/legal sequence: start the legal pre-flight **today** (longest lead
+time); finalize pitch + collateral; form the entity; build the target list;
+**first 10 hospice outreaches**.
 
 ### Weeks 5–8 — First pilots & proof
 Book 10+ discovery calls; sign 1–2 free pilots; **run at-need cases by hand**,
-capturing every outcome; first savings case studies. (Build the scrappy partner
-portal + reporting v1 **only if** a pilot is live and needs it.)
+capturing every outcome; first savings case studies. The partner portal +
+reporting dashboard are **already built** (`/partners`, `/partner/[code]`,
+`/admin/partners`) — use the live `/partner/sample-hospice` illustrative report
+to sell the pilot, and the real per-partner report once a pilot has cases.
 
 ### Weeks 9–12 — Convert & publish
-Compile the proof sheet; ask for the **paid annual contract** + peer intros;
-publish the **first Fair-Price Index** with a press push; write the decision memo
-vs. the scorecard (raise? go full-time?).
+Compile the proof sheet (the live per-partner report generates this); ask for
+the **paid annual contract** + peer intros; the **Fair-Price Index is already
+published** (`/fair-price-index` + `/methodology`) — lean on it in the press
+push; write the decision memo vs. the scorecard (raise? go full-time?).
 
-**Deferred until a hospice says yes:** the full partner portal, the reporting
-dashboard, the Fair-Price Index build-out, programmatic SEO depth, `OUTREACH_LIVE`.
+**No longer true — corrected 2026-07-05:** the original plan below said to
+defer the partner portal, reporting dashboard, Fair-Price Index build-out, and
+programmatic SEO depth until a hospice said yes. That got overtaken — all of it
+shipped ahead of the first signed hospice (see §10). `OUTREACH_LIVE` is the one
+item on this list that's still deliberately off.
 
 **12-month arc:** Phase 0 Foundation (0–1) → Phase 1 First proof (1–3) → Phase 2
 Repeatable, 3–5 paid hospices + raise prep (4–6) → Phase 3 Scale: employer
@@ -389,13 +417,15 @@ channel, data-licensing pilot, seed raise / full-time (7–12).
   satisfaction across ~10+ cases; free-tool traction + first AI/press citations
   climbing; runway covered by revenue **or** ~12–18 mo savings **or** a raise.
   **Rule:** go full-time from evidence + stability, not feeling or consumer sales.
-- **Current reading:** 0 hospice contacts; outcomes instrumentation pending apply;
-  L1 built; emails off. The next number that matters: **hospice contacts → calls
-  → first pilot.** Detail: [`SCORECARD.md`](SCORECARD.md).
-- **Instrumentation gaps (close these to measure honestly):** reach analytics not
-  wired; outcomes migration not applied; no sales CRM yet (a spreadsheet works);
-  authority tracked by hand. None block the plan — all gate honest weekly
-  measurement of it.
+- **Current reading (2026-07-05):** 0 hospice contacts — sales, not engineering,
+  is now the bottleneck; outcomes instrumentation applied and live; L1 and L3
+  built; emails still off (`OUTREACH_LIVE` false, by design). The next number
+  that matters: **hospice contacts → calls → first pilot.** Detail:
+  [`SCORECARD.md`](SCORECARD.md).
+- **Instrumentation gaps (close these to measure honestly):** ~~reach analytics
+  not wired~~ **done** (Vercel Analytics, sitewide, 2026-07-05); ~~outcomes
+  migration not applied~~ **done**; no sales CRM yet (a spreadsheet works);
+  authority tracked by hand.
 
 ---
 
