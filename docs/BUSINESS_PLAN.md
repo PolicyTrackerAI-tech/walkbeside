@@ -483,10 +483,15 @@ SOM's families): roster every licensed establishment, harvest posted GPLs,
 request the rest openly under an FCA-survey-style methodology (we identify
 ourselves; **no pretexting, ever**, it is the one collection method that could
 poison the brand), ingest via the founder ingest tool, vet homes into the
-directory; (2) **one California metro second** (SB 658 makes CA the richest
-collection state); (3) consented family uploads compound from pilot case #1.
-Gate: SLC collected and vetted by Oct 1, or the first pilot runs on labeled
-estimates and R8 fires.
+directory; (2) **Sacramento second** (California's website-disclosure rule,
+B&P §7685(b), produced the best GPL-posting rates in the country; an Aug 2026
+spot-check ran 10-for-10 there); (3) consented family uploads compound from
+pilot case #1. The full collection worklist, rosters, and verified GPL URLs
+live in `docs/data/GPL_WORKLIST_2026-08.md`; the Wasatch Front math is ~82
+establishments collapsing to ~45 unique GPLs, of which ~37 are obtainable
+without a phone call (posted GPLs + the FCA of Utah survey archive). Gate: SLC
+collected and vetted by Oct 1, or the first pilot runs on labeled estimates
+and R8 fires.
 
 **Standing rule:** the employer pivot is pre-authorized **only** as the Oct-1
 kill response, not as a temptation to chase bigger ACVs before hospice proof.
