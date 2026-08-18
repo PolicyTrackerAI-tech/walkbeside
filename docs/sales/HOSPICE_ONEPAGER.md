@@ -12,7 +12,7 @@ A **free, neutral funeral-price advocate**, wrapped in a **light practical-navig
 
 - **Fair prices for your area** — what a funeral *should* cost near them, by line item, so a quote can't blindside them.
 - **"Is this quote fair?"** — they send us a price list; we flag the overcharges and the items they can legally decline.
-- **A real advocate** — we contact funeral homes, gather itemized quotes, and lay the options side by side. *The family chooses. Always.*
+- **A real advocate** — we help the family request itemized quotes from funeral homes (their right under the FTC Funeral Rule) and lay the options side by side. *The family chooses. Always.*
 - **A light after-death layer** — a what-to-do-next checklist (death certificates, accounts, benefits, who to notify) and pointers to the right resources, so nothing critical falls through.
 
 **Free to your families. We take no money from funeral homes or insurers — ever.**
@@ -23,7 +23,7 @@ A **free, neutral funeral-price advocate**, wrapped in a **light practical-navig
 
 **1. Referral reputation → census.** A great experience at the hardest moment becomes word-of-mouth from families and goodwill from your referral sources. This is the real ROI: the families you serve well are the ones who fill your next beds.
 
-**2. Documented mandate coverage.** Medicare requires ~13 months of bereavement support after every death (42 CFR 418.64) — unfunded, and survey-able. We hand you a report (families served, satisfaction, savings, time-to-resolution) that documents support delivered across the funeral-and-admin part of that window.
+**2. Documented mandate coverage.** Medicare requires bereavement support for the family up to a year after every death (42 CFR 418.64) — unfunded, and survey-able. We hand you a report (families served, satisfaction, savings, time-to-resolution) that documents support delivered across the funeral-and-admin part of that window.
 
 **3. Staff hours back.** The funeral-pricing and after-death-admin questions your counselors and social workers field — but were never resourced to handle — we absorb. We complement your grief program; we don't replace your counselors.
 
@@ -35,6 +35,8 @@ A **free, neutral funeral-price advocate**, wrapped in a **light practical-navig
 
 We take **no money from funeral homes or insurers**, and we **never steer** a family to a specific home. We present neutral options; the family decides everything. That's not just our ethic — it's what makes us *legal* for you to hand over under anti-steering law. It's the only funeral-cost tool you can put in a family's hands without putting your name behind a referral.
 
+The neutrality runs both directions: our public hospice directory lists **every Medicare-certified hospice** and ranks none of them — no hospice pays to appear, and being our partner changes nothing about how any hospice is shown to families. Your compliance team can verify that, and we'll put it in writing.
+
 ---
 
 ## The ask
@@ -45,6 +47,6 @@ You hand families a neutral link or card; they enroll themselves (no PHI changes
 
 ---
 
-**[Founder Name]** · Honest Funeral · [phone] · [email] · honestfuneral.co
+**Ryan Currie, Founder** · Honest Funeral Co. · [phone] · ryan@honestfuneral.co · honestfuneral.co
 *Free to families · No funeral-home or insurer money · We never steer*
 [Physical postal address]

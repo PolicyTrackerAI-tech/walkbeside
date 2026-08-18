@@ -1,6 +1,6 @@
 # Hospice Cold Outreach Sequence — 3 Touches to a Discovery Call
 
-> **What this is.** A copy-paste cold sequence to get a Utah hospice to book a 20-minute discovery call. Four pieces: **Email 1** (open), a **Call opener + Voicemail**, **Email 2** (follow-up), and a **LinkedIn connection note**. Fill in every `[bracketed field]` before sending. Lead with *their* pain — referral reputation and the unfunded 13-month bereavement mandate — never with our features.
+> **What this is.** A copy-paste cold sequence to get a Utah hospice to book a 20-minute discovery call. Four pieces: **Email 1** (open), a **Call opener + Voicemail**, **Email 2** (follow-up), and a **LinkedIn connection note**. Fill in every `[bracketed field]` before sending. Lead with *their* pain — referral reputation and the unfunded bereavement mandate — never with our features.
 >
 > **Companion docs:** voice and full playbook in [`HOSPICE_GTM.md`](../HOSPICE_GTM.md); approved family-facing copy and anti-steering rules in [`HOSPICE_COLLATERAL.md`](../HOSPICE_COLLATERAL.md). The single milestone these touches serve: a **booked discovery call**.
 
@@ -17,6 +17,8 @@ Three buyer roles — start with whichever you can reach; the ED ultimately sign
 **Warm path (always try first):** a **chaplain or social worker** you can reach is the fastest human — they feel the family's funeral-and-paperwork panic firsthand. Ask them for a warm intro to the bereavement coordinator rather than cold-emailing the ED.
 
 > **Sequencing.** One contact per hospice at a time. Email 1 → Day 0. Call + voicemail → Day 2–3 (if no reply). Email 2 → Day 5–6. LinkedIn note → Day 7, or anytime as a parallel warm touch. If no reply after the full sequence, mark dead and move on.
+>
+> **Send order within the target list** (`TARGET_LIST_2026-08.md`): Tier 1 first, and within it, lead with the low-CAHPS names (2★ operators have the most visible family-experience gap — use the Care Compare opener for them, always framed as the hard-to-staff stretch, never as criticism). Never contact anyone on the watch-out list.
 
 ---
 
@@ -43,7 +45,7 @@ Three buyer roles — start with whichever you can reach; the ED ultimately sign
 >
 > I'm reaching out to [Hospice] because the part that quietly shapes your reputation isn't the care before the death — it's what happens after. A family that gets overcharged or lost in the paperwork remembers it, and that's the story that travels back to the hospitals, SNFs, and physicians who send you referrals. We take that exploitative, confusing stretch off your plate and give families a calm, neutral path through it.
 >
-> It also gives you a documented way to deliver the ~13 months of bereavement support Medicare requires (42 CFR 418.64) but pays you nothing extra for — the funeral-and-admin piece your counselors aren't resourced to handle. You get a short report proving your families were supported.
+> It also gives you a documented way to deliver the year of bereavement support Medicare requires after each death (42 CFR 418.64) but pays you nothing extra for — the funeral-and-admin piece your counselors aren't resourced to handle. You get a short report proving your families were supported.
 >
 > Worth 20 minutes to see if it'd help your families? I'm in Utah and happy to come to you.
 >
@@ -89,7 +91,7 @@ Three buyer roles — start with whichever you can reach; the ED ultimately sign
 
 > Hi [First name] — I run Honest Funeral, a free, neutral guide that helps grieving families through funeral pricing and the after-death paperwork (we take no money from funeral homes). It takes the exploitative part off your bereavement team's plate and protects the experience families carry back to your referral sources. Would love to connect.
 
-> *After they accept, first message:* "Thanks for connecting, [First name]. Genuinely think this could lighten your team's load on the funeral-and-admin side of the 13-month bereavement mandate — and it's free to your families. Open to a quick 20-minute call to see if it fits [Hospice]?"
+> *After they accept, first message:* "Thanks for connecting, [First name]. Genuinely think this could lighten your team's load on the funeral-and-admin side of the bereavement mandate — and it's free to your families. Open to a quick 20-minute call to see if it fits [Hospice]?"
 
 ---
 

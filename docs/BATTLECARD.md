@@ -32,7 +32,8 @@ can ethically put us in a grieving family's hands.
 | **Cake / Lantern / Everplans** | Mostly the **family** (the graveyard) — and on exit, **funeral-money** owners | Cake → a funeral operator; Everplans → a preneed lead-gen for homes; now conflicted by ownership | We're built to never be ownable by funeral money — that's the moat, not a feature |
 | **Price-comparison sites** | The **funeral homes** (listing/lead fees) | Paid by the homes they rank — the exact conflict we exist to remove | We rank no one for pay; n>5 + methodology before any published number |
 | **Funeral homes / the FTC-Rule status quo** | The **family**, at the worst moment | The seller sets the price and discloses the bare minimum the law forces | We invoke the family's FTC right *for* them and show a neutral side-by-side |
-| **"Do nothing / existing hospice counselors"** | N/A (unfunded mandate) | Counselors do grief, not funeral-pricing + after-death admin; the 13-mo mandate is unfunded | We deliver the unfunded mandate, lift CAHPS, and hand the hospice a proof report |
+| **"Do nothing / existing hospice counselors"** | N/A (unfunded mandate) | Counselors do grief, not funeral-pricing + after-death admin; the yearlong mandate is unfunded | We deliver the unfunded mandate, lift CAHPS, and hand the hospice a proof report |
+| **Renidy** (new, 2026) | TBD — piloting with TX hospices | AI funeral-planning platform; payer model and neutrality structure not yet public | Our payer clarity is contractual and code-enforced; our price dataset and payment-blind neutrality are verifiable today |
 
 ---
 
@@ -141,8 +142,8 @@ can ethically put us in a grieving family's hands.
 
 ### 7. "Do nothing / the hospice's existing counselors"
 
-- **What it is:** the hospice's own bereavement staff handling the 13-month
-  mandate (42 CFR 418.64) with the resources they have.
+- **What it is:** the hospice's own bereavement staff handling the yearlong
+  bereavement mandate (42 CFR 418.64) with the resources they have.
 - **The conflict / gap:** the mandate is **federally required and unfunded**;
   counselors are trained for **grief**, not **funeral-price negotiation** or the
   **after-death admin maze** (certificates, accounts, SSA/VA benefits). It quietly
@@ -154,11 +155,44 @@ can ethically put us in a grieving family's hands.
   pricing and paperwork maze they were never resourced for — and hand you the
   report that proves it."*
 
+### 8. Renidy — the new hospice-channel entrant (watch, don't dismiss)
+
+- **What they are:** an AI-powered "all-in-one funeral planning platform"
+  (funeral, advance-care, and legacy planning plus grief support), piloting
+  with Texas hospices as of mid-2026 and covered by Hospice News (Jul 2026).
+  The first company besides us visibly testing the hospice channel for
+  funeral navigation.
+- **What's unknown (as of Aug 2026):** who pays them, whether funeral homes
+  are ever a revenue source, and how they handle neutrality. Do not assert a
+  conflict that isn't documented.
+- **Why we win today:** our structure is verifiable, not aspirational — the
+  payer allowlist is enforced in billing code, the hospice directory is
+  provably payment-blind, the anti-steering design is documented, and the
+  price dataset is collected under a published methodology. If a buyer
+  mentions them: *"Great sign that hospices are looking at this category.
+  Ask any vendor the two questions that matter: who pays you, and can a
+  funeral home ever pay you anything? Our answers are contractual."*
+- **Honesty guard:** they're new and largely unknown; treat them with the
+  same respect rule as Empathy. The existence of a second entrant validates
+  the channel — use it that way.
+
+### The budget-line precedents (use when a buyer doubts hospices buy things like this)
+
+Hospices already pay outside vendors against the same unfunded bereavement
+mandate and family-experience pressure: **Help Texts** has sold hospices
+13-month grief-text subscriptions for years (marketed explicitly on the CMS
+requirement and CAHPS); **Betterleave** pivoted from selling employers to
+selling hospices in 2024 and lives in the Netsmart EHR marketplace;
+bereavement mailer programs and program software run low-thousands per
+year; every mid-size hospice already pays a CMS-approved CAHPS survey
+vendor by mandate. The category exists — we're the funeral-pricing layer of
+it, which no one else sells.
+
 ---
 
 ## Our wedge, restated for the hospice
 
-> **"You're federally required to provide thirteen months of bereavement support,
+> **"You're federally required to provide your families a year of bereavement support,
 > you're paid nothing extra to do it, and it shows up in your family-satisfaction
 > scores. We give every one of your families a neutral guide through the funeral
 > and the after-death maze — free to them — and hand you a report that proves you
@@ -190,7 +224,7 @@ can ethically put us in a grieving family's hands.
 |---|---|
 | **"We already offer Empathy / an insurer's bereavement benefit."** | "Empathy is paid by the insurer and is great for the *payout* and estate logistics. It isn't a neutral **funeral-price** advocate — an insurer-funded tool has no reason to get the funeral bill down. We're the conflict-free funeral-pricing layer, free to your families, paid by you, not the homes or insurers." |
 | **"We use Trust & Will / an estate-doc tool."** | "Those write the **will** ahead of time. We handle the **funeral, at the worst moment** — itemized prices, a neutral comparison, and the after-death admin maze — free to the family." |
-| **"Our bereavement counselors already cover this."** | "Your counselors do **grief**. We do the **funeral-pricing and paperwork** they were never resourced for, free to the family, and hand you the **CAHPS/compliance report** that proves the 13-month mandate was delivered." |
+| **"Our bereavement counselors already cover this."** | "Your counselors do **grief**. We do the **funeral-pricing and paperwork** they were never resourced for, free to the family, and hand you the **CAHPS/compliance report** that proves the bereavement mandate was delivered." |
 | **"We refer families to a local funeral home / a comparison site."** | "Anything paid by the homes — a referral or a ranking — is a steering and neutrality problem for you. We take **no** funeral-home money and **never steer**, which is exactly why you can put us in a family's hands without compliance risk." |
 | **"We don't have budget for another vendor."** | "Start with a **free 60-day pilot** on 10–15 families. You only pay once the satisfaction and savings prove out — and the value is measured against your unfunded mandate, your CAHPS, and staff hours saved, not 'software.'" |
 | **"How do we know your prices are right?"** | "Published methodology, **real itemized price lists** we collect under the family's FTC right, and we prove it on **your own families** during the pilot. We never publish a number we can't defend." |
@@ -229,3 +263,11 @@ can ethically put us in a grieving family's hands.
   [Foundation Partners](https://foundationpartners.com/fpgnews/foundation-partners-group-acquires-cake-to-meet-growing-demand-for-end-of-life-planning-tools-and-resources/);
   Everplans → Precoa (preneed lead-gen, Oct 2024) and Lantern → Wellthy (2024):
   per industry reporting, Oct 2024.
+- Renidy (TX hospice pilots, AI funeral planning):
+  [Hospice News, Jul 21 2026](https://hospicenews.com/2026/07/21/behind-the-scenes-of-ai-powered-bereavement-care/),
+  [renidy.com](https://www.renidy.com/)
+- Budget-line precedents — Help Texts sells hospices vs the CMS mandate:
+  [Help Texts for hospices](https://helptexts.com/for-organizations/hospices/);
+  Betterleave's employer→hospice pivot:
+  [Hospice News, Jul 24 2024](https://hospicenews.com/2024/07/24/grief-care-startup-betterleave-expands-hospice-partnerships/),
+  [Netsmart marketplace](https://www.ntst.com/marketplace/betterleave)

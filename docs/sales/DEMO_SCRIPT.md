@@ -1,6 +1,6 @@
 # Honest Funeral — Family-Experience Demo Script (Discovery / Pitch Call)
 
-**A tight ~10-minute live walkthrough for hospice discovery and pitch calls.** This is the *show*, not the *tell*. You are walking the bereavement coordinator (and, ideally, the Executive Director) through exactly what one of their grieving families experiences — then turning every screen back to *their* ROI: referrals, reputation, the unfunded 13-month mandate, and staff hours saved.
+**A tight ~10-minute live walkthrough for hospice discovery and pitch calls.** This is the *show*, not the *tell*. You are walking the bereavement coordinator (and, ideally, the Executive Director) through exactly what one of their grieving families experiences — then turning every screen back to *their* ROI: referrals, reputation, the unfunded bereavement mandate, and staff hours saved.
 
 > **Before you dial:** Have the live product open in a browser, logged in, on a second monitor or a screen you can share. Have one realistic test case staged (a fictional family, a city in their service area, and the staged price list from [`SAMPLE_GPL_DEMO.md`](SAMPLE_GPL_DEMO.md) copied to your clipboard — verified to flag ≈$9,000 of overcharge every time). Pull *their* Care Compare "emotional and spiritual support" score so you can reference it by number. Confirm screen-share works.
 >
@@ -155,7 +155,7 @@
 >
 > **One — referrals.** Every one of these families had a good experience attached to [Hospice]'s name. That's the word-of-mouth and the referral-source goodwill that drives your census. This page is the receipt.
 >
-> **Two — your mandate.** This is documented evidence you supported families through the 13-month bereavement window Medicare requires under 42 CFR 418.64 — the obligation you carry with no extra funding. It goes straight in your compliance file. *(And yes, supporting families in the weeks after a death is exactly what CAHPS asks them about — so it shows up in your reputation there too.)*
+> **Two — your mandate.** This is documented evidence you supported families through the bereavement window Medicare requires under 42 CFR 418.64 (support for the family up to a year after the death) — the obligation you carry with no extra funding. It goes straight in your compliance file. *(And yes, supporting families in the weeks after a death is exactly what CAHPS asks them about — so it shows up in your reputation there too.)*
 >
 > **Three — staff hours.** Every case on this sheet is funeral-pricing and after-death admin work your counselors didn't have to do. That's the line we'll come back to when we talk about what it's worth."
 
