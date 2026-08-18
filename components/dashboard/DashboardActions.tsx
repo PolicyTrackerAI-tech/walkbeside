@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { SHARE_KEYS } from "@/lib/share-keys";
 
 /**
  * Dashboard action row: "Save for my daughter" + "Print my progress".
@@ -15,30 +16,6 @@ import { Button } from "@/components/ui/Button";
  * "Print my progress" calls window.print(). The page already hides nav
  * and SiteHeader controls in print mode (print:hidden).
  */
-
-// Keys we snapshot into a share link. Keep this list minimal — only
-// what helps the proxy operator pick up where the originator stopped.
-const SHARE_KEYS = [
-  // /decide flow answers (hf-decide:* namespace)
-  "hf-decide:faith",
-  "hf-decide:customFaith",
-  "hf-decide:faithDenomination",
-  "hf-decide:bodyAtService",
-  "hf-decide:dispositionPreference",
-  "hf-decide:costPriority",
-  "hf-decide:isVeteran",
-  "hf-decide:recommendedServiceType",
-  // /negotiate/start wizard state
-  "honestfuneral.negotiate-wizard.v1",
-  // /guidance/[scenario] step progress, per scenario
-  "honestfuneral.guidance.hospital.v1",
-  "honestfuneral.guidance.home-expected.v1",
-  "honestfuneral.guidance.home-unexpected.v1",
-  "honestfuneral.guidance.elsewhere.v1",
-  // /next-30-days state
-  "honestfuneral.next30.v1",
-  "honestfuneral.next30.expanded.v1",
-];
 
 function snapshotSessionStorage(): Record<string, string> {
   const out: Record<string, string> = {};

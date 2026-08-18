@@ -89,7 +89,7 @@ const LIVE_REQUIRED_VARS = [
   "RESEND_API_KEY",
   "RESEND_WEBHOOK_SECRET", // route requireServer()s it; missing → webhook 500s, bounces unhandled
   "UNSUBSCRIBE_SECRET",
-  "ADMIN_EMAILS", // empty = any logged-in user is an admin; dangerous when live
+  "ADMIN_EMAILS", // unset in prod now fails closed (admin locked out) — set it so the team can reach /admin
   "CRON_SECRET",
 ];
 
@@ -114,6 +114,15 @@ export function validateEnv(): { errors: string[]; warnings: string[] } {
           `${v} is not set (ok for partial local dev; required for a working app)`,
         );
     }
+  }
+
+  // Admin surface is fail-closed in production (lib/admin.ts): an unset
+  // allowlist locks the team out of /admin rather than opening it to everyone.
+  // Warn loudly at boot so a prod deploy without it is noticed immediately.
+  if (process.env.NODE_ENV === "production" && isMissing("ADMIN_EMAILS")) {
+    warnings.push(
+      "ADMIN_EMAILS is not set in production — /admin is fail-closed, so nobody can reach admin tools until it is configured",
+    );
   }
 
   if (live) {

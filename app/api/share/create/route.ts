@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { readLimitedJson } from "@/lib/http-guards";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 /**
  * POST /api/share/create
@@ -15,6 +16,11 @@ import { readLimitedJson } from "@/lib/http-guards";
  * insert for anon role.
  */
 export async function POST(req: Request) {
+  const ip = clientIp(req.headers);
+  const rl = rateLimit(`share-create:${ip}`, { limit: 5, windowMs: 60 * 60_000 });
+  if (!rl.ok)
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+
   const limited = await readLimitedJson<{ payload?: unknown }>(req, 100);
   if (!limited.ok)
     return NextResponse.json({ error: limited.error }, { status: limited.status });
