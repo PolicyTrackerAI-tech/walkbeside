@@ -656,10 +656,10 @@ export default function FuneralHomeTacticsPage() {
               </p>
               <p>
                 We take no money from any funeral home. No
-                commissions, no referral fees, no kickbacks. We keep
-                families free and are funded by the institutions we
-                partner with. That&rsquo;s why we can write the page you
-                just read.
+                commissions, no referral fees, no kickbacks. Families
+                never pay us either &mdash; any revenue we earn comes
+                from the institutions that serve families. That&rsquo;s
+                why we can write the page you just read.
               </p>
             </div>
             <div className="mt-5">

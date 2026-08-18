@@ -7,11 +7,13 @@ import { LinkButton } from "@/components/ui/Button";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
+import { outreachFromAddress } from "@/lib/negotiation/email-body";
+import { outreachIsLive } from "@/lib/negotiation/outreach-mode";
 
 export const metadata: Metadata = {
   title: { absolute: "How Honest Funeral helps families" },
   description:
-    "A consumer advocate, not a funeral home. Everything is free to families — the tools and the funeral-home outreach. We contact homes on your behalf at no charge, and we keep families free because we're funded by the institutions we partner with.",
+    "A consumer advocate, not a funeral home. Everything is free to families — the tools and the funeral-home outreach. We contact homes on your behalf at no charge. Families never pay; any revenue we earn comes from the institutions that serve families, never from funeral homes or insurers.",
   alternates: { canonical: "/how-it-works" },
 };
 
@@ -27,24 +29,27 @@ async function getSignedIn(): Promise<boolean> {
 function buildSteps(signedIn: boolean): { n: number; title: string; body: React.ReactNode }[] {
   const dashHref = signedIn ? "/dashboard" : "/login?next=/dashboard";
   const dashLabel = signedIn ? "your dashboard" : "your account dashboard";
+  // Single source of truth for the sender we claim: the same function the
+  // send path uses (default pinned by lib/negotiation/__tests__/email-body).
+  const fromAddr =
+    outreachFromAddress().match(/<([^>]+)>/)?.[1] ?? outreachFromAddress();
   return [
   {
     n: 1,
-    title: "We find the funeral homes near you, and you approve the list.",
+    title: "We find vetted funeral homes near you.",
     body:
-      "We line up as many as nine homes in your area. You approve the list before anything goes out — we only contact homes once you're in.",
+      "You tell us your area and how far you'd travel; we line up the nearby homes we've personally vetted — only vetted homes are ever contacted. Nothing goes out until you've given written authorization, and you see every home on the list, by name, on your case page.",
   },
   {
     n: 2,
     title: "It's free to families — we contact homes on your behalf at no charge.",
     body:
-      "There's nothing to pay. No commissions, no kickbacks, no referral fees from funeral homes. We keep families free because we're funded by the institutions we partner with.",
+      "There's nothing to pay. No commissions, no kickbacks, no referral fees from funeral homes. Families never pay either — any revenue we earn comes from the institutions that serve families, like hospices and employers.",
   },
   {
     n: 3,
     title: "Every email identifies us as your advocate — by name.",
-    body:
-      "Sent from advocate@honestfuneral.co. We don't pretend to be you. The family's surname is mentioned; no other identifying details unless you tell us to.",
+    body: `Sent from ${fromAddr}. We don't pretend to be you. The family's surname is mentioned; no other identifying details unless you tell us to.`,
   },
   {
     n: 4,
@@ -82,6 +87,7 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
 export default async function HowItWorksPage() {
   const signedIn = await getSignedIn();
   const STEPS = buildSteps(signedIn);
+  const live = outreachIsLive();
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader rightSlot={<BackLink defaultHref="/" />} />
@@ -103,6 +109,20 @@ export default async function HowItWorksPage() {
               behalf at no charge. Here&rsquo;s every step.
             </p>
           </div>
+
+          {!live && (
+            <Card tone="soft">
+              <CardEyebrow>Where this stands today</CardEyebrow>
+              <p className="text-ink-soft">
+                We vet funeral homes region by region, and our team
+                isn&rsquo;t sending outreach emails yet. Start the flow and
+                we&rsquo;ll prepare everything &mdash; the vetted homes near
+                you and the exact request each would get &mdash; and your
+                case page will always say plainly what has and hasn&rsquo;t
+                been sent.
+              </p>
+            </Card>
+          )}
 
           <ol className="space-y-4">
             {STEPS.map((s) => (
@@ -132,8 +152,9 @@ export default async function HowItWorksPage() {
               Everything on the site is free to families &mdash; the tools and
               the funeral-home outreach. There&rsquo;s nothing to pay and no
               subscription. No commissions from any funeral home. No referral
-              fees. We keep families free because we&rsquo;re funded by the
-              institutions we partner with, never by funeral homes or insurers.
+              fees. Any revenue we earn comes from the institutions that serve
+              families &mdash; hospices and employers &mdash; never from
+              funeral homes or insurers, and never from you.
             </p>
             <div className="flex flex-wrap gap-3">
               <LinkButton href="/decide">
@@ -148,10 +169,10 @@ export default async function HowItWorksPage() {
           <Card tone="soft">
             <CardTitle>Why it works</CardTitle>
             <p className="text-ink-soft">
-              Funeral homes respond to Honest Funeral differently than they respond
-              to a grieving family. Every email signals we know the FTC
-              Funeral Rule and we&rsquo;re comparing. The prices we get back
-              tend to reflect that.
+              Funeral homes respond differently to a documented, comparing
+              buyer than to a grieving family alone. Every email signals we
+              know the FTC Funeral Rule and that the family is comparing
+              &mdash; that&rsquo;s the leverage this flow is built on.
             </p>
           </Card>
         </div>

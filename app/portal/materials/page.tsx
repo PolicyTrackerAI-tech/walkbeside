@@ -63,8 +63,8 @@ export default async function PortalMaterialsPage() {
     : `After admission, this is something we give every family we serve: a free, independent guide to funeral prices that shows what things fairly cost nearby and checks any quote you're handed. Nobody there takes money from funeral homes, so the numbers are honest. There's no sign-up required to look — the link is ${snippetUrl}.`;
 
   const emailParagraph = isEmployer
-    ? `We share this with our people, free: Honest Funeral, an independent guide to funeral prices. It shows fair prices for your area, checks any quote you're given, and — if you ask — will contact funeral homes to gather comparison quotes, all free. It takes no money from funeral homes, and there's no sign-up required to look: ${snippetUrl}\n\n${pledgeText(partner.name)}`
-    : `One resource we share with the families we serve: Honest Funeral, a free, independent guide to funeral prices. It shows fair prices for your area, checks any quote you're given, and — if you ask — will contact funeral homes to gather comparison quotes, all free. It takes no money from funeral homes, and there's no sign-up required to look: ${snippetUrl}\n\n${pledgeText(partner.name)}`;
+    ? `We share this with our people, free: Honest Funeral, an independent guide to funeral prices. It shows fair prices for your area, checks any quote you're given, and — if you ask — will help you get comparison quotes from funeral homes, all free. It takes no money from funeral homes, and there's no sign-up required to look: ${snippetUrl}\n\n${pledgeText(partner.name)}`
+    : `One resource we share with the families we serve: Honest Funeral, a free, independent guide to funeral prices. It shows fair prices for your area, checks any quote you're given, and — if you ask — will help you get comparison quotes from funeral homes, all free. It takes no money from funeral homes, and there's no sign-up required to look: ${snippetUrl}\n\n${pledgeText(partner.name)}`;
 
   // Internal staff email — pasted by the coordinator to their OWN colleagues,
   // never to a family (hence a CopySnippet, never a mailto). Joined explicitly

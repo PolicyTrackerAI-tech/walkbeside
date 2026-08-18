@@ -4,6 +4,10 @@ import {
   CaseStepper,
   stageForNegotiationStatus,
 } from "@/components/negotiate/CaseStepper";
+import {
+  anyOutreachSent,
+  outreachStatusLabel,
+} from "@/lib/negotiation/status-labels";
 import { fmtCents } from "@/lib/stripe";
 
 export interface OutreachRow {
@@ -23,20 +27,15 @@ export interface FuneralHomeOutreachCardProps {
   outreach: OutreachRow[];
 }
 
-const STATUS_LABEL: Record<string, string> = {
-  sent: "Awaiting reply",
-  replied: "Replied",
-  "no-reply": "No reply yet",
-  declined: "Declined",
-  dry_run: "Dry-run (test mode)",
-};
-
 /**
  * Dashboard card showing the family's active funeral-home outreach.
  *
  * The outreach is free to families; results are free to view and choosing a
  * home costs nothing. The family sees every home and quote with no reveal
- * paywall.
+ * paywall. Row statuses render through outreachStatusLabel — internal enums
+ * (dry_run, pending, …) must never reach the family — and the card only says
+ * "we contacted" when an email really left (anyOutreachSent), never while
+ * rows are merely prepared.
  */
 export function FuneralHomeOutreachCard({
   negotiationId,
@@ -53,6 +52,7 @@ export function FuneralHomeOutreachCard({
   const highQuote = quotes.length ? Math.max(...quotes) : null;
   const pendingPayment = status === "pending_payment";
   const closed = status === "closed";
+  const sentAny = anyOutreachSent(outreach);
 
   const headline = pendingPayment
     ? "Your funeral-home outreach — ready to send."
@@ -60,7 +60,9 @@ export function FuneralHomeOutreachCard({
       ? "Your funeral-home outreach — placed."
       : status === "received" || replied.length > 0
         ? `Your funeral-home outreach — ${replied.length} ${replied.length === 1 ? "home has" : "homes have"} replied.`
-        : "Your funeral-home outreach — in progress.";
+        : sentAny
+          ? "Your funeral-home outreach — in progress."
+          : "Your funeral-home outreach — prepared.";
 
   return (
     <Card tone={unlocked ? "good" : "primary"}>
@@ -73,9 +75,13 @@ export function FuneralHomeOutreachCard({
 
       {justStarted && (
         <div className="mb-4 rounded-xl border border-primary/40 bg-white px-4 py-3 text-sm text-ink-soft">
-          Outreach sent. Most homes reply within 24 hours. We&rsquo;ll surface
-          the responses here as they come in &mdash; you don&rsquo;t need to
-          check email.
+          {sentAny ? (
+            <>Outreach sent. We&rsquo;ll surface the responses here as they
+            come in &mdash; you don&rsquo;t need to check email.</>
+          ) : (
+            <>Your outreach is prepared &mdash; nothing has been sent to any
+            home. The outreach detail page shows exactly where things stand.</>
+          )}
         </div>
       )}
 
@@ -87,7 +93,7 @@ export function FuneralHomeOutreachCard({
             request to each. <strong className="text-ink">Nothing has been
             sent yet</strong> &mdash; review and send to start getting quotes.
           </>
-        ) : (
+        ) : sentAny ? (
           <>
             We contacted {outreach.length}{" "}
             {outreach.length === 1 ? "home" : "homes"} on your behalf and
@@ -101,6 +107,16 @@ export function FuneralHomeOutreachCard({
               </>
             )}
           </>
+        ) : (
+          <>
+            We prepared an itemized-price request for {outreach.length}{" "}
+            vetted {outreach.length === 1 ? "home" : "homes"} near you.{" "}
+            <strong className="text-ink">Nothing has been sent to any
+            home</strong>{" "}
+            &mdash; our team isn&rsquo;t sending outreach emails right now.
+            The detail page shows each request, and quotes you gather
+            yourself can be recorded there.
+          </>
         )}
       </p>
 
@@ -113,7 +129,7 @@ export function FuneralHomeOutreachCard({
             >
               <span className="flex-1 text-sm text-ink">{o.home_name}</span>
               <span className="text-xs uppercase tracking-wider text-ink-muted shrink-0">
-                {STATUS_LABEL[o.status] ?? o.status}
+                {outreachStatusLabel(o.status)}
               </span>
               {o.quote_cents != null && o.quote_cents > 0 && (
                 <span className="text-sm font-medium text-ink shrink-0">
@@ -146,8 +162,13 @@ export function FuneralHomeOutreachCard({
           </div>
           {!closed && (
             <p className="text-xs text-ink-muted mt-3">
-              This is what we knew a moment ago &mdash; outreach detail has the
-              live view, updated as replies come in.
+              {sentAny ? (
+                <>This is what we knew a moment ago &mdash; outreach detail
+                has the live view, updated as replies come in.</>
+              ) : (
+                <>Outreach detail has the full view &mdash; each prepared
+                request, and a place to record quotes you gather.</>
+              )}
             </p>
           )}
         </>

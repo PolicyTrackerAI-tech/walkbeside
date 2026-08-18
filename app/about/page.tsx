@@ -6,7 +6,7 @@ import { LinkButton } from "@/components/ui/Button";
 export const metadata: Metadata = {
   title: { absolute: "About Honest Funeral" },
   description:
-    "Why Honest Funeral exists: to put a grieving family on equal footing with the funeral industry. Independent and founder-built — free to families, funded by the institutions we partner with, and we take no money from funeral homes.",
+    "Why Honest Funeral exists: to put a grieving family on equal footing with the funeral industry. Independent and founder-built — free to families, and we take no money from funeral homes or insurers.",
   alternates: { canonical: "/about" },
 };
 
@@ -19,7 +19,7 @@ const PRINCIPLES: { label: string; title: string; body: string }[] = [
   {
     label: "What it costs",
     title: "Free to families",
-    body: "There's nothing to pay. We keep families free and are funded by the institutions we partner with — never by funeral homes or insurers.",
+    body: "There's nothing to pay. Families stay free; any revenue we earn comes from the institutions that serve families — never from funeral homes or insurers.",
   },
   {
     label: "What's free",
