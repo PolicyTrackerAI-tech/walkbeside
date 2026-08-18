@@ -74,7 +74,11 @@
 
 **Listen for:** any number. Even "a few hours a week per counselor" × loaded hourly cost = the framing that makes a small annual fee look cheap. Write the number down.
 
-> **5.2** "If that maze just… got handled, and you got a report proving every family was supported — what would that be worth to your team's time and to your families' experience?"
+> **5.2** "Do you spend anything today on outside bereavement support — the mailer programs, grief-text services, that kind of thing?"
+
+**Listen for:** a named vendor or dollar figure. Hospices commonly pay for grief mailers (a few dollars per family), grief-text subscriptions (Help Texts sells hospices exactly this against the same 13-month mandate), and bereavement-program software. If they already pay for any of it, your annual isn't a new budget category — it's a better use of an existing one. Write down what they pay today; that's your pricing anchor at the results review.
+
+> **5.3** "If that maze just… got handled, and you got a report proving every family was supported — what would that be worth to your team's time and to your families' experience?"
 
 **Listen for:** them doing your value math for you. Don't fill the silence — let them assign the value.
 
@@ -92,7 +96,7 @@
 
 > **6.3** "One practical thing — because families would enroll themselves directly with us, we don't need to touch any of your patient health information. Does that match how your team thinks about privacy and HIPAA, or would your compliance folks still want a paperwork review?"
 
-**Listen for:** relief that self-enrollment sidesteps PHI/HIPAA friction, or a request for documentation. If they want paper: *"Easy — I've got a simple BAA and a one-page security summary I can send so your compliance team has it on file."* Don't let security become the reason to stall; have the docs ready.
+**Listen for:** relief that self-enrollment sidesteps PHI/HIPAA friction, or a request for documentation. If they want paper: *"Easy — I'll send a one-page summary of the design and our security packet so your compliance team has it on file. The short version: no patient information ever flows from you to us, so there's no business-associate relationship to paper — and if we ever added a feature that changed that, we'd sign a BAA before any data moved."* **Never offer to "just sign a BAA" to smooth the conversation** — no PHI flows in this model, a BAA would concede the opposite, and the no-BA position is deliberate architecture (see `docs/legal/HIPAA_BA_POSITION_DRAFT.md`). Don't let security become the reason to stall; have the packet ready.
 
 ---
 
@@ -110,10 +114,12 @@ Mirror back the two or three pains they named, then make the ask.
 
 ## Objection quick-reference (if they come up mid-call)
 
-- **"Is this steering / a kickback?"** → "No, and it can't be — we present neutral options, the family chooses, and we take zero funeral-home money. That's precisely why a hospice can ethically use us."
-- **"We have no budget."** → "The pilot is completely free for 60 days. And we're exploring aging and bereavement grant funding that may help cover the ongoing cost, so budget shouldn't be the thing that decides this."
+- **"Is this steering / a kickback?"** → "No, and it can't be — we present neutral options, the family chooses, and we take zero funeral-home money. Our public hospice directory works the same way: every Medicare-certified hospice is listed, none is ranked, and no hospice pays to appear. Neutrality runs both directions, and we can put that in writing for your compliance team."
+- **"We have no budget."** → "The pilot is completely free for 60 days. If the results earn a yes but the budget truly isn't there, there are two honest paths we've used in planning: a small per-family rate instead of the annual, or a sponsorship where a foundation or donor you nominate covers it. Budget shouldn't be the thing that decides this."
 - **"We already do bereavement."** → "Your counselors do the grief work — we don't replace that. We handle the funeral-pricing and after-death admin maze they aren't resourced for, and we hand you the documented report."
+- **"We already pay for Help Texts / grief mailers."** → "Keep them — grief support and funeral-price navigation are different jobs, and they compose. What we'd add is the piece none of those touch: the funeral bill itself, plus the documented report. And hospices paying for those services is exactly why this isn't a strange purchase — it's the same budget line, aimed at the most expensive week."
 - **"How do we know the prices are right?"** → "Published methodology and real itemized price-list data — and in the pilot you'll see it on your own families, not a brochure."
+- **"This is a rough season for the industry."** *(audits, the enrollment moratorium)* → "That's actually why this fits now. Everything about us is built to survive a compliance review — no funeral-home money, no patient data crossing, delivered only after admission, documented. In an audit-heavy year, a benefit that's clean by construction is the safe kind to add." *(Only use if they raise the climate — never open with fear.)*
 
 ---
 
@@ -130,4 +136,4 @@ Mirror back the two or three pains they named, then make the ask.
 
 ---
 
-*Funnel reality check: aim for ~10 of these discovery calls to yield ~2–3 pilots and ~1–2 paid contracts. Better than 1-in-5 to paid is product-market fit. A pilot can be **signed** within ~90 days; the pilot itself **runs 60 days**; the first **paid** contract is realistically **4–6 months** out. Be honest about that timeline — with yourself and with them.*
+*Funnel reality check: aim for ~10 of these discovery calls to yield ~2–3 pilots and ~1–2 paid contracts. Better than 1-in-5 to paid is product-market fit. The pilot **runs 60 days** with conversion designed into its calendar (week-2 metrics conversation, week-6 review + price preview, week-9 proof sheet + the paid ask) — so a pilot that starts converts or doesn't within ~10 weeks, though some EDs will still need a budget cycle beyond that. Be honest about the timeline — with yourself and with them.*

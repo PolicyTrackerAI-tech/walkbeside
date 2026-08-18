@@ -17,6 +17,8 @@ Three buyer roles — start with whichever you can reach; the ED ultimately sign
 **Warm path (always try first):** a **chaplain or social worker** you can reach is the fastest human — they feel the family's funeral-and-paperwork panic firsthand. Ask them for a warm intro to the bereavement coordinator rather than cold-emailing the ED.
 
 > **Sequencing.** One contact per hospice at a time. Email 1 → Day 0. Call + voicemail → Day 2–3 (if no reply). Email 2 → Day 5–6. LinkedIn note → Day 7, or anytime as a parallel warm touch. If no reply after the full sequence, mark dead and move on.
+>
+> **Send order within the target list** (`TARGET_LIST_2026-08.md`): Tier 1 first, and within it, lead with the low-CAHPS names (2★ operators have the most visible family-experience gap — use the Care Compare opener for them, always framed as the hard-to-staff stretch, never as criticism). Never contact anyone on the watch-out list.
 
 ---
 
