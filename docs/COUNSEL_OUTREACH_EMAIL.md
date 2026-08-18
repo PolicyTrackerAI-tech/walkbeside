@@ -37,13 +37,20 @@ preferred, before I sign my first hospice pilot this fall. The work:
    never steer, and present all options neutrally; the family signs
    everything directly.
 4. Review of our 60-day pilot agreement and data-use grant (drafts exist).
-5. Entity cleanup: Delaware C-corp, doing business as "Honest Funeral Co.",
-   replacing the current LLC.
+5. Entity: review our Delaware C-corp formation set and paper the migration
+   from the current LLC (we run the formation mechanics ourselves; the plan
+   is drafted).
 
-I've attached a detailed brief covering the model, the statutes I've mapped,
-and the specific questions; sections 5 and 8 are the core. Planning budget is
-$3,000 to $7,500 for the setup package. Timing matters: I want items 1 and 4
-done before the first pilot signature, targeted for early October.
+One thing that should make this efficient: working drafts of all five
+deliverables already exist, prepared against the primary sources (the
+position memos, the hospice services agreement drafted to hold under both
+the anti-kickback and HIPAA readings, and the entity plan). The engagement
+I'm asking for is review and redline at a fixed fee, not drafting from
+scratch. I've attached a detailed brief covering the model, the statutes
+I've mapped, and the specific questions; sections 5 and 8 are the core.
+Planning budget is $3,000 to $7,500 for the package. Timing matters: I want
+items 1 and 4 done before the first pilot signature, targeted for early
+October.
 
 Would you have 30 minutes this week or next for a scoping call?
 
