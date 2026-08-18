@@ -23,7 +23,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What does Honest Funeral actually do?",
     plain:
-      "We help families who've just lost someone make better funeral decisions under pressure. Everything on the site is free to families — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, the 30-day post-funeral checklist, and the funeral-home outreach. We contact homes on your behalf, collect itemized quotes, and put them side by side at no charge. We keep families free because we're funded by the institutions we partner with, never by funeral homes.",
+      "We help families who've just lost someone make better funeral decisions under pressure. Everything on the site is free to families — the fair-price lookup, the prep kit, the obituary helper, the price-list analyzer, the pre-meeting worksheet, the certificate calculator, the veterans benefits checker, the 30-day post-funeral checklist, and the funeral-home outreach. We contact homes on your behalf, collect itemized quotes, and put them side by side at no charge. Families never pay, and neither do funeral homes — any revenue we earn comes from the institutions that serve families.",
     a: (
       <>
         <p>
@@ -67,14 +67,16 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How do you make money?",
     plain:
-      "We're free to families and funded by the institutions we partner with — hospices today, employers and insurers over time. Everything on the site is free to families, and nothing is ever charged to you. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We never take money from funeral homes or insurers, and we never charge the grieving family.",
+      "Right now, we don't — no one pays us anything yet, and we'd rather say that plainly than pretend otherwise. The model we're building: institutions that serve families — hospices first, then employers — pay for the service, and families never do. No commissions from funeral homes. No referral fees from insurance, financing, or any other service. We never take money from funeral homes or insurers, and we never charge the grieving family.",
     a: (
       <>
         <p>
-          We&rsquo;re <strong>free to families</strong> and funded by the{" "}
-          <strong>institutions we partner with</strong> &mdash; hospices
-          today, and employers and insurers over time. Everything on the site
-          is free to families, and nothing is ever charged to you.
+          Right now, we don&rsquo;t &mdash; no one pays us anything yet, and
+          we&rsquo;d rather say that plainly than pretend otherwise. The model
+          we&rsquo;re building: <strong>institutions that serve
+          families</strong> &mdash; hospices first, then employers &mdash; pay
+          for the service, and <strong>families never do</strong>. Everything
+          on the site is free to families, and nothing is ever charged to you.
         </p>
         <ul>
           <li>No commissions from funeral homes. Ever.</li>
@@ -100,20 +102,20 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Why did my hospice or employer recommend Honest Funeral?",
     plain:
-      "Because we're funded by them, not by you. Hospices and employers pay us so their families get this free; we never take money from funeral homes or insurers, and we never charge the family. That funding model is what lets them hand this to you without steering you toward any particular funeral home — they have no financial stake in which one you pick, and neither do we.",
+      "Because it costs their families nothing and steers no one. Our model is built on the institutions that serve families — hospices and employers — never on funeral homes, insurers, or you. Neither your hospice nor we have any financial stake in which funeral home you pick.",
     a: (
       <>
         <p>
-          Because we&rsquo;re funded by <strong>them</strong>, not by you.
-          Hospices and employers pay us so the families they serve get this
-          free &mdash; we never take money from funeral homes or insurers,
-          and we never charge you.
+          Because it costs their families nothing and steers no one. Our
+          model is built on the <strong>institutions that serve
+          families</strong> &mdash; hospices and employers &mdash; never on
+          funeral homes, insurers, or you.
         </p>
         <p>
-          That funding model is exactly what lets them hand this to you
-          without steering you toward any particular funeral home: neither
-          they nor we have any financial stake in which one you pick. You
-          choose, always.
+          That&rsquo;s exactly what lets them hand this to you without
+          steering you toward any particular funeral home: neither they nor
+          we have any financial stake in which one you pick. You choose,
+          always.
         </p>
       </>
     ),

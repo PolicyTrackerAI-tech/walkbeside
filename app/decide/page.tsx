@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { BackLink } from "@/components/ui/BackLink";
 import { HelpFooter } from "@/components/HelpFooter";
+import { RoleDisclaimer } from "@/components/RoleDisclaimer";
 import {
   PlanningAheadBanner,
   isAheadMode,
@@ -42,6 +43,8 @@ export default async function DecidePage({
           )}
 
           <DecideFlow aheadMode={aheadMode} />
+
+          <RoleDisclaimer className="mt-10" />
 
           <HelpFooter />
         </div>

@@ -6,6 +6,8 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { CaseSatisfaction } from "@/components/negotiate/CaseSatisfaction";
 import { CaseStepper } from "@/components/negotiate/CaseStepper";
+import { isEmailDenylisted } from "@/lib/negotiation/denylist";
+import { outreachIsLive } from "@/lib/negotiation/outreach-mode";
 
 export default async function NegotiationClosedPage({
   params,
@@ -20,8 +22,11 @@ export default async function NegotiationClosedPage({
   } = await supabase.auth.getUser();
   if (!user) redirect(`/login?next=/negotiate/${id}/closed`);
 
-  // The /api/negotiate/choose action already closed the negotiation and
-  // notified the chosen home, so this page is purely confirmation.
+  // The /api/negotiate/choose action closed the negotiation and ATTEMPTED to
+  // notify the chosen home — but notifyChosenHome sends nothing when
+  // OUTREACH_LIVE is off (or the row has no email/quote). This page must only
+  // say "we've let them know" when that send really happened, so it mirrors
+  // notifyChosenHome's own guards against the chosen row.
   const { data: neg } = await supabase
     .from("negotiations")
     .select("*")
@@ -29,6 +34,19 @@ export default async function NegotiationClosedPage({
     .eq("user_id", user.id)
     .single();
   if (!neg) redirect("/dashboard");
+
+  const { data: chosen } = await supabase
+    .from("negotiation_outreach")
+    .select("home_name, home_email, quote_cents")
+    .eq("negotiation_id", id)
+    .eq("chosen", true)
+    .maybeSingle();
+  const notified =
+    outreachIsLive() &&
+    !!chosen?.home_email &&
+    chosen.quote_cents != null &&
+    !isEmailDenylisted(chosen.home_email);
+  const homeName = chosen?.home_name ?? "the home you chose";
 
   return (
     <main className="flex-1 flex flex-col">
@@ -41,15 +59,23 @@ export default async function NegotiationClosedPage({
             That decision is made. Take a breath.
           </h1>
           <p className="text-lg text-ink-soft">
-            We&rsquo;ve let the home you chose know they were selected, with
-            the price they quoted in writing. They&rsquo;ll be in touch with
-            times for the arrangement meeting &mdash; we&rsquo;ll loop you in
-            once a slot is set. <strong className="text-ink">You&rsquo;ll
-            attend the meeting in person and sign all paperwork directly with
-            the home;</strong> we don&rsquo;t sign for you. We stay on email
-            for any pre-meeting questions or post-meeting disputes.{" "}
-            Choosing your home was free, and so was the outreach &mdash; Honest
-            Funeral is free to families.
+            {notified ? (
+              <>We&rsquo;ve let {homeName} know they were selected, with the
+              price they quoted in writing. They&rsquo;ll be in touch with
+              times for the arrangement meeting. </>
+            ) : (
+              <>Your choice of {homeName} is recorded with your case, with the
+              price you noted. <strong className="text-ink">We haven&rsquo;t
+              sent them anything</strong>{" "}
+              &mdash; our team isn&rsquo;t sending outreach emails right now
+              &mdash; so call or visit them directly to set the arrangement
+              meeting. </>
+            )}
+            <strong className="text-ink">You&rsquo;ll attend the meeting in
+            person and sign all paperwork directly with the home;</strong>{" "}
+            we don&rsquo;t sign for you. We stay on email for any pre-meeting
+            questions or post-meeting disputes. Choosing your home was free
+            &mdash; Honest Funeral is free to families.
           </p>
           <p className="text-xs text-ink-muted">
             We never took a cut of what you were quoted, and this choice was
@@ -60,10 +86,18 @@ export default async function NegotiationClosedPage({
           <Card tone="soft">
             <CardEyebrow>What happens next</CardEyebrow>
             <ul className="mt-2 space-y-2 text-sm text-ink-soft list-disc pl-5">
-              <li>
-                The home reaches out to schedule your arrangement meeting
-                &mdash; usually within a day or two.
-              </li>
+              {notified ? (
+                <li>
+                  The home reaches out to schedule your arrangement meeting
+                  &mdash; usually within a day or two.
+                </li>
+              ) : (
+                <li>
+                  Call or visit the home to schedule your arrangement meeting
+                  &mdash; mention the quote you have from them so the price is
+                  on the table from the start.
+                </li>
+              )}
               <li>
                 Bring the prep kit below. It covers what to bring, what to
                 expect, and which line items deserve pushback.

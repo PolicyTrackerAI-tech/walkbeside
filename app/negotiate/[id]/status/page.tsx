@@ -7,6 +7,10 @@ import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { fmtCents } from "@/lib/stripe";
+import {
+  anyOutreachSent,
+  outreachStatusLabel,
+} from "@/lib/negotiation/status-labels";
 
 interface Outreach {
   id: string;
@@ -15,6 +19,7 @@ interface Outreach {
   status: string;
   quote_cents: number | null;
   notes: string | null;
+  initial_email_body: string | null;
 }
 
 interface Message {
@@ -25,6 +30,7 @@ interface Message {
   subject: string | null;
   body_text: string | null;
   created_at: string;
+  delivered_at: string | null;
   // AI-proposed quote parsed from an inbound reply (2026-07-16 migration).
   // Absent on a pre-migration schema — every read is null-guarded.
   ai_quote_cents?: number | null;
@@ -60,6 +66,7 @@ export default function NegotiationStatusPage({
   const [neg, setNeg] = useState<NegotiationView | null>(null);
   const [outreach, setOutreach] = useState<Outreach[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [outreachLive, setOutreachLive] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function refresh() {
@@ -72,6 +79,7 @@ export default function NegotiationStatusPage({
     setNeg(d.negotiation);
     setOutreach(d.outreach);
     setMessages(d.messages ?? []);
+    setOutreachLive(d.outreachLive === true);
   }
 
   // When the page first loaded — not reset when the effect re-runs on a
@@ -139,6 +147,9 @@ export default function NegotiationStatusPage({
 
   const someReplied = outreach.some((o) => o.quote_cents != null);
   const noHomesAvailable = neg.status === "no_homes_available";
+  // The one condition under which this page may say "we're contacting
+  // funeral homes": an email really left. Prepared/dry-run rows never count.
+  const sentAny = anyOutreachSent(outreach);
 
   // Latest unconfirmed AI-parsed quote for a home that has no recorded quote
   // yet. Matched by the webhook's outreach link first, then by sender email.
@@ -176,17 +187,28 @@ export default function NegotiationStatusPage({
           <CaseStepper stage="contacting" />
           <div>
             <CardEyebrow>
-              {noHomesAvailable ? "No coverage yet" : "Negotiation in progress"}
+              {noHomesAvailable
+                ? "No coverage yet"
+                : sentAny
+                  ? "Negotiation in progress"
+                  : "Outreach prepared"}
             </CardEyebrow>
             <h1 className="font-serif text-3xl text-ink">
               {noHomesAvailable
                 ? <>We don&rsquo;t have vetted funeral homes in your area yet.</>
-                : <>We&rsquo;re contacting funeral homes for you.</>}
+                : sentAny
+                  ? <>We&rsquo;re contacting funeral homes for you.</>
+                  : <>Your outreach is prepared.</>}
             </h1>
             <p className="text-ink-soft mt-2">
-              {noHomesAvailable
-                ? <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back as we add coverage in your region.</>
-                : <>Most homes reply within 24 hours. We&rsquo;ll surface the best two or three options as they come in. You can check back here any time.</>}
+              {noHomesAvailable ? (
+                <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back as we add coverage in your region.</>
+              ) : sentAny ? (
+                <>We&rsquo;ve asked each home below for their itemized prices &mdash; your right under the FTC Funeral Rule. Each home&rsquo;s status updates here as replies come in; you can check back any time.</>
+              ) : (
+                <>For each home below we&rsquo;ve written the exact price-list request we&rsquo;d send &mdash; itemized prices are your right under the FTC Funeral Rule. <strong className="text-ink">Our team isn&rsquo;t sending outreach emails right now, so nothing has gone out to any home.</strong>{" "}
+                You can contact any of them directly today, and anything you record here stays organized with your case.</>
+              )}
             </p>
           </div>
 
@@ -232,30 +254,32 @@ export default function NegotiationStatusPage({
                 ))}
                 {outreach.length === 0 && (
                   <p className="text-ink-muted text-sm">
-                    We&rsquo;re contacting funeral homes now. First responses
-                    usually arrive within 4&ndash;24 hours. This page refreshes
-                    automatically.
+                    {outreachLive ? (
+                      <>We&rsquo;re lining up your outreach now. This page
+                      refreshes automatically.</>
+                    ) : (
+                      <>We&rsquo;re preparing your request list. Nothing has
+                      been sent to any home.</>
+                    )}
                   </p>
                 )}
               </ul>
-              {outreach.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-3 text-xs text-ink-muted">
-                  <LegendDot label="Sent" className="bg-ink-muted" />
-                  <LegendDot label="Read" className="bg-primary" />
-                  <LegendDot label="Replied" className="bg-primary-deep" />
-                  <LegendDot label="Quoted" className="bg-good" />
-                  <LegendDot label="Declined" className="bg-bad" />
-                </div>
-              )}
             </div>
           )}
 
           {someReplied && (
             <Card tone="primary">
-              <CardTitle>Ready to see what we found?</CardTitle>
+              <CardTitle>Ready to compare?</CardTitle>
               <p className="text-ink-soft mb-4">
-                We&rsquo;ve received at least one quote. Choose the home you want and
-                we&rsquo;ll notify them and help schedule the arrangement meeting.
+                {sentAny ? (
+                  <>We&rsquo;ve received at least one quote. Choose the home
+                  you want and we&rsquo;ll notify them and help schedule the
+                  arrangement meeting.</>
+                ) : (
+                  <>At least one quote is recorded. When you&rsquo;re ready,
+                  choose the home you want &mdash; choosing is free, and
+                  we&rsquo;ll walk you through what happens next.</>
+                )}
               </p>
               <LinkButton href={`/negotiate/${id}/results`}>
                 See results →
@@ -267,6 +291,7 @@ export default function NegotiationStatusPage({
             negotiationId={id}
             outreach={outreach}
             messages={messages}
+            outreachLive={outreachLive}
             onSent={refresh}
           />
         </div>
@@ -279,11 +304,13 @@ function MessagesPanel({
   negotiationId,
   outreach,
   messages,
+  outreachLive,
   onSent,
 }: {
   negotiationId: string;
   outreach: Outreach[];
   messages: Message[];
+  outreachLive: boolean;
   onSent: () => void;
 }) {
   const reachable = outreach.filter((o) => o.home_email);
@@ -332,10 +359,17 @@ function MessagesPanel({
     <div>
       <h2 className="font-serif text-xl text-ink mb-3">Pre-meeting messages</h2>
       <p className="text-sm text-ink-muted mb-4">
-        Use this for scheduling and questions before the arrangement meeting.
-        Your personal contact info stays private. You&rsquo;ll meet with the
-        home in person to make selections and sign &mdash; that part happens
-        at the funeral home, not here.
+        {outreachLive ? (
+          <>Use this for scheduling and questions before the arrangement
+          meeting. Your personal contact info stays private. You&rsquo;ll meet
+          with the home in person to make selections and sign &mdash; that
+          part happens at the funeral home, not here.</>
+        ) : (
+          <>Our team isn&rsquo;t relaying messages to funeral homes right now.
+          Anything you write here is saved with your case &mdash; it
+          won&rsquo;t be sent to the home, so for scheduling or questions,
+          contact the home directly.</>
+        )}
       </p>
 
       {messages.length > 0 && (
@@ -356,10 +390,10 @@ function MessagesPanel({
 
       {reachable.length > 0 && (
         <Card>
-          <CardEyebrow>Send a message</CardEyebrow>
+          <CardEyebrow>{outreachLive ? "Send a message" : "Add a note"}</CardEyebrow>
           <div className="grid gap-3">
             <div>
-              <Label htmlFor="msg-home">Send to</Label>
+              <Label htmlFor="msg-home">{outreachLive ? "Send to" : "About"}</Label>
               <Select
                 id="msg-home"
                 value={effectiveOutreachId}
@@ -379,13 +413,23 @@ function MessagesPanel({
                 rows={5}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="Scheduling, pre-meeting questions, things they should know. We'll relay it from our team."
+                placeholder={
+                  outreachLive
+                    ? "Scheduling, pre-meeting questions, things they should know. We'll relay it from our team."
+                    : "Notes about this home — saved with your case, not sent."
+                }
               />
             </div>
             {sendError && <p className="text-bad text-sm">{sendError}</p>}
             <div>
               <Button onClick={send} disabled={busy || !text.trim()}>
-                {busy ? "Sending…" : "Send via Honest Funeral"}
+                {busy
+                  ? outreachLive
+                    ? "Sending…"
+                    : "Saving…"
+                  : outreachLive
+                    ? "Send via Honest Funeral"
+                    : "Save note"}
               </Button>
             </div>
           </div>
@@ -407,11 +451,21 @@ function MessageBubble({
   const align = isInbound ? "items-start" : "items-end";
   const bg = isInbound ? "bg-surface-soft" : "bg-primary-soft";
   const when = new Date(message.created_at).toLocaleString();
+  // An outbound message with no delivery stamp was stored while our sending
+  // was paused — it never reached the home, and (like a dry_run outreach row)
+  // it will not send later. Say so instead of letting it look delivered.
+  const savedNotSent =
+    message.direction === "outbound_to_fd" && !message.delivered_at;
   return (
     <li className={`flex flex-col ${align}`}>
       <div className={`max-w-[85%] rounded-2xl border border-border px-4 py-3 ${bg}`}>
         <div className="text-xs text-ink-muted mb-1">
           {label} · {when}
+          {savedNotSent && (
+            <span className="ml-1.5 rounded-full border border-border bg-surface px-2 py-0.5 text-[10px] uppercase tracking-wider">
+              Saved — not sent to the home
+            </span>
+          )}
         </div>
         {message.subject && (
           <div className="text-sm text-ink font-medium mb-1">
@@ -423,15 +477,6 @@ function MessageBubble({
         </pre>
       </div>
     </li>
-  );
-}
-
-function LegendDot({ label, className }: { label: string; className: string }) {
-  return (
-    <span className="inline-flex items-center gap-1.5">
-      <span className={`inline-block w-2.5 h-2.5 rounded-full ${className}`} />
-      {label}
-    </span>
   );
 }
 
@@ -521,9 +566,7 @@ function OutreachRow({
           <div className="text-xs text-ink-muted uppercase tracking-wider mt-1">
             {outreach.quote_cents
               ? `Quoted ${fmtCents(outreach.quote_cents)}`
-              : outreach.status === "sent"
-                ? "Email sent — waiting on reply"
-                : outreach.status}
+              : outreachStatusLabel(outreach.status)}
           </div>
         </div>
         {!editing && (
@@ -604,6 +647,18 @@ function OutreachRow({
         <p className="mt-3 text-sm text-ink-soft whitespace-pre-line">
           {outreach.notes}
         </p>
+      )}
+      {outreach.initial_email_body && (
+        <details className="mt-3 text-sm">
+          <summary className="cursor-pointer text-ink-muted">
+            {outreach.status === "dry_run" || outreach.status === "pending"
+              ? "See the request we prepared"
+              : "See the request we sent"}
+          </summary>
+          <pre className="mt-2 whitespace-pre-wrap font-sans text-ink-soft border-l-2 border-border pl-3">
+            {outreach.initial_email_body}
+          </pre>
+        </details>
       )}
     </li>
   );

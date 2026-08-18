@@ -7,6 +7,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { fmtCents } from "@/lib/stripe";
+import { outreachIsLive } from "@/lib/negotiation/outreach-mode";
 
 export default async function NegotiationResultsPage({
   params,
@@ -62,7 +63,9 @@ export default async function NegotiationResultsPage({
             <p className="text-ink-soft mt-2">
               {replies.length === 0
                 ? "No quotes recorded yet. Once homes reply, record what they sent on the previous screen."
-                : "Pick the home you want — it costs nothing. We’ll notify them and help schedule the arrangement meeting. You’ll meet with the home in person to make final selections and sign."}
+                : outreachIsLive()
+                  ? "Pick the home you want — it costs nothing. We’ll notify them and help schedule the arrangement meeting. You’ll meet with the home in person to make final selections and sign."
+                  : "Pick the home you want — it costs nothing. Your choice is recorded with your case; you’ll contact the home directly to set the arrangement meeting, and we’ll show you exactly what to bring. You’ll meet with the home in person to make final selections and sign."}
             </p>
             {replies.length > 0 && (
               <p className="text-xs text-ink-muted mt-1">

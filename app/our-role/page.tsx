@@ -171,10 +171,10 @@ export default function OurRolePage() {
               Honest Funeral is a free, neutral source of funeral-pricing
               truth. Every tool on the site is free to families and always
               will be — no family is ever charged, and no funeral home ever
-              pays us for a referral, listing, or lead. Our revenue comes
-              from institutions that serve people at end of life, starting
-              with hospices, who license our tools as a family
-              bereavement-support resource.
+              pays us for a referral, listing, or lead. Our revenue model is
+              licensing our tools to institutions that serve people at end of
+              life — hospices first — as a family bereavement-support
+              resource; we take no money from funeral homes or insurers.
             </p>
             <p className="mb-3">
               We only ever act at a family&rsquo;s own initiation. A
