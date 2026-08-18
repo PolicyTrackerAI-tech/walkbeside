@@ -11,10 +11,18 @@ const Body = z
     id: z.string().uuid(),
     active: z.boolean().optional(),
     status: z.enum(["pilot", "active", "paused", "archived"]).optional(),
+    // Census tier (BUSINESS_PLAN §10) — founder-assigned here, read by
+    // /api/stripe/checkout to pick the STRIPE_PRICE_* env. null clears it.
+    // NEVER settable by the partner; billing_status stays webhook-only.
+    billingTier: z.enum(["small", "mid", "large"]).nullable().optional(),
   })
-  .refine((b) => b.active !== undefined || b.status !== undefined, {
-    message: "must set active or status",
-  });
+  .refine(
+    (b) =>
+      b.active !== undefined ||
+      b.status !== undefined ||
+      b.billingTier !== undefined,
+    { message: "must set active, status, or billingTier" },
+  );
 
 /**
  * PATCH /api/admin/partners — the human approval gate. Session-gated to the
@@ -42,6 +50,8 @@ export async function PATCH(req: Request) {
     if (parsed.data.active) update.approved_at = new Date().toISOString();
   }
   if (parsed.data.status !== undefined) update.status = parsed.data.status;
+  if (parsed.data.billingTier !== undefined)
+    update.billing_tier = parsed.data.billingTier;
 
   const { error } = await svc
     .from("partners")

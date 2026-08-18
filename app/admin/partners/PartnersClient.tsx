@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Field";
 
 const STATUSES = ["pilot", "active", "paused", "archived"] as const;
+const BILLING_TIERS = ["small", "mid", "large"] as const;
 
 export interface PartnerRow {
   id: string;
@@ -18,6 +19,9 @@ export interface PartnerRow {
   contact_email: string | null;
   application_notes: string | null;
   created_at: string;
+  // Optional: absent until Migration B is applied (institutional billing).
+  billing_status?: string | null;
+  billing_tier?: string | null;
 }
 
 export interface CodeStat {
@@ -107,6 +111,31 @@ export function PartnersClient({
       setPartners((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
     } catch {
       setError("Couldn't update that partner's stage — try again.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  // Census tier per BUSINESS_PLAN §10 — assigned HERE by the founder, never
+  // self-selected by the partner (checkout refuses to run without it, and the
+  // partner-side card carries no tier choice). "" clears the assignment.
+  async function setBillingTier(id: string, tier: string) {
+    setBusy(id);
+    setError(null);
+    try {
+      const r = await fetch("/api/admin/partners", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id, billingTier: tier === "" ? null : tier }),
+      });
+      if (!r.ok) throw new Error();
+      setPartners((prev) =>
+        prev.map((p) =>
+          p.id === id ? { ...p, billing_tier: tier === "" ? null : tier } : p,
+        ),
+      );
+    } catch {
+      setError("Couldn't update that partner's billing tier — try again.");
     } finally {
       setBusy(null);
     }
@@ -268,8 +297,11 @@ export function PartnersClient({
                     <span className="font-medium text-ink">
                       {p.name} <span className="text-ink-muted text-xs">({p.partner_type})</span>
                     </span>
-                    <span className="text-xs text-ink-muted">
-                      {codes.length} code{codes.length === 1 ? "" : "s"} · {totalClaims} claim{totalClaims === 1 ? "" : "s"}
+                    <span className="text-xs text-ink-muted flex items-center gap-2">
+                      <span>
+                        {codes.length} code{codes.length === 1 ? "" : "s"} · {totalClaims} claim{totalClaims === 1 ? "" : "s"}
+                      </span>
+                      <BillingChip status={p.billing_status} />
                     </span>
                   </div>
                   {p.contact_email && (
@@ -314,6 +346,20 @@ export function PartnersClient({
                         </option>
                       ))}
                     </Select>
+                    <Select
+                      aria-label="Billing tier (census)"
+                      value={p.billing_tier ?? ""}
+                      onChange={(e) => setBillingTier(p.id, e.target.value)}
+                      disabled={busy === p.id}
+                      className="w-auto text-sm"
+                    >
+                      <option value="">No tier</option>
+                      {BILLING_TIERS.map((t) => (
+                        <option key={t} value={t}>
+                          Tier: {t}
+                        </option>
+                      ))}
+                    </Select>
                   </div>
                 </li>
               );
@@ -323,6 +369,32 @@ export function PartnersClient({
       </Card>
     </>
   );
+}
+
+/** Read-only billing state from the Stripe webhook (institutional only). */
+function BillingChip({ status }: { status?: string | null }) {
+  if (status === "active") {
+    return (
+      <span className="rounded-full border border-good/30 bg-good-soft px-2 py-0.5 text-[11px] font-medium text-good">
+        billing active
+      </span>
+    );
+  }
+  if (status === "past_due") {
+    return (
+      <span className="rounded-full border border-warn/30 bg-warn-soft px-2 py-0.5 text-[11px] font-medium text-warn">
+        past due
+      </span>
+    );
+  }
+  if (status === "canceled") {
+    return (
+      <span className="rounded-full border border-border px-2 py-0.5 text-[11px] text-ink-muted">
+        billing canceled
+      </span>
+    );
+  }
+  return null; // none / pre-migration: no chip
 }
 
 function PipelineStat({ label, value }: { label: string; value: number }) {

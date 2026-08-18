@@ -60,6 +60,31 @@ export default async function AdminPartnersPage() {
     // pre-migration: empty desk, page still renders
   }
 
+  // Billing columns in their OWN query, merged by id — a pre-Migration-B
+  // database errors on them, and folding them into the main select above
+  // would blank the whole desk. Missing columns → no billing chips, desk
+  // still renders.
+  try {
+    const { data: billingRows } = await admin
+      .from("partners")
+      .select("id, billing_status, billing_tier");
+    const byId = new Map(
+      (
+        (billingRows as
+          | { id: string; billing_status: string | null; billing_tier: string | null }[]
+          | null) ?? []
+      ).map((b) => [b.id, b]),
+    );
+    partners = partners.map((p) => {
+      const b = byId.get(p.id);
+      return b
+        ? { ...p, billing_status: b.billing_status, billing_tier: b.billing_tier }
+        : p;
+    });
+  } catch {
+    // pre-migration: no billing chips, desk still renders
+  }
+
   // Demo-request leads (partner_leads) in their OWN try/catch — the table
   // ships in a later migration than partners, so a missing table must not
   // blank the whole desk.

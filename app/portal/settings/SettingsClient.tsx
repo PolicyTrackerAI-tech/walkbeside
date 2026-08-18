@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Label, Input } from "@/components/ui/Field";
+import { BillingCard } from "@/components/partner/BillingCard";
 
 /**
  * Owner-only settings form + the quick-link danger zone. The org name is
@@ -24,6 +25,10 @@ export function SettingsClient({
   brandAccent: initialBrandAccent,
   appUrl,
   reportToken,
+  billingConfigured,
+  billingStatus,
+  billingStartedAt,
+  billingJustCheckedOut,
 }: {
   orgName: string;
   contactName: string;
@@ -32,6 +37,10 @@ export function SettingsClient({
   brandAccent: string;
   appUrl: string;
   reportToken: string;
+  billingConfigured: boolean;
+  billingStatus: string | null;
+  billingStartedAt: string | null;
+  billingJustCheckedOut: boolean;
 }) {
   const [contactName, setContactName] = useState(initialContactName);
   const [notificationEmail, setNotificationEmail] = useState(
@@ -233,6 +242,13 @@ export function SettingsClient({
         </div>
         {rotateError && <p className="text-sm text-bad mt-2">{rotateError}</p>}
       </Card>
+
+      <BillingCard
+        configured={billingConfigured}
+        billingStatus={billingStatus}
+        billingStartedAt={billingStartedAt}
+        justCheckedOut={billingJustCheckedOut}
+      />
     </div>
   );
 }

@@ -70,3 +70,13 @@ where table_schema = 'public'
     or (table_name = 'price_list_analyses' and column_name = 'contributed')
   )
 order by table_name, column_name;
+
+-- Confirm the 2026-08-18 partner-billing migration landed (expect 5 rows):
+select column_name
+from information_schema.columns
+where table_schema = 'public' and table_name = 'partners'
+  and column_name in (
+    'stripe_customer_id', 'billing_status', 'billing_plan',
+    'billing_started_at', 'billing_tier'
+  )
+order by column_name;

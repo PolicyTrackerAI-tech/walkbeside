@@ -29,6 +29,19 @@ export const FEATURES = {
     Boolean(PUBLIC.supabaseUrl && PUBLIC.supabaseAnonKey),
   claude: () => hasServer("ANTHROPIC_API_KEY"),
   stripe: () => hasServer("STRIPE_SECRET_KEY"),
+  /**
+   * Checkout-capable: a Stripe key plus at least one tier price id
+   * (STRIPE_PRICE_SMALL/MID/LARGE — created by the founder in the Stripe
+   * dashboard; amounts never live in code). INSTITUTIONAL billing only
+   * (hospice/employer partners) — there is no family payment anywhere
+   * (guardrail #2). The UI's "configured" signal is this AND
+   * BILLING_LIVE === "true", both read at request time.
+   */
+  billing: () =>
+    hasServer("STRIPE_SECRET_KEY") &&
+    (hasServer("STRIPE_PRICE_SMALL") ||
+      hasServer("STRIPE_PRICE_MID") ||
+      hasServer("STRIPE_PRICE_LARGE")),
   email: () => hasServer("RESEND_API_KEY"),
 };
 
