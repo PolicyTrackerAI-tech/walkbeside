@@ -6,6 +6,12 @@
 > Answers [`COMPLIANCE_ADDENDUM.md`](COMPLIANCE_ADDENDUM.md) §1's five design
 > constraints, one bullet each. Deliberately short — expand only if counsel
 > asks for more on a specific point.
+>
+> **Re-verified 2026-08-18 (audit A8):** ranking still reads no partner field
+> (directory selects `name, email, zip`, orders by zip proximity only; the
+> choose route contains no `partner` reference; the hospice-directory firewall
+> test bans `partner_id`/`partner_code`/`stripe` string literals in query
+> modules). Line anchors below refreshed where they had drifted.
 
 1. **Deterministic, neutral directory ordering, no paid signal.**
    [`lib/negotiation/directory.ts:38-56`](../lib/negotiation/directory.ts) —
@@ -20,7 +26,7 @@
    list; the family selects.
 
 3. **Single reviewed hand-off copy constant.** The coordinator link-share
-   page, [`app/partner/r/[token]/links/page.tsx:114-123`](../app/partner/r/%5Btoken%5D/links/page.tsx),
+   page, [`app/partner/r/[token]/links/page.tsx:90-101`](../app/partner/r/%5Btoken%5D/links/page.tsx),
    carries one fixed "neutrality pledge" paragraph and describes every link
    as opening "free, neutral tools" — identical wording regardless of which
    homes exist near that family. Outreach emails to homes go through the
