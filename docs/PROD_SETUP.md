@@ -84,11 +84,11 @@ Project → Settings → Environment Variables (Production scope). The app
 | `CRON_SECRET` | generate: `openssl rand -hex 32` |
 | `ADMIN_EMAILS` | your email(s), comma-separated — gates `/admin/*` |
 
-Confirmed against `lib/env.ts`'s boot-time validator — `STRIPE_SECRET_KEY` and
-`STRIPE_WEBHOOK_SECRET` are deliberately **not** on this list. There is no
-family-facing checkout anymore; Stripe stays in the codebase only as
-scaffolding for a future *institutional* billing feature, not a go-live gate.
-Set it later, only when that feature actually ships.
+Confirmed against `lib/env.ts`'s boot-time validator — the `STRIPE_*` vars are
+deliberately **not** on this list. There is no family-facing checkout (and
+never will be again); Stripe exists only for *institutional* billing
+(hospice/employer subscriptions — see the billing section below), which is
+optional/billing-scoped, never a go-live gate for outreach.
 
 ### Strongly recommended
 | Var | Value / source |
@@ -109,6 +109,44 @@ Set it later, only when that feature actually ships.
 | `OUTREACH_NOTIFICATIONS_ENABLED` | unset/`false` |
 | `PARTNER_DIGEST_ENABLED` | unset/`false` — monthly aggregate partner-activity email cron |
 | `BEREAVEMENT_SMS_ENABLED` | unset/`false` — SMS variant of the bereavement cadence; also requires the three `TWILIO_*` vars below to actually send |
+| `BILLING_LIVE` | unset/`false` — institutional Stripe checkout/portal (billing section below). Off → the portal Billing card shows "invoiced by arrangement" and the checkout/portal-link routes 409. The webhook is NOT behind this flag (a flag flip must never desync billing state from Stripe). Boot-enforced: flipping it to `true` refuses to start unless `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `ADMIN_EMAILS`, and at least one `STRIPE_PRICE_*` are set (lib/env.ts, mirroring `OUTREACH_LIVE`). |
+
+### Optional (institutional billing — hospices/employers only, never families)
+
+| Var | Value / source |
+|-----|----------------|
+| `STRIPE_SECRET_KEY` | Stripe → Developers → API keys (test `sk_test_…` until the founder go-live decision) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe → Webhooks → endpoint `https://…/api/stripe/webhook` signing secret (`whsec_…`); in dev, from `stripe listen` |
+| `STRIPE_PRICE_SMALL` | `price_…` id — monthly recurring price the founder creates in the Stripe dashboard (tier <50 ADC) |
+| `STRIPE_PRICE_MID` | `price_…` id — monthly recurring price (tier 50–100 ADC) |
+| `STRIPE_PRICE_LARGE` | `price_…` id — monthly recurring price (tier 100+ ADC) |
+
+Billing posture (BUSINESS_PLAN §10 is the source of truth):
+
+- **Who can pay:** `partner_type in ('hospice','employer')` only, enforced in
+  code (`lib/billing.ts` allowlist + pins in
+  `lib/__tests__/billing-guardrails.test.ts`). There is structurally no way to
+  invoice an insurer, a funeral home, or a family.
+- **Amounts live only in Stripe.** The founder creates one product
+  ("Bereavement support program — pilot subscription") with three monthly
+  recurring prices at the current tier sheet (small/mid/large, e.g.
+  $400/$800/$1,500 per month at the v3 price list); code carries env price ids
+  only and never hardcodes an amount. The founder assigns each partner's tier
+  in `/admin/partners`; checkout refuses to run until a tier is assigned.
+- **Annual prepay (−10%)** is not a Checkout object: send it as a Stripe
+  invoice (net-30, PO number on the invoice) from the dashboard, then mark the
+  tier/status by hand if needed. Monthly Checkout is the default ask.
+- **Invoice language:** every subscription invoice carries the description
+  "bereavement support program — [tier]" (set by the checkout route;
+  procurement-safe AKS framing). Keep dashboard-created invoices to the same
+  wording.
+- **Dunning:** Stripe smart retries + emails. `billing_status` moves to
+  `past_due`, which is visible in `/admin/partners` — and changes nothing
+  else. **Service is never cut off mid-family-case**; nothing in the product
+  gates on billing state, by design. A lapsed hospice is a founder
+  conversation, not an outage.
+- **Revenue recognition:** monthly ratable (a bookkeeping note, not code —
+  annual-prepay invoices recognize 1/12 per month).
 
 ### Optional (reply pipeline — can wait past v1)
 `POSTMARK_INBOUND_USER`, `POSTMARK_INBOUND_SECRET` (funeral-home reply relay),

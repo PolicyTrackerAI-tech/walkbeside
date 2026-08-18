@@ -31,17 +31,33 @@ export default async function AdminPartnersPage() {
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
+  // One query in the steady state; a pre-Migration-B database errors on the
+  // billing columns, so fall back to the legacy column list (no chips, desk
+  // still renders) rather than paying a second full-table read forever.
+  const LEGACY_PARTNER_COLS =
+    "id, name, partner_type, status, active, report_token, contact_name, contact_email, application_notes, created_at";
   let partners: PartnerRow[] = [];
   let codeStats: CodeStat[] = [];
   try {
-    const { data } = await admin
+    const { data, error } = await admin
       .from("partners")
-      .select(
-        "id, name, partner_type, status, active, report_token, contact_name, contact_email, application_notes, created_at",
-      )
+      .select(`${LEGACY_PARTNER_COLS}, billing_status, billing_tier`)
       .order("created_at", { ascending: false });
-    partners = (data as PartnerRow[] | null) ?? [];
+    if (error) throw error;
+    partners = (data as unknown as PartnerRow[] | null) ?? [];
+  } catch {
+    try {
+      const { data } = await admin
+        .from("partners")
+        .select(LEGACY_PARTNER_COLS)
+        .order("created_at", { ascending: false });
+      partners = (data as unknown as PartnerRow[] | null) ?? [];
+    } catch {
+      // pre-migration: empty desk, page still renders
+    }
+  }
 
+  try {
     const { data: codes } = await admin
       .from("partner_codes")
       .select("code, partner_id, label, active, created_at");
@@ -57,7 +73,7 @@ export default async function AdminPartnersPage() {
       (codes as Omit<CodeStat, "claims">[] | null) ?? []
     ).map((c) => ({ ...c, claims: claimCounts.get(c.code) ?? 0 }));
   } catch {
-    // pre-migration: empty desk, page still renders
+    // pre-migration: no code stats, page still renders
   }
 
   // Demo-request leads (partner_leads) in their OWN try/catch — the table

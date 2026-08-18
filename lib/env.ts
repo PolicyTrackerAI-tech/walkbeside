@@ -4,6 +4,8 @@
  * making API calls with empty keys.
  */
 
+import { BILLING_PRICE_ENV } from "./billing";
+
 export const PUBLIC = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
   supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
@@ -29,6 +31,20 @@ export const FEATURES = {
     Boolean(PUBLIC.supabaseUrl && PUBLIC.supabaseAnonKey),
   claude: () => hasServer("ANTHROPIC_API_KEY"),
   stripe: () => hasServer("STRIPE_SECRET_KEY"),
+  /**
+   * Checkout-capable: a Stripe key plus at least one tier price id (the env
+   * names come from BILLING_PRICE_ENV in lib/billing.ts — created by the
+   * founder in the Stripe dashboard; amounts never live in code).
+   * INSTITUTIONAL billing only (hospice/employer partners) — there is no
+   * family payment anywhere (guardrail #2). "At least one" is deliberately
+   * loose (the founder may configure tiers incrementally); checkout itself
+   * requires the SPECIFIC assigned tier's env and 409s quietly otherwise.
+   * The UI's "configured" signal is this AND BILLING_LIVE === "true" AND
+   * billingEligible(partner_type), all read at request time.
+   */
+  billing: () =>
+    hasServer("STRIPE_SECRET_KEY") &&
+    Object.values(BILLING_PRICE_ENV).some(hasServer),
   email: () => hasServer("RESEND_API_KEY"),
 };
 
@@ -62,11 +78,12 @@ const CORE_VARS = [
  * missing CORE var already escalates to an error above, so listing it here too
  * would print the failure twice.
  *
- * Stripe is deliberately NOT here: the family-facing product is free (no
- * checkout/webhook exists), and Stripe is kept only as scaffolding for future
- * institutional billing. Requiring a live Stripe key to flip OUTREACH_LIVE was
- * leftover coupling from the decommissioned $49 family-fee model — outreach
- * has no payment dependency, so it must not fail to boot over one.
+ * Stripe is deliberately NOT here: the family-facing product is free, and
+ * Stripe exists only for INSTITUTIONAL billing (hospice/employer), which has
+ * its own switch — `BILLING_LIVE`, validated in its own block below. Outreach
+ * has no payment dependency, so it must not fail to boot over a Stripe var
+ * (that requirement was leftover coupling from the decommissioned $49
+ * family-fee model).
  */
 const LIVE_REQUIRED_VARS = [
   "RESEND_API_KEY",
@@ -117,6 +134,28 @@ export function validateEnv(): { errors: string[]; warnings: string[] } {
     if (from.includes("resend.dev") || from.includes("onboarding@")) {
       warnings.push(
         "RESEND_FROM looks like a Resend sandbox address — set a verified-domain sender before launch",
+      );
+    }
+  }
+
+  // Institutional billing switch (mirrors the OUTREACH_LIVE pattern): the
+  // flag must never come on with a missing webhook secret — checkout would
+  // charge a hospice while every lifecycle event 503s, so billing_status
+  // never leaves 'none' and the portal keeps offering checkout to a partner
+  // who already paid. ADMIN_EMAILS is required because /admin/partners tier
+  // assignment now selects the Stripe price (the admin gate is permissive
+  // until it's set).
+  if (process.env.BILLING_LIVE === "true") {
+    for (const v of ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "ADMIN_EMAILS"]) {
+      if (isMissing(v)) {
+        errors.push(
+          `BILLING_LIVE=true but ${v} is missing — refusing to run institutional billing without it`,
+        );
+      }
+    }
+    if (!Object.values(BILLING_PRICE_ENV).some((v) => !isMissing(v))) {
+      errors.push(
+        "BILLING_LIVE=true but no STRIPE_PRICE_* tier price id is set — checkout can never succeed",
       );
     }
   }
