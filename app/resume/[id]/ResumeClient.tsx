@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { SHARE_KEYS_SET } from "@/lib/share-keys";
 
 interface SnapshotResponse {
   id: string;
@@ -42,9 +43,12 @@ export function ResumeClient({ id }: { id: string }) {
           return;
         }
         const data = (await r.json()) as SnapshotResponse;
-        // Hydrate sessionStorage from the snapshot.
+        // Hydrate sessionStorage from the snapshot. Only allowlisted keys are
+        // written — a crafted share link must not be able to inject arbitrary
+        // sessionStorage keys into this device's session.
         if (data.payload && typeof data.payload === "object") {
           for (const [key, value] of Object.entries(data.payload)) {
+            if (!SHARE_KEYS_SET.has(key)) continue;
             try {
               const stringValue =
                 typeof value === "string" ? value : JSON.stringify(value);

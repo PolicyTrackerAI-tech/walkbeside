@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, FEATURES, requireServer } from "@/lib/env";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
-import { LinkButton } from "@/components/ui/Button";
+import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
 import { SmsOptIn } from "./SmsOptIn";
 
@@ -13,33 +13,49 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /**
- * Email preferences / unsubscribe surface.
- *
- * Linked from anniversary check-in emails as
- * /preferences/[user-uuid]?action=unsubscribe. Light auth: knowing the
- * uuid is sufficient to flip the toggle (acceptable for unsubscribe;
- * worst case is someone unsubscribing a stranger, which is recoverable
- * via this same page).
+ * Flip the anniversary-email subscription. POST-only server action, NOT a GET:
+ * a link that mutated on load would let email clients / security scanners
+ * (which prefetch URLs) silently unsubscribe a grieving family — or, via the
+ * same uuid-as-capability, be triggered by any prefetch of the page's links.
+ */
+async function setSubscription(formData: FormData): Promise<void> {
+  "use server";
+  const id = (formData.get("id")?.toString() ?? "").trim();
+  const optIn = formData.get("optIn") === "true";
+  if (!FEATURES.supabase() || !UUID_RE.test(id)) redirect("/");
+  const admin = createClient(
+    PUBLIC.supabaseUrl,
+    requireServer("SUPABASE_SERVICE_ROLE_KEY"),
+  );
+  await admin
+    .from("profiles")
+    .update({ anniversary_emails_opt_in: optIn })
+    .eq("id", id);
+  redirect(`/preferences/${id}`);
+}
+
+/**
+ * Email preferences / unsubscribe surface. Linked from anniversary check-in
+ * emails as /preferences/[user-uuid]. Light auth: knowing the uuid is enough
+ * to view and flip the toggle (acceptable for unsubscribe; worst case is
+ * someone unsubscribing a stranger, recoverable via this same page). The flip
+ * itself is a POST (see setSubscription) so it can't fire on link prefetch.
  */
 export default async function PreferencesPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ action?: "unsubscribe" | "resubscribe" }>;
 }) {
   const { id } = await params;
-  const sp = await searchParams;
 
   if (!FEATURES.supabase()) redirect("/");
 
   // Validate UUID shape so we don't hit Supabase with garbage.
-  if (
-    !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-      id,
-    )
-  ) {
+  if (!UUID_RE.test(id)) {
     return <NotFound />;
   }
 
@@ -47,16 +63,6 @@ export default async function PreferencesPage({
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
-
-  // Apply action if present.
-  if (sp.action === "unsubscribe" || sp.action === "resubscribe") {
-    const optIn = sp.action === "resubscribe";
-    await admin
-      .from("profiles")
-      .update({ anniversary_emails_opt_in: optIn })
-      .eq("id", id);
-    redirect(`/preferences/${id}`);
-  }
 
   const { data: profile } = await admin
     .from("profiles")
@@ -116,11 +122,17 @@ export default async function PreferencesPage({
                 ? "Click below if you'd rather not receive these. We won't send anything else from this address."
                 : "Click below if you'd like to start receiving them again. Each one is shorter than this page."}
             </p>
-            <LinkButton
-              href={`/preferences/${id}?action=${subscribed ? "unsubscribe" : "resubscribe"}`}
-            >
-              {subscribed ? "Unsubscribe" : "Resubscribe"}
-            </LinkButton>
+            <form action={setSubscription}>
+              <input type="hidden" name="id" value={id} />
+              <input
+                type="hidden"
+                name="optIn"
+                value={subscribed ? "false" : "true"}
+              />
+              <Button type="submit">
+                {subscribed ? "Unsubscribe" : "Resubscribe"}
+              </Button>
+            </form>
           </Card>
 
           <SmsOptIn id={id} initialPhone={smsPhone} initialOptIn={smsOptIn} />

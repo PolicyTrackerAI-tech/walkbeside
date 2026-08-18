@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { isAdminEmail, adminAllowlistConfigured } from "@/lib/admin";
 
 let saved: string | undefined;
@@ -9,12 +9,21 @@ beforeEach(() => {
 afterEach(() => {
   if (saved === undefined) delete process.env.ADMIN_EMAILS;
   else process.env.ADMIN_EMAILS = saved;
+  vi.unstubAllEnvs();
 });
 
 describe("isAdminEmail", () => {
-  it("permissive when ADMIN_EMAILS is unset (any logged-in user is admin)", () => {
+  it("permissive when ADMIN_EMAILS is unset outside production (dev convenience)", () => {
+    vi.stubEnv("NODE_ENV", "development");
     expect(isAdminEmail("anyone@example.com")).toBe(true);
     expect(isAdminEmail(null)).toBe(true);
+    expect(adminAllowlistConfigured()).toBe(false);
+  });
+
+  it("FAILS CLOSED when ADMIN_EMAILS is unset in production (no fail-open hole)", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    expect(isAdminEmail("anyone@example.com")).toBe(false);
+    expect(isAdminEmail(null)).toBe(false);
     expect(adminAllowlistConfigured()).toBe(false);
   });
 

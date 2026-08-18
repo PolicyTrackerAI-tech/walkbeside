@@ -9,25 +9,7 @@ import { HelpFooter } from "@/components/HelpFooter";
 import { HouseholdLinkCard } from "./HouseholdLinkCard";
 import { DigestCard } from "./DigestCard";
 
-const SHARE_KEYS = [
-  "hf-decide:faith",
-  "hf-decide:customFaith",
-  "hf-decide:faithDenomination",
-  "hf-decide:bodyAtService",
-  "hf-decide:dispositionPreference",
-  "hf-decide:costPriority",
-  "hf-decide:isVeteran",
-  "hf-decide:recommendedServiceType",
-  "honestfuneral.negotiate-wizard.v1",
-  "honestfuneral.guidance.hospital.v1",
-  "honestfuneral.guidance.home-expected.v1",
-  "honestfuneral.guidance.home-unexpected.v1",
-  "honestfuneral.guidance.elsewhere.v1",
-  "honestfuneral.next30.v1",
-  "honestfuneral.next30.expanded.v1",
-  "honestfuneral.notifications.v1",
-  "honestfuneral.eulogy.draft.v1",
-];
+import { SHARE_KEYS } from "@/lib/share-keys";
 
 function snapshotStorage(): Record<string, string> {
   const out: Record<string, string> = {};
