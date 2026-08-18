@@ -1,12 +1,12 @@
 /**
  * Placeholder funeral home directory + radius helper.
  *
- * Imported by both client (`app/negotiate/start/page.tsx` for the radius slider)
- * and server (the outreach API). MUST NOT import server-only modules
- * (`next/headers`, `@/lib/supabase/server`) at the top level — those would be
- * pulled into the client bundle and break the Next build.
- *
- * Server-only DB lookup lives in `directory.ts`.
+ * `homesForRadius` caps how many directory homes the outreach API requests
+ * for a given search radius. It is a CAP, not a promise — the vetted
+ * directory may return fewer (or none), so no family-facing surface may
+ * display it as a home count (the 2026-08 A2 audit removed exactly that
+ * fiction from the wizard). The TEMPLATES below are admin-preview
+ * placeholders only; the real lookup lives in `directory.ts` (server-only).
  */
 
 export interface FuneralHome {

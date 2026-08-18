@@ -97,9 +97,10 @@ export default function TermsPage() {
           <p>
             The outreach is free to families. We do not charge you for
             contacting funeral homes on your behalf, for presenting their
-            quotes, or for your selection of a home. We keep families free and
-            are funded by the institutions we partner with &mdash; we take no
-            money from funeral homes or insurers.
+            quotes, or for your selection of a home. We keep families free;
+            we take no money from funeral homes or insurers, and any revenue
+            we earn comes from institutions that serve families, such as
+            hospices and employers.
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">
@@ -151,8 +152,8 @@ export default function TermsPage() {
             To the fullest extent permitted by law, Honest Funeral&rsquo;s total
             liability to you for any claim arising out of or relating to the
             Service is limited to $100. The Service is free to families &mdash;
-            we are funded by the institutions we partner with, not by fees you
-            pay us &mdash; so this cap is not tied to any amount you paid.
+            you pay us no fees &mdash; so this cap is not tied to any amount
+            you paid.
             Honest Funeral is not liable for indirect, incidental,
             consequential, or punitive damages.
           </p>

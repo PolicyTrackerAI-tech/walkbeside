@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { requireSignedIn } from "@/lib/require-signed-in";
+import { outreachIsLive } from "@/lib/negotiation/outreach-mode";
 import { Wizard } from "./Wizard";
 
 export const metadata: Metadata = {
@@ -28,5 +29,8 @@ export default async function Page({
   }
   const suffix = qs.size > 0 ? `?${qs.toString()}` : "";
   await requireSignedIn(`/negotiate/start${suffix}`);
-  return <Wizard />;
+  // Honest-mode switch (display only): when live outreach is off, the wizard
+  // must describe what really happens — we prepare the outreach and send
+  // nothing — instead of promising contact that won't occur.
+  return <Wizard outreachLive={outreachIsLive()} />;
 }

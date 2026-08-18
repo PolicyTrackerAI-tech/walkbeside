@@ -5,9 +5,11 @@ import Link from "next/link";
 import { HelpFooter } from "@/components/HelpFooter";
 
 /**
- * Error boundary for the money flow. Beyond the generic message, it reassures
- * the family that a payment already made is safe — the single thing they'd
- * panic about if a page broke mid-flow.
+ * Error boundary for the negotiate flow. Beyond the generic message, it
+ * reassures the family their case isn't lost — the thing they'd panic about
+ * if a page broke mid-flow. It must not promise anything about sending
+ * (whether outreach goes out depends on OUTREACH_LIVE and can't be known
+ * from inside a crashed page).
  */
 export default function NegotiateError({
   error,
@@ -33,10 +35,10 @@ export default function NegotiateError({
           <p className="text-ink-soft mb-3">Try again in a moment.</p>
           <p className="text-ink-soft mb-8">
             <strong className="text-ink">
-              Your request is safe
+              Your case is safe
             </strong>{" "}
-            and your requests still go out &mdash; nothing is lost. Call us and
-            we&rsquo;ll confirm where things stand.
+            &mdash; nothing you&rsquo;ve entered is lost. Reply to any email
+            from us and a real person will confirm where things stand.
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <button

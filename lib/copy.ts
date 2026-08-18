@@ -27,3 +27,17 @@ export const FREE_FOR_EVERY_FAMILY =
  */
 export const FREE_WITH_OR_WITHOUT_LINK =
   "Everything here is free for you — with or without this link.";
+
+/**
+ * THE role sentence (audit A8 gate, 2026-08-18): the persistent plain-language
+ * disclaimer required by docs/legal/UTAH_CLEARANCE_DRAFT.md §4 (PR #184) —
+ * the platform must visibly disclaim funeral-home / funeral-director status
+ * on the surfaces closest to "arranging" (negotiate + decide) and site-wide.
+ * Substance is fixed pending counsel blessing (wording tightened for design
+ * is fine; the three elements — not a funeral home or director, we do not
+ * arrange funerals or handle remains, the family contracts directly — must
+ * all survive). Renders via components/RoleDisclaimer.tsx and the global
+ * footer. Use the constant; never retype the sentence.
+ */
+export const NOT_A_FUNERAL_HOME =
+  "Honest Funeral is not a funeral home or funeral director. We do not arrange funerals or handle remains. Your family contracts directly with the funeral home you choose.";

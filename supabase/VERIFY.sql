@@ -6,7 +6,9 @@
 -- 1 read policy + column grants; the rest are owner-scoped) — EXCEPT the
 -- deny-all service-role-only tables, which correctly show policies = 0:
 -- partners, partner_codes, partner_members, partner_leads, api_cost_events,
--- regional_benchmarks, hospices.
+-- regional_benchmarks, hospices, household_links, and share_links (the last
+-- moved to deny-all in audit A8 2026-08-18 — before that it carried an anon
+-- read policy with no id predicate, enumerable in bulk).
 
 select
   c.relname                                                            as table_name,

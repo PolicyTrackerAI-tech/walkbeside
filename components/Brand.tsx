@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NOT_A_FUNERAL_HOME } from "@/lib/copy";
 
 export function RoseMark({
   className = "",
@@ -123,10 +124,10 @@ export function Footer() {
           .
         </p>
         <p className="text-xs">
-          Honest Funeral is not a law firm, not a funeral home, and not a medical or
-          financial advisor. Information here is general guidance, not legal,
-          medical, or financial advice. Price estimates are informational and
-          based on regional data; actual prices vary.
+          {NOT_A_FUNERAL_HOME} We are also not a law firm and not a medical
+          or financial advisor. Information here is general guidance, not
+          legal, medical, or financial advice. Price estimates are
+          informational and based on regional data; actual prices vary.
         </p>
         <div className="pt-2">
           <p className="text-xs font-medium mb-2">Tools</p>

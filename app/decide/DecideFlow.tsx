@@ -293,7 +293,10 @@ export function DecideFlow({ aheadMode }: { aheadMode?: boolean }) {
           <ul className="space-y-0.5">
             <li>&bull; We recommend a service type that fits your answers.</li>
             <li>&bull; You&rsquo;ll see what fair pricing looks like for it.</li>
-            <li>&bull; Nothing is saved. No one gets contacted.</li>
+            <li>
+              &bull; Your answers stay on this device (unless you share
+              them). No one gets contacted.
+            </li>
           </ul>
         </div>
 

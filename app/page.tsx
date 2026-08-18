@@ -260,7 +260,7 @@ export default function HomePage() {
 
             <article className="bg-primary-soft border-2 border-primary rounded-2xl p-6 flex flex-col">
               <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
-                Free · funded by our partners
+                Free · no funeral-home money
               </div>
               <h3 className="font-serif text-xl text-ink mb-2">
                 Have us get you quotes
@@ -269,8 +269,8 @@ export default function HomePage() {
                 We contact funeral homes on your behalf, collect itemized
                 quotes, and put them side by side so you can choose. Free to
                 families &mdash; we contact homes for you at no charge, and
-                choosing a home costs nothing. We&rsquo;re funded by the
-                institutions we partner with, never by funeral homes.
+                choosing a home costs nothing. Funeral homes never pay us a
+                cent, so no home can buy its way in front of you.
               </p>
               <Link
                 href="/how-it-works"
