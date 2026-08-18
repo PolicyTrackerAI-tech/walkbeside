@@ -14,7 +14,7 @@ import { ArticleSchema } from "@/components/seo/ArticleSchema";
 export const metadata: Metadata = {
   title: "Home funerals — what they are, where they're legal, and how they work",
   description:
-    "A home funeral is family-led care of the body after death — washing, dressing, holding a vigil, then transporting to cremation, burial, or donation. Legal in 41 US states. A plain-language guide with state-by-state rules.",
+    "A home funeral is family-led care of the body after death — washing, dressing, holding a vigil, then transporting to cremation, burial, or donation. Legal for families to lead in most US states. A plain-language guide with state-by-state rules.",
   openGraph: { images: [ogImage("Family-led home funerals", "Options")] },
 };
 
@@ -34,7 +34,7 @@ export default function HomeFuneralPage() {
       <ArticleSchema
         slug="home-funeral"
         title="Home funerals — family-led care of the body"
-        description="A home funeral is family-led care of the body — washing, dressing, vigil, transport. Legal in 41 US states. What it is, what it isn't, and how it works."
+        description="A home funeral is family-led care of the body — washing, dressing, vigil, transport. Legal for families to lead in most US states. What it is, what it isn't, and how it works."
         eyebrow="Options"
       />
 

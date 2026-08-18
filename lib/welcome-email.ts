@@ -88,8 +88,8 @@ export function buildWelcomeEmail(source: string): {
     <p style="font-size: 16px; line-height: 1.6; color: #4a4a4a; margin: 0 0 12px 0;">Here's the guide you saved:</p>
     <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #1a1a1a; margin: 0 0 24px 0;">${info.title}</p>
     <a href="${url}" style="display: inline-block; background-color: #1f3d2c; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-weight: 500; font-size: 15px;">Read the guide</a>
-    <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 28px 0 0 0;">It'll be here whenever you need it. We'll send one calm email a month with new resources we've built. Never marketing, never shared.</p>
-    <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 12px 0 0 0;">If this wasn't you, ignore this email and we'll remove the address.</p>
+    <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 28px 0 0 0;">It'll be here whenever you need it. We'll send an occasional calm check-in with resources we've built — a couple in the first month, then rarely. Your address is never shared.</p>
+    <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 12px 0 0 0;">If this wasn't you, reply to this email and we'll remove the address.</p>
     <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 32px 0 16px 0;" />
     <p style="font-family: Georgia, 'Times New Roman', serif; font-size: 12px; color: #9ca3af; margin: 0 0 6px 0;">Honest Funeral — quiet help after a loss.</p>
     <p style="font-size: 11px; color: #9ca3af; margin: 0;">${postalAddressLine()}</p>
@@ -102,7 +102,7 @@ Here's the guide you saved: ${info.title}
 
 ${url}
 
-It'll be here whenever you need it. We'll send one calm email a month with new resources we've built. Never marketing, never shared.
+It'll be here whenever you need it. We'll send an occasional calm check-in with resources we've built — a couple in the first month, then rarely. Your address is never shared.
 
 If this wasn't you, reply to this email and we'll remove the address.
 

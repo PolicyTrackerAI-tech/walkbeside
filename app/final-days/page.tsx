@@ -42,9 +42,9 @@ export default function FinalDaysPage() {
             </h1>
             <p className="text-lg text-ink-soft">
               About 1.7 million Americans receive hospice care each
-              year. Almost all of them die at home or in a hospice
-              facility, surrounded by family who have never done this
-              before. This page is what to expect, what helps, and
+              year. Most of them die at home, in a nursing facility,
+              or in a hospice facility, surrounded by family who have
+              never done this before. This page is what to expect, what helps, and
               what doesn&rsquo;t &mdash; written for the people
               sitting at the bedside.
             </p>
@@ -124,8 +124,9 @@ export default function FinalDaysPage() {
                 hygiene, all medications related to the terminal
                 diagnosis, durable medical equipment (hospital bed,
                 wheelchair, oxygen), a social worker, a chaplain if
-                wanted, and 13 months of bereavement support after
-                death.
+                wanted, and bereavement support for the family after
+                the death &mdash; Medicare requires up to a year, and
+                most programs run about 13 months.
               </p>
             </div>
           </Card>

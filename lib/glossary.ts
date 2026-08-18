@@ -75,7 +75,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "A funeral with embalming, viewing, a formal service at a funeral home or place of worship, and burial in a cemetery. The most expensive of the common options.",
     paragraphs: [
-      "A traditional funeral typically includes: embalming and cosmetic preparation, use of the funeral home's viewing room for one or more visitation periods, a casket, a hearse, a graveside service, and burial in a cemetery plot with an outer burial container (vault). National median cost in 2026 runs $9,000–$15,000 before cemetery charges. Cemetery charges (plot, opening and closing, marker) add another $2,000–$8,000.",
+      "A traditional funeral typically includes: embalming and cosmetic preparation, use of the funeral home's viewing room for one or more visitation periods, a casket, a hearse, a graveside service, and burial in a cemetery plot with an outer burial container (vault). A typical all-in cost in 2026 runs $9,000–$15,000 before cemetery charges (for reference, the NFDA's 2023 member survey put the median funeral with viewing and burial at $8,300 before cemetery costs). Cemetery charges (plot, opening and closing, marker) add another $2,000–$8,000.",
       "Nothing in this list is legally required. Embalming is not required by law in any US state except in specific edge cases (long delays, certain communicable diseases, transport across some state lines). Vaults are not required by state law but most cemeteries require them. Viewing is optional. The casket can be bought from a third party.",
     ],
     watchOut:
@@ -145,7 +145,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       "Reducing the body to bone fragments and ash using high heat (about 1,400–1,800 °F) over two to three hours. The resulting 'cremated remains' weigh 4–8 pounds for an adult.",
     paragraphs: [
       "After cremation, the bone fragments are processed in a machine called a cremulator into a uniform, sand-like consistency. The remains are returned to the family in a temporary plastic container or, if the family bought one, an urn.",
-      "Cremation accounts for about 60% of US dispositions and is rising. It is legal in every US state. Costs range from $800 for direct cremation to $4,000+ when bundled with viewing and a formal service.",
+      "Cremation accounts for over 60% of US dispositions and is rising (the NFDA projects about 63% for 2025). It is legal in every US state. Costs range from $800 for direct cremation to $4,000+ when bundled with viewing and a formal service.",
       "Religious rules vary. Catholic Church permits cremation but prefers the body be present at the funeral mass; Jewish and Muslim traditions generally prohibit cremation; most Protestant, Buddhist, and Hindu traditions permit or prefer it. Check the specific tradition before assuming.",
     ],
     related: ["direct-cremation", "urn", "aquamation"],
@@ -243,7 +243,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     paragraphs: [
       "The Federal Trade Commission's Funeral Rule requires every funeral home to maintain a current General Price List and to give it to anyone who asks. It must include the price of each service and product the home offers, individually — not just packages.",
       "Funeral homes are required to quote prices over the phone if asked. They are required to provide the GPL in writing to anyone who walks in and discusses arrangements, before discussing prices verbally. Many homes resist this. Insisting on the written GPL is your right.",
-      "Comparing GPLs from three to five homes in the same city is the single most effective way to avoid being overcharged. Prices for identical services often vary by 200–400% between neighboring funeral homes.",
+      "Comparing GPLs from three to five homes in the same city is the most effective way to avoid being overcharged. Consumer surveys (Funeral Consumers Alliance / Consumer Federation of America) have documented prices for identical services varying by 200–400% between neighboring funeral homes.",
     ],
     watchOut:
       "If a funeral home will not provide its GPL in writing, will not quote direct cremation by phone, or pressures you to discuss arrangements before you see the prices — these are violations of federal law. Report to the FTC at reportfraud.ftc.gov.",
@@ -270,8 +270,8 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "The one fee a funeral home is allowed to charge every family regardless of what services they pick. Covers overhead — facility, staff time, paperwork.",
     paragraphs: [
-      "Typical 2026 range: $1,500–$4,500 depending on region and home. The fee covers the funeral home's general operating costs (rent, staff, filing the death certificate, coordinating with the crematory or cemetery). It is the primary non-declinable item under the FTC Funeral Rule — the one fee every family pays regardless of the services they choose.",
-      "This fee varies more between funeral homes than almost any other line item. A neighborhood independent might charge $1,800; a national chain in the same zip code might charge $3,800 for the same service. Always check this number first when comparing GPLs.",
+      "Our benchmark fair range in 2026 is $1,500–$2,500; quotes above $3,500 are where our checker calls it predatory. The fee covers the funeral home's general operating costs (rent, staff, filing the death certificate, coordinating with the crematory or cemetery). It is the primary non-declinable item under the FTC Funeral Rule — the one fee every family pays regardless of the services they choose.",
+      "This fee varies more between funeral homes than almost any other line item. A neighborhood independent might charge $1,800; a national chain in the same zip code might quote twice that for the same service. Always check this number first when comparing GPLs.",
     ],
     related: ["gpl", "ftc-funeral-rule"],
   },
@@ -283,7 +283,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       "Charges the funeral home pays to a third party on the family's behalf and passes through — death certificates, clergy honoraria, obituary placement, flowers.",
     paragraphs: [
       "By federal law, the funeral home cannot mark up cash advance items without disclosing the markup in writing. In practice, most homes do mark them up — typically 10–30% — and the disclosure is buried in small print. Families can almost always pay these third parties directly and skip the markup.",
-      "Common cash advance items: certified death certificates ($5–$30 each in 2026, varies by county), clergy or celebrant honorarium ($150–$500), obituary placement in a newspaper ($100–$1,500 depending on paper and length), flowers, musicians, and police escort for the funeral procession.",
+      "Common cash advance items: certified death certificates ($10–$25 each is the fair range; the base fee varies by state), clergy or celebrant honorarium ($150–$500), obituary placement in a newspaper ($100–$1,500 depending on paper and length), flowers, musicians, and police escort for the funeral procession.",
     ],
     related: ["gpl", "death-certificate"],
   },
@@ -492,7 +492,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "A casket bought from a source other than the funeral home — Costco, Walmart, online dealers, local casket stores. Federal law requires the funeral home to accept it without a handling fee.",
     paragraphs: [
-      "Funeral home casket markups commonly run 300–500% above wholesale. The identical casket the home shows in its selection room for $4,000 typically retails online for $1,000–$1,400, delivered to the home within 2–3 business days. For traditional burials, third-party caskets are the single largest cost-savings opportunity.",
+      "Funeral home casket markups commonly run 300–500% above wholesale. The identical casket the home shows in its selection room for $4,000 typically retails online for $1,000–$1,400, delivered to the home within 1–3 business days. For traditional burials, third-party caskets are one of the largest cost-savings opportunities on the bill.",
       "The FTC Funeral Rule explicitly requires funeral homes to accept caskets bought elsewhere and prohibits any handling fee, inspection fee, or surcharge tied to a third-party casket. Homes that resist or invent fees are violating federal law.",
       "Practical tips: order the casket as early as practical (delivery is 1–3 business days from most vendors), confirm delivery to the funeral home before the service, and bring the receipt to the arrangement meeting so there is no ambiguity that the casket is yours.",
     ],
@@ -521,7 +521,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "Dying without a valid will. State law (the 'intestate succession statute') determines who inherits what — usually spouse and children first, then parents, siblings, and outward.",
     paragraphs: [
-      "Roughly 60% of US adults die intestate. The state's intestate succession statute is a default; it cannot be changed after death. Each state's rules differ in detail, particularly for blended families: a surviving spouse and the deceased's children from a prior marriage often split assets in specific shares set by state law, regardless of what the deceased would have wanted.",
+      "Most US adults die intestate — surveys consistently find that more than half have no will (a 2021 Gallup poll put it at 54%; more recent industry surveys run higher). The state's intestate succession statute is a default; it cannot be changed after death. Each state's rules differ in detail, particularly for blended families: a surviving spouse and the deceased's children from a prior marriage often split assets in specific shares set by state law, regardless of what the deceased would have wanted.",
       "Probate is required for intestate estates in most cases. The court appoints an administrator (functionally an executor, but called administrator when there's no will). The administrator follows the intestate statute in distributing assets.",
       "Assets with named beneficiaries (life insurance, retirement accounts, payable-on-death bank accounts) and jointly-owned property pass outside the intestate process. They go to the named beneficiary or surviving joint owner regardless of state law. This is why a will alone is not a complete estate plan; the beneficiary designations on accounts matter as much or more.",
     ],

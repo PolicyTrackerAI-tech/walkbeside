@@ -138,7 +138,7 @@ const GUIDES: Guide[] = [
     href: "/home-funeral",
     title: "Family-led home funerals",
     description:
-      "The family cares for the body at home. Legal in 41 states. What it is, what it isn’t.",
+      "The family cares for the body at home. Legal for families to lead in most states. What it is, what it isn’t.",
     category: "decisions",
   },
   {

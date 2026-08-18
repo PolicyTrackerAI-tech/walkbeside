@@ -61,8 +61,8 @@ export default function MethodologyPage() {
               1. Where the fair-price ranges come from
             </h2>
             <p>
-              We maintain a reference set of fair-price ranges for the{" "}
-              {ITEM_COUNT} charges that appear on nearly every funeral bill &mdash;
+              We maintain a reference set of fair-price ranges for{" "}
+              {ITEM_COUNT} common funeral charges &mdash;
               the basic services fee, transfer of remains, embalming and body
               preparation, viewing and service facilities, hearse and limousine,
               graveside service, caskets, cremation containers, urns, and death
@@ -136,11 +136,11 @@ export default function MethodologyPage() {
             </p>
             <p>
               One deliberate exception:{" "}
-              <strong className="text-ink">fixed government fees</strong>, like the
+              <strong className="text-ink">fixed per-unit fees</strong>, like the
               per-copy charge for a death certificate, are not cost-of-living
-              adjusted &mdash; the state charges the same fee everywhere, so we judge
-              those against a flat national amount and against the per-copy price,
-              not the total.
+              adjusted &mdash; they are government-set fees (they vary by state,
+              not by a metro&rsquo;s cost of living), so we judge them against a
+              flat national range and against the per-copy price, not the total.
             </p>
           </div>
 
@@ -184,10 +184,11 @@ export default function MethodologyPage() {
             <p>
               The FTC Funeral Rule (16 CFR Part 453) has governed funeral pricing
               since 1984. It requires itemized price lists, forbids requiring a
-              casket for direct cremation, requires written authorization for
-              embalming, and more. It is widely violated, and most families never
-              learn their rights. We scan every quote against the {RULE_COUNT} most
-              common patterns, including:
+              casket for direct cremation, requires express prior approval before
+              embalming, and more. FTC compliance sweeps have repeatedly found
+              homes failing the required disclosures, and consumer surveys show
+              most people don&rsquo;t know their rights under it. We scan every
+              quote against the {RULE_COUNT} most common patterns, including:
             </p>
             <ul className="space-y-2">
               <li>A casket required or pushed on a direct-cremation quote.</li>
@@ -222,6 +223,56 @@ export default function MethodologyPage() {
               Charges we can&rsquo;t benchmark are left at face value &mdash; they never
               inflate the &ldquo;above fair&rdquo; figure. The estimate is deliberately
               conservative.
+            </p>
+          </div>
+
+          <div className="space-y-3" id="overcharge-figure">
+            <h2 className="font-serif text-2xl text-ink">
+              6. Where the &ldquo;$2,000&ndash;$5,000&rdquo; figure comes from
+            </h2>
+            <p>
+              Several of our pages describe an overpayment risk of{" "}
+              <strong className="text-ink">$2,000&ndash;$5,000</strong> per
+              family on the funeral arrangement. That figure is a{" "}
+              <strong className="text-ink">
+                projection from published price-dispersion data
+              </strong>{" "}
+              &mdash; the documented gap between fair and inflated pricing for
+              the same arrangement &mdash; not a measured outcome of our own
+              cases. Three independent anchors put the risk in that band:
+            </p>
+            <ul className="space-y-2">
+              <li>
+                <strong className="text-ink">Our own published bands.</strong>{" "}
+                For the most common service types, the gap between the top of
+                the fair range and the start of the predatory band in the
+                tables above runs about $1,800 (direct cremation) to $6,000
+                (traditional burial).
+              </li>
+              <li>
+                <strong className="text-ink">
+                  Consumer Federation of America.
+                </strong>{" "}
+                CFA reports that comparison shopping can cut funeral costs by
+                as much as 50% &mdash; against the NFDA&rsquo;s 2023 survey
+                medians ($6,280 for a funeral with viewing and cremation,
+                $8,300 with viewing and burial before cemetery costs), that is
+                roughly $3,100&ndash;$4,200.
+              </li>
+              <li>
+                <strong className="text-ink">
+                  FCA/CFA market surveys.
+                </strong>{" "}
+                Joint Funeral Consumers Alliance / CFA surveys have documented
+                full-service funeral prices ranging from $2,580 to $13,800
+                within the same markets &mdash; a spread far wider than
+                $5,000.
+              </li>
+            </ul>
+            <p>
+              We state it as a risk, not a promise: we have not yet published
+              outcome data from families using our own tools, and when we do,
+              those numbers will appear here with their sample sizes.
             </p>
           </div>
 

@@ -40,9 +40,10 @@ export default function HowToPayPage() {
               Every program, every free option, every cost-cutting move &mdash; in order.
             </h1>
             <p className="text-lg text-ink-soft">
-              A typical US funeral costs $9,000&ndash;$15,000.
-              Roughly 40% of US families can&rsquo;t cover an
-              unexpected $400 expense, let alone that. There is a
+              A typical US funeral costs $9,000&ndash;$15,000 all-in.
+              In the Federal Reserve&rsquo;s latest household survey,
+              37% of US adults couldn&rsquo;t cover an unexpected $400
+              expense with cash on hand, let alone that. There is a
               full menu of assistance programs, free options, and
               cost-cutting moves &mdash; most families either
               don&rsquo;t know about them or learn too late. This is
@@ -104,8 +105,9 @@ export default function HowToPayPage() {
                   A veteran with an honorable discharge qualifies for
                   free burial in a national cemetery, a free
                   headstone or marker, a burial flag, and military
-                  honors. Cash burial allowance of $300&ndash;$2,000
-                  depending on circumstances.{" "}
+                  honors — plus a cash burial allowance (the VA
+                  publishes current amounts; typically a few hundred
+                  to a couple thousand dollars).{" "}
                   <Link
                     href="/veterans"
                     className="text-primary-deep underline"
@@ -310,7 +312,8 @@ export default function HowToPayPage() {
                   <strong className="text-ink">Home funeral + direct cremation:</strong>{" "}
                   $800&ndash;$1,500 total. Family handles care of
                   the body and transport; the only paid step is the
-                  cremation itself. Legal in 41 states.{" "}
+                  cremation itself. Legal for families to lead in
+                  most states.{" "}
                   <Link
                     href="/home-funeral"
                     className="text-primary-deep underline"
@@ -376,9 +379,9 @@ export default function HowToPayPage() {
               </p>
               <p>
                 <strong className="text-ink">Taxes:</strong>{" "}
-                gifts of less than $18,000 per donor per year
-                (2026 limit) are not taxable to the recipient or
-                the donor. The vast majority of funeral
+                gifts of less than $19,000 per donor per year
+                (the IRS annual exclusion for 2026) are not taxable
+                to the recipient or the donor. The vast majority of funeral
                 crowdfunding falls well below this. GoFundMe issues
                 no tax forms for personal campaigns. The funds are
                 not income.

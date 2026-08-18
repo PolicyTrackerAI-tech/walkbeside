@@ -95,12 +95,13 @@ export default function GriefPage() {
                 <strong className="text-ink">integrated grief</strong>{" "}
                 over months to years (the loss is held alongside the
                 rest of life, not at the center every day). For
-                about 10% of bereaved adults, grief becomes{" "}
+                about one in ten bereaved adults (a 2017
+                meta-analysis put it at 9.8%), grief becomes{" "}
                 <strong className="text-ink">complicated</strong>{" "}
                 &mdash; persistent, severe, and interfering with
                 daily life past 12 months. That is now a recognized
-                clinical condition (Prolonged Grief Disorder in
-                DSM-5-TR; Prolonged Grief Disorder in ICD-11) and
+                clinical condition (Prolonged Grief Disorder, in both
+                the DSM-5-TR and the ICD-11) and
                 responds well to treatment.
               </p>
             </div>
@@ -338,10 +339,11 @@ export default function GriefPage() {
                 <li>
                   <strong className="text-ink">Hospice bereavement groups</strong>{" "}
                   &mdash; if the death involved hospice, the hospice
-                  agency runs free bereavement groups for 13 months
-                  after death, included in the Medicare hospice
-                  benefit. Open to family even if you live in a
-                  different city than the hospice was in.
+                  agency runs free bereavement groups after the death
+                  as part of the Medicare hospice benefit &mdash;
+                  Medicare requires up to a year, and most programs
+                  run about 13 months. Open to family even if you live
+                  in a different city than the hospice was in.
                 </li>
                 <li>
                   <strong className="text-ink">Modern Loss</strong>{" "}

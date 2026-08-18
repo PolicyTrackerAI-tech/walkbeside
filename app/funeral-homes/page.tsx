@@ -33,8 +33,9 @@ export default function FuneralHomesIndexPage() {
               What does a fair funeral cost in your area?
             </h1>
             <p className="text-lg text-ink-soft">
-              Funeral home prices vary by 3–10× for the same goods and
-              services in the same town. We&rsquo;ll show you what
+              Consumer surveys have documented prices varying 200–400%
+              between funeral homes in the same town for the same goods
+              and services. We&rsquo;ll show you what
               fair-range pricing actually looks like in your zip code,
               what each line item should cost, and how to spot the
               upsells before you sign.
@@ -84,7 +85,7 @@ export default function FuneralHomesIndexPage() {
             <CardEyebrow>How we&rsquo;re different</CardEyebrow>
             <CardTitle>Not a directory. Not a broker.</CardTitle>
             <p className="text-ink-soft mt-3">
-              Most &ldquo;funeral home finders&rdquo; on the internet
+              Many &ldquo;funeral home finders&rdquo; on the internet
               are ad surfaces — funeral homes pay to appear. We
               don&rsquo;t take a cent from any funeral home, ever — and we never charge the family either. We&rsquo;re funded by the hospices and employers we serve. That&rsquo;s how we stay accountable to you.
             </p>

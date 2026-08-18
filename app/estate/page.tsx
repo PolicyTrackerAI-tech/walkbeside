@@ -130,8 +130,9 @@ export default async function EstatePage() {
                 <strong className="text-ink">Inherited retirement accounts.</strong>{" "}
                 Under the SECURE Act, most non-spouse inheritors of
                 an IRA or 401(k) must drain it within 10 years.
-                Getting this wrong triggers a 50% penalty. Talk to a
-                CPA before moving the money.
+                Missing a required distribution triggers a 25%
+                penalty (10% if corrected quickly, under SECURE 2.0).
+                Talk to a CPA before moving the money.
               </li>
               <li>
                 <strong className="text-ink">Digital accounts.</strong>{" "}

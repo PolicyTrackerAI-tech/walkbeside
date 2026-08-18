@@ -1,6 +1,11 @@
 "use client";
 
-import { LINE_ITEMS, fmtRange, adjustedRange } from "@/lib/pricing-data";
+import {
+  LINE_ITEMS,
+  PRICING_LAST_UPDATED,
+  fmtRange,
+  displayThresholds,
+} from "@/lib/pricing-data";
 import { FIVE_QUESTIONS, DECLINE_SCRIPTS } from "@/lib/scenarios";
 
 /**
@@ -39,7 +44,7 @@ export function Cheatsheet({ zip }: { zip?: string }) {
             Things they cannot legally require
           </div>
           <ul className="text-sm space-y-1 list-disc list-inside text-ink">
-            <li>Embalming (in most US states)</li>
+            <li>Embalming — refrigeration is the legal alternative</li>
             <li>Buying their casket — bring your own from any vendor</li>
             <li>Buying a vault more expensive than the cemetery requires</li>
             <li>Paying a &ldquo;handling fee&rdquo; on a third-party casket</li>
@@ -65,11 +70,13 @@ export function Cheatsheet({ zip }: { zip?: string }) {
           <tbody>
             {LINE_ITEMS.filter((i) => i.highMarkup || i.required === "yes").map(
               (it) => {
-                const [low, high] = adjustedRange(it.fairLow, it.fairHigh, zip);
+                const t = displayThresholds(it, zip);
                 return (
                   <tr key={it.id} className="border-b border-border/60">
                     <td className="py-1 pr-2">{it.name}</td>
-                    <td className="py-1 text-right">{fmtRange(low, high)}</td>
+                    <td className="py-1 text-right">
+                      {fmtRange(t.fairLow, t.fairHigh)}
+                    </td>
                   </tr>
                 );
               },
@@ -105,9 +112,11 @@ export function Cheatsheet({ zip }: { zip?: string }) {
       </div>
 
       <p className="text-xs text-ink-muted border-t border-border pt-3">
-        These ranges are US national averages adjusted for your region. Your
-        local funeral director may quote different numbers — push back politely
-        and ask why.
+        These are national fair-price benchmark ranges adjusted for your
+        region (modeled estimates; fixed state fees like death certificates
+        stay national). Benchmarks last reviewed {PRICING_LAST_UPDATED} —
+        method: honestfuneral.co/methodology. Your local funeral director may
+        quote different numbers — push back politely and ask why.
       </p>
     </div>
   );

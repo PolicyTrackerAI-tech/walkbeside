@@ -73,14 +73,17 @@ export default function DeathCertificatesPage() {
             </p>
             <ul className="space-y-1 text-[15px] text-ink-soft list-disc pl-5 mb-4">
               <li>
-                <strong className="text-ink">$10&ndash;$30 per copy</strong>{" "}
+                <strong className="text-ink">$10&ndash;$25 per copy</strong>{" "}
                 when ordered through the funeral home along with the
-                initial order.
+                initial order &mdash; most homes pass through the
+                state&rsquo;s base fee. Ask whether they add a markup.
               </li>
               <li>
-                <strong className="text-ink">$15&ndash;$50 per copy</strong>{" "}
+                <strong className="text-ink">
+                  The same base fee, plus possible search and rush charges
+                </strong>{" "}
                 when ordered directly from the state vital records office
-                later, plus processing delays of 2&ndash;8 weeks.
+                later &mdash; and processing delays of 2&ndash;8 weeks.
               </li>
             </ul>
             <p className="text-ink-soft text-sm">

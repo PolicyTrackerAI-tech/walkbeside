@@ -6,7 +6,7 @@
  *   - metro: human-readable metro/area label (e.g., "Manhattan, NY")
  *
  * This replaces the original 3-bucket multiplier (high-coastal /
- * baseline / low-COL) with ~150 metro-level entries covering most of
+ * baseline / low-COL) with ~900 metro-level entries covering most of
  * the US population. Where a zip's 3-digit prefix isn't in the table,
  * regionMultiplier() falls back to the 1-digit prefix logic below.
  *

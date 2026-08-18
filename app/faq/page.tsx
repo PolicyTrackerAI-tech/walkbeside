@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LinkButton } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -89,8 +90,8 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
         </ul>
         <p>
           Staying free to families is the only way to stay accountable to the
-          family. Every &ldquo;free&rdquo; service in this industry runs on commissions or
-          kickbacks from funeral homes &mdash; which is why most of them route
+          family. Many &ldquo;free&rdquo; funeral-help services run on commissions or
+          kickbacks from funeral homes &mdash; an arrangement that rewards routing
           grieving families to whichever home paid for the placement. We
           don&rsquo;t play that game.
         </p>
@@ -181,7 +182,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Does the outreach cover cremation-only arrangements?",
     plain:
-      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. It's free to families regardless of service type, and we contact homes on your behalf at no charge. Direct cremation is where price differences are starkest — consumer surveys have documented the identical service ranging from about $850 to over $3,300 within a single metro — so comparing quotes matters most there.",
+      "Yes — our outreach covers every service type: burial, cremation, direct cremation, green burial, body donation. It's free to families regardless of service type, and we contact homes on your behalf at no charge. Direct cremation is where price differences are starkest — Funeral Consumers Alliance metro surveys have documented the identical service ranging from about $850 to over $3,300 within a single metro — so comparing quotes matters most there.",
     a: (
       <>
         <p>
@@ -193,7 +194,8 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
         <p>
           Direct cremation in particular is where price differences are
           starkest, because traditional homes often quote it as if it were a
-          full service. Consumer surveys have documented the identical
+          full service. Funeral Consumers Alliance metro surveys have
+          documented the identical
           direct cremation ranging from about $850 to over $3,300 within a
           single metro &mdash; so comparing quotes matters most there.
         </p>
@@ -343,7 +345,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What if I\u2019m not sure I need your help?",
     plain:
-      "That's fine — everything here is free anyway. Use the public guidance and the fair-price lookup to rate the quote you've been given against local data. Families often overpay by $2,000 to $5,000 on the funeral arrangement alone — usually because they don't know the fair range. If the lookup tells you the quote you've been given is already in range, you're done. Nothing else to do.",
+      "That's fine — everything here is free anyway. Use the public guidance and the fair-price lookup to rate the quote you've been given against local data. The gap between fair and inflated pricing runs $2,000 to $5,000 on the funeral arrangement alone (our methodology page shows how we calculate that), and not knowing the fair range is how families end up on the wrong side of it. If the lookup tells you the quote you've been given is already in range, you're done. Nothing else to do.",
     a: (
       <>
         <p>
@@ -352,9 +354,17 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           against local data.
         </p>
         <p>
-          Families often overpay by{" "}
+          The gap between fair and inflated pricing runs{" "}
           <strong>$2,000 to $5,000</strong> on the funeral arrangement alone
-          &mdash; usually because they don&rsquo;t know the fair range. If
+          (our{" "}
+          <Link
+            href="/methodology#overcharge-figure"
+            className="text-primary-deep underline-offset-2 hover:underline"
+          >
+            methodology page
+          </Link>{" "}
+          shows how we calculate that), and not knowing the fair range is how
+          families end up on the wrong side of it. If
           the lookup tells you the quote you&rsquo;ve been given is
           already in range, you&rsquo;re done. Nothing else to do.
         </p>
@@ -386,17 +396,16 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How long does this whole process take?",
     plain:
-      "Fair-price lookup: under three minutes. No account, no email. The funeral-home outreach: most homes respond within 24–72 hours. Start to finish (authorize, quotes, choose a home) typically takes 3–5 days. Families tell us this is worth waiting for — the savings on a single funeral arrangement often cover a year of living expenses for someone on a fixed income.",
+      "Fair-price lookup: under three minutes. No account, no email. The funeral-home outreach: we ask homes to respond within a few days, and we design the flow so a comparison is in your hands before you have to sign anything. The stakes justify the short wait — the gap between fair and inflated pricing on a single arrangement runs $2,000 to $5,000.",
     a: (
       <>
         <p>Fair-price lookup: under three minutes. No account, no email.</p>
         <p>
-          The funeral-home outreach: most homes respond within 24&ndash;72 hours.
-          Start to finish (authorize &rarr; quotes &rarr; choose a home)
-          typically takes 3&ndash;5 days. Families tell us this is worth
-          waiting for &mdash; the savings on a single funeral arrangement
-          often cover a year of living expenses for someone on a fixed
-          income.
+          The funeral-home outreach: we ask homes to respond within a few
+          days, and we design the flow so a comparison is in your hands
+          before you have to sign anything. The stakes justify the short
+          wait &mdash; the gap between fair and inflated pricing on a single
+          arrangement runs $2,000 to $5,000.
         </p>
       </>
     ),

@@ -178,7 +178,7 @@ export function fallbackAdvocacySummary(input: {
     potentialSavings > 0
       ? vCount > 0
         ? `This quote runs about ${usd(potentialSavings)} above fair, and we flagged ${vNote} that may not be allowed under the FTC Funeral Rule.`
-        : `This quote runs about ${usd(potentialSavings)} above fair for your region — most of it is negotiable.`
+        : `This quote runs about ${usd(potentialSavings)} above fair for your region — every overpriced line is negotiable.`
       : vCount > 0
         ? `The pricing is close to fair, but we flagged ${vNote} worth questioning under the FTC Funeral Rule.`
         : "This quote is in line with fair pricing for your region.";
@@ -385,7 +385,7 @@ export function buildShareText(r: ShareResult): string {
   } else {
     out.push("This quote is in line with fair pricing for your region.");
   }
-  out.push(`Quoted ${usd(r.totalQuoted)} · Fair midpoint ${usd(r.totalFairMid)}`);
+  out.push(`Quoted ${usd(r.totalQuoted)} · At fair prices ${usd(r.totalFairMid)}`);
   out.push(r.sourceNote);
   if (r.coverage && r.coverage.level !== "high" && r.coverage.note) {
     out.push(`Note on coverage: ${r.coverage.note}`);
@@ -395,7 +395,7 @@ export function buildShareText(r: ShareResult): string {
   for (const it of r.items) {
     if (it.isRange && it.centsLow != null && it.centsHigh != null) {
       out.push(
-        `- ${it.name}: ${usd(it.centsLow)}–${usd(it.centsHigh)} — buy third-party (often 50–80% less)`,
+        `- ${it.name}: ${usd(it.centsLow)}–${usd(it.centsHigh)} — buy third-party (often 40–70% less)`,
       );
       continue;
     }

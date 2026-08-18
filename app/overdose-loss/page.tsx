@@ -43,8 +43,10 @@ export default function OverdoseLossPage() {
               When someone you love dies of an overdose.
             </h1>
             <p className="text-lg text-ink-soft">
-              Over 100,000 Americans die of drug overdoses each year
-              &mdash; more than gun deaths and car accidents combined.
+              Tens of thousands of Americans die of drug overdoses
+              every year &mdash; roughly 70,000 in 2025 by CDC
+              provisional counts, after years above 100,000 at the
+              peak of the crisis.
               Behind every number is a family that is now grieving in
               a culture that doesn&rsquo;t yet know how to grieve this
               loss. This page is for those families.

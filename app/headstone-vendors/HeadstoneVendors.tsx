@@ -42,7 +42,8 @@ export function HeadstoneVendors() {
             <p className="text-lg text-ink-soft">
               Funeral homes typically mark up headstones 50&ndash;200%
               over what monument companies charge for the same stone.
-              Below are vetted monument companies serving your area.
+              Below are monument companies to start from &mdash; we
+              take no fee from any of them.
               Direct purchase, same product, much less money.
             </p>
           </div>
@@ -179,10 +180,9 @@ export function HeadstoneVendors() {
           <Card tone="soft">
             <CardEyebrow>Don&rsquo;t see your area?</CardEyebrow>
             <p className="text-ink-soft text-sm">
-              We&rsquo;re building this directory state by state, with
-              every vendor verified by our team. If you don&rsquo;t
-              see your metro, two ways to find a reputable monument
-              company nearby:
+              We&rsquo;re building this directory state by state. If
+              you don&rsquo;t see your metro, two ways to find a
+              reputable monument company nearby:
             </p>
             <ul className="space-y-2 text-sm text-ink-soft list-disc pl-5 mt-3">
               <li>
@@ -214,9 +214,10 @@ export function HeadstoneVendors() {
               <strong className="text-ink-soft">Not a marketplace.</strong>{" "}
               We take no commissions, referral fees, or kickbacks from
               any vendor listed above. We are not affiliated with any
-              of them. Listings are based on public information,
-              independently verified by our team, and reflect our
-              best understanding at the time of publication. Pricing,
+              of them. Listings are based on public information and
+              reflect our best understanding at the time of
+              publication &mdash; they are starting points, not
+              endorsements. Pricing,
               service area, and availability change &mdash; confirm
               directly with the vendor before relying on anything
               here.

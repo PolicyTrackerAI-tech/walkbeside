@@ -6,7 +6,7 @@ import {
 } from "@/lib/funeral-homes-pricing";
 import {
   LINE_ITEMS,
-  adjustedRange,
+  displayThresholds,
   type ServiceType,
 } from "@/lib/pricing-data";
 
@@ -52,10 +52,10 @@ function catalogSums(ids: string[], zip: string) {
   for (const id of ids) {
     const item = LINE_ITEMS.find((it) => it.id === id);
     if (!item) throw new Error(`unknown line item: ${id}`);
-    const [lo, hi] = adjustedRange(item.fairLow, item.fairHigh, zip);
-    low += lo * 100;
-    high += hi * 100;
-    predatory += item.predatoryAt * 100;
+    const t = displayThresholds(item, zip);
+    low += t.fairLow * 100;
+    high += t.fairHigh * 100;
+    predatory += t.predatoryAt * 100;
   }
   return { low, high, predatory };
 }
@@ -111,20 +111,25 @@ describe(`totalsForService — featured services at zip ${ZIP}`, () => {
   });
 
   it("pins the exact rendered totals (cents)", () => {
+    // REGRESSION NOTE (2026-08-18, audit A3): totals moved when the predatory
+    // sums switched from raw-national to the displayThresholds rule (regional
+    // multiplier on non-per-unit items; death certificates stay national) —
+    // the same rule the analyzer classifies with. Fair highs moved by $1
+    // (the per-unit death certificate no longer COLA-shrinks at 0.95×).
     expect(totalsForService("direct-cremation", ZIP)).toEqual({
-      stripped: { low: 195_800, high: 339_700 },
-      typical: { low: 195_800, high: 339_700 },
-      predatory: 645_000,
+      stripped: { low: 195_800, high: 339_800 },
+      typical: { low: 195_800, high: 339_800 },
+      predatory: 613_000,
     });
     expect(totalsForService("cremation-with-service", ZIP)).toEqual({
-      stripped: { low: 195_800, high: 339_700 },
-      typical: { low: 328_900, high: 548_800 },
-      predatory: 1_065_000,
+      stripped: { low: 195_800, high: 339_800 },
+      typical: { low: 328_900, high: 548_900 },
+      predatory: 1_012_000,
     });
     expect(totalsForService("traditional-burial", ZIP)).toEqual({
-      stripped: { low: 433_300, high: 805_200 },
-      typical: { low: 694_600, high: 1_223_300 },
-      predatory: 2_605_000,
+      stripped: { low: 433_300, high: 805_300 },
+      typical: { low: 694_600, high: 1_223_400 },
+      predatory: 2_475_000,
     });
   });
 });

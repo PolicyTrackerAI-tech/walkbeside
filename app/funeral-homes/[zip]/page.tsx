@@ -10,7 +10,7 @@ import {
   LINE_ITEMS,
   SERVICE_LABELS,
   fmtRange,
-  adjustedRange,
+  displayThresholds,
   DATA_SOURCE_LABEL,
   PRICING_LAST_UPDATED,
 } from "@/lib/pricing-data";
@@ -130,9 +130,9 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
                     <Stat
-                      label="Required minimum"
+                      label="Required items only"
                       value={`${fmtCents(t.stripped.low)}–${fmtCents(t.stripped.high)}`}
-                      hint="What a home must charge to handle it"
+                      hint="Fair range for just the items you can't decline"
                     />
                     <Stat
                       label="Typical fair total"
@@ -197,14 +197,16 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
               <tbody>
                 {LINE_ITEMS.map((it) => {
                   // Override ranges are CENTS; the table renders dollars.
-                  // Per-unit items (state fees) never take an override.
+                  // Per-unit items (state fees) never take an override and
+                  // never COLA-adjust — displayThresholds carries the rule.
                   const ov = it.perUnit ? undefined : overrides.get(it.id);
+                  const t = displayThresholds(it, zip);
                   const [lo, hi] = ov
                     ? [
                         Math.round(ov.fairLowCents / 100),
                         Math.round(ov.fairHighCents / 100),
                       ]
-                    : adjustedRange(it.fairLow, it.fairHigh, zip);
+                    : [t.fairLow, t.fairHigh];
                   const requiredLabel =
                     it.required === "yes"
                       ? "Yes"

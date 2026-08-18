@@ -91,10 +91,13 @@ export default function HomePage() {
           </p>
 
           <p className="mt-6 text-sm text-ink-soft max-w-md mx-auto">
-            Families often overpay by{" "}
+            The gap between fair and inflated pricing runs{" "}
             <span className="font-medium text-ink">$2,000 to $5,000</span> on
-            the funeral arrangement alone. Knowing the fair range is usually
-            the whole difference.
+            the funeral arrangement alone (
+            <Link href="/methodology#overcharge-figure" className="underline underline-offset-2">
+              how we calculate this
+            </Link>
+            ). Knowing the fair range is the difference.
           </p>
 
           <p className="mt-10 text-sm text-ink-muted">
@@ -157,14 +160,18 @@ export default function HomePage() {
           </ol>
           <div className="mt-8 flex flex-col items-center text-center">
             <div className="text-xs uppercase tracking-wider text-ink-muted font-medium mb-1">
-              Typical overcharge
+              Overpayment risk
             </div>
             <div className="font-serif text-4xl sm:text-5xl text-primary-deep leading-none">
               $2,000&ndash;$5,000
             </div>
             <p className="text-sm text-ink-soft mt-2 max-w-sm">
-              per family, on the funeral arrangement alone. Knowing the fair
-              range up front is usually the whole difference.
+              per family on the funeral arrangement alone — the documented gap
+              between fair and inflated pricing (
+              <Link href="/methodology#overcharge-figure" className="underline underline-offset-2">
+                how we calculate this
+              </Link>
+              ).
             </p>
           </div>
           <p className="mt-8 text-center text-sm text-ink-soft">
@@ -301,22 +308,23 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
             <Card>
-              <CardEyebrow>Typical overcharge</CardEyebrow>
+              <CardEyebrow>Overpayment risk</CardEyebrow>
               <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
                 $2,000&ndash;$5,000
               </div>
               <p className="text-sm text-ink-soft mt-2">
-                per family, on the funeral arrangement alone.
+                per family, on the funeral arrangement alone — from published
+                price-dispersion data.
               </p>
             </Card>
             <Card>
               <CardEyebrow>Bereavement mandate</CardEyebrow>
               <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
-                ~13 months
+                1 year
               </div>
               <p className="text-sm text-ink-soft mt-2">
-                of support Medicare requires per death (42 CFR 418.64) &mdash;
-                unfunded.
+                of bereavement support Medicare requires per death (42 CFR
+                418.64(d)) &mdash; unfunded.
               </p>
             </Card>
           </div>

@@ -110,8 +110,9 @@ export function SelfCheck() {
           <ul className="mt-3 space-y-1.5 text-sm text-ink">
             <li>
               <strong>Your hospice&rsquo;s bereavement line</strong> — free
-              counseling, groups, and check-ins for about 13 months after the
-              death. You&rsquo;re entitled to it; one call starts it.
+              counseling, groups, and check-ins after the death (Medicare
+              requires up to a year; most programs run about 13 months).
+              You&rsquo;re entitled to it; one call starts it.
             </li>
             <li>
               <strong>988</strong> (call or text) — 24 hours, for any level of

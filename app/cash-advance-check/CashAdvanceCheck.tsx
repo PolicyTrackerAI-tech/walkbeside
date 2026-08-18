@@ -82,8 +82,8 @@ export function CashAdvanceCheck() {
             <p className="text-ink-soft">
               Cash-advance items are things the funeral home buys from someone
               else on your behalf &mdash; flowers, the newspaper obituary,
-              death certificates, the clergy honorarium. You&rsquo;re entitled
-              to ask what the vendor actually charged. Put the two numbers side
+              death certificates, the clergy honorarium. You can always ask
+              what the vendor actually charged. Put the two numbers side
               by side and the difference stops being a suspicion and becomes a
               documented fact.
             </p>

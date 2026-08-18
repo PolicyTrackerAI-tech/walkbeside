@@ -12,12 +12,14 @@ import {
   SERVICE_LABELS,
   fmtRange,
   adjustedRange,
+  displayThresholds,
   fmtUSD,
   PRICING_LAST_UPDATED,
   DATA_SOURCE_LABEL,
   type LineItem,
   type ServiceType,
 } from "@/lib/pricing-data";
+import { rateQuote } from "@/lib/price-rating";
 import { FIVE_QUESTIONS } from "@/lib/scenarios";
 
 type Mode = "no-quote" | "has-quote";
@@ -78,12 +80,18 @@ export function PriceCalculator() {
 
   const totals = SERVICE_TOTALS.find((t) => t.type === serviceType)!;
   const [low, high] = adjustedRange(totals.fairLow, totals.fairHigh, zip);
+  // The predatory band adjusts by the SAME regional multiplier as the fair
+  // range — mixing an adjusted fair range with national predatory numbers
+  // let the two tools rate the same quote differently (guardrail #4).
+  const [predLow, predHigh] = adjustedRange(
+    totals.predatoryLow,
+    totals.predatoryHigh,
+    zip,
+  );
 
   const quotedNum = Number(quotedPrice.replace(/[^0-9.]/g, ""));
   const dealRating =
-    mode === "has-quote"
-      ? computeOverall(quotedNum, low, high, totals.predatoryHigh)
-      : null;
+    mode === "has-quote" ? rateQuote(quotedNum, low, high, predLow) : null;
 
   const lineItems = LINE_ITEMS.filter((li) => li.categories.includes(serviceType));
 
@@ -227,11 +235,11 @@ export function PriceCalculator() {
               {fmtRange(low, high)}
             </h2>
             <p className="text-ink-soft">
-              This is what most families pay for{" "}
-              {SERVICE_LABELS[serviceType].toLowerCase()} in your area. A
-              quote of {fmtUSD(totals.predatoryLow)}&ndash;
-              {fmtUSD(totals.predatoryHigh)} is what predatory pricing looks
-              like for this service type.
+              A fair price for{" "}
+              {SERVICE_LABELS[serviceType].toLowerCase()} in your area falls
+              in this range. A quote of {fmtUSD(predLow)}&ndash;
+              {fmtUSD(predHigh)} is what predatory pricing looks like for
+              this service type in your area.
             </p>
             <p className="text-xs text-ink-muted mt-4">
               <DataTierBadge tier="modeled" className="mr-2" />
@@ -309,12 +317,14 @@ export function PriceCalculator() {
             <CardEyebrow>Line-by-line fair prices</CardEyebrow>
             <CardTitle>What each line on their price list should cost.</CardTitle>
             <p className="text-ink-soft mb-5 text-sm">
-              Ranges are adjusted for your zip. Required vs optional is
-              tagged &mdash; anything marked optional, you can decline.
+              Ranges are adjusted for your zip &mdash; except fixed
+              per-unit fees like death certificates, which cost the same
+              everywhere in a state. Required vs optional is tagged &mdash;
+              anything marked optional, you can decline.
             </p>
             <ul className="divide-y divide-border">
               {lineItems.map((item) => {
-                const [lo, hi] = adjustedRange(item.fairLow, item.fairHigh, zip);
+                const t = displayThresholds(item, zip);
                 return (
                   <li key={item.id} className="py-4 flex gap-4">
                     <div className="flex-1">
@@ -335,10 +345,10 @@ export function PriceCalculator() {
                     </div>
                     <div className="text-right shrink-0">
                       <div className="font-serif text-ink">
-                        {fmtRange(lo, hi)}
+                        {fmtRange(t.fairLow, t.fairHigh)}
                       </div>
                       <div className="text-xs text-ink-muted">
-                        over {fmtUSD(item.predatoryAt)} = overpriced
+                        over {fmtUSD(t.predatoryAt)} = overpriced
                       </div>
                     </div>
                   </li>
@@ -460,40 +470,3 @@ function RequiredPill({ value }: { value: LineItem["required"] }) {
   );
 }
 
-function computeOverall(
-  quoted: number,
-  fairLow: number,
-  fairHigh: number,
-  predatoryHigh: number,
-): { label: string; tone: "good" | "warn" | "bad"; message: string } {
-  if (!quoted) {
-    return {
-      label: "\u2014",
-      tone: "warn",
-      message: "Enter the price they quoted to see how it compares.",
-    };
-  }
-  const median = Math.round((fairLow + fairHigh) / 2);
-  const deltaPct = Math.round(((quoted - median) / median) * 100);
-
-  if (quoted <= fairHigh) {
-    const position = deltaPct <= 0 ? "within" : "in the upper portion of";
-    return {
-      label: `${fmtUSD(quoted)}`,
-      tone: "good",
-      message: `This quote is ${position} the regional fair range (${fmtUSD(fairLow)}\u2013${fmtUSD(fairHigh)}). The regional median is ${fmtUSD(median)}. Ask for the itemized General Price List to verify each line.`,
-    };
-  }
-  if (quoted <= (fairHigh + predatoryHigh) / 2) {
-    return {
-      label: `${fmtUSD(quoted)}`,
-      tone: "warn",
-      message: `This quote is approximately ${deltaPct}% above the regional median of ${fmtUSD(median)}. Regional fair range is ${fmtUSD(fairLow)}\u2013${fmtUSD(fairHigh)}. You may want to request itemized prices from other firms for comparison.`,
-    };
-  }
-  return {
-    label: `${fmtUSD(quoted)}`,
-    tone: "bad",
-    message: `This quote is approximately ${deltaPct}% above the regional median of ${fmtUSD(median)}. Regional fair range is ${fmtUSD(fairLow)}\u2013${fmtUSD(fairHigh)}. Comparing to other firms in your area is likely to materially change the price. Predatory territory begins around ${fmtUSD(predatoryHigh)}.`,
-  };
-}

@@ -102,9 +102,9 @@ export default function SuicideLossPage() {
                 community use the term deliberately. You can too.
               </p>
               <p>
-                Roughly 135 people are directly affected by every
-                suicide in the US (CDC estimates), though that
-                number understates the actual reach. You are not
+                Researchers estimate roughly 135 people are exposed
+                to every suicide in the US (Cerel et al., 2019),
+                though even that number understates the reach. You are not
                 rare and you are not alone, even if it feels that
                 way in the first weeks.
               </p>

@@ -81,26 +81,27 @@ export default function EmployersPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card>
-              <CardEyebrow>Typical overcharge</CardEyebrow>
+              <CardEyebrow>Overpayment risk</CardEyebrow>
               <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
                 $2,000&ndash;$5,000
               </div>
               <p className="text-sm text-ink-soft mt-2">
-                per family, on the funeral arrangement alone &mdash; national
-                benchmark, see{" "}
+                per family, on the funeral arrangement alone &mdash; the
+                documented gap between fair and inflated pricing, see{" "}
                 <Link
-                  href="/methodology"
+                  href="/methodology#overcharge-figure"
                   className="text-primary-deep underline-offset-2 hover:underline"
                 >
-                  methodology
+                  how we calculate this
                 </Link>
                 .
               </p>
               <p className="text-xs text-ink-muted mt-2">
-                Basis: NFDA General Price List survey medians, cost-of-living
-                adjusted by zip. National benchmark, not yet locally
-                validated for your workforce&rsquo;s locations &mdash;
-                excludes cemetery/plot, monument, and third-party fees.
+                Basis: NFDA General Price List survey medians and FCA/CFA
+                price-dispersion surveys, cost-of-living adjusted by zip. A
+                projection from published dispersion data &mdash; not yet a
+                measured outcome of our cases &mdash; and it excludes
+                cemetery/plot, monument, and third-party fees.
               </p>
             </Card>
             <Card>

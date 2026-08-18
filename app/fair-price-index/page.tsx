@@ -20,7 +20,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "The Fair-Price Index — what funeral items should cost",
   description:
-    "A free, neutral reference for what each common funeral charge should cost: fair-price ranges for caskets, embalming, the basic services fee, vaults, cremation, death certificates, and more — sourced and adjusted for your region. Built by a service that takes no money from funeral homes or insurers.",
+    "A free, neutral reference for what each common funeral charge should cost: national fair-price ranges for caskets, embalming, the basic services fee, vaults, cremation, death certificates, and more, with sources and methodology. Built by a service that takes no money from funeral homes or insurers.",
   alternates: { canonical: "/fair-price-index" },
 };
 
@@ -109,7 +109,7 @@ export default async function FairPriceIndexPage() {
               What funeral items should cost.
             </h1>
             <p className="text-lg">
-              Funeral prices are deliberately hard to compare, and grief is a
+              Funeral prices are notoriously hard to compare, and grief is a
               terrible time to negotiate. So here&rsquo;s a free, plain reference:
               the fair range for each common charge on a funeral home&rsquo;s
               price list. Built by a service that takes{" "}
@@ -223,8 +223,9 @@ export default async function FairPriceIndexPage() {
                   range.
                 </>
               )}{" "}
-              Fixed government fees (like death
-              certificates) are the same everywhere; merchandise like caskets
+              Fixed per-unit fees (like death
+              certificates) are government-set, not cost-of-living items, so
+              we benchmark them nationally; merchandise like caskets
               and urns you can buy from any third party. Last reviewed{" "}
               {LAST_UPDATED}. Where each number comes
               from, and the limits, are on the{" "}

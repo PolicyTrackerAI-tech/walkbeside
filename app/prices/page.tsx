@@ -25,7 +25,9 @@ export default function PricesPage() {
               See what you should expect to pay.
             </h1>
             <p className="text-lg text-ink-soft">
-              Most families who do this save more than a year of groceries. No account, no email.
+              Knowing the fair range before you talk to a funeral home is
+              how families avoid four-figure overcharges. No account, no
+              email.
             </p>
           </div>
 
@@ -67,8 +69,9 @@ function HowFairRangesWork() {
         <li>
           <strong className="text-ink">Adjusted for your area.</strong>{" "}
           We start from national pricing benchmarks and adjust for your
-          region&rsquo;s cost of living, because funeral prices vary more
-          than 3&times; between zips. A metro upgrades to Verified data when
+          region&rsquo;s cost of living &mdash; the same service can cost
+          roughly twice as much in the most expensive US regions as in the
+          least expensive. A metro upgrades to Verified data when
           at least 5 independent real price lists accumulate for an item and
           a person reviews the range &mdash; the tier badge on the calculator
           tells you which you&rsquo;re seeing today.

@@ -91,7 +91,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 450,
     required: "no",
     notes:
-      "Add-on to be present when the cremation begins. A small fee — $100–$300 is typical.",
+      "Add-on to be present when the cremation begins. A small fee — $100–$250 is typical.",
     categories: ["direct-cremation", "cremation-with-service", "aquamation"],
   },
   {
@@ -226,7 +226,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 1200,
     required: "no",
     notes:
-      "Not legally required in any US state. About 15 states require embalming OR refrigeration after 24–48 hours — refrigeration is always a legal alternative. Decline unless you have a specific reason and the funeral home has confirmed in writing why it is needed.",
+      "No US state requires embalming for every death. Some states require embalming OR refrigeration if disposition doesn't happen within a set time (often 24–48 hours) — refrigeration is the legal alternative. Decline unless you have a specific reason and the funeral home has confirmed in writing why it is needed.",
     categories: ["traditional-burial"],
     highMarkup: true,
   },
@@ -355,7 +355,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 6000,
     required: "no",
     notes:
-      "Same third-party purchase right applies. Buying from outside the funeral home saves $3,000–$4,000 routinely.",
+      "Same third-party purchase right applies. A wood casket from an outside vendor runs $1,200–$2,500; funeral-home showroom prices for comparable models routinely run several times that.",
     categories: ["traditional-burial"],
     highMarkup: true,
   },
@@ -367,7 +367,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 1500,
     required: "cremation",
     notes:
-      "Must be combustible — cardboard or unfinished plywood qualifies. The funeral home is legally required under the FTC Funeral Rule to make a low-cost alternative container available and to tell you it exists. If they don't show you one, that's a violation. You never need an expensive casket for cremation.",
+      "Must be combustible — cardboard or unfinished plywood qualifies. For direct cremation, the FTC Funeral Rule requires the funeral home to make a low-cost alternative container available; refusing to offer one is a violation. You never need an expensive casket for cremation.",
     categories: ["direct-cremation", "cremation-with-service", "aquamation"],
   },
   {
@@ -406,7 +406,7 @@ export const LINE_ITEMS: LineItem[] = [
     predatoryAt: 8000,
     required: "burial",
     notes:
-      "Compare cemeteries independently. Funeral home referrals often involve referral fees baked into the price.",
+      "Compare cemeteries independently rather than relying on a single referral — plot prices vary widely within one metro.",
     categories: ["traditional-burial", "graveside-burial", "green-burial"],
   },
   {
@@ -629,7 +629,7 @@ export function fmtRange(low: number, high: number): string {
  * Regional cost-of-living adjustment by zip prefix.
  *
  * Two-tier lookup:
- * 1. Try the 3-digit metro table in lib/zip-regions.ts (~250 entries
+ * 1. Try the 3-digit metro table in lib/zip-regions.ts (~900 entries
  *    covering most US metros) — gives city-level precision
  * 2. Fall back to 1-digit prefix bucket for zips not in the table
  *
@@ -662,6 +662,41 @@ export function adjustedRange(
 ): [number, number] {
   const m = regionMultiplier(zip ?? "");
   return [Math.round(low * m), Math.round(high * m)];
+}
+
+/**
+ * The ONE display rule for a line item's thresholds at a zip — the same rule
+ * the analyzer classifies with (app/api/analyze-price-list/route.ts):
+ *
+ * - Per-unit items (death certificates, per-day refrigeration) are fixed
+ *   state/government or flat fees, not metro-cost-of-living sensitive — they
+ *   keep the NATIONAL fair range and cutoff, never COLA-adjusted.
+ * - Everything else adjusts BOTH the fair range and the predatory cutoff by
+ *   the same regional multiplier, so a displayed range can never contradict
+ *   the verdict or cutoff printed beside it (see classifyAgainst).
+ *
+ * Every public surface that renders per-item thresholds must derive them
+ * here (pinned by lib/__tests__/pricing-display.test.ts) — two surfaces
+ * publishing two different numbers for the same fact is a guardrail-#4
+ * violation.
+ */
+export function displayThresholds(
+  item: LineItem,
+  zip?: string,
+): { fairLow: number; fairHigh: number; predatoryAt: number } {
+  if (item.perUnit) {
+    return {
+      fairLow: item.fairLow,
+      fairHigh: item.fairHigh,
+      predatoryAt: item.predatoryAt,
+    };
+  }
+  const [fairLow, fairHigh] = adjustedRange(item.fairLow, item.fairHigh, zip);
+  return {
+    fairLow,
+    fairHigh,
+    predatoryAt: Math.round(item.predatoryAt * regionMultiplier(zip ?? "")),
+  };
 }
 
 /**

@@ -41,8 +41,9 @@ export default function AfterHospicePage() {
               The smoothest kind of death, and the things families still get wrong.
             </h1>
             <p className="text-lg text-ink-soft">
-              About 1.7 million Americans die in hospice care each
-              year &mdash; nearly half of all deaths in the US. Of
+              About 1.7 million Americans receive hospice care each
+              year, and about half of Medicare patients who die were
+              enrolled in hospice (NHPCO). Of
               every kind of death, hospice deaths involve the fewest
               decisions, the least paperwork, and the most warning.
               That said, families still make a handful of avoidable
@@ -173,8 +174,10 @@ export default function AfterHospicePage() {
                 the body once hospice has pronounced. Most hospice
                 agencies have relationships with local funeral homes
                 and will recommend one. You are not required to use
-                their recommendation. Prices among funeral homes in
-                the same city often vary by 200% to 400% for the same
+                their recommendation. Consumer surveys (Funeral
+                Consumers Alliance / Consumer Federation of America)
+                have documented prices varying 200&ndash;400% among
+                funeral homes in the same city for the same
                 services. Comparing two or three before you commit
                 is the single most effective way to avoid being
                 overcharged.{" "}
@@ -267,11 +270,14 @@ export default function AfterHospicePage() {
                 or months out, when the caregiving identity is gone
                 and the days that used to revolve around the dying
                 person are suddenly empty. Hospice bereavement
-                programs run for 13 months for exactly this reason.
+                programs typically run about 13 months for exactly
+                this reason.
                 The first anniversary, holidays, and the deceased&rsquo;s
                 birthday are the most common hard days. Use the
-                bereavement services. They are free and they are
-                included in the Medicare hospice benefit.
+                bereavement services. They are free &mdash; Medicare
+                requires hospices to offer bereavement support for up
+                to a year after the death (42 CFR 418.64(d)), and most
+                programs run through the first anniversary.
               </p>
             </div>
           </Card>
@@ -290,7 +296,7 @@ export default function AfterHospicePage() {
                   48 hours of death).
                 </li>
                 <li>
-                  Order 10&ndash;15 certified death certificates.{" "}
+                  Order 5&ndash;10 certified death certificates to start.{" "}
                   <Link
                     href="/glossary/death-certificate"
                     className="text-primary-deep underline"

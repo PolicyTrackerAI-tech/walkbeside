@@ -164,7 +164,7 @@ export default async function StateProbatePage({
           <Card tone="soft">
             <CardEyebrow>Other states</CardEyebrow>
             <p className="text-ink-soft text-sm mb-3">
-              We have probate guides for the 10 most populous states.
+              We have detailed probate guides for 25 states.
               Pick another:
             </p>
             <div className="flex flex-wrap gap-2">
