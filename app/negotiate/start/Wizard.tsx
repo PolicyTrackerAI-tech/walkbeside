@@ -644,9 +644,10 @@ function NegotiateStartWizard() {
                     </li>
                     <li>
                       You attend the arrangement meeting in person and sign
-                      all paperwork directly with the home &mdash; Honest
-                      Funeral never signs for you and is not a funeral
-                      establishment.
+                      all paperwork directly with the home. Honest Funeral
+                      is not a funeral home or funeral director, never
+                      signs for you, and does not arrange the funeral or
+                      handle remains.
                     </li>
                     <li>
                       This is free to families &mdash; we contact homes on

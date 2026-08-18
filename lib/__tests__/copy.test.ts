@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { FREE_FOR_EVERY_FAMILY, FREE_WITH_OR_WITHOUT_LINK } from "@/lib/copy";
+import {
+  FREE_FOR_EVERY_FAMILY,
+  FREE_WITH_OR_WITHOUT_LINK,
+  NOT_A_FUNERAL_HOME,
+} from "@/lib/copy";
 
 /**
  * Copy law. Both sentences are reviewed, verbatim strings rendered to grieving
@@ -34,5 +38,23 @@ describe("verbatim copy constants", () => {
       expect(sentence).not.toContain("&mdash;");
       expect(sentence).not.toMatch(/\s-\s/);
     }
+  });
+
+  /**
+   * The role sentence (audit A8, per docs/legal/UTAH_CLEARANCE_DRAFT.md §4,
+   * PR #184). Wording may be tightened only if all three substance elements
+   * survive — the element assertions below are the law, the exact-string
+   * assertion is the tripwire that makes any edit a deliberate decision.
+   */
+  it("renders the role sentence exactly", () => {
+    expect(NOT_A_FUNERAL_HOME).toBe(
+      "Honest Funeral is not a funeral home or funeral director. We do not arrange funerals or handle remains. Your family contracts directly with the funeral home you choose.",
+    );
+  });
+
+  it("keeps all three substance elements of the role sentence", () => {
+    expect(NOT_A_FUNERAL_HOME).toMatch(/not a funeral home or funeral director/i);
+    expect(NOT_A_FUNERAL_HOME).toMatch(/do not arrange funerals or handle remains/i);
+    expect(NOT_A_FUNERAL_HOME).toMatch(/contracts directly with the funeral home/i);
   });
 });
