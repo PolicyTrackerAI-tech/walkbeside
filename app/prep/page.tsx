@@ -7,7 +7,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Field";
 import { Cheatsheet } from "@/components/Cheatsheet";
-import { LINE_ITEMS, fmtRange, adjustedRange } from "@/lib/pricing-data";
+import { LINE_ITEMS, fmtRange, displayThresholds } from "@/lib/pricing-data";
 import {
   FIVE_QUESTIONS,
   DECLINE_SCRIPTS,
@@ -83,8 +83,8 @@ export default function PrepPage() {
               </p>
               <p className="text-ink-soft">
                 This is your right under the FTC Funeral Rule. Asking it tells
-                the funeral director you know your rights. From that moment
-                forward, the prices they quote you will be more honest.
+                the funeral director you know your rights — and puts every
+                number on the table in writing, where you can compare it.
               </p>
             </Card>
 
@@ -92,7 +92,8 @@ export default function PrepPage() {
               <CardTitle>What you&rsquo;ll be shown vs. what&rsquo;s required</CardTitle>
               <ul className="space-y-3 text-[15px]">
                 {LINE_ITEMS.map((it) => {
-                  const [lo, hi] = adjustedRange(it.fairLow, it.fairHigh, zip);
+                  const t = displayThresholds(it, zip);
+                  const [lo, hi] = [t.fairLow, t.fairHigh];
                   return (
                     <li
                       key={it.id}

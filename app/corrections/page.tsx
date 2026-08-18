@@ -38,9 +38,19 @@ const BENCHMARK_CHANGES: {
 
 const CORRECTIONS: { date: string; title: string; body: string }[] = [
   {
+    date: "August 2026",
+    title: "One threshold rule on every page",
+    body: "An audit found our surfaces disagreeing about the same numbers: some pages showed regionally-adjusted fair ranges next to unadjusted “predatory” thresholds, and some cost-of-living-adjusted fixed per-unit fees (like death certificates) that the checker deliberately benchmarks nationally. Every public page now derives its thresholds from one shared rule — fair ranges and predatory cutoffs adjust together by the regional index, and fixed per-unit fees stay national — so two pages can never rate the same price differently. We also unified stray copy that had drifted from the catalog (a third-party casket savings figure stated two ways, a pre-tightening direct-cremation range) to one canonical value per fact.",
+  },
+  {
+    date: "June 2026",
+    title: "Tightened the direct-cremation fair range",
+    body: "We tightened the whole-service direct cremation fair range from $1,000–$2,500 to $1,000–$2,200, re-anchoring the top of the band to the published national-average direct-cremation total (~$2,183, Funeralocity/After). A narrower band claims less; we'd rather under-claim.",
+  },
+  {
     date: "June 2026",
     title: "Made the “above fair” total strictly conservative",
-    body: "We rebuilt the headline figure so it only ever reflects line items priced above the fair range. Selection merchandise you can buy anywhere (caskets, urns, vaults), fixed government fees, and charges we don't yet benchmark never inflate it. The number on screen now always equals the sum of the per-item amounts you can see in the table.",
+    body: "We rebuilt the headline figure so it only ever reflects line items priced above the fair range. Selection merchandise you can buy anywhere (caskets, urns, vaults) and charges we don't yet benchmark never inflate it, and fixed per-unit fees are judged per copy against a national amount. The number on screen now always equals the sum of the per-item amounts you can see in the table.",
   },
   {
     date: "June 2026",
@@ -49,8 +59,8 @@ const CORRECTIONS: { date: string; title: string; body: string }[] = [
   },
   {
     date: "June 2026",
-    title: "Documented every fair-price source",
-    body: `We expanded our benchmarks to ${ITEM_COUNT} common charges using published industry survey medians and real funeral-home price lists, and we cite each source on our methodology page. Where the public data was thin, we left the item out rather than publish a number we couldn't defend.`,
+    title: "Expanded and sourced the benchmark catalog",
+    body: `We expanded our benchmarks to ${ITEM_COUNT} common charges using published industry survey medians (NFDA, Funeral Consumers Alliance) and a sample of real funeral-home price lists; the source categories and their limits are described on our methodology page. Where the public data was thin, we left the item out rather than publish a number we couldn't defend.`,
   },
   {
     date: "June 2026",
@@ -98,13 +108,13 @@ export default function CorrectionsPage() {
                 false accusation is worse than a miss.
               </li>
               <li>
-                <strong className="text-ink">We show our work.</strong> Every
-                fair-price range and each of the {RULE_COUNT} FTC checks is
-                documented, sourced, and dated on our{" "}
+                <strong className="text-ink">We show our work.</strong> The
+                sources behind the fair-price ranges, the {RULE_COUNT} FTC
+                checks, and the last-reviewed date are documented on our{" "}
                 <Link href="/methodology" className="text-primary-deep underline">
                   methodology page
                 </Link>
-                .
+                &mdash; and its honest limits are stated there too.
               </li>
               <li>
                 <strong className="text-ink">We say when we&rsquo;re unsure.</strong>{" "}
@@ -149,8 +159,9 @@ export default function CorrectionsPage() {
             {BENCHMARK_CHANGES.length === 0 ? (
               <p className="text-sm text-ink-muted">
                 No crowd-refined changes yet &mdash; every range currently in
-                use is on its published survey baseline. The first change will
-                appear here before it takes effect.
+                use is on its national modeled baseline (the sources and
+                their limits are on the methodology page). The first change
+                will appear here before it takes effect.
               </p>
             ) : (
               <ul className="space-y-5 mt-2">

@@ -16,11 +16,11 @@ import {
 } from "@/lib/pricing-data";
 
 export const metadata: Metadata = {
-  title: "How much does a funeral cost? 2026 averages by service type",
+  title: "How much does a funeral cost? 2026 fair-price ranges by service type",
   description:
-    "What a funeral actually costs in 2026: direct cremation $1,000–$2,200, traditional burial $8,000–$12,000, and more. Fair-price ranges by service type, what drives the cost, and the line items you can legally decline.",
+    "What a funeral should cost in 2026: direct cremation $1,000–$2,200, traditional burial $8,000–$12,000, and more. Fair-price benchmark ranges by service type, what drives the cost, and the line items you can legally decline.",
   openGraph: {
-    images: [ogImage("How much does a funeral cost?", "2026 averages")],
+    images: [ogImage("How much does a funeral cost?", "2026 fair-price ranges")],
   },
 };
 
@@ -74,9 +74,9 @@ export default function AverageFuneralCostPage() {
             </p>
           </div>
 
-          {/* Averages by service type */}
+          {/* Fair-price ranges by service type */}
           <Card>
-            <CardEyebrow>Average cost by service type</CardEyebrow>
+            <CardEyebrow>Cost by service type</CardEyebrow>
             <CardTitle>National fair-price ranges (2026).</CardTitle>
             <div className="mt-4 overflow-x-auto -mx-2 px-2">
               <table className="w-full text-sm">
@@ -191,13 +191,13 @@ export default function AverageFuneralCostPage() {
             <ol className="mt-3 space-y-3 text-ink-soft list-decimal pl-5">
               <li>
                 <strong className="text-ink">Buy the casket third-party.</strong>{" "}
-                Costco and Amazon caskets run 50&ndash;80% less, and the
+                Costco and Amazon caskets run 40&ndash;70% less, and the
                 funeral home must accept one with no handling fee (FTC Funeral
                 Rule).
               </li>
               <li>
-                <strong className="text-ink">Decline embalming.</strong> Not
-                required by law in any state; refrigeration is always a legal
+                <strong className="text-ink">Decline embalming.</strong> No
+                state requires it for every death; refrigeration is the legal
                 alternative. Saves roughly {fmtUSD(800)}.
               </li>
               <li>
@@ -211,15 +211,15 @@ export default function AverageFuneralCostPage() {
                 <strong className="text-ink">
                   Skip the &ldquo;protective&rdquo; casket and vault upgrades.
                 </strong>{" "}
-                The sealing claims aren&rsquo;t supported by science; the
-                premium is {fmtUSD(1000)}&ndash;{fmtUSD(3000)}.
+                The FTC itself warns that no casket preserves a body
+                indefinitely; the premium is {fmtUSD(1000)}&ndash;{fmtUSD(3000)}.
               </li>
               <li>
                 <strong className="text-ink">
                   Comparison-shop at least two homes.
                 </strong>{" "}
-                Prices for the identical service vary by thousands in the same
-                town.
+                Consumer surveys have documented prices for the identical
+                service varying by thousands of dollars in the same town.
               </li>
             </ol>
             <div className="mt-5">
@@ -247,7 +247,7 @@ export default function AverageFuneralCostPage() {
                   Price-list analyzer
                 </Link>{" "}
                 — photograph a funeral home&rsquo;s quote and we flag the
-                overcharges and FTC violations.
+                overcharges and likely FTC Funeral Rule issues.
               </li>
               <li>
                 <Link href="/decide" className="text-primary-deep underline">

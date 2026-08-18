@@ -664,9 +664,9 @@ export function Analyzer({
               {sample && (
                 <div className="print:hidden rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft">
                   <span className="font-medium text-ink">This is a sample bill.</span>{" "}
-                  A real, deliberately-overpriced quote — the numbers below are
-                  computed live, nothing is faked. Upload or paste your own to
-                  check it.
+                  A realistic, deliberately-overpriced example — the numbers
+                  below are computed live by the same checker that reads real
+                  quotes. Upload or paste your own to check it.
                 </div>
               )}
               {/* Letterhead — print only. The printed sheet is the artifact a
@@ -815,7 +815,7 @@ export function Analyzer({
                 <div className="grid sm:grid-cols-3 gap-4">
                   <Stat label="They quoted" value={fmtUSD(result.totalQuoted / 100)} />
                   <Stat
-                    label="Fair total (midpoint)"
+                    label="At fair prices"
                     value={fmtUSD(result.totalFairMid / 100)}
                   />
                   <Stat
@@ -853,7 +853,7 @@ export function Analyzer({
                             (casket / urn / vault) from a third party
                           </span>
                           <span className="font-medium text-ink-soft whitespace-nowrap">
-                            50–80% less
+                            often 40–70% less
                           </span>
                         </div>
                       )}

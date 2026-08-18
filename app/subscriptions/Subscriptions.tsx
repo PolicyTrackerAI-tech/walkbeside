@@ -229,11 +229,11 @@ export function Subscriptions() {
             <p className="text-lg text-ink-soft">
               Paste a bank or credit card statement &mdash; we
               extract every recurring charge so you can decide what
-              to cancel. Most families turn up{" "}
+              to cancel. It&rsquo;s common to find{" "}
               <strong className="text-ink">
-                $30&ndash;$200 in monthly subscriptions
+                recurring monthly charges
               </strong>{" "}
-              they didn&rsquo;t realize the deceased was paying for.
+              nobody realized the deceased was paying for.
             </p>
             {hydrated && cancelSavings > 0 && (
               <p className="mt-4 text-sm text-good">

@@ -8,8 +8,28 @@
  * a black box — they need a clear "here's what fits, and here's why."
  */
 
-import type { ServiceType } from "./pricing-data";
+import {
+  SERVICE_TOTALS,
+  fmtRange,
+  fmtUSD,
+  type ServiceType,
+} from "./pricing-data";
 import { getFaith, type FaithKey } from "./faith-traditions";
+
+// Every dollar figure in a recommendation derives from SERVICE_TOTALS so the
+// engine's copy can never drift from the published catalog (guardrail #4 —
+// the drift already happened once: a hardcoded "$1,000–$2,500" survived the
+// 2026-06-26 tightening of direct cremation to $1,000–$2,200).
+function fairBand(type: ServiceType): string {
+  const t = SERVICE_TOTALS.find((s) => s.type === type)!;
+  return fmtRange(t.fairLow, t.fairHigh);
+}
+
+function fairGap(higher: ServiceType, lower: ServiceType): string {
+  const hi = SERVICE_TOTALS.find((s) => s.type === higher)!;
+  const lo = SERVICE_TOTALS.find((s) => s.type === lower)!;
+  return `${fmtUSD(hi.fairLow - lo.fairLow)}–${fmtUSD(hi.fairHigh - lo.fairHigh)}`;
+}
 
 export type CostPriority = "lowest" | "balanced" | "tradition";
 export type BodyAtService = "open-casket" | "closed-casket" | "no" | "unsure";
@@ -113,8 +133,7 @@ export function recommend(inputs: DecideInputs): Recommendation {
     return {
       serviceType: "memorial-no-body",
       reasons,
-      oneLiner:
-        "Memorial service without the body present — typical cost $500–$1,500 plus disposition.",
+      oneLiner: `Memorial service without the body present — fair range ${fairBand("memorial-no-body")} plus disposition.`,
       faithLocked: false,
     };
   }
@@ -122,7 +141,9 @@ export function recommend(inputs: DecideInputs): Recommendation {
   // Burial preference, body present.
   if (inputs.dispositionPreference === "burial" || faith.dispositionNorm === "burial-preferred") {
     if (inputs.costPriority === "lowest") {
-      reasons.push("Graveside-only burial skips the chapel viewing — saves $1,500–$3,000 vs full traditional.");
+      reasons.push(
+        `Graveside-only burial skips the chapel viewing — at fair prices, roughly ${fairGap("traditional-burial", "graveside-burial")} less than a full traditional service.`,
+      );
       return {
         serviceType: "graveside-burial",
         reasons,
@@ -155,8 +176,7 @@ export function recommend(inputs: DecideInputs): Recommendation {
     return {
       serviceType: "cremation-with-service",
       reasons,
-      oneLiner:
-        "Cremation with a service — viewing or memorial first, cremation after. Typical cost $3,500–$6,000.",
+      oneLiner: `Cremation with a service — viewing or memorial first, cremation after. Fair range ${fairBand("cremation-with-service")}.`,
       faithLocked: false,
     };
   }
@@ -167,7 +187,7 @@ export function recommend(inputs: DecideInputs): Recommendation {
   return {
     serviceType: "direct-cremation",
     reasons,
-    oneLiner: "Direct cremation — typical cost $1,000–$2,500. No service at the funeral home.",
+    oneLiner: `Direct cremation — fair range ${fairBand("direct-cremation")}. No service at the funeral home.`,
     faithLocked: false,
   };
 }

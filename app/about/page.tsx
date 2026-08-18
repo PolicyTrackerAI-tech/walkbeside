@@ -53,8 +53,8 @@ export default function AboutPage() {
           </h1>
           <p className="text-lg text-ink-soft max-w-md mx-auto">
             That gap &mdash; between people who do this every day and a family in
-            shock doing it for the first time &mdash; is why families overpay by
-            thousands. Honest Funeral exists to close it.
+            shock doing it for the first time &mdash; is how families end up
+            overpaying by thousands. Honest Funeral exists to close it.
           </p>
         </div>
       </section>

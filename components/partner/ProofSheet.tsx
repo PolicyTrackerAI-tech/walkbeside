@@ -353,8 +353,8 @@ export function ProofSheet({
                         Documented mandate coverage.
                       </strong>{" "}
                       Evidence you supported families across the
-                      funeral-and-admin part of the ~13-month bereavement
-                      window Medicare requires (42 CFR 418.64) and
+                      funeral-and-admin part of the year-long bereavement
+                      window Medicare requires (42 CFR 418.64(d)) and
                       doesn&rsquo;t separately fund.
                     </li>
                     <li>
@@ -373,16 +373,12 @@ export function ProofSheet({
             <>
               <div className="grid sm:grid-cols-2 gap-3">
                 <Quote
-                  text="They caught a $2,000 overcharge on the casket and told me exactly what to say. I finally felt like someone was on my side."
-                  who={
-                    partnerType === "employer"
-                      ? "Daughter of an employee · de-identified"
-                      : "Daughter of a patient · de-identified"
-                  }
+                  text="A four-figure casket overcharge caught before signing, with exact language for the pushback — the kind of intervention the checker exists for."
+                  who="Illustrative scenario — no real family data yet"
                 />
                 <Quote
-                  text="I had no idea the death certificates were marked up. The checklist for the weeks after was the part I didn't know I needed."
-                  who="Spouse · de-identified"
+                  text="Death-certificate markups flagged, and the weeks-after checklist covering the part families don't know they need."
+                  who="Illustrative scenario — no real family data yet"
                 />
               </div>
               <Card tone="primary">

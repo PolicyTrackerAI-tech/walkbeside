@@ -16,12 +16,12 @@
 
 import {
   LINE_ITEMS,
-  adjustedRange,
+  displayThresholds,
   type ServiceType,
 } from "./pricing-data";
 
 export interface ServiceTotals {
-  /** Required-only minimum the funeral home cannot legally avoid charging. */
+  /** Fair range for the required-only minimum a family can't decline. */
   stripped: { low: number; high: number };
   /** Typical full bundle (required + commonly chosen optional items). */
   typical: { low: number; high: number };
@@ -60,9 +60,12 @@ export const TYPICAL_OPTIONAL_BY_SERVICE: Record<ServiceType, string[]> = {
 
 /**
  * Computes the three pricing bands for a given service type at a given zip.
- * All numbers in cents. Predatory totals use the raw (non-zip-adjusted)
- * predatoryAt ceilings — a deliberate judgment call: the ceiling marks
- * exploitation anywhere, not a local market rate.
+ * All numbers in cents. Every threshold derives from displayThresholds —
+ * the same rule the analyzer classifies with: fair ranges AND predatory
+ * cutoffs adjust by the regional multiplier, per-unit state fees stay
+ * national. (Previously the predatory sums stayed raw-national beside
+ * adjusted fair ranges, so this page and the analyzer could rate the same
+ * dollar total differently — guardrail #4.)
  */
 export function totalsForService(
   serviceType: ServiceType,
@@ -90,10 +93,10 @@ export function totalsForService(
   let predatoryTotal = 0;
 
   for (const it of requiredItems) {
-    const [lo, hi] = adjustedRange(it.fairLow, it.fairHigh, zip);
-    strippedLow += lo * 100; // dollars to cents
-    strippedHigh += hi * 100;
-    predatoryTotal += it.predatoryAt * 100;
+    const t = displayThresholds(it, zip);
+    strippedLow += t.fairLow * 100; // dollars to cents
+    strippedHigh += t.fairHigh * 100;
+    predatoryTotal += t.predatoryAt * 100;
   }
 
   // Typical optional items
@@ -105,10 +108,10 @@ export function totalsForService(
   for (const id of optionalIds) {
     const item = LINE_ITEMS.find((it) => it.id === id);
     if (item) {
-      const [lo, hi] = adjustedRange(item.fairLow, item.fairHigh, zip);
-      optionalLow += lo * 100;
-      optionalHigh += hi * 100;
-      optionalPredatory += item.predatoryAt * 100;
+      const t = displayThresholds(item, zip);
+      optionalLow += t.fairLow * 100;
+      optionalHigh += t.fairHigh * 100;
+      optionalPredatory += t.predatoryAt * 100;
     }
   }
 

@@ -25,7 +25,7 @@ export function Certificates() {
               How many certified copies do you actually need?
             </h1>
             <p className="text-ink-soft">
-              Most families order three and pay rush fees on the rest later.
+              Order too few and you pay rush fees on the rest later.
               Five minutes here saves a week. Tell us what they had — we&rsquo;ll
               do the math.
             </p>
@@ -55,8 +55,8 @@ export function Certificates() {
               ))}
             </div>
             <p className="text-xs text-ink-muted mt-4">
-              Most families need 10&ndash;15. We cap at 50 &mdash; call us if
-              you need more.
+              Most families need 5&ndash;10 to start &mdash; you can always
+              order more later. We cap the calculator at 50.
             </p>
           </Card>
 
@@ -108,7 +108,8 @@ export function Certificates() {
               </li>
               <li>
                 You can also order direct from your state vital records
-                office for the base fee (usually $10–$20 per copy).
+                office for the base fee (commonly $10–$30 per copy; it
+                varies by state).
               </li>
               <li>
                 Always order <strong>certified</strong> copies. Informational

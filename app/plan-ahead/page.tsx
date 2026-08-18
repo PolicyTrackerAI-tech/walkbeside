@@ -144,8 +144,9 @@ export default function PlanAheadPage() {
               <p>
                 <strong className="text-ink">A will.</strong> If you
                 have any meaningful assets, real estate, or minor
-                children, you need one. Roughly 60% of US adults die
-                without a will; state intestate-succession law then
+                children, you need one. Most US adults die
+                without a will &mdash; surveys consistently find more
+                than half have none; state intestate-succession law then
                 decides who inherits, regardless of what you would
                 have wanted. Templates from Quicken WillMaker or
                 LegalZoom work for simple cases (under $200). For
@@ -433,8 +434,9 @@ export default function PlanAheadPage() {
                 <strong className="text-ink">Better alternative:</strong>{" "}
                 a will + the death folder + clear written preferences +
                 a savings account labeled &ldquo;funeral&rdquo; with
-                enough to cover direct cremation ($1,500&ndash;$3,000)
-                or a basic burial ($5,000&ndash;$8,000). The family
+                enough to cover direct cremation (fair range
+                $1,000&ndash;$2,200) or a basic graveside burial
+                ($5,000&ndash;$8,000). The family
                 still has flexibility, the money is still yours, and
                 no funeral home holds it.
               </p>

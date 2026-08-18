@@ -6,7 +6,7 @@
  * `zip-regions.ts`) and a full 5-digit zip (for cross-linking to
  * the funeral-homes directory).
  *
- * 25 major US metros for the first batch. Add cities as the
+ * 87 major US metros (batches 1+2). Add cities as the
  * funeral-home directory expands.
  */
 
@@ -68,7 +68,7 @@ export const CITIES: CityEntry[] = [
     zipPrefix: "200",
     zipExample: "20001",
     blurb:
-      "Washington-area funeral costs reflect the regional cost of living. Veterans benefits are particularly relevant here given the federal-employee population.",
+      "Washington-area funeral costs run above the national average, reflecting the regional cost of living.",
   },
   // Southeast
   {
@@ -89,7 +89,7 @@ export const CITIES: CityEntry[] = [
     zipPrefix: "331",
     zipExample: "33101",
     blurb:
-      "Miami funeral pricing reflects high regional cost-of-living. Spanish-language services are widely available; ask if you need them.",
+      "Miami funeral pricing runs close to the national average. Spanish-language services are widely available; ask if you need them.",
   },
   {
     slug: "jacksonville",
@@ -207,7 +207,7 @@ export const CITIES: CityEntry[] = [
     zipPrefix: "787",
     zipExample: "78701",
     blurb:
-      "Austin funeral pricing has been pulled upward by the metro's recent growth. Pricing varies more between homes here than in many other Texas cities.",
+      "Austin funeral pricing runs in line with national averages. As in most metros, prices for the same service vary widely between homes — compare at least two.",
   },
   // West
   {

@@ -176,8 +176,7 @@ export function BillCheck() {
                       {result.increasedCount > 0 &&
                         `${result.increasedCount} line${result.increasedCount === 1 ? "" : "s"} higher than quoted`}
                       . Worth asking the funeral home to walk you through each
-                      one — you&rsquo;re entitled to an explanation before you
-                      pay.
+                      one before you pay.
                     </p>
                   </>
                 ) : (

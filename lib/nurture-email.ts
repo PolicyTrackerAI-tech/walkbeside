@@ -196,7 +196,7 @@ ${brandFooterText(email)}`;
   const html = `<div style="background-color: #f9f7f3; padding: 32px 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a1a;">
   <div style="max-width: 480px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; padding: 40px 32px;">
     <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 24px; font-weight: 400; color: #1a1a1a; margin: 0 0 20px 0; line-height: 1.35;">If you ever need help with funeral arrangements.</h1>
-    <p style="font-size: 16px; line-height: 1.65; color: #4a4a4a; margin: 0 0 16px 0;">Quick note in case it's useful. We help families compare funeral homes before they sign anything — typical savings on the arrangement run $2,000 to $5,000.</p>
+    <p style="font-size: 16px; line-height: 1.65; color: #4a4a4a; margin: 0 0 16px 0;">Quick note in case it's useful. We help families compare funeral homes before they sign anything. The gap between fair and inflated pricing on the same arrangement runs $2,000 to $5,000 — comparing before you sign is how families stay on the right side of it.</p>
     <p style="font-size: 16px; line-height: 1.65; color: #4a4a4a; margin: 0 0 16px 0;">Free to families — we contact homes on your behalf at no charge. We take no commissions or kickbacks from any funeral home, and families never pay; any revenue we earn comes from the institutions that serve families.</p>
     <a href="${SITE}/where" style="display: inline-block; background-color: #1f3d2c; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-weight: 500; font-size: 15px;">Start here when you need it →</a>
     <p style="font-size: 14px; line-height: 1.6; color: #6b7280; margin: 24px 0 0 0;">This is the last check-in email we'll send. If you want updates when we publish new guides, stay subscribed — otherwise the one-click link below stops everything.</p>
@@ -206,7 +206,7 @@ ${brandFooterText(email)}`;
 
   const text = `If you ever need help with funeral arrangements.
 
-Quick note in case it's useful. We help families compare funeral homes before they sign anything — typical savings on the arrangement run $2,000 to $5,000.
+Quick note in case it's useful. We help families compare funeral homes before they sign anything. The gap between fair and inflated pricing on the same arrangement runs $2,000 to $5,000 — comparing before you sign is how families stay on the right side of it.
 
 Free to families — we contact homes on your behalf at no charge. We take no commissions or kickbacks from any funeral home, and families never pay; any revenue we earn comes from the institutions that serve families.
 

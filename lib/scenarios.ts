@@ -3,6 +3,13 @@
  * determines the immediate-guidance steps for the next 2 hours.
  */
 
+import { LINE_ITEMS, fmtUSD } from "./pricing-data";
+
+// FIVE_QUESTIONS quotes the basic-services thresholds; derive them from the
+// catalog so this copy can never drift from the published benchmarks
+// (guardrail #4 — one canonical value per fact).
+const BASIC_SERVICES = LINE_ITEMS.find((i) => i.id === "basic-services")!;
+
 export type Scenario = "hospital" | "home-expected" | "home-unexpected" | "elsewhere";
 
 export const SCENARIO_LABELS: Record<Scenario, string> = {
@@ -113,7 +120,7 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
       {
         title: "When the doctor signs the paperwork.",
         body:
-          "The doctor who confirmed the death also signs the official document (the death certificate). This usually happens within 24–72 hours. The funeral home you chose orders certified copies for you through the state vital records office. Most families need 10–15 originals — banks, life insurance, Social Security, and the IRS each want one.",
+          "The doctor who confirmed the death also signs the official document (the death certificate). This usually happens within 24–72 hours. The funeral home you chose orders certified copies for you through the state vital records office. Most families need 5–10 certified copies to start — banks, life insurance, and Social Security each want one, and you can order more later.",
         tone: "info",
         gateUntilPaid: true,
       },
@@ -255,11 +262,11 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
 export const FIVE_QUESTIONS: { q: string; why: string }[] = [
   {
     q: "Can I see your itemized General Price List before we begin?",
-    why: "This is your right under the FTC Funeral Rule. Asking it changes the entire meeting — it tells the director you know your rights, and the prices they quote will be more honest from that point on.",
+    why: "This is your right under the FTC Funeral Rule. Asking it tells the director you know your rights — and puts every number in writing, where you can compare it.",
   },
   {
     q: "What is your basic services fee, and what exactly does it cover?",
-    why: "This is the only non-declinable charge. Fair range is $1,500–$2,500. Anything over $3,500 is a red flag.",
+    why: `This is the only non-declinable charge. Fair range is ${fmtUSD(BASIC_SERVICES.fairLow)}–${fmtUSD(BASIC_SERVICES.fairHigh)}. Anything over ${fmtUSD(BASIC_SERVICES.predatoryAt)} is a red flag.`,
   },
   {
     q: "Will you accept a casket I purchase from another vendor at no extra fee?",
@@ -267,7 +274,7 @@ export const FIVE_QUESTIONS: { q: string; why: string }[] = [
   },
   {
     q: "Is embalming required for the type of service I want?",
-    why: "Embalming is not legally required in any state. Some states require embalming OR refrigeration after a time window. If a home says state law requires embalming with no alternative, ask them to point to the specific statute — they cannot, because no such statute exists.",
+    why: "No state requires embalming for every death. Some states require embalming OR refrigeration after a time window — refrigeration is the legal alternative. If a home says state law requires embalming with no alternative, ask them to point to the specific statute.",
   },
   {
     q: "What is the total all-in cost in writing, with every fee included?",
@@ -280,7 +287,7 @@ export const DECLINE_SCRIPTS: { upsell: string; script: string }[] = [
   {
     upsell: "Premium / 'protective' caskets",
     script:
-      "We've decided on a simpler casket. We're not interested in the protective seal — we know it doesn't extend preservation in any meaningful way.",
+      "We've decided on a simpler casket. We're not interested in the protective seal — the FTC itself warns that no casket preserves a body indefinitely.",
   },
   {
     upsell: "Embalming",
