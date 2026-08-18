@@ -38,14 +38,22 @@ export function BillingCard({
       const r = await fetch(path, { method: "POST" });
       const body = (await r.json().catch(() => null)) as {
         url?: string;
+        error?: string;
       } | null;
       if (r.ok && body?.url) {
         window.location.assign(body.url);
         return;
       }
-      // 409/403 are quiet states, not errors: billing simply isn't switched
-      // on for this organization yet, or the subscription isn't set up.
-      if (r.status === 409 || r.status === 403) {
+      // Quiet states, not errors. 403 is terminal (this organization type is
+      // never billed — no promise of later setup); already_subscribed means
+      // the webhook simply hasn't landed on this page's data yet.
+      if (r.status === 403) {
+        setNotice("There's nothing to set up for your organization here.");
+      } else if (r.status === 409 && body?.error === "already_subscribed") {
+        setNotice(
+          "You're already set up. Your subscription will show here shortly.",
+        );
+      } else if (r.status === 409) {
         setNotice(
           "This isn't quite ready for your organization yet. We'll set it up together and it will appear here.",
         );

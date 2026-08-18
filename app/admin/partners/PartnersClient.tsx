@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Field";
+import { BILLING_TIERS, billingEligible } from "@/lib/billing";
 
 const STATUSES = ["pilot", "active", "paused", "archived"] as const;
-const BILLING_TIERS = ["small", "mid", "large"] as const;
 
 export interface PartnerRow {
   id: string;
@@ -346,20 +346,24 @@ export function PartnersClient({
                         </option>
                       ))}
                     </Select>
-                    <Select
-                      aria-label="Billing tier (census)"
-                      value={p.billing_tier ?? ""}
-                      onChange={(e) => setBillingTier(p.id, e.target.value)}
-                      disabled={busy === p.id}
-                      className="w-auto text-sm"
-                    >
-                      <option value="">No tier</option>
-                      {BILLING_TIERS.map((t) => (
-                        <option key={t} value={t}>
-                          Tier: {t}
-                        </option>
-                      ))}
-                    </Select>
+                    {/* Guardrail #1: no tier control for partner types that
+                        can never bill (the PATCH route refuses them too). */}
+                    {billingEligible(p.partner_type) && (
+                      <Select
+                        aria-label="Billing tier (census)"
+                        value={p.billing_tier ?? ""}
+                        onChange={(e) => setBillingTier(p.id, e.target.value)}
+                        disabled={busy === p.id}
+                        className="w-auto text-sm"
+                      >
+                        <option value="">No tier</option>
+                        {BILLING_TIERS.map((t) => (
+                          <option key={t} value={t}>
+                            Tier: {t}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
                   </div>
                 </li>
               );

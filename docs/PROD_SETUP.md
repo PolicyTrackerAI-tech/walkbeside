@@ -109,7 +109,7 @@ optional/billing-scoped, never a go-live gate for outreach.
 | `OUTREACH_NOTIFICATIONS_ENABLED` | unset/`false` |
 | `PARTNER_DIGEST_ENABLED` | unset/`false` — monthly aggregate partner-activity email cron |
 | `BEREAVEMENT_SMS_ENABLED` | unset/`false` — SMS variant of the bereavement cadence; also requires the three `TWILIO_*` vars below to actually send |
-| `BILLING_LIVE` | unset/`false` — institutional Stripe checkout/portal (billing section below). Off → the portal Billing card shows "invoiced by arrangement" and the checkout/portal-link routes 409. The webhook is NOT behind this flag (a flag flip must never desync billing state from Stripe). |
+| `BILLING_LIVE` | unset/`false` — institutional Stripe checkout/portal (billing section below). Off → the portal Billing card shows "invoiced by arrangement" and the checkout/portal-link routes 409. The webhook is NOT behind this flag (a flag flip must never desync billing state from Stripe). Boot-enforced: flipping it to `true` refuses to start unless `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `ADMIN_EMAILS`, and at least one `STRIPE_PRICE_*` are set (lib/env.ts, mirroring `OUTREACH_LIVE`). |
 
 ### Optional (institutional billing — hospices/employers only, never families)
 

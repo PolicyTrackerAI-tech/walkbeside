@@ -4,6 +4,7 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminApi } from "@/lib/admin-auth";
 import { readLimitedJson } from "@/lib/http-guards";
+import { BILLING_TIERS, billingEligible } from "@/lib/billing";
 import { sendEmail } from "@/lib/email";
 
 const Body = z
@@ -14,7 +15,7 @@ const Body = z
     // Census tier (BUSINESS_PLAN §10) — founder-assigned here, read by
     // /api/stripe/checkout to pick the STRIPE_PRICE_* env. null clears it.
     // NEVER settable by the partner; billing_status stays webhook-only.
-    billingTier: z.enum(["small", "mid", "large"]).nullable().optional(),
+    billingTier: z.enum(BILLING_TIERS).nullable().optional(),
   })
   .refine(
     (b) =>
@@ -50,8 +51,25 @@ export async function PATCH(req: Request) {
     if (parsed.data.active) update.approved_at = new Date().toISOString();
   }
   if (parsed.data.status !== undefined) update.status = parsed.data.status;
-  if (parsed.data.billingTier !== undefined)
+  if (parsed.data.billingTier !== undefined) {
+    // Guardrail #1 defense-in-depth: a tier can only be ASSIGNED to a
+    // billable partner type (clearing to null is always allowed). Checkout
+    // re-checks eligibility, but this route must not record a census tier —
+    // the precursor to an invoice — on an insurer or any future type.
+    if (parsed.data.billingTier !== null) {
+      const { data: target } = await svc
+        .from("partners")
+        .select("partner_type")
+        .eq("id", parsed.data.id)
+        .single();
+      const targetType = (target as { partner_type: string } | null)
+        ?.partner_type;
+      if (!targetType || !billingEligible(targetType)) {
+        return NextResponse.json({ error: "not_billable" }, { status: 400 });
+      }
+    }
     update.billing_tier = parsed.data.billingTier;
+  }
 
   const { error } = await svc
     .from("partners")

@@ -25,6 +25,7 @@ export function SettingsClient({
   brandAccent: initialBrandAccent,
   appUrl,
   reportToken,
+  billingApplicable,
   billingConfigured,
   billingStatus,
   billingStartedAt,
@@ -37,6 +38,7 @@ export function SettingsClient({
   brandAccent: string;
   appUrl: string;
   reportToken: string;
+  billingApplicable: boolean;
   billingConfigured: boolean;
   billingStatus: string | null;
   billingStartedAt: string | null;
@@ -243,12 +245,16 @@ export function SettingsClient({
         {rotateError && <p className="text-sm text-bad mt-2">{rotateError}</p>}
       </Card>
 
-      <BillingCard
-        configured={billingConfigured}
-        billingStatus={billingStatus}
-        billingStartedAt={billingStartedAt}
-        justCheckedOut={billingJustCheckedOut}
-      />
+      {/* Guardrail #1: no billing surface of any kind for ineligible partner
+          types — the card is absent, not just unconfigured. */}
+      {billingApplicable && (
+        <BillingCard
+          configured={billingConfigured}
+          billingStatus={billingStatus}
+          billingStartedAt={billingStartedAt}
+          justCheckedOut={billingJustCheckedOut}
+        />
+      )}
     </div>
   );
 }
