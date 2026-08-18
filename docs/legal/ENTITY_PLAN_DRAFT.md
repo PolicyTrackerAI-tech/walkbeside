@@ -8,8 +8,15 @@
 
 ## Question 1: "Add Honest Funeral Co. to the d/b/a line of my LLC?"
 
-**Yes, this week. It is ~$22 and about ten minutes, and it does not conflict
-with the C-corp plan.**
+**Yes, this week, and it turns out to be legally required, not just tidy:**
+Utah Code § 42-2-5 requires anyone transacting business under an assumed
+name to file the assumed-name certificate **within 30 days of commencing
+business under that name**, and § 42-2-10 bars a non-compliant business from
+maintaining any action in Utah courts until it complies (plus late fees).
+The company began operating publicly as "Honest Funeral Co." on 2026-08-18,
+so the 30-day clock is running. ~$22 and about ten minutes, and it does not
+conflict with the C-corp plan. (The chapter is recodified effective
+10/1/2026 with new section numbers; same substance.)
 
 Why now: the LLC is the operating entity today, and outreach emails, the
 counsel engagement, and pilot conversations are all happening under the name
@@ -113,7 +120,7 @@ the setup package):**
 | Item | Cost | Who |
 |---|---|---|
 | Utah d/b/a on the LLC | ~$22 | Founder, this week |
-| Delaware formation (Clerky/Atlas) + registered agent year 1 | ~$500–700 | Founder, ~30 days |
+| Delaware formation: Clerky Company Lifetime Package (verified 2026-08-18; incl. DE expedited filing fees + agent year 1 + post-incorporation setup + unlimited SAFE/hiring docs) | $819 | Founder, in progress |
 | Utah foreign registration | ~$50–75 | Founder, with Phase 2 |
 | Counsel review of formation + migration papering | inside the $3–7.5k package | Counsel |
 | CPA check on the LLC→corp migration | ~$300–750 one-time | CPA |
