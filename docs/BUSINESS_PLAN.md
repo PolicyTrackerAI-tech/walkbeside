@@ -438,7 +438,9 @@ C-corp at counsel setup, before any contract or raise.
 
 The 90-day question is singular: **will one hospice pay?** Everything below
 serves it. Product work is deliberately capped at the four items in week 1; this
-is a selling quarter, not a building quarter.
+is a selling quarter, not a building quarter. The runnable week-by-week version
+of this section, with owners, tripwires, the weekly scoreboard, and the
+profit-architecture audit, is `docs/EXECUTION_PLAN_2026-08.md`.
 
 **Week of Aug 18 (restart week):**
 1. Send the counsel outreach brief (drafted, queued); target one firm covering
