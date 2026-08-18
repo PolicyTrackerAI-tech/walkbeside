@@ -1,6 +1,6 @@
-# Honest Funeral — Business Plan
+# Honest Funeral Co. — Business Plan
 
-_Confidential · v3.0 · August 16, 2026 · Ryan Currie, Founder · honestfuneral.co_
+_Confidential · v3.0 · August 18, 2026 · Ryan Currie, Founder · honestfuneral.co_
 
 > **Version note.** v3.0 supersedes the June 2026 plan (v1) and the July 2026
 > v2.0 draft (PR #167, unmerged). It carries v2's pricing, cost, and
@@ -9,7 +9,9 @@ _Confidential · v3.0 · August 16, 2026 · Ryan Currie, Founder · honestfunera
 > parallel research passes (internal docs, hospice payer economics, legal
 > landscape, comparable-company outcomes, ~150 sources). Where that research
 > corrected a prior belief, the correction is stated in place and marked
-> **[corrected]**.
+> **[corrected]**. It also records the naming decision of 2026-08-18: the
+> company is **Honest Funeral Co.** (§1), which closes the July naming question
+> without a rename.
 
 > **A note on figures.** Market and competitor figures are drawn from public
 > sources (cited in the appendix); figures labeled *derived* are arithmetic on
@@ -24,7 +26,7 @@ _Confidential · v3.0 · August 16, 2026 · Ryan Currie, Founder · honestfunera
 
 ## 1. The company in one page
 
-**Honest Funeral is the free, neutral source of truth for funeral pricing**, and
+**Honest Funeral Co. is the free, neutral source of truth for funeral pricing**, and
 the advocate that helps grieving families act on it. ~3 million Americans die
 each year into a market where identical services vary 100–200%+ within one
 metro, only ~18% of funeral homes post prices online, and everyone who claims to
@@ -43,6 +45,17 @@ The six guardrails are law and are enforced in code where code can enforce them:
 (3) never steer a family to a specific home; (4) never publish a number we can't
 defend (n>5 + significance + methodology); (5) never own the funeral or its
 capital risk; (6) never rent the whole flywheel from one platform.
+
+**The name (decided 2026-08-18): Honest Funeral Co.** The "Co." absorbs the
+domain: **honestfuneral.co reads as the company's name**, not as a
+second-choice TLD. That dissolves the problem that forced July's naming sprint
+(honestfuneral.com is squatted and unbuyable; ~85 candidates were swept; "Open
+Farewell" was purchased, then rejected): a company named Honest Funeral Co.
+does not need the .com. It also deletes an entire risk class from the July
+plan: no domain migration, no 301 runbook, no SEO-recovery window, no
+social-handle moves. The live domain, the email infrastructure, and every unit
+of brand equity earned to date carry forward unchanged. Say the name aloud and
+you have typed the address.
 
 **Where we are in one sentence:** the product is built through all three layers,
 the legal design is sound on the evidence, no one has paid us a dollar, and the
@@ -82,9 +95,19 @@ has not started.
   discovery calls by Aug 8") **fired eight days before this document's date.**
 
 **In flight elsewhere:** MBC Step-2 application; YC target ~November; the
-November checkpoint decides founder full-time. The rename ("Open Farewell") is
-ON HOLD by founder decision (2026-07-27); the brand remains Honest Funeral and
-this plan drops all rename-dependent scheduling from v2.
+November checkpoint decides founder full-time.
+
+**Naming: resolved.** The company is **Honest Funeral Co.** (founder decision,
+2026-08-18; rationale in §1). This closes the July rename question ("Open
+Farewell" rejected 2026-07-27) with follow-ups that are additive, not a
+migration: flip `lib/brand.ts` to `name: "Honest Funeral Co."` (the
+brand-constant discipline built for the rename now pays off as a one-line
+change); confirm ownership of the phonetic typo domain **honestfuneralco.com**
+(registered 2026-08-18 at Squarespace Domains, matching the founder's existing
+stack) and 301 it to honestfuneral.co, with honestfuneralco.co still
+unregistered as an optional pickup; incorporate or d/b/a under the full name at
+counsel setup (§15); and let the unused Open Farewell domain stack lapse at its
+2027-07-15 renewal.
 
 ## 3. What the August 2026 research settled
 
@@ -502,9 +525,12 @@ sign-off before any NJ pilot.
 5. TX (§651.001(7)) and SC (§40-19-20(d)) unlicensed-practice opinions before
    entering those states; consider the Everest mitigation (a licensed funeral
    director consultant on call).
-6. Entity reconciliation to Delaware C-corp; substantiation standards for
-   published claims; privacy-policy rewrite for B2B2C; WA My Health My Data
-   scan; NJ/ME/CA state checks as those states enter scope.
+6. Entity reconciliation to Delaware C-corp, incorporated or d/b/a as
+   **"Honest Funeral Co."** to match the brand; a descriptive-mark trademark
+   strategy for the name (drop the pending Open Farewell TESS spend);
+   substantiation standards for published claims; privacy-policy rewrite for
+   B2B2C; WA My Health My Data scan; NJ/ME/CA state checks as those states
+   enter scope.
 
 **Climate note (a sales weapon, not just a risk):** the 2025–26 DOJ/OIG
 hospice-fraud takedowns and six-state enhanced-oversight regime mean hospice
