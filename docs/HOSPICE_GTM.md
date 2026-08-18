@@ -8,7 +8,7 @@
 
 ## 0. The one-line thesis you are selling
 
-> *"You're federally required to provide thirteen months of bereavement support, you're paid nothing extra to do it, and it shows up in your CAHPS scores. We give every one of your families a neutral guide through the funeral and the after-death maze — free to them — and hand you a report that proves you delivered it. And because we never take a dime from funeral homes, we're the one thing you can ethically put in a grieving family's hands."*
+> *"You're federally required to provide your families a year of bereavement support, you're paid nothing extra to do it, and it shows up in your CAHPS scores. We give every one of your families a neutral guide through the funeral and the after-death maze — free to them — and hand you a report that proves you delivered it. And because we never take a dime from funeral homes, we're the one thing you can ethically put in a grieving family's hands."*
 
 Two regulatory facts anchor every conversation and both are verified:
 

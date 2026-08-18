@@ -180,7 +180,7 @@ The disciplined process, end to end. Mechanics + scripts in
 | **7. Results review** | Present families served, satisfaction, savings, time-to-resolution | A yes to a paid annual contract | the proof sheet |
 | **8. Close + expand** | Paid annual contract; ask for intros to peer hospices | Recurring revenue + referrals | the contract |
 
-**The pitch (memorize):** "You're required to provide thirteen months of
+**The pitch (memorize):** "You're required to provide your families a year of
 bereavement support and you get paid nothing extra to do it — and it shows up in
 your family-satisfaction scores. We give every one of your families a neutral
 guide through the funeral and the after-death maze — free to them — and hand you
