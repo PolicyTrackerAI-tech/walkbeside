@@ -100,7 +100,12 @@ export function CoordinatorCheck({
       <Card>
         <CardTitle>Paste the price list</CardTitle>
         <div className="mt-3">
-          <Label htmlFor="check-text">Price list text</Label>
+          <Label
+            htmlFor="check-text"
+            hint="Paste the price list only. Please remove a family&rsquo;s name or contact details first; the checker doesn&rsquo;t need them."
+          >
+            Price list text
+          </Label>
           <Textarea
             id="check-text"
             rows={10}
