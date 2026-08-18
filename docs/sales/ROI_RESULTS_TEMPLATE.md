@@ -49,7 +49,7 @@
 
 **Referral reputation — your real return.** Every family that has a calm, un-exploited funeral experience tells the family that referred *them*, and tells the hospital discharge planner, the SNF, and the physician who sent them to you. A great bereavement experience is referral-source goodwill, and referral-source goodwill is census. This is the line you can take to your community-liaison and your ED.
 
-**Documented mandate coverage.** Medicare requires ~13 months of bereavement support after every death (42 CFR 418.64), it's unfunded, and it's survey-able. This pilot is a documented, repeatable way you delivered the funeral-and-admin portion of that obligation across [N] families — evidence for your compliance file, and the kind of family-experience support CAHPS asks about.
+**Documented mandate coverage.** Medicare requires bereavement support for the family up to a year after every death (42 CFR 418.64), it's unfunded, and it's survey-able. This pilot is a documented, repeatable way you delivered the funeral-and-admin portion of that obligation across [N] families — evidence for your compliance file, and the kind of family-experience support CAHPS asks about.
 
 > *Note: CAHPS is pay-for-reporting — it's about your publicly reported reputation and Star Ratings, not extra reimbursement. The reimbursement story here is indirect: reputation → referrals → census.*
 

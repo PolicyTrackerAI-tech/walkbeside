@@ -28,7 +28,7 @@
 
 > **2.2** "How do families actually engage with it — do most take you up on the support, or do a lot drift away after the service?"
 
-**Listen for:** low engagement / "we mail things and don't hear back" = an opening. They're carrying a federal obligation (the ~13-month bereavement requirement under 42 CFR 418.64) they can't fully deliver against. Don't lecture them on the reg — just let them describe the gap.
+**Listen for:** low engagement / "we mail things and don't hear back" = an opening. They're carrying a federal obligation (bereavement support for the family up to a year after the death, under 42 CFR 418.64 — most programs run about 13 months) they can't fully deliver against. Don't lecture them on the reg — just let them describe the gap.
 
 > **2.3** "Where does keeping that program running stretch you thinnest — is it staffing, the volume right after a death, or the range of things families need?"
 
@@ -76,7 +76,7 @@
 
 > **5.2** "Do you spend anything today on outside bereavement support — the mailer programs, grief-text services, that kind of thing?"
 
-**Listen for:** a named vendor or dollar figure. Hospices commonly pay for grief mailers (a few dollars per family), grief-text subscriptions (Help Texts sells hospices exactly this against the same 13-month mandate), and bereavement-program software. If they already pay for any of it, your annual isn't a new budget category — it's a better use of an existing one. Write down what they pay today; that's your pricing anchor at the results review.
+**Listen for:** a named vendor or dollar figure. Hospices commonly pay for grief mailers (a few dollars per family), grief-text subscriptions (Help Texts sells hospices exactly this against the same bereavement mandate), and bereavement-program software. If they already pay for any of it, your annual isn't a new budget category — it's a better use of an existing one. Write down what they pay today; that's your pricing anchor at the results review.
 
 > **5.3** "If that maze just… got handled, and you got a report proving every family was supported — what would that be worth to your team's time and to your families' experience?"
 

@@ -17,7 +17,7 @@ We'll call these "Honest Funeral" and "the Hospice" below.
 
 ## Why we're doing this
 
-The Hospice is federally required to provide roughly 13 months of bereavement support after each patient death (42 CFR 418.64), and is paid nothing extra to do it. Honest Funeral handles the part a bereavement team usually isn't resourced for: **the funeral-pricing and after-death paperwork maze.** This pilot is a free, time-boxed way for the Hospice to see whether that helps its families — and to measure it — before anyone discusses paying for it.
+The Hospice is federally required to make bereavement support available to the family for up to a year after each patient death (42 CFR 418.64), which most programs deliver as a roughly 13-month window, and is paid nothing extra to do it. Honest Funeral handles the part a bereavement team usually isn't resourced for: **the funeral-pricing and after-death paperwork maze.** This pilot is a free, time-boxed way for the Hospice to see whether that helps its families — and to measure it — before anyone discusses paying for it.
 
 ---
 

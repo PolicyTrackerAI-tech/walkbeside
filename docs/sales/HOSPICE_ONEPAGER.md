@@ -23,7 +23,7 @@ A **free, neutral funeral-price advocate**, wrapped in a **light practical-navig
 
 **1. Referral reputation → census.** A great experience at the hardest moment becomes word-of-mouth from families and goodwill from your referral sources. This is the real ROI: the families you serve well are the ones who fill your next beds.
 
-**2. Documented mandate coverage.** Medicare requires ~13 months of bereavement support after every death (42 CFR 418.64) — unfunded, and survey-able. We hand you a report (families served, satisfaction, savings, time-to-resolution) that documents support delivered across the funeral-and-admin part of that window.
+**2. Documented mandate coverage.** Medicare requires bereavement support for the family up to a year after every death (42 CFR 418.64) — unfunded, and survey-able. We hand you a report (families served, satisfaction, savings, time-to-resolution) that documents support delivered across the funeral-and-admin part of that window.
 
 **3. Staff hours back.** The funeral-pricing and after-death-admin questions your counselors and social workers field — but were never resourced to handle — we absorb. We complement your grief program; we don't replace your counselors.
 

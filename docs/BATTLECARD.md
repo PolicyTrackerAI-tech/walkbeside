@@ -32,7 +32,7 @@ can ethically put us in a grieving family's hands.
 | **Cake / Lantern / Everplans** | Mostly the **family** (the graveyard) — and on exit, **funeral-money** owners | Cake → a funeral operator; Everplans → a preneed lead-gen for homes; now conflicted by ownership | We're built to never be ownable by funeral money — that's the moat, not a feature |
 | **Price-comparison sites** | The **funeral homes** (listing/lead fees) | Paid by the homes they rank — the exact conflict we exist to remove | We rank no one for pay; n>5 + methodology before any published number |
 | **Funeral homes / the FTC-Rule status quo** | The **family**, at the worst moment | The seller sets the price and discloses the bare minimum the law forces | We invoke the family's FTC right *for* them and show a neutral side-by-side |
-| **"Do nothing / existing hospice counselors"** | N/A (unfunded mandate) | Counselors do grief, not funeral-pricing + after-death admin; the 13-mo mandate is unfunded | We deliver the unfunded mandate, lift CAHPS, and hand the hospice a proof report |
+| **"Do nothing / existing hospice counselors"** | N/A (unfunded mandate) | Counselors do grief, not funeral-pricing + after-death admin; the yearlong mandate is unfunded | We deliver the unfunded mandate, lift CAHPS, and hand the hospice a proof report |
 | **Renidy** (new, 2026) | TBD — piloting with TX hospices | AI funeral-planning platform; payer model and neutrality structure not yet public | Our payer clarity is contractual and code-enforced; our price dataset and payment-blind neutrality are verifiable today |
 
 ---
@@ -142,8 +142,8 @@ can ethically put us in a grieving family's hands.
 
 ### 7. "Do nothing / the hospice's existing counselors"
 
-- **What it is:** the hospice's own bereavement staff handling the 13-month
-  mandate (42 CFR 418.64) with the resources they have.
+- **What it is:** the hospice's own bereavement staff handling the yearlong
+  bereavement mandate (42 CFR 418.64) with the resources they have.
 - **The conflict / gap:** the mandate is **federally required and unfunded**;
   counselors are trained for **grief**, not **funeral-price negotiation** or the
   **after-death admin maze** (certificates, accounts, SSA/VA benefits). It quietly
@@ -178,7 +178,7 @@ can ethically put us in a grieving family's hands.
 
 ### The budget-line precedents (use when a buyer doubts hospices buy things like this)
 
-Hospices already pay outside vendors against the same unfunded 13-month
+Hospices already pay outside vendors against the same unfunded bereavement
 mandate and family-experience pressure: **Help Texts** has sold hospices
 13-month grief-text subscriptions for years (marketed explicitly on the CMS
 requirement and CAHPS); **Betterleave** pivoted from selling employers to
@@ -192,7 +192,7 @@ it, which no one else sells.
 
 ## Our wedge, restated for the hospice
 
-> **"You're federally required to provide thirteen months of bereavement support,
+> **"You're federally required to provide your families a year of bereavement support,
 > you're paid nothing extra to do it, and it shows up in your family-satisfaction
 > scores. We give every one of your families a neutral guide through the funeral
 > and the after-death maze — free to them — and hand you a report that proves you
@@ -224,7 +224,7 @@ it, which no one else sells.
 |---|---|
 | **"We already offer Empathy / an insurer's bereavement benefit."** | "Empathy is paid by the insurer and is great for the *payout* and estate logistics. It isn't a neutral **funeral-price** advocate — an insurer-funded tool has no reason to get the funeral bill down. We're the conflict-free funeral-pricing layer, free to your families, paid by you, not the homes or insurers." |
 | **"We use Trust & Will / an estate-doc tool."** | "Those write the **will** ahead of time. We handle the **funeral, at the worst moment** — itemized prices, a neutral comparison, and the after-death admin maze — free to the family." |
-| **"Our bereavement counselors already cover this."** | "Your counselors do **grief**. We do the **funeral-pricing and paperwork** they were never resourced for, free to the family, and hand you the **CAHPS/compliance report** that proves the 13-month mandate was delivered." |
+| **"Our bereavement counselors already cover this."** | "Your counselors do **grief**. We do the **funeral-pricing and paperwork** they were never resourced for, free to the family, and hand you the **CAHPS/compliance report** that proves the bereavement mandate was delivered." |
 | **"We refer families to a local funeral home / a comparison site."** | "Anything paid by the homes — a referral or a ranking — is a steering and neutrality problem for you. We take **no** funeral-home money and **never steer**, which is exactly why you can put us in a family's hands without compliance risk." |
 | **"We don't have budget for another vendor."** | "Start with a **free 60-day pilot** on 10–15 families. You only pay once the satisfaction and savings prove out — and the value is measured against your unfunded mandate, your CAHPS, and staff hours saved, not 'software.'" |
 | **"How do we know your prices are right?"** | "Published methodology, **real itemized price lists** we collect under the family's FTC right, and we prove it on **your own families** during the pilot. We never publish a number we can't defend." |
