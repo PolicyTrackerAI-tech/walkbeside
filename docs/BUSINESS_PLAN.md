@@ -83,6 +83,12 @@ has not started.
 - **No billing surface.** `lib/stripe.ts` is 24 lines of scaffolding. A hospice
   that said yes today could not pay us. (Spec exists: Migration B +
   institutional-only Stripe, sprint Day 8.)
+- **No home-level price data.** The pricing layer runs on regional baseline
+  estimates, honestly labeled as estimates by the three-tier architecture;
+  **zero funeral-home GPLs have been ingested and the vetted-home directory is
+  empty.** Consequence, stated plainly: the at-need advocacy flow cannot run a
+  real case, and the Fair-Price Index cannot clear its own n>5 gate, until the
+  first metro is collected. This is pilot-blocking by October (§14 data lane).
 - **Migration A (hospice directory data) not applied in prod**; hospice search
   runs empty until it is. `ADMIN_EMAILS` not yet set in Vercel (blocks the
   audit-stream PR #175).
@@ -102,12 +108,11 @@ November checkpoint decides founder full-time.
 Farewell" rejected 2026-07-27) with follow-ups that are additive, not a
 migration: flip `lib/brand.ts` to `name: "Honest Funeral Co."` (the
 brand-constant discipline built for the rename now pays off as a one-line
-change); confirm ownership of the phonetic typo domain **honestfuneralco.com**
-(registered 2026-08-18 at Squarespace Domains, matching the founder's existing
-stack) and 301 it to honestfuneral.co, with honestfuneralco.co still
-unregistered as an optional pickup; incorporate or d/b/a under the full name at
-counsel setup (§15); and let the unused Open Farewell domain stack lapse at its
-2027-07-15 renewal.
+change); point the founder-owned phonetic typo domain **honestfuneralco.com**
+(registered 2026-08-18) at honestfuneral.co via permanent forwarding, with
+honestfuneralco.co still unregistered as an optional pickup; incorporate or
+d/b/a under the full name at counsel setup (§15); and let the unused Open
+Farewell domain stack lapse at its 2027-07-15 renewal.
 
 ## 3. What the August 2026 research settled
 
@@ -467,6 +472,21 @@ cases of evidence.
 **Dec 1 – 31 (conversion window):** the monthly-tier Checkout ask off the proof
 sheet. **Kill gate Dec 31** (§18). December financing checkpoint: with 1–2
 paying logos and renewal signal forming, decide bootstrap-vs-raise per §13.
+
+**The parallel data lane (pilot-blocking by October):** the negotiate flow
+needs a vetted-home directory and real GPL data in the pilot metro before the
+first pilot family activates, and the Index needs ≥2 verified metros to clear
+its n>5 gate. As of Aug 18 the dataset holds zero home-level GPLs. Cadence:
+founder evenings/weekends plus AI legwork; this lane never displaces daytime
+discovery calls. Sequence: (1) **Salt Lake City / Wasatch Front first** (the
+SOM's families): roster every licensed establishment, harvest posted GPLs,
+request the rest openly under an FCA-survey-style methodology (we identify
+ourselves; **no pretexting, ever**, it is the one collection method that could
+poison the brand), ingest via the founder ingest tool, vet homes into the
+directory; (2) **one California metro second** (SB 658 makes CA the richest
+collection state); (3) consented family uploads compound from pilot case #1.
+Gate: SLC collected and vetted by Oct 1, or the first pilot runs on labeled
+estimates and R8 fires.
 
 **Standing rule:** the employer pivot is pre-authorized **only** as the Oct-1
 kill response, not as a temptation to chase bigger ACVs before hospice proof.
