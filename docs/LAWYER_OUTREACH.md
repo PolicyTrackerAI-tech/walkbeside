@@ -1,8 +1,21 @@
 # Lawyer outreach — QUEUED (send next week, not this week)
 
-> Per the launch plan, we go **next week**, not this. This is drafted and ready
-> so that next week sending is one click. **Do not send until you're ready to
-> engage** (and have picked the attorney). Drafting ≠ sending.
+> **⚠️ STALE as of 2026-08-18 (audit A8). Read before using.** This file's
+> "send next week" framing dates to ~July 1 and never fired. The engagement
+> posture has since moved on: the five counsel deliverables are now
+> **pre-drafted** in `docs/legal/` (hospice services agreement, AKS/CMP memo,
+> HIPAA BA position, Utah Title 58-9 clearance, entity plan — pending PR #184),
+> so the ask to counsel is a **fixed-fee REVIEW of existing drafts**, not a
+> cold discovery call. Before sending anything: reconcile with whatever counsel
+> contact the naming/entity work already initiated, confirm the attorney pick,
+> and attach the `docs/legal/` package plus this repo's `/privacy` + `/terms`
+> (privacy rewritten in this same A8 pass; terms arbitration clause is a flagged
+> counsel item). The cover email below is still usable; the "next week" cadence
+> language is not.
+
+> Per the (superseded) launch plan, we go **next week**, not this. This is
+> drafted and ready so that next week sending is one click. **Do not send until
+> you're ready to engage** (and have picked the attorney). Drafting ≠ sending.
 
 > **⚠️ Rewritten 2026-07-01 to match the current business model.** An earlier
 > draft of this email described a $49 flat consumer fee. **That model is fully

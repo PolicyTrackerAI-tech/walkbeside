@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { readLimitedJson } from "@/lib/http-guards";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
+import { serviceClient, shareAvailable } from "../service";
 
 /**
  * POST /api/share/create
@@ -12,10 +12,14 @@ import { rateLimit, clientIp } from "@/lib/rate-limit";
  *
  * Returns: { id, shareUrl }
  *
- * No auth — anonymous share by UUID. RLS policy on share_links allows
- * insert for anon role.
+ * No account required — anonymous share by UUID. Writes run through the
+ * service role because share_links is service-role-only after audit A8
+ * (the anon key can no longer read or write the table).
  */
 export async function POST(req: Request) {
+  if (!shareAvailable())
+    return NextResponse.json({ error: "unavailable" }, { status: 503 });
+
   const ip = clientIp(req.headers);
   const rl = rateLimit(`share-create:${ip}`, { limit: 5, windowMs: 60 * 60_000 });
   if (!rl.ok)
@@ -33,8 +37,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data, error } = await serviceClient()
     .from("share_links")
     .insert({ payload: body.payload })
     .select("id")
