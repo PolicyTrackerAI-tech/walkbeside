@@ -16,9 +16,11 @@ export type CaseStage =
   | "compare"
   | "closed";
 
+// "Outreach" (not "We reach out"): the stage covers both a live send and a
+// prepared-but-paused case, and the stage label must be true in both.
 const ORDER: { key: CaseStage; label: string }[] = [
   { key: "started", label: "Tell us" },
-  { key: "contacting", label: "We reach out" },
+  { key: "contacting", label: "Outreach" },
   { key: "results", label: "You choose" },
   { key: "closed", label: "Confirmed" },
 ];

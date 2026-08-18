@@ -43,8 +43,9 @@ export default function ForFuneralHomesPage() {
               <li>
                 <strong>We take no money from funeral homes.</strong> No
                 commissions, no referral fees, no kickbacks, no
-                lead-sale revenue. We’re funded by the institutions we partner
-                with, never by families. Your firm&rsquo;s revenue stays your firm&rsquo;s.
+                lead-sale revenue. Any revenue we earn comes from the
+                institutions that serve families &mdash; never from funeral
+                homes, never from families. Your firm&rsquo;s revenue stays your firm&rsquo;s.
               </li>
               <li>
                 <strong>The family contracts with you directly.</strong> If
@@ -115,8 +116,8 @@ export default function ForFuneralHomesPage() {
                 lead-sale service?</dt>
                 <dd className="mt-1">
                   No. We don&rsquo;t take money from funeral homes in any
-                  form. Families are never charged either &mdash; we&rsquo;re
-                  funded by the institutions we partner with.
+                  form. Families are never charged either &mdash; any revenue
+                  we earn comes from the institutions that serve families.
                 </dd>
               </div>
               <div>

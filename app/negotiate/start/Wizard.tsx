@@ -12,7 +12,6 @@ import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { readReferral } from "@/lib/referral-codes";
 import { ReferralCoBrand } from "@/components/ReferralCoBrand";
 import { SERVICE_LABELS, type ServiceType } from "@/lib/pricing-data";
-import { homesForRadius } from "@/lib/negotiation/sample-homes";
 import { trackTool } from "@/lib/analytics";
 import {
   DEFAULT_STATE,
@@ -25,7 +24,7 @@ import {
 
 const TOTAL_STEPS = 8;
 
-function NegotiateStartWizard() {
+function NegotiateStartWizard({ outreachLive }: { outreachLive: boolean }) {
   const router = useRouter();
   const sp = useSearchParams();
 
@@ -224,8 +223,6 @@ function NegotiateStartWizard() {
     }
   }
 
-  const homesCount = homesForRadius(state.radiusMiles);
-
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader
@@ -237,13 +234,27 @@ function NegotiateStartWizard() {
 
           <div>
             <h1 className="font-serif text-3xl text-ink mb-3">
-              Have us contact funeral homes — free.
+              {outreachLive
+                ? <>Have us contact funeral homes &mdash; free.</>
+                : <>We&rsquo;ll prepare your funeral-home outreach &mdash; free.</>}
             </h1>
             <p className="text-ink-soft">
-              We&rsquo;ll contact 3&ndash;5 homes near you as your advocate,
-              request itemized prices, and bring back the options to compare.
-              Free to families &mdash; we contact homes on your behalf at no
-              charge.
+              {outreachLive ? (
+                <>We&rsquo;ll contact the vetted homes near you as your
+                advocate, request itemized prices, and bring back the options
+                to compare. Free to families &mdash; we contact homes on your
+                behalf at no charge.</>
+              ) : (
+                <>We&rsquo;ll line up the vetted funeral homes near you and
+                write the exact itemized-price request each one should get
+                &mdash; your right under the FTC Funeral Rule.{" "}
+                <strong className="text-ink">Our team isn&rsquo;t sending
+                outreach emails right now,</strong>{" "}
+                so nothing goes to any home
+                when you finish &mdash; you&rsquo;ll see exactly what&rsquo;s
+                prepared, and your case page always says plainly what has and
+                hasn&rsquo;t been sent. Free to families, always.</>
+              )}
             </p>
           </div>
 
@@ -372,7 +383,11 @@ function NegotiateStartWizard() {
                     How far are you willing to drive?
                   </h2>
                   <div className="grid sm:grid-cols-3 gap-3 mt-3">
-                    {[10, 25, 50].map((mi) => (
+                    {[
+                      { mi: 10, hint: "closest homes only" },
+                      { mi: 25, hint: "most of a metro area" },
+                      { mi: 50, hint: "the wider region" },
+                    ].map(({ mi, hint }) => (
                       <button
                         type="button"
                         key={mi}
@@ -389,12 +404,15 @@ function NegotiateStartWizard() {
                         <div className="font-serif text-xl text-ink">
                           {mi} miles
                         </div>
-                        <div className="text-sm text-ink-soft mt-1">
-                          ~{homesForRadius(mi)} homes
-                        </div>
+                        <div className="text-sm text-ink-soft mt-1">{hint}</div>
                       </button>
                     ))}
                   </div>
+                  <p className="text-xs text-ink-muted mt-3">
+                    A wider range means more homes to compare &mdash; only
+                    homes we&rsquo;ve personally vetted are ever on the list,
+                    and you&rsquo;ll see each one by name.
+                  </p>
                 </Card>
               )}
 
@@ -627,6 +645,16 @@ function NegotiateStartWizard() {
                   <p className="text-ink-soft mb-4">
                     By checking the box below, you tell us we can contact
                     funeral homes near you on your behalf.
+                    {!outreachLive && (
+                      <>
+                        {" "}
+                        <strong className="text-ink">Right now our team
+                        isn&rsquo;t sending outreach emails</strong>{" "}
+                        &mdash; your authorization and the prepared requests
+                        are saved with your case, and nothing goes to any
+                        home.
+                      </>
+                    )}
                   </p>
                   <ul className="text-sm text-ink space-y-2 list-disc pl-5 mb-5">
                     <li>
@@ -677,8 +705,12 @@ function NegotiateStartWizard() {
                     size="lg"
                   >
                     {busy
-                      ? "Reaching out…"
-                      : `Reach out to ${homesCount} homes →`}
+                      ? outreachLive
+                        ? "Starting your outreach…"
+                        : "Preparing your outreach…"
+                      : outreachLive
+                        ? "Start my outreach →"
+                        : "Prepare my outreach →"}
                   </Button>
                 </Card>
               )}
@@ -697,7 +729,7 @@ function NegotiateStartWizard() {
   );
 }
 
-export function Wizard() {
+export function Wizard({ outreachLive }: { outreachLive: boolean }) {
   return (
     <Suspense
       fallback={
@@ -706,7 +738,7 @@ export function Wizard() {
         </div>
       }
     >
-      <NegotiateStartWizard />
+      <NegotiateStartWizard outreachLive={outreachLive} />
     </Suspense>
   );
 }

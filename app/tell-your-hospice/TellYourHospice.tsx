@@ -20,7 +20,7 @@ const INTRO_SUBJECT = "A free funeral-cost resource for the families you serve";
 
 const INTRO_BODY = [
   `I'd like to pass along ${BRAND.name} (${BRAND.url}) — a free, independent site that shows families what a funeral should cost in their area and checks any funeral price list for overcharges.`,
-  `It's free for every family: it's funded by the institutions it partners with, takes no money from funeral homes or insurers, and never steers anyone toward any particular funeral home.`,
+  `It's free for every family, takes no money from funeral homes or insurers, and never steers anyone toward any particular funeral home.`,
   `It seems like something your bereavement team could offer families after a death, alongside the support you already provide.`,
   `If it looks useful, how it works for hospices is at ${BRAND.url}/partners.`,
 ].join("\n\n");

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { outreachIsLive } from "@/lib/negotiation/outreach-mode";
 
 export async function GET(
   _req: Request,
@@ -32,7 +33,7 @@ export async function GET(
   // retry with the legacy column list rather than blanking the messages
   // panel on a pre-migration schema.
   const MESSAGE_COLS =
-    "id, outreach_id, direction, from_address, subject, body_text, created_at";
+    "id, outreach_id, direction, from_address, subject, body_text, created_at, delivered_at";
   let messages: Record<string, unknown>[] | null = null;
   {
     const withAi = await supabase
@@ -57,5 +58,8 @@ export async function GET(
     negotiation: neg,
     outreach: outreach ?? [],
     messages: messages ?? [],
+    // Display-only: lets the status page describe honestly whether sending
+    // from our side is on. The send gates check the env themselves.
+    outreachLive: outreachIsLive(),
   });
 }
