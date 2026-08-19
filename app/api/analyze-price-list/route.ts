@@ -49,6 +49,10 @@ const Body = z.object({
   // below: no checkbox shown means no consent given, and only true or a
   // provably pre-consent NULL row ever feeds the benchmark aggregation.
   contributed: z.boolean().optional(),
+  // The analyzer's demo bill. Demo input is not family data: persistence is
+  // skipped entirely (it would otherwise land a fake quote on a signed-in
+  // visitor's account and flip their dashboard's has-checked-prices state).
+  sample: z.boolean().optional(),
   // Eval-harness knobs (scripts/eval-analyzer.mjs). Honored ONLY on a dev
   // server (NODE_ENV !== "production") — a production build silently ignores
   // both, so no public caller can pick our model or re-tag our cost ledger.
@@ -93,7 +97,8 @@ export async function POST(req: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.format() }, { status: 400 });
 
-  const { text, zip, serviceTypeHint, referralCode, contributed } = parsed.data;
+  const { text, zip, serviceTypeHint, referralCode, contributed, sample } =
+    parsed.data;
   const isEvalRun =
     process.env.NODE_ENV !== "production" && parsed.data.evalRun === true;
   const evalModel = isEvalRun ? parsed.data.evalModel : undefined;
@@ -301,8 +306,12 @@ export async function POST(req: Request) {
     totalCents: totalQuoted,
   });
 
-  // Optional: persist if logged in
-  if (FEATURES.supabase()) {
+  // Optional: persist if logged in. `saved` reports honestly whether a row
+  // really landed — the UI must never claim a check was recorded on a
+  // best-effort insert that failed (or for the signed-out majority, where
+  // nothing persists at all). Demo-sample runs never persist.
+  let saved = false;
+  if (!sample && FEATURES.supabase()) {
     const supabase = await createClient();
     const {
       data: { user },
@@ -362,6 +371,7 @@ export async function POST(req: Request) {
       } else {
         insertedId = inserted?.id ?? null;
       }
+      saved = insertedId != null;
 
       // Referral attribution — reporting label ONLY (never read by choose/
       // outreach/ranking; anti-steering is structural). Best-effort: an
@@ -436,9 +446,12 @@ export async function POST(req: Request) {
     summary,
     coverage,
     dataTier,
-    // Dev-only eval runs need to know whether the model or the naive regex
-    // fallback produced the items — a naive row isn't measuring the model.
-    ...(isEvalRun ? { extractionMethod } : {}),
+    saved,
+    // Which parser produced the items. The UI tells the family when the
+    // simpler regex fallback (not the model) read their list — a silent
+    // parser downgrade shouldn't be invisible on the verdict they act on.
+    // (Previously exposed only on dev eval runs.)
+    extractionMethod,
   });
 }
 
