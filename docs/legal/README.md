@@ -21,6 +21,7 @@ enforced in the product's code._
 
 | File | What it is | Counsel's job |
 |---|---|---|
+| `COUNSEL_PACKET_2026-08.md` | The first-engagement cover: what to send, the prioritized question list (verified 2026-08-19), our claims to pressure-test, and the citation-correction log | Read first; run the engagement off its §3 |
 | `HOSPICE_SERVICES_AGREEMENT_DRAFT.md` | The paid annual contract, drafted dual-frame (AKS-safe procurement framing + HIPAA-safe consumer-service framing) | Redline; confirm the two frames hold together |
 | `AKS_CMP_MEMO_DRAFT.md` | Anti-Kickback / beneficiary-inducement position memo | Confirm or correct; deliver as firm memo |
 | `HIPAA_BA_POSITION_DRAFT.md` | Business-associate avoidance position (self-enrollment design) | Confirm the BA analysis; bless the reporting design |

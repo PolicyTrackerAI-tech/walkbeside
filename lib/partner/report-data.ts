@@ -26,13 +26,17 @@ export interface PartnerReportData {
   stats: CohortStats;
   digest: string;
   /**
-   * Analyses stamped with this partner's id at check time. A non-identifying
-   * tool-usage count (no dollars, no satisfaction, no identities), so it is
-   * deliberately outside aggregateCohort and its n≥5 suppression — the same
-   * posture as familiesHelped. Dollar/satisfaction fields stay
-   * suppression-gated.
+   * DISTINCT families with at least one analysis stamped with this partner's
+   * id at check time — including referred families who checked a quote but
+   * never started a case. Counted as FAMILIES, never raw checks: the §4.2
+   * covenant bands every partner-visible count until five families underlie
+   * it, and a raw check count would un-band at 5 checks even when a single
+   * family (re-checking a revised quote — the analyzer's normal flow) made
+   * them all, turning the figure into a live tracker of one family's
+   * activity. Display via displayCount on every partner-visible surface;
+   * dollar/satisfaction fields stay suppression-gated in CohortStats.
    */
-  priceListChecks: number;
+  checkerFamilies: number;
 }
 
 /**
@@ -62,24 +66,31 @@ export async function buildPartnerReportData(partner: {
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
-  // Direct attribution — analyses stamped with this partner's id at check
-  // time, including referred families who checked a quote but never started a
-  // case. Its OWN try/catch: the partner_id column ships in a founder-applied
-  // migration, and a missing column must degrade to zero checks, never zero
-  // the whole report below.
-  // Head-count query (mirrors activeCodeCount) — a row fetch would silently
-  // cap at PostgREST's max-rows (1000) and freeze the number there.
-  let priceListChecks = 0;
+  // Direct attribution — distinct FAMILIES (user_id) with an analysis stamped
+  // with this partner's id at check time (see the interface comment for why
+  // families, never raw check counts). Attributed rows always carry a
+  // user_id (the analyzer only stamps attribution on signed-in checks). Its
+  // OWN try/catch: the partner_id column ships in a founder-applied
+  // migration, and a missing column must degrade to zero, never zero the
+  // whole report below. The row fetch is bounded by PostgREST's max-rows
+  // (~1000) — fine at pilot scale; revisit with a paged or RPC distinct
+  // count before any partner accumulates >1000 attributed analyses.
+  let checkerFamilies = 0;
   try {
-    const { count, error: countError } = await admin
+    const { data: attributedRows, error: attrError } = await admin
       .from("price_list_analyses")
-      .select("id", { count: "exact", head: true })
-      .eq("partner_id", partner.id);
-    if (!countError && typeof count === "number") {
-      priceListChecks = count;
+      .select("user_id")
+      .eq("partner_id", partner.id)
+      .not("user_id", "is", null);
+    if (!attrError) {
+      checkerFamilies = new Set(
+        ((attributedRows ?? []) as { user_id: string }[]).map(
+          (r) => r.user_id,
+        ),
+      ).size;
     }
   } catch {
-    // degrade to zero checks
+    // degrade to zero
   }
 
   let records: ReturnType<typeof rowToCohortRecord>[] = [];
@@ -211,7 +222,7 @@ export async function buildPartnerReportData(partner: {
 
   const stats = aggregateCohort(records);
   const digest = await buildOutcomesDigest(partner.name, stats, partnerType);
-  return { stats, digest, priceListChecks };
+  return { stats, digest, checkerFamilies };
 }
 
 /**

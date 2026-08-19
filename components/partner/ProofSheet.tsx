@@ -4,7 +4,11 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { BRAND } from "@/lib/brand";
 import { fmtUSD } from "@/lib/pricing-data";
-import { SMALL_SAMPLE_THRESHOLD, type CohortStats } from "@/lib/partner-report";
+import {
+  SMALL_SAMPLE_THRESHOLD,
+  displayCount,
+  type CohortStats,
+} from "@/lib/partner-report";
 import { PrintButton } from "@/components/partner/PrintButton";
 import { PrintHeader } from "@/components/print/PrintHeader";
 
@@ -25,7 +29,7 @@ export function ProofSheet({
   portalNav,
   linksHref,
   partnerType = "hospice",
-  priceListChecks = 0,
+  checkerFamilies = 0,
 }: {
   name: string;
   stats: CohortStats;
@@ -52,12 +56,13 @@ export function ProofSheet({
    */
   partnerType?: "hospice" | "employer";
   /**
-   * Analyses attributed to this partner's links — a non-identifying
-   * tool-usage count (no dollars, no satisfaction, no identities), shown
-   * even before any case completes and deliberately outside the n≥5
-   * suppression that gates dollar and satisfaction figures.
+   * DISTINCT families with an analysis attributed to this partner's links —
+   * a non-identifying usage count (no dollars, no satisfaction, no
+   * identities), shown even before any case completes. Counted as families
+   * (never raw checks — one family re-checking would un-band a check count)
+   * and always rendered through displayCount so an exact 1–4 never shows.
    */
-  priceListChecks?: number;
+  checkerFamilies?: number;
 }) {
   const empty = live && stats.familiesHelped === 0;
 
@@ -121,17 +126,17 @@ export function ProofSheet({
                 &mdash; total overcharge caught, how many saved, satisfaction,
                 and time to resolution.
               </p>
-              {priceListChecks > 0 && (
+              {checkerFamilies > 0 && (
                 <div className="mt-4 bg-surface-soft rounded-xl p-4">
                   <div className="text-xs uppercase tracking-wider text-ink-muted">
-                    Price lists checked
+                    Families who checked prices
                   </div>
                   <div className="font-serif text-2xl text-ink mt-1">
-                    {priceListChecks}
+                    {displayCount(checkerFamilies)}
                   </div>
                   <p className="text-xs text-ink-muted mt-1">
-                    quotes families checked through your links &mdash; an early
-                    signal; completed-case outcomes will follow here.
+                    families checked a price list through your links &mdash; an
+                    early signal; completed-case outcomes will follow here.
                   </p>
                 </div>
               )}
@@ -147,28 +152,29 @@ export function ProofSheet({
             <Card tone="primary">
               <CardEyebrow>Families helped so far</CardEyebrow>
               <div className="font-serif text-4xl sm:text-5xl text-primary-deep mt-1 leading-none">
-                {stats.familiesHelped}
+                {displayCount(stats.familiesHelped)}
               </div>
               <p className="text-ink-soft mt-2">
-                Your report is building. We hold the dollar and satisfaction
-                figures back until at least {SMALL_SAMPLE_THRESHOLD}{" "}
-                families have completed their cases &mdash; both so the
-                numbers are stable and so no single family can be identified
-                from them.
+                Your report is building. Small counts show as &ldquo;fewer
+                than {SMALL_SAMPLE_THRESHOLD}&rdquo; rather than exact
+                numbers, and dollar and satisfaction figures stay held back
+                until at least {SMALL_SAMPLE_THRESHOLD} families have
+                completed their cases &mdash; both so the numbers are stable
+                and so no single family can be identified from them.
               </p>
-              {/* Non-identifying usage count — deliberately outside the n≥5
-                  gate (same posture as familiesHelped above), so the number a
-                  partner saw at zero cases doesn't vanish at one. */}
-              {priceListChecks > 0 && (
+              {/* Counts stay visible below the n≥5 gate — banded, not exact,
+                  so the number a partner saw at zero cases doesn't vanish at
+                  one, and a tiny cohort can't point at one family. */}
+              {checkerFamilies > 0 && (
                 <div className="mt-4 bg-surface-soft rounded-xl p-4">
                   <div className="text-xs uppercase tracking-wider text-ink-muted">
-                    Price lists checked
+                    Families who checked prices
                   </div>
                   <div className="font-serif text-2xl text-ink mt-1">
-                    {priceListChecks}
+                    {displayCount(checkerFamilies)}
                   </div>
                   <p className="text-xs text-ink-muted mt-1">
-                    quotes families checked through your links
+                    families checked a price list through your links
                   </p>
                 </div>
               )}
@@ -188,9 +194,11 @@ export function ProofSheet({
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <Metric label="Families helped" value={stats.familiesHelped} />
+                {/* Sub-cell counts band too: at n≥5, "2 of 6" is still a
+                    2-family cell (with a 4-family complement). */}
                 <Metric
                   label="Families who saved"
-                  value={`${stats.familiesWhoSaved} of ${stats.familiesHelped}`}
+                  value={`${displayCount(stats.familiesWhoSaved)} of ${stats.familiesHelped}`}
                 />
                 <Metric
                   label="Avg caught / family"
@@ -289,15 +297,15 @@ export function ProofSheet({
                 </Card>
               )}
 
-              {priceListChecks > 0 && (
+              {checkerFamilies > 0 && (
                 <Card>
-                  <CardEyebrow>Price lists checked</CardEyebrow>
+                  <CardEyebrow>Families who checked prices</CardEyebrow>
                   <div className="font-serif text-3xl text-ink mt-1">
-                    {priceListChecks}
+                    {displayCount(checkerFamilies)}
                   </div>
                   <p className="text-xs text-ink-muted mt-1">
-                    quotes families checked through your links &mdash; an
-                    aggregate count of checks, never who or where.
+                    families checked a price list through your links &mdash;
+                    an aggregate count of families, never who or where.
                   </p>
                 </Card>
               )}
@@ -342,11 +350,13 @@ export function ProofSheet({
                 ) : (
                   <>
                     <li>
-                      <strong className="text-ink">Referral reputation.</strong>{" "}
-                      Every family who felt genuinely supported through the
-                      funeral and the paperwork is the family who recommends
-                      you &mdash; and tells the hospital, the SNF, and the
-                      physician who refers to you.
+                      <strong className="text-ink">
+                        Families who felt supported.
+                      </strong>{" "}
+                      Every family genuinely supported through the funeral and
+                      the paperwork finishes the year knowing their hospice
+                      stood by them &mdash; the kind of care your bereavement
+                      program exists to deliver.
                     </li>
                     <li>
                       <strong className="text-ink">

@@ -122,12 +122,21 @@ export async function POST(req: Request) {
         PUBLIC.supabaseUrl,
         requireServer("SUPABASE_SERVICE_ROLE_KEY"),
       );
-      const { data: codeRow } = await svc
+      const { data } = await svc
         .from("partner_codes")
-        .select("code, partner_id, active")
+        .select("code, partner_id, active, partners ( active )")
         .eq("code", referralCode)
         .maybeSingle();
-      if (codeRow?.active) {
+      // Both the code AND its partner must be active — same rule as
+      // /api/partner/resolve — so a paused or deactivated partner stops
+      // accruing claims into its report the moment it is paused.
+      const codeRow = data as unknown as {
+        code: string;
+        partner_id: string;
+        active: boolean;
+        partners: { active: boolean } | null;
+      } | null;
+      if (codeRow?.active && codeRow.partners?.active) {
         await svc
           .from("negotiations")
           .update({ partner_id: codeRow.partner_id, partner_code: codeRow.code })

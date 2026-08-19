@@ -116,10 +116,32 @@ Agreement, and that Honest Funeral is not a business associate of Hospice.
 
 4.2 All reporting to Hospice under this Agreement will consist solely of
 aggregate information de-identified in accordance with 45 C.F.R. §164.514,
-with minimum cell sizes sufficient to prevent re-identification. The partner
-dashboard will never display information about an identifiable family.
-**[COUNSEL: confirm the de-identification standard reference and whether a
-minimum cell size should be specified numerically.]**
+with a minimum cell size of five (5) families, applied as follows.
+(a) **Counts of families** — families served, families who checked prices,
+families who saved, and per-referral-link activity tallies — are displayed
+exactly at zero and at five or more, and as a band ("fewer than 5") in
+between; the banding is applied server-side, before any figure reaches a
+page or file Hospice can access, because at pilot scale an exact small
+count, especially on a labeled referral link, could let Hospice infer which
+family activated. Usage figures are counted as distinct families, never as
+raw event counts (a per-check tally would exceed five while a single family
+underlies it). (b) **Dollar, satisfaction, resolution-time, and percentage
+figures** are withheld entirely until at least five families have completed
+cases, and are only ever computed over cohorts of five or more families.
+(c) **Event counts** that are not family counts (e.g., FTC-issue findings)
+appear only alongside a cohort of five or more families. The partner
+dashboard will never display information about an identifiable family, and
+Honest Funeral will not issue referral codes scoped to a single family or
+single patient. Hospice acknowledges the residual signal inherent in any
+zero/non-zero distinction (a link shared with a single family reveals, once
+its tally leaves zero, that some family used it) and agrees not to
+distribute activation materials in a manner designed to isolate an
+individual family. **[COUNSEL: confirm the de-identification standard
+reference and the numeric cell size; the product enforces exactly these
+semantics in code — lib/partner-report.ts (`displayCount`,
+`SMALL_SAMPLE_THRESHOLD`, `aggregateCohort`), lib/partner/codes.ts
+(pre-banded per-link tallies), lib/partner/report-data.ts (distinct-family
+usage counts).]**
 
 4.3 If the parties later agree to any service that would require Honest
 Funeral to create or receive PHI for or on behalf of Hospice, the parties

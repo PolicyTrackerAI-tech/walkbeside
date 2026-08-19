@@ -21,13 +21,13 @@ A **free, neutral funeral-price advocate**, wrapped in a **light practical-navig
 
 ## What [Hospice Name] gets
 
-**1. Referral reputation → census.** A great experience at the hardest moment becomes word-of-mouth from families and goodwill from your referral sources. This is the real ROI: the families you serve well are the ones who fill your next beds.
+**1. Families supported at the hardest moment.** A calm, un-exploited funeral experience for every family you serve — the psychosocial and practical support your bereavement program exists to deliver, delivered without adding staff. (By design, this benefit is for families already in your care: it never appears in pre-admission marketing or anything used to bring families in.)
 
 **2. Documented mandate coverage.** Medicare requires bereavement support for the family up to a year after every death (42 CFR 418.64) — unfunded, and survey-able. We hand you a report (families served, satisfaction, savings, time-to-resolution) that documents support delivered across the funeral-and-admin part of that window.
 
 **3. Staff hours back.** The funeral-pricing and after-death-admin questions your counselors and social workers field — but were never resourced to handle — we absorb. We complement your grief program; we don't replace your counselors.
 
-**4. The proof report.** A one-page summary on your own families, so you see exactly what families experienced — for your compliance file and your referral conversations.
+**4. The proof report.** A one-page summary on your own families, so you see exactly what families experienced — for your compliance file and bereavement-program documentation. Never a single family's details.
 
 ---
 

@@ -103,6 +103,22 @@ export type CohortStats = CohortStatsSuppressed | CohortStatsFull;
 /** Below this many families, label the report a small sample (guardrail #4). */
 export const SMALL_SAMPLE_THRESHOLD = 5;
 
+/**
+ * Display form of any family-adjacent COUNT on a partner-visible surface
+ * (report, portal, links page, digest email, CSV export). Exact at 0
+ * (nothing to identify) and at ≥ SMALL_SAMPLE_THRESHOLD (the existing gate);
+ * banded in between — at pilot scale a coordinator who handed out two
+ * packets can otherwise infer WHICH family activated from an exact 1–4,
+ * which is functionally a partner surface showing an identifiable family.
+ * Founder-only admin surfaces keep exact numbers; this is for what an org
+ * can see. Pure so the banding math is locked by tests.
+ */
+export function displayCount(n: number): string {
+  if (n <= 0) return "0";
+  if (n >= SMALL_SAMPLE_THRESHOLD) return String(n);
+  return `fewer than ${SMALL_SAMPLE_THRESHOLD}`;
+}
+
 function median(nums: number[]): number | null {
   if (!nums.length) return null;
   const s = [...nums].sort((a, b) => a - b);

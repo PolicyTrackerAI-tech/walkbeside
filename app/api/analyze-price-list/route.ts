@@ -377,16 +377,25 @@ export async function POST(req: Request) {
             PUBLIC.supabaseUrl,
             requireServer("SUPABASE_SERVICE_ROLE_KEY"),
           );
-          const { data: codeRow } = await svc
+          const { data: joined } = await svc
             .from("partner_codes")
-            .select("code, partner_id, active")
+            .select("code, partner_id, active, partners ( active )")
             .eq("code", code)
             .maybeSingle();
+          // Both the code AND its partner must be active — same rule as
+          // /api/partner/resolve — so a paused partner stops accruing claims.
+          const codeRow = joined as unknown as {
+            code: string;
+            partner_id: string;
+            active: boolean;
+            partners: { active: boolean } | null;
+          } | null;
+          const attributable = !!(codeRow?.active && codeRow.partners?.active);
           // Partner staff carry their org's ?ref= memory from testing their
           // own links; their checks must not inflate the org's engagement
           // numbers, so any active portal member is excluded here.
           let isPartnerStaff = false;
-          if (codeRow?.active) {
+          if (attributable) {
             const { data: memberRow } = await svc
               .from("partner_members")
               .select("id")
@@ -396,7 +405,7 @@ export async function POST(req: Request) {
               .maybeSingle();
             isPartnerStaff = !!memberRow;
           }
-          if (codeRow?.active && !isPartnerStaff) {
+          if (attributable && codeRow && !isPartnerStaff) {
             await svc
               .from("price_list_analyses")
               .update({

@@ -31,7 +31,7 @@ const PRINCIPLES: { label: string; title: string; body: string }[] = [
 const NOT: string[] = [
   "Not a funeral home, law firm, or financial advisor.",
   "Not a marketplace paid by the homes it lists.",
-  "Not a subscription — free to families, funded by our partners.",
+  "Not a subscription — free to families; any revenue we earn comes from institutional partners.",
   "Not a replacement for your own attorney on complex estates.",
 ];
 

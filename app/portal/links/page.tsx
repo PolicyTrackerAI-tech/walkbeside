@@ -5,6 +5,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { PortalSessionNav } from "@/components/partner/PortalSessionNav";
 import { requirePartnerMember } from "@/lib/partner/auth";
 import { codesWithClaims } from "@/lib/partner/codes";
+import { displayCount } from "@/lib/partner-report";
 import { LinksClient } from "@/components/partner/LinksClient";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
  */
 export default async function PortalLinksPage() {
   const ctx = await requirePartnerMember("/portal/links");
-  const codes = await codesWithClaims(ctx.partner.id);
+  const { rows: codes, totalClaims } = await codesWithClaims(ctx.partner.id);
 
   // Only "employer" gets the employer voice; anything else coerces to the
   // hospice default (the codebase convention). The rest of this page's copy
@@ -31,7 +32,6 @@ export default async function PortalLinksPage() {
   // personal-only number. Anyone in the org can see this page, so it has to
   // read honestly as shared good news, not a private metric — and never a
   // target to hit.
-  const totalClaims = codes.reduce((s, c) => s + c.claims, 0);
 
   return (
     <main className="flex-1 flex flex-col">
@@ -79,13 +79,12 @@ export default async function PortalLinksPage() {
             {totalClaims > 0 ? (
               <>
                 <div className="font-serif text-3xl text-primary-deep mt-1 leading-none">
-                  {totalClaims}
+                  {displayCount(totalClaims)}
                 </div>
                 <p className="text-ink-soft mt-2 text-sm">
-                  {totalClaims === 1 ? "family has" : "families have"} used
-                  this on their own terms &mdash; no pitch needed, no
-                  follow-up required. Just something good to have handed
-                  over.
+                  families have used this on their own terms &mdash; no pitch
+                  needed, no follow-up required. Just something good to have
+                  handed over.
                 </p>
               </>
             ) : (

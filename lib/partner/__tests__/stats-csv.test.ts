@@ -33,10 +33,10 @@ describe("statsToCsv — suppressed cohort (n=4)", () => {
   const csv = statsToCsv("Canyon Home Hospice", stats);
   const lines = csv.trim().split("\n");
 
-  it("keeps only the header, organization, and families-helped rows numeric/named", () => {
+  it("bands the families-helped count below the threshold — never an exact 1–4", () => {
     expect(lines[0]).toBe("metric,value,period");
     expect(lines).toContain("organization,Canyon Home Hospice,pilot to date");
-    expect(lines).toContain("families helped,4,pilot to date");
+    expect(lines).toContain("families helped,fewer than 5,pilot to date");
   });
 
   it("renders every dollar/satisfaction/engagement row as the literal 'collecting data' — no digit leaks", () => {

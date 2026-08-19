@@ -5,12 +5,13 @@
  * Same discipline as ProofSheet: this renders ONLY what CohortStats already
  * carries, and the small-sample suppression travels with the type — on a
  * suppressed cohort every field except familiesHelped is null, so every row
- * except "families helped" renders the literal string "collecting data".
- * There is no path through this file that could turn a suppressed value back
- * into a number.
+ * except "families helped" renders the literal string "collecting data", and
+ * "families helped" itself is banded via displayCount (an exact 1–4 on a
+ * partner-visible export could point at one family). There is no path
+ * through this file that could turn a suppressed value back into a number.
  */
 
-import type { CohortStats } from "@/lib/partner-report";
+import { displayCount, type CohortStats } from "@/lib/partner-report";
 
 const PERIOD = "pilot to date";
 const COLLECTING = "collecting data";
@@ -36,6 +37,10 @@ export function statsToCsv(
 
   const num = (v: number | null | undefined): string | number =>
     v == null ? COLLECTING : v;
+  // Family-count cells band below the threshold (sub-cells included: at n≥5,
+  // "families who saved: 2" is still a 2-family cell).
+  const bandedNum = (v: number | null | undefined): string =>
+    v == null ? COLLECTING : displayCount(v);
   const pct = (v: number | null | undefined): string =>
     v == null ? COLLECTING : `${v}%`;
   const dollars = (cents: number | null | undefined): string | number =>
@@ -44,8 +49,10 @@ export function statsToCsv(
   const lines = [
     "metric,value,period",
     row("organization", orgName),
-    row("families helped", stats.familiesHelped),
-    row("families who saved", num(stats.familiesWhoSaved)),
+    // Banded below the suppression threshold (displayCount) — same rule as
+    // every partner-visible surface; exact counts return at n≥5.
+    row("families helped", displayCount(stats.familiesHelped)),
+    row("families who saved", bandedNum(stats.familiesWhoSaved)),
     row("total overcharge caught (dollars)", dollars(stats.totalOverchargeCaughtCents)),
     row("avg caught per family (dollars)", dollars(stats.avgOverchargeCaughtCents)),
     row("ftc issues flagged", num(stats.ftcIssuesFlagged)),

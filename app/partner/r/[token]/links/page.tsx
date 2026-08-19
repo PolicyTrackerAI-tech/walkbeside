@@ -6,6 +6,7 @@ import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
 import { resolvePartnerToken } from "@/lib/partner-auth";
 import { codesWithClaims } from "@/lib/partner/codes";
+import { displayCount } from "@/lib/partner-report";
 import { LinksClient } from "@/components/partner/LinksClient";
 
 export const metadata: Metadata = {
@@ -31,14 +32,13 @@ export default async function PartnerLinksPage({
 
   // Codes + aggregate claim counts (shared with /portal/links). Errors
   // degrade to an empty list with the create flow available.
-  const codes = await codesWithClaims(partner.id);
+  const { rows: codes, totalClaims } = await codesWithClaims(partner.id);
 
   // Cumulative, all-time, team-level — never time-boxed or framed as a
   // personal-only number. The report_token this page shares with the org's
   // aggregate report (docs/PARTNER_PORTAL_SPEC.md) means an ED could open
   // this same page, so this has to read honestly as shared good news, not a
   // private metric — and never a target to hit.
-  const totalClaims = codes.reduce((s, c) => s + c.claims, 0);
 
   return (
     <main className="flex-1 flex flex-col">
@@ -77,13 +77,12 @@ export default async function PartnerLinksPage({
             {totalClaims > 0 ? (
               <>
                 <div className="font-serif text-3xl text-primary-deep mt-1 leading-none">
-                  {totalClaims}
+                  {displayCount(totalClaims)}
                 </div>
                 <p className="text-ink-soft mt-2 text-sm">
-                  {totalClaims === 1 ? "family has" : "families have"} used
-                  this on their own terms &mdash; no pitch needed, no
-                  follow-up required. Just something good to have handed
-                  over.
+                  families have used this on their own terms &mdash; no pitch
+                  needed, no follow-up required. Just something good to have
+                  handed over.
                 </p>
               </>
             ) : (

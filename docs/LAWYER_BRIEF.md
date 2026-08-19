@@ -240,10 +240,20 @@ shipped product, that is a deception risk we need to fix before launch:
     offense (we take nothing from homes — but this also poisons any future
     supply-side monetization); TX Occ. Code ch. 651 and SC define "funeral
     directing" broadly (we stay navigation/education, never "arranging");
-    **at-need solicitation bans (FL §497.164, TX, ME, NE)** restrict outbound
-    contact with grieving families — our platform is **family-initiated
-    activation only** (the hospice hands the family a link; we never
-    cold-contact next of kin). **Q:** Do our flows as built clear these?
+    **solicitation law [citation corrected 2026-08-19]:** Florida's at-need
+    ban is licensee-scoped and post-death (definition at §497.005;
+    disciplinary grounds at §497.152 — an earlier draft cited §497.164,
+    which is licensee solicitation rulemaking, not the ban); Maine is
+    preneed-only and licensee-only (32 M.R.S. §1402) and Nebraska is
+    licensee discipline (Neb. Rev. Stat. §38-1424). The two statutes that
+    reach a *platform* are **Texas** (Occ. Code §651.001 — solicitation
+    includes uninvited contact by a licensee's representative "or any other
+    entity" with a person near death or their family) and **New Jersey**
+    (N.J.S.A. 45:7-65.3 — any person, in-facility, expressly covering "the
+    making of at need or preneed funeral arrangements"). Our platform is
+    **family-initiated activation only** (the hospice hands the family a
+    link; we never cold-contact next of kin). **Q:** Do our flows as built
+    clear TX and NJ as those statutes are construed?
   - **HIPAA [CONFIRM]:** decedent PHI is protected for 50 years; receiving
     patient/family data **from** a hospice would make us a business associate.
     Our design avoids this by construction — **the hospice transmits nothing;

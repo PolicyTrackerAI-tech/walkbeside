@@ -100,10 +100,11 @@ export async function sendOutreachForNegotiation(
     failed,
   });
 
-  // A PAID family whose outreach didn't go out is the worst failure mode —
-  // page once with the count so it can be retried/refunded.
+  // A family whose outreach didn't go out is the worst failure mode — the
+  // family is waiting on quotes that never left. Page once with the count so
+  // the sends can be retried.
   if (failed > 0) {
-    await sendAlert("error", "Outreach failed to send for a paid negotiation", {
+    await sendAlert("error", "Outreach failed to send for a negotiation", {
       negotiationId,
       failed,
       sent,

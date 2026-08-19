@@ -35,7 +35,10 @@ export default function PrivacyPage() {
             <p className="text-ink font-medium">The short version</p>
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li>We never sell your data, and we run no advertising.</li>
-              <li>Families never pay us. Hospices and employers do.</li>
+              <li>
+                Families never pay us; any revenue we earn comes from the
+                hospices and employers we partner with.
+              </li>
               <li>
                 A hospice or employer partner only ever sees anonymous totals,
                 never your name, your details, your prices, or the funeral home
@@ -150,9 +153,12 @@ export default function PrivacyPage() {
             5. When you arrive through a hospice or employer
           </h2>
           <p>
-            Our tools are free to you because hospices and employers pay us to
-            make them available to the families and people they serve. If one of
-            them gave you a link or a code, here is exactly how that works.
+            Our tools are free to you, with or without a partner link. Our
+            revenue model is institutional: any revenue we earn comes from
+            hospices and employers that make these tools available to the
+            families and people they serve &mdash; never from you and never
+            from funeral homes. If one of them gave you a link or a code, here
+            is exactly how that works.
           </p>
           <ul className="list-disc list-inside space-y-2">
             <li>
@@ -183,11 +189,13 @@ export default function PrivacyPage() {
               families in their program have completed cases.
             </li>
             <li>
-              <span className="text-ink">In plain terms:</span> a partner can see
-              how many people used their link, and that number can be small. If a
-              partner creates a separate link for each family, they could tell
-              that a particular family started using the tools. Even then, they
-              never see who you are, what you paid, or what you chose.
+              <span className="text-ink">In plain terms:</span> a partner can
+              see how many people used their link, but a small count shows
+              only as &ldquo;fewer than five,&rdquo; never as an exact number.
+              A partner who shared a link with just one family could still
+              tell that the link was used at all, so we ask partners not to
+              make per-family links &mdash; and either way, they never see who
+              you are, what you paid, or what you chose.
             </li>
           </ul>
 
@@ -305,8 +313,9 @@ export default function PrivacyPage() {
             privacy-respecting analytics above), Anthropic (the AI that reads text
             and drafts content), Resend (sending our email), Postmark (receiving
             funeral-home replies), and Twilio (sending the text reminders you opt
-            into). We also use Stripe to bill the hospices and employers that pay
-            us; because families never pay us, Stripe does not process any family
+            into). We also use Stripe for institutional billing only &mdash; the
+            hospices and employers we partner with, never families &mdash; and
+            because families never pay us, Stripe does not process any family
             payment information. These providers handle limited data on our
             behalf under standard data-processing terms. We do not send your data
             to advertising networks.
