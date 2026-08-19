@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ResumeClient } from "./ResumeClient";
 
 export const metadata: Metadata = {
-  title: "Pick up where she left off",
+  title: "Pick up where they left off",
   description:
     "A family member started this for the funeral arrangements. Pick up where they left off — their answers are restored on this device.",
   // Don't index resume URLs.

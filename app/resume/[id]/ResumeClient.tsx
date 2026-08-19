@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
-import { SHARE_KEYS_SET } from "@/lib/share-keys";
+import { shareKeyTarget } from "@/lib/share-keys";
 
 interface SnapshotResponse {
   id: string;
@@ -43,16 +43,23 @@ export function ResumeClient({ id }: { id: string }) {
           return;
         }
         const data = (await r.json()) as SnapshotResponse;
-        // Hydrate sessionStorage from the snapshot. Only allowlisted keys are
+        // Hydrate the snapshot into device storage. Only allowlisted keys are
         // written — a crafted share link must not be able to inject arbitrary
-        // sessionStorage keys into this device's session.
+        // storage keys into this device's session. Each key goes to the store
+        // its tool actually READS (shareKeyTarget): the checklist/guidance/
+        // worksheet tools read localStorage, so hydrating those keys into
+        // sessionStorage would restore them where nothing ever looks.
         if (data.payload && typeof data.payload === "object") {
           for (const [key, value] of Object.entries(data.payload)) {
-            if (!SHARE_KEYS_SET.has(key)) continue;
+            const target = shareKeyTarget(key);
+            if (!target) continue;
             try {
               const stringValue =
                 typeof value === "string" ? value : JSON.stringify(value);
-              sessionStorage.setItem(key, stringValue);
+              (target === "local" ? localStorage : sessionStorage).setItem(
+                key,
+                stringValue,
+              );
             } catch {
               // Skip keys that fail to write — partial restore is better
               // than nothing.

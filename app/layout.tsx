@@ -5,7 +5,6 @@ import { AnalyticsBeacon } from "@/components/analytics/AnalyticsBeacon";
 import { RememberReferral } from "@/components/RememberReferral";
 import "./globals.css";
 import { Footer } from "@/components/Brand";
-import { PhaseProvider } from "@/components/PhaseContext";
 import { ComfortModeToggle } from "@/components/ComfortModeToggle";
 
 const sans = Inter({
@@ -80,13 +79,11 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <PhaseProvider>
-          <div id="main-content" tabIndex={-1} className="flex-1 flex flex-col">
-            {children}
-          </div>
-          <Footer />
-          <ComfortModeToggle />
-        </PhaseProvider>
+        <div id="main-content" tabIndex={-1} className="flex-1 flex flex-col">
+          {children}
+        </div>
+        <Footer />
+        <ComfortModeToggle />
         <AnalyticsBeacon />
         {/* Suspense because it reads useSearchParams under a static layout. */}
         <Suspense fallback={null}>

@@ -107,6 +107,14 @@ export function CompareQuotes() {
           Boolean(x.res),
         )
     : [];
+  // Filled slots whose analysis failed. A quote silently missing from the
+  // side-by-side would misrepresent the family's real options — say which
+  // one dropped out rather than rendering a quieter two-way comparison.
+  const droppedSlots = results
+    ? slots
+        .map((s, i) => ({ slot: s, res: results[i], idx: i }))
+        .filter((x) => x.slot.text.trim().length >= 20 && !x.res)
+    : [];
 
   return (
     <main className="flex-1 flex flex-col">
@@ -209,6 +217,23 @@ export function CompareQuotes() {
 
           {compared.length >= 2 && (
             <div ref={resultRef} tabIndex={-1} className="space-y-6 focus:outline-none">
+              {droppedSlots.length > 0 && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="rounded-xl border border-warn/40 bg-warn-soft/50 px-4 py-3 text-sm text-ink"
+                >
+                  <span className="font-medium">
+                    {droppedSlots
+                      .map(({ slot, idx }) => slot.label.trim() || `Quote ${idx + 1}`)
+                      .join(" and ")}{" "}
+                    couldn&rsquo;t be read
+                  </span>{" "}
+                  &mdash; {droppedSlots.length === 1 ? "it isn't" : "they aren't"} in
+                  the comparison below. Check the pasted text and compare again
+                  to include {droppedSlots.length === 1 ? "it" : "them"}.
+                </div>
+              )}
               <div className={`grid gap-4 ${compared.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
                 {compared.map(({ slot, res, idx }) => {
                   const violations =

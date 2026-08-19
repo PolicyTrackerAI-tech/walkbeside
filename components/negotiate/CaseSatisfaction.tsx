@@ -18,19 +18,32 @@ const SCORES: { value: number; label: string }[] = [
 const MAX_PAID_DOLLARS = 100_000;
 
 /**
- * Post-case outcome prompt shown on the /negotiate/[id]/closed page.
- * Records a 1–5 score plus, optionally, what the family ended up paying and
- * any fees that surprised them, via /api/negotiate/[id]/outcome (RLS-owned).
+ * Post-case outcome prompt. Default copy fits the /negotiate/[id]/closed page;
+ * the status page reuses it with its own title/intro for cases that never
+ * closed (no vetted homes, or the family arranged on their own). Records a
+ * 1–5 score plus, optionally, what the family ended up paying and any fees
+ * that surprised them, via /api/negotiate/[id]/outcome (RLS-owned).
  * Mirrors the idle → busy → ok/err pattern used by EmailCaptureForm.
+ *
+ * showSurpriseFees: the API stores surprise-fee text on the CHOSEN outreach
+ * row's notes — a case with no chosen home has nowhere to put it, so callers
+ * on never-closed paths hide the field rather than silently dropping the
+ * family's answer.
  */
 export function CaseSatisfaction({
   negotiationId,
   initialScore = null,
   initialAmountPaidCents = null,
+  title = "How has this gone for you?",
+  intro = "Just for us. No wrong answer, and the money questions are optional.",
+  showSurpriseFees = true,
 }: {
   negotiationId: string;
   initialScore?: number | null;
   initialAmountPaidCents?: number | null;
+  title?: string;
+  intro?: string;
+  showSurpriseFees?: boolean;
 }) {
   const [score, setScore] = useState<number | null>(initialScore);
   // Seed from what's already recorded so a returning family sees their
@@ -130,10 +143,8 @@ export function CaseSatisfaction({
 
   return (
     <Card tone="soft">
-      <CardTitle>How has this gone for you?</CardTitle>
-      <p className="text-ink-soft mt-2 mb-4">
-        Just for us. No wrong answer, and the money questions are optional.
-      </p>
+      <CardTitle>{title}</CardTitle>
+      <p className="text-ink-soft mt-2 mb-4">{intro}</p>
       <form onSubmit={submit} className="space-y-4">
         <div
           className="flex flex-wrap gap-2"
@@ -176,19 +187,21 @@ export function CaseSatisfaction({
             disabled={state === "busy"}
           />
         </div>
-        <div>
-          <Label htmlFor="outcome-surprise-fees">
-            Any fees that surprised you?
-          </Label>
-          <Textarea
-            id="outcome-surprise-fees"
-            rows={3}
-            maxLength={1000}
-            value={surpriseFees}
-            onChange={(e) => setSurpriseFees(e.target.value)}
-            disabled={state === "busy"}
-          />
-        </div>
+        {showSurpriseFees && (
+          <div>
+            <Label htmlFor="outcome-surprise-fees">
+              Any fees that surprised you?
+            </Label>
+            <Textarea
+              id="outcome-surprise-fees"
+              rows={3}
+              maxLength={1000}
+              value={surpriseFees}
+              onChange={(e) => setSurpriseFees(e.target.value)}
+              disabled={state === "busy"}
+            />
+          </div>
+        )}
         <Button type="submit" disabled={state === "busy"}>
           {state === "busy" ? "Saving…" : "Save"}
         </Button>
