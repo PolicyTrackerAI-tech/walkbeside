@@ -5,7 +5,7 @@ import { BackLink } from "@/components/ui/BackLink";
 export const metadata = {
   title: "Privacy",
   description:
-    "How Honest Funeral handles your data. Short version: we never sell it, we never share your details with funeral homes without your say-so, we only ever give a hospice or employer partner anonymous totals, and we delete your account data when you ask.",
+    "How Honest Funeral Co. handles your data. Short version: we never sell it, we never share your details with funeral homes without your say-so, we only ever give a hospice or employer partner anonymous totals, and we delete your account data when you ask.",
 };
 
 export default function PrivacyPage() {
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
           <p className="text-sm text-ink-muted">Last updated: August 2026</p>
 
           <p>
-            This policy describes how Honest Funeral collects, uses, and
+            This policy describes how Honest Funeral Co. collects, uses, and
             protects your information. We wrote it in plain language on purpose,
             because the people who read it are often in the middle of a loss. We
             treat anything you share with us, including anything you tell us

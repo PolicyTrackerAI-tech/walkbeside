@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BRAND } from "@/lib/brand";
 import { NOT_A_FUNERAL_HOME } from "@/lib/copy";
 
 export function RoseMark({
@@ -74,7 +75,7 @@ export function Brand({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       className={`inline-flex items-center gap-2 font-serif ${text} text-ink hover:no-underline`}
     >
       <RoseMark size={mark} />
-      <span className="leading-none">Honest Funeral</span>
+      <span className="leading-none">{BRAND.name}</span>
     </Link>
   );
 }
@@ -196,7 +197,7 @@ export function Footer() {
             Accessibility
           </Link>
         </div>
-        <p className="text-xs pt-2">&copy; 2026 Honest Funeral</p>
+        <p className="text-xs pt-2">&copy; 2026 {BRAND.name}</p>
       </div>
     </footer>
   );

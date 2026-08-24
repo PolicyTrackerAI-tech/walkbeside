@@ -40,4 +40,4 @@ export const FREE_WITH_OR_WITHOUT_LINK =
  * footer. Use the constant; never retype the sentence.
  */
 export const NOT_A_FUNERAL_HOME =
-  "Honest Funeral is not a funeral home or funeral director. We do not arrange funerals or handle remains. Your family contracts directly with the funeral home you choose.";
+  "Honest Funeral Co. is not a funeral home or funeral director. We do not arrange funerals or handle remains. Your family contracts directly with the funeral home you choose.";

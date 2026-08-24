@@ -10,7 +10,7 @@ import { BackLink } from "@/components/ui/BackLink";
 export const metadata = {
   title: "Terms",
   description:
-    "The terms for using Honest Funeral. Free to families — the tools and the funeral-home outreach. We never charge the grieving family.",
+    "The terms for using Honest Funeral Co. Free to families — the tools and the funeral-home outreach. We never charge the grieving family.",
 };
 
 export default function TermsPage() {
@@ -23,9 +23,13 @@ export default function TermsPage() {
           <h1 className="font-serif text-3xl text-ink">Terms of Service</h1>
           <p className="text-sm text-ink-muted">Last updated: April 2026</p>
 
+          {/* Entity accuracy: no LLC exists — the operating name is Honest
+              Funeral Co. (incorporation in progress under that legal name;
+              docs/legal/ENTITY_PLAN_DRAFT.md). Never state an entity form
+              here that hasn't been formed. */}
           <p>
-            These terms govern your use of Honest Funeral (the &ldquo;Service&rdquo;),
-            operated by Honest Funeral, LLC (&ldquo;we,&rdquo; &ldquo;us&rdquo;). By
+            These terms govern your use of Honest Funeral Co. (the
+            &ldquo;Service,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;). By
             using the Service you agree to these terms. If you do not agree,
             do not use the Service.
           </p>

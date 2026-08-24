@@ -18,7 +18,7 @@ describe("outreachFromAddress", () => {
   it("defaults to the arrangements@ advocate address", () => {
     delete process.env.OUTREACH_FROM;
     expect(outreachFromAddress()).toBe(
-      "Honest Funeral <arrangements@honestfuneral.co>",
+      "Honest Funeral Co. <arrangements@honestfuneral.co>",
     );
   });
 

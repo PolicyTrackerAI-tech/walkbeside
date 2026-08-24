@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { BRAND } from "./brand";
 import { FEATURES, requireServer } from "./env";
 import { maskEmail } from "./observability";
 
@@ -11,7 +12,7 @@ function resend(): Resend {
 }
 
 export const FROM_DEFAULT =
-  process.env.RESEND_FROM ?? "Honest Funeral <hello@honestfuneral.co>";
+  process.env.RESEND_FROM ?? `${BRAND.name} <hello@${BRAND.domain}>`;
 
 export interface OutboundEmail {
   to: string;

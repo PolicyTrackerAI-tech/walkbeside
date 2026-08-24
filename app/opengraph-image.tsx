@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
+import { BRAND } from "@/lib/brand";
 
 export const runtime = "edge";
-export const alt = "Honest Funeral — quiet help after a loss";
+export const alt = `${BRAND.name} — quiet help after a loss`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,7 +31,7 @@ export default async function Image() {
             marginBottom: 32,
           }}
         >
-          Honest Funeral
+          {BRAND.name}
         </div>
         <div
           style={{

@@ -37,7 +37,7 @@ export function buildOutreachEmail(input: OutreachEmailInput): OutreachEmail {
   const subject = `Price list request — ${familyLabel} (ref ${authorizationId})`;
   const body = `Hello,
 
-I'm writing from Honest Funeral on behalf of ${familyLabel}. They've engaged us as their consumer advocate to gather price information from funeral homes in your area before they choose where to make arrangements.
+I'm writing from Honest Funeral Co. on behalf of ${familyLabel}. They've engaged us as their consumer advocate to gather price information from funeral homes in your area before they choose where to make arrangements.
 
 Could you reply with your current General Price List and any service-specific quote you can share? A PDF works fine. The family is planning arrangements ${timing}.
 
@@ -46,12 +46,12 @@ They'll review what comes back. If your firm is selected, we'll reach out to hel
 Thank you for your time.
 
 ${advocateName}
-Honest Funeral
+Honest Funeral Co.
 honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. We help families gather pricing and prepare for the arrangement meeting; the family makes all arrangements directly with the funeral home they select. More about us: ${SITE}/for-funeral-homes
+Honest Funeral Co. is a consumer advocacy service, not a licensed funeral establishment. We help families gather pricing and prepare for the arrangement meeting; the family makes all arrangements directly with the funeral home they select. More about us: ${SITE}/for-funeral-homes
 
 To opt out of future outreach requests from us, one-click: ${funeralHomeOptOutUrl(homeEmail)}
 ${postalAddressLine()}`;
@@ -89,12 +89,12 @@ We'll relay everything and keep the thread going until the meeting is on the cal
 Thank you,
 
 ${advocateName}
-Honest Funeral
+Honest Funeral Co.
 honestfuneral.co
 Authorization reference: ${authorizationId}
 
 ---
-Honest Funeral is a consumer advocacy service, not a licensed funeral establishment. The family makes all funeral arrangements and signs all paperwork directly with you. More about us: ${SITE}/for-funeral-homes
+Honest Funeral Co. is a consumer advocacy service, not a licensed funeral establishment. The family makes all funeral arrangements and signs all paperwork directly with you. More about us: ${SITE}/for-funeral-homes
 
 To opt out of future outreach from us, one-click: ${funeralHomeOptOutUrl(homeEmail)}
 ${postalAddressLine()}`;
@@ -116,7 +116,7 @@ function formatDollars(cents: number): string {
 
 export function outreachFromAddress(): string {
   return (
-    process.env.OUTREACH_FROM ?? "Honest Funeral <arrangements@honestfuneral.co>"
+    process.env.OUTREACH_FROM ?? "Honest Funeral Co. <arrangements@honestfuneral.co>"
   );
 }
 

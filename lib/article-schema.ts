@@ -1,3 +1,4 @@
+import { BRAND } from "./brand";
 /**
  * Build an Article JSON-LD object for a content page. Wraps the
  * canonical schema.org Article type with sensible defaults for
@@ -56,12 +57,12 @@ export function articleSchema({
     dateModified: dateModified ?? datePublished,
     author: {
       "@type": "Organization",
-      name: "Honest Funeral",
+      name: BRAND.name,
       url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
-      name: "Honest Funeral",
+      name: BRAND.name,
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
