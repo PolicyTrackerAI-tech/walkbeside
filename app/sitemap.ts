@@ -27,6 +27,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     [
       { url: `${SITE}/`, priority: 1.0, changeFrequency: "weekly" },
       { url: `${SITE}/where`, priority: 0.9, changeFrequency: "monthly" },
+      // The wedge product itself — absent from the sitemap until audit
+      // A6-01 flagged it (the one page the whole funnel points at).
+      { url: `${SITE}/analyzer`, priority: 0.9, changeFrequency: "monthly" },
       { url: `${SITE}/prices`, priority: 0.9, changeFrequency: "weekly" },
       { url: `${SITE}/fair-price-index`, priority: 0.9, changeFrequency: "monthly" },
       { url: `${SITE}/bill-check`, priority: 0.8, changeFrequency: "monthly" },
