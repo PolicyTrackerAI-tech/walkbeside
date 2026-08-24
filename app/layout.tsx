@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import { BRAND } from "@/lib/brand";
 import { Inter, Source_Serif_4 } from "next/font/google";
 import { AnalyticsBeacon } from "@/components/analytics/AnalyticsBeacon";
 import { RememberReferral } from "@/components/RememberReferral";
@@ -20,25 +21,29 @@ const serif = Source_Serif_4({
   display: "swap",
 });
 
+// Formal surfaces carry the full name (BRAND.name) per the naming style rule
+// — page titles are the most formal surface there is.
+const SITE_TITLE = `${BRAND.name} — quiet help after a loss`;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://honestfuneral.co"),
   title: {
-    default: "Honest Funeral — quiet help after a loss",
-    template: "%s — Honest Funeral",
+    default: SITE_TITLE,
+    template: `%s — ${BRAND.name}`,
   },
   description:
     "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
   openGraph: {
     type: "website",
-    siteName: "Honest Funeral",
-    title: "Honest Funeral — quiet help after a loss",
+    siteName: BRAND.name,
+    title: SITE_TITLE,
     description:
       "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
     url: "https://honestfuneral.co",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Honest Funeral — quiet help after a loss",
+    title: SITE_TITLE,
     description:
       "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
   },

@@ -48,7 +48,7 @@ describe("verbatim copy constants", () => {
    */
   it("renders the role sentence exactly", () => {
     expect(NOT_A_FUNERAL_HOME).toBe(
-      "Honest Funeral is not a funeral home or funeral director. We do not arrange funerals or handle remains. Your family contracts directly with the funeral home you choose.",
+      "Honest Funeral Co. is not a funeral home or funeral director. We do not arrange funerals or handle remains. Your family contracts directly with the funeral home you choose.",
     );
   });
 

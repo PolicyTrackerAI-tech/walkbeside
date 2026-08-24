@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BRAND } from "@/lib/brand";
 
 export const runtime = "edge";
 
@@ -25,7 +26,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const title =
     url.searchParams.get("title") ?? "Quiet help when someone important dies.";
-  const eyebrow = url.searchParams.get("eyebrow") ?? "Honest Funeral";
+  const eyebrow = url.searchParams.get("eyebrow") ?? BRAND.name;
 
   // Trim very long titles so they fit. Browsers truncate metadata too
   // but a clean visual is better than letting it overflow.
@@ -58,9 +59,9 @@ export async function GET(req: Request) {
               marginBottom: 8,
             }}
           >
-            Honest Funeral
+            {BRAND.name}
           </div>
-          {eyebrow && eyebrow !== "Honest Funeral" && (
+          {eyebrow && eyebrow !== BRAND.name && (
             <div
               style={{
                 fontSize: 22,
