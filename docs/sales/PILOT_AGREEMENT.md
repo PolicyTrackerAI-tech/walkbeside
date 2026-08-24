@@ -44,7 +44,7 @@ This is why the Hospice can ethically and lawfully put the resource in a grievin
 ## Privacy
 
 - Because families **self-enroll**, the Hospice is **not required to share PHI** with Honest Funeral for this pilot.
-- The Hospice receives **aggregate, de-identified outcomes only** — never any individual family's private case details.
+- The Hospice receives **aggregate, de-identified outcomes only** — never any individual family's private case details. Every figure the Hospice can see carries a **minimum cell size of five families**: dollar, satisfaction, and percentage figures are withheld entirely until at least five families have completed cases, and counts of families (families served, families who checked prices, per-link activity) are shown exactly at zero and at five or more but as a band ("fewer than 5") in between — banded server-side, and counted as distinct families rather than raw events, so no small count can point at any one family.
 - If, during or after the pilot, the parties ever decide the Hospice will share PHI, a **Business Associate Agreement (BAA)** will be signed **before** any such information is exchanged. A short security summary is available on request.
 
 ---

@@ -73,8 +73,13 @@ these rules are what make us admissible. Full analysis + citations:
 
 - **Family-initiated activation only.** The hospice hands the family a
   link/packet; the family activates. The platform NEVER cold-contacts a next of
-  kin (at-need solicitation is banned in FL, TX, ME, NE — and it's the Grace
-  failure mode). Opt-in follow-ups to a family who activated are fine.
+  kin. (Statutory map, corrected 2026-08-19: TX Occ. Code §651.001 defines
+  solicitation to include uninvited contact by "any other entity" with a
+  person near death or their family, and NJ 45:7-65.3 reaches any person
+  soliciting in care facilities — those two reach a platform directly; the
+  FL/ME/NE bans are licensee-scoped, but this rule is house law everywhere
+  regardless. It's also the Grace failure mode.) Opt-in follow-ups to a
+  family who activated are fine.
 - **Delivered post-admission only.** The benefit must never appear in a
   hospice's pre-admission marketing or be usable to induce hospice selection —
   that is the Anti-Kickback danger vector (the funeral itself isn't federally

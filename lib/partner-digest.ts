@@ -6,7 +6,7 @@
  * small-sample gate travels with the numbers by construction.
  */
 
-import type { CohortStats } from "./partner-report";
+import { displayCount, type CohortStats } from "./partner-report";
 
 export interface DigestInput {
   partnerName: string;
@@ -62,12 +62,14 @@ export function buildPartnerDigest(input: DigestInput): {
     `Your ${input.periodLabel} summary from Honest Funeral — aggregate counts only, as always.`,
     ``,
     `This period:`,
-    `  - ${input.familiesStartedInPeriod} famil${input.familiesStartedInPeriod === 1 ? "y" : "ies"} started a case through your links`,
+    // Counts are banded below the suppression threshold (displayCount) so a
+    // small period — or a tiny cohort — can never point at one family.
+    `  - ${displayCount(input.familiesStartedInPeriod)} families started a case through your links`,
   ];
 
   if (cohort.familiesHelped > 0) {
     lines.push(``, `Since your pilot began:`);
-    lines.push(`  - ${cohort.familiesHelped} referred famil${cohort.familiesHelped === 1 ? "y" : "ies"} with completed cases`);
+    lines.push(`  - ${displayCount(cohort.familiesHelped)} referred families with completed cases`);
     if (cohort.smallSample) {
       lines.push(
         `  - Dollar and satisfaction figures unlock at 5 completed cases — a small cohort stays suppressed so no single family is identifiable`,

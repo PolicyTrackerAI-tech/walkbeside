@@ -11,7 +11,7 @@ the doc-status table at the bottom.
 
 ---
 
-## Where we are vs. the three layers
+## Where we are vs. the three layers *(status re-baselined 2026-08-19)*
 
 ### L1 — Free source of truth — **largely built; keep extending**
 Live and genuinely free: `/prices` (ZIP calculator), `/average-funeral-cost`,
@@ -23,24 +23,30 @@ model. **Guardrail #2 already honored here** — none of this is paywalled.
 **Gaps:** no published **Fair-Price Index** product page; no methodology page;
 no public **mistakes** page; no dataset/API surface.
 
-### L2 — Instrumented family service — **outcomes layer ~85%, uncommitted**
-The at-need `/negotiate` flow exists. **Outcomes instrumentation is built but
-not yet applied** (separate branch/PR): migration
-`supabase/migrations/2026-06-22-negotiation-outcomes.sql` (listed/quoted/
-negotiated/paid/chosen/hidden-fees/satisfaction + computed savings), a
+### L2 — Instrumented family service — **built; needs prod migrations + real cases**
+The at-need `/negotiate` flow exists with outcomes instrumentation end to end:
+migration `supabase/migrations/2026-06-22-negotiation-outcomes.sql` (listed/
+quoted/negotiated/paid/chosen/hidden-fees/satisfaction + computed savings),
 family satisfaction capture on the closed page, and `/admin/outcomes`.
-**Gap:** apply the migration; then the outcomes dashboard for L3.
+**Gap:** apply the prod migrations and run real cases — zero real cases have
+flowed through it.
 
-### L3 — Institutional — **does not exist (this is the revenue)**
-No partner portal, no reporting dashboard, no hospice/employer auth or B2B2C
-routing. Everything here is net-new and is the most important thing to build
-after outcomes data exists.
+### L3 — Institutional — **built but unproven (this is the revenue)**
+The partner portal, referral codes, aggregate-only reporting, AI digest cron,
+and dormant hospice billing are all built (`app/partners`, `app/admin/partners`,
+`app/partner/[code]`, `app/partner/r/[token]` + `/links` + `/check`,
+`app/portal/*`). But zero real cases have run through it and no hospice can pay
+yet (`BILLING_LIVE` off; the partner-billing migration is founder-applied-only
+and unapplied). The gate is no longer engineering: apply the prod migrations,
+retain counsel, and name a pilot hospice. For current status, [`BUSINESS_PLAN.md`](BUSINESS_PLAN.md)
+(v3.0, 2026-08-18) supersedes this section's history.
 
 ### Guardrail check against the live code
 All six hold today (free L1, no funeral-home money, vetted directory, no
-steering, RLS-private family data) — **except** the consumer **$49 pay-to-send**
-charge, which contradicts guardrail #2 and is scheduled for removal
-([`PAYMENT_DECOMMISSION.md`](PAYMENT_DECOMMISSION.md)).
+steering, RLS-private family data). The consumer **$49 pay-to-send** charge was
+**fully decommissioned 2026-06-26**
+([`PAYMENT_DECOMMISSION.md`](PAYMENT_DECOMMISSION.md)) — no family charge
+exists anywhere.
 
 ---
 

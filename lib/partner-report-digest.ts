@@ -25,7 +25,12 @@
 import { callClaude, claudeAvailable } from "@/lib/claude";
 import { partnerOutcomesDigestSystem } from "@/lib/negotiation/prompts";
 import { stripCodeFence } from "@/lib/negotiation/price-list-parse";
-import { SMALL_SAMPLE_THRESHOLD, type CohortStats, type CohortStatsFull } from "@/lib/partner-report";
+import {
+  SMALL_SAMPLE_THRESHOLD,
+  displayCount,
+  type CohortStats,
+  type CohortStatsFull,
+} from "@/lib/partner-report";
 
 /**
  * Deterministic fallback — built ONLY from CohortStatsFull's own fields, no
@@ -45,7 +50,10 @@ export function fallbackOutcomesDigest(
   const dollars = (cents: number) =>
     `$${Math.round(cents / 100).toLocaleString("en-US")}`;
   const parts: string[] = [
-    `${stats.familiesHelped} families referred through ${name} completed cases, and ${stats.familiesWhoSaved} of them caught an overcharge — ${dollars(stats.totalOverchargeCaughtCents)} total, ${dollars(stats.avgOverchargeCaughtCents)} on average.`,
+    // familiesWhoSaved is a sub-cell of the cohort and bands below the
+    // threshold ("fewer than 5 of them caught an overcharge") — an exact 1-4
+    // at n≥5 is still a small family cell.
+    `${stats.familiesHelped} families referred through ${name} completed cases, and ${displayCount(stats.familiesWhoSaved)} of them caught an overcharge — ${dollars(stats.totalOverchargeCaughtCents)} total, ${dollars(stats.avgOverchargeCaughtCents)} on average.`,
   ];
   if (stats.ftcIssuesFlagged > 0) {
     parts.push(
@@ -105,7 +113,9 @@ export async function buildOutcomesDigest(
     partnerType,
     partnerName: name,
     familiesHelped: stats.familiesHelped,
-    familiesWhoSaved: stats.familiesWhoSaved,
+    // Banded (a sub-cell of the cohort) — Claude's grounding must never carry
+    // an exact count the rendered surfaces would band.
+    familiesWhoSaved: displayCount(stats.familiesWhoSaved),
     totalOverchargeCaughtDollars: Math.round(stats.totalOverchargeCaughtCents / 100),
     avgOverchargeCaughtDollars: Math.round(stats.avgOverchargeCaughtCents / 100),
     ftcIssuesFlagged: stats.ftcIssuesFlagged,

@@ -1,28 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { statsToCsv } from "@/lib/partner/stats-csv";
-import type { CohortStats } from "@/lib/partner-report";
 
 /**
  * "Download CSV" on the /portal overview — the same aggregate,
  * suppression-gated numbers the ProofSheet renders, as a file a partner can
- * drop into their own spreadsheet. Built entirely client-side from the stats
- * the page already loaded; no extra endpoint, nothing beyond CohortStats can
- * reach the file.
+ * drop into their own spreadsheet. The CSV is built SERVER-SIDE
+ * (lib/partner/stats-csv.ts) and this component receives only the finished
+ * string: passing raw CohortStats across the client boundary would embed the
+ * exact suppressed counts in the page payload the partner's browser receives,
+ * defeating the banding the server render applies.
  */
-export function CsvExportButton({
-  orgName,
-  stats,
-  partnerType = "hospice",
-}: {
-  orgName: string;
-  stats: CohortStats;
-  /** Audience variant — an employer export omits the hospice-program bereavement row. */
-  partnerType?: "hospice" | "employer";
-}) {
+export function CsvExportButton({ csv }: { csv: string }) {
   function download() {
-    const csv = statsToCsv(orgName, stats, partnerType);
     const date = new Date().toISOString().slice(0, 10);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);

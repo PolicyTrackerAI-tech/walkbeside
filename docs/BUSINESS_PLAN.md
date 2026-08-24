@@ -526,13 +526,20 @@ defamation/trade-libel suit, including 60 years of FCA surveys.
 4. Funeral-home money in any form (also license-revocation bait for the homes
    in NY/VA).
 
-**Corrections to prior internal beliefs [corrected]:** FTC action was an ANPR
-(2022), not an NPRM; no rule exists as of Aug 2026. Maine's ban is
-preneed-only and licensee-scoped. Texas's solicitation rule is licensee-scoped.
-**New Jersey belongs on the watch list ahead of all four previously believed
-states** (its ban reaches "any person" soliciting in health-care facilities);
-the family-initiated packet flow should clear it, and NJ mechanics get specific
-sign-off before any NJ pilot.
+**Corrections to prior internal beliefs [corrected 2026-08-19]:** FTC action
+was an ANPR (2022), not an NPRM; no rule exists as of Aug 2026. Maine's ban is
+preneed-only and licensee-scoped. Texas's solicitation definition is **NOT
+licensee-scoped** — Tex. Occ. Code §651.001 defines solicitation as
+uninvited contact by a licensee's representative "**or any other entity**"
+with a person near death or their family, so it reaches this platform
+directly; only family-initiated activation keeps us outside it (verify the
+exact operative prohibition section, §§651.459–651.460, with counsel —
+official TX sources were unreachable when this was checked). **New Jersey
+belongs on the watch list ahead of all four previously believed states**
+(N.J.S.A. 45:7-65.3 reaches "any person" soliciting in health-care
+facilities and expressly covers "the making of at need or preneed funeral
+arrangements"); the family-initiated packet flow should clear it, and NJ
+mechanics get specific sign-off before any NJ pilot.
 
 **Counsel engagement (priority order, fixed-fee asks):**
 
@@ -649,8 +656,11 @@ employer channel. What survives any deal: the guardrails.
   Foundation Partners Sep 2024; Lantern → Wellthy Nov 2024; Farewill → Dignity
   £12.9M, completed Feb 2025; Renidy (Hospice News Jul 21, 2026).
 - **Legal:** OIG AO 00-3; 42 U.S.C. §1320a-7b(b); SSA §1128A(a)(5); OIG
-  nominal-value policy (2016); Fla. Stat. §497.005/.381; Tex. Occ. Code
-  §651.001(7)/.454; 32 M.R.S. §1402; Neb. Rev. Stat. §38-1424; **N.J.S.A.
+  nominal-value policy (2016); Fla. Stat. §§497.005 (at-need solicitation
+  definition), 497.152 (discipline), 497.452 (preneed licensing, any person);
+  Tex. Occ. Code §651.001(7) (definitions; operative solicitation
+  prohibition believed §§651.459–651.460 — verify with counsel, per §15);
+  32 M.R.S. §1402; Neb. Rev. Stat. §38-1424; **N.J.S.A.
   §45:7-65.3**; S.C. Code §40-19-20; Cal. B&P §7615–16; N.Y. PBH §3450; Va.
   Code §54.1-2806; FTC Funeral Rule ANPR 87 Fed. Reg. (Nov 2, 2022), no
   NPRM/final as of Aug 2026; 16 CFR §453.1(i); 45 CFR §160.103; §164.502(f)

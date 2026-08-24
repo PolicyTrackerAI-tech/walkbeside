@@ -32,7 +32,7 @@ export default async function PartnerTokenReportPage({
   const partner = await resolvePartnerToken(token);
   if (!partner || partner.active === false) notFound();
 
-  const { stats, digest, priceListChecks } = await buildPartnerReportData(partner);
+  const { stats, digest, checkerFamilies } = await buildPartnerReportData(partner);
 
   return (
     <>
@@ -42,7 +42,7 @@ export default async function PartnerTokenReportPage({
         live
         digest={digest}
         linksHref={`/partner/r/${token}/links`}
-        priceListChecks={priceListChecks}
+        checkerFamilies={checkerFamilies}
         partnerType={
           partner.partner_type === "employer" ? "employer" : "hospice"
         }

@@ -11,8 +11,15 @@ export interface CodeRow {
   label: string | null;
   active: boolean;
   created_at: string;
-  /** Aggregate claim count — the only case-adjacent number this surface ever shows. */
-  claims: number;
+  /**
+   * Aggregate claim count as a PRE-BANDED display string ("0", "fewer than
+   * 5", "7"). Banded SERVER-SIDE in lib/partner/codes.ts before crossing the
+   * server→client boundary — client-component props are serialized into the
+   * page payload, so an exact 1–4 here would reach the coordinator's browser
+   * (view-source) even if the render banded it, and an exact small count on
+   * a labeled code could tell a coordinator which family activated.
+   */
+  claimsDisplay: string;
 }
 
 /**
@@ -76,7 +83,7 @@ export function LinksClient({
           label: label || null,
           active: true,
           created_at: new Date().toISOString(),
-          claims: 0,
+          claimsDisplay: "0",
         },
         ...prev,
       ]);
@@ -172,7 +179,7 @@ export function LinksClient({
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                   <span className="font-mono text-sm text-ink">{c.code}</span>
                   <span className="text-xs text-ink-muted">
-                    {c.claims} {c.claims === 1 ? "family started a case" : "families started cases"}
+                    {c.claimsDisplay} families started cases
                     {!c.active && " · turned off"}
                   </span>
                 </div>

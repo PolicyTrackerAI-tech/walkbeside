@@ -107,11 +107,17 @@ export default function TermsPage() {
             4. Referrals and compensation
           </h2>
           <p>
-            Where we show third-party referrals (for example, insurance,
-            financing, or legal services) we disclose on the same screen if
-            we receive compensation for the referral. Our recommendations
-            are based on stated criteria, not on compensation amount. You
-            are under no obligation to use any referral.
+            We receive no compensation for any referral or mention of a
+            third-party service &mdash; no commissions, referral fees, or
+            other payment from funeral homes, cemeteries, insurers, financing
+            services, attorneys, or anyone else we mention. Where we name a
+            third-party resource, it is chosen on stated criteria only, and
+            you are under no obligation to use it. Compensation from funeral
+            homes, cemeteries, or insurers will never happen &mdash; that is a
+            founding commitment, not a policy that can change. If we ever
+            accept compensation for referring any other kind of service, we
+            will update these Terms and disclose it on the same screen before
+            you use the referral.
           </p>
 
           <h2 className="font-serif text-xl text-ink pt-4">

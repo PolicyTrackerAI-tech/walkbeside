@@ -33,7 +33,7 @@ const HOW_IT_WORKS = [
   {
     n: 5,
     title: "At the agreed point, you get an aggregate report.",
-    body: "Families helped, savings, satisfaction, time-to-resolution — for your compliance file and referral conversations. Never a single family's details.",
+    body: "Families helped, savings, satisfaction, time-to-resolution — for your compliance file and bereavement-program documentation. Never a single family's details, and never for use in marketing to families who haven't chosen you yet.",
   },
 ];
 

@@ -4,9 +4,30 @@ import {
   sampleCohort,
   rowToCohortRecord,
   metroMedianCents,
+  displayCount,
   SMALL_SAMPLE_THRESHOLD,
   type CohortRecord,
 } from "@/lib/partner-report";
+
+describe("displayCount", () => {
+  it("is exact at zero and at the threshold and above", () => {
+    expect(displayCount(0)).toBe("0");
+    expect(displayCount(SMALL_SAMPLE_THRESHOLD)).toBe(
+      String(SMALL_SAMPLE_THRESHOLD),
+    );
+    expect(displayCount(37)).toBe("37");
+  });
+
+  it("bands every count between 1 and threshold-1 — a partner-visible exact 1–4 could point at one family", () => {
+    for (let n = 1; n < SMALL_SAMPLE_THRESHOLD; n++) {
+      expect(displayCount(n)).toBe(`fewer than ${SMALL_SAMPLE_THRESHOLD}`);
+    }
+  });
+
+  it("treats a defensive negative as zero", () => {
+    expect(displayCount(-1)).toBe("0");
+  });
+});
 
 describe("aggregateCohort", () => {
   it("returns a fully-suppressed stat block for no records — nulled at the source, not just zeroed", () => {

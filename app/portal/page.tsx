@@ -10,6 +10,7 @@ import { PortalSessionNav } from "@/components/partner/PortalSessionNav";
 import { CsvExportButton } from "@/components/partner/CsvExportButton";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardTitle } from "@/components/ui/Card";
+import { statsToCsv } from "@/lib/partner/stats-csv";
 
 export const metadata: Metadata = {
   title: "Partner portal",
@@ -25,7 +26,7 @@ export default async function PortalOverviewPage() {
   const ctx = await requirePartnerMember("/portal");
   const { partner } = ctx;
 
-  const [{ stats, digest, priceListChecks }, codeCount] = await Promise.all([
+  const [{ stats, digest, checkerFamilies }, codeCount] = await Promise.all([
     buildPartnerReportData(partner),
     activeCodeCount(partner.id),
   ]);
@@ -120,7 +121,7 @@ export default async function PortalOverviewPage() {
       digest={digest}
       linksHref="/portal/links"
       partnerType={partnerType}
-      priceListChecks={priceListChecks}
+      checkerFamilies={checkerFamilies}
       portalNav={
         <div className="space-y-4">
           {nav}
@@ -167,10 +168,11 @@ export default async function PortalOverviewPage() {
           )}
           {stats.familiesHelped > 0 && (
             <div className="flex justify-end">
+              {/* CSV is built server-side so only the finished, banded string
+                  crosses the client boundary — raw stats in a client prop
+                  would put exact suppressed counts in the page payload. */}
               <CsvExportButton
-                orgName={partner.name}
-                stats={stats}
-                partnerType={partnerType}
+                csv={statsToCsv(partner.name, stats, partnerType)}
               />
             </div>
           )}

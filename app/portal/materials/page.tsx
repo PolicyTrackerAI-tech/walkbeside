@@ -36,7 +36,7 @@ export default async function PortalMaterialsPage() {
   const ctx = await requirePartnerMember("/portal/materials");
   const { partner } = ctx;
 
-  const codes = await codesWithClaims(partner.id);
+  const { rows: codes } = await codesWithClaims(partner.id);
   const activeCodes = codes.filter((c) => c.active);
   const urlFor = (code: string) => `${PUBLIC.appUrl}/plan-now?ref=${code}`;
   const accent = safeAccent(partner.brand_accent);

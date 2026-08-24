@@ -47,11 +47,11 @@
 
 ## 4. Why this matters beyond the numbers
 
-**Referral reputation — your real return.** Every family that has a calm, un-exploited funeral experience tells the family that referred *them*, and tells the hospital discharge planner, the SNF, and the physician who sent them to you. A great bereavement experience is referral-source goodwill, and referral-source goodwill is census. This is the line you can take to your community-liaison and your ED.
+**Families supported — your real return.** Every family that has a calm, un-exploited funeral experience finishes the bereavement year knowing their hospice stood by them. That is the return: the psychosocial and practical support your program exists to deliver, now documented. (One boundary we hold by design, and ask you to hold with us: this benefit and its results are for families already in your care and for your internal program records — never for pre-admission marketing or any material used to bring families in.)
 
 **Documented mandate coverage.** Medicare requires bereavement support for the family up to a year after every death (42 CFR 418.64), it's unfunded, and it's survey-able. This pilot is a documented, repeatable way you delivered the funeral-and-admin portion of that obligation across [N] families — evidence for your compliance file, and the kind of family-experience support CAHPS asks about.
 
-> *Note: CAHPS is pay-for-reporting — it's about your publicly reported reputation and Star Ratings, not extra reimbursement. The reimbursement story here is indirect: reputation → referrals → census.*
+> *Note: CAHPS is pay-for-reporting — it's about your publicly reported family-experience measures and Star Ratings, not extra reimbursement.*
 
 **Neutral and free to families — the only tool you can ethically hand over.** We take **zero money from funeral homes or insurers**, and we never steer a family to a specific home. We present neutral options; the family chooses. That's exactly why it's safe under anti-steering law for you to put us in a grieving family's hands.
 
