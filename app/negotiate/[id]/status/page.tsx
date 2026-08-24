@@ -6,6 +6,7 @@ import { Card, CardTitle, CardEyebrow } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { CaseStepper } from "@/components/negotiate/CaseStepper";
+import { CaseSatisfaction } from "@/components/negotiate/CaseSatisfaction";
 import { fmtCents } from "@/lib/stripe";
 import {
   anyOutreachSent,
@@ -55,6 +56,8 @@ interface NegotiationView {
   target_home_estimate_cents: number | null;
   best_quote_cents: number | null;
   savings_cents: number | null;
+  satisfaction_score: number | null;
+  amount_paid_cents: number | null;
 }
 
 export default function NegotiationStatusPage({
@@ -68,6 +71,19 @@ export default function NegotiationStatusPage({
   const [messages, setMessages] = useState<Message[]>([]);
   const [outreachLive, setOutreachLive] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // The dashboard links straight to #outcome ("note how it turned out").
+  // The section renders only after the fetch resolves, so the browser's own
+  // anchor scroll can't find it — open the disclosure and scroll ourselves.
+  const [outcomeOpen, setOutcomeOpen] = useState(
+    () => typeof window !== "undefined" && window.location.hash === "#outcome",
+  );
+  useEffect(() => {
+    if (!neg || window.location.hash !== "#outcome") return;
+    document
+      .getElementById("outcome")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- fire once when the case first loads; later refreshes must not re-scroll under the family
+  }, [neg?.id]);
 
   async function refresh() {
     const r = await fetch(`/api/negotiate/${id}`);
@@ -202,7 +218,9 @@ export default function NegotiationStatusPage({
             </h1>
             <p className="text-ink-soft mt-2">
               {noHomesAvailable ? (
-                <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back as we add coverage in your region.</>
+                <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back as we add coverage in your region. The price guides and the{" "}
+                <a href="/analyzer" className="underline hover:text-ink">quote checker</a>{" "}
+                work everywhere, whichever home you talk to.</>
               ) : sentAny ? (
                 <>We&rsquo;ve asked each home below for their itemized prices &mdash; your right under the FTC Funeral Rule. Each home&rsquo;s status updates here as replies come in; you can check back any time.</>
               ) : (
@@ -238,6 +256,19 @@ export default function NegotiationStatusPage({
               </div>
             </div>
           </Card>
+
+          {noHomesAvailable && (
+            <div id="outcome">
+              <CaseSatisfaction
+                negotiationId={id}
+                initialScore={neg.satisfaction_score}
+                initialAmountPaidCents={neg.amount_paid_cents}
+                title="If you've already made arrangements"
+                intro="Many families handle things directly from here — that's exactly right. If you'd like to note how it turned out, it stays private with your case and helps us help the next family. Entirely optional."
+                showSurpriseFees={false}
+              />
+            </div>
+          )}
 
           {!noHomesAvailable && (
             <div>
@@ -294,6 +325,33 @@ export default function NegotiationStatusPage({
             outreachLive={outreachLive}
             onSent={refresh}
           />
+
+          {/* The quiet second mouth of the outcomes layer: families who
+              finish things on their own (with or without quotes here) were
+              previously never asked how it went — only the choose-a-home →
+              closed path was. Optional, never gating; the case stays open. */}
+          {!noHomesAvailable && neg.status !== "closed" && (
+            <details
+              id="outcome"
+              open={outcomeOpen}
+              onToggle={(e) => setOutcomeOpen(e.currentTarget.open)}
+              className="rounded-2xl border border-border bg-surface-soft px-5 py-4"
+            >
+              <summary className="cursor-pointer text-sm text-ink-soft hover:text-ink">
+                Already made arrangements on your own?
+              </summary>
+              <div className="mt-4">
+                <CaseSatisfaction
+                  negotiationId={id}
+                  initialScore={neg.satisfaction_score}
+                  initialAmountPaidCents={neg.amount_paid_cents}
+                  title="That's completely fine"
+                  intro="Many families finish things directly with a home. If you'd like to note how it turned out, it stays private with your case and helps us help the next family. Entirely optional — your case here stays open either way."
+                  showSurpriseFees={false}
+                />
+              </div>
+            </details>
+          )}
         </div>
       </section>
     </main>

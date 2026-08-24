@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { isAheadMode } from "@/components/PlanningAheadBanner";
 import { ReferralCoBrand } from "@/components/ReferralCoBrand";
 import { normalizeReferralCode } from "@/lib/referral-codes";
+import { FEATURES } from "@/lib/env";
+import { createClient } from "@/lib/supabase/server";
 import { Analyzer } from "./Analyzer";
 
 export const metadata: Metadata = {
@@ -43,12 +45,34 @@ export default async function Page({
   // Codes resolve to the real institution name via <ReferralCoBrand>; the
   // titleized cosmetic banner is suppressed for them.
   if (normalizeReferralCode(ref)) partner = undefined;
+  // Whether this visitor's checks persist (signed in) — drives the honest
+  // post-result save prompt. Auth is never REQUIRED to see results; when
+  // Supabase isn't configured the prompt is suppressed entirely (there is
+  // no account to offer).
+  const authAvailable = FEATURES.supabase();
+  let signedIn = false;
+  if (authAvailable) {
+    try {
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      signedIn = !!user;
+    } catch {
+      // Treat an auth hiccup as signed-out: the checker itself never blocks.
+    }
+  }
   return (
     <>
       <div className="max-w-3xl mx-auto px-5 pt-4 empty:hidden">
         <ReferralCoBrand refParam={ref} />
       </div>
-      <Analyzer partner={partner} aheadMode={isAheadMode(sp)} />
+      <Analyzer
+        partner={partner}
+        aheadMode={isAheadMode(sp)}
+        signedIn={signedIn}
+        authAvailable={authAvailable}
+      />
     </>
   );
 }

@@ -168,7 +168,15 @@ export function FuneralHomeOutreachCard({
               ) : (
                 <>Outreach detail has the full view &mdash; each prepared
                 request, and a place to record quotes you gather.</>
-              )}
+              )}{" "}
+              Already made arrangements on your own?{" "}
+              <a
+                href={`/negotiate/${negotiationId}/status#outcome`}
+                className="underline hover:text-ink-soft"
+              >
+                You can note how it turned out
+              </a>
+              {" "}&mdash; optional.
             </p>
           )}
         </>

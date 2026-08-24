@@ -63,7 +63,19 @@ interface AnalyzerResult {
     /** Benchmarked items in total (per-unit state-fee items excluded). */
     itemsBenchmarked?: number;
   };
+  /** True only when a row really landed for a signed-in family. */
+  saved?: boolean;
+  /** Which parser read the list — "naive" is the regex fallback. */
+  extractionMethod?: "claude" | "naive";
 }
+
+/**
+ * Inputs stashed across the /login round-trip when a signed-out family opts
+ * to save their check. sessionStorage survives the same-tab redirect (the
+ * same pattern as hf-analyzer:handoff). Deliberately excludes the contribute
+ * checkbox — consent is re-asked, never carried (unchecked default).
+ */
+const PENDING_SAVE_KEY = "hf-analyzer:pending-save";
 
 /**
  * Client-side downscale before posting an image to /api/extract-price-list-image.
@@ -128,9 +140,15 @@ Total $10,730`;
 export function Analyzer({
   partner,
   aheadMode,
+  signedIn = false,
+  authAvailable = false,
 }: {
   partner?: string;
   aheadMode?: boolean;
+  /** Server-derived: this visitor has a session, so checks persist. */
+  signedIn?: boolean;
+  /** Supabase configured — an account is even possible to offer. */
+  authAvailable?: boolean;
 }) {
   const [text, setText] = useState("");
   const [zip, setZip] = useState("");
@@ -140,6 +158,9 @@ export function Analyzer({
   // hf-decide sessionStorage value) — the bridge to /negotiate/start passes it
   // along only when it's a real ServiceType key.
   const [usedHint, setUsedHint] = useState<string | undefined>(undefined);
+  // The contribute-checkbox state the CURRENT result was analyzed with —
+  // ticking the box after a run must not relabel an already-returned result.
+  const [usedContribute, setUsedContribute] = useState(false);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<AnalyzerResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -149,7 +170,53 @@ export function Analyzer({
   const [sample, setSample] = useState(false);
   // Explicit opt-in to contribute this check's de-identified prices to the
   // benchmark feed (D8). Unchecked by default — consent is never assumed.
+  // Rendered only for signed-in visitors: an anonymous check persists no row
+  // at all, so showing the box signed-out would collect a consent we then
+  // silently discard (A4-02).
   const [contribute, setContribute] = useState(false);
+  // Soft post-result save prompt (signed-out only): dismissible, never gates
+  // the result. "No thanks" holds for the rest of this visit.
+  const [savePromptDismissed, setSavePromptDismissed] = useState(false);
+  // Set when inputs were restored after the sign-in round-trip.
+  const [restoredPending, setRestoredPending] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem(PENDING_SAVE_KEY);
+      if (!raw) return;
+      window.sessionStorage.removeItem(PENDING_SAVE_KEY);
+      const pending = JSON.parse(raw) as {
+        text?: string;
+        zip?: string;
+        homeName?: string;
+      };
+      if (typeof pending.text === "string" && pending.text.trim()) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- mount-only sessionStorage hydration after the /login round-trip; unreadable during SSR-safe render
+        setText(pending.text);
+        if (typeof pending.zip === "string") setZip(pending.zip);
+        if (typeof pending.homeName === "string")
+          setHomeName(pending.homeName);
+        setRestoredPending(true);
+      }
+    } catch {
+      // ignore — worst case the family pastes again
+    }
+  }, []);
+
+  function stashPendingSave() {
+    try {
+      window.sessionStorage.setItem(
+        PENDING_SAVE_KEY,
+        JSON.stringify({
+          text,
+          zip,
+          ...(homeName.trim() ? { homeName: homeName.trim() } : {}),
+        }),
+      );
+    } catch {
+      // ignore — sign-in still works, they just re-paste
+    }
+  }
   const [letter, setLetter] = useState<string | null>(null);
   const [letterBusy, setLetterBusy] = useState(false);
   const [letterCopied, setLetterCopied] = useState(false);
@@ -215,6 +282,10 @@ export function Analyzer({
           // fixed demo prices are not the family's data and must never feed
           // the benchmark aggregation, whatever the box says.
           contributed: isSample ? false : contribute,
+          // Demo runs are not family data: the route skips persistence
+          // entirely (a signed-in visitor's sample click must not land a
+          // fake $10,730 bill on their account record).
+          sample: isSample,
         }),
       });
       if (!r.ok) {
@@ -228,6 +299,7 @@ export function Analyzer({
       }
       setResult(await r.json());
       setUsedHint(serviceTypeHint);
+      setUsedContribute(isSample ? false : contribute);
       trackTool("analyzer_completed");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Could not analyze.");
@@ -610,19 +682,33 @@ export function Analyzer({
                   {pageWarning}
                 </div>
               )}
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={contribute}
-                  onChange={(e) => setContribute(e.target.checked)}
-                  className="mt-1 h-4 w-4 accent-[var(--primary-deep,#2f5d50)] shrink-0"
-                />
-                <span className="text-sm text-ink-soft">
-                  Add my de-identified prices to the public fair-price data
-                  &mdash; optional. Your name, contact details, and anything
-                  personal are never included either way.
-                </span>
-              </label>
+              {restoredPending && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="text-sm text-ink-soft bg-surface-soft border border-border rounded-xl px-4 py-3"
+                >
+                  Your price list is still here from before
+                  {signedIn
+                    ? " — press Analyze to run it again; this time the check is recorded to your account."
+                    : "."}
+                </div>
+              )}
+              {signedIn && (
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={contribute}
+                    onChange={(e) => setContribute(e.target.checked)}
+                    className="mt-1 h-4 w-4 accent-[var(--primary-deep,#2f5d50)] shrink-0"
+                  />
+                  <span className="text-sm text-ink-soft">
+                    Add my de-identified prices to the public fair-price data
+                    &mdash; optional. Your name, contact details, and anything
+                    personal are never included either way.
+                  </span>
+                </label>
+              )}
               <div className="flex flex-wrap items-center gap-3">
                 <Button
                   onClick={() => analyze()}
@@ -705,6 +791,20 @@ export function Analyzer({
                 </div>
               )}
 
+              {/* Parser-provenance honesty: when the regex fallback (not the
+                  model) read the list, the family deserves to know before
+                  acting on the verdict — it can miss unusual wording. */}
+              {result.extractionMethod === "naive" && (
+                <div className="rounded-xl border border-border bg-surface-soft px-4 py-3 text-sm text-ink-soft">
+                  <span className="font-medium text-ink">
+                    Read with our simpler backup reader.{" "}
+                  </span>
+                  Our main reader couldn&rsquo;t process this list, so a
+                  simpler one parsed it &mdash; it can miss unusual wording.
+                  Double-check the items below against your copy.
+                </div>
+              )}
+
               {result.coverage &&
                 result.coverage.level !== "high" &&
                 result.coverage.note && (
@@ -751,6 +851,18 @@ export function Analyzer({
                   Print / Save as PDF
                 </Button>
               </div>
+
+              {/* Only when a row really landed (route-reported) — never claim
+                  a save that didn't happen. */}
+              {result.saved && (
+                <p className="print:hidden text-xs text-ink-muted">
+                  Recorded privately to your account
+                  {usedContribute
+                    ? " — and, with your permission, the de-identified prices join our fair-price data pool"
+                    : ""}
+                  . Thank you.
+                </p>
+              )}
 
               <ShareThisPage surface="analyzer" />
 
@@ -988,6 +1100,43 @@ export function Analyzer({
                   </tbody>
                 </table>
               </div>
+
+              {/* Soft, skippable save prompt for the signed-out majority —
+                  their check persists nothing (A4-02). Never gates the
+                  result; everything above renders regardless. */}
+              {!sample &&
+                !signedIn &&
+                authAvailable &&
+                !savePromptDismissed && (
+                  <Card tone="soft" className="print:hidden">
+                    <CardTitle>Keep a record of this check?</CardTitle>
+                    <p className="text-ink-soft text-sm mt-2 mb-4">
+                      Right now it lives only on this screen &mdash; nothing is
+                      saved once you leave. If you&rsquo;d like a record, sign
+                      in free and press Analyze again: the check is recorded
+                      privately to your account, and &mdash; only if you choose
+                      &mdash; your de-identified prices can join the public
+                      fair-price data that helps the next family. Everything
+                      above works without an account.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <LinkButton
+                        href="/login?next=/analyzer"
+                        variant="secondary"
+                        onClick={stashPendingSave}
+                      >
+                        Sign in to save it →
+                      </LinkButton>
+                      <button
+                        type="button"
+                        onClick={() => setSavePromptDismissed(true)}
+                        className="text-sm text-ink-muted underline underline-offset-2 hover:text-ink-soft"
+                      >
+                        No thanks
+                      </button>
+                    </div>
+                  </Card>
+                )}
 
               {/* Footer — print only. Closes the document with the source note
                   and where to verify the method. */}
