@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
 import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
-import { resolvePartnerToken } from "@/lib/partner-auth";
+import { isPartnerParked, resolvePartnerToken } from "@/lib/partner-auth";
 import { CoordinatorCheck } from "@/components/partner/CoordinatorCheck";
 
 export const metadata: Metadata = {
@@ -27,7 +27,9 @@ export default async function PartnerCheckPage({
 }) {
   const { token } = await params;
   const partner = await resolvePartnerToken(token);
-  if (!partner || partner.active === false) notFound();
+  // Parked orgs (paused/archived/deactivated) lose bearer-link access the
+  // moment the founder parks them — same rule as the session portal (A5-02).
+  if (!partner || isPartnerParked(partner)) notFound();
 
   return (
     <main className="flex-1 flex flex-col">

@@ -83,10 +83,13 @@ export function OutcomesClient({
   initial,
   partners = [],
   aiProposals = [],
+  demoPartnerIds = [],
 }: {
   initial: OutcomeCase[];
   partners?: PartnerLite[];
   aiProposals?: AiQuoteProposal[];
+  /** Seeded demo orgs (A5-04) — their cases never join the headline totals. */
+  demoPartnerIds?: string[];
 }) {
   const [cases, setCases] = React.useState<OutcomeCase[]>(initial);
   const [filter, setFilter] = React.useState<Filter>("all");
@@ -94,17 +97,26 @@ export function OutcomesClient({
   const [busy, setBusy] = React.useState<Record<string, boolean>>({});
   const [error, setError] = React.useState<string | null>(null);
 
+  const demoIds = React.useMemo(() => new Set(demoPartnerIds), [demoPartnerIds]);
+
   const totals = React.useMemo(() => {
     let withOutcome = 0;
     let savings = 0;
+    let demo = 0;
     for (const c of cases) {
+      // Demo-org cases are our own seeded fiction — they must never inflate
+      // the headline numbers the kill gates are judged on (A5-04).
+      if (c.partner_id && demoIds.has(c.partner_id)) {
+        demo++;
+        continue;
+      }
       if (c.outcome_recorded_at) withOutcome++;
       if (typeof c.savings_vs_listed_cents === "number") {
         savings += c.savings_vs_listed_cents;
       }
     }
-    return { total: cases.length, withOutcome, savings };
-  }, [cases]);
+    return { total: cases.length - demo, withOutcome, savings, demo };
+  }, [cases, demoIds]);
 
   const visible = React.useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -179,6 +191,9 @@ export function OutcomesClient({
         <Pill label="Cases" value={String(totals.total)} />
         <Pill label="Outcome recorded" value={String(totals.withOutcome)} tone="good" />
         <Pill label="Total savings vs listed" value={money(totals.savings)} tone="good" />
+        {totals.demo > 0 && (
+          <Pill label="Demo cases excluded" value={String(totals.demo)} />
+        )}
       </div>
 
       <Card tone="soft">

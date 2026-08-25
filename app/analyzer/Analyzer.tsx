@@ -14,6 +14,7 @@ import {
   DATA_SOURCE_LABEL,
   SERVICE_LABELS,
 } from "@/lib/pricing-data";
+import { BRAND } from "@/lib/brand";
 import { readReferral } from "@/lib/referral-codes";
 import { trackTool } from "@/lib/analytics";
 import {
@@ -761,7 +762,7 @@ export function Analyzer({
               <div className="hidden print:block border-b border-border pb-3 mb-2">
                 <div className="flex items-baseline justify-between">
                   <span className="font-serif text-xl text-ink">
-                    Honest Funeral
+                    {BRAND.name}
                   </span>
                   <span className="text-xs text-ink-muted">
                     Price-list check ·{" "}

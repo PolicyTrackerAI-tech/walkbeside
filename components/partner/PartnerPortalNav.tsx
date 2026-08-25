@@ -10,12 +10,13 @@ import Link from "next/link";
  * grids.
  */
 
-export type PortalTab = "report" | "links" | "check";
+export type PortalTab = "report" | "links" | "check" | "materials";
 
 const TABS: { key: PortalTab; label: string; path: string }[] = [
   { key: "report", label: "Report", path: "" },
   { key: "links", label: "Referral links", path: "/links" },
   { key: "check", label: "Quote check", path: "/check" },
+  { key: "materials", label: "Family materials", path: "/materials" },
 ];
 
 export function PartnerPortalNav({

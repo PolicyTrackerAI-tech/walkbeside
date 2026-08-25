@@ -27,7 +27,7 @@ const HOW_IT_WORKS = [
   },
   {
     n: 4,
-    title: "We run every case by hand and capture outcomes.",
+    title: "Every case is instrumented end to end.",
     body: "Savings, satisfaction, time-to-resolution — recorded on every case that comes through.",
   },
   {

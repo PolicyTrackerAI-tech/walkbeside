@@ -55,6 +55,7 @@ export function PartnersClient({
   leads: LeadRow[];
 }) {
   const [partners, setPartners] = useState(initial);
+  const [leadRows, setLeadRows] = useState(leads);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -68,6 +69,32 @@ export function PartnersClient({
       setTimeout(() => setCopiedId(null), 2000);
     } catch {
       // Clipboard unavailable — the truncated display stays as-is.
+    }
+  }
+
+  // A5-04: the write path partner_leads.handled_at never had — without it the
+  // founder re-triaged the same leads on every visit.
+  async function setLeadHandled(leadId: string, handled: boolean) {
+    setBusy(leadId);
+    setError(null);
+    try {
+      const r = await fetch("/api/admin/partners", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ leadId, handled }),
+      });
+      if (!r.ok) throw new Error();
+      setLeadRows((prev) =>
+        prev.map((l) =>
+          l.id === leadId
+            ? { ...l, handled_at: handled ? new Date().toISOString() : null }
+            : l,
+        ),
+      );
+    } catch {
+      setError("Couldn't update that lead — try again.");
+    } finally {
+      setBusy(null);
     }
   }
 
@@ -165,10 +192,15 @@ export function PartnersClient({
         ))}
       </div>
 
-      {leads.length > 0 && (
+      {leadRows.length > 0 && (
         <Card tone="soft">
           <CardTitle>
-            {leads.length} lead{leads.length === 1 ? "" : "s"}
+            {(() => {
+              const open = leadRows.filter((l) => !l.handled_at).length;
+              return open > 0
+                ? `${open} lead${open === 1 ? "" : "s"} to triage`
+                : "All leads handled";
+            })()}
           </CardTitle>
           <p className="text-sm text-ink-soft mt-1">
             Demo requests from institutions and hospice nominations from
@@ -177,8 +209,15 @@ export function PartnersClient({
             nominated hospice&apos;s families.
           </p>
           <ul className="mt-3 space-y-3">
-            {leads.map((l) => (
-              <li key={l.id} className="rounded-xl border border-border bg-surface px-4 py-3">
+            {[...leadRows]
+              .sort((a, b) => Number(!!a.handled_at) - Number(!!b.handled_at))
+              .map((l) => (
+              <li
+                key={l.id}
+                className={`rounded-xl border border-border bg-surface px-4 py-3 ${
+                  l.handled_at ? "opacity-55" : ""
+                }`}
+              >
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                   <span className="font-medium text-ink">
                     {l.name ??
@@ -223,6 +262,17 @@ export function PartnersClient({
                 {l.note && (
                   <p className="text-sm text-ink-soft mt-1 whitespace-pre-line">{l.note}</p>
                 )}
+                <div className="mt-2">
+                  <button
+                    onClick={() => setLeadHandled(l.id, !l.handled_at)}
+                    disabled={busy === l.id}
+                    className="text-xs text-primary-deep underline-offset-2 hover:underline disabled:opacity-50"
+                  >
+                    {l.handled_at
+                      ? `Handled ${new Date(l.handled_at).toLocaleDateString("en-US")} — reopen`
+                      : "Mark handled"}
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
