@@ -1,0 +1,36 @@
+# CI (audit A10-01): the 736-test suite, typecheck, lint, and a full build on
+# every PR and every push to main. Before this file existed, all of it ran
+# only when a human remembered — the guardrail tests protected nothing at
+# merge time.
+#
+# The build runs WITHOUT secrets on purpose: the app is designed to degrade
+# calmly when env is absent (unconfigured Supabase, no AI key), and the build
+# passing env-less is itself one of those guarantees — do not "fix" a CI
+# failure by adding prod secrets here.
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Match local dev (node 24); bump deliberately, not by drift.
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
