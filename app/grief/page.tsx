@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  * /grief — public, indexable. The "year-long arc" companion to the
  * 30-day at-need flow. Practical info on what grief looks like over
  * time, when to seek professional help, and where to find support.
- * No sister voice; factual references to published grief research
+ * No first-person practitioner voice; factual references to published grief research
  * and named national organizations.
  */
 export default function GriefPage() {

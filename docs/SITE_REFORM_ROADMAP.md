@@ -1,5 +1,7 @@
 # Site Reform Roadmap — one site, two zones, staged
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** This roadmap's site inventory is no longer the site — "the B2B side today is five real surfaces" and the shared-family-nav problem it plans around predate the full partner portal (`/portal` + materials/links/settings, the token report + its twins, institutional billing behind `BILLING_LIVE`) and the July-sprint dual-lane homepage/buyer-nav work, and the "~13 months" bereavement-mandate stat it cites was corrected site-wide to "up to 1 year" in audit A3; plan from docs/BUSINESS_PLAN.md v3.0 + the site-audit LEDGER instead (the §1 no-domain-split recommendation itself still stands). Kept for history; do not execute from this document.
+
 **Date:** 2026-07-04
 **Trigger:** founder request — reform the landing experience for hospice/employer
 buyers and the family/consumer side, without losing existing content, and

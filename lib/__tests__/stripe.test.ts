@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/format";
 
 // The consumer family fee is decommissioned (free to families). fmtCents stays
 // for currency display on quotes/savings.

@@ -1,5 +1,13 @@
 # Honest Funeral — The Plan of Attack
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** Superseded by
+> `docs/BUSINESS_PLAN.md` v3.0 (2026-08-18) + `docs/EXECUTION_PLAN_2026-08.md`;
+> its snapshot is 2026-06-24 and its biggest false claims today are that the $49
+> family fee is "live … being removed" (fully decommissioned 2026-06-26), that
+> L3/the partner portal and the Fair-Price Index are "not built" (both are built
+> and live), and a CAHPS-lift pitch the July market research banned. Kept for
+> history; do not execute from this document.
+
 **The master battle plan. Everything, beginning to end, in one place.** This
 synthesizes the whole `docs/` set into a single narrative you can run the company
 off. Each section points to its detailed spec for depth. When in doubt, this

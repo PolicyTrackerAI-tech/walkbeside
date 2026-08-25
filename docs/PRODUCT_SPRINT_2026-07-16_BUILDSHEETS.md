@@ -1,5 +1,7 @@
 # Product Sprint — Day Build Sheets (execution depth, Jul 16–27)
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** The entire sprint has shipped (Days 1–9 all merged; see the site-audit LEDGER and docs/BUSINESS_PLAN.md v3.0 for current state), and §RENAME DAY is dead, not pending — the 2026-08-18 naming decision fixed the brand as "Honest Funeral Co." permanently, so "Honest Funeral → Open Farewell, everywhere" will never run. Kept for history; do not execute from this document (its own internal banners already said this for Days 5–9; it now applies to every section).
+
 Companion to [`PRODUCT_SPRINT_2026-07-16.md`](PRODUCT_SPRINT_2026-07-16.md)
 (the frame: mission, D1–D12, migrations, QA, cut lines) and
 [`PRODUCT_PLAN_2026-Q3.md`](PRODUCT_PLAN_2026-Q3.md) (the 13-week master).

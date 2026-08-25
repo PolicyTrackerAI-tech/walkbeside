@@ -15,10 +15,3 @@ export const stripeAvailable = FEATURES.stripe;
 // families (Operating Plan guardrail #2). Stripe stays as scaffolding for
 // future INSTITUTIONAL billing (per-facility annual), never a family charge.
 
-export function fmtCents(cents: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(cents / 100);
-}

@@ -2,7 +2,9 @@
 
 This is the operating contract for anyone (human or agent) working on Honest
 Funeral. Read it first. The full strategy is [`docs/OPERATING_PLAN.md`](docs/OPERATING_PLAN.md)
-(the bible); the execution plan is [`docs/ROADMAP.md`](docs/ROADMAP.md).
+(the bible); the execution plan is [`docs/EXECUTION_PLAN_2026-08.md`](docs/EXECUTION_PLAN_2026-08.md)
+(with [`docs/BUSINESS_PLAN.md`](docs/BUSINESS_PLAN.md) v3.0 as the strategy source;
+ROADMAP.md is bannered-stale as of audit A9).
 
 ## What this company is (the one-paragraph thesis)
 
@@ -48,12 +50,16 @@ the data, it's probably a distraction.
 
 ## Operational safety rules (do not break)
 
-- **No live emails to funeral homes without explicit founder go.** The single
-  send path is `lib/negotiation/send.ts` `sendOutreachForNegotiation`, which
-  **only sends when `OUTREACH_LIVE === "true"`** (otherwise it records `dry_run`
-  rows). Keep `OUTREACH_LIVE` **unset/false**. Never add a raw email-to-a-home
-  send anywhere else — route everything through that function so the kill switch
-  always applies. `OUTREACH_NOTIFICATIONS_ENABLED` is the matching switch for
+- **No live emails to funeral homes without explicit founder go.** There are
+  exactly THREE home-directed send sites — `lib/negotiation/send.ts`
+  (`sendOutreachForNegotiation`), `lib/negotiation/notify-chosen-home.ts`, and
+  `app/api/negotiate/[id]/messages/route.ts` — and each **only sends when
+  `OUTREACH_LIVE === "true"`** (otherwise rows record `dry_run` / messages
+  store unsent). Keep `OUTREACH_LIVE` **unset/false**. The set is enforced by
+  `lib/__tests__/send-path-architecture.test.ts`: a new `sendEmail` call site
+  anywhere fails CI until deliberately allowlisted with its recipient class,
+  and any home-directed site must carry the gate + the denylist re-check.
+  Prefer routing new home sends through `sendOutreachForNegotiation`. `OUTREACH_NOTIFICATIONS_ENABLED` is the matching switch for
   family quote notifications; keep it off too.
 - **Only vetted homes are ever contacted.** `lib/negotiation/directory.ts`
   requires `active = true AND vetted = true`. Don't loosen it.

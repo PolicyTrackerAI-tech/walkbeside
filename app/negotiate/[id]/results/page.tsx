@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { CaseStepper } from "@/components/negotiate/CaseStepper";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/format";
 import { outreachIsLive } from "@/lib/negotiation/outreach-mode";
 
 export default async function NegotiationResultsPage({

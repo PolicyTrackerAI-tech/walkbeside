@@ -1,5 +1,7 @@
 # Engineering Backlog — what's next to build
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** Superseded by docs/BUSINESS_PLAN.md v3.0 and the site-audit LEDGER: its "build next" item #1 (the AI partner digest) shipped long ago (`lib/partner-digest.ts` + the `partner-digest` cron), the per-metro Fair-Price Index it files under "longer-tail" is live with a public dataset endpoint, and the current gate is prod migrations + counsel + naming a pilot hospice — not building more. Kept for history; do not execute from this document.
+
 Replaces the 2026-07-05 "fully superseded" version of this file (all its P1–P4
 tickets shipped; that history is in git log if ever needed). This is a fresh
 backlog assembled from a strategy review (sales-process, AI-feature-gap,

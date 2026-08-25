@@ -203,32 +203,14 @@ export async function GET(req: Request) {
     .select(PARTNER_COLUMNS)
     .eq("active", true);
   if (error) {
-    // notification_email/partner_type arrive in a Day-1 migration; against a
-    // database that hasn't applied it the select above errors, so retry with
-    // the legacy column set rather than silently reporting sent: 0.
-    const legacy = await admin
-      .from("partners")
-      .select("id, name, contact_email, report_token")
-      .eq("active", true)
-      .not("contact_email", "is", null);
-    if (legacy.error) {
-      return NextResponse.json({ sent: 0, error: "partners_query_failed" });
-    }
-    partners = (
-      (legacy.data as unknown as Omit<
-        PartnerRow,
-        "active" | "notification_email" | "partner_type"
-      >[] | null) ?? []
-    ).map((p) => ({
-      ...p,
-      // The legacy query filtered on active = true above.
-      active: true,
-      notification_email: null,
-      partner_type: "hospice",
-    }));
-  } else {
-    partners = (data as unknown as PartnerRow[] | null) ?? [];
+    // The 2026-07-13 portal-identity migration (notification_email,
+    // partner_type) is applied in prod, verified live. The legacy-column
+    // retry that lived here tolerated a pre-migration schema; audit A9
+    // removed it — a select failing against today's schema should fail
+    // loudly, not silently degrade to a reduced column set.
+    return NextResponse.json({ sent: 0, error: "partners_query_failed" });
   }
+  partners = (data as unknown as PartnerRow[] | null) ?? [];
 
   const period = digestPeriod();
 

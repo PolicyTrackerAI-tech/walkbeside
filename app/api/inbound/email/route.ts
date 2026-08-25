@@ -86,7 +86,7 @@ export async function POST(req: Request) {
   }
 
   // Best-effort match the sender to a known outreach row so the message
-  // attaches to the right FD. If no match, outreach_id stays null; Sister
+  // attaches to the right FD. If no match, outreach_id stays null; the founder
   // can manually link via SQL editor.
   let outreachId: string | null = null;
   if (fromAddress) {

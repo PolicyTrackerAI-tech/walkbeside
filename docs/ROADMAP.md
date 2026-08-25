@@ -1,5 +1,14 @@
 # Roadmap — realigned to the Operating Plan
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** The "Where we are"
+> sections were re-baselined 2026-08-19 and remain broadly accurate, but the
+> operative plan is now `docs/BUSINESS_PLAN.md` v3.0 +
+> `docs/EXECUTION_PLAN_2026-08.md`, and this doc's Build order P1–P4 is
+> entirely shipped — the outcomes migration is applied (2026-07-09), the $49
+> decommission is done (2026-06-26), the partner portal is built, and the
+> Fair-Price Index + `/methodology` are published — as is the L1 "Gaps" list.
+> Kept for history; do not execute from this document.
+
 The single execution plan, aligned to [`OPERATING_PLAN.md`](OPERATING_PLAN.md).
 Goal: **one hospice paying (or about to) within 90 days.** Everything below
 serves that.

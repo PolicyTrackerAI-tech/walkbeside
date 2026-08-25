@@ -13,7 +13,7 @@
  *      The Reuters investigation series (2017-2018) revealed serious
  *      ethical problems with several private programs.
  *
- * We list university programs by default. Sister will vet private
+ * We list university programs by default. Private programs need vetting before listing —
  * programs case-by-case before recommending.
  *
  * NOT financial / legal / medical advice. Programs change acceptance

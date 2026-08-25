@@ -33,9 +33,13 @@ export function isFreeEmail(email: string | null | undefined): boolean {
 }
 
 /**
- * Server-side: is this user paid? Anonymous users are never paid.
+ * Server-side: is this a founder/test account? (Renamed from isPaidUser in
+ * audit A9 — the consumer payment is fully decommissioned; this now means
+ * "free-email allowlist member or a grandfathered legacy paid_at row", used
+ * only to reveal test-only affordances. Guardrail #2 grep-audits kept
+ * tripping over the old name.)
  */
-export async function isPaidUser(
+export async function isTestAccount(
   supabase: SupabaseClient,
   user: User | null,
 ): Promise<boolean> {

@@ -19,7 +19,7 @@ export interface LineItem {
   notes: string;
   /** Categories to filter by service type */
   categories: ServiceType[];
-  /** Sister's "watch out" markers — surfaced first in the prep kit */
+  /** the founder's "watch out" markers — surfaced first in the prep kit */
   highMarkup?: boolean;
   /**
    * Priced per unit (the fair range is per-each). Families usually buy several

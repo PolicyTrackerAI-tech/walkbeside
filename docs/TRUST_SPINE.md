@@ -1,5 +1,7 @@
 # Trust Spine — page specs
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** Superseded by the shipped site and docs/BUSINESS_PLAN.md v3.0: the "live family charge" in the fee note below was fully decommissioned 2026-06-25 (`FLAT_FEE_CENTS` no longer exists; no family ever pays), the legacy-$49 copy it targets was scrubbed sitewide, `/methodology` and `/corrections` are built and live, and the Fair-Price Index has shipped. Kept for history (`/promise` and `/team` remain unbuilt ideas); do not execute from this document.
+
 > **Fee note:** the live family charge is `FLAT_FEE_CENTS` = **$49** (`49_00`, verified on `main`). Scrub targets below should grep for `$49` and `fee_cents` (and any stale `$199`) to catch the real strings.
 
 > Build-priority **#2** in the roadmap (after the outcomes layer). See

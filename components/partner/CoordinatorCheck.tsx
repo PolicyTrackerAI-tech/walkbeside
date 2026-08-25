@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardTitle } from "@/components/ui/Card";
 import { Button, LinkButton } from "@/components/ui/Button";
 import { Label, Textarea } from "@/components/ui/Field";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/format";
 import { ViolationsPanel } from "@/components/analyzer/ViolationsPanel";
 import type { AnalyzerItem, Violation } from "@/components/analyzer/types";
 

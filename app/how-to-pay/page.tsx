@@ -19,7 +19,7 @@ export const metadata: Metadata = {
  * /how-to-pay — public, indexable. Probably the most-searched and
  * worst-answered question in the consumer funeral space. Practical
  * walk through every assistance program, cost-cutting option, and
- * last-resort path. No sister voice; factual and procedural.
+ * last-resort path. No first-person practitioner voice; factual and procedural.
  */
 export default function HowToPayPage() {
   return (

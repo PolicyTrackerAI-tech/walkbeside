@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { sendEmail } from "@/lib/email";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/format";
 import { logEvent, captureError, sendAlert } from "@/lib/observability";
 
 export const runtime = "nodejs";

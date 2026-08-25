@@ -21,7 +21,7 @@ import {
   FEATURED_SERVICES,
 } from "@/lib/funeral-homes-pricing";
 import { regionForZip } from "@/lib/zip-regions";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/format";
 import { FIVE_QUESTIONS } from "@/lib/scenarios";
 
 interface PageProps {

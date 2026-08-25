@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 /**
  * /talking-to-kids — public, indexable evergreen guide. Pure
- * informational content, no sister voice. Sources: National
+ * informational content, No first-person practitioner voice;. Sources: National
  * Alliance for Children's Grief, the Dougy Center, the Sesame
  * Workshop "When Families Grieve" guidance, and consensus
  * grief-therapist literature.

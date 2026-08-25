@@ -1,5 +1,7 @@
 # Metrics & the go/no-go scorecard
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** The operative go/no-go is docs/BUSINESS_PLAN.md §15, and the readings below are frozen at 2026-06-24: the Fair-Price Index it calls "not yet published" is live, the outcomes migrations it calls "pending apply" were applied 2026-07-09, and the hospice target list it calls "not yet built" shipped in PR #176. Kept for history; do not execute from this document.
+
 The living tracker for [OPERATING_PLAN.md](OPERATING_PLAN.md) Part 10. Review the
 dashboard weekly; review the go/no-go monthly. Update the "current reading" at
 the bottom as you go.
