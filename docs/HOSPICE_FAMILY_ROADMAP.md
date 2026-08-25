@@ -1,5 +1,7 @@
 # Hospice-Referred Family Feature Roadmap
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** No longer "the live build checklist" — every item except the Spanish human-review gate (still tracked in docs/SPANISH_REVIEW_QUEUE.md) shipped by 2026-07-03, priorities have since moved to docs/BUSINESS_PLAN.md v3.0 + the site-audit LEDGER, and the "~13 months of bereavement support their hospice is required to offer (42 CFR 418.64)" claim below is wrong as law — the regulation requires support for up to 1 year (audit A3 rule; 13 months survives only as common practice). Kept for history; do not execute from this document.
+
 **Status: the live build checklist.** Produced 2026-07-01 by a research +
 adversarial-vet workflow: a current-app audit (so nothing below duplicates a
 shipped feature), sourced research (Medicare hospice bereavement requirements

@@ -1,5 +1,14 @@
 # The path to your first paying hospice
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** Superseded by
+> `docs/BUSINESS_PLAN.md` v3.0 + `docs/EXECUTION_PLAN_2026-08.md`; despite
+> partial July updates, its biggest false claims today are that "the one paid
+> piece is the $49 advocacy" (fully decommissioned 2026-06-26), that the
+> Fair-Price Index and partner portal are "still deferred … until a hospice
+> says yes" (both built and live), and that the outcomes migration is still to
+> apply (applied 2026-07-09). Kept for history; do not execute from this
+> document.
+
 The single sequenced path that ties every other plan together — optimized for
 your scarcest resource (time) and for **getting to cold outreach fast.** Read
 this when you want to know "what do I do next, and in what order."

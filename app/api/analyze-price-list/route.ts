@@ -347,28 +347,14 @@ export async function POST(req: Request) {
         })
         .select("id")
         .single();
-      if (insertError) {
-        // The legacy-shape fallback exists solely for pre-migration schemas
-        // (unknown column: PostgREST PGRST204 / Postgres 42703 — also seen
-        // for a few minutes of schema-cache lag right after a migration).
-        // It can't record `contributed`, so the row would land NULL — which
-        // lib/benchmark-sources.ts aggregates as a grandfathered legacy row.
-        // That's only tolerable when the family actually consented; for a
-        // decline (or a consent-less caller, treated as a decline above),
-        // dropping the best-effort persist is the acceptable failure mode —
-        // aggregating a declined row never is. Non-schema errors don't
-        // retry: a transient failure must not launder the consent flag.
-        const missingColumn =
-          insertError.code === "PGRST204" || insertError.code === "42703";
-        if (missingColumn && contributed === true) {
-          const { data: legacyInserted } = await supabase
-            .from("price_list_analyses")
-            .insert(row)
-            .select("id")
-            .single();
-          insertedId = legacyInserted?.id ?? null;
-        }
-      } else {
+      // (Audit A9: the legacy pre-migration fallback that lived here — a
+      // second insert without the consent column, permitted only when
+      // contributed === true — was removed. Migration A has been applied and
+      // verified live in prod; with no fallback, a missing-column error now
+      // simply means the best-effort persist is skipped, which makes
+      // declined-never-persists structural rather than conditional. The
+      // consent write-path test pins this.)
+      if (!insertError) {
         insertedId = inserted?.id ?? null;
       }
       saved = insertedId != null;

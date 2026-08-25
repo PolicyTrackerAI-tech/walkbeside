@@ -130,17 +130,16 @@ describe("consent write path (declined analyses never persist)", () => {
     expect(inserts).toHaveLength(1);
   });
 
-  it("does retry a CONSENTED row through the legacy fallback — and the legacy shape omits `contributed` entirely", async () => {
+  it("the legacy fallback is GONE (audit A9): even a consented row never retries — one insert, saved:false", async () => {
     const { inserts } = scriptClient({
       user: USER,
-      insertResults: [{ error: MISSING_COLUMN }, { data: { id: "legacy-1" } }],
+      insertResults: [{ error: MISSING_COLUMN }],
     });
     const res = await POST(analyzeRequest({ contributed: true }));
     const json = (await res.json()) as { saved?: boolean };
-    expect(json.saved).toBe(true);
-    expect(inserts).toHaveLength(2);
+    expect(json.saved).toBe(false);
+    expect(inserts).toHaveLength(1);
     expect(inserts[0].values).toHaveProperty("contributed", true);
-    expect(inserts[1].values).not.toHaveProperty("contributed");
   });
 
   it("does NOT launder consent on a transient (non-schema) insert error — no retry even when consented", async () => {

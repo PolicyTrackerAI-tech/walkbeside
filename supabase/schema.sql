@@ -1,4 +1,4 @@
--- Walk Beside — Supabase schema
+-- Honest Funeral Co. (pre-rename: Walk Beside) — Supabase schema
 -- Run this once in the SQL editor of your Supabase project.
 -- Idempotent: safe to re-run.
 

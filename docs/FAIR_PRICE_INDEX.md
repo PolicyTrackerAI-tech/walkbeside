@@ -1,5 +1,7 @@
 # Fair-Price Index — Build Spec
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** The Index this spec plans is now built and live — `/fair-price-index`, `/methodology`, the public dataset endpoint, 30 benchmark line items, and the analyzer contribute-consent all exist, and the outcomes migrations are applied in prod — so this file's "Status: spec" framing and its §6 gap list ("No Index / methodology pages", "Outcomes migration not applied", "currently 21 items") are false today; current strategy is docs/BUSINESS_PLAN.md v3.0 + docs/OPERATING_PLAN.md. Kept for history; do not execute from this document.
+
 > **Status:** spec / build-priority #4 (after outcomes layer, families-free + trust spine, first hospice pilot infra). The Index is the moat's *public face* — the Case-Shiller of funeral pricing, the quarterly press event, and the #1 driver of AI/journalist citations. It is **L1 (free public)** in the [Operating Plan](OPERATING_PLAN.md) three-layer model, but it is the surface where the **L2 outcomes data** becomes visible to the world.
 >
 > Aligns to [`OPERATING_PLAN.md`](OPERATING_PLAN.md) §4 and [`ROADMAP.md`](ROADMAP.md) P4. Data sourcing lives in [`DATA_PLAN.md`](DATA_PLAN.md). This doc is the *Index-specific* methodology, page spec, and release cadence.

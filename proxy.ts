@@ -2,9 +2,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 import { RATE_LIMITS, rateLimit, clientIp } from "@/lib/rate-limit";
 
-const SUPPRESS_COOKIE = "commercial_suppression_until";
-const FOUR_HOURS_MS = 4 * 60 * 60 * 1000;
-
 export async function proxy(request: NextRequest) {
   // Best-effort, per-instance rate limiting on the hottest POST endpoints
   // (see lib/rate-limit.ts). Runs before the Supabase session refresh so a
@@ -26,18 +23,13 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  const response = await updateSession(request);
-
-  if (request.nextUrl.pathname === "/guidance/home-unexpected") {
-    const until = Date.now() + FOUR_HOURS_MS;
-    response.cookies.set(SUPPRESS_COOKIE, String(until), {
-      path: "/",
-      maxAge: FOUR_HOURS_MS / 1000,
-      sameSite: "lax",
-    });
-  }
-
-  return response;
+  // (Audit A9: the commercial_suppression_until cookie block that lived here
+  // was removed with the rest of the suppression chain — it was written on
+  // /guidance/home-unexpected visits but NOTHING ever read it, and the
+  // feature's premise (suppressing paid upsells after a traumatic scenario)
+  // died with the consumer fee. Every CTA is free help now; tone rules
+  // govern instead.)
+  return await updateSession(request);
 }
 
 export const config = {

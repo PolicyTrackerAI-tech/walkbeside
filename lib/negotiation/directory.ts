@@ -1,5 +1,5 @@
 /**
- * Server-only funeral home directory lookup. Reads the sister-curated
+ * Server-only funeral home directory lookup. Reads the founder-curated
  * `funeral_homes` table.
  *
  * A home only qualifies for outreach when it is BOTH `active` (good standing)

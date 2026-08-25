@@ -18,7 +18,7 @@
  * - "suspicious": legal but a known upsell trick.
  * - "info": worth noting but not actionable.
  *
- * Sister will extend this file as she sees patterns in the wild.
+ * the founder will extend this file as she sees patterns in the wild.
  */
 
 import { detectDocScope } from "./doc-scope";

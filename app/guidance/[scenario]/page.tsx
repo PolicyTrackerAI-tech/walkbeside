@@ -11,7 +11,7 @@ import { StepList } from "@/components/guidance/StepList";
 import { CrisisUnexpected } from "./CrisisUnexpected";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { createClient } from "@/lib/supabase/server";
-import { isPaidUser } from "@/lib/auth-paid";
+import { isTestAccount } from "@/lib/auth-paid";
 import { FEATURES } from "@/lib/env";
 
 const VALID: Scenario[] = ["hospital", "home-expected", "home-unexpected", "elsewhere"];
@@ -76,7 +76,7 @@ export default async function GuidancePage({
       data: { user },
     } = await supabase.auth.getUser();
     if (user) {
-      if (await isPaidUser(supabase, user)) {
+      if (await isTestAccount(supabase, user)) {
         pickedHome = true;
       } else {
         const { data: closed } = await supabase
@@ -120,7 +120,7 @@ export default async function GuidancePage({
         steps={g.steps}
         pullQuote={g.pullQuote}
         showCrisisResources={scenario === "elsewhere"}
-        isPaid={pickedHome}
+        pickedHome={pickedHome}
       />
     </>
   );

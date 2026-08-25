@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 /**
  * /digital-legacy — public, indexable page covering the deceased's
  * digital footprint. Major platform-by-platform with current process
- * URLs. No sister voice; factual and procedural.
+ * URLs. No first-person practitioner voice; factual and procedural.
  */
 export default function DigitalLegacyPage() {
   return (

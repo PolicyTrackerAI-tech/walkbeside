@@ -17,7 +17,7 @@
  */
 
 const RAW_DENYLIST: ReadonlyArray<string> = [
-  // Examples / placeholders — populate as Sister flags addresses to block.
+  // Examples / placeholders — populate as founder flags addresses to block.
   // "office@consolidatedfuneralservices.com",
   // "info@runcfs.com",
 ];

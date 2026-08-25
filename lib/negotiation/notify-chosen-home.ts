@@ -3,9 +3,10 @@
  * a family picked. Gated by OUTREACH_LIVE (same kill switch as the
  * initial outreach) so a paused outreach state pauses follow-ups too.
  *
- * Callers (Stripe webhook + checkout route) are responsible for ensuring
- * this only fires once per selection — typically via a conditional
- * `neq("status", "closed")` update before invoking.
+ * The caller (/api/negotiate/choose) is responsible for ensuring this only
+ * fires once per selection — via its conditional `neq("status", "closed")`
+ * update before invoking. (Docstring de-fossilized in A9: the Stripe
+ * webhook/checkout callers it named were decommissioned with the fee.)
  */
 
 import "server-only";

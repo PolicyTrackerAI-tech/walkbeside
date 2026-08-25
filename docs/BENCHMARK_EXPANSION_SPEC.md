@@ -1,5 +1,7 @@
 # Benchmark line-item expansion — spec for founder approval
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** The "Status: NOT shipped. Awaiting Ryan's approve/redline" header is false today — the Wave-1 items (forwarding-remains, receiving-remains, refrigeration-shelter, rental-casket, etc.) are live in `lib/pricing-data.ts`, whose LINE_ITEMS taxonomy is now 30 items; that file (plus `/methodology`) is the source of truth for current benchmarks, and this doc survives only as the sourcing/citation record behind those numbers. Kept for history; do not execute from this document.
+
 **Status: NOT shipped. Awaiting Ryan's approve/redline.** None of these numbers touch
 the live checker until signed off — per the rule that price benchmarks are the
 founder's call and liability.

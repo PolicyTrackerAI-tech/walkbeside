@@ -5,8 +5,8 @@
  * each state's probate-court website (linked per state) for current
  * thresholds and forms.
  *
- * TODO-FD: review thresholds and timelines against current state code
- * before sister sends this to a real family.
+ * Thresholds re-verified (CA/TX/FL cited) in the 2026-08-25 A7 deep-read; review against current state code
+ * before founder sends this to a real family.
  */
 
 export interface StateProbateGuide {

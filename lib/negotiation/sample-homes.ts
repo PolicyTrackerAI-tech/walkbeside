@@ -45,15 +45,3 @@ export function homesForRadius(radiusMiles: number): number {
   if (radiusMiles <= 50) return 14;
   return TEMPLATES.length;
 }
-
-export function findHomes(zip: string, n = 4): FuneralHome[] {
-  // Deterministic shuffle by zip for a stable demo experience.
-  const seed = Number(zip.replace(/\D/g, "").slice(0, 5) || "0");
-  const arr = [...TEMPLATES];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = (seed * (i + 1)) % (i + 1);
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr.slice(0, Math.min(n, arr.length));
-}
-

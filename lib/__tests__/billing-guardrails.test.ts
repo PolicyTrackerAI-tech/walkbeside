@@ -11,9 +11,9 @@ import { join, relative } from "node:path";
  * flag check, and this file pins it.
  * Guardrail #2: never charge the grieving family → no family surface may
  * even IMPORT the Stripe client factory; the fs scan below makes that
- * structural. `fmtCents`/`stripeAvailable` imports elsewhere are fine and
- * expected (they exist today on family surfaces for displaying quote
- * amounts) — the pins key on the `stripe` factory binding and on the
+ * structural. `stripeAvailable` imports elsewhere are fine and expected (fmtCents
+ * moved to lib/format.ts in A9, so family surfaces no longer import
+ * "stripe" at all to print a price) — the pins key on the `stripe` factory binding and on the
  * lib/stripe module specifier, not on the module path alone.
  *
  * If the scan ever flags a TEST file: fix the test to the vi.hoisted mock
@@ -56,7 +56,6 @@ const {
 vi.mock("@/lib/stripe", () => ({
   stripe: stripeMock,
   stripeAvailable: () => true,
-  fmtCents: (c: number) => String(c),
 }));
 vi.mock("@/lib/partner/auth", () => ({ requirePartnerApi: vi.fn() }));
 vi.mock("@supabase/supabase-js", () => ({ createClient: vi.fn() }));

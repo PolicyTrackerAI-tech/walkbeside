@@ -35,7 +35,7 @@ export interface MonumentVendor {
   phone?: string;
   /** What they're known for / family-relevant notes. */
   notes: string;
-  /** TODO-FD: verified by sister. */
+  /** Set when an entry passes a founder click-test (last full test 2026-08-25). */
   ftcVerified?: boolean;
 }
 

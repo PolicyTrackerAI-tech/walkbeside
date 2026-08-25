@@ -16,7 +16,7 @@ export type DigestKind = "task" | "contact" | "document";
 
 export interface DigestItem {
   kind: DigestKind;
-  /** e.g. "Forward their mail" / "Aunt Carol (sister)" / "DD-214 (military discharge)". */
+  /** e.g. "Forward their mail" / "Aunt Carol (the founder)" / "DD-214 (military discharge)". */
   title: string;
   /** Optional short note, e.g. "location: filing cabinet". */
   note?: string;

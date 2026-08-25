@@ -8,7 +8,11 @@
  * entry captures the most common modern American practice; sub-profiles in
  * FAITH_SUB_PROFILES carry the denominational specifics.
  *
- * Every faith claim in this file is tagged `// TODO-FD:` for licensed
+ * Faith claims here were AI-adversarially verified 2026-05-21
+ * (docs/FAITH_REVIEW_FINDINGS.md) and re-spot-checked in the 2026-08-25 A7
+ * deep-read; the posture decision (LEDGER A7-01) accepted this + the live
+ * disclaimer, with clergy review a committed post-first-revenue item. The
+ * old per-line TODO-FD tags gated on a licensed
  * funeral director cofounder review. Sources cited inline + in `sources[]`
  * arrays per profile.
  */
@@ -112,13 +116,12 @@ export interface FaithTradition {
 
 export const FAITH_TRADITIONS: FaithTradition[] = [
   // -------------------------------------------------------------------------
-  // TODO-FD: verify all secular content. No religious authority — sister to
   // confirm the secular default still tracks what families actually pick.
   // -------------------------------------------------------------------------
   {
     key: "secular",
     label: "No religious tradition",
-    dispositionNorm: "either", // TODO-FD: verify
+    dispositionNorm: "either",
     dispositionAllowed: [
       "direct-cremation",
       "cremation-with-service",
@@ -138,7 +141,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify atheist content. Identical funeral-practice implications
   // to secular, but distinct identity — atheist families often want their
   // identity reflected, not lumped under "none of the above."
   // -------------------------------------------------------------------------
@@ -185,14 +187,13 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Catholic content against current USCCB pastoral guidance.
   // Cremation rules tightened in Vatican guidance (Ad resurgendum cum Christo,
   // 2016) — ashes must be interred, not scattered or kept at home.
   // -------------------------------------------------------------------------
   {
     key: "christian-catholic",
     label: "Catholic",
-    dispositionNorm: "burial-preferred", // TODO-FD: verify — burial preferred but cremation permitted
+    dispositionNorm: "burial-preferred",
     dispositionAllowed: [
       "traditional-burial",
       "graveside-burial",
@@ -246,7 +247,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Protestant content. Practice varies enormously across
   // denominations — Baptist/Pentecostal lean traditional burial, mainline
   // (Methodist, Lutheran, Presbyterian, Episcopal) accepts cremation widely,
   // non-denominational follows whatever the family chooses.
@@ -254,7 +254,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "christian-protestant",
     label: "Protestant",
-    dispositionNorm: "either", // TODO-FD: verify across major Protestant denominations
+    dispositionNorm: "either",
     dispositionAllowed: [
       "traditional-burial",
       "graveside-burial",
@@ -309,7 +309,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Eastern Orthodox content. Cremation is forbidden in
   // mainstream Orthodox practice (Greek Orthodox Archdiocese of America,
   // OCA, Antiochian, Russian Orthodox all align). Open casket is standard.
   // Embalming is generally accepted for practical reasons.
@@ -317,10 +316,10 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "christian-orthodox",
     label: "Eastern Orthodox",
-    dispositionNorm: "burial-required", // TODO-FD: verify — cremation forbidden in mainstream Orthodox
+    dispositionNorm: "burial-required",
     dispositionAllowed: ["traditional-burial", "graveside-burial"],
     timelineNorm: "Funeral typically within 2–3 days. Trisagion service the night before.",
-    embalmingNorm: "common", // TODO-FD: verify — accepted but not required
+    embalmingNorm: "common",
     notes:
       "Eastern Orthodox practice requires ground burial — cremation is not permitted. The Trisagion (a brief prayer service) is held the evening before the funeral. The funeral itself takes place at the parish church with an open casket. The body is buried facing east.",
     defaultServiceType: "traditional-burial",
@@ -370,7 +369,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify LDS / Mormon content. The Church of Jesus Christ of
   // Latter-day Saints permits both burial and cremation, though burial is
   // strongly preferred. Members who received their endowment are typically
   // dressed in temple clothing for burial — funeral home should know.
@@ -378,7 +376,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "lds-mormon",
     label: "LDS / Mormon",
-    dispositionNorm: "burial-preferred", // TODO-FD: verify — burial strongly preferred but cremation not forbidden
+    dispositionNorm: "burial-preferred",
     dispositionAllowed: [
       "traditional-burial",
       "graveside-burial",
@@ -435,7 +433,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Jewish content carefully. Practice varies dramatically by
   // denomination — Orthodox and most Conservative require traditional burial
   // within 24–48 hours with no embalming and no viewing; Reform sometimes
   // permits cremation; Reconstructionist varies widely. The top-level entry
@@ -445,10 +442,10 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "jewish",
     label: "Jewish",
-    dispositionNorm: "burial-required", // TODO-FD: verify — Orthodox/Conservative required, Reform varies
+    dispositionNorm: "burial-required",
     dispositionAllowed: ["graveside-burial", "traditional-burial", "green-burial"],
     timelineNorm: "Burial within 24–48 hours when possible. Sabbath and holidays may delay by a day.",
-    embalmingNorm: "forbidden", // TODO-FD: verify
+    embalmingNorm: "forbidden",
     notes:
       "Traditional Jewish practice requires prompt burial in a simple wood casket, no embalming, no viewing. Reform Judaism increasingly permits cremation (now common in many communities); Conservative and Orthodox do not. Ask your rabbi if you're uncertain — and pick the appropriate sub-tradition on /decide so the recommendation matches your community's practice.",
     defaultServiceType: "graveside-burial",
@@ -514,7 +511,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Muslim content. Sunni and Shia practice are largely
   // similar at the funeral home — both require ghusl, kafan, and prompt
   // ground burial without embalming. Differences (specific prayers, period
   // of mourning) appear after burial, not at the funeral home.
@@ -522,10 +518,10 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "muslim",
     label: "Muslim",
-    dispositionNorm: "burial-required", // TODO-FD: verify
+    dispositionNorm: "burial-required",
     dispositionAllowed: ["graveside-burial", "green-burial"],
     timelineNorm: "Burial within 24 hours when possible.",
-    embalmingNorm: "forbidden", // TODO-FD: verify
+    embalmingNorm: "forbidden",
     notes:
       "Islamic practice requires prompt burial without embalming or cremation. The body is washed and shrouded (ghusl and kafan), placed in a simple coffin or directly in the grave depending on local law, and buried facing Mecca. Coordinate with your local mosque — many have a burial committee that handles ghusl and arrangements.",
     defaultServiceType: "graveside-burial",
@@ -590,7 +586,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Hindu content. Cremation is the standard practice across
   // virtually all Hindu traditions. Pre-cremation rites (antyesti / antim
   // sanskar) are typically led by the eldest son or a male family member.
   // Ashes (asthi) are immersed in moving water — sacred rivers preferred,
@@ -602,7 +597,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
     dispositionNorm: "cremation-preferred", // verified 2026-05-21: cremation is standard but not universal — ascetics/gurus/sadhus and some infants are buried (Hindu American Foundation)
     dispositionAllowed: ["cremation-with-service", "direct-cremation", "aquamation"],
     timelineNorm: "Cremation typically within 24 hours.",
-    embalmingNorm: "discouraged", // TODO-FD: verify
+    embalmingNorm: "discouraged",
     notes:
       "Cremation is the standard practice for most Hindus (a few groups — ascetics, gurus, and some infants — are traditionally buried instead). A short pre-cremation viewing or ceremony at the funeral home is typical, often led by the eldest son or another close family member. Ashes are usually scattered in moving water, ideally a sacred river.",
     defaultServiceType: "cremation-with-service",
@@ -660,7 +655,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Buddhist content. Practice varies enormously across
   // Theravada (Thai, Burmese, Sri Lankan), Mahayana (Chinese, Vietnamese,
   // Korean, Japanese Pure Land/Zen), and Vajrayana (Tibetan) lineages.
   // Common across most: cremation, body undisturbed for some hours after
@@ -669,7 +663,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   {
     key: "buddhist",
     label: "Buddhist",
-    dispositionNorm: "cremation-preferred", // TODO-FD: verify
+    dispositionNorm: "cremation-preferred",
     dispositionAllowed: [
       "cremation-with-service",
       "direct-cremation",
@@ -678,7 +672,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
       "green-burial",
     ],
     timelineNorm: "Service often held 3–7 days after death; some traditions wait up to 49 days for full memorial rites.",
-    embalmingNorm: "uncommon", // TODO-FD: verify per lineage
+    embalmingNorm: "uncommon",
     notes:
       "Cremation is most common across Buddhist traditions, following the example of the Buddha. Practices vary widely between Theravada, Mahayana, and Vajrayana lineages — your local sangha or temple can guide specifics.",
     defaultServiceType: "cremation-with-service",
@@ -724,7 +718,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Sikh content. Cremation is the standard practice across
   // Sikhism — burial is generally discouraged. The funeral (Antam Sanskar)
   // includes recitation from the Guru Granth Sahib. Ashes are immersed in
   // moving water (river, sea) — no headstones or memorials are erected.
@@ -735,7 +728,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
     dispositionNorm: "cremation-preferred", // verified 2026-05-21: cremation is the standard, strongly-preferred practice but not an absolute requirement forbidding burial (Sikh Rehat Maryada, Sikh Coalition)
     dispositionAllowed: ["cremation-with-service", "direct-cremation", "aquamation"],
     timelineNorm: "Cremation typically within 1–3 days. Antam Sanskar service at the gurdwara.",
-    embalmingNorm: "discouraged", // TODO-FD: verify
+    embalmingNorm: "discouraged",
     notes:
       "Sikh practice calls for cremation in nearly all cases, generally within a few days of death. The Antam Sanskar (final rites) include recitation from the Guru Granth Sahib at the gurdwara. Mourners typically wear plain clothing, often white. After cremation, ashes are immersed in flowing water; Sikhs traditionally do not erect headstones or memorials.",
     defaultServiceType: "cremation-with-service",
@@ -815,7 +808,6 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
 
 export const FAITH_SUB_PROFILES: FaithTradition[] = [
   // -------------------------------------------------------------------------
-  // TODO-FD: verify all four Jewish sub-profiles against current practice in
   // each movement. Orthodox: strictest — burial only, no embalming, no
   // viewing, plain pine aron, within 24–48 hours. Conservative: same as
   // Orthodox in practice for most communities. Reform: most flexible —
@@ -827,7 +819,7 @@ export const FAITH_SUB_PROFILES: FaithTradition[] = [
     key: "jewish-orthodox",
     parentId: "jewish",
     label: "Jewish — Orthodox",
-    dispositionNorm: "burial-required", // TODO-FD: verify
+    dispositionNorm: "burial-required",
     dispositionAllowed: ["graveside-burial", "traditional-burial"],
     timelineNorm: "Burial within 24 hours when possible. Sabbath and major holidays may delay by a day.",
     embalmingNorm: "forbidden",
@@ -843,7 +835,7 @@ export const FAITH_SUB_PROFILES: FaithTradition[] = [
     key: "jewish-conservative",
     parentId: "jewish",
     label: "Jewish — Conservative",
-    dispositionNorm: "burial-required", // TODO-FD: verify
+    dispositionNorm: "burial-required",
     dispositionAllowed: ["graveside-burial", "traditional-burial", "green-burial"],
     timelineNorm: "Burial within 24–48 hours when possible.",
     embalmingNorm: "forbidden",
@@ -858,7 +850,7 @@ export const FAITH_SUB_PROFILES: FaithTradition[] = [
     key: "jewish-reform",
     parentId: "jewish",
     label: "Jewish — Reform",
-    dispositionNorm: "burial-preferred", // TODO-FD: verify — Reform increasingly accepts cremation
+    dispositionNorm: "burial-preferred",
     dispositionAllowed: [
       "graveside-burial",
       "traditional-burial",
@@ -880,7 +872,7 @@ export const FAITH_SUB_PROFILES: FaithTradition[] = [
     key: "jewish-reconstructionist",
     parentId: "jewish",
     label: "Jewish — Reconstructionist",
-    dispositionNorm: "either", // TODO-FD: verify — Reconstructionist varies widely
+    dispositionNorm: "either",
     dispositionAllowed: [
       "graveside-burial",
       "traditional-burial",
@@ -899,7 +891,6 @@ export const FAITH_SUB_PROFILES: FaithTradition[] = [
   },
 
   // -------------------------------------------------------------------------
-  // TODO-FD: verify Sunni vs Shia funeral practice differences. Both require
   // ghusl, kafan, janazah prayer, and prompt ground burial without embalming.
   // Differences are mostly in specific prayer wording and post-burial
   // mourning observances, not at the funeral home itself.
@@ -981,7 +972,6 @@ export const MUSLIM_DENOMINATIONS: DenominationOption[] = [
   { value: "not-sure", label: "Not sure", subProfileKey: null },
 ];
 
-// TODO-FD: verify Protestant denomination labels. We persist the string only;
 // no sub-profiles are created since funeral practice is broadly similar
 // across these denominations at the funeral-home level.
 export const PROTESTANT_DENOMINATIONS: DenominationOption[] = [

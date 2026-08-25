@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { isPaidUser } from "@/lib/auth-paid";
+import { isTestAccount } from "@/lib/auth-paid";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
@@ -37,9 +37,9 @@ export default async function DashboardPage({
   } = await supabase.auth.getUser();
   if (!user) return <AnonymousDashboard />;
 
-  // Everything is free to families. `isPaid` here is only the free-email
+  // Everything is free to families. `isTest` here is only the free-email
   // test/founder flag — used to tone the outreach CTA, not to gate a tool.
-  const isPaid = await isPaidUser(supabase, user);
+  const isTest = await isTestAccount(supabase, user);
 
   const [
     { data: profile },
@@ -155,7 +155,7 @@ export default async function DashboardPage({
             />
           )}
 
-          {!isPaid && (
+          {!isTest && (
             <Card tone="primary">
               <CardEyebrow>When you&rsquo;re ready</CardEyebrow>
               <CardTitle>

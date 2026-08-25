@@ -21,7 +21,7 @@ export const metadata: Metadata = {
  * told (explicitly or implicitly) that their loss isn't big enough to
  * grieve fully.
  *
- * Voice: factual + validating; no performed empathy, no sister-voice
+ * Voice: factual + validating; no performed empathy, no first-person practitioner voice
  * first person, no "we know how hard this is" framing.
  */
 export default function DisenfranchisedGriefPage() {

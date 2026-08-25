@@ -3,7 +3,7 @@
  *
  * Source: VA.gov burial benefits pages (verified 2026-04-26). The VA
  * publishes the actual current allowance amounts; we link out for those
- * rather than hardcoding numbers that drift. Sister validates the rule
+ * rather than hardcoding numbers that drift. The audit re-verifies the rule
  * structure against what families actually see on VA Form 21P-530EZ.
  *
  * The checker is intentionally conservative: when in doubt, suggest

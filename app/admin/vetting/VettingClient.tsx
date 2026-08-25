@@ -27,7 +27,7 @@ type Status = "pending" | "approved" | "rejected";
 type StatusFilter = "all" | Status | "needs-email";
 type Action = "approve" | "reject" | "reset" | "save";
 
-const REVIEWER_KEY = "wb_vetting_reviewer";
+const REVIEWER_KEY = "hf_vetting_reviewer"; // pre-rename "wb_" (Walk Beside) prefix retired in A9
 
 function statusOf(h: VettingHome): Status {
   if (!h.vetted) return "pending";

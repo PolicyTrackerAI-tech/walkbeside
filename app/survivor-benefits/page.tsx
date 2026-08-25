@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 /**
  * /survivor-benefits — public, indexable page covering SSA survivor
  * benefits. Top-level (like /veterans) for SEO and discoverability.
- * Factual reference; no sister voice. Source: SSA Publication 05-10084
+ * Factual reference; No first-person practitioner voice;. Source: SSA Publication 05-10084
  * "Survivors Benefits" (2025 edition).
  */
 export default function SurvivorBenefitsPage() {

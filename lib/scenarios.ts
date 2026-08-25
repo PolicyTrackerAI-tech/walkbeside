@@ -56,7 +56,7 @@ export interface GuidanceStep {
    * post-decision operational steps that only matter once the user
    * has picked a funeral home through us.
    */
-  gateUntilPaid?: boolean;
+  gateUntilChosen?: boolean; // post-decision steps, revealed once a case closes (name pre-A9: gateUntilPaid)
 }
 
 export interface ScenarioGuidance {
@@ -108,28 +108,28 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         body:
           "A release form authorizing the funeral home you chose to take the body. Just that. The hospital or nursing home handles the rest with the funeral home directly. Read it carefully — it names one specific funeral home, and switching after is harder than getting it right the first time.",
         tone: "info",
-        gateUntilPaid: true,
+        gateUntilChosen: true,
       },
       {
         title: "Three calls. In order.",
         body:
           "(1) Two or three immediate family — the ones who need to know first. (2) The funeral home you actually compared and chose. (3) Your employer, if bereavement leave matters. That's it for today. Everything else can wait — we'll help you track who's been told later so nothing falls through.",
         tone: "calm",
-        gateUntilPaid: true,
+        gateUntilChosen: true,
       },
       {
         title: "When the doctor signs the paperwork.",
         body:
           "The doctor who confirmed the death also signs the official document (the death certificate). This usually happens within 24–72 hours. The funeral home you chose orders certified copies for you through the state vital records office. Most families need 5–10 certified copies to start — banks, life insurance, and Social Security each want one, and you can order more later.",
         tone: "info",
-        gateUntilPaid: true,
+        gateUntilChosen: true,
       },
       {
         title: "The rest of family — slowly.",
         body:
           "You don't have to call everyone today. Pick two or three close people. Ask them to help with the next round of calls. There's no prize for telling fifty people in twenty-four hours.",
         tone: "calm",
-        gateUntilPaid: true,
+        gateUntilChosen: true,
       },
     ],
   },
@@ -170,21 +170,21 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
         body:
           "Hospice nurse comes first and officially confirms the death. The funeral home you've chosen sends transport when YOU say you're ready — not on their schedule. Police and the medical examiner are usually not involved in an expected at-home death.",
         tone: "info",
-        gateUntilPaid: true,
+        gateUntilChosen: true,
       },
       {
         title: "There is genuinely time. Sit with them.",
         body:
           "Hospice will not pressure you. Take the hour you need before transport. Many families deeply regret hurrying through this part. The body does not need to leave the room in the first hour, or the first three hours.",
         tone: "calm",
-        gateUntilPaid: true,
+        gateUntilChosen: true,
       },
       {
         title: "When the funeral home arrives.",
         body:
           "They'll ask you to sign one thing: a transport authorization letting them take your loved one to their facility. That's the only document you have to sign today. Caskets, services, urns, prices — all of that waits until the arrangement meeting a day or two later.",
         tone: "info",
-        gateUntilPaid: true,
+        gateUntilChosen: true,
       },
     ],
   },
@@ -258,7 +258,7 @@ export const SCENARIO_GUIDANCE: Record<Scenario, ScenarioGuidance> = {
   },
 };
 
-/** The five questions the family should ask any funeral home. Sister's content. */
+/** The five questions the family should ask any funeral home. the founder's content. */
 export const FIVE_QUESTIONS: { q: string; why: string }[] = [
   {
     q: "Can I see your itemized General Price List before we begin?",
@@ -282,7 +282,7 @@ export const FIVE_QUESTIONS: { q: string; why: string }[] = [
   },
 ];
 
-/** Scripts for declining specific upsells without feeling guilty. Sister's voice. */
+/** Scripts for declining specific upsells without feeling guilty. the founder's voice. */
 export const DECLINE_SCRIPTS: { upsell: string; script: string }[] = [
   {
     upsell: "Premium / 'protective' caskets",

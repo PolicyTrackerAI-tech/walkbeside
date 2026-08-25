@@ -29,7 +29,7 @@ export interface HomeFuneralStateRule {
 
 /**
  * Source: National Home Funeral Alliance, current as of 2024.
- * Sister should re-verify with NHFA before publishing to families.
+ * Re-verify with NHFA on the next content pass (A7 read it 2026-08-25).
  */
 export const HOME_FUNERAL_RULES: HomeFuneralStateRule[] = [
   // States that require funeral director involvement at some step

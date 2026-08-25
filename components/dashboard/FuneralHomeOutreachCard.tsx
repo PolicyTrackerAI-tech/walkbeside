@@ -8,7 +8,7 @@ import {
   anyOutreachSent,
   outreachStatusLabel,
 } from "@/lib/negotiation/status-labels";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/format";
 
 export interface OutreachRow {
   id: string;

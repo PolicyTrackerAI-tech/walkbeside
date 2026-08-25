@@ -1,38 +1,10 @@
 /**
- * Sister's editorial content — voice, scripts, prompts.
+ * the founder's editorial content — voice, scripts, prompts.
  * Tone rules: warm, direct, never saccharine, no jargon without explanation.
  */
 
 import type { Scenario } from "./scenarios";
 
-export const PROMISE =
-  "When someone important to you dies, you should not have to figure this out alone. We walk beside you from the first phone call to the last account closed.";
-
-export const PROGRESS_PHRASES: Record<string, string[]> = {
-  "chose-funeral-home": [
-    "Done. Next step below.",
-    "That decision is made. Take a breath.",
-  ],
-  "uploaded-price-list": [
-    "We found a few items above fair market price. Here's what you can still change.",
-    "Good. Let's see what they tried to charge you.",
-  ],
-  "completed-arrangement-meeting": [
-    "You walked in prepared. That matters. Here's what comes next.",
-    "That meeting is over. The hardest financial decision is behind you.",
-  ],
-  "ordered-death-certificates": [
-    "One of the most tedious parts done. We'll track where each one goes.",
-  ],
-};
-
-export function progressLine(key: string): string {
-  const opts = PROGRESS_PHRASES[key];
-  if (!opts || opts.length === 0) return "Done.";
-  return opts[0];
-}
-
-/** Death certificate guidance — lookup table of asset types → certificates needed. */
 export const CERT_BUCKETS: {
   key: string;
   label: string;

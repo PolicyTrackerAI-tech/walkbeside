@@ -1,5 +1,7 @@
 # Plan: remove the consumer payment, keep families free, send zero live emails
 
+> **⚠️ STALE — executed and complete (bannered 2026-08-25, audit A9).** This plan was carried out: the $49 consumer charge was fully decommissioned 2026-06-25 (`FLAT_FEE_CENTS` is gone; no family pays anything, ever), and Stage 4 later shipped as institutional-only billing behind `BILLING_LIVE`. The "how payment and sending are wired today" description below is false today — superseded by docs/BUSINESS_PLAN.md v3.0 and the current code. Kept for history; do not execute from this document.
+
 > **Fee amount:** the live family charge is `FLAT_FEE_CENTS` in `lib/stripe.ts` = **$49** (`49_00`, verified on `main`). It is being removed entirely (families become free), so the figure doesn't change the plan.
 
 **Why.** Guardrail #2 of the [Operating Plan](OPERATING_PLAN.md): never charge

@@ -7,7 +7,7 @@ import { Button, LinkButton } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { CaseStepper } from "@/components/negotiate/CaseStepper";
 import { CaseSatisfaction } from "@/components/negotiate/CaseSatisfaction";
-import { fmtCents } from "@/lib/stripe";
+import { fmtCents } from "@/lib/format";
 import {
   anyOutreachSent,
   outreachStatusLabel,

@@ -24,7 +24,7 @@ interface Props {
   /** Show 988 block. True for scenarios with elevated survivor suicide risk. */
   showCrisisResources?: boolean;
   /** True once the family has picked a home (a closed deal). Unlocks post-decision steps. */
-  isPaid?: boolean;
+  pickedHome?: boolean;
 }
 
 const STEP_TONE_CLASS: Record<NonNullable<GuidanceStep["tone"]>, string> = {
@@ -108,14 +108,14 @@ export function StepList({
   pullQuote,
   showCta = true,
   showCrisisResources = false,
-  isPaid = false,
+  pickedHome = false,
 }: Props) {
   // Filter out post-decision steps for non-paid users. Paid users see
   // the whole timeline; pre-pay users only see calming + the pivotal
   // CTA step.
-  const steps = isPaid
+  const steps = pickedHome
     ? allSteps
-    : allSteps.filter((s) => !s.gateUntilPaid);
+    : allSteps.filter((s) => !s.gateUntilChosen);
   const [statuses, setStatuses] = useState<StepStatus[]>(() =>
     steps.map((_, i) => (i === 0 ? "current" : "hidden")),
   );
@@ -368,7 +368,7 @@ export function StepList({
                           {i + 1}
                         </div>
                         <div className="flex-1">
-                          {step.inlineCta && !isPaid && (
+                          {step.inlineCta && !pickedHome && (
                             <div className="text-xs uppercase tracking-wider text-primary-deep font-semibold mb-2">
                               The next move
                             </div>
@@ -379,7 +379,7 @@ export function StepList({
                           <p className="text-ink-soft leading-relaxed text-base">
                             {step.body}
                           </p>
-                          {step.inlineCta && !isPaid && (
+                          {step.inlineCta && !pickedHome && (
                             <div className="mt-5 rounded-xl bg-primary-soft border border-primary/30 px-4 py-4">
                               {step.inlineCta.helperText && (
                                 <p className="text-sm text-ink-soft mb-3 leading-relaxed">
@@ -413,7 +413,7 @@ export function StepList({
                       )}
 
                       <div className="flex flex-wrap gap-3 mt-5">
-                        {(!step.inlineCta || isPaid) && (
+                        {(!step.inlineCta || pickedHome) && (
                           <>
                             <Button
                               size="lg"
@@ -509,7 +509,7 @@ export function StepList({
           {/* Hint for pre-pay users that more unlocks after they pick a home.
               Pulls the actual gated step titles so the hint matches the
               scenario instead of describing hospital-specific content. */}
-          {!isPaid && allSteps.some((s) => s.gateUntilPaid) && (
+          {!pickedHome && allSteps.some((s) => s.gateUntilChosen) && (
             <div className="mt-8 rounded-2xl border border-border bg-surface-soft px-5 py-4">
               <p className="text-sm text-ink-soft leading-relaxed mb-2">
                 <strong className="text-ink">What unlocks next.</strong>{" "}
@@ -518,7 +518,7 @@ export function StepList({
               </p>
               <ul className="text-sm text-ink-soft list-disc pl-5 space-y-1">
                 {allSteps
-                  .filter((s) => s.gateUntilPaid)
+                  .filter((s) => s.gateUntilChosen)
                   .map((s, idx) => (
                     <li key={idx}>{s.title}</li>
                   ))}

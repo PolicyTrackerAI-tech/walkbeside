@@ -20,7 +20,7 @@ export const metadata: Metadata = {
  * /after-hospice. Covers the period BEFORE death: recognizing the final
  * stage, the 1-2 week window, the last 24-72 hours, the hour itself,
  * what helps, what hurts, and care of the caregiver. Voice is third-
- * person factual; no sister-as-FD first person.
+ * person factual; no first-person practitioner framing.
  */
 export default function FinalDaysPage() {
   return (

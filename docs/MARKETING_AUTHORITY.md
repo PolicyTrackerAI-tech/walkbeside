@@ -1,5 +1,15 @@
 # Marketing as Authority — The Source-of-Truth Playbook
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** Status columns are
+> from before the July build sprint and are false today — the Fair-Price Index
+> ("Not built … #1 marketing build") is built and live with a public dataset
+> endpoint, the trust spine (`/methodology`, `/our-role`, `/corrections`) is
+> published, and L3 institutional distribution ("not built") is built; current
+> plan = `docs/BUSINESS_PLAN.md` v3.0 + the audit LEDGER (A6 covers the
+> remaining SEO/GEO work). The play-level GEO/schema guidance may still be
+> mined, but verify each item against the repo first. Kept for history; do not
+> execute from this document.
+
 > Operationalizes Part 6 of the [Operating Plan](OPERATING_PLAN.md) ("Marketing: becoming the source of truth"). Marketing here is **not ads — it is authority.** The job is to become the answer Google, ChatGPT, Perplexity, and journalists give when an American asks what a funeral costs. Every play below feeds one of the three engines: **reach** (organic + AI + press), the **data flywheel**, and the **institutional pipeline** (a hospice trusts a brand its families already trust).
 
 > **Guardrail check.** This entire doc lives inside guardrail #2 (free to families) and guardrail #6 (don't rent the flywheel). Two plays touch guardrail #4 (never publish a number we can't defend): the **Fair-Price Index** and any **home-level** claim. Both are gated on n>5 + significance + a public methodology page before publish. Nothing here takes funeral-home or insurer money (#1).

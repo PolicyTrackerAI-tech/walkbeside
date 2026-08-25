@@ -1,5 +1,7 @@
 # SPRINT DAYS 5–9 — EXECUTION BUILDSHEETS (FINAL) · RENAME ON HOLD
 
+> **⚠️ STALE — superseded (bannered 2026-08-25, audit A9).** All five days have shipped (Day 5 #170, Day 6 #171, Day 7 #172, Day 8 billing #182; Day 9's QA/docs-truth scope was absorbed by the August 11-day site audit — see the LEDGER), so "Days 5–8 have not run … run strictly in order" is false today; and the rename below is not "on hold" but dead — the 2026-08-18 naming decision fixed the brand as "Honest Funeral Co." permanently ("Open Farewell" will never happen). Kept for history; do not execute from this document.
+
 > **⛔ RENAME ON HOLD (founder decision 2026-07-27).** The founder does not like the
 > "Open Farewell" name and is waiting. Every rename-related item in this file is
 > **inert until the founder re-decides**: Day-8 founder action C (DNS pre-staging) —
