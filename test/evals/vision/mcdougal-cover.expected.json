@@ -1,0 +1,8 @@
+{
+  "_source": "McDougal Funeral Home (Taylorsville, UT) Mar 2024 GPL COVER page \u2014 zero prices on page; hand-verified 2026-08-25",
+  "mustFind": [],
+  "mustFindPrices": [],
+  "maxDollarAmounts": 0,
+  "notes": "Hallucination-resistance case: a real GPL cover with NO prices. Correct behavior is the 422 'couldn't read' nudge (nothing to extract) OR an extraction containing zero dollar amounts \u2014 never fabricated price lines.",
+  "expectNoExtraction": true
+}

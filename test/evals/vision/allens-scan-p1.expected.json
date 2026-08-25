@@ -1,0 +1,51 @@
+{
+  "_source": "Allen Mortuaries (Logan, UT) 2024 GPL page 1 \u2014 FCA of Utah rehost; scan hand-verified 2026-08-25",
+  "mustFind": [
+    {
+      "nameHint": "funeral director",
+      "price": "$2,975|\\$2975"
+    },
+    {
+      "nameHint": "embalming",
+      "price": "\\$895"
+    },
+    {
+      "nameHint": "preparation",
+      "price": "\\$205"
+    },
+    {
+      "nameHint": "viewing|visitation",
+      "price": "\\$550"
+    },
+    {
+      "nameHint": "transfer",
+      "price": "\\$495"
+    },
+    {
+      "nameHint": "hearse|funeral coach",
+      "price": "\\$395"
+    },
+    {
+      "nameHint": "flower van|service vehicle",
+      "price": "\\$80"
+    },
+    {
+      "nameHint": "full service",
+      "price": "\\$6,295|\\$6295"
+    }
+  ],
+  "mustFindPrices": [
+    "2975",
+    "895",
+    "205",
+    "550",
+    "350",
+    "495",
+    "395",
+    "80",
+    "6295"
+  ],
+  "expectDate": "September 24, 2024",
+  "notes": "Dense itemized page with dotted leaders and sub-item price runs (Restoration $45/hr, Hair Dressing $50, Dressing $75...) \u2014 the classic photo-path case.",
+  "dateInfoOnly": true
+}

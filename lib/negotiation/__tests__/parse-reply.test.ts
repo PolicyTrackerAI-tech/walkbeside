@@ -1,5 +1,20 @@
-import { describe, it, expect } from "vitest";
-import { interpretQuotePayload } from "@/lib/negotiation/parse-reply";
+import { describe, it, expect, vi } from "vitest";
+
+// Captures the exact `user` content sent to Claude so the redaction pin below
+// can assert on it. claudeAvailable true so parseInboundQuote proceeds.
+const callClaudeMock = vi.fn(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- the param types the mock call signature so the redaction pin can read calls[0][0].user
+  async (_args: { user: string }) => '{"items": [], "total_cents": null}',
+);
+vi.mock("@/lib/claude", () => ({
+  callClaude: (args: { user: string }) => callClaudeMock(args),
+  claudeAvailable: () => true,
+}));
+
+import {
+  interpretQuotePayload,
+  parseInboundQuote,
+} from "@/lib/negotiation/parse-reply";
 
 // interpretQuotePayload is the pure half of the inbound parse (the Claude
 // call is a thin wrapper around it) — everything questionable must come back
@@ -146,5 +161,23 @@ describe("interpretQuotePayload", () => {
     expect(p).not.toBeNull();
     expect(Number.isInteger(p!.cents)).toBe(true);
     expect(p!.items[0].cents).toBe(300000);
+  });
+});
+
+describe("parseInboundQuote redaction (A10-03)", () => {
+  it("contact-redacts the FD reply body BEFORE it reaches Claude — the last raw-body exception is closed", async () => {
+    callClaudeMock.mockClear();
+    await parseInboundQuote(
+      "Hi, quote attached. Direct cremation $1,895 all-in. Call Marge at 801-555-0142 or marge@examplemortuary.com. The family's daughter (kate.smith@gmail.com) asked us to reply here.",
+      "neg-1",
+    );
+    expect(callClaudeMock).toHaveBeenCalledTimes(1);
+    const sent = callClaudeMock.mock.calls[0][0].user;
+    expect(sent).not.toContain("801-555-0142");
+    expect(sent).not.toContain("marge@examplemortuary.com");
+    expect(sent).not.toContain("kate.smith@gmail.com");
+    expect(sent).toContain("[redacted]");
+    // The prices the parser exists for must survive redaction untouched.
+    expect(sent).toContain("$1,895");
   });
 });
