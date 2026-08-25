@@ -70,7 +70,7 @@ export default async function FaithPage({
     "@type": "Article",
     headline: `${t.label} — funeral planning guide`,
     description: t.notes,
-    datePublished: "2026-04-01",
+    datePublished: "2026-04-26", // first-commit date of this page (A6-05: was approximate)
     author: {
       "@type": "Organization",
       name: "Honest Funeral",

@@ -9,6 +9,7 @@ import { BackLink } from "@/components/ui/BackLink";
 
 export const metadata = {
   title: "Terms",
+  alternates: { canonical: "/terms" },
   description:
     "The terms for using Honest Funeral Co. Free to families — the tools and the funeral-home outreach. We never charge the grieving family.",
 };

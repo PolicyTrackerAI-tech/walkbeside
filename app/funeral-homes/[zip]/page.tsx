@@ -37,6 +37,13 @@ export async function generateMetadata({
     ? `${region.metro}, ${region.state} (zip ${zip})`
     : `zip ${zip}`;
   return {
+    // Audit A6-04 decision: /funeral-homes/[zip] renders for ANY 5-digit
+    // string — an unbounded ~100k-page thin-content space with titles
+    // promising prices for a page that lists no homes. Noindexed (follow
+    // kept so links pass through); the 87-city /funeral-costs pages serve
+    // this intent with real content. Founder may flip this if the cluster
+    // is later bounded to real zips + differentiated content.
+    robots: { index: false, follow: true },
     title: `Funeral home prices in ${locationLabel} — fair-range data`,
     description: `Honest fair-price ranges for direct cremation, traditional burial, and cremation with memorial in ${locationLabel}. Consumer advocacy for families — no commissions, no kickbacks from any funeral home.`,
   };

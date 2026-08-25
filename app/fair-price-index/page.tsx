@@ -7,6 +7,7 @@ import { LinkButton } from "@/components/ui/Button";
 import { LINE_ITEMS, PRICING_LAST_UPDATED, fmtUSD } from "@/lib/pricing-data";
 import { DataTierBadge } from "@/components/DataTierBadge";
 import { BRAND } from "@/lib/brand";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { listActiveBenchmarks } from "@/lib/benchmarks-store";
 import { datasetLastUpdated } from "@/lib/fair-price-dataset";
 import { groupVerifiedMetros, metroSummaryLine } from "@/lib/verified-metros";
@@ -76,7 +77,13 @@ export default async function FairPriceIndexPage() {
     url: "https://honestfuneral.co/fair-price-index",
     dateModified: lastUpdated,
     isAccessibleForFree: true,
-    license: "https://honestfuneral.co/methodology",
+    // A real license (audit A6-05): the field previously pointed at our
+    // methodology page, which is documentation, not a license — Dataset
+    // Search wants a recognized one. CC BY 4.0 fits the citable-open-data
+    // strategy: reuse allowed, attribution (a link back) required. The
+    // methodology stays attached as isBasedOn.
+    license: "https://creativecommons.org/licenses/by/4.0/",
+    isBasedOn: "https://honestfuneral.co/methodology",
     distribution: [
       {
         "@type": "DataDownload",
@@ -93,10 +100,7 @@ export default async function FairPriceIndexPage() {
 
   return (
     <main className="flex-1 flex flex-col">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
       <SiteHeader rightSlot={<BackLink defaultHref="/analyzer" defaultLabel="← The quote checker" />} />
 
       <section className="flex-1">

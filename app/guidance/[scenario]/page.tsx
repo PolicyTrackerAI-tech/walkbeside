@@ -95,7 +95,7 @@ export default async function GuidancePage({
     "@type": "Article",
     headline: SCENARIO_SEO_TITLES[scenario],
     description: SCENARIO_DESCRIPTIONS[scenario],
-    datePublished: "2026-01-01",
+    datePublished: "2026-04-23", // first-commit date of this page (A6-05: was a fabricated 2026-01-01)
     author: {
       "@type": "Organization",
       name: "Honest Funeral",

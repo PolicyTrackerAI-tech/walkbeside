@@ -43,6 +43,10 @@ export async function generateMetadata({
   const city = getCity(slug);
   if (!city) return {};
   return {
+    // Self-canonical (audit A6-04): the 87-page ISR cluster emitted no
+    // canonicals at all — "Google chose different canonical" risk on the
+    // whole cluster. Next.js does not auto-emit these.
+    alternates: { canonical: `/funeral-costs/${slug}` },
     title: `Funeral costs in ${city.name}, ${city.state} — fair-price ranges by service type`,
     description: `What a funeral actually costs in ${city.name}: direct cremation, traditional burial, green burial, and more. Regional fair-price ranges drawn from national pricing data adjusted for ${city.name} cost-of-living. No funeral home referrals; no commissions.`,
     openGraph: {

@@ -4,6 +4,7 @@ import { listStateSlugs } from "@/lib/probate-by-state";
 import { listSlugs as listGlossarySlugs } from "@/lib/glossary";
 import { listCitySlugs } from "@/lib/city-pages";
 import { US_STATES } from "@/lib/us-states";
+import { PRICING_LAST_UPDATED } from "@/lib/pricing-data";
 
 const SITE = "https://honestfuneral.co";
 
@@ -21,7 +22,11 @@ const AFTER_TOPICS = [
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  // lastModified honesty (audit A6-03): stamping request-time on every URL
+  // made the freshness signal pure noise (every crawl saw "modified now").
+  // Price-bearing surfaces carry the catalog's real review date; everything
+  // else omits lastModified — absent is honest, fabricated is not.
+  const pricingDate = new Date(PRICING_LAST_UPDATED);
 
   const staticRoutes: MetadataRoute.Sitemap = (
     [
@@ -40,6 +45,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/decide`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/worksheet`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/how-it-works`, priority: 0.8, changeFrequency: "monthly" },
+      // Audit A6-03: real pages that were missing while /briefing (empty to
+      // crawlers) and the /after redirect stub were present.
+      { url: `${SITE}/rights`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/our-role`, priority: 0.7, changeFrequency: "monthly" },
+      { url: `${SITE}/next-30-days`, priority: 0.8, changeFrequency: "monthly" },
+      { url: `${SITE}/tell-your-hospice`, priority: 0.6, changeFrequency: "monthly" },
+      { url: `${SITE}/eulogy`, priority: 0.6, changeFrequency: "monthly" },
+      { url: `${SITE}/for-funeral-homes`, priority: 0.5, changeFrequency: "monthly" },
+      { url: `${SITE}/where/just-happened`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/methodology`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/corrections`, priority: 0.6, changeFrequency: "monthly" },
       { url: `${SITE}/accessibility`, priority: 0.5, changeFrequency: "monthly" },
@@ -47,7 +61,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/about`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/prep`, priority: 0.6, changeFrequency: "monthly" },
       { url: `${SITE}/obituary`, priority: 0.6, changeFrequency: "monthly" },
-      { url: `${SITE}/after`, priority: 0.6, changeFrequency: "monthly" },
+      // /after itself is a redirect stub to /next-30-days — its topic pages
+      // below stay; the stub does not (A6-03).
       { url: `${SITE}/veterans`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/funeral-homes`, priority: 0.9, changeFrequency: "weekly" },
       { url: `${SITE}/home-funeral`, priority: 0.7, changeFrequency: "monthly" },
@@ -73,7 +88,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/estate`, priority: 0.7, changeFrequency: "monthly" },
       { url: `${SITE}/reverse-mortgage`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/medicaid-estate-recovery`, priority: 0.8, changeFrequency: "monthly" },
-      { url: `${SITE}/briefing`, priority: 0.6, changeFrequency: "monthly" },
       { url: `${SITE}/partners`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/employers`, priority: 0.8, changeFrequency: "monthly" },
       { url: `${SITE}/partners/apply`, priority: 0.6, changeFrequency: "monthly" },
@@ -84,32 +98,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
       { url: `${SITE}/terms`, priority: 0.3, changeFrequency: "yearly" },
       { url: `${SITE}/privacy`, priority: 0.3, changeFrequency: "yearly" },
     ] as const
-  ).map((r) => ({ ...r, lastModified: now }));
+  ).map((r) => {
+    const priceSurfaces = [
+      `${SITE}/prices`,
+      `${SITE}/analyzer`,
+      `${SITE}/fair-price-index`,
+      `${SITE}/average-funeral-cost`,
+      `${SITE}/funeral-costs`,
+      `${SITE}/funeral-homes`,
+      `${SITE}/how-to-pay`,
+    ];
+    return priceSurfaces.includes(r.url)
+      ? { ...r, lastModified: pricingDate }
+      : { ...r };
+  });
 
   const scenarioRoutes: MetadataRoute.Sitemap = SCENARIOS.map((s) => ({
     url: `${SITE}/guidance/${s}`,
-    lastModified: now,
     changeFrequency: "monthly",
     priority: 0.9,
   }));
 
   const afterRoutes: MetadataRoute.Sitemap = AFTER_TOPICS.map((t) => ({
     url: `${SITE}/after/${t}`,
-    lastModified: now,
     changeFrequency: "monthly",
     priority: 0.6,
   }));
 
   const faithRoutes: MetadataRoute.Sitemap = FAITH_TRADITIONS.map((t) => ({
     url: `${SITE}/faith/${t.key}`,
-    lastModified: now,
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
   const estateRoutes: MetadataRoute.Sitemap = listStateSlugs().map((slug) => ({
     url: `${SITE}/estate/${slug}`,
-    lastModified: now,
     changeFrequency: "monthly",
     priority: 0.7,
   }));
@@ -117,7 +140,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const glossaryRoutes: MetadataRoute.Sitemap = listGlossarySlugs().map(
     (slug) => ({
       url: `${SITE}/glossary/${slug}`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.5,
     }),
@@ -125,7 +147,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const cityRoutes: MetadataRoute.Sitemap = listCitySlugs().map((slug) => ({
     url: `${SITE}/funeral-costs/${slug}`,
-    lastModified: now,
+    lastModified: pricingDate,
     changeFrequency: "monthly",
     priority: 0.85,
   }));
@@ -136,13 +158,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const hospiceRoutes: MetadataRoute.Sitemap = [
     {
       url: `${SITE}/hospices`,
-      lastModified: now,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     ...US_STATES.map((s) => ({
       url: `${SITE}/hospices/${s.slug}`,
-      lastModified: now,
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
