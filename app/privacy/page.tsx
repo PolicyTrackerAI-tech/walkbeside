@@ -4,6 +4,7 @@ import { BackLink } from "@/components/ui/BackLink";
 
 export const metadata = {
   title: "Privacy",
+  alternates: { canonical: "/privacy" },
   description:
     "How Honest Funeral Co. handles your data. Short version: we never sell it, we never share your details with funeral homes without your say-so, we only ever give a hospice or employer partner anonymous totals, and we delete your account data when you ask.",
 };

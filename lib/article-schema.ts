@@ -21,8 +21,10 @@ export interface ArticleSchemaInput {
   /** Category eyebrow (e.g. "Grief", "After", "Planning"). */
   eyebrow?: string;
   /**
-   * ISO date string for when this content was first published.
-   * Default: 2026-05-14 (current content launch date).
+   * ISO date string for when this content was first published. Only emitted
+   * when a page provides its REAL date (audit A6-05: the old hardcoded
+   * 2026-05-14 default stamped one identical fabricated date across ~23
+   * pages — absent is honest, uniform-wrong is a citability liability).
    */
   datePublished?: string;
   /**
@@ -37,7 +39,7 @@ export function articleSchema({
   title,
   description,
   eyebrow,
-  datePublished = "2026-05-14",
+  datePublished,
   dateModified,
 }: ArticleSchemaInput): Record<string, unknown> {
   const pageUrl = `${SITE_URL}/${slug.replace(/^\//, "")}`;
@@ -53,8 +55,10 @@ export function articleSchema({
     headline: title,
     description,
     image: imageUrl,
-    datePublished,
-    dateModified: dateModified ?? datePublished,
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ?? datePublished
+      ? { dateModified: dateModified ?? datePublished }
+      : {}),
     author: {
       "@type": "Organization",
       name: BRAND.name,

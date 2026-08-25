@@ -15,7 +15,7 @@ const schema = {
   headline: "What to do after an unexpected death at home",
   description:
     "You're not in trouble. Here's what happens when 911 comes, and what you can and can't do while you wait.",
-  datePublished: "2026-01-01",
+  datePublished: "2026-04-24", // first-commit date of this page (A6-05)
   author: {
     "@type": "Organization",
     name: "Honest Funeral",
