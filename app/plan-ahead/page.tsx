@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { LinkButton } from "@/components/ui/Button";
 import { HelpFooter } from "@/components/HelpFooter";
+import { CheatSheetForm } from "@/components/planning/CheatSheetForm";
 import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
 
@@ -328,6 +329,13 @@ export default function PlanAheadPage() {
           {/* PILLAR 4: Funeral preferences */}
           <Card>
             <CardEyebrow>Pillar 4 — Funeral preferences</CardEyebrow>
+            <p className="text-xs text-ink-muted mt-1">
+              Facing this with a death likely in the coming weeks? The{" "}
+              <Link href="/plan-now" className="text-primary-deep underline">
+                family plan builder
+              </Link>{" "}
+              is built for exactly that moment.
+            </p>
             <CardTitle>Written, not pre-paid.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
@@ -545,6 +553,22 @@ export default function PlanAheadPage() {
                 it up.
               </p>
             </div>
+          </Card>
+
+          {/* The cheat-sheet email capture, rehomed from the retired /planning
+              page (audit A7-02: /planning 301s here now; source stays
+              "cheatsheet" so the signup API, welcome email, and nurture
+              sequence are untouched). Counts describe the real sheet:
+              five questions, seven decline scripts (lib/scenarios.ts). */}
+          <Card tone="primary">
+            <CardEyebrow>Free cheat sheet</CardEyebrow>
+            <CardTitle>The one-page arrangement cheat sheet.</CardTitle>
+            <p className="text-ink-soft mb-5">
+              The five questions to ask any funeral home, the upsell decline
+              scripts, and the FTC rights most families don&rsquo;t know they
+              have &mdash; on one printable page.
+            </p>
+            <CheatSheetForm />
           </Card>
 
           {/* Tools we provide */}

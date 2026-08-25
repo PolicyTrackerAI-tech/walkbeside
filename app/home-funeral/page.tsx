@@ -242,9 +242,9 @@ export default function HomeFuneralPage() {
                 <strong className="text-ink">File the death certificate.</strong>{" "}
                 In states that allow family-led, you file directly with
                 the county vital records office. Timeline varies but
-                is usually within 5 days of death. Order extra copies
-                (10&ndash;15 is typical for the family&rsquo;s
-                paperwork needs).
+                is usually within 5 days of death. Order extra
+                certified copies &mdash; 5&ndash;10 to start is
+                typical; you can always order more.
               </li>
               <li>
                 <strong className="text-ink">Transport for final disposition.</strong>{" "}

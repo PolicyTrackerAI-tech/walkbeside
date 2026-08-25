@@ -41,9 +41,9 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     slug: "california",
     name: "California",
     abbr: "CA",
-    smallEstateThresholdUSD: 184_500,
+    smallEstateThresholdUSD: 208_850,
     smallEstateProcess:
-      "If the gross value of the estate is $184,500 or less, the family can use a Small Estate Affidavit (Probate Code §13100) to collect personal property without opening probate. For real estate, there's a separate Affidavit re Real Property of Small Value when the property is $61,500 or less. Wait 40 days after death before filing.",
+      "If the gross value of the estate is $208,850 or less (for deaths on or after April 1, 2025; the threshold adjusts every three years, next in April 2028), the family can use a Small Estate Affidavit (Probate Code §13100) to collect personal property without opening probate. For real estate, there's a separate Affidavit re Real Property of Small Value when the property is $69,625 or less. Wait 40 days after death before filing.",
     typicalTimelineMonths: { low: 9, high: 18 },
     informalProbateAvailable: false,
     attorneyRequiredForProbate: false,
@@ -52,6 +52,7 @@ export const STATE_GUIDES: StateProbateGuide[] = [
       "Probate is famously slow and expensive in CA. Statutory attorney + executor fees are based on a sliding scale of gross estate value (4% on first $100k, 3% on next $100k, etc.) — these add up fast.",
       "The Spousal/Domestic Partner Property Petition (Probate Code §13650) is faster than full probate when assets pass to a spouse.",
       "Since 2020, California allows transfer-on-death deeds for real estate — a way to bypass probate entirely if set up before death.",
+      "AB 2016 (effective April 1, 2025) also created a simplified petition to pass a primary residence worth up to $750,000 outside full probate.",
     ],
     keyForms: [
       {
@@ -67,7 +68,7 @@ export const STATE_GUIDES: StateProbateGuide[] = [
       {
         name: "Small Estate Affidavit (Probate Code §13100)",
         description:
-          "For estates under $184,500. Bypass full probate.",
+          "For estates under $208,850. Bypass full probate.",
       },
     ],
     authoritativeSources: [
@@ -130,9 +131,9 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     slug: "florida",
     name: "Florida",
     abbr: "FL",
-    smallEstateThresholdUSD: 75_000,
+    smallEstateThresholdUSD: 150_000,
     smallEstateProcess:
-      "Florida has 'summary administration' for estates under $75,000 (excluding exempt property) OR when the deceased has been gone for more than 2 years. Faster and cheaper than formal administration. Filed in the county where the deceased lived.",
+      "Florida has 'summary administration' for estates under $150,000 (excluding exempt property) for deaths on or after July 1, 2026 ($75,000 for earlier deaths), OR when the deceased has been gone for more than 2 years. Faster and cheaper than formal administration. Filed in the county where the deceased lived.",
     typicalTimelineMonths: { low: 6, high: 12 },
     informalProbateAvailable: true,
     attorneyRequiredForProbate: true,
@@ -146,7 +147,8 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     keyForms: [
       {
         name: "Petition for Summary Administration",
-        description: "For small estates under $75,000.",
+        description:
+          "For small estates under $150,000 (deaths on or after July 1, 2026; $75,000 for earlier deaths).",
       },
       {
         name: "Petition for Administration",
@@ -346,9 +348,9 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     slug: "georgia",
     name: "Georgia",
     abbr: "GA",
-    smallEstateThresholdUSD: 25_000,
+    smallEstateThresholdUSD: null,
     smallEstateProcess:
-      "Georgia has limited small-estate options. The 'No Administration Necessary' procedure works when all heirs agree, there's no will, and no creditors require formal administration. For modest estates with cooperative heirs, this can avoid probate entirely.",
+      "Georgia has limited small-estate options. The 'No Administration Necessary' procedure works when all heirs agree, there's no will, and no creditors require formal administration — there is no dollar cap. For modest estates with cooperative heirs, this can avoid probate entirely. Banks may release up to $15,000 directly to surviving family without administration (O.C.G.A. §7-1-239).",
     typicalTimelineMonths: { low: 6, high: 12 },
     informalProbateAvailable: true,
     attorneyRequiredForProbate: false,
@@ -430,9 +432,9 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     slug: "michigan",
     name: "Michigan",
     abbr: "MI",
-    smallEstateThresholdUSD: 28_000,
+    smallEstateThresholdUSD: 53_000,
     smallEstateProcess:
-      "Michigan's Small Estate Affidavit (technically 'Petition and Order for Assignment') handles estates ≤$28,000 (2025; adjusted annually for inflation). Wait 28 days after death. Filed with the Probate Court.",
+      "Michigan's Small Estate Affidavit (technically 'Petition and Order for Assignment') handles estates of $53,000 or less (2026; statutory base $50,000 under 2024 PA 1, adjusted annually for inflation). Wait 28 days after death. Filed with the Probate Court.",
     typicalTimelineMonths: { low: 6, high: 12 },
     informalProbateAvailable: true,
     attorneyRequiredForProbate: false,
@@ -566,7 +568,7 @@ export const STATE_GUIDES: StateProbateGuide[] = [
       "Washington is a community-property state — half of all property acquired during marriage automatically belongs to the surviving spouse.",
       "Probate in Washington is generally faster and cheaper than most states — known for being executor-friendly.",
       "Most wills include 'nonintervention powers,' which lets the executor handle the estate with minimal court supervision after appointment.",
-      "Washington has its own state estate tax that kicks in at $2.193 million (2024) — separate from the federal threshold.",
+      "Washington has its own state estate tax — the exclusion is $3 million for deaths on or after July 1, 2025 (SB 5813; adjusted for inflation from 2026) — separate from the federal threshold.",
       "Community Property Agreements (CPA) — a Washington-specific document spouses can sign that automatically transfers all community property to the survivor without probate.",
     ],
     keyForms: [
@@ -896,9 +898,9 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     slug: "colorado",
     name: "Colorado",
     abbr: "CO",
-    smallEstateThresholdUSD: 80_000,
+    smallEstateThresholdUSD: 88_000,
     smallEstateProcess:
-      "Colorado's Collection of Personal Property by Affidavit (C.R.S. §15-12-1201) handles estates of $80,000 or less in personal property. Wait 10 days after death. The successor presents the affidavit directly to whoever holds the asset.",
+      "Colorado's Collection of Personal Property by Affidavit (C.R.S. §15-12-1201) handles estates of $88,000 or less in personal property (for deaths in 2026; adjusted annually for inflation — check the current JDF 999 form). Wait 10 days after death. The successor presents the affidavit directly to whoever holds the asset.",
     typicalTimelineMonths: { low: 6, high: 12 },
     informalProbateAvailable: true,
     attorneyRequiredForProbate: false,
@@ -916,7 +918,7 @@ export const STATE_GUIDES: StateProbateGuide[] = [
       },
       {
         name: "JDF 998 — Collection of Personal Property by Affidavit",
-        description: "Small-estate path under $80,000.",
+        description: "Small-estate path under $88,000 (2026; adjusted annually).",
       },
       {
         name: "JDF 940 — Inventory of Estate",
@@ -1024,9 +1026,9 @@ export const STATE_GUIDES: StateProbateGuide[] = [
     slug: "alabama",
     name: "Alabama",
     abbr: "AL",
-    smallEstateThresholdUSD: 32_071,
+    smallEstateThresholdUSD: 37_075,
     smallEstateProcess:
-      "Alabama's Summary Distribution (Ala. Code §43-2-690) handles estates of $32,071 or less (the threshold is indexed annually). Wait 30 days after death. Filed with probate court.",
+      "Alabama's Summary Distribution (Ala. Code §43-2-690) handles estates of $37,075 or less (the indexed figure for March 2025–February 2026; the State Treasurer adjusts it each March). Wait 30 days after death. Filed with probate court.",
     typicalTimelineMonths: { low: 6, high: 12 },
     informalProbateAvailable: true,
     attorneyRequiredForProbate: false,

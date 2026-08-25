@@ -260,7 +260,7 @@ const GUIDES: Guide[] = [
     href: "/headstone-vendors",
     title: "Monument company directory",
     description:
-      "Buy the headstone direct. Typically 30–60% less than funeral-home pricing for the same stone.",
+      "Buy the headstone direct — the same stone funeral homes resell with a markup. Compare one direct quote and see the gap.",
     category: "vendors",
   },
 
@@ -277,13 +277,6 @@ const GUIDES: Guide[] = [
     title: "End of life — when you’re the one dying",
     description:
       "For people with a terminal diagnosis. Palliative vs hospice, MAID where legal, treatment decisions, what to actually do with the time.",
-    category: "plan-ahead",
-  },
-  {
-    href: "/planning",
-    title: "Planning for yourself or an aging parent",
-    description:
-      "The non-crisis entry point. Free cheat sheet, fair-price lookup, the conversation to have now.",
     category: "plan-ahead",
   },
 

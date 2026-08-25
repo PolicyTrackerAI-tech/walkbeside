@@ -158,9 +158,9 @@ const PMC: BenefitMatch = {
 
 const SURVIVOR_PENSION: BenefitMatch = {
   id: "survivor-pension",
-  title: "Survivors Pension (DIC) — worth checking",
+  title: "Survivors Pension — worth checking",
   whatItIs:
-    "A monthly payment to surviving spouses and dependent children of wartime veterans, if income is below a threshold. Separate from burial benefits.",
+    "A monthly payment to surviving spouses and dependent children of wartime veterans, if income is below a threshold. Separate from burial benefits. Separate from DIC (Dependency and Indemnity Compensation) — a monthly, non-income-tested payment when the death was service-connected or on active duty; VA Form 21P-534EZ covers both, so file it either way.",
   amountNote:
     "Ongoing monthly payment, not a one-time benefit. Heavily underutilized — surviving spouses of low-income wartime veterans frequently don't realize they qualify.",
   whyEligible:

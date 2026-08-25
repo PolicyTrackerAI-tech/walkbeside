@@ -131,7 +131,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     paragraphs: [
       "Embalming replaces the body's blood with a formaldehyde-based solution and applies cosmetics to the visible skin. The goal is short-term preservation — enough time for a viewing, a service, and burial. Embalming does not preserve the body indefinitely.",
       "Federal law (FTC Funeral Rule) prohibits funeral homes from claiming that embalming is required when it isn't. It is not required by any US state for cremation. It is not required for a private viewing held shortly after death. It is required only in specific edge cases such as long shipping delays or certain communicable diseases.",
-      "Typical 2026 price: $500–$1,200. Some funeral homes price a 'preparation of the body' bundle that includes embalming, cosmetics, and hairstyling — break this apart on the GPL if you only want one piece of it.",
+      "A fair 2026 price is $700–$900; our checker flags quotes at $1,200 or more. Some funeral homes price a 'preparation of the body' bundle that includes embalming, cosmetics, and hairstyling — break this apart on the GPL if you only want one piece of it.",
     ],
     watchOut:
       "If a funeral home says embalming is 'required by law' or 'required for health reasons,' that is almost always false. Ask which specific law or regulation requires it for your situation.",
@@ -158,7 +158,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "Burial without embalming, without a metal or hardwood casket, and without a concrete vault — designed to let the body decompose into the soil naturally.",
     paragraphs: [
-      "Green burial is legal in all 50 US states, but most conventional cemeteries require vaults that defeat the point. About 350 US cemeteries are certified as green or hybrid (allowing green burials in a defined section). The Green Burial Council maintains the certification list.",
+      "Green burial is legal in all 50 US states, but most conventional cemeteries require vaults that defeat the point. Roughly 500 cemeteries across the US and Canada now offer green burial in some form — hybrid sections, fully natural grounds, or conservation burial grounds. A smaller set is formally certified by the Green Burial Council, which maintains a public directory.",
       "A green burial uses a biodegradable container — a plain pine box, a wicker casket, a cotton shroud — and skips embalming. Refrigeration handles preservation between death and burial. Graves are usually shallower than conventional graves to support decomposition.",
       "Typical 2026 cost: $1,500–$4,000 all-in, depending on the cemetery and whether a memorial service is included. Less than half the cost of a traditional funeral.",
     ],
@@ -188,7 +188,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       "The official government document recording the death. Required for almost everything that comes after — bank accounts, insurance, Social Security, probate, transferring property.",
     paragraphs: [
       "A death certificate has two parts: a medical section (cause and manner of death, signed by a physician, hospice nurse, or medical examiner) and a personal section (filled out by the funeral home or the family). The completed certificate is filed with the county vital records office, which then issues certified copies.",
-      "Most families need 10–15 certified copies. Banks, brokerage firms, pension administrators, life insurance companies, the Social Security Administration, the IRS, and the county recorder's office (for any real estate transfer) each want an original. Photocopies are not accepted.",
+      "Most families order 5–10 certified copies to start; estates with many accounts, properties, or policies need more. Banks, brokerage firms, pension administrators, life insurance companies, the Social Security Administration, the IRS, and the county recorder's office (for any real estate transfer) each want an original. Photocopies are not accepted.",
       "Certified copies cost $5–$30 each depending on state. Order extras at the time of filing — going back later costs the same per copy plus a return trip to the county office.",
     ],
     related: ["next-of-kin", "burial-transit-permit", "probate"],
@@ -239,7 +239,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     term: "GPL (General Price List)",
     category: "money",
     short:
-      "The itemized price list every funeral home in the US is legally required to give you on request — in person, by phone, or by email.",
+      "The itemized price list every funeral home in the US must hand you when you ask in person. They must also answer price questions over the phone. (Federal law does not yet require them to email it or post it online — though good homes do.)",
     paragraphs: [
       "The Federal Trade Commission's Funeral Rule requires every funeral home to maintain a current General Price List and to give it to anyone who asks. It must include the price of each service and product the home offers, individually — not just packages.",
       "Funeral homes are required to quote prices over the phone if asked. They are required to provide the GPL in writing to anyone who walks in and discusses arrangements, before discussing prices verbally. Many homes resist this. Insisting on the written GPL is your right.",
@@ -310,7 +310,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "The container the body is placed in for viewing and burial. Required for traditional funerals; optional for direct cremation (a cardboard 'alternative container' suffices).",
     paragraphs: [
-      "Caskets range from $400 cardboard 'alternative containers' (used for cremation) to $20,000+ hardwood caskets with bronze hardware. Most funeral home displays start at $2,500 and run up to about $10,000. The same casket bought from a third party — Costco, Walmart, online dealers — typically costs less than half.",
+      "Caskets range from cardboard 'alternative containers' (roughly $50–$400, used for cremation) to $20,000+ hardwood caskets with bronze hardware. Most funeral home displays start at $2,500 and run up to about $10,000. The same casket bought from a third party — Costco, Walmart, online dealers — typically costs less than half.",
       "Federal law requires funeral homes to display a casket price list and to use any casket the family provides, with no extra fee. Families are not required to buy the casket from the funeral home.",
       "'Protective' or 'sealed' caskets — usually metal with a rubber gasket — are commonly upsold at $1,000–$3,000 above an equivalent non-sealed model. There is no consumer or scientific evidence that sealing meaningfully slows decomposition or improves preservation.",
     ],
@@ -479,11 +479,12 @@ export const GLOSSARY: GlossaryEntry[] = [
     paragraphs: [
       "Funeral insurance is sold heavily to people over 50 through TV, direct mail, and senior-focused marketing. It is structured as whole life insurance with a small face value. Premiums are level for life. There is usually no medical exam, which is the main selling point.",
       "The economics are usually bad for the buyer. Premiums for a $10,000 policy purchased at age 65 commonly total $15,000–$25,000 over the policyholder's expected lifetime. A separate savings account funded with the same monthly amount would be worth more by the time it is needed, and is fully accessible for any purpose.",
+      "'Guaranteed issue' policies usually carry a graded death benefit: die within the first two to three years and the policy pays back only your premiums plus interest, not the full amount.",
       "The product makes the most sense for buyers with serious health conditions who cannot qualify for term life and who genuinely cannot or will not save the money in another account. For everyone else, a savings account labeled 'funeral fund' is the better choice.",
     ],
     watchOut:
-      "Funeral insurance is different from pre-need contracts. Pre-need is a contract with a specific funeral home, locking in services and (sometimes) prices. Funeral insurance is a check from an insurance company that the family can use anywhere. Salespeople sometimes blur the two.",
-    related: ["pre-need"],
+      "Funeral insurance is different from pre-need contracts. Pre-need is a contract with a specific funeral home, locking in services and (sometimes) prices. Funeral insurance is a check from an insurance company that the family can use anywhere. Salespeople sometimes blur the two. And if you live long enough, you can pay more in premiums than the policy ever pays out — a payable-on-death savings account earmarked for the funeral is often cheaper and more flexible.",
+    related: ["payable-on-death", "pre-need"],
   },
   {
     slug: "third-party-casket",
@@ -587,7 +588,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "Burial shortly after death with no embalming, no viewing, and no formal service at the funeral home. The burial equivalent of direct cremation.",
     paragraphs: [
-      "Immediate burial is one of the lowest-cost burial options and, like direct cremation, must appear as its own line on every funeral home's General Price List under the FTC Funeral Rule. It includes basic services, transfer of the body, a simple container, and the burial itself — but skips embalming, cosmetic preparation, viewing, and a chapel ceremony.",
+      "Immediate burial is one of the lowest-cost burial options and — like direct cremation — must appear as its own separately priced line on the General Price List of any funeral home that offers it, under the FTC Funeral Rule. It includes basic services, transfer of the body, a simple container, and the burial itself — but skips embalming, cosmetic preparation, viewing, and a chapel ceremony.",
       "Expect roughly $1,500–$5,000 to the funeral home, plus separate cemetery costs for the plot, opening and closing, and any required liner or vault. Families can still hold a graveside gathering or a memorial later without paying for the funeral home's full service package.",
     ],
     related: ["direct-cremation", "graveside-service", "cemetery-plot"],
@@ -641,9 +642,9 @@ export const GLOSSARY: GlossaryEntry[] = [
     alsoKnownAs: ["ashes", "cremains"],
     category: "body",
     short:
-      "What is returned after cremation: dry, ground bone fragments weighing roughly 3 to 9 pounds. Despite the nickname, they are not ash in the everyday sense.",
+      "What is returned after cremation: dry, ground bone fragments weighing roughly 4 to 8 pounds. Despite the nickname, they are not ash in the everyday sense.",
     paragraphs: [
-      "After cremation, what remains is bone, which is then processed into a uniform, sand-like consistency. An adult typically yields about 3 to 9 pounds. The remains are inert, sterile, and safe to handle, which is why families can keep them, divide them, scatter them, or bury them.",
+      "After cremation, what remains is bone, which is then processed into a uniform, sand-like consistency. An adult typically yields about 4 to 8 pounds. The remains are inert, sterile, and safe to handle, which is why families can keep them, divide them, scatter them, or bury them.",
       "Remains come back in a plain plastic or cardboard container unless you buy an urn. There is no legal requirement to buy an urn from the funeral home — any container works, and urns are widely available for far less elsewhere.",
     ],
     related: ["cremation", "urn", "scattering", "columbarium"],
@@ -705,7 +706,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     short:
       "An unfinished, often cardboard or fiberboard box used for cremation in place of a casket. Crematories require a rigid, combustible container — not a casket.",
     paragraphs: [
-      "For a direct cremation you do not need a casket. An alternative container — typically heavy cardboard, pressed wood, or fiberboard — satisfies the crematory's requirement for a rigid, combustible enclosure. They cost roughly $50–$150 versus hundreds or thousands for a casket.",
+      "For a direct cremation you do not need a casket. An alternative container — typically heavy cardboard, pressed wood, or fiberboard — satisfies the crematory's requirement for a rigid, combustible enclosure. They cost roughly $50–$400 — some homes include one in the direct-cremation price — versus hundreds or thousands for a casket.",
       "The FTC Funeral Rule requires funeral homes to tell you alternative containers are available for direct cremation and to list one on the price list. Some staff skip mentioning it, steering families toward a casket they do not need.",
     ],
     watchOut:
@@ -833,21 +834,6 @@ export const GLOSSARY: GlossaryEntry[] = [
   },
 
   // ---------------- Even more money ----------------
-  {
-    slug: "final-expense-insurance",
-    term: "Final expense insurance",
-    alsoKnownAs: ["burial insurance", "funeral insurance policy"],
-    category: "money",
-    short:
-      "A small whole-life policy, usually $5,000–$25,000, marketed to cover funeral costs. Easy to qualify for, but expensive per dollar of coverage.",
-    paragraphs: [
-      "Final expense insurance is permanent life insurance in a small face amount, sold specifically as a way to leave money for a funeral. It is easy to get — often with few or no health questions — and the payout goes to a named beneficiary, not locked to any funeral home, so the family keeps whatever is left over.",
-      "The trade-off is cost. Premiums are high relative to the benefit, and “guaranteed issue” policies usually carry a graded death benefit: if you die within the first two to three years, the policy pays back only your premiums plus interest, not the full amount.",
-    ],
-    watchOut:
-      "If you live long enough, you can pay more in premiums than the policy ever pays out. For many people a payable-on-death savings account earmarked for the funeral is cheaper and more flexible.",
-    related: ["funeral-insurance", "payable-on-death", "pre-need"],
-  },
   {
     slug: "perpetual-care",
     term: "Perpetual care",

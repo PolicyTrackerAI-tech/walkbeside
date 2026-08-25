@@ -323,11 +323,10 @@ export default function HowToPayPage() {
                 </li>
                 <li>
                   <strong className="text-ink">Direct cremation through a low-cost provider:</strong>{" "}
-                  $800&ndash;$1,500. Several national low-cost
-                  cremation services operate in major US metros
-                  (Tulip Cremation, Solace Cremation, and similar).
-                  Local low-cost providers exist in most cities;
-                  compare 2&ndash;3 by calling for a quote.
+                  $800&ndash;$1,500. Several national online
+                  direct-cremation services operate in major US
+                  metros, and local low-cost providers exist in most
+                  cities; compare 2&ndash;3 by calling for a quote.
                 </li>
                 <li>
                   <strong className="text-ink">Direct burial without service:</strong>{" "}

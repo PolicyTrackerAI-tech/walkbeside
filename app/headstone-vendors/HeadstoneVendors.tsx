@@ -37,14 +37,14 @@ export function HeadstoneVendors() {
               Monument company directory
             </p>
             <h1 className="font-serif text-3xl sm:text-4xl text-ink leading-tight mb-4">
-              Buy the headstone direct. Save 30&ndash;60%.
+              Buy the headstone direct. Same stone, less money.
             </h1>
             <p className="text-lg text-ink-soft">
-              Funeral homes typically mark up headstones 50&ndash;200%
-              over what monument companies charge for the same stone.
-              Below are monument companies to start from &mdash; we
-              take no fee from any of them.
-              Direct purchase, same product, much less money.
+              Funeral homes usually resell headstones made by the same
+              monument companies you can buy from directly, with a
+              markup added. Below are monument companies to start from
+              &mdash; we take no fee from any of them. Two quotes will
+              show you the real gap in your case.
             </p>
           </div>
 

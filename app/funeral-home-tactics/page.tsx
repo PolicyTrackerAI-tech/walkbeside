@@ -11,7 +11,7 @@ import { ArticleSchema } from "@/components/seo/ArticleSchema";
 export const metadata: Metadata = {
   title: "How the funeral industry actually makes money — and how the sales floor pushes you",
   description:
-    "The specific scripts, room layouts, and psychological framing that move families from a $3,000 cremation to a $12,000 funeral. Sourced from the FTC Funeral Rule, Reuters' multi-year investigation, and Funeral Consumers Alliance reports.",
+    "The specific scripts, room layouts, and psychological framing that move families from a $3,000 cremation to a $12,000 funeral. Sourced from FTC Funeral Rule enforcement actions and undercover sweeps, Funeral Consumers Alliance reports, and AARP consumer research.",
   openGraph: { images: [ogImage("How the funeral industry's sales floor works", "Advocacy")] },
 };
 
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
  * "here's why and how the industry is structured to make you NOT
  * decline." Moat content. The honest critique no competitor can fake.
  *
- * Sources cited generally (FTC Funeral Rule, Reuters body-broker
- * series, Funeral Consumers Alliance, AARP). Speaks about "the
+ * Sources cited generally (FTC Funeral Rule enforcement actions and
+ * undercover sweeps, Funeral Consumers Alliance, AARP). Speaks about "the
  * industry" and "many homes" — not specific named homes — to avoid
  * defamation risk. Acknowledges that honest funeral homes exist.
  */
@@ -59,25 +59,26 @@ export default function FuneralHomeTacticsPage() {
               homes, where corporate ownership has installed sales
               processes designed at the headquarters level. The
               pattern is documented in FTC Funeral Rule enforcement
-              actions, in a multi-year Reuters investigation
-              (2017&ndash;2018), and in the Funeral Consumers
-              Alliance&rsquo;s state-by-state reports.
+              actions and undercover sweeps, in the Funeral Consumers
+              Alliance&rsquo;s state-by-state reports, and in AARP
+              consumer research.
             </p>
           </div>
 
           {/* Ownership */}
           <Card>
             <CardEyebrow>Who owns the funeral home you’re sitting in</CardEyebrow>
-            <CardTitle>Three corporations own a meaningful slice.</CardTitle>
+            <CardTitle>Corporate chains own a meaningful slice.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
-                About 80% of US funeral homes are independently owned,
-                often by the same family for generations. The other
-                20% are owned by one of three publicly-traded
-                corporations or a handful of private-equity firms.
+                Roughly 85&ndash;90% of US funeral homes are
+                independently owned, often by the same family for
+                generations. The rest are owned by two
+                publicly-traded corporations or a growing set of
+                private-equity firms.
                 The largest is SCI (Service Corporation
-                International), which operates more than 1,500
-                funeral homes and 400 cemeteries under hundreds of
+                International), which operates nearly 1,500
+                funeral homes and about 500 cemeteries under hundreds of
                 local brand names. Most consumers have no idea their
                 neighborhood funeral home is a Fortune 500 outlet.
               </p>
@@ -123,9 +124,10 @@ export default function FuneralHomeTacticsPage() {
               <ul className="space-y-2 list-disc pl-5">
                 <li>
                   <strong className="text-ink">Caskets:</strong>{" "}
-                  typical markup of 200&ndash;500% above wholesale.
-                  A $1,200 casket retails for $4,000&ndash;$8,000.
-                  Highest-margin line item in most arrangements.
+                  markups commonly run 200&ndash;500% above wholesale
+                  &mdash; a casket that wholesales around $1,200
+                  routinely retails for $4,000&ndash;$6,000 at the
+                  home. Highest-margin line item in most arrangements.
                 </li>
                 <li>
                   <strong className="text-ink">Vaults / outer burial containers:</strong>{" "}
@@ -145,8 +147,8 @@ export default function FuneralHomeTacticsPage() {
                 </li>
                 <li>
                   <strong className="text-ink">Cash-advance items</strong>{" "}
-                  (death certificates, obituary placement,
-                  flowers): 10&ndash;30% markup is typical, despite
+                  (death certificates, obituary placement):
+                  10&ndash;30% markup is typical, despite
                   FTC Rule disclosure requirements.
                 </li>
                 <li>
@@ -221,12 +223,13 @@ export default function FuneralHomeTacticsPage() {
                 </li>
                 <li>
                   <strong className="text-ink">The hidden lowest-priced casket.</strong>{" "}
-                  FTC Funeral Rule requires homes to display or
-                  describe the lowest-priced casket. Many homes
-                  technically comply by listing it on the price list
-                  but not putting it in the room. If you ask to see
-                  it, they have to produce it &mdash; often
-                  reluctantly.
+                  The FTC Funeral Rule requires the casket price
+                  list to include every casket the home regularly
+                  offers &mdash; but not to put the cheapest ones in
+                  the room, and many homes don&rsquo;t. Ask to see
+                  the least expensive casket on the list. An honest
+                  home will show it or order it; reluctance tells
+                  you something.
                 </li>
               </ul>
               <p>
@@ -377,9 +380,9 @@ export default function FuneralHomeTacticsPage() {
                 If you find yourself crying and being pushed,
                 say: <em>&ldquo;I need to step out and call my
                 family. I&rsquo;ll come back in 30 minutes.&rdquo;</em>{" "}
-                Then leave the room. Funeral homes are required to
-                let you take a break. Most upsell pressure
-                evaporates on the second meeting.
+                Then leave. No one can make you stay in the room;
+                the arrangement meeting waits for you. Most upsell
+                pressure evaporates on the second meeting.
               </p>
             </div>
           </Card>
@@ -533,8 +536,9 @@ export default function FuneralHomeTacticsPage() {
                   &ldquo;The cremation is booked for tomorrow,
                   you need to pay now.&rdquo; Nothing is that
                   urgent. Reputable homes will hold the body in
-                  cooled storage for days at no charge while you
-                  decide.
+                  cooled storage for days while you decide &mdash;
+                  some charge a modest daily refrigeration fee,
+                  which must appear on the GPL.
                 </li>
                 <li>
                   <strong className="text-ink">The bill doesn&rsquo;t match the verbal quotes.</strong>{" "}
@@ -561,10 +565,10 @@ export default function FuneralHomeTacticsPage() {
             <CardTitle>Where to file a complaint, in order.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
-                Documented violations of the FTC Funeral Rule are
-                routinely punished &mdash; the FTC has imposed fines
-                on dozens of funeral homes in undercover audits over
-                the past two decades, including major chains.
+                The FTC runs undercover compliance sweeps; homes
+                caught violating the Rule typically must enter a
+                three-year compliance program and make a payment to
+                the U.S. Treasury, or face an FTC lawsuit.
                 Reporting matters even if the family doesn&rsquo;t
                 get money back.
               </p>
@@ -719,10 +723,9 @@ export default function FuneralHomeTacticsPage() {
             This page is general consumer information based on
             publicly-documented practices in the US funeral industry.
             Sources include FTC Funeral Rule enforcement actions
-            (1984&ndash;present), the Reuters body-brokers
-            investigation (2017&ndash;2018), Funeral Consumers
-            Alliance state-by-state reports, and AARP consumer
-            research. The tactics described are common patterns
+            and undercover sweeps (1984&ndash;present), Funeral
+            Consumers Alliance state-by-state reports, and AARP
+            consumer research. The tactics described are common patterns
             documented across the industry; they are not claims
             about any specific funeral home. Many honest funeral
             homes operate without using any of them.

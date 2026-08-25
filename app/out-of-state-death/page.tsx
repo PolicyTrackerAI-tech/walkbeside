@@ -375,8 +375,10 @@ export default function OutOfStateDeathPage() {
                 <strong className="text-ink">Burial at sea</strong>{" "}
                 of the full body is permitted under EPA rules more
                 than 3 nautical miles from shore, with notification
-                to the EPA within 30 days. Cremated remains can be
-                scattered at sea with no permit required. Both options
+                to the EPA within 30 days. Cremated remains fall under
+                the same EPA general permit &mdash; at least 3 nautical
+                miles from shore, with the same 30-day notification (no
+                application or fee, and no depth requirement). Both options
                 are common for US Navy veterans &mdash; the Navy
                 offers free burial-at-sea services for eligible
                 veterans and dependents (
@@ -396,7 +398,7 @@ export default function OutOfStateDeathPage() {
 
           <Card>
             <CardEyebrow>Specific common scenarios</CardEyebrow>
-            <CardTitle>The four cases families call us about most.</CardTitle>
+            <CardTitle>The four cases that come up most.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
                 <strong className="text-ink">A college student dies at school.</strong>{" "}

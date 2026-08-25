@@ -22,7 +22,9 @@ export const metadata: Metadata = {
  * (already in /disenfranchised-grief; this page covers older
  * children too).
  *
- * Sensitive content. Sister to redline before final MVP approval.
+ * Sensitive content: reviewed under the 2026-08-25 A7 posture decision
+ * (AI-adversarial verification + live disclaimers; external grief-professional
+ * review is a funded post-first-revenue item — see LEDGER A7-01).
  * Voice: deeply validating, no performed empathy, honest about the
  * difficulty without saccharine framing.
  */
@@ -316,8 +318,10 @@ export default function DeathOfAChildPage() {
               <p>
                 <strong className="text-ink">The Compassionate Friends</strong>{" "}
                 runs grandparent-specific resources and meetings in
-                many chapters. The Bereaved Grandparents Foundation
-                also has support specifically for this group.
+                many chapters. Bereaved Parents of the USA
+                (bereavedparentsusa.org) also explicitly supports
+                grieving grandparents, and the MISS Foundation
+                matches grandparents with trained peer mentors.
               </p>
             </div>
           </Card>

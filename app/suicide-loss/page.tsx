@@ -22,7 +22,9 @@ export const metadata: Metadata = {
  * 988 surfaced prominently because suicide loss survivors are at
  * elevated risk themselves.
  *
- * Sensitive content. Sister to redline before final MVP approval.
+ * Sensitive content: reviewed under the 2026-08-25 A7 posture decision
+ * (AI-adversarial verification + live disclaimers; external grief-professional
+ * review is a funded post-first-revenue item — see LEDGER A7-01).
  * Voice: factual, validating, no performed empathy, treats reader
  * as a competent adult. National orgs only (AFSP, Alliance of Hope).
  */

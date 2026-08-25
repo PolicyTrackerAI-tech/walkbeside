@@ -33,7 +33,7 @@ const RIGHTS: Right[] = [
   {
     title: "A casket from the funeral home",
     law: "FTC Funeral Rule · 16 CFR 453.4",
-    body: "Federal law requires the funeral home to accept a casket you buy from any third-party vendor — Costco, Amazon, a local casket store — at no additional handling fee. Funeral home casket markups run 300–500% above wholesale. A $1,200 casket elsewhere is routinely $4,000–$6,000 through the home.",
+    body: "Federal law requires the funeral home to accept a casket you buy from any third-party vendor — Costco, Amazon, a local casket store — at no additional handling fee. Funeral-home casket markups commonly run 200–500% above wholesale — a casket that wholesales around $1,200 routinely retails for $4,000–$6,000 through the home, and far less from a third-party store.",
     tellThem: "We’ll be bringing our own casket. Please confirm there’s no handling charge — I know federal law prohibits one.",
   },
   {

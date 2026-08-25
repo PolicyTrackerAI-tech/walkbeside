@@ -120,9 +120,10 @@ export default async function FaithPage({
                 </p>
               )}
               <p className="text-ink-soft mb-5">
-                This is the service type most families in this tradition
-                choose. You can refine with the five-question decision guide if
-                you want to weigh budget or other preferences.
+                This is the traditional starting point in this tradition
+                &mdash; not a rule. You can refine with the five-question
+                decision guide if you want to weigh budget or other
+                preferences.
               </p>
               <div className="flex flex-wrap gap-3">
                 <LinkButton href={`/prices?svc=${t.defaultServiceType}`}>

@@ -137,10 +137,12 @@ export default function EndOfLifePage() {
                 certify a life expectancy of 6 months or less. To
                 enter hospice you stop active curative treatment for
                 the terminal illness (you can still be treated for
-                unrelated conditions). Hospice covers all medications,
-                equipment, nurse and aide visits, social workers,
-                chaplains, and 13 months of bereavement support for
-                your family after death.
+                unrelated conditions). Hospice covers medications
+                related to the terminal illness, equipment, nurse and
+                aide visits, social workers, chaplains, and
+                bereavement support for your family after the death
+                (Medicare requires up to a year; many programs run
+                about 13 months).
               </p>
               <p>
                 <strong className="text-ink">The transition between them</strong>{" "}
@@ -233,14 +235,18 @@ export default function EndOfLifePage() {
                 that&rsquo;s a different situation that deserves a
                 different response.
               </p>
+              {/* Re-verify this list against compassionandchoices.org
+                  /states-where-medical-aid-in-dying-is-authorized/
+                  before editing. Last checked 2026-08-25. */}
               <p>
-                <strong className="text-ink">Where it&rsquo;s legal as of 2026:</strong>{" "}
-                Oregon, Washington, Vermont, California, Colorado,
-                DC, Hawaii, Maine, New Jersey, New Mexico, and
-                Montana (court-recognized, no formal statute). Most
-                states have a residency requirement, though Oregon and
-                Vermont have removed theirs. A handful of additional
-                states have legislation in active consideration.
+                <strong className="text-ink">Where it&rsquo;s legal as of late 2026:</strong>{" "}
+                California, Colorado, Delaware, Hawaii, Maine,
+                Montana (court-recognized, no formal statute), New
+                Jersey, New Mexico, New York (effective August 2026),
+                Oregon, Vermont, Washington, and Washington, DC.
+                Illinois&rsquo;s law takes effect September 12, 2026.
+                Most states have a residency requirement, though
+                Oregon and Vermont have removed theirs.
               </p>
               <p>
                 <strong className="text-ink">Eligibility (typical, varies by state):</strong>
@@ -271,10 +277,11 @@ export default function EndOfLifePage() {
               </ul>
               <p>
                 <strong className="text-ink">What it involves:</strong>{" "}
-                a prescription for a barbiturate-based medication
-                that you take orally at a time you choose. It
-                works within minutes; the person typically falls
-                asleep and dies peacefully. The process from first
+                a prescription medication &mdash; today usually a
+                compounded mix of sedative and heart-slowing drugs
+                &mdash; that you take yourself, orally, at a time you
+                choose. Most people fall asleep within minutes; death
+                typically follows within a few hours. The process from first
                 request to receiving the medication usually takes
                 15&ndash;30 days depending on state. About one-third
                 of people who receive the medication never take it

@@ -92,7 +92,9 @@ export default function DisenfranchisedGriefPage() {
             <CardTitle>Miscarriage, stillbirth, NICU loss, SIDS.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
-                About 1 in 4 known pregnancies ends in miscarriage.
+                About 10 to 20 percent of known pregnancies end in
+                miscarriage &mdash; and the true rate is higher,
+                counting losses before a pregnancy is recognized.
                 Stillbirth (loss after 20 weeks) happens in about 1
                 in 175 US pregnancies. Infant death in the first year
                 happens to about 5 in every 1,000 births. None of
@@ -294,23 +296,17 @@ export default function DisenfranchisedGriefPage() {
                   often misread by friends.
                 </li>
                 <li>
-                  <strong className="text-ink">Stand Alone</strong>{" "}
+                  <strong className="text-ink">Together Estranged</strong>{" "}
                   &mdash;{" "}
                   <a
-                    href="https://www.standalone.org.uk"
+                    href="https://www.togetherestranged.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary-deep underline"
                   >
-                    standalone.org.uk
+                    togetherestranged.org
                   </a>
-                  . UK-based but online resources and forums available
-                  to anyone. The most thoughtful peer community for
-                  estranged adults.
-                </li>
-                <li>
-                  <strong className="text-ink">Together Estranged</strong>{" "}
-                  &mdash; private online community for adults estranged
+                  . Private online community for adults estranged
                   from family. Active US membership.
                 </li>
               </ul>

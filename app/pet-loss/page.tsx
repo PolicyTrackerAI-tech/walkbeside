@@ -450,9 +450,11 @@ export default function PetLossPage() {
                   >
                     aplb.org
                   </a>
-                  . Online chat support, certified pet-loss
-                  counselor directory, free 24/7 helpline. The
-                  national authority on pet bereavement.
+                  . Free scheduled chat rooms (most weeknight
+                  evenings, Eastern time), a certified pet-loss
+                  counselor directory, and articles. The most
+                  established pet-bereavement organization in
+                  the US.
                 </li>
                 <li>
                   <strong className="text-ink">Lap of Love grief support</strong>{" "}

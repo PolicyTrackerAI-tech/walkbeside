@@ -157,9 +157,8 @@ export default function AfterHospicePage() {
                 pronouncement of death, medical portion of the death
                 certificate, disposal of controlled medications,
                 notification of the attending physician, support
-                calls and bereavement check-ins (typically for 13
-                months after death, included in Medicare hospice
-                benefits).
+                calls and bereavement check-ins (Medicare requires up
+                to a year; many programs run about 13 months).
               </p>
               <p>
                 <strong className="text-ink">Hospice does not handle:</strong>{" "}

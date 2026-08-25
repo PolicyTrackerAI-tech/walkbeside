@@ -450,7 +450,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
     timelineNorm: "Burial within 24–48 hours when possible. Sabbath and holidays may delay by a day.",
     embalmingNorm: "forbidden", // TODO-FD: verify
     notes:
-      "Traditional Jewish practice requires prompt burial in a simple wood casket, no embalming, no viewing. Reform congregations sometimes accept cremation; Conservative and Orthodox do not. Ask your rabbi if you're uncertain — and pick the appropriate sub-tradition on /decide so the recommendation matches your community's practice.",
+      "Traditional Jewish practice requires prompt burial in a simple wood casket, no embalming, no viewing. Reform Judaism increasingly permits cremation (now common in many communities); Conservative and Orthodox do not. Ask your rabbi if you're uncertain — and pick the appropriate sub-tradition on /decide so the recommendation matches your community's practice.",
     defaultServiceType: "graveside-burial",
     whatYouCanDecline: [
       "embalming",
@@ -756,7 +756,7 @@ export const FAITH_TRADITIONS: FaithTradition[] = [
       "Pushing burial-related upsells (vault, plot, headstone) — none apply.",
       "Embalming despite the family's wishes.",
       "Selling an expensive cremation casket when a basic combustible container is correct.",
-      "Failing to remove the kara (steel bracelet) and other articles of faith respectfully when preparing the body.",
+      "Removing the kara (steel bracelet) or other articles of faith when preparing the body — the five Ks remain on the body through cremation.",
     ],
     cheatsheet: {
       openingQuestion:
