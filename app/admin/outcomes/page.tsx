@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminPage } from "@/lib/admin-auth";
+import { DEMO_ORG_MARKER } from "@/lib/demo-org";
 import {
   OutcomesClient,
   type AiQuoteProposal,
@@ -108,6 +109,20 @@ export default async function AdminOutcomesPage() {
     partners = [];
   }
 
+  // Demo orgs share prod tables with only the seeded marker separating them
+  // (A5-04): cases tagged to one must never join the headline numbers this
+  // desk reports — they're our own fictional data.
+  let demoPartnerIds: string[] = [];
+  try {
+    const { data } = await admin
+      .from("partners")
+      .select("id")
+      .eq("application_notes", DEMO_ORG_MARKER);
+    demoPartnerIds = ((data as { id: string }[] | null) ?? []).map((p) => p.id);
+  } catch {
+    demoPartnerIds = [];
+  }
+
   // So the founder never silently drops a referred case from a partner report.
   const untaggedRecorded = cases.filter(
     (c) => c.outcome_recorded_at && !c.partner_id,
@@ -149,6 +164,7 @@ export default async function AdminOutcomesPage() {
                 initial={cases}
                 partners={partners}
                 aiProposals={aiProposals}
+                demoPartnerIds={demoPartnerIds}
               />
             </>
           )}

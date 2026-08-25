@@ -5,9 +5,10 @@ import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminApi } from "@/lib/admin-auth";
 import { readLimitedJson } from "@/lib/http-guards";
 import { BILLING_TIERS, billingEligible } from "@/lib/billing";
+import { BRAND } from "@/lib/brand";
 import { sendEmail } from "@/lib/email";
 
-const Body = z
+const PartnerBody = z
   .object({
     id: z.string().uuid(),
     active: z.boolean().optional(),
@@ -24,6 +25,16 @@ const Body = z
       b.billingTier !== undefined,
     { message: "must set active, status, or billingTier" },
   );
+
+// Lead triage (A5-04): before this, partner_leads.handled_at had NO write
+// path anywhere — the founder re-triaged the same leads forever. handled
+// stamps/clears the timestamp; nothing else on a lead is mutable from here.
+const LeadBody = z.object({
+  leadId: z.string().uuid(),
+  handled: z.boolean(),
+});
+
+const Body = z.union([LeadBody, PartnerBody]);
 
 /**
  * PATCH /api/admin/partners — the human approval gate. Session-gated to the
@@ -45,6 +56,19 @@ export async function PATCH(req: Request) {
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
+
+  if ("leadId" in parsed.data) {
+    const { error } = await svc
+      .from("partner_leads")
+      .update({
+        handled_at: parsed.data.handled ? new Date().toISOString() : null,
+      })
+      .eq("id", parsed.data.leadId);
+    if (error)
+      return NextResponse.json({ error: "unavailable" }, { status: 503 });
+    return NextResponse.json({ ok: true });
+  }
+
   const update: Record<string, unknown> = {};
   if (parsed.data.active !== undefined) {
     update.active = parsed.data.active;
@@ -106,7 +130,7 @@ export async function PATCH(req: Request) {
           );
         await sendEmail({
           to: partner.contact_email,
-          subject: "You're approved — your Honest Funeral portal",
+          subject: `You're approved — your ${BRAND.name} portal`,
           text: [
             `${partner.name} is approved.`,
             ``,

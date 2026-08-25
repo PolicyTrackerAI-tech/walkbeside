@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Card, CardEyebrow, CardTitle } from "@/components/ui/Card";
 import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
-import { resolvePartnerToken } from "@/lib/partner-auth";
+import { isPartnerParked, resolvePartnerToken } from "@/lib/partner-auth";
 import { codesWithClaims } from "@/lib/partner/codes";
 import { displayCount } from "@/lib/partner-report";
 import { LinksClient } from "@/components/partner/LinksClient";
@@ -28,7 +28,9 @@ export default async function PartnerLinksPage({
   const { token } = await params;
 
   const partner = await resolvePartnerToken(token);
-  if (!partner || partner.active === false) notFound();
+  // Parked orgs (paused/archived/deactivated) lose bearer-link access the
+  // moment the founder parks them — same rule as the session portal (A5-02).
+  if (!partner || isPartnerParked(partner)) notFound();
 
   // Codes + aggregate claim counts (shared with /portal/links). Errors
   // degrade to an empty list with the create flow available.

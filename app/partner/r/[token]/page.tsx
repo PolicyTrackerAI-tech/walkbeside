@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { resolvePartnerToken } from "@/lib/partner-auth";
+import { isPartnerParked, resolvePartnerToken } from "@/lib/partner-auth";
 import { buildPartnerReportData } from "@/lib/partner/report-data";
 import { ProofSheet } from "@/components/partner/ProofSheet";
 import { PartnerPortalNav } from "@/components/partner/PartnerPortalNav";
@@ -30,7 +30,9 @@ export default async function PartnerTokenReportPage({
   // Resolve the token → partner. A bad token, or the table not existing yet
   // (migration unapplied), both 404 — we never confirm the route to a guesser.
   const partner = await resolvePartnerToken(token);
-  if (!partner || partner.active === false) notFound();
+  // Parked orgs (paused/archived/deactivated) lose bearer-link access the
+  // moment the founder parks them — same rule as the session portal (A5-02).
+  if (!partner || isPartnerParked(partner)) notFound();
 
   const { stats, digest, checkerFamilies } = await buildPartnerReportData(partner);
 

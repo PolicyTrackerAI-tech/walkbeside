@@ -27,7 +27,7 @@ const HOW_IT_WORKS = [
   },
   {
     n: 4,
-    title: "We run every case by hand and capture outcomes.",
+    title: "Every case is instrumented end to end.",
     body: "Savings, satisfaction, time-to-resolution — recorded on every case that comes through.",
   },
   {
@@ -191,10 +191,16 @@ export default function PartnersPage() {
                 after every death (42 CFR 418.64(d)) &mdash; unfunded, and
                 survey-able. Most programs run about 13 months in practice.
               </li>
+              {/* Channel law (market research 2026-07): NEVER pitch CAHPS/star-
+                  rating/payment-update repair — that framing burned this
+                  channel once. The admissible frame is bereavement-program
+                  value; reputation is a consequence of good bereavement care,
+                  never a marketed inducement. */}
               <li>
-                Your CAHPS &ldquo;Emotional &amp; Spiritual Support&rdquo;
-                composite feeds your Care Compare star rating; missing it
-                risks your Medicare Annual Payment Update.
+                The months after a death are what families remember about
+                your care &mdash; and what they tell other families. The
+                funeral-cost stress in that window is the sharpest,
+                least-resourced part of it.
               </li>
               <li>
                 The funeral-pricing and after-death questions your counselors
