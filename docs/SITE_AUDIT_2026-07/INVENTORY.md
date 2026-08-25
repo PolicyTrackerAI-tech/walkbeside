@@ -1,5 +1,13 @@
 # Site Audit 2026-07 — Surface Inventory (generated)
 
+> **📦 ARCHIVED (A11, 2026-08-25).** This is the 2026-07-27 mapping-pass
+> snapshot (main @ c47a6a0) that seeded the audit — a map of LEADS, not a
+> statement of current fact. Every claim in it was verified, fixed, or
+> superseded by audit days A1–A10; the current state of every surface is
+> [A11-SCORECARD.md](A11-SCORECARD.md) and the dispositions are in
+> [LEDGER.md](LEDGER.md). Kept verbatim as the audit's before-picture.
+
+
 > **What this is:** the raw per-surface inventory produced by the 12-agent mapping pass on
 > 2026-07-27 (main @ c47a6a0). Each audit session reads ONLY its day's section (see
 > [PLAN.md](PLAN.md) for the day→section mapping). Every entry lists the surface, its layer,
