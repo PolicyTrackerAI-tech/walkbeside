@@ -82,3 +82,9 @@ where table_schema = 'public' and table_name = 'partners'
     'billing_started_at', 'billing_tier'
   )
 order by column_name;
+
+-- Confirm the 2026-08-25 analysis-input-hash migration landed (expect 1 row):
+select column_name
+from information_schema.columns
+where table_schema = 'public' and table_name = 'price_list_analyses'
+  and column_name = 'input_hash';

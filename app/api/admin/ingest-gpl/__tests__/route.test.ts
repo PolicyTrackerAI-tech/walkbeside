@@ -25,6 +25,7 @@ import { LINE_ITEMS } from "@/lib/pricing-data";
 import { matchLineItem } from "@/lib/negotiation/price-list-parse";
 import { priceListAnalysisSystem } from "@/lib/negotiation/prompts";
 import { extractionConfidence } from "@/lib/extraction-confidence";
+import { analysisInputHash } from "@/lib/analysis-hash";
 import { POST } from "../route";
 
 const requireAdminApiMock = vi.mocked(requireAdminApi);
@@ -317,6 +318,21 @@ describe("POST /api/admin/ingest-gpl — save", () => {
     expect(rawText).not.toContain("(801) 555-0142");
     expect(rawText).toContain("[redacted]");
     expect(rawText).toContain("Basic services fee");
+    // Source-document hash (A4-04): home identity + normalized RAW text —
+    // the same GPL re-pasted with stray whitespace collapses to one
+    // benchmark observation, while chain locations rehosting identical
+    // corporate GPL text stay distinct documents (name+zip differ).
+    expect(calls[0].values!.input_hash).toBe(
+      analysisInputHash(`Example Fictional Home\n84101\n${GPL_TEXT}`),
+    );
+    expect(calls[0].values!.input_hash).toBe(
+      analysisInputHash(
+        `Example Fictional Home\n84101\n  ${GPL_TEXT.replace(/\n/g, "  \n")} `,
+      ),
+    );
+    expect(calls[0].values!.input_hash).not.toBe(
+      analysisInputHash(`Other Chain Location\n84020\n${GPL_TEXT}`),
+    );
     // Confidence is the buildsheet-specced extractionConfidence over the
     // reviewed rows (3 items, no stated total, range excluded from the sum).
     expect(calls[0].values!.confidence).toBe(

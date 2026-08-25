@@ -17,6 +17,7 @@ import { LINE_ITEMS } from "@/lib/pricing-data";
 import { extractionConfidence } from "@/lib/extraction-confidence";
 import { redactContact } from "@/lib/redact";
 import { readLimitedJson } from "@/lib/http-guards";
+import { analysisInputHash } from "@/lib/analysis-hash";
 
 /**
  * Founder GPL ingest — the write path behind /admin/ingest-gpl (D2).
@@ -228,6 +229,17 @@ async function handleSave(body: z.infer<typeof SaveBody>) {
       potential_savings_cents: 0,
       extraction_method: "founder_ingest",
       confidence,
+      // Source-document hash (2026-08-25-analysis-input-hash.sql): the
+      // benchmark feed scopes dedupe per document, so re-ingesting one GPL
+      // collapses to one observation while two homes printing the same price
+      // both count. The home identity (name + zip) is mixed into the hash —
+      // all founder rows share one user id, and chain locations rehost
+      // byte-identical corporate GPL text (SCI/Dignity in the SLC harvest);
+      // text alone would collapse two real homes into one observation, with
+      // the last-ingested home's zip silently winning the metro stats.
+      input_hash: analysisInputHash(
+        `${body.homeName}\n${body.zip}\n${body.text}`,
+      ),
     })
     .select("id")
     .single();

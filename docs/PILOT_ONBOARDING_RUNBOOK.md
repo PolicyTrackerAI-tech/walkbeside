@@ -13,6 +13,10 @@ delivered post-admission only, family activates, hospice transmits nothing ·
 
 - [ ] `ADMIN_EMAILS` set in Vercel prod (admin gate fails closed without it).
 - [ ] `supabase/migrations/2026-08-18-share-links-lockdown.sql` applied in prod.
+- [ ] `supabase/migrations/2026-08-25-analysis-input-hash.sql` applied in prod
+      **before the code deploys** — un-migrated, `/admin/ingest-gpl` 500s on
+      every save (blocking the GPL harvest ingest) and analyzer persistence
+      degrades to `saved: false`.
 - [ ] SLC GPL ingest under way (`~/FH/gpl-harvest/README.md` runbook) and the
       first vetted homes in `funeral_homes` (`active AND vetted AND email`),
       so an at-need family doesn't dead-end at `no_homes_available`.
