@@ -22,7 +22,9 @@ export const metadata: Metadata = {
  * but framed for SURVIVORS (a SAMHSA helpline is for the bereaved
  * too, not only for active users).
  *
- * Sensitive content. Sister to redline before final MVP approval.
+ * Sensitive content: reviewed under the 2026-08-25 A7 posture decision
+ * (AI-adversarial verification + live disclaimers; external grief-professional
+ * review is a funded post-first-revenue item — see LEDGER A7-01).
  */
 export default function OverdoseLossPage() {
   return (
@@ -420,12 +422,10 @@ export default function OverdoseLossPage() {
             <CardTitle>This is the moment, if there is one.</CardTitle>
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
-                If you have another family member with a substance
-                use disorder, the overdose death may be the highest-leverage moment of their life for entering treatment.
-                Researchers find that close family overdose deaths
-                are one of the most consistent triggers for treatment
-                engagement &mdash; even more than a person&rsquo;s
-                own overdose or arrest.
+                For some people with a substance use disorder, a
+                family member&rsquo;s overdose death becomes the
+                moment they finally accept treatment. If there is
+                a window, this may be it.
               </p>
               <p>
                 The conversation is delicate, but worth having. SAMHSA
@@ -459,11 +459,6 @@ export default function OverdoseLossPage() {
                   meth addiction; widely used in overdose-loss
                   family circles for understanding the disease
                   model.
-                </li>
-                <li>
-                  <strong className="text-ink">&ldquo;Saving Sammy&rdquo;</strong>{" "}
-                  by Beth Maloney &mdash; about the medical-system
-                  failures that often surround substance-use death.
                 </li>
                 <li>
                   <strong className="text-ink">&ldquo;In the Realm of Hungry Ghosts&rdquo;</strong>{" "}

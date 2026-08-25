@@ -24,7 +24,7 @@ export default async function DecidePage({
   const aheadMode = isAheadMode(await searchParams);
   return (
     <main className="flex-1 flex flex-col">
-      <SiteHeader rightSlot={<BackLink defaultHref="/planning" defaultLabel="← Planning" />} />
+      <SiteHeader rightSlot={<BackLink defaultHref="/plan-ahead" defaultLabel="← Plan ahead" />} />
 
       <section className="flex-1">
         <div className="max-w-2xl mx-auto px-5 py-12">

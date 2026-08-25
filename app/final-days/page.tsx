@@ -83,9 +83,9 @@ export default function FinalDaysPage() {
                 Medicare hospice eligibility starts when a physician
                 estimates a life expectancy of 6 months or less. Most
                 families wait too long: the median length of hospice
-                stay in the US is about 18 days, and roughly a third
-                of patients receive hospice for less than a week
-                before death. The benefit is designed for 6 months,
+                stay in the US is about 18 days, and about one in
+                four patients receives hospice for a week or less
+                before death (NHPCO). The benefit is designed for 6 months,
                 and the longer earlier window is where most of the
                 relief happens &mdash; for both the patient and the
                 family.

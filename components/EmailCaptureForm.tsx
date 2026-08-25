@@ -34,7 +34,8 @@ interface Props {
  * email and passes it down as defaultEmail.
  *
  * Brand voice: calm, no marketing fluff, no urgency. The implied
- * contract is "we'll send one calm email a month and never share."
+ * contract matches what the pipeline actually sends: a couple of calm
+ * emails, then rarely — and we never share.
  */
 export function EmailCaptureForm({
   source,
@@ -43,7 +44,7 @@ export function EmailCaptureForm({
   buttonLabel = "Send it to me",
   successTitle = "Got it.",
   successMessage = "It's in your inbox. Take care.",
-  noteText = "We send one calm email a month. No marketing, easy to unsubscribe. We never share your email.",
+  noteText = "A couple of calm emails, then rarely. No marketing, easy to unsubscribe. We never share your email.",
   defaultEmail = "",
 }: Props) {
   const [email, setEmail] = useState(defaultEmail);

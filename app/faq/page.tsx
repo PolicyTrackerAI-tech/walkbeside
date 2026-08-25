@@ -207,7 +207,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What if you don\u2019t have price data for my area?",
     plain:
-      "Our fair-price lookup works for most US zip codes. If we don't have enough local data, we say so plainly — we don't make up numbers. Our funeral-home outreach still works in any zip with at least a few funeral homes: we send the request, homes respond under the FTC Funeral Rule, and you see whatever comes back.",
+      "Our fair-price lookup works for most US zip codes. If we don't have enough local data, we say so plainly — we don't make up numbers. Our funeral-home outreach still works in any zip with at least a few funeral homes: we send the request; most homes respond — the same price transparency the Funeral Rule already requires of them in person and by phone. You see whatever comes back.",
     a: (
       <>
         <p>
@@ -218,8 +218,9 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
         </p>
         <p>
           Our funeral-home outreach still works in any zip with at least a few
-          funeral homes: we send the request, homes respond under the FTC
-          Funeral Rule, and you see whatever comes back.
+          funeral homes: we send the request; most homes respond &mdash; the
+          same price transparency the Funeral Rule already requires of them in
+          person and by phone. You see whatever comes back.
         </p>
       </>
     ),
@@ -249,7 +250,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "Will funeral homes know I used Honest Funeral?",
     plain:
-      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. When you have us contact funeral homes for you (our outreach): yes, and that's the point. We identify ourselves, by name, in every email. We invoke your rights under the FTC Funeral Rule to request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
+      "For the fair-price lookup: no. That happens entirely on our side, and no home is contacted. When you have us contact funeral homes for you (our outreach): yes, and that's the point. We identify ourselves, by name, in every email. We cite the FTC Funeral Rule's price-disclosure requirements when we request a General Price List. Your surname is mentioned so the home knows who the inquiry is for; nothing else about you unless you tell us to share it. We don't impersonate families. Homes respond to Honest Funeral differently than to a grieving family, and that's exactly why this works.",
     a: (
       <>
         <p>
@@ -262,8 +263,8 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           <strong>
             We identify ourselves, by name, in every email.
           </strong>{" "}
-          We invoke your rights under the FTC Funeral Rule to request
-          a General Price List. Your surname is mentioned so the home
+          We cite the FTC Funeral Rule&rsquo;s price-disclosure requirements
+          when we request a General Price List. Your surname is mentioned so the home
           knows who the inquiry is for; nothing else about you unless
           you tell us to share it.
         </p>
@@ -279,7 +280,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What is the funeral-home outreach, and is it anonymous?",
     plain:
-      "Our funeral-home outreach: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Honest Funeral is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule gives them a legal obligation to provide a price list on request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
+      "Our funeral-home outreach: we contact funeral homes on your behalf and collect comparison quotes. It is not anonymous — it's transparent. The homes know Honest Funeral is asking, they know we're a consumer advocate, and they know the FTC Funeral Rule already requires them to hand anyone a price list in person and give accurate prices by phone — most homes extend that same transparency to a written request. We rely on the fact that homes respond differently when someone who knows the rules is doing the comparing.",
     a: (
       <>
         <p>
@@ -289,10 +290,12 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
         </p>
         <p>
           The homes know Honest Funeral is asking, they know we&rsquo;re a
-          consumer advocate, and they know the FTC Funeral Rule gives them a
-          legal obligation to provide a price list on request. We don&rsquo;t
-          hide who we are; we rely on the fact that homes respond differently
-          when someone who knows the rules is doing the comparing.
+          consumer advocate, and they know the FTC Funeral Rule already
+          requires them to hand anyone a price list in person and give
+          accurate prices by phone &mdash; most homes extend that same
+          transparency to a written request. We don&rsquo;t hide who we are;
+          we rely on the fact that homes respond differently when someone who
+          knows the rules is doing the comparing.
         </p>
       </>
     ),
@@ -376,15 +379,16 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "What do I do if the funeral home won\u2019t honor their quote?",
     plain:
-      "For quotes collected through our outreach: tell us and we'll escalate with the home on your behalf — a written, itemized GPL quote is what the Funeral Rule requires homes to provide, and homes that fail to honor a written quote can be reported to the FTC and to your state attorney general. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
+      "For quotes collected through our outreach: tell us and we'll escalate with the home on your behalf — itemized written pricing is exactly what the Funeral Rule is built around, and a home that won't stand behind its own written prices can be reported to the FTC at ReportFraud.ftc.gov and to your state attorney general or funeral board. For quotes you collected on your own: keep every written communication. You can file a complaint with the FTC at ReportFraud.ftc.gov, and (in many states) with your state attorney general or funeral board.",
     a: (
       <>
         <p>
           For quotes collected through our outreach: tell us and we&rsquo;ll
-          escalate with the home on your behalf &mdash; a written, itemized
-          GPL quote is what the Funeral Rule requires homes to provide, and
-          homes that fail to honor a written quote can be reported to the FTC
-          and to your state attorney general.
+          escalate with the home on your behalf &mdash; itemized written
+          pricing is exactly what the Funeral Rule is built around, and a
+          home that won&rsquo;t stand behind its own written prices can be
+          reported to the FTC at ReportFraud.ftc.gov and to your state
+          attorney general or funeral board.
         </p>
         <p>
           For quotes you collected on your own: keep every written
@@ -398,7 +402,7 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
   {
     q: "How long does this whole process take?",
     plain:
-      "Fair-price lookup: under three minutes. No account, no email. The funeral-home outreach: we ask homes to respond within a few days, and we design the flow so a comparison is in your hands before you have to sign anything. The stakes justify the short wait — the gap between fair and inflated pricing on a single arrangement runs $2,000 to $5,000.",
+      "Fair-price lookup: under three minutes. No account, no email. The funeral-home outreach: we ask homes to respond within a few days, and we design the flow so a comparison is in your hands before you have to sign anything. The stakes justify the short wait — the gap between fair and inflated pricing on a single arrangement runs $2,000 to $5,000 (our methodology page shows how we calculate that).",
     a: (
       <>
         <p>Fair-price lookup: under three minutes. No account, no email.</p>
@@ -407,7 +411,14 @@ export const FAQ: { q: string; plain: string; a: React.ReactNode }[] = [
           days, and we design the flow so a comparison is in your hands
           before you have to sign anything. The stakes justify the short
           wait &mdash; the gap between fair and inflated pricing on a single
-          arrangement runs $2,000 to $5,000.
+          arrangement runs{" "}
+          <Link
+            href="/methodology#overcharge-figure"
+            className="text-primary-deep underline-offset-2 hover:underline"
+          >
+            $2,000 to $5,000
+          </Link>
+          .
         </p>
       </>
     ),

@@ -161,9 +161,10 @@ export default function EstateBasicsPage() {
               </li>
               <li>
                 <strong className="text-ink">The estate is &ldquo;taxable&rdquo;</strong>{" "}
-                &mdash; at the federal level that&rsquo;s above ~$13M
-                (2026; subject to change), but some states impose estate
-                or inheritance taxes at much lower thresholds.
+                &mdash; at the federal level that&rsquo;s above $15M
+                per person (2026; indexed annually), but some states
+                impose estate or inheritance taxes at much lower
+                thresholds.
               </li>
               <li>
                 <strong className="text-ink">Disputes between heirs.</strong>{" "}

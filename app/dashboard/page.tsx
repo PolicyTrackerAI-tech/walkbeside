@@ -348,7 +348,7 @@ export default async function DashboardPage({
                 href="/headstone-vendors"
                 eyebrow="Long term"
                 title="Monument company directory"
-                blurb="Buy the headstone direct. Typically 30&ndash;60% less than funeral-home pricing."
+                blurb="Buy the headstone direct &mdash; the same stone, without the funeral-home markup."
               />
             </div>
           </details>

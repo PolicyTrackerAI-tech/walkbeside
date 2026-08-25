@@ -126,8 +126,8 @@ export const DONATION_PROGRAMS: DonationProgram[] = [
     name: "Columbia University — Anatomical Donations",
     state: "NY",
     type: "university",
-    phone: "212-305-3450",
-    url: "https://www.cumc.columbia.edu/dept/anatomy/donations.html",
+    phone: "212-305-3600",
+    url: "https://www.pathology.columbia.edu/about-us/anatomical-donor-program",
     notes: "Serves NYC region. Pre-registration required.",
   },
   {
@@ -160,7 +160,7 @@ export const DONATION_PROGRAMS: DonationProgram[] = [
     state: "MI",
     type: "university",
     phone: "734-764-4359",
-    url: "https://medschool.umich.edu/sites/default/files/anatomical-donations",
+    url: "https://medicine.umich.edu/dept/anatomical-sciences/anatomical-donations-program",
     notes: "Serves Michigan. Pre-registration encouraged.",
   },
   {

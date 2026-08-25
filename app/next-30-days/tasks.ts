@@ -98,7 +98,7 @@ export const PHASES: Phase[] = [
       {
         id: "p0-certs-count",
         title: "Decide how many death certificates to order",
-        body: "Most families need 10–15. Order through the funeral home — it's faster and the home usually passes through the state's base fee.",
+        body: "Most families need 5–10 to start. Order through the funeral home — it's faster and the home usually passes through the state's base fee.",
         help: {
           kind: "internal-link",
           label: "Open the certificate calculator →",
@@ -172,7 +172,7 @@ export const PHASES: Phase[] = [
     tasks: [
       {
         id: "w1-certs",
-        title: "Order 10–15 certified death certificates",
+        title: "Order 5–10 certified death certificates to start",
         body: "Every bank, insurer, and government agency wants a certified copy. Order through the funeral home (faster) or your state's vital records office (cheaper).",
         help: {
           kind: "external-link",
@@ -249,12 +249,12 @@ export const PHASES: Phase[] = [
       {
         id: "w2-banks",
         title: "Notify banks and investment firms",
-        body: "They will freeze accounts as soon as notified. Transfer anything you'll need for funeral expenses BEFORE you notify — then notify.",
+        body: "Banks freeze solo accounts once notified. If you're a joint owner or a named payable-on-death beneficiary, the money is yours and stays accessible. Don't move money out of an account that was only in their name — those funds belong to the estate, and withdrawing them can create personal liability. Sort out how funeral costs get paid first (many homes accept insurance assignment), then notify.",
       },
       {
         id: "w2-va",
         title: "Claim VA burial benefits",
-        body: "Up to $2,000 for service-connected death, several hundred otherwise. Plus possible free national cemetery burial, government headstone, burial flag.",
+        body: "Up to $2,000 for a service-connected death; smaller allowances otherwise (the VA publishes current amounts — the checker links you to them). Plus possible free national cemetery burial, government headstone, burial flag.",
         applicableWhen: (ctx) => ctx.isVeteran !== "no",
         contextNote: (ctx) => {
           if (ctx.isVeteran === "yes") {
@@ -385,13 +385,13 @@ export const PHASES: Phase[] = [
       {
         id: "m2-headstone",
         title: "Order the headstone",
-        body: "Headstone markup at funeral homes is among the highest in the industry. We can probably save you 30–60% on this one — or, if buying through the funeral home is easier and the price is fair, that's a fine choice too.",
+        body: "Headstone markup at funeral homes is among the highest in the industry. Buying direct from a monument company is often meaningfully less for the same stone — or, if buying through the funeral home is easier and the price is fair, that's a fine choice too.",
         help: {
           kind: "internal-link",
           label: "Open the monument company directory →",
           href: "/headstone-vendors",
           description:
-            "Vetted monument companies by metro. Direct purchase, same product as the funeral home offers, typically 30–60% less. Plus a 4-step decision flow on when buying from the funeral home is fine and when to go direct.",
+            "Monument companies sell the same stones funeral homes resell with a markup — starting points, not endorsements; we take no fee. Get one direct quote and compare.",
         },
       },
     ],

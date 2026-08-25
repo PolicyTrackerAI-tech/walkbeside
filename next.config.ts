@@ -48,6 +48,15 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: SECURITY_HEADERS }];
   },
+  // Audit A7-02 (planning-trio decision): /planning's one unique feature (the
+  // cheat-sheet email form) was rehomed onto /plan-ahead, which is now the one
+  // canonical planning-ahead surface; /plan-now stays the separate pre-death
+  // PRODUCT page (partner ?ref= links + printed packets embed that URL — never
+  // rename it). Permanent redirect so old links and any indexed /planning URLs
+  // consolidate.
+  async redirects() {
+    return [{ source: "/planning", destination: "/plan-ahead", permanent: true }];
+  },
 };
 
 export default nextConfig;

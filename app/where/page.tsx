@@ -43,7 +43,7 @@ const PATHS: {
     sub: "Now the paperwork begins — death certificates, Social Security, accounts to close, estate. We walk through it in order.",
   },
   {
-    href: "/planning",
+    href: "/plan-ahead",
     title: "I’m planning ahead",
     sub: "Nobody has died. Learning what funerals should cost and how to set things up before the day comes.",
   },

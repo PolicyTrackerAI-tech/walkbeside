@@ -218,16 +218,19 @@ export default function DigitalLegacyPage() {
             <div className="text-ink-soft space-y-3 mt-3">
               <p>
                 Microsoft has a Next-of-Kin process to release account
-                contents. Request at{" "}
+                contents. Start with{" "}
                 <a
-                  href="https://account.microsoft.com/security/account-deceased"
+                  href="https://support.microsoft.com/en-us/account-billing/accessing-outlook-com-onedrive-and-other-microsoft-services-when-someone-has-died-ebbd2860-917e-4b39-9913-212362da6b2f"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary-deep underline"
                 >
-                  account.microsoft.com/security/account-deceased
+                  Microsoft&rsquo;s support article on accessing a
+                  deceased person&rsquo;s account
                 </a>
-                . Microsoft requires the deceased&rsquo;s email address,
+                ; requests go to Microsoft&rsquo;s Custodian of Records
+                (msrecord@microsoft.com). Microsoft requires the
+                deceased&rsquo;s email address,
                 proof of death, proof of relationship, and a notarized
                 affidavit. Processing typically takes 6 to 8 weeks.
                 They deliver contents on a DVD by physical mail (yes,

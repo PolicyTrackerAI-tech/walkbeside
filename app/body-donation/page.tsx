@@ -105,8 +105,9 @@ export default function BodyDonationPage() {
               </li>
               <li>
                 <strong className="text-ink">It supports medical training.</strong>{" "}
-                Every doctor, nurse, surgeon, and physical therapist
-                in the US trained on a donated body. The bodies are
+                Nearly every doctor and surgeon in the US &mdash; and
+                many nurses and physical therapists &mdash; trained on
+                donated bodies. The bodies are
                 treated with profound respect &mdash; medical schools
                 hold annual memorial services to honor donors.
               </li>

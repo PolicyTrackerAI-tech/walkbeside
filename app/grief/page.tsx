@@ -732,7 +732,7 @@ export default function GriefPage() {
           <EmailCapture
             source="grief"
             title="Want this saved to come back to?"
-            subtitle="Grief comes in waves. We'll email this guide so it's there when you need it again, plus one calm message a month with new resources."
+            subtitle="Grief comes in waves. We'll email this guide so it's there when you need it again, plus a couple of calm follow-ups with new resources — then we leave you alone."
             buttonLabel="Email me this guide"
             successMessage="It's in your inbox. Take your time."
           />

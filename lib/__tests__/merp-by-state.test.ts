@@ -45,6 +45,30 @@ describe("VERIFIED_MERP integrity", () => {
   });
 });
 
+describe("VERIFIED_MERP register-contamination guard (audit A7)", () => {
+  // Audit A7 found the adversarial-verification pass's FEEDBACK notes pasted
+  // into this register as if they were the family-facing content — a grieving
+  // family picking their state saw editor instructions ("Same as drafted,
+  // with two refinements…") instead of the state's rules. Every field here
+  // renders verbatim through StateMerp.tsx, so verifier/editor voice must
+  // never appear in any of them. If a future verification pass leaks its
+  // notes into the data again, this trips.
+  const VERIFIER_VOICE =
+    /as drafted|Optional (enrichment|precision|tightening)|Accurate as written|Accurate as far as|Minor precision|Do NOT|do not cite|confirmed (verbatim|as claimed|unchanged)|Consider adding|Suggest '/;
+
+  it("no field carries verifier voice instead of family-facing prose", () => {
+    const hits: string[] = [];
+    for (const r of VERIFIED_MERP) {
+      for (const [field, value] of Object.entries(r)) {
+        if (typeof value !== "string") continue;
+        const m = value.match(VERIFIER_VOICE);
+        if (m) hits.push(`${r.code}.${field} contains "${m[0]}"`);
+      }
+    }
+    expect(hits).toEqual([]);
+  });
+});
+
 describe("FEDERAL_BASELINE", () => {
   it("leads with the fact that stops the panic", () => {
     expect(FEDERAL_BASELINE.headline).toContain("never a bill your family personally owes");

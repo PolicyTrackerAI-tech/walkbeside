@@ -25,7 +25,7 @@ function WorksheetView({ aheadMode }: { aheadMode: boolean }) {
   return (
     <main className="flex-1 flex flex-col">
       <SiteHeader
-        rightSlot={<BackLink defaultHref="/planning" defaultLabel="← Planning" />}
+        rightSlot={<BackLink defaultHref="/plan-ahead" defaultLabel="← Plan ahead" />}
       />
 
       <section className="flex-1">

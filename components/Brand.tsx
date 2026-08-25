@@ -143,6 +143,9 @@ export function Footer() {
               Have us contact homes
             </Link>
             <Link href="/plan-now" className="hover:text-ink-soft">
+              Make the family plan
+            </Link>
+            <Link href="/plan-ahead" className="hover:text-ink-soft">
               Plan ahead
             </Link>
             <Link href="/dashboard" className="hover:text-ink-soft">
