@@ -18,12 +18,25 @@ interface Row {
   zip: string;
 }
 
+/**
+ * Recording fake (audit A10-02): the original fake ignored eq()/not() args,
+ * so deleting `.eq("vetted", true)` from directory.ts passed the whole
+ * suite — the operational law CLAUDE.md marks as never-loosen had no
+ * tripwire. Every filter is now captured for assertion.
+ */
 function fakeClient(result: { data: Row[] | null; error: unknown }) {
+  const filters: { op: string; args: unknown[] }[] = [];
   const chain = {
-    eq: () => chain,
-    not: () => Promise.resolve(result),
+    eq: (...args: unknown[]) => {
+      filters.push({ op: "eq", args });
+      return chain;
+    },
+    not: (...args: unknown[]) => {
+      filters.push({ op: "not", args });
+      return Promise.resolve(result);
+    },
   };
-  return { from: () => ({ select: () => chain }) };
+  return { client: { from: () => ({ select: () => chain }) }, filters };
 }
 
 beforeEach(() => {
@@ -42,7 +55,7 @@ describe("findHomesFromDirectory", () => {
   it("query errors → returns empty array, never a placeholder", async () => {
     supabaseMock.mockReturnValue(true);
     createClientMock.mockResolvedValue(
-      fakeClient({ data: null, error: new Error("db down") }) as never,
+      fakeClient({ data: null, error: new Error("db down") }).client as never,
     );
     const homes = await findHomesFromDirectory("90210", 4);
     expect(homes).toEqual([]);
@@ -51,7 +64,7 @@ describe("findHomesFromDirectory", () => {
   it("zero vetted homes match → returns empty array, never a placeholder", async () => {
     supabaseMock.mockReturnValue(true);
     createClientMock.mockResolvedValue(
-      fakeClient({ data: [], error: null }) as never,
+      fakeClient({ data: [], error: null }).client as never,
     );
     const homes = await findHomesFromDirectory("90210", 4);
     expect(homes).toEqual([]);
@@ -67,7 +80,7 @@ describe("findHomesFromDirectory", () => {
           { name: "Prefix Home", email: "prefix@h.com", zip: "90211" },
         ],
         error: null,
-      }) as never,
+      }).client as never,
     );
     const homes = await findHomesFromDirectory("90210", 4);
     expect(homes.map((h) => h.name)).toEqual([
@@ -86,9 +99,19 @@ describe("findHomesFromDirectory", () => {
           { name: "Has Email Home", email: "ok@h.com", zip: "90210" },
         ],
         error: null,
-      }) as never,
+      }).client as never,
     );
     const homes = await findHomesFromDirectory("90210", 4);
     expect(homes).toEqual([{ name: "Has Email Home", email: "ok@h.com" }]);
+  });
+
+  it("THE vetted gate: the query filters active=true AND vetted=true AND email not null (CLAUDE.md law — never loosen)", async () => {
+    supabaseMock.mockReturnValue(true);
+    const fake = fakeClient({ data: [], error: null });
+    createClientMock.mockResolvedValue(fake.client as never);
+    await findHomesFromDirectory("90210", 4);
+    expect(fake.filters).toContainEqual({ op: "eq", args: ["active", true] });
+    expect(fake.filters).toContainEqual({ op: "eq", args: ["vetted", true] });
+    expect(fake.filters).toContainEqual({ op: "not", args: ["email", "is", null] });
   });
 });
