@@ -33,6 +33,10 @@ const Body = z.object({
     "image/webp",
     "image/gif",
   ]),
+  // Eval-harness knob (scripts/eval-vision.mjs). Honored ONLY on a dev
+  // server — production silently ignores it, so no public caller can re-tag
+  // our cost ledger. Mirrors the analyzer route's evalRun.
+  evalRun: z.boolean().optional(),
 });
 
 export async function POST(req: Request) {
@@ -104,7 +108,9 @@ export async function POST(req: Request) {
     });
     // Vision content blocks don't fit the string-only callClaude wrapper —
     // this site keeps its direct client() call and cost-tags via recordUsage.
-    recordUsage("extract-price-list-image", msg);
+    const isEvalRun =
+      process.env.NODE_ENV !== "production" && parsed.data.evalRun === true;
+    recordUsage(isEvalRun ? "eval" : "extract-price-list-image", msg);
 
     const extracted = textOf(msg).trim();
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { timingSafeEqual } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { notifyFamilyOfReply } from "@/lib/negotiation/notify-family-of-reply";
@@ -43,7 +44,12 @@ export async function POST(req: Request) {
   const expected =
     "Basic " +
     Buffer.from(`${expectedUser}:${expectedSecret}`).toString("base64");
-  if (authHeader !== expected) {
+  // Timing-safe compare (A1-08 → A10): a plain !== leaks a byte-position
+  // oracle. Length-normalize first — timingSafeEqual throws on unequal
+  // lengths, and the length itself is not secret.
+  const a = Buffer.from(authHeader);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !timingSafeEqual(a, b)) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

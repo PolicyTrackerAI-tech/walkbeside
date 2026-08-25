@@ -1,6 +1,7 @@
 import { callClaude, claudeAvailable } from "@/lib/claude";
 import { summarizeQuoteSystem } from "@/lib/negotiation/prompts";
 import { stripCodeFence } from "@/lib/negotiation/price-list-parse";
+import { redactContact } from "@/lib/redact";
 import { extractionConfidence } from "@/lib/extraction-confidence";
 
 /**
@@ -129,7 +130,12 @@ export async function parseInboundQuote(
     const out = await callClaude({
       feature: "inbound-quote-parse",
       system: summarizeQuoteSystem(),
-      user: body.slice(0, 6000),
+      // A10-03: FD reply bodies previously went to Claude RAW — the one
+      // undocumented exception to the redact-before-AI posture. The parser
+      // needs prices and item names, never the contact strings a reply can
+      // carry (incl. a family's own details quoted back by the home), so
+      // the same contact redaction the analyzer applies runs here first.
+      user: redactContact(body).slice(0, 6000),
       maxTokens: 1300, // re-baselined 1000→1300 (sonnet-5 tokenizer)
       negotiationId,
       timeoutMs: 15_000,

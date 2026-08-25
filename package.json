@@ -15,7 +15,8 @@
     "build:bootstrap": "node scripts/build-bootstrap-sql.mjs",
     "eval:analyzer": "node scripts/eval-analyzer.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "eval:vision": "node scripts/eval-vision.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",

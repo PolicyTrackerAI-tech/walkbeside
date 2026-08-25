@@ -1,0 +1,66 @@
+{
+  "_source": "Allen Mortuaries 2024 GPL page 2 \u2014 packages, merchandise ranges, numbered options; hand-verified 2026-08-25",
+  "mustFind": [
+    {
+      "nameHint": "package a|full funeral service",
+      "price": "\\$5,595|\\$5595"
+    },
+    {
+      "nameHint": "package b|without an evening",
+      "price": "\\$5,245|\\$5245"
+    },
+    {
+      "nameHint": "package c|grave side",
+      "price": "\\$4,895|\\$4895"
+    },
+    {
+      "nameHint": "forwarding",
+      "price": "\\$1,995|\\$1995"
+    },
+    {
+      "nameHint": "receiving",
+      "price": "\\$1,695|\\$1695"
+    },
+    {
+      "nameHint": "immediate burial",
+      "price": "\\$2,820|\\$2820"
+    },
+    {
+      "nameHint": "direct cremation",
+      "price": "\\$2,795|\\$2795"
+    },
+    {
+      "nameHint": "unfinished wood box",
+      "price": "\\$3,195|\\$3195"
+    },
+    {
+      "nameHint": "holiday",
+      "price": "\\$900"
+    }
+  ],
+  "mustFindPrices": [
+    "5595",
+    "5245",
+    "4895",
+    "1995",
+    "1695",
+    "2820",
+    "2795",
+    "2495",
+    "3195",
+    "900"
+  ],
+  "rangeChecks": [
+    {
+      "nameHint": "casket",
+      "low": "1450",
+      "high": "15000"
+    },
+    {
+      "nameHint": "outer burial",
+      "low": "1595",
+      "high": "5200"
+    }
+  ],
+  "notes": "Packages + numbered option lists + merchandise RANGES \u2014 exercises range extraction (caskets $1450-$15,000) and the state cremation permit fee ($157) parenthetical."
+}

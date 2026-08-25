@@ -63,16 +63,28 @@ function verifySvixSignature(
   } catch {
     return false;
   }
+  // Freshness window (A1-08 → A10): without it, a captured signed payload
+  // replays forever — each replay re-running the deactivation write. Svix's
+  // own tolerance is 5 minutes; same here, both directions (clock skew).
+  const ts = Number(timestamp);
+  if (!Number.isFinite(ts) || Math.abs(Date.now() / 1000 - ts) > 300) {
+    return false;
+  }
   const toSign = `${id}.${timestamp}.${payload}`;
   const computed = crypto
     .createHmac("sha256", secretBytes)
     .update(toSign)
     .digest("base64");
-  const expected = `v1,${computed}`;
-  // Resend may include multiple signatures space-separated; any match passes
-  return signatureHeader
-    .split(" ")
-    .some((sig) => sig.trim() === expected);
+  const expected = Buffer.from(`v1,${computed}`);
+  // Resend may include multiple signatures space-separated; any match passes.
+  // Compared timing-safe (length first — lengths aren't secret).
+  return signatureHeader.split(" ").some((sig) => {
+    const candidate = Buffer.from(sig.trim());
+    return (
+      candidate.length === expected.length &&
+      crypto.timingSafeEqual(candidate, expected)
+    );
+  });
 }
 
 export async function POST(req: Request) {
