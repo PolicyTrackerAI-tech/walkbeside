@@ -1,5 +1,12 @@
 # The Product Plan — Jul 16 → Oct 16, 2026 (13 weeks)
 
+> **⚠️ PARTIALLY RE-BASELINED (A11, 2026-08-25).** The 13-week arc and the
+> one milestone (one hospice paying) stand; the weekly scoreboard mechanics
+> and any "Open Farewell" rename items are superseded — the operative plan is
+> `docs/BUSINESS_PLAN.md` v3.0 + `docs/EXECUTION_PLAN_2026-08.md`, and the
+> current site state is `docs/SITE_AUDIT_2026-07/A11-SCORECARD.md`.
+
+
 **The one goal (from the bible):** one hospice paying — in-product, on real
 data, with proof it works. Everything here is product development only; sales
 motions and legal work appear only as *gates* the product must be ready for.

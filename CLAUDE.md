@@ -111,7 +111,12 @@ these rules are what make us admissible. Full analysis + citations:
 - Branch per change; open a PR; don't merge to `main` without the founder's go.
 - Verify before declaring done: `npm run typecheck`, `npm run lint` (eslint),
   `npm run build`, and the test suite (vitest — tests live in `__tests__/`
-  dirs and `*.test.ts`).
+  dirs and `*.test.ts`). CI (`.github/workflows/ci.yml`) runs all four on
+  every PR — the suite includes mutation-tested guardrail tripwires (consent
+  write path, vetted gate, send-path architecture, word-bans); when one
+  fails, the invariant is the law, not the test.
+- Current state of every surface: `docs/SITE_AUDIT_2026-07/A11-SCORECARD.md`
+  + `CLOSEOUT.md` (the 2026-08 full-site audit's close-out).
 
 ## Stack
 
