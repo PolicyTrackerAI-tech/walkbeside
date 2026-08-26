@@ -40,16 +40,33 @@ export interface AnalysisRecord {
   /** Owner — used only for dedupe, never surfaced. */
   userId: string;
   /**
-   * Overrides userId as the dedupe scope. Family checker rows dedupe by
-   * OWNER (the same family re-checking the same quote counts once) — but
+   * Overrides userId as the dedupe scope. Rows with an input_hash
+   * (2026-08-25) scope per user+hash — per source DOCUMENT — so one
+   * document re-analyzed counts once while two documents that print the
+   * same price both count. Hashless legacy family rows dedupe by OWNER
+   * (the same family re-checking the same quote counts once) — but
    * founder-ingest rows all share the founder's one user id while each row
    * is a DIFFERENT home's GPL, so owner-scoped dedupe would collapse two
    * homes that print the same price (death certificates are a fixed state
    * fee — every home in a state prints the identical per-copy total, and
-   * n would sit at 1 forever). Those rows dedupe per ingested document
-   * instead, exactly like the outreach feed's outreachId scope below.
+   * n would sit at 1 forever). Those legacy rows dedupe per ingested
+   * document (row id) instead, exactly like the outreach feed's outreachId
+   * scope below. lib/benchmark-sources.ts assigns all of these.
    */
   dedupeScope?: string;
+  /**
+   * Migration-straddle guard: set (with dedupeScope) on hashed family
+   * rows so each observation ALSO seeds the legacy owner-scoped key
+   * `${userId}|item|cents`. A document analyzed pre-migration (hashless,
+   * owner-scoped) and re-analyzed after would otherwise count twice —
+   * the two scopes never collide on their own. Hashed rows always sort
+   * newer than legacy rows (the column postdates every legacy insert,
+   * and the feed is newest-first), so the seed lands before the legacy
+   * duplicate is examined. Seeding is one-way: hashed rows never CHECK
+   * the owner key, so two hashed documents at the same price still both
+   * count.
+   */
+  seedOwnerScope?: boolean;
   /** Zip if captured (column added 2026-07-02; older rows have none). */
   zip?: string | null;
   items: Array<{
@@ -152,6 +169,11 @@ function collectObservations(
       const dedupeKey = `${rec.dedupeScope ?? rec.userId}|${item.matchedItemId}|${item.cents}`;
       if (seen.has(dedupeKey)) continue;
       seen.add(dedupeKey);
+      // Straddle seed (see AnalysisRecord.seedOwnerScope): suppress the
+      // pre-migration owner-scoped copy of this same observation.
+      if (rec.seedOwnerScope) {
+        seen.add(`${rec.userId}|${item.matchedItemId}|${item.cents}`);
+      }
 
       // Per-each price for per-unit items; per-unit is never COLA-normalized.
       const perEach =

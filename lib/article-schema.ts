@@ -1,4 +1,5 @@
 import { BRAND } from "./brand";
+import { ogQueryString } from "./og";
 /**
  * Build an Article JSON-LD object for a content page. Wraps the
  * canonical schema.org Article type with sensible defaults for
@@ -44,10 +45,9 @@ export function articleSchema({
 }: ArticleSchemaInput): Record<string, unknown> {
   const pageUrl = `${SITE_URL}/${slug.replace(/^\//, "")}`;
 
-  const params = new URLSearchParams();
-  params.set("title", title);
-  if (eyebrow) params.set("eyebrow", eyebrow);
-  const imageUrl = `${SITE_URL}/og?${params.toString()}`;
+  // Shared signed builder (lib/og.ts) so the JSON-LD image URL carries
+  // the same sig as the og:image tags; stays absolute for schema.org.
+  const imageUrl = `${SITE_URL}/og?${ogQueryString(title, eyebrow)}`;
 
   return {
     "@context": "https://schema.org",

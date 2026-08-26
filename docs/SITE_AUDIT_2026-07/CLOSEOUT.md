@@ -54,7 +54,7 @@ laws.
    tier + real at-need cases + A3-08's per-item source table).
 2. A4-01 email nudge — designed, built on founder flag-go.
 3. A4-02 anonymous consented contribution — schema decision (founder).
-4. A4-04 analysis-row dedupe before promote-time n inflates (code, small).
+4. ~~A4-04 analysis-row dedupe~~ (shipped 2026-08-25, post-closeout — `input_hash` migration must be applied in prod before deploy).
 5. A10-03 eval fixtures — vision extractor golden set, seedable from the
    harvest's image GPLs (code, next session).
 
@@ -68,7 +68,7 @@ laws.
 **REACH:**
 9. FOUNDER: `GOOGLE_SITE_VERIFICATION` (reach is UNMEASURED until this) +
    Vercel Analytics dashboard confirm → then the GSC baseline snapshot (A6-C3).
-10. A1-05 /og signing (queued design) · A6-05 OG-tagline voice call (founder).
+10. ~~A1-05 /og signing~~ (shipped 2026-08-25, post-closeout — inert until `OG_SIGNING_SECRET` is set in Vercel) · A6-05 OG-tagline voice call (founder).
 
 **Hygiene queue (batch into any session):** A1-07 anonymous-email endpoint
 limits verify · A1-08 webhook timing-safety (pre-OUTREACH_LIVE) · A8-05

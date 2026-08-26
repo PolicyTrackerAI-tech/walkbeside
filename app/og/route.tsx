@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { BRAND } from "@/lib/brand";
+import { verifyOgSignature } from "@/lib/og-verify";
 
 export const runtime = "edge";
 
@@ -21,12 +22,34 @@ export const runtime = "edge";
  * Or just put plain text in the query string; Next.js will encode.
  * Falls back to a sensible default when params are missing, so the
  * route is safe to hit without args.
+ *
+ * When OG_SIGNING_SECRET is set, any request carrying title/eyebrow
+ * must also carry a valid `sig` (minted by `ogImage()` in lib/og.ts —
+ * audit A1-05: unsigned query text would let anyone render arbitrary
+ * copy under the brand mark). Missing/invalid sig degrades to the
+ * default card (fixed brand copy, safe unsigned) instead of a 403, so
+ * old unsigned URLs cached by scrapers still resolve to a brand image.
  */
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const title =
-    url.searchParams.get("title") ?? "Quiet help when someone important dies.";
-  const eyebrow = url.searchParams.get("eyebrow") ?? BRAND.name;
+  let rawTitle = url.searchParams.get("title");
+  let rawEyebrow = url.searchParams.get("eyebrow");
+
+  const secret = process.env.OG_SIGNING_SECRET;
+  if (secret && (rawTitle !== null || rawEyebrow !== null)) {
+    if (!(await verifyOgSignature(url.searchParams, secret))) {
+      // Drop the unverified text; the ?? fallbacks below are the single
+      // default-card path.
+      rawTitle = null;
+      rawEyebrow = null;
+    }
+  }
+
+  const title = rawTitle ?? "Quiet help when someone important dies.";
+  // `||` not `??`: a signed no-eyebrow URL with `&eyebrow=` appended still
+  // verifies (both canonicalize the same) — the empty string must fall back
+  // to the brand name, not blank the eyebrow line.
+  const eyebrow = rawEyebrow || BRAND.name;
 
   // Trim very long titles so they fit. Browsers truncate metadata too
   // but a clean visual is better than letting it overflow.

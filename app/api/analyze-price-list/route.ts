@@ -35,6 +35,7 @@ import { runRules } from "@/lib/bundling-detection/rules";
 import { FEATURES, PUBLIC, requireServer } from "@/lib/env";
 import { readLimitedJson } from "@/lib/http-guards";
 import { normalizeReferralCode } from "@/lib/referral-codes";
+import { analysisInputHash } from "@/lib/analysis-hash";
 
 const Body = z.object({
   text: z.string().min(20).max(20000),
@@ -332,9 +333,12 @@ export async function POST(req: Request) {
       // 2026-07-02-benchmark-zip.sql); confidence/extraction_method are the
       // provenance columns from 2026-07-13-portal-identity.sql; contributed is
       // the consent flag from 2026-07-20-hospices-consent.sql (absent in the
-      // body → false: no checkbox shown means no consent given). All ride the
-      // first attempt only. Persistence stays best-effort: if no insert
-      // lands, the analysis response still returns.
+      // body → false: no checkbox shown means no consent given); input_hash is
+      // the source-document dedupe scope from
+      // 2026-08-25-analysis-input-hash.sql (hashed over the RAW text — the
+      // same document must hash the same before and after redaction changes).
+      // All ride the first attempt only. Persistence stays best-effort: if no
+      // insert lands, the analysis response still returns.
       let insertedId: string | null = null;
       const { data: inserted, error: insertError } = await supabase
         .from("price_list_analyses")
@@ -344,6 +348,7 @@ export async function POST(req: Request) {
           confidence,
           extraction_method: extractionMethod,
           contributed: contributed ?? false,
+          input_hash: analysisInputHash(text),
         })
         .select("id")
         .single();

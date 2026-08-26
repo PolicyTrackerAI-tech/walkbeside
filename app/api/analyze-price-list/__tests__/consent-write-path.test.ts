@@ -35,6 +35,7 @@ vi.mock("@supabase/supabase-js", () => ({ createClient: vi.fn() }));
 vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn() }));
 
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { analysisInputHash } from "@/lib/analysis-hash";
 import { POST } from "../route";
 
 const createServerClientMock = vi.mocked(createServerClient);
@@ -105,6 +106,13 @@ describe("consent write path (declined analyses never persist)", () => {
     expect(inserts).toHaveLength(1);
     expect(inserts[0].table).toBe("price_list_analyses");
     expect(inserts[0].values.contributed).toBe(false);
+    // The row rides with the source-document hash (A4-04) — the benchmark
+    // feed collapses re-analyses of one document on it.
+    expect(inserts[0].values.input_hash).toBe(
+      analysisInputHash(
+        "Basic services fee $2,495\nEmbalming $1,150\nTotal $3,645",
+      ),
+    );
   });
 
   it("persists an explicit opt-in as contributed=true", async () => {

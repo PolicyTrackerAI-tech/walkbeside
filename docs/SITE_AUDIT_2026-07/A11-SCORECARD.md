@@ -12,7 +12,7 @@ Companion: [CLOSEOUT.md](CLOSEOUT.md) (what happens next). Evidence:
 | Surface group | C | F | U | V | Verified | State / what remains |
 |---|---|---|---|---|---|---|
 | Analyzer (THE wedge) | ✅ | ✅ | ✅ | ✅ | A2·A3·A4·A6 | Honest tiers/coverage, consent structural, save prompt, in sitemap w/ real metadata, parser-provenance disclosed. Remains: eval fixtures (A10-03). |
-| /prices + calculators (bill-check, cash-advance, compare) | ✅ | ✅ | ✅ | ✅ | A3·A4 | `displayThresholds()` is THE display rule (test-pinned); compare names failed slots. Remains: per-click row dedupe (queued). |
+| /prices + calculators (bill-check, cash-advance, compare) | ✅ | ✅ | ✅ | ✅ | A3·A4 | `displayThresholds()` is THE display rule (test-pinned); compare names failed slots. Per-click row dedupe shipped 2026-08-25 (input_hash, post-closeout). |
 | Fair-Price Index + dataset endpoint | ✅ | ✅ | ✅ | 🟡 | A3·A6 | Citable, CC-BY-4.0 licensed, robots carve-out, escaped JSON-LD. 🟡V: verified tier EMPTY until SLC GPLs are promoted — the ingest is the unlock. |
 | 87-city cluster + /funeral-costs | ✅ | ✅ | ✅ | ✅ | A3·A6 | Self-canonicals added; honest lastModified; badge honesty holds with zero overrides. |
 | /funeral-homes/[zip] | ✅ | ✅ | 🟡 | 🟡 | A6 | noindex,follow (unbounded thin space; founder may flip when bounded). Directory itself ~empty pending vetting. |

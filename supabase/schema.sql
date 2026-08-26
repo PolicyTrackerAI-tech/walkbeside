@@ -125,6 +125,7 @@ create table if not exists public.price_list_analyses (
   potential_savings_cents int,
   items jsonb,
   zip text,                        -- regional benchmark aggregation (2026-07-02-benchmark-zip.sql)
+  input_hash text,                 -- source-document dedupe (2026-08-25-analysis-input-hash.sql)
   created_at timestamptz not null default now()
 );
 

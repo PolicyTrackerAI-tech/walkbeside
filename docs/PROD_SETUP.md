@@ -148,6 +148,14 @@ Billing posture (BUSINESS_PLAN §10 is the source of truth):
 - **Revenue recognition:** monthly ratable (a bookkeeping note, not code —
   annual-prepay invoices recognize 1/12 per month).
 
+### Optional (OG image signing)
+`OG_SIGNING_SECRET` — any long random string; signs `/og` image URLs so third
+parties can't mint branded cards; optional — unset means unsigned URLs are
+accepted. Signatures are baked into page metadata at build time, so the
+secret must be present at build (Vercel env vars cover build + runtime) —
+setting or rotating it requires a redeploy, and pages rendered under an old
+value degrade to the default brand card (never an error) until rebuilt.
+
 ### Optional (reply pipeline — can wait past v1)
 `POSTMARK_INBOUND_USER`, `POSTMARK_INBOUND_SECRET` (funeral-home reply relay),
 `OUTREACH_POSTAL_ADDRESS` (overrides the CAN-SPAM footer address).
