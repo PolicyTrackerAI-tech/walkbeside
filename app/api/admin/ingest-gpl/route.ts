@@ -115,7 +115,7 @@ async function handleParse(text: string) {
         feature: "founder-ingest",
         system: priceListAnalysisSystem(),
         user: text,
-        // 8000, deliberately NOT the analyzer's 2000: this tool exists to
+        // 8000, deliberately NOT the analyzer's 4000: this tool exists to
         // ingest FULL dense GPLs (58+ line items observed), the only caller
         // is the founder so output cost is irrelevant, and callClaude treats
         // a max_tokens cut as a failed call — an undersized cap here
