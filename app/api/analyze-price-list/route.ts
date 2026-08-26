@@ -117,7 +117,16 @@ export async function POST(req: Request) {
         feature: isEvalRun ? "eval" : "analyzer-extract",
         system: priceListAnalysisSystem(),
         user: text,
-        maxTokens: 2000, // re-baselined 1500→2000 for the sonnet-5 tokenizer (~30% more tokens/text)
+        // 4000 (1500→2000 for the sonnet-5 tokenizer, →4000 2026-08-26):
+        // ~2000 output tokens is roughly 55 extracted items, and a dense
+        // family-pasted GPL (58+ line items — the class that overflowed the
+        // founder ingest tool's identical cap live) truncates. callClaude
+        // throws on a max_tokens cut, silently degrading the family to the
+        // regex parser. 4000 covers ~110 items, more than the 20k-char input
+        // cap can plausibly hold. Deliberately below ingest's 8000: this
+        // route is public and family-facing volume, so the cap is also the
+        // per-call output-spend ceiling. Eval-gated (lib/claude.ts THE LAW).
+        maxTokens: 4000,
         cacheSystem: true,
         ...(evalModel ? { model: evalModel } : {}),
       });
