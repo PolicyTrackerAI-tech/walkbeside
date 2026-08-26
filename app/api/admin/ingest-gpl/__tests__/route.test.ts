@@ -326,10 +326,10 @@ describe("POST /api/admin/ingest-gpl — parse", () => {
     expect(callClaudeMock).toHaveBeenCalledWith(
       expect.objectContaining({
         feature: "founder-ingest",
-        // 8000, NOT the analyzer's 2000: that cap deterministically
-        // truncated a dense 58-item GPL live on 2026-08-26 and silently
-        // downgraded three consecutive parses to the regex fallback.
-        // Lowering this back re-opens that failure.
+        // 8000, NOT the analyzer's 4000: an analyzer-sized cap (2000 at
+        // the time) deterministically truncated a dense 58-item GPL live
+        // on 2026-08-26 and silently downgraded three consecutive parses
+        // to the regex fallback. Lowering this back re-opens that failure.
         maxTokens: 8000,
         system: priceListAnalysisSystem(),
         cacheSystem: true,
