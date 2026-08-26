@@ -106,6 +106,13 @@ export function IngestClient() {
   const [extractionMethod, setExtractionMethod] = useState<
     "claude" | "naive" | null
   >(null);
+  // WHY the fallback parsed, when it did — "truncated" means Claude's output
+  // overflowed the route's token cap (the cap is undersized for the GPL),
+  // which must read differently from an outage: the fix is a bigger cap, not
+  // a retry.
+  const [fallbackReason, setFallbackReason] = useState<
+    "truncated" | "error" | "unavailable" | null
+  >(null);
 
   const [saveBusy, setSaveBusy] = useState(false);
   const [saved, setSaved] = useState<{
@@ -206,6 +213,13 @@ export function IngestClient() {
       setExtractionMethod(
         j.extractionMethod === "claude" || j.extractionMethod === "naive"
           ? j.extractionMethod
+          : null,
+      );
+      setFallbackReason(
+        j.fallbackReason === "truncated" ||
+          j.fallbackReason === "error" ||
+          j.fallbackReason === "unavailable"
+          ? j.fallbackReason
           : null,
       );
     } catch {
@@ -333,6 +347,7 @@ export function IngestClient() {
     setRows(null);
     setStatedTotalCents(null);
     setExtractionMethod(null);
+    setFallbackReason(null);
     setSaved(null);
     setError(null);
   }
@@ -427,13 +442,26 @@ export function IngestClient() {
               {rows.length} parsed item{rows.length === 1 ? "" : "s"} — review
               before saving
             </p>
-            <p className="text-xs text-ink-muted mt-1">
-              {extractionMethod === "naive"
-                ? "Parsed by the deterministic fallback (Claude unavailable or its output unusable) — check every row against the document."
-                : "Parsed by Claude — eyeball names, prices, and benchmark mappings against the document."}{" "}
-              Unmatched rows still save; they just don&rsquo;t feed a benchmark
-              group.
-            </p>
+            {extractionMethod === "naive" ? (
+              // A parser downgrade is warn-colored, never muted — the naive
+              // regex misses lines a dense GPL prints, so the operator must
+              // know these rows came from the fallback (and why).
+              <p className="text-xs text-warn mt-1">
+                {fallbackReason === "truncated"
+                  ? "Claude's output was cut off at the parse token cap, so the deterministic fallback parsed this instead — the cap is undersized for this GPL (flag it); check every row against the document."
+                  : fallbackReason === "unavailable"
+                    ? "Claude isn't configured, so the deterministic fallback parsed this — check every row against the document."
+                    : "Claude failed or returned unusable output, so the deterministic fallback parsed this — check every row against the document, or re-parse to retry."}{" "}
+                Unmatched rows still save; they just don&rsquo;t feed a
+                benchmark group.
+              </p>
+            ) : (
+              <p className="text-xs text-ink-muted mt-1">
+                Parsed by Claude — eyeball names, prices, and benchmark
+                mappings against the document. Unmatched rows still save; they
+                just don&rsquo;t feed a benchmark group.
+              </p>
+            )}
           </div>
 
           <div className="overflow-x-auto">

@@ -86,6 +86,14 @@ export interface CallOpts {
 }
 
 /**
+ * Thrown by callClaude when the response was cut off at max_tokens. A typed
+ * subclass so a caller that surfaces WHY its fallback ran (the founder
+ * ingest parse) can tell an undersized cap from an API outage without
+ * sniffing message strings; every caller still catches it like any failure.
+ */
+export class ClaudeTruncatedError extends Error {}
+
+/**
  * The cost-tagged path every plain string-in/string-out Claude call goes
  * through: one messages.create + usage recorded to api_cost_events + one
  * structured log line, then textOf(). Call sites with non-string content
@@ -133,7 +141,7 @@ export async function callClaude(o: CallOpts): Promise<string> {
       model: msg.model,
       maxTokens: o.maxTokens ?? 1300,
     });
-    throw new Error(
+    throw new ClaudeTruncatedError(
       `Claude response truncated at max_tokens (feature: ${o.feature})`,
     );
   }
