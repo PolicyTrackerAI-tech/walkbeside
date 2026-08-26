@@ -9,6 +9,9 @@ vi.mock("@/lib/supabase/server", () => ({ getUser: vi.fn() }));
 vi.mock("@/lib/claude", () => ({
   callClaude: vi.fn(),
   claudeAvailable: vi.fn(),
+  // The route classifies fallbacks by instanceof — the mock must export the
+  // same class the tests construct rejections from.
+  ClaudeTruncatedError: class ClaudeTruncatedError extends Error {},
 }));
 // The route builds its own service client; feed it a scripted fake.
 vi.mock("@supabase/supabase-js", () => ({ createClient: vi.fn() }));
@@ -20,7 +23,11 @@ vi.mock("@/lib/env", () => ({
 import { createClient } from "@supabase/supabase-js";
 import { requireAdminApi } from "@/lib/admin-auth";
 import { getUser } from "@/lib/supabase/server";
-import { callClaude, claudeAvailable } from "@/lib/claude";
+import {
+  callClaude,
+  claudeAvailable,
+  ClaudeTruncatedError,
+} from "@/lib/claude";
 import { LINE_ITEMS } from "@/lib/pricing-data";
 import { matchLineItem } from "@/lib/negotiation/price-list-parse";
 import { priceListAnalysisSystem } from "@/lib/negotiation/prompts";
@@ -192,6 +199,7 @@ describe("POST /api/admin/ingest-gpl — parse", () => {
     expect(res.status).toBe(200);
     const j = await res.json();
     expect(j.extractionMethod).toBe("claude");
+    expect(j.fallbackReason).toBeNull();
     // No total line printed → statedTotalCents stays null (the model never
     // sums items itself — prompt contract 2026-07-16).
     expect(j.statedTotalCents).toBeNull();
@@ -225,14 +233,20 @@ describe("POST /api/admin/ingest-gpl — parse", () => {
     expect((await res.json()).statedTotalCents).toBe(219500);
   });
 
-  it("falls back to naiveExtract when callClaude throws (API failure or max_tokens truncation)", async () => {
+  it("labels a max_tokens truncation honestly: naive fallback + fallbackReason 'truncated'", async () => {
+    // The 2026-08-26 live failure: callClaude throws its typed truncation
+    // error, and the route must degrade to the regex parser while telling
+    // the operator the cap fired — not pose as a Claude outage.
     callClaudeMock.mockRejectedValue(
-      new Error("Claude response truncated at max_tokens (feature: founder-ingest)"),
+      new ClaudeTruncatedError(
+        "Claude response truncated at max_tokens (feature: founder-ingest)",
+      ),
     );
     const res = await post({ action: "parse", text: GPL_TEXT });
     expect(res.status).toBe(200);
     const j = await res.json();
     expect(j.extractionMethod).toBe("naive");
+    expect(j.fallbackReason).toBe("truncated");
     const names = (j.items as { name: string }[]).map((i) => i.name);
     expect(names).toContain("Basic services fee");
     expect(names).toContain("Embalming");
@@ -243,20 +257,67 @@ describe("POST /api/admin/ingest-gpl — parse", () => {
     expect(caskets).toMatchObject({ isRange: true, centsLow: 99500, centsHigh: 450000 });
   });
 
+  it("falls back with fallbackReason 'error' on a plain API failure", async () => {
+    callClaudeMock.mockRejectedValue(new Error("api down"));
+    const res = await post({ action: "parse", text: GPL_TEXT });
+    const j = await res.json();
+    expect(j.extractionMethod).toBe("naive");
+    expect(j.fallbackReason).toBe("error");
+  });
+
+  it("never labels a truncated JSON body 'claude' — cut-off output degrades to naive", async () => {
+    // Defense-in-depth behind callClaude's truncation throw: if that
+    // contract ever regressed and a cut-off body were returned as success,
+    // JSON.parse must still route it to the fallback — a half-parsed item
+    // list labeled "claude" would silently drop the tail of a dense GPL
+    // into the benchmark feed.
+    const dense = JSON.stringify({
+      items: Array.from({ length: 58 }, (_, i) => ({
+        name: `Service line ${i + 1}`,
+        cents: 10000 + i * 100,
+      })),
+    });
+    callClaudeMock.mockResolvedValue(dense.slice(0, Math.floor(dense.length / 2)));
+    const res = await post({ action: "parse", text: GPL_TEXT });
+    const j = await res.json();
+    expect(j.extractionMethod).toBe("naive");
+    expect(j.fallbackReason).toBe("error");
+  });
+
+  it("returns every row of a dense parse (the 58-item class that overflowed the old 2000 cap)", async () => {
+    callClaudeMock.mockResolvedValue(
+      JSON.stringify({
+        items: Array.from({ length: 58 }, (_, i) => ({
+          name: `Service line ${i + 1}`,
+          cents: 10000 + i * 100,
+        })),
+      }),
+    );
+    const res = await post({ action: "parse", text: GPL_TEXT });
+    const j = await res.json();
+    expect(j.extractionMethod).toBe("claude");
+    expect(j.fallbackReason).toBeNull();
+    expect(j.items).toHaveLength(58);
+  });
+
   it("falls back when Claude returns valid JSON of the wrong shape", async () => {
     callClaudeMock.mockResolvedValue(JSON.stringify({ error: "nope" }));
     const res = await post({ action: "parse", text: GPL_TEXT });
-    expect((await res.json()).extractionMethod).toBe("naive");
+    const j = await res.json();
+    expect(j.extractionMethod).toBe("naive");
+    expect(j.fallbackReason).toBe("error");
   });
 
   it("uses naiveExtract without calling Claude when unavailable", async () => {
     claudeAvailableMock.mockReturnValue(false);
     const res = await post({ action: "parse", text: GPL_TEXT });
-    expect((await res.json()).extractionMethod).toBe("naive");
+    const j = await res.json();
+    expect(j.extractionMethod).toBe("naive");
+    expect(j.fallbackReason).toBe("unavailable");
     expect(callClaudeMock).not.toHaveBeenCalled();
   });
 
-  it("runs the analyzer's exact chain: founder-ingest tag, re-baselined cap, eval-gated prompt, cached system", async () => {
+  it("runs the analyzer's exact chain: founder-ingest tag, founder-sized cap, eval-gated prompt, cached system", async () => {
     callClaudeMock.mockResolvedValue(JSON.stringify({ items: [] }));
     await post({ action: "parse", text: GPL_TEXT });
     // Any drift here silently diverges founder-ingested benchmark data from
@@ -265,7 +326,11 @@ describe("POST /api/admin/ingest-gpl — parse", () => {
     expect(callClaudeMock).toHaveBeenCalledWith(
       expect.objectContaining({
         feature: "founder-ingest",
-        maxTokens: 2000,
+        // 8000, NOT the analyzer's 2000: that cap deterministically
+        // truncated a dense 58-item GPL live on 2026-08-26 and silently
+        // downgraded three consecutive parses to the regex fallback.
+        // Lowering this back re-opens that failure.
+        maxTokens: 8000,
         system: priceListAnalysisSystem(),
         cacheSystem: true,
         user: GPL_TEXT,

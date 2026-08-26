@@ -22,7 +22,7 @@ vi.mock("@anthropic-ai/sdk", () => ({
 
 process.env.ANTHROPIC_API_KEY = "test-key-for-client-construction";
 
-import { callClaude } from "@/lib/claude";
+import { callClaude, ClaudeTruncatedError } from "@/lib/claude";
 
 function message(overrides: Record<string, unknown>): Record<string, unknown> {
   return {
@@ -48,13 +48,20 @@ describe("callClaude truncation contract", () => {
     expect(out).toBe("a complete draft.");
   });
 
-  it("throws when the response was truncated at max_tokens", async () => {
+  it("throws a typed ClaudeTruncatedError when the response was truncated at max_tokens", async () => {
     nextMessage = message({
       stop_reason: "max_tokens",
       content: [{ type: "text", text: "a draft that stops mid-sen" }],
     });
-    await expect(
-      callClaude({ feature: "test-feature", system: "sys", user: "hi" }),
-    ).rejects.toThrow(/truncated at max_tokens.*test-feature/);
+    const call = callClaude({
+      feature: "test-feature",
+      system: "sys",
+      user: "hi",
+    });
+    await expect(call).rejects.toThrow(/truncated at max_tokens.*test-feature/);
+    // The TYPE is load-bearing, not just the message: the founder ingest
+    // parse classifies its fallback reason by instanceof, so an undersized
+    // cap reads "truncated" to the operator instead of posing as an outage.
+    await expect(call).rejects.toBeInstanceOf(ClaudeTruncatedError);
   });
 });

@@ -4,7 +4,11 @@ import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminApi } from "@/lib/admin-auth";
 import { getUser } from "@/lib/supabase/server";
-import { callClaude, claudeAvailable } from "@/lib/claude";
+import {
+  callClaude,
+  claudeAvailable,
+  ClaudeTruncatedError,
+} from "@/lib/claude";
 import { priceListAnalysisSystem } from "@/lib/negotiation/prompts";
 import {
   matchLineItem,
@@ -97,30 +101,55 @@ export async function POST(req: Request) {
 async function handleParse(text: string) {
   let extracted: { items: RawItem[]; total_cents?: number } = { items: [] };
   let extractionMethod: "claude" | "naive" = "naive";
+  // WHY the deterministic fallback parsed instead of Claude — returned to the
+  // review UI so a parser downgrade is visible and diagnosable to the
+  // operator, never silent. (Live 2026-08-26: a dense 58-item GPL overflowed
+  // the old 2000-token cap three runs straight, and the fallback was
+  // indistinguishable from a Claude outage.)
+  let fallbackReason: "truncated" | "error" | "unavailable" | null = null;
 
   if (claudeAvailable()) {
+    let out: string | null = null;
     try {
-      const out = await callClaude({
+      out = await callClaude({
         feature: "founder-ingest",
         system: priceListAnalysisSystem(),
         user: text,
-        maxTokens: 2000, // same prompt as analyzer-extract → same sonnet-5 re-baselined cap
+        // 8000, deliberately NOT the analyzer's 2000: this tool exists to
+        // ingest FULL dense GPLs (58+ line items observed), the only caller
+        // is the founder so output cost is irrelevant, and callClaude treats
+        // a max_tokens cut as a failed call — an undersized cap here
+        // deterministically downgrades every dense GPL to the regex parser.
+        // (The analyzer's own cap is eval-gated law — lib/claude.ts — and is
+        // not changed by this.)
+        maxTokens: 8000,
         cacheSystem: true,
       });
-      const parsedOut = JSON.parse(stripCodeFence(out)) as {
-        items?: unknown;
-        total_cents?: number;
-      };
-      if (!Array.isArray(parsedOut.items)) throw new Error("unexpected shape");
-      extracted = parsedOut as { items: RawItem[]; total_cents?: number };
-      extractionMethod = "claude";
-    } catch {
+    } catch (e) {
       // callClaude throws on API failure AND on max_tokens truncation — both
-      // degrade to the deterministic regex parser, exactly like the analyzer.
-      extracted = naiveExtract(text);
+      // degrade to the deterministic regex parser, exactly like the
+      // analyzer, but the operator is told which one happened.
+      fallbackReason = e instanceof ClaudeTruncatedError ? "truncated" : "error";
     }
+    if (out !== null) {
+      try {
+        const parsedOut = JSON.parse(stripCodeFence(out)) as {
+          items?: unknown;
+          total_cents?: number;
+        };
+        if (!Array.isArray(parsedOut.items)) throw new Error("unexpected shape");
+        extracted = parsedOut as { items: RawItem[]; total_cents?: number };
+        extractionMethod = "claude";
+      } catch {
+        // The call itself succeeded but the output is unusable (malformed or
+        // truncated JSON, wrong shape) — never label it "claude".
+        fallbackReason = "error";
+      }
+    }
+    if (extractionMethod === "naive") extracted = naiveExtract(text);
   } else {
     extracted = naiveExtract(text);
+    fallbackReason = "unavailable";
   }
 
   const items = extracted.items
@@ -168,6 +197,7 @@ async function handleParse(text: string) {
         ? extracted.total_cents
         : null,
     extractionMethod,
+    fallbackReason,
   });
 }
 
