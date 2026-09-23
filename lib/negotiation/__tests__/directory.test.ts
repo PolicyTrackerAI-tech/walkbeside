@@ -124,6 +124,30 @@ describe("findHomesFromDirectory", () => {
     expect(homes).not.toContain("Baltimore Home");
   });
 
+  it("drops denylisted addresses BEFORE the cap, and an all-denylisted area returns []", async () => {
+    supabaseMock.mockReturnValue(true);
+    createClientMock.mockResolvedValue(
+      fakeClient({
+        data: [
+          { name: "Broker", email: "leads@dfsmemorials.com", zip: "20011" },
+          { name: "Directory", email: "info@parting.com", zip: "20011" },
+          { name: "Real Home", email: "office@realhome.com", zip: "20012" },
+        ],
+        error: null,
+      }).client as never,
+    );
+    // Cap of 1: the blocked same-zip rows must not eat the only slot.
+    expect((await findHomesFromDirectory("20011", 1)).map((h) => h.name)).toEqual(["Real Home"]);
+
+    createClientMock.mockResolvedValue(
+      fakeClient({
+        data: [{ name: "Broker", email: "leads@dfsmemorials.com", zip: "20011" }],
+        error: null,
+      }).client as never,
+    );
+    expect(await findHomesFromDirectory("20011", 4)).toEqual([]);
+  });
+
   it("the cap draws fairly within a tier — not the same import-order homes every time (guardrail #3)", async () => {
     supabaseMock.mockReturnValue(true);
     const rows = ["A", "B", "C", "D", "E", "F"].map((l) => ({

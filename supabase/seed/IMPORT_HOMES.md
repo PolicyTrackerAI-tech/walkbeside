@@ -41,7 +41,7 @@ in the report). Everything else imports.
 ## 2. Dry run first (no writes)
 
 ```bash
-npm run import:homes -- ./utah-homes.csv --dry-run
+npm run import:homes -- ./dmv-homes.csv --dry-run
 ```
 
 (or, passing creds explicitly:)
@@ -49,7 +49,7 @@ npm run import:homes -- ./utah-homes.csv --dry-run
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co \
 SUPABASE_SERVICE_ROLE_KEY=<service-role-key> \
-node scripts/import-funeral-homes.mjs ./utah-homes.csv --dry-run
+node scripts/import-funeral-homes.mjs ./dmv-homes.csv --dry-run
 ```
 
 The dry run prints exactly what *would* happen: counts of valid / invalid /
@@ -59,7 +59,7 @@ Fix the CSV until the report looks right.
 ## 3. Apply
 
 ```bash
-npm run import:homes -- ./utah-homes.csv
+npm run import:homes -- ./dmv-homes.csv
 ```
 
 The import is **idempotent and dedup-safe**:
