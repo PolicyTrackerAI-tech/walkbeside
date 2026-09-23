@@ -22,7 +22,11 @@
  */
 
 import { detectDocScope } from "./doc-scope";
-import { outsideUrnOrVaultFee } from "@/lib/outside-merchandise";
+import {
+  namesAnotherService,
+  outsideCasketFee,
+  outsideUrnOrVaultFee,
+} from "@/lib/outside-merchandise";
 
 export type Severity = "violation" | "suspicious" | "info";
 
@@ -115,11 +119,18 @@ function isCasketHandlingFee(item: AnalyzedItem): boolean {
   if (/\bno (?:fee|charge)\b|\bwithout (?:a |any )?(?:fee|charge)\b|\bwaived\b|\bfree\b|\bn\/c\b/.test(n))
     return false;
   if (/\bhandling (?:fee|charge)\b/.test(n)) return true;
+  // A line pricing another service that merely mentions the family's casket
+  // ("Graveside service fee (casket provided by family)") is that service's
+  // fee, not a handling fee.
+  if (namesAnotherService(n)) return false;
   const outside =
     /\boutside\b|\bthird[- ]party\b|\belsewhere\b|\bnot (?:purchased|bought)\b|\bfamily[- ]provided\b|\bprovided by (?:the )?family\b/.test(
       n,
     );
-  return outside && /\b(?:handling|fee|charge|surcharge)\b/.test(n);
+  if (outside && /\b(?:handling|fee|charge|surcharge)\b/.test(n)) return true;
+  // The wider bought-elsewhere phrasings ("customer-provided",
+  // "provided by the purchaser", "furnished by the family").
+  return outsideCasketFee(n, { requireCharge: true });
 }
 
 function findItem(

@@ -21,15 +21,28 @@
  *
  * Shared by the matcher (such a line must never be priced as an urn or a
  * vault) and the rules engine (which flags the fee itself).
+ *
+ * outsideCasketFee() applies the same signals to caskets. It widens #207's
+ * casket-handling-fee, which missed "customer-provided", "purchaser-provided"
+ * and "provided by the purchaser" phrasings, and namesAnotherService() keeps
+ * any of these checks off a line that prices a different service
+ * ("Graveside service fee (casket provided by family)" was a false
+ * violation).
  */
 
 const URN = /\burns?\b/;
 const VAULT = /\b(?:vaults?|grave liners?|outer burial containers?|burial containers?)\b/;
 const PURCHASED_ELSEWHERE =
-  /\belsewhere\b|\bnot (?:purchased|bought)\b|\bthird[- ]party\b|\b(?:family|customer|purchaser|consumer)[- ](?:provided|supplied|purchased|owned)\b|\b(?:provided|supplied|furnished|purchased|bought) by (?:the )?(?:family|purchaser|consumer|customer)\b|\boutside (?:urns?|vaults?|burial|grave|containers?|merchandise)\b/;
+  /\belsewhere\b|\bnot (?:purchased|bought)\b|\bthird[- ]party\b|\b(?:family|customer|purchaser|consumer)[- ](?:provided|supplied|purchased|owned)\b|\b(?:provided|supplied|furnished|purchased|bought) by (?:the )?(?:family|purchaser|consumer|customer)\b|\boutside (?:caskets?|coffins?|urns?|vaults?|burial|grave|containers?|merchandise)\b/;
 const FEE_WORD = /\b(?:handling|fee|charge|surcharge|acceptance)\b/;
 const NOT_A_HANDLING_FEE =
   /\bship(?:ping|ment)?\b|\bmail(?:ing)?\b|\bforwarding\b|\bdelivery\b|\btransport(?:ation)?\b|\binstall(?:ation)?\b|\bsetting\b|\bcemetery\b|\bcash advance\b/;
+// A line that prices another service and merely mentions the family's own
+// merchandise. "Memorial" alone is not here on purpose: home names carry it
+// ("…not purchased from Canyon Rim Memorial Chapel").
+const ANOTHER_SERVICE =
+  /\b(?:direct|immediate)\s+(?:cremation|burial)s?\b|\bgraveside\b|\bviewing\b|\bvisitation\b|\bceremony\b|\bmemorial service\b|\bfuneral service\b|\bembalm\w*|\btransfer\b|\bpackage\b/;
+const CASKET = /\b(?:caskets?|coffins?)\b/;
 const WAIVED =
   /\bno (?:fee|charge)\b|\bwithout (?:a |any )?(?:fee|charge)\b|\bwaived\b|\bfree\b|\bn\/c\b/;
 
@@ -46,9 +59,29 @@ export function outsideUrnOrVaultFee(
 ): OutsideMerchandise | null {
   const n = name.toLowerCase();
   if (!PURCHASED_ELSEWHERE.test(n) || !FEE_WORD.test(n)) return null;
-  if (NOT_A_HANDLING_FEE.test(n)) return null;
+  if (NOT_A_HANDLING_FEE.test(n) || ANOTHER_SERVICE.test(n)) return null;
   if (opts.requireCharge && WAIVED.test(n)) return null;
   if (URN.test(n)) return "urn";
   if (VAULT.test(n)) return "vault";
   return null;
+}
+
+/** True when the line prices another service (see ANOTHER_SERVICE). */
+export function namesAnotherService(name: string): boolean {
+  return ANOTHER_SERVICE.test(name.toLowerCase());
+}
+
+/**
+ * A fee for accepting a casket the family bought elsewhere, by the same
+ * signals as outsideUrnOrVaultFee. Pass `requireCharge` to drop waived or
+ * free wording, as the rule does.
+ */
+export function outsideCasketFee(
+  name: string,
+  opts: { requireCharge?: boolean } = {},
+): boolean {
+  const n = name.toLowerCase();
+  if (!CASKET.test(n) || !PURCHASED_ELSEWHERE.test(n) || !FEE_WORD.test(n)) return false;
+  if (NOT_A_HANDLING_FEE.test(n) || ANOTHER_SERVICE.test(n)) return false;
+  return !(opts.requireCharge && WAIVED.test(n));
 }

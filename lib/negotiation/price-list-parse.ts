@@ -1,5 +1,5 @@
 import { LINE_ITEMS, type LineItem } from "@/lib/pricing-data";
-import { outsideUrnOrVaultFee } from "@/lib/outside-merchandise";
+import { outsideCasketFee, outsideUrnOrVaultFee } from "@/lib/outside-merchandise";
 
 /**
  * A single line item as extracted from a funeral home's General Price List,
@@ -389,7 +389,11 @@ function isCasketAddOn(n: string): boolean {
   if (!CASKET_NOUN.test(n)) return false;
   if (/\bhandling\b/.test(n)) return true;
   if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
-  return OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n);
+  if (OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n)) return true;
+  // "Acceptance charge for customer-provided casket", "Fee for casket
+  // provided by the purchaser": the wider bought-elsewhere phrasings
+  // (lib/outside-merchandise.ts), which used to fall through to casket-metal.
+  return outsideCasketFee(n);
 }
 
 // The FTC Funeral Rule makes every GPL price its direct cremations and

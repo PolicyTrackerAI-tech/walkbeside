@@ -154,6 +154,17 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("Death certificates (handling)")).toBe("death-cert");
   });
 
+  it("never prices a fee for a customer- or purchaser-provided casket as a casket", () => {
+    expect(id("Acceptance charge for customer-provided casket")).toBeUndefined();
+    expect(id("Fee for casket provided by the purchaser")).toBeUndefined();
+    expect(id("Purchaser-provided casket surcharge")).toBeUndefined();
+    expect(id("Casket furnished by the family — acceptance fee")).toBeUndefined();
+    // …while another service's fee keeps its own benchmark, and a plain
+    // "provided by family" casket line (no fee) is still a casket.
+    expect(id("Graveside service fee (casket provided by family)")).toBe("graveside");
+    expect(id("Casket provided by family")).toBe("casket-metal");
+  });
+
   it("never prices a fee for an urn or vault bought elsewhere as the urn or vault", () => {
     // The urn lines hit the "urn" synonym before and read against an urn's
     // range; the urn-vault-handling-fee rule surfaces them instead.

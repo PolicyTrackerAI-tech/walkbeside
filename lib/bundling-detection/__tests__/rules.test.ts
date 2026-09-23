@@ -323,14 +323,40 @@ describe("urn-vault-handling-fee", () => {
     expect(ids(d)).not.toContain("urn-vault-handling-fee");
   });
 
-  it("flags a mixed casket-and-urn line the casket rule doesn't recognize, instead of dropping it", () => {
-    // Review finding: skipping every casket-mentioning line let this fall
-    // between the two rules, leaving only the generic info card.
+  it("a mixed casket-and-urn line gets exactly one violation card, never zero", () => {
+    // Review finding: this line used to fall between the two rules. The casket
+    // rule now recognizes "customer-provided", so it takes the line alone.
     const name = "Acceptance charge for customer-provided casket and urn";
     const d = fire(`${name} $495`, [{ name, cents: 49500 }]);
-    expect(ids(d)).not.toContain("casket-handling-fee");
-    const hit = d.find((x) => x.ruleId === "urn-vault-handling-fee");
-    expect(hit?.severity).toBe("violation");
-    expect(hit?.title).toBe("A fee for using a casket or urn bought elsewhere");
+    expect(sev(d, "casket-handling-fee")).toBe("violation");
+    expect(ids(d)).not.toContain("urn-vault-handling-fee");
+  });
+});
+
+describe("casket-handling-fee — wider bought-elsewhere phrasings", () => {
+  it("flags customer-, purchaser-, and family-provided casket fees", () => {
+    for (const name of [
+      "Acceptance charge for customer-provided casket",
+      "Fee for casket provided by the purchaser",
+      "Customer-supplied casket handling",
+      "Purchaser-provided casket surcharge",
+      "Casket furnished by the family — acceptance fee",
+    ]) {
+      const d = fire(`${name} $295`, [{ name, cents: 29500 }]);
+      expect(sev(d, "casket-handling-fee"), name).toBe("violation");
+    }
+  });
+
+  it("never flags another service's fee that mentions the family's casket", () => {
+    // Graveside was a live false violation on main before this change.
+    for (const name of [
+      "Graveside service fee (casket provided by family)",
+      "Immediate burial with casket provided by purchaser (includes basic services fee)",
+      "Viewing fee — family-provided casket",
+      "Casket provided by family",
+    ]) {
+      const d = fire(`${name} $295`, [{ name, cents: 29500 }]);
+      expect(ids(d), name).not.toContain("casket-handling-fee");
+    }
   });
 });
