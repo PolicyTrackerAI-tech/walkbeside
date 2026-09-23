@@ -128,6 +128,32 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("18-gauge metal casket")).toBe("casket-metal");
   });
 
+  it("never benchmarks a casket add-on as a casket (both demo lines read 'good' before)", () => {
+    // Handling fees for a casket bought elsewhere: the FTC Funeral Rule bars
+    // them; the casket-handling-fee rule is what surfaces them.
+    expect(id("Outside casket handling fee (casket bought elsewhere)")).toBeUndefined();
+    expect(
+      id("Outside casket handling fee (caskets not purchased from Canyon Rim Memorial Chapel)"),
+    ).toBeUndefined(); // hit the "chapel" synonym before
+    expect(id("Casket handling fee")).toBeUndefined();
+    expect(id("Fee for caskets purchased elsewhere")).toBeUndefined();
+    expect(id("Third-party casket charge")).toBeUndefined();
+    // Upgrades priced on top of a casket are an upsell delta, not a casket.
+    expect(id("Protective sealer casket upgrade")).toBeUndefined();
+    expect(id("Casket gasket add-on")).toBeUndefined();
+  });
+
+  it("the add-on guard leaves real caskets, rentals, and non-casket handling lines alone", () => {
+    expect(id("Rental casket")).toBe("rental-casket");
+    expect(id("Ceremonial casket")).toBe("rental-casket");
+    expect(id("Rental casket fee")).toBe("rental-casket");
+    expect(id("Casket — \"Homestead\" solid oak")).toBe("casket-metal");
+    expect(id("Protective casket — 18 gauge steel")).toBe("casket-metal");
+    expect(id("Sealer casket")).toBe("casket-metal");
+    // "handling" without a casket is not the guard's business.
+    expect(id("Death certificates (handling)")).toBe("death-cert");
+  });
+
   it("does not let a new item steal an existing line", () => {
     expect(id("Transfer of remains")).toBe("transfer");
     expect(id("Cremation container")).toBe("cremation-container");

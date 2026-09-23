@@ -102,6 +102,25 @@ function mentionsCasket(item: AnalyzedItem): boolean {
   );
 }
 
+// A priced fee for accepting a casket the family bought elsewhere. Needs a
+// casket noun plus either the named "casket handling fee" or a handling/fee
+// word next to an outside-purchase signal. Air-shipment lines ("air tray /
+// casket handling for shipment") are a different service, and a line that
+// says the fee is waived or free is compliant; both stay silent.
+function isCasketHandlingFee(item: AnalyzedItem): boolean {
+  if (!mentionsCasket(item)) return false;
+  const n = lower(item.name);
+  if (/air ?tray|airline|\bship(?:ping|ment)\b|forwarding/.test(n)) return false;
+  if (/\bno (?:fee|charge)\b|\bwithout (?:a |any )?(?:fee|charge)\b|\bwaived\b|\bfree\b|\bn\/c\b/.test(n))
+    return false;
+  if (/\bhandling (?:fee|charge)\b/.test(n)) return true;
+  const outside =
+    /\boutside\b|\bthird[- ]party\b|\belsewhere\b|\bnot (?:purchased|bought)\b|\bfamily[- ]provided\b|\bprovided by (?:the )?family\b/.test(
+      n,
+    );
+  return outside && /\b(?:handling|fee|charge|surcharge)\b/.test(n);
+}
+
 function findItem(
   ctx: DetectionContext,
   predicate: (item: AnalyzedItem) => boolean,
@@ -283,6 +302,28 @@ export const RULES: Rule[] = [
         evidence: vault.name,
         whatToSay:
           "We're not having a ground burial — please remove the burial vault from this quote.",
+      };
+    },
+  },
+  {
+    id: "casket-handling-fee",
+    detect(ctx) {
+      // Self-proving from the price list: the home has priced a fee for a
+      // casket bought elsewhere, which §453.4(b)(1)(ii) bars (it isn't the
+      // basic services fee or anything the family selected). Item-based, so
+      // a price is required; a line that says the fee is waived stays silent.
+      const fee = findItem(ctx, (i) => i.cents > 0 && isCasketHandlingFee(i));
+      if (!fee) return null;
+      return {
+        ruleId: "casket-handling-fee",
+        severity: "violation",
+        title: "A fee for using a casket bought elsewhere",
+        description:
+          "You can buy a casket anywhere, and the FTC Funeral Rule doesn't let the funeral home charge anything to accept one. A handling fee for an outside casket is exactly the kind of charge the Rule bars. You can ask them to take it off.",
+        ftcReference: "16 CFR §453.4(b)(1)(ii)",
+        evidence: fee.name,
+        whatToSay:
+          "Please take the outside casket handling fee off our statement. The FTC Funeral Rule doesn't allow a charge for accepting a casket we buy elsewhere. Please confirm in writing.",
       };
     },
   },

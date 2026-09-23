@@ -125,6 +125,38 @@ describe("embalming-no-disclosure", () => {
   });
 });
 
+describe("casket-handling-fee", () => {
+  it("flags a priced fee for a casket bought elsewhere as a violation, on that line", () => {
+    for (const name of [
+      "Outside casket handling fee (casket bought elsewhere)",
+      "Outside casket handling fee (caskets not purchased from Canyon Rim Memorial Chapel)",
+      "Casket handling fee",
+      "Fee for caskets purchased elsewhere",
+      "Third-party casket surcharge",
+    ]) {
+      const d = fire(`${name} $625`, [{ name, cents: 62500 }]);
+      expect(sev(d, "casket-handling-fee"), name).toBe("violation");
+      expect(d.find((x) => x.ruleId === "casket-handling-fee")?.evidence).toBe(name);
+    }
+  });
+
+  it("stays silent on a compliant or unrelated line", () => {
+    for (const [name, cents] of [
+      ["No handling fee for caskets purchased elsewhere", 0],
+      ["Outside casket handling fee waived", 0],
+      ["Outside caskets accepted without charge", 50000],
+      ["Air tray / casket handling for shipment", 25000],
+      ["Casket — 18-gauge metal", 250000],
+      ["Rental casket fee", 95000],
+      ["Casket coach (hearse) handling fee", 45000],
+      ["Death certificate handling (per certified copy)", 5500],
+    ] as const) {
+      const d = fire(`${name} $${cents / 100}`, [{ name, cents }]);
+      expect(ids(d), name).not.toContain("casket-handling-fee");
+    }
+  });
+});
+
 describe("FTC engine — expansion rules (2026-06-26)", () => {
   // THE most important tests: the FTC Funeral Rule's OWN mandated disclosures
   // say "...does not require...". Those compliant lines must NEVER fire a

@@ -48,6 +48,7 @@
   "mustNotFlagRuleIds": [
     "predatory-line-items",
     "no-gpl-attestation",
-    "casket-required-for-direct-cremation"
+    "casket-required-for-direct-cremation",
+    "casket-handling-fee"
   ]
 }
