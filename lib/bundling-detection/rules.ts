@@ -334,18 +334,24 @@ export const RULES: Rule[] = [
       // casket-handling-fee's sibling for urns and burial vaults. It needs an
       // explicit bought-elsewhere signal (lib/outside-merchandise.ts), so a
       // shipping, installation, or passed-through cemetery charge stays
-      // silent. A line that also names a casket is left to
-      // casket-handling-fee, so one line never produces two violation cards.
+      // silent. A line casket-handling-fee already flags is left to it, so
+      // one line never produces two violation cards; a mixed line it doesn't
+      // recognize ("Acceptance charge for customer-provided casket and urn")
+      // is flagged here rather than falling between the two rules.
       const fee = findItem(
         ctx,
         (i) =>
           i.cents > 0 &&
-          !mentionsCasket(i) &&
+          !isCasketHandlingFee(i) &&
           outsideUrnOrVaultFee(i.name, { requireCharge: true }) !== null,
       );
       if (!fee) return null;
-      const what =
-        outsideUrnOrVaultFee(fee.name) === "urn" ? "an urn" : "a burial vault";
+      const merch = outsideUrnOrVaultFee(fee.name) === "urn" ? "urn" : "burial vault";
+      const what = mentionsCasket(fee)
+        ? `a casket or ${merch}`
+        : merch === "urn"
+          ? "an urn"
+          : "a burial vault";
       return {
         ruleId: "urn-vault-handling-fee",
         severity: "violation",

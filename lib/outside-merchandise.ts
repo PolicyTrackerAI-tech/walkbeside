@@ -5,8 +5,12 @@
  * The FTC Funeral Rule lets a family buy funeral merchandise from any outside
  * seller, and bars a funeral provider from charging any fee as a condition of
  * furnishing its goods or services beyond the fees the Rule permits
- * (16 CFR §453.4(b)(1)(ii)). #207 covers caskets (the casket-handling-fee rule
- * and isCasketAddOn in the matcher); this is the same fee for urns and vaults.
+ * (16 CFR §453.4(b)(1)(ii)). That text is general, not limited to caskets, and
+ * the FTC's own consumer guidance names urns: "The funeral provider cannot
+ * refuse to handle a casket or urn you bought online, at a local casket store,
+ * or somewhere else — or charge you a fee to do it" (consumer.ftc.gov, "The
+ * FTC Funeral Rule"). #207 covers caskets (the casket-handling-fee rule and
+ * isCasketAddOn in the matcher); this is the same fee for urns and vaults.
  *
  * Stricter than the casket check on purpose. A bare "urn handling fee" or
  * "vault handling" can be a real service (mailing cremated remains, a

@@ -316,10 +316,21 @@ describe("urn-vault-handling-fee", () => {
     }
   });
 
-  it("leaves a line that names a casket to casket-handling-fee (one card per line)", () => {
+  it("leaves a line casket-handling-fee flags to it (one card per line)", () => {
     const name = "Handling fee for caskets or urns purchased elsewhere";
     const d = fire(`${name} $495`, [{ name, cents: 49500 }]);
     expect(ids(d)).toContain("casket-handling-fee");
     expect(ids(d)).not.toContain("urn-vault-handling-fee");
+  });
+
+  it("flags a mixed casket-and-urn line the casket rule doesn't recognize, instead of dropping it", () => {
+    // Review finding: skipping every casket-mentioning line let this fall
+    // between the two rules, leaving only the generic info card.
+    const name = "Acceptance charge for customer-provided casket and urn";
+    const d = fire(`${name} $495`, [{ name, cents: 49500 }]);
+    expect(ids(d)).not.toContain("casket-handling-fee");
+    const hit = d.find((x) => x.ruleId === "urn-vault-handling-fee");
+    expect(hit?.severity).toBe("violation");
+    expect(hit?.title).toBe("A fee for using a casket or urn bought elsewhere");
   });
 });
