@@ -1,5 +1,8 @@
 # Counsel shortlist — healthcare regulatory setup package
 
+> **SUPERSEDED 2026-09-23** by [`COUNSEL_SHORTLIST_DMV_2026-09.md`](COUNSEL_SHORTLIST_DMV_2026-09.md):
+> the launch market moved from Utah to the DC metro.
+
 _Researched 2026-08-18 (web research; verify contacts before sending). Pairs
 with `docs/COUNSEL_OUTREACH_EMAIL.md` (the send-ready cover email) and
 `docs/LAWYER_BRIEF.md` (the attachment). Scope: AKS/CMP memo, HIPAA

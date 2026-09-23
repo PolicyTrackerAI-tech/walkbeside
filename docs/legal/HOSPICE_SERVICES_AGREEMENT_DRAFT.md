@@ -243,8 +243,14 @@ party beneficiaries, except that activated families may enforce Section 9.4's
 continuation of free service. **[COUNSEL: confirm or strike the third-party
 beneficiary carve-in.]** Assignment only with consent, except to a successor
 in a reorganization or sale (Honest Funeral's planned conversion to a
-Delaware corporation is pre-approved). Governing law: Utah; venue: Salt Lake
-County. Entire agreement; amendments in writing; counterparts and electronic
+Delaware corporation is pre-approved). Governing law: [the jurisdiction of
+Honest Funeral's principal office in the DC metro: the District of Columbia,
+Maryland, or Virginia]; venue: the courts of that jurisdiction. **[COUNSEL:
+default to our principal-office jurisdiction. Concede to the hospice's home
+jurisdiction if its counsel insists; within the DMV that costs little. Never
+Utah (the company left Utah on 2026-09-23). A Virginia governing-law clause
+does not change which state's funeral-licensing law applies to our
+conduct; see `DMV_LEGAL_OVERVIEW.md` §2.]** Entire agreement; amendments in writing; counterparts and electronic
 signature.
 
 **HONEST FUNERAL** — By: Ryan Currie, Founder — Date: ______

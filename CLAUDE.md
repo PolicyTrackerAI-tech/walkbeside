@@ -86,6 +86,15 @@ these rules are what make us admissible. Full analysis + citations:
   FL/ME/NE bans are licensee-scoped, but this rule is house law everywhere
   regardless. It's also the Grace failure mode.) Opt-in follow-ups to a
   family who activated are fine.
+- **Launch market is the DC metro (since 2026-09-23; Utah went cold).** The
+  DC/MD/VA solicitation rules are all licensee-scoped, and DC's expressly
+  excludes "responses to requests for information from consumers." But
+  **Virginia licenses "the business of preneed funeral planning" for any
+  person** (Va. Code §54.1-2805: "making of arrangements prior to death").
+  Keep pre-death home outreach off when the family or any recipient home is
+  in Virginia until counsel clears it, and never convey a family's price
+  acceptance or broker the arrangement meeting. Full analysis:
+  `docs/legal/DMV_LEGAL_OVERVIEW.md`.
 - **Delivered post-admission only.** The benefit must never appear in a
   hospice's pre-admission marketing or be usable to induce hospice selection —
   that is the Anti-Kickback danger vector (the funeral itself isn't federally

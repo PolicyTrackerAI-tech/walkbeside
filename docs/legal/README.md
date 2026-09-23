@@ -25,7 +25,13 @@ enforced in the product's code._
 | `HOSPICE_SERVICES_AGREEMENT_DRAFT.md` | The paid annual contract, drafted dual-frame (AKS-safe procurement framing + HIPAA-safe consumer-service framing) | Redline; confirm the two frames hold together |
 | `AKS_CMP_MEMO_DRAFT.md` | Anti-Kickback / beneficiary-inducement position memo | Confirm or correct; deliver as firm memo |
 | `HIPAA_BA_POSITION_DRAFT.md` | Business-associate avoidance position (self-enrollment design) | Confirm the BA analysis; bless the reporting design |
-| `UTAH_CLEARANCE_DRAFT.md` | Utah Title 58-9 / anti-steering clearance analysis | Confirm; this is the #1 launch gate |
+| `COUNSEL_PACKET_DMV_2026-09.md` | **DMV supplement** (2026-09-23): replaces the August packet's state questions with the DC/MD/VA set; the federal questions stand | Run the DMV engagement off its §2 |
+| `DMV_LEGAL_OVERVIEW.md` | The three-jurisdiction comparison, cross-border rule, DMV launch order, and the unified product-change list | Confirm the cross-border rule; read first after the packet |
+| `DC_CLEARANCE_DRAFT.md` | DC Code Title 3 ch. 4 clearance + CPPA exposure | Confirm; DC is the cleanest license text and the sharpest consumer-protection exposure |
+| `MD_CLEARANCE_DRAFT.md` | Md. Health Occ. Title 7 clearance + MODPA | Confirm; answer "assist in the practice" |
+| `VA_CLEARANCE_DRAFT.md` | Va. Code Title 54.1 ch. 28 clearance | Confirm; **the preneed-planning question is the #1 DMV launch gate** |
+| `DMV_OPERATING_REGISTRATIONS_DRAFT.md` | Entity registration, local licenses, sales tax, privacy thresholds, insurance, postal address for the DMV | Counsel + CPA confirm |
+| `UTAH_CLEARANCE_DRAFT.md` | Utah Title 58-9 clearance (**parked 2026-09-23**: Utah went cold; kept as the template the DMV drafts follow) | None unless Utah revives |
 | `ENTITY_PLAN_DRAFT.md` | LLC → Delaware C-corp + "Honest Funeral Co." naming plan | Bless the path; run the conversion's tax check with a CPA |
 | `../sales/PILOT_AGREEMENT.md` | The free 60-day pilot agreement (predates this folder) | Review alongside the services agreement |
 

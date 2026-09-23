@@ -1,5 +1,9 @@
 # Sourcing the launch funeral homes (gate 5 — the #1 data gate)
 
+> **PARKED 2026-09-23: Utah went cold.** The DMV version is
+> [`data/GPL_WORKLIST_DMV_2026-09.md`](data/GPL_WORKLIST_DMV_2026-09.md). The
+> vetting checklist below still applies unchanged.
+
 Until real, vetted Utah homes exist in `funeral_homes`, the outreach flow falls
 back to placeholders and nothing real can be contacted. This is how to build the
 list. The importer + vetting tooling is already done — you're producing the CSV.
