@@ -161,6 +161,161 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
   });
 });
 
+// The FTC Funeral Rule makes every GPL price direct cremation and immediate
+// burial as packages, one line per variant. The synonym pass read the
+// merchandise after "with" instead, so a $1,790 package was judged against a
+// $100–$300 container range and read "predatory".
+describe("matchLineItem — FTC package wordings", () => {
+  const id = (s: string) => matchLineItem(s)?.id;
+
+  it("benchmarks a direct-cremation package as the package, not its container (the repro)", () => {
+    expect(id("Direct cremation with container provided by purchaser")).toBe("direct-cremation-fee");
+    expect(id("Direct cremation with alternative container")).toBe("direct-cremation-fee");
+    expect(id("Direct cremation with container provided by the consumer")).toBe(
+      "direct-cremation-fee",
+    );
+  });
+
+  it("never benchmarks an immediate-burial package as a casket (there is no burial-package benchmark)", () => {
+    expect(id("Immediate burial with minimum casket")).toBeUndefined();
+    expect(id("Immediate burial with casket provided by purchaser")).toBeUndefined();
+    expect(id("Immediate Burial with 20 gauge metal casket")).toBeUndefined();
+    expect(id("Immediate Burial (with casket provided by customer)")).toBeUndefined();
+    expect(id("Direct burial with casket provided by family")).toBeUndefined();
+    expect(id("Immediate burial")).toBeUndefined();
+  });
+
+  it("reads the variant wordings real price lists use", () => {
+    expect(id("• Direct cremation with cardboard container")).toBe("direct-cremation-fee");
+    expect(id("* Direct Cremation (with Maryland state required cardboard container)")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(
+      id("*Direct Cremation with casket provided by funeral home (plus cost of casket)"),
+    ).toBe("direct-cremation-fee");
+    expect(id("Direct cremation with trayview - cardboard container - cremation oriented")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(id("A direct cremation where the purchaser provides the container")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(id("A. Direct cremation with alternative container")).toBe("direct-cremation-fee");
+    expect(id("Direct cremation w/ alternative container")).toBe("direct-cremation-fee");
+    expect(id("Immediate cremation with alternative container")).toBe("direct-cremation-fee");
+  });
+
+  it("reads a package variant folded under its own header", () => {
+    expect(id("Direct cremation — With container provided by purchaser")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(id("Direct cremation: container provided by purchaser")).toBe("direct-cremation-fee");
+    expect(id("Immediate burial — casket provided by purchaser")).toBeUndefined();
+    expect(id("DIRECT CREMATION — Direct cremation with alternative container")).toBe(
+      "direct-cremation-fee",
+    );
+  });
+
+  it("never benchmarks a cremation package with services (the FTC's direct cremation has none)", () => {
+    // Before: read as viewing / embalming / urn and judged against that item.
+    expect(id("• Direct Cremation with private family viewing (Within 48 hours)")).toBeUndefined();
+    expect(id("• Direct Cremation with Embalming")).toBeUndefined();
+    expect(id("DIRECT CREMATION WITH VISITATION")).toBeUndefined();
+    expect(id("Direct Cremation with Memorial Service (Urn Package)")).toBeUndefined();
+    expect(id("Immediate cremation with chapel service, visitation prior")).toBeUndefined();
+    expect(id("Direct cremation with no viewing Memorial Service (2 hours)")).toBeUndefined();
+    expect(id("Direct Cremation with ID viewing (no embalming)")).toBeUndefined();
+  });
+
+  it("never benchmarks a cremation package whose price includes a casket", () => {
+    expect(id("Direct cremation with clifton hardwood casket")).toBeUndefined();
+    expect(id("Direct Cremation with highest priced casket acceptable for cremation")).toBeUndefined();
+    expect(id("Direct cremation with casket (describe casket)")).toBeUndefined();
+    // A casket that costs extra, or that the purchaser provides, leaves the package price.
+    expect(
+      id("C. Direct Cremation with casket of choice (in addition to the cost of the casket)"),
+    ).toBe("direct-cremation-fee");
+    expect(id("Direct cremation with casket provided by funeral home (plus cost of casket)")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(id("Direct cremation with container or casket provided by purchaser")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(id("Direct Cremation with Casket - (*Add Casket Price)")).toBe("direct-cremation-fee");
+    expect(id("Direct cremation with casket from funeral home (additional costs)")).toBe(
+      "direct-cremation-fee",
+    );
+  });
+
+  it("a service the line rules out does not make it a service package", () => {
+    expect(id("DIRECT CREMATION (NO Service or Viewing)")).toBe("direct-cremation-fee");
+    expect(id("DIRECT CREMATION (no service of viewing)")).toBe("direct-cremation-fee");
+    expect(id("Immediate cremation with no other services/merchandise")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(id("Direct cremation (without ceremony, viewing, or embalming)")).toBe(
+      "direct-cremation-fee",
+    );
+    expect(
+      id("Direct cremation (without ceremony) includes basic services of funeral director and staff"),
+    ).toBe("direct-cremation-fee");
+  });
+
+  it("leaves containers, caskets, and headers folded over their own item alone", () => {
+    expect(id("Cremation container")).toBe("cremation-container");
+    expect(id("Direct cremation container")).toBe("cremation-container");
+    expect(id("Alternative cremation container (fiberboard container)")).toBe(
+      "cremation-container",
+    );
+    expect(id("Direct cremation — Cremation container")).toBe("cremation-container");
+    expect(id("20 gauge metal casket")).toBe("casket-metal");
+    expect(id("Direct cremation — Basic services fee")).toBe("basic-services");
+    expect(id("Direct cremation arrangement — Basic services fee")).toBe("basic-services");
+    expect(cleanItemName("Direct cremation arrangement — Basic services fee")).toBe(
+      "Basic services fee",
+    );
+    // A bare "direct cremation" folded under another item is that item.
+    expect(id("Transfer of remains — Direct cremation")).toBe("transfer");
+  });
+
+  it("a package priced as a package no longer reads 'predatory'", () => {
+    const national = (itemId: string, dollars: number) => {
+      const li = LINE_ITEMS.find((i) => i.id === itemId)!;
+      const [lo, hi] = adjustedRange(li.fairLow, li.fairHigh, "");
+      return classifyAgainst(dollars, lo, hi, li.predatoryAt);
+    };
+    const pkg = "Direct cremation with container provided by purchaser";
+    expect(id(pkg)).toBe("direct-cremation-fee");
+    expect(national("direct-cremation-fee", 1790)).toBe("fair");
+    // What the same line read before, judged as a container.
+    expect(national("cremation-container", 1790)).toBe("predatory");
+  });
+
+  it("naiveExtract + matchLineItem benchmark the package lines of a real-shaped GPL", () => {
+    const { items } = naiveExtract(
+      [
+        "DIRECT CREMATION ........................ $1,790.00 to $3,145.00",
+        "• Direct cremation with container provided by purchaser ........ $1,790.00",
+        "• Direct cremation with alternative container ................... $1,895.00",
+        "*Direct Cremation with container provided by the consumer         $3,145.00",
+        "Alternative Cremation Container (fiberboard container)            $30.00",
+        "Immediate Burial (with casket provided by customer)               $3,400.00",
+        "Immediate Burial with 20 gauge metal casket                       $5,595.00",
+      ].join("\n"),
+    );
+    const matched = items
+      .filter((i) => i.cents != null)
+      .map((i) => [i.cents, matchLineItem(cleanItemName(i.name))?.id ?? null]);
+    expect(matched).toEqual([
+      [179000, "direct-cremation-fee"],
+      [189500, "direct-cremation-fee"],
+      [314500, "direct-cremation-fee"],
+      [3000, "cremation-container"],
+      [340000, null],
+      [559500, null],
+    ]);
+  });
+});
+
 describe("cleanItemName (strip folded section headers)", () => {
   it("strips a header folded onto a benchmarked item (the repro)", () => {
     // GPL has "Direct cremation arrangement" header above "Basic services fee

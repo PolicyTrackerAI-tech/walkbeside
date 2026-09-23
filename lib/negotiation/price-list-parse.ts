@@ -323,11 +323,16 @@ export function naiveExtract(text: string): {
  * "urn" but not "return"), or — for multi-word synonyms — if every word
  * appears somewhere in the name.
  *
- * A casket add-on (a handling fee, an upgrade) is never benchmarked; see
- * isCasketAddOn.
+ * A direct-cremation package line is matched as the package, and a burial
+ * package or a cremation package with services is never benchmarked (see
+ * packageKind); nor is a casket add-on such as a handling fee or an upgrade
+ * (see isCasketAddOn).
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
+  const pkg = packageKind(n);
+  if (pkg === "direct-cremation") return LINE_ITEMS.find((it) => it.id === "direct-cremation-fee");
+  if (pkg === "unbenchmarked") return undefined;
   if (isCasketAddOn(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
@@ -379,6 +384,67 @@ function isCasketAddOn(n: string): boolean {
   if (/\bhandling\b/.test(n)) return true;
   if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
   return OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n);
+}
+
+// The FTC Funeral Rule makes every GPL price its direct cremations and
+// immediate burials as whole packages, one line per variant: "Direct
+// cremation with container provided by purchaser", "Direct cremation with
+// alternative container", "Immediate burial with minimum casket". The
+// synonym pass read the merchandise named after "with": "cremation container"
+// matches any name holding both words, and bare "casket" swallows a burial
+// package, so a $1,790 package was judged against a $100–$300 container range
+// and read "predatory". Checked before the synonym pass. A package line leads
+// with the package and then names its variant ("with", "without", "where",
+// "w/", a parenthesis or a comma), or says the purchaser provides the
+// merchandise. A header folded over its own item ("Direct cremation — Basic
+// services fee", "Direct cremation arrangement — Basic services fee") and a
+// container sold for cremation ("Direct cremation container") are not
+// package lines and fall through, which is why direct-cremation-fee still
+// sits last in LINE_ITEMS.
+//
+// Only a cremation package with no viewing or ceremony and no casket in its
+// price is benchmarked, as direct-cremation-fee. There is no immediate-burial
+// benchmark. A "Direct cremation with private family viewing" or "…with
+// memorial service" line is a cremation with services, which the FTC's
+// definition of direct cremation excludes, and "Direct cremation with
+// hardwood casket" prices the casket too; the direct-cremation range would
+// call either predatory. All three are left unbenchmarked. A service the line
+// rules out ("no service or viewing", "without ceremony") does not count, and
+// neither does a casket the purchaser provides or that costs extra ("plus
+// cost of casket").
+const PACKAGE_LEAD =
+  /^[^a-z0-9]*(?:[a-z0-9]{1,2}[.)]\s*)?(?:an?\s+)?(?:direct|immediate)\s+(cremation|burial)s?\b(.*)$/;
+const PACKAGE_VARIANT =
+  /^\s*(?:[.:]?\s*$|[(,]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
+const PURCHASER_PROVIDES =
+  /\b(?:provided|supplied|furnished)\s+by\s+(?:the\s+)?(?:purchaser|consumer|customer|client|buyer|family)\b|\b(?:purchaser|consumer|customer|client|buyer|family)\s+(?:provides|supplies|furnishes)\b/;
+const WITH_SERVICE =
+  /\b(?:viewings?|visitation|embalm(?:ing|ed)?|ceremon(?:y|ies)|wake|memorial|chapel|church|(?:funeral|graveside|committal)\s+services?)\b|\bwith\s+(?:a\s+)?services?\b/;
+// "no service or viewing", "without ceremony, viewing, or embalming", "with
+// no other services/merchandise". "of" is in the list because real price
+// lists print "no service of viewing".
+const RULED_OUT =
+  /\b(?:no|without|w\/o|excluding)\s+(?:(?:other|additional|any)\s+)?[a-z-]+(?:(?:\s*[,/]\s*(?:or\s+|and\s+)?|\s+(?:or|and|of|&)\s+)[a-z-]+)*/g;
+const PRICED_EXTRA = /\b(?:plus|add|in addition to|additional|not included)\b/;
+
+function packageKind(n: string): "direct-cremation" | "unbenchmarked" | undefined {
+  let pkg = PACKAGE_LEAD.exec(n);
+  if (pkg && !PACKAGE_VARIANT.test(pkg[2]) && !PURCHASER_PROVIDES.test(pkg[2])) pkg = null;
+  if (!pkg) {
+    // A header folded over a full package line ("Cremation options — Direct
+    // cremation with alternative container"). The folded part must name its
+    // variant: a bare "Transfer of remains — Direct cremation" is the transfer.
+    const fold = HEADER_SEPARATOR.exec(n);
+    const inner = fold ? PACKAGE_LEAD.exec(fold[2].trim()) : null;
+    const tail = inner ? inner[2].replace(/[\s.:]+$/, "") : "";
+    if (inner && tail && PACKAGE_VARIANT.test(tail)) pkg = inner;
+  }
+  if (!pkg) return undefined;
+  const variant = pkg[2].replace(RULED_OUT, " ");
+  if (pkg[1] === "burial" || WITH_SERVICE.test(variant)) return "unbenchmarked";
+  const casketInPrice =
+    CASKET_NOUN.test(variant) && !PURCHASER_PROVIDES.test(variant) && !PRICED_EXTRA.test(variant);
+  return casketInPrice ? "unbenchmarked" : "direct-cremation";
 }
 
 // Header separators the Claude extractor uses to glue a non-priced section
