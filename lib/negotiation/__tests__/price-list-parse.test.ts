@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, it, expect } from "vitest";
 import {
   naiveExtract,
@@ -447,6 +449,225 @@ describe("naiveExtract — two items collapsed onto one OCR line", () => {
     // Exactly-two-$ guard: a 3-column collapse is not force-split into junk.
     const items = only("A $1   B $2   C $3");
     expect(items.every((i) => typeof i.cents === "number")).toBe(true);
+  });
+});
+
+// A long item name wrapped onto a second line used to lose its first half: the
+// price-less first line was skipped and the second became the whole name. The
+// join needs BOTH signals (the head ends mid-phrase AND the next line carries
+// on), and section headers and prose paragraphs never qualify as a head.
+describe("naiveExtract — item names wrapped onto two lines", () => {
+  const only = (text: string) => naiveExtract(text).items;
+  const fixture = (name: string) =>
+    readFileSync(path.join(process.cwd(), "test", "evals", "gpl", `${name}.txt`), "utf8");
+
+  it("joins the demo's wrapped handling-fee line (the repro)", () => {
+    const items = only(
+      [
+        "Protective sealer casket upgrade .................... $795",
+        "Outside casket handling fee (caskets not purchased",
+        "  from Canyon Rim Memorial Chapel) .................. $495",
+      ].join("\n"),
+    );
+    expect(items).toEqual([
+      { name: "Protective sealer casket upgrade", cents: 79500 },
+      {
+        name: "Outside casket handling fee (caskets not purchased from Canyon Rim Memorial Chapel)",
+        cents: 49500,
+      },
+    ]);
+  });
+
+  it("the fallback reproduces the demo golden's item set", () => {
+    // Every golden row is found by its match substring, exactly once, at its
+    // price, and no half-name like "Canyon Rim Memorial Chapel)" is left over.
+    const expected = JSON.parse(
+      readFileSync(
+        path.join(process.cwd(), "test", "evals", "gpl", "demo-canyon-rim.expected.json"),
+        "utf8",
+      ),
+    ) as { items: { match: string; name?: string; cents: number }[] };
+    const items = only(fixture("demo-canyon-rim"));
+    expect(items).toHaveLength(expected.items.length);
+    for (const exp of expected.items) {
+      const hits = items.filter((i) =>
+        i.name.toLowerCase().includes(exp.match.toLowerCase()),
+      );
+      expect(hits, exp.match).toHaveLength(1);
+      expect(hits[0].cents, exp.match).toBe(exp.cents);
+    }
+    const fee = items.find((i) => i.name.startsWith("Outside casket handling fee"));
+    expect(fee?.name).toBe(
+      expected.items.find((i) => i.match === "Outside casket handling")?.name,
+    );
+  });
+
+  it("joins an unindented continuation that starts lowercase", () => {
+    expect(
+      only(
+        "Direct cremation with container provided by purchaser or\npurchased from the funeral home ....... $1,790",
+      ),
+    ).toEqual([
+      {
+        name: "Direct cremation with container provided by purchaser or purchased from the funeral home",
+        cents: 179000,
+      },
+    ]);
+  });
+
+  it("joins an uppercase continuation that is indented deeper than the head", () => {
+    expect(
+      only(
+        "Use of staff and equipment for Memorial Service at\n      Church or Other Facility ................ $750",
+      ),
+    ).toEqual([
+      {
+        name: "Use of staff and equipment for Memorial Service at Church or Other Facility",
+        cents: 75000,
+      },
+    ]);
+  });
+
+  it("joins an unindented uppercase continuation only when it closes the head's paren", () => {
+    expect(
+      only("Other preparation of the body (Cosmetology,\nDressing, Casketing) $595"),
+    ).toEqual([
+      { name: "Other preparation of the body (Cosmetology, Dressing, Casketing)", cents: 59500 },
+    ]);
+    // A head left open isn't enough when the next line starts a fresh,
+    // flush-left, capitalized item that closes nothing.
+    expect(only("Use of facilities and staff for\nEmbalming ........ $795")).toEqual([
+      { name: "Embalming", cents: 79500 },
+    ]);
+    expect(only("Acknowledgement cards (boxes of 25\nStandard ........ $18")).toEqual([
+      { name: "Standard", cents: 1800 },
+    ]);
+  });
+
+  it("the joined line still runs the full pipeline (marker, range)", () => {
+    expect(only("Transfer of remains (within\n  25 miles) ........ $295*")).toEqual([
+      { name: "Transfer of remains (within 25 miles)", cents: 29500 },
+    ]);
+    expect(only("Caskets (full price list available\n  on request) $995 - $8,500")).toEqual([
+      { name: "Caskets (full price list available on request)", cents_low: 99500, cents_high: 850000 },
+    ]);
+  });
+
+  it("never joins a section header onto the next item", () => {
+    // ALL CAPS, even when it ends on a connector word.
+    expect(only("PROFESSIONAL SERVICES\n  basic services fee ........ $2,100")).toEqual([
+      { name: "basic services fee", cents: 210000 },
+    ]);
+    expect(only("CHARGES FOR\n    Embalming ........ $795")).toEqual([
+      { name: "Embalming", cents: 79500 },
+    ]);
+    // ...or an unclosed paren, as when OCR drops the header's ")".
+    expect(
+      only("CASH ADVANCE ITEMS (PAID TO OTHERS FOR YOU\n  certified copies of the death certificate $25"),
+    ).toEqual([{ name: "certified copies of the death certificate", cents: 2500 }]);
+    // A trailing colon.
+    expect(only("Cash advance items:\n  certified copies of the death certificate $25")).toEqual([
+      { name: "certified copies of the death certificate", cents: 2500 },
+    ]);
+    expect(only("Items we purchase for you (cash advances):\n  death certificates $25")).toEqual([
+      { name: "death certificates", cents: 2500 },
+    ]);
+  });
+
+  it("a wrapped item directly under a section header still joins", () => {
+    // The header is a block break, not paragraph text, so the line after it
+    // can still be the head of a wrap.
+    expect(
+      only(
+        "PROFESSIONAL SERVICES\nOutside casket handling fee (caskets not purchased\n  from us) ........ $495",
+      ),
+    ).toEqual([
+      { name: "Outside casket handling fee (caskets not purchased from us)", cents: 49500 },
+    ]);
+    expect(
+      only("Cash advance items:\nCertified copies of the death certificate (per\n  copy) ........ $25"),
+    ).toEqual([{ name: "Certified copies of the death certificate (per copy)", cents: 2500 }]);
+  });
+
+  it("header-folding fixture: sub-headers are not joined onto their indented variants", () => {
+    // "Acknowledgement cards" doesn't end mid-phrase, so the indented "Type A"
+    // line keeps its own name, exactly as before.
+    expect(only(fixture("header-folding")).map((i) => i.name)).toEqual([
+      "Basic services fee",
+      "Embalming",
+      "Transfer of remains",
+      "Type A (per 25)",
+      "With picture (per 25)",
+      "Standard",
+      "Deluxe embossed",
+    ]);
+  });
+
+  it("never joins a prose disclosure onto the next item", () => {
+    // Mid-paragraph: "special cases, and for" ends on a connector, but it
+    // follows another price-less text line.
+    expect(
+      only(
+        [
+          "Embalming ........ $795",
+          "Embalming is not required",
+          "by law except in certain",
+          "special cases, and for",
+          "  Direct cremation ........ $1,295",
+        ].join("\n"),
+      ),
+    ).toEqual([
+      { name: "Embalming", cents: 79500 },
+      { name: "Direct cremation", cents: 129500 },
+    ]);
+    // A sentence break inside the line.
+    expect(
+      only(
+        "Embalming ........ $795\nPrices may change. Ask us for\n  Direct cremation ........ $1,295",
+      ),
+    ).toEqual([
+      { name: "Embalming", cents: 79500 },
+      { name: "Direct cremation", cents: 129500 },
+    ]);
+    // A paragraph whose first two lines look like a wrap (and join, finding no
+    // price) is still a paragraph: its later lines are mid-paragraph too.
+    expect(
+      only(
+        [
+          "Embalming ........ $795",
+          "Embalming is not required by law (except in",
+          "certain cases), but a fee applies when a",
+          "family asks for",
+          "  Direct cremation ........ $1,295",
+        ].join("\n"),
+      ),
+    ).toEqual([
+      { name: "Embalming", cents: 79500 },
+      { name: "Direct cremation", cents: 129500 },
+    ]);
+    // Longer than an item name.
+    expect(
+      only(
+        "Embalming ........ $795\nThis fee for our basic services and overhead will be added to the cost of\n  Direct cremation ........ $1,295",
+      ),
+    ).toEqual([
+      { name: "Embalming", cents: 79500 },
+      { name: "Direct cremation", cents: 129500 },
+    ]);
+  });
+
+  it("never joins onto a total, a payment line, or a bare price", () => {
+    const total = naiveExtract("Use of facilities and staff for\n  Total ........ $7,000");
+    expect(total.items).toEqual([]);
+    expect(total.total_cents).toBe(700000);
+    expect(only("Use of facilities and staff for\n  sales tax $42.50")).toEqual([]);
+    expect(only("Outside casket handling fee (caskets not purchased\n    $495")).toEqual([]);
+  });
+
+  it("a blank line ends the wrap", () => {
+    expect(
+      only("Transfer of remains (within\n\n  25 miles) ........ $295").map((i) => i.name),
+    ).toEqual(["25 miles)"]);
   });
 });
 

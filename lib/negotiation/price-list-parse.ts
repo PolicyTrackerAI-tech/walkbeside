@@ -191,6 +191,63 @@ function splitTwoColumn(line: string): [string, string] | null {
   return [`${name1} $${m[2]}`, `${name2} $${m[4]}`];
 }
 
+// --- Wrapped item names ------------------------------------------------------
+// A long item name can wrap onto a second physical line, with the price only on
+// the second:
+//   Outside casket handling fee (caskets not purchased
+//     from Canyon Rim Memorial Chapel) .................. $495
+// Parsed line by line, the first half is skipped (no price) and the second
+// becomes an item named "Canyon Rim Memorial Chapel)", which the "chapel"
+// synonym benchmarks as a facility charge. Join the two, but only on two
+// signals together. The price-less HEAD must end mid-phrase: an unclosed "(",
+// a trailing lowercase connector ("of", "for", "and"), or a trailing , & /.
+// The CONTINUATION must show it carries on: it starts lowercase or with ")",
+// sits deeper-indented than the head, or closes the head's open paren. A
+// section header is never a head: an ALL-CAPS line is refused outright, and a
+// "Cash advance items:" line ends on neither a connector nor an open paren
+// (and, like ALL CAPS, counts as a block break, not paragraph text, so the
+// item under it can still wrap). Prose is kept out three ways: a head
+// holding a sentence break, a head longer than a name, and any line that
+// follows another price-less text line (the middle of a paragraph). One join
+// at most. A three-line wrap stays unjoined, which is the same miss as before.
+const WRAP_TAIL =
+  /(?:\s(?:of|from|for|to|with|without|within|and|or|by|in|on|at|into|per|including|the|a|an)|[,&/])$/;
+const SENTENCE_BREAK = /[.!?]["')\]]?\s+["'(]?[A-Z]/;
+const MAX_WRAP_HEAD_WORDS = 12;
+const TOTAL_LEAD = /^(?:(?:grand\s+)?total|sub-?total)\b/i;
+
+const hasUnclosedParen = (s: string): boolean =>
+  (s.match(/\(/g) ?? []).length > (s.match(/\)/g) ?? []).length;
+
+/** Leading-whitespace width of a raw line (a tab counts as four spaces). */
+const indentOf = (rawLine: string): number =>
+  rawLine.replace(/\t/g, "    ").search(/\S/);
+
+/** Whether a price-less line might be the first half of a wrapped item name. */
+function opensWrap(line: string): boolean {
+  if (!/[a-z]/.test(line)) return false; // ALL-CAPS header, even one missing its ")"
+  if (SENTENCE_BREAK.test(line)) return false; // prose
+  if (line.split(/\s+/).length > MAX_WRAP_HEAD_WORDS) return false; // prose
+  return hasUnclosedParen(line) || WRAP_TAIL.test(line);
+}
+
+/** Whether `line` carries on the name a held head line left open. */
+function continuesWrap(
+  head: { text: string; indent: number },
+  line: string,
+  indent: number,
+): boolean {
+  // Name text, not a bare "$495", a bullet, or a total/payment line.
+  if (!/^[a-z0-9)]/i.test(line)) return false;
+  if (TOTAL_LEAD.test(line) || NOISE_LEAD.test(line)) return false;
+  if (/^[a-z)]/.test(line)) return true; // "from Canyon Rim…", ") ….. $495"
+  if (indent > head.indent) return true;
+  // "Dressing, casketing) $595" under "Other preparation (cosmetology,".
+  const close = line.indexOf(")");
+  const open = line.indexOf("(");
+  return hasUnclosedParen(head.text) && close >= 0 && (open < 0 || close < open);
+}
+
 /**
  * Deterministic fallback parser, used when Claude is unavailable or returns
  * output we can't parse. Per line: strip a trailing marker, split a two-column
@@ -199,7 +256,8 @@ function splitTwoColumn(line: string): [string, string] | null {
  * price, and a single price with a trailing unit. Names are cleaned of OCR
  * leaders; a stated "total"/"grand total" sets the total (a subtotal only if no
  * total is seen); accounting noise, bare years/addresses, and price-less lines
- * are skipped.
+ * are skipped. A price-less line that ends mid-phrase is joined to the line
+ * after it when that line carries on the name (see opensWrap / continuesWrap).
  */
 export function naiveExtract(text: string): {
   items: RawItem[];
@@ -292,21 +350,50 @@ export function naiveExtract(text: string): {
     return false;
   };
 
-  for (const rawLine of text.split(/\r?\n/)) {
-    let line = rawLine.trim();
-    if (!line) continue;
-    line = stripTrailingMarker(line);
-
-    // Two "name $price" columns collapsed onto one OCR line — parse each half
-    // through the normal pipeline (so a qty column inside a half still works).
+  // Parse one line, first splitting two "name $price" columns collapsed onto
+  // one OCR line (each half runs the normal pipeline, so a qty column inside a
+  // half still works). Returns true if anything was consumed.
+  const parseLine = (line: string): boolean => {
     const halves = splitTwoColumn(line);
     if (halves) {
-      consumeLine(halves[0]);
-      consumeLine(halves[1]);
+      const first = consumeLine(halves[0]);
+      const second = consumeLine(halves[1]);
+      return first || second;
+    }
+    return consumeLine(line);
+  };
+
+  // A price-less line held for one line, in case the next finishes its name.
+  let head: { text: string; indent: number } | null = null;
+  // The previous line was price-less body text (not blank, not a header), so
+  // the current line sits mid-paragraph and is never the head of a wrap.
+  let afterText = false;
+
+  for (const rawLine of text.split(/\r?\n/)) {
+    let line = rawLine.trim();
+    if (!line) {
+      head = null;
+      afterText = false;
+      continue;
+    }
+    line = stripTrailingMarker(line);
+    const indent = indentOf(rawLine);
+
+    const held = head;
+    head = null;
+    if (held && continuesWrap(held, line, indent)) {
+      // If the joined line has no price, neither half did: both are skipped,
+      // as before, and the next line follows text.
+      afterText = !parseLine(`${held.text} ${line}`);
       continue;
     }
 
-    consumeLine(line);
+    if (parseLine(line)) {
+      afterText = false;
+      continue;
+    }
+    if (!afterText && opensWrap(line)) head = { text: line, indent };
+    afterText = /[a-z]/.test(line) && !line.endsWith(":");
   }
 
   return { items, total_cents: total };
