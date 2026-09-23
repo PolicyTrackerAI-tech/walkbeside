@@ -166,7 +166,8 @@ export async function POST(req: Request) {
 
   const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
-  // No real vetted homes in this ZIP yet. Never fabricate outreach against a
+  // No real vetted homes in this family's service area yet (the directory
+  // never reaches outside it — lib/service-markets.ts). Never fabricate outreach against a
   // home we haven't personally verified — tell the family honestly instead
   // of silently pretending we're contacting someone. The negotiation row
   // stays (for admin follow-up / re-running once the region gets coverage);

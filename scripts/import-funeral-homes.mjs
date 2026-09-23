@@ -17,7 +17,7 @@
  *
  * Usage:
  *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
- *     node scripts/import-funeral-homes.mjs path/to/homes.csv [--dry-run] [--state=UT|ALL]
+ *     node scripts/import-funeral-homes.mjs path/to/homes.csv [--dry-run] [--state=DC,MD,VA|UT|ALL]
  *
  *   # or, reading creds from .env.local:
  *   npm run import:homes -- path/to/homes.csv --dry-run
@@ -27,7 +27,9 @@
  *
  * A home with no/blank email still imports (it just can't be contacted until an
  * email is added in /admin/vetting). Rows missing a name or a valid 5-digit zip,
- * or whose state doesn't match the expected state, are skipped as invalid.
+ * or whose state isn't one of the expected states, are skipped as invalid.
+ * Expected states default to the DC-metro launch (DC,MD,VA — one market that
+ * crosses three state lines; see lib/service-markets.ts).
  */
 
 import { readFileSync } from "node:fs";
@@ -45,9 +47,11 @@ const DRY_RUN = flags.has("--dry-run");
 const PARSE_ONLY = flags.has("--parse-only");
 
 const stateArg = args.find((a) => a.startsWith("--state="));
-// Default to UT for the Utah launch; pass --state=ALL to accept any 2-letter
-// state (for the eventual nationwide dataset), or --state=XX to pin another.
-const EXPECT_STATE = (stateArg ? stateArg.split("=")[1] : "UT").toUpperCase();
+// Default to the DC-metro launch (DC,MD,VA); pass --state=ALL to accept any
+// 2-letter state (for the eventual nationwide dataset), or a comma list
+// (--state=UT, --state=DC,MD) to pin others.
+const EXPECT_STATE = (stateArg ? stateArg.split("=")[1] : "DC,MD,VA").toUpperCase();
+const EXPECT_STATES = new Set(EXPECT_STATE.split(",").map((s) => s.trim()).filter(Boolean));
 
 const {
   NEXT_PUBLIC_SUPABASE_URL: SUPABASE_URL,
@@ -61,7 +65,7 @@ function die(msg) {
 
 if (!csvPath) {
   die(
-    "No CSV path given.\n  Usage: node scripts/import-funeral-homes.mjs homes.csv [--dry-run] [--state=UT|ALL]",
+    "No CSV path given.\n  Usage: node scripts/import-funeral-homes.mjs homes.csv [--dry-run] [--state=DC,MD,VA|UT|ALL]",
   );
 }
 if (!PARSE_ONLY) {
@@ -179,7 +183,7 @@ function normalizeRow(raw, lineNo) {
   let state = (raw.state ?? "").trim().toUpperCase();
   if (!/^[A-Z]{2}$/.test(state)) {
     errors.push(`invalid state "${raw.state ?? ""}" (need 2-letter code)`);
-  } else if (EXPECT_STATE !== "ALL" && state !== EXPECT_STATE) {
+  } else if (EXPECT_STATE !== "ALL" && !EXPECT_STATES.has(state)) {
     errors.push(`state ${state} != expected ${EXPECT_STATE} (use --state=ALL to allow)`);
   }
 
