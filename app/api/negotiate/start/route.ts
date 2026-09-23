@@ -166,28 +166,14 @@ export async function POST(req: Request) {
 
   const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
 
-  // No real vetted homes in this family's service area yet (the directory
-  // never reaches outside it — lib/service-markets.ts). Never fabricate outreach against a
-  // home we haven't personally verified — tell the family honestly instead
-  // of silently pretending we're contacting someone. The negotiation row
-  // stays (for admin follow-up / re-running once the region gets coverage);
-  // we just skip outreach entirely.
-  if (homes.length === 0) {
-    await supabase
-      .from("negotiations")
-      .update({ status: "no_homes_available" })
-      .eq("id", neg.id);
-    return NextResponse.json({ id: neg.id, noHomesAvailable: true });
-  }
-
-  // Build and STORE the outreach as `pending`. Honest Funeral is FREE to
-  // families (Operating Plan guardrail #2) — there is no payment step. We then
-  // trigger the send below directly. The send self-gates on OUTREACH_LIVE and,
-  // until the founder explicitly enables live outreach, records `dry_run` rows
-  // and emails no funeral home.
+  // Build the outreach rows (stored as `pending`). Honest Funeral is FREE to
+  // families (Operating Plan guardrail #2) — there is no payment step. The
+  // send below self-gates on OUTREACH_LIVE and, until the founder explicitly
+  // enables live outreach, records `dry_run` rows and emails no funeral home.
   const rows = homes
     // Code-level denylist runs before we even store a home, independent of
-    // funeral_homes.active. Survives DB edits.
+    // funeral_homes.active. Survives DB edits. (The directory already drops
+    // denylisted addresses; this is the defense-in-depth re-check.)
     .filter((home) => !isEmailDenylisted(home.email))
     .map((home) => {
       const { body } = buildOutreachEmail({
@@ -206,9 +192,22 @@ export async function POST(req: Request) {
       };
     });
 
-  if (rows.length > 0) {
-    await supabase.from("negotiation_outreach").insert(rows);
+  // No contactable vetted home in this family's service area yet (the
+  // directory never reaches outside it — lib/service-markets.ts — and every
+  // denylisted address is gone by here). Never fabricate outreach against a
+  // home we haven't personally verified, and never advance an empty case to
+  // `contacting`: tell the family honestly instead. The negotiation row stays
+  // (for admin follow-up / re-running once the region gets coverage); we
+  // just skip outreach entirely.
+  if (rows.length === 0) {
+    await supabase
+      .from("negotiations")
+      .update({ status: "no_homes_available" })
+      .eq("id", neg.id);
+    return NextResponse.json({ id: neg.id, noHomesAvailable: true });
   }
+
+  await supabase.from("negotiation_outreach").insert(rows);
 
   // Trigger the outreach now — free to the family, no payment step. The send
   // self-gates on OUTREACH_LIVE (records `dry_run` rows and emails nothing

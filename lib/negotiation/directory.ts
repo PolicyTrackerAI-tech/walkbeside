@@ -35,6 +35,7 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
 import { serviceAreaZip3s } from "@/lib/service-markets";
+import { isEmailDenylisted } from "./denylist";
 import type { FuneralHome } from "./sample-homes";
 
 export async function findHomesFromDirectory(
@@ -57,10 +58,14 @@ export async function findHomesFromDirectory(
 
   if (error || !data) return [];
 
+  // Denylisted addresses are dropped BEFORE the cap, so a blocked domain
+  // can't take a slot a contactable home in the same market should have had
+  // (and an all-blocked area returns [] → the honest no_homes_available path).
   const withEmail = data.filter(
     (h): h is { name: string; email: string; zip: string } =>
       typeof h.email === "string" &&
       h.email.length > 0 &&
+      !isEmailDenylisted(h.email) &&
       typeof h.zip === "string" &&
       area.has(h.zip.slice(0, 3)),
   );
