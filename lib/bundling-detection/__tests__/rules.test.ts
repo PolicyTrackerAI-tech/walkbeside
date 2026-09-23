@@ -279,3 +279,47 @@ describe("FTC engine — expansion rules (2026-06-26)", () => {
     });
   });
 });
+
+describe("urn-vault-handling-fee", () => {
+  it("flags a priced fee for an urn or vault bought elsewhere as a violation, on that line", () => {
+    for (const [name, what] of [
+      ["Handling fee for urn provided by the family", "an urn"],
+      ["Outside urn handling fee (urn purchased elsewhere)", "an urn"],
+      ["Third-party urn acceptance charge", "an urn"],
+      ["Outside vault handling fee (vault purchased elsewhere)", "a burial vault"],
+      ["Outer burial container provided by family — handling charge", "a burial vault"],
+      ["Grave liner not purchased from us — surcharge", "a burial vault"],
+    ] as const) {
+      const d = fire(`${name} $295`, [{ name, cents: 29500 }]);
+      const hit = d.find((x) => x.ruleId === "urn-vault-handling-fee");
+      expect(hit?.severity, name).toBe("violation");
+      expect(hit?.evidence, name).toBe(name);
+      expect(hit?.title, name).toBe(`A fee for using ${what} bought elsewhere`);
+    }
+  });
+
+  it("stays silent on real services, pass-throughs, waived fees, and plain merchandise", () => {
+    for (const [name, cents] of [
+      ["Urn handling fee", 9500], // no bought-elsewhere signal: could be mailing
+      ["Vault handling", 25000], // no bought-elsewhere signal: could be setting
+      ["Shipping of cremated remains in family-provided urn — fee", 9500],
+      ["Vault installation fee (vault purchased elsewhere)", 45000],
+      ["Cemetery charge for outside vault (cash advance)", 30000],
+      ["No fee for urns purchased elsewhere", 0],
+      ["Outside urn handling fee waived", 0],
+      ["Outside urns accepted without charge", 50000],
+      ["Urn (basic)", 15000],
+      ["Burial vault — Guardian", 239500],
+    ] as const) {
+      const d = fire(`${name} $${cents / 100}`, [{ name, cents }]);
+      expect(ids(d), name).not.toContain("urn-vault-handling-fee");
+    }
+  });
+
+  it("leaves a line that names a casket to casket-handling-fee (one card per line)", () => {
+    const name = "Handling fee for caskets or urns purchased elsewhere";
+    const d = fire(`${name} $495`, [{ name, cents: 49500 }]);
+    expect(ids(d)).toContain("casket-handling-fee");
+    expect(ids(d)).not.toContain("urn-vault-handling-fee");
+  });
+});

@@ -154,6 +154,24 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("Death certificates (handling)")).toBe("death-cert");
   });
 
+  it("never prices a fee for an urn or vault bought elsewhere as the urn or vault", () => {
+    // The urn lines hit the "urn" synonym before and read against an urn's
+    // range; the urn-vault-handling-fee rule surfaces them instead.
+    expect(id("Handling fee for urn provided by the family")).toBeUndefined();
+    expect(id("Outside urn handling fee (urn purchased elsewhere)")).toBeUndefined();
+    expect(id("Outside burial vault handling fee")).toBeUndefined();
+    expect(id("Third-party grave liner charge")).toBeUndefined();
+  });
+
+  it("the urn/vault guard leaves real urns, vaults, and legitimate services alone", () => {
+    expect(id("Urn (basic)")).toBe("urn");
+    expect(id("Keepsake urn — bronze")).toBe("urn");
+    expect(id("Grave liner")).toBe("vault");
+    expect(id("Burial vault — Guardian")).toBe("vault");
+    // A fee word with no bought-elsewhere signal is not this guard's business.
+    expect(id("Urn engraving fee")).toBe("urn");
+  });
+
   it("does not let a new item steal an existing line", () => {
     expect(id("Transfer of remains")).toBe("transfer");
     expect(id("Cremation container")).toBe("cremation-container");

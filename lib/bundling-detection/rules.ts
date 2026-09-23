@@ -22,6 +22,7 @@
  */
 
 import { detectDocScope } from "./doc-scope";
+import { outsideUrnOrVaultFee } from "@/lib/outside-merchandise";
 
 export type Severity = "violation" | "suspicious" | "info";
 
@@ -324,6 +325,35 @@ export const RULES: Rule[] = [
         evidence: fee.name,
         whatToSay:
           "Please take the outside casket handling fee off our statement. The FTC Funeral Rule doesn't allow a charge for accepting a casket we buy elsewhere. Please confirm in writing.",
+      };
+    },
+  },
+  {
+    id: "urn-vault-handling-fee",
+    detect(ctx) {
+      // casket-handling-fee's sibling for urns and burial vaults. It needs an
+      // explicit bought-elsewhere signal (lib/outside-merchandise.ts), so a
+      // shipping, installation, or passed-through cemetery charge stays
+      // silent. A line that also names a casket is left to
+      // casket-handling-fee, so one line never produces two violation cards.
+      const fee = findItem(
+        ctx,
+        (i) =>
+          i.cents > 0 &&
+          !mentionsCasket(i) &&
+          outsideUrnOrVaultFee(i.name, { requireCharge: true }) !== null,
+      );
+      if (!fee) return null;
+      const what =
+        outsideUrnOrVaultFee(fee.name) === "urn" ? "an urn" : "a burial vault";
+      return {
+        ruleId: "urn-vault-handling-fee",
+        severity: "violation",
+        title: `A fee for using ${what} bought elsewhere`,
+        description: `You can buy ${what} anywhere, and the FTC Funeral Rule doesn't let the funeral home charge anything to accept one. A handling fee for outside merchandise is exactly the kind of charge the Rule bars. You can ask them to take it off.`,
+        ftcReference: "16 CFR §453.4(b)(1)(ii)",
+        evidence: fee.name,
+        whatToSay: `Please take this fee off our statement. It's a charge for accepting ${what} we bought elsewhere, and the FTC Funeral Rule doesn't allow that. Please confirm in writing.`,
       };
     },
   },

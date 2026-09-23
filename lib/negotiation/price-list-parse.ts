@@ -1,4 +1,5 @@
 import { LINE_ITEMS, type LineItem } from "@/lib/pricing-data";
+import { outsideUrnOrVaultFee } from "@/lib/outside-merchandise";
 
 /**
  * A single line item as extracted from a funeral home's General Price List,
@@ -326,7 +327,8 @@ export function naiveExtract(text: string): {
  * A direct-cremation package line is matched as the package, and a burial
  * package or a cremation package with services is never benchmarked (see
  * packageKind); nor is a casket add-on such as a handling fee or an upgrade
- * (see isCasketAddOn).
+ * (see isCasketAddOn), nor a fee for an urn or vault bought elsewhere (see
+ * outsideUrnOrVaultFee).
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
@@ -334,6 +336,10 @@ export function matchLineItem(name: string): LineItem | undefined {
   if (pkg === "direct-cremation") return LINE_ITEMS.find((it) => it.id === "direct-cremation-fee");
   if (pkg === "unbenchmarked") return undefined;
   if (isCasketAddOn(n)) return undefined;
+  // The same fee for an urn or a vault bought elsewhere (lib/outside-merchandise.ts):
+  // "Handling fee for urn provided by the family" used to hit the "urn"
+  // synonym and read against an urn's price range.
+  if (outsideUrnOrVaultFee(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
