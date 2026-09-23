@@ -1,5 +1,11 @@
 # Utah Clearance Analysis: Title 58-9 and Adjacent Law (DRAFT)
 
+> **PARKED 2026-09-23: Utah went cold; the launch market is the DC metro.**
+> Kept as the template the DMV drafts follow. Current launch-gate analysis:
+> [`DMV_LEGAL_OVERVIEW.md`](DMV_LEGAL_OVERVIEW.md). Note: §4's product
+> requirement "the platform never conveys acceptance" is violated by the
+> current selection email. The DMV drafts flag it (overview §7).
+
 > **DRAFT for Utah counsel review. Not legal advice.** Prepared 2026-08-18
 > from the official current-code PDFs at le.utah.gov (current through the
 > 2026 General Session) and the R156-9 rule compilation. This is the #1

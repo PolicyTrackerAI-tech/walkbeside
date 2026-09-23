@@ -79,9 +79,14 @@ business associate of any hospice. By construction, not by assertion.**
   My Data Act and successors define "consumer health data" broadly enough to
   reach bereavement-adjacent data held by non-covered entities. A 50-state
   consumer-health-privacy scan is a normal counsel deliverable, sequenced
-  after the four launch-gating items. Utah's own consumer privacy act
-  applies at scale thresholds the company does not yet meet. **[COUNSEL:
-  confirm Utah thresholds; flag any state that regulates at our size.]**
+  after the four launch-gating items. In the DMV launch market (as of
+  2026-09-23): **Maryland's Online Data Privacy Act** applies at just 35,000
+  Maryland consumers, covers nonprofits, and limits health-data processing
+  to what is strictly necessary. It is the binding constraint. **Virginia's
+  CDPA** applies at 100,000 Virginia consumers. We found no comprehensive DC
+  statute. Details are in `MD_CLEARANCE_DRAFT.md` §8 and
+  `DMV_OPERATING_REGISTRATIONS_DRAFT.md` §4. **[COUNSEL: confirm the
+  thresholds; flag any state that regulates at our size.]**
 
 ## Voluntary posture regardless of status
 

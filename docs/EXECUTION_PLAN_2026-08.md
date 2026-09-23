@@ -1,5 +1,11 @@
 # Execution Plan — the selling quarter (Aug 18 → Dec 31, 2026)
 
+> **Market changed 2026-09-23:** Utah went cold and the launch market is now
+> the DC metro. The dates, targets, and data lane below are superseded by
+> [`EXECUTION_PLAN_DMV_2026-09.md`](EXECUTION_PLAN_DMV_2026-09.md), which also
+> carries the founder's gate decision (§1 there). The objective, §3 cadence,
+> §5 mechanisms, and §6 out-of-scope list still stand.
+
 _Companion to `docs/BUSINESS_PLAN.md` v3.0 (§14 selling test, §18 kill
 criteria). This is the runnable version: week by week, with owners and gates.
 Owner key: **F** = founder (only the founder can do it), **C** = Claude

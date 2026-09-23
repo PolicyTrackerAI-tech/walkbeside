@@ -1,4 +1,4 @@
 name,email,phone,address,city,state,zip,google_rating,google_review_count,notes
-Example Mortuary,arrangements@example-mortuary.com,801-555-0101,123 S Main St,Salt Lake City,UT,84101,4.8,142,Independent; transparent GPL on request
-Example Memorial Chapel,office@example-memorial.com,801-555-0102,4500 S Highland Dr,Holladay,UT,84117,4.4,76,Larger group; confirm direct-cremation price
-Example Family Funeral Home,info@example-family.com,435-555-0103,88 N University Ave,Provo,UT,84601,4.9,53,Cremation-focused; family-owned
+Example Mortuary,arrangements@example-mortuary.com,202-555-0101,123 Example St NW,Washington,DC,20001,4.8,142,Independent; price lists posted online (DC requires it)
+Example Memorial Chapel,office@example-memorial.com,301-555-0102,4500 Example Ave,Silver Spring,MD,20910,4.4,76,Larger group; confirm direct-cremation price
+Example Family Funeral Home,info@example-family.com,703-555-0103,88 Example Blvd,Arlington,VA,22201,4.9,53,Cremation-focused; family-owned; VA outreach waits on counsel's preneed answer

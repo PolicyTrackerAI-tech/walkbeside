@@ -17,9 +17,12 @@ delivered post-admission only, family activates, hospice transmits nothing ·
       **before the code deploys** — un-migrated, `/admin/ingest-gpl` 500s on
       every save (blocking the GPL harvest ingest) and analyzer persistence
       degrades to `saved: false`.
-- [ ] SLC GPL ingest under way (`~/FH/gpl-harvest/README.md` runbook) and the
-      first vetted homes in `funeral_homes` (`active AND vetted AND email`),
-      so an at-need family doesn't dead-end at `no_homes_available`.
+- [ ] DMV GPL ingest under way, DC first (`docs/data/GPL_WORKLIST_DMV_2026-09.md`;
+      the SLC harvest is parked with Utah), and the first vetted homes in
+      `funeral_homes` (`active AND vetted AND email`) in the pilot hospice's
+      service area, so an at-need family doesn't dead-end at
+      `no_homes_available` (matching never reaches outside the family's
+      market; see `lib/service-markets.ts`).
 - [ ] Counsel has reviewed the agreement drafts (gates the SIGNATURE, not the
       build or the demo).
 

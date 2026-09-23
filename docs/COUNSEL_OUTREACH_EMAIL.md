@@ -1,5 +1,8 @@
 # Counsel outreach email (send-ready)
 
+> **SUPERSEDED 2026-09-23**: the DMV version of this email lives in
+> [`COUNSEL_SHORTLIST_DMV_2026-09.md`](COUNSEL_SHORTLIST_DMV_2026-09.md).
+
 _Drafted 2026-08-18. Send to the top 2–3 firms on the shortlist in parallel,
 not serially; a week of serial waiting is a week off the Oct 1 clock. Attach
 `docs/LAWYER_BRIEF.md` exported to PDF. Firm shortlist: see

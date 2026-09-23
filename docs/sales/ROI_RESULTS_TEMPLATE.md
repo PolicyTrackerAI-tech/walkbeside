@@ -87,7 +87,7 @@ Here's the trade we're proposing, side by side:
 ## 7. The ask
 
 1. **Move to a paid annual** — continue Honest Funeral for **all** your families at **$[annual price]/year**, starting [proposed start date].
-2. **Two peer introductions** — if this earned it, who are two other Utah hospice leaders who'd want the same for their families? A warm intro from you is worth more than anything we could send cold.
+2. **Two peer introductions** — if this earned it, who are two other hospice leaders in the region who'd want the same for their families? A warm intro from you is worth more than anything we could send cold.
 
 > If the numbers above don't justify it, we shake hands and you owe nothing — that was always the deal. But if your families were served and your staff got hours back, let's make it the standard for every family [Hospice] cares for.
 

@@ -146,8 +146,14 @@ anti-steering rule.
 ## Open items for counsel
 
 - Confirm the retention analysis and the procurement framing's strength.
-- Utah state analogs: whether Utah's insurance-fraud or kickback statutes
-  add anything federal law does not. **[COUNSEL]**
+- State analogs for the DMV launch market (the Utah analog question is
+  moot; Utah went cold 2026-09-23). The state Medicaid kickback statutes are
+  mapped in the clearance drafts: Va. Code § 32.1-315 (Class 6 felony),
+  Md. Crim. Law § 8-511 (felony above $1,500; civil treble), and D.C. Code
+  § 4-802(c)–(d). Each mirrors the federal "payable under medical
+  assistance" hook, so the post-admission analysis should transfer.
+  Confirm, and flag any **all-payer** analog in the three jurisdictions.
+  **[COUNSEL]**
 - Advisory-opinion strategy: cost, timeline, and whether the certainty is
   worth it before scale. **[COUNSEL]**
 - Whether any hospice compliance officer objection patterns (from their

@@ -28,7 +28,7 @@ Rules the importer enforces:
 |-----------------------|----------|-------|
 | `name`                | yes      | non-empty, ≤255 chars |
 | `zip`                 | yes      | exactly 5 digits |
-| `state`               | yes      | 2-letter; must match the expected state (default `UT`) |
+| `state`               | yes      | 2-letter; must be one of the expected states (default `DC,MD,VA`) |
 | `email`               | no       | validated + lowercased; blank/invalid → imported but not contactable |
 | `phone`              | no       | normalised to 10 digits when possible |
 | `google_rating`       | no       | 0.0–5.0; bad values cleared |
@@ -41,7 +41,7 @@ in the report). Everything else imports.
 ## 2. Dry run first (no writes)
 
 ```bash
-npm run import:homes -- ./utah-homes.csv --dry-run
+npm run import:homes -- ./dmv-homes.csv --dry-run
 ```
 
 (or, passing creds explicitly:)
@@ -49,7 +49,7 @@ npm run import:homes -- ./utah-homes.csv --dry-run
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co \
 SUPABASE_SERVICE_ROLE_KEY=<service-role-key> \
-node scripts/import-funeral-homes.mjs ./utah-homes.csv --dry-run
+node scripts/import-funeral-homes.mjs ./dmv-homes.csv --dry-run
 ```
 
 The dry run prints exactly what *would* happen: counts of valid / invalid /
@@ -59,7 +59,7 @@ Fix the CSV until the report looks right.
 ## 3. Apply
 
 ```bash
-npm run import:homes -- ./utah-homes.csv
+npm run import:homes -- ./dmv-homes.csv
 ```
 
 The import is **idempotent and dedup-safe**:
@@ -80,9 +80,11 @@ it is **approved (vetted) AND has an email** — and even then only when
 
 ## Other states / the nationwide dataset
 
-The importer defaults to expecting `UT`. To load another state, pass
-`--state=CA` (etc.). To accept any valid 2-letter state in one file (e.g. the
-eventual nationwide dataset), pass `--state=ALL`.
+The importer defaults to expecting `DC,MD,VA` — the DC-metro launch is one
+funeral market across three state lines (`lib/service-markets.ts`), so one CSV
+(`dmv-homes.template.csv`) carries all three. To load other states, pass a
+comma list (`--state=UT`, `--state=CA,NV`). To accept any valid 2-letter state
+in one file (e.g. the eventual nationwide dataset), pass `--state=ALL`.
 
 ## Requirements
 

@@ -278,11 +278,15 @@ shipped product, that is a deception risk we need to fix before launch:
 
 - **Entity domiciled in:** [CONFIRM — state of LLC formation].
 - **Founder operating from:** [CONFIRM — state].
-- **Launch market:** Utah (only dataset we have today; first hospice pilot
-  target is also Utah).
+- **Launch market (updated 2026-09-23):** the **DC metro**: DC, Maryland
+  (Montgomery and Prince George's), and Northern Virginia. The founder is
+  DMV-based and Utah went cold. Per-jurisdiction clearance drafts are in
+  `docs/legal/{DC,MD,VA}_CLEARANCE_DRAFT.md`, tied together in
+  `docs/legal/DMV_LEGAL_OVERVIEW.md`. The Utah draft is kept for reference.
 - **Intended reach:** all 50 states (the site serves any US ZIP).
-- Funeral regulation is a **50-state patchwork**. Priority is to clear Utah for
-  launch, then map the states we expand into. **Q:** Can we limit advocate
+- Funeral regulation is a **50-state patchwork**. Priority is to clear the
+  three DMV jurisdictions for launch (DC first, Virginia's preneed question
+  the gating one), then map the states we expand into. **Q:** Can we limit advocate
   outreach to states we've cleared, and gate the rest, as a risk-management
   measure?
 
@@ -311,7 +315,9 @@ shipped product, that is a deception risk we need to fix before launch:
    Anti-Kickback/Stark/HIPAA exposure, and what contract terms keep us clear of
    it? This gates signing our first hospice pilot agreement.
 2. **Licensing (§B):** Does our free advocate-outreach model require a funeral,
-   broker, or other license in Utah? In other states? This gates launch.
+   broker, or other license in DC, Maryland, or Virginia (the launch market;
+   see `docs/legal/DMV_LEGAL_OVERVIEW.md`)? In other states? This gates
+   launch.
 3. **Outreach representation (§4.1, §E):** Read our outreach emails — are we
    safe describing ourselves as the family's named advocate invoking the FTC
    Funeral Rule? Any impersonation/CAN-SPAM issue?
