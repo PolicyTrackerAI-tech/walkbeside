@@ -114,7 +114,7 @@
     "third-party-merchandise-rights",
     "dressing-casketing-billed-on-top-of-prep",
     "basic-services-fee-high",
-    "outside-merchandise-handling-fee"
+    "casket-handling-fee"
   ],
   "mustNotFlagRuleIds": [
     "casket-required-for-direct-cremation",

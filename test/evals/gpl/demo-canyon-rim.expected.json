@@ -113,7 +113,7 @@
     "predatory-line-items",
     "third-party-merchandise-rights",
     "dressing-casketing-billed-on-top-of-prep",
-    "outside-merchandise-handling-fee"
+    "casket-handling-fee"
   ],
   "mustNotFlagRuleIds": [
     "casket-required-for-direct-cremation",

@@ -1,5 +1,4 @@
 import { LINE_ITEMS, type LineItem } from "@/lib/pricing-data";
-import { isOutsideMerchandiseFee } from "@/lib/outside-merchandise";
 
 /**
  * A single line item as extracted from a funeral home's General Price List,
@@ -323,10 +322,18 @@ export function naiveExtract(text: string): {
  * false hits. A synonym matches if it appears as a whole word ("urn" hits
  * "urn" but not "return"), or — for multi-word synonyms — if every word
  * appears somewhere in the name.
+ *
+ * A direct-cremation package line is matched as the package, and a burial
+ * package or a cremation package with services is never benchmarked (see
+ * packageKind); nor is a casket add-on such as a handling fee or an upgrade
+ * (see isCasketAddOn).
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
-  if (isOutsideMerchandiseFee(n) || SEALER_UPGRADE.test(n)) return undefined;
+  const pkg = packageKind(n);
+  if (pkg === "direct-cremation") return LINE_ITEMS.find((it) => it.id === "direct-cremation-fee");
+  if (pkg === "unbenchmarked") return undefined;
+  if (isCasketAddOn(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
@@ -345,16 +352,6 @@ export function matchLineItem(name: string): LineItem | undefined {
   return alias ? LINE_ITEMS.find((it) => it.id === alias[1]) : undefined;
 }
 
-// Casket add-ons that say "casket" but are not a casket. The bare "casket"
-// synonym used to benchmark them against a casket's price range, so a $995
-// sealer upcharge read "good". They stay unbenchmarked (face value). The rules
-// engine flags them instead: the outside-merchandise fee as a Funeral Rule
-// violation, the sealer as the protective-casket upsell. A sealed casket sold
-// as a casket ("Sealer casket, 18-gauge steel") is still a casket; only an
-// upgrade/add-on line is excluded.
-const SEALER_UPGRADE =
-  /\b(?:seal(?:er|ing)?|gasket(?:ed)?|protective)\b.*\b(?:upgrade|add-?on|upcharge|option)\b|\b(?:upgrade|add-?on|upcharge)\b.*\b(?:seal(?:er|ing)?|gasket(?:ed)?|protective)\b/;
-
 // Standard GPL wordings the synonym pass can't reach. The FTC Funeral Rule's
 // own label for the non-declinable fee is "Basic services of funeral
 // director and staff". It has no "fee" in it, so the "Basic services fee"
@@ -367,6 +364,88 @@ const WORDING_ALIASES: ReadonlyArray<readonly [RegExp, string]> = [
   [/\bbasic services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
   [/\bnon-?declinable basic services\b/, "basic-services"],
 ];
+
+// Lines that name a casket but price something else: a fee for handling one
+// bought elsewhere, or an upgrade/add-on charged on top of one. The synonym
+// pass reduces "Casket — 18-gauge metal" to a bare "casket", so without this
+// guard a $625 "Outside casket handling fee" was judged against a casket's
+// range and read "good" (and the wrapped "…not purchased from Canyon Rim
+// Memorial Chapel" variant hit the "chapel" synonym instead). The FTC Funeral
+// Rule bars that fee outright; the casket-handling-fee rule flags it, and
+// protective-casket-pitched flags the sealer pitch. Checked before the
+// synonym pass. Rental and ceremonial caskets, and protective or sealer
+// caskets themselves, carry none of these words and keep their match.
+const CASKET_NOUN = /\b(?:caskets?|coffins?)\b/;
+const OUTSIDE_PURCHASE =
+  /\boutside\b|\bthird[- ]party\b|\belsewhere\b|\bnot (?:purchased|bought)\b/;
+
+function isCasketAddOn(n: string): boolean {
+  if (!CASKET_NOUN.test(n)) return false;
+  if (/\bhandling\b/.test(n)) return true;
+  if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
+  return OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n);
+}
+
+// The FTC Funeral Rule makes every GPL price its direct cremations and
+// immediate burials as whole packages, one line per variant: "Direct
+// cremation with container provided by purchaser", "Direct cremation with
+// alternative container", "Immediate burial with minimum casket". The
+// synonym pass read the merchandise named after "with": "cremation container"
+// matches any name holding both words, and bare "casket" swallows a burial
+// package, so a $1,790 package was judged against a $100–$300 container range
+// and read "predatory". Checked before the synonym pass. A package line leads
+// with the package and then names its variant ("with", "without", "where",
+// "w/", a parenthesis or a comma), or says the purchaser provides the
+// merchandise. A header folded over its own item ("Direct cremation — Basic
+// services fee", "Direct cremation arrangement — Basic services fee") and a
+// container sold for cremation ("Direct cremation container") are not
+// package lines and fall through, which is why direct-cremation-fee still
+// sits last in LINE_ITEMS.
+//
+// Only a cremation package with no viewing or ceremony and no casket in its
+// price is benchmarked, as direct-cremation-fee. There is no immediate-burial
+// benchmark. A "Direct cremation with private family viewing" or "…with
+// memorial service" line is a cremation with services, which the FTC's
+// definition of direct cremation excludes, and "Direct cremation with
+// hardwood casket" prices the casket too; the direct-cremation range would
+// call either predatory. All three are left unbenchmarked. A service the line
+// rules out ("no service or viewing", "without ceremony") does not count, and
+// neither does a casket the purchaser provides or that costs extra ("plus
+// cost of casket").
+const PACKAGE_LEAD =
+  /^[^a-z0-9]*(?:[a-z0-9]{1,2}[.)]\s*)?(?:an?\s+)?(?:direct|immediate)\s+(cremation|burial)s?\b(.*)$/;
+const PACKAGE_VARIANT =
+  /^\s*(?:[.:]?\s*$|[(,]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
+const PURCHASER_PROVIDES =
+  /\b(?:provided|supplied|furnished)\s+by\s+(?:the\s+)?(?:purchaser|consumer|customer|client|buyer|family)\b|\b(?:purchaser|consumer|customer|client|buyer|family)\s+(?:provides|supplies|furnishes)\b/;
+const WITH_SERVICE =
+  /\b(?:viewings?|visitation|embalm(?:ing|ed)?|ceremon(?:y|ies)|wake|memorial|chapel|church|(?:funeral|graveside|committal)\s+services?)\b|\bwith\s+(?:a\s+)?services?\b/;
+// "no service or viewing", "without ceremony, viewing, or embalming", "with
+// no other services/merchandise". "of" is in the list because real price
+// lists print "no service of viewing".
+const RULED_OUT =
+  /\b(?:no|without|w\/o|excluding)\s+(?:(?:other|additional|any)\s+)?[a-z-]+(?:(?:\s*[,/]\s*(?:or\s+|and\s+)?|\s+(?:or|and|of|&)\s+)[a-z-]+)*/g;
+const PRICED_EXTRA = /\b(?:plus|add|in addition to|additional|not included)\b/;
+
+function packageKind(n: string): "direct-cremation" | "unbenchmarked" | undefined {
+  let pkg = PACKAGE_LEAD.exec(n);
+  if (pkg && !PACKAGE_VARIANT.test(pkg[2]) && !PURCHASER_PROVIDES.test(pkg[2])) pkg = null;
+  if (!pkg) {
+    // A header folded over a full package line ("Cremation options — Direct
+    // cremation with alternative container"). The folded part must name its
+    // variant: a bare "Transfer of remains — Direct cremation" is the transfer.
+    const fold = HEADER_SEPARATOR.exec(n);
+    const inner = fold ? PACKAGE_LEAD.exec(fold[2].trim()) : null;
+    const tail = inner ? inner[2].replace(/[\s.:]+$/, "") : "";
+    if (inner && tail && PACKAGE_VARIANT.test(tail)) pkg = inner;
+  }
+  if (!pkg) return undefined;
+  const variant = pkg[2].replace(RULED_OUT, " ");
+  if (pkg[1] === "burial" || WITH_SERVICE.test(variant)) return "unbenchmarked";
+  const casketInPrice =
+    CASKET_NOUN.test(variant) && !PURCHASER_PROVIDES.test(variant) && !PRICED_EXTRA.test(variant);
+  return casketInPrice ? "unbenchmarked" : "direct-cremation";
+}
 
 // Header separators the Claude extractor uses to glue a non-priced section
 // header onto the following item's name: " — " / " – " / " - " (a dash with
