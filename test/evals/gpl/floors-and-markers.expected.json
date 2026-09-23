@@ -35,6 +35,7 @@
     "casket-required-for-direct-cremation",
     "rental-casket-sold-as-purchase",
     "basic-services-fee-high",
-    "no-gpl-attestation"
+    "no-gpl-attestation",
+    "casket-handling-fee"
   ]
 }
