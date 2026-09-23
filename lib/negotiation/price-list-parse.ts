@@ -325,7 +325,7 @@ export function naiveExtract(text: string): {
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
-  return LINE_ITEMS.find((it) => {
+  const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
       .split("/")
@@ -338,7 +338,23 @@ export function matchLineItem(name: string): LineItem | undefined {
       return words.length > 1 && words.every((w) => n.includes(w));
     });
   });
+  if (direct) return direct;
+  const alias = WORDING_ALIASES.find(([re]) => re.test(n));
+  return alias ? LINE_ITEMS.find((it) => it.id === alias[1]) : undefined;
 }
+
+// Standard GPL wordings the synonym pass can't reach. The FTC Funeral Rule's
+// own label for the non-declinable fee is "Basic services of funeral
+// director and staff". It has no "fee" in it, so the "Basic services fee"
+// synonym missed the most common line on real price lists and left the one
+// charge no family can decline out of the savings total. Checked only after
+// the synonym pass, so a package line that mentions basic services ("Direct
+// cremation, includes basic services of funeral director…") keeps its
+// package match.
+const WORDING_ALIASES: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bbasic services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
+  [/\bnon-?declinable basic services\b/, "basic-services"],
+];
 
 // Header separators the Claude extractor uses to glue a non-priced section
 // header onto the following item's name: " — " / " – " / " - " (a dash with

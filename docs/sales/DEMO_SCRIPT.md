@@ -52,7 +52,7 @@
 **SHOW / CLICK:**
 - Go to **`/analyzer`**.
 - Paste the staged price list from [`SAMPLE_GPL_DEMO.md`](SAMPLE_GPL_DEMO.md) (already on your clipboard — don't fumble live).
-- Walk the output: *"Quoted $18,975. Fair for Salt Lake is about $10,000. There's nearly $9,000 flagged on this one list — the $3,495 basic services fee that no one can decline, $495-a-day refrigeration that should be about $60, and a fee for bringing your own casket that federal law says they can't charge at all."*
+- Walk the output: *"Quoted about $23,700. Fair for DC is about $10,600. There's roughly $13,000 flagged on this one list: the $4,395 basic services fee that no one can decline, $625-a-day refrigeration that should be about $60, and embalming at $1,750. The DC Attorney General's own 2017 survey of every District funeral home found embalming averaged $750."* (Local proof point: the DC Attorney General surveyed all 38 DC homes in 2017, and DC now requires homes to post their price lists online. See `docs/legal/DC_CLEARANCE_DRAFT.md` §3.)
 - Point at the tier badge on the verdict: *"And the verdict says HOW we know — whether this comparison is modeled from national data or verified against real price lists from this area, with the sample size right there. Click it and you get the full methodology. No black box."*
 
 **TRANSITION (back to their ROI):**

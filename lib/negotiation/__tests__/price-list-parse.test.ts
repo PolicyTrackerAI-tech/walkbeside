@@ -89,6 +89,20 @@ describe("matchLineItem (name → benchmarked item)", () => {
   it("returns undefined for an item we don't benchmark", () => {
     expect(matchLineItem("Catering and sandwiches")).toBeUndefined();
   });
+
+  it("matches the FTC's standard wording for the non-declinable fee", () => {
+    expect(matchLineItem("Basic services of funeral director and staff")?.id).toBe(
+      "basic-services",
+    );
+    expect(matchLineItem("Basic Services of Staff")?.id).toBe("basic-services");
+    expect(matchLineItem("Non-declinable basic services")?.id).toBe("basic-services");
+  });
+
+  it("a package line that mentions basic services keeps its package match", () => {
+    expect(
+      matchLineItem("Direct cremation (includes basic services of funeral director and staff)")?.id,
+    ).toBe("direct-cremation-fee");
+  });
 });
 
 describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
