@@ -121,9 +121,10 @@ There is one textual soft spot (§4.1). The real exposure is the CPPA (§6).
      and
    - proposed the Consumer Bill of Rights that now mandates online price
      lists.
-   **[OFFICIAL-EXTRACT: oag.dc.gov releases]** A regulator that publishes
-   home-by-home price surveys cannot coherently treat publishing and
-   explaining those prices as unlicensed funeral directing.
+   **[OFFICIAL-EXTRACT: oag.dc.gov releases]** A regulator that surveys every
+   home's prices and publishes the ranges (whether the 2017 PDF names homes
+   individually was not confirmed in this pass) cannot coherently treat
+   publishing and explaining funeral prices as unlicensed funeral directing.
 4. **Price publishers operate openly in DC.** Consumers' Checkbook rates 49
    Washington-area homes. Its direct-cremation prices ranged $995 to $7,495
    (average $3,129), and its sample traditional funeral ranged $6,165 to
@@ -277,7 +278,7 @@ action.
 | DC-1 | Every public claim is substantiated to the CPPA standard; the claims register is the evidence file | Register exists; **re-audit claims for DC launch** |
 | DC-2 | Decide on the who-pays disclosure for hospice-activated families before the first DC hospice family activates | **Counsel decision** (packet Q9) |
 | DC-3 | Copy advises on prices and rights, not on "arrangements" (§ 3-421) | **Copy audit** (shared with MD-2) |
-| DC-4 | Online price lists are mandatory in DC, so DC price-list collection uses provenance `posted` wherever a home has a website, and a missing price list is itself a DLCP-reportable gap | **Data playbook** (`docs/data/GPL_WORKLIST_DMV.md`) |
+| DC-4 | Online price lists are mandatory in DC, so DC price-list collection uses provenance `posted` wherever a home has a website, and a missing price list is itself a DLCP-reportable gap | **Data playbook** (`docs/data/GPL_WORKLIST_DMV_2026-09.md`) |
 
 ## 13. Open questions for DC counsel
 

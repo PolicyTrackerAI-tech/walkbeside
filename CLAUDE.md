@@ -2,7 +2,8 @@
 
 This is the operating contract for anyone (human or agent) working on Honest
 Funeral. Read it first. The full strategy is [`docs/OPERATING_PLAN.md`](docs/OPERATING_PLAN.md)
-(the bible); the execution plan is [`docs/EXECUTION_PLAN_2026-08.md`](docs/EXECUTION_PLAN_2026-08.md)
+(the bible); the execution plan is [`docs/EXECUTION_PLAN_2026-08.md`](docs/EXECUTION_PLAN_2026-08.md),
+re-planned for the DC-metro launch in [`docs/EXECUTION_PLAN_DMV_2026-09.md`](docs/EXECUTION_PLAN_DMV_2026-09.md)
 (with [`docs/BUSINESS_PLAN.md`](docs/BUSINESS_PLAN.md) v3.0 as the strategy source;
 ROADMAP.md is bannered-stale as of audit A9).
 

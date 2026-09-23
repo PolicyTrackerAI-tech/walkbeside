@@ -31,8 +31,10 @@ list. The importer + vetting tooling is already done — you're producing the CS
 
 > Only collect **public business contact info**. No personal/consumer data, no
 > scraping of anything behind a login. Skip generic SaaS/aggregator domains
-> (consolidatedfuneralservices.com, runcfs.com, etc.) — those are also guarded
-> by the code denylist (`lib/negotiation/denylist.ts`).
+> (consolidatedfuneralservices.com, runcfs.com, etc.). Since 2026-09-23 those,
+> plus directory, marketplace, and cremation-broker domains, are also guarded
+> by the code's domain denylist (`lib/negotiation/denylist.ts`). Before that
+> date the denylist was empty, despite this note.
 
 ## What goes in each column
 
