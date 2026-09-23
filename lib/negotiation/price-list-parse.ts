@@ -322,9 +322,13 @@ export function naiveExtract(text: string): {
  * false hits. A synonym matches if it appears as a whole word ("urn" hits
  * "urn" but not "return"), or — for multi-word synonyms — if every word
  * appears somewhere in the name.
+ *
+ * A casket add-on (a handling fee, an upgrade) is never benchmarked; see
+ * isCasketAddOn.
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
+  if (isCasketAddOn(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
@@ -355,6 +359,27 @@ const WORDING_ALIASES: ReadonlyArray<readonly [RegExp, string]> = [
   [/\bbasic services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
   [/\bnon-?declinable basic services\b/, "basic-services"],
 ];
+
+// Lines that name a casket but price something else: a fee for handling one
+// bought elsewhere, or an upgrade/add-on charged on top of one. The synonym
+// pass reduces "Casket — 18-gauge metal" to a bare "casket", so without this
+// guard a $625 "Outside casket handling fee" was judged against a casket's
+// range and read "good" (and the wrapped "…not purchased from Canyon Rim
+// Memorial Chapel" variant hit the "chapel" synonym instead). The FTC Funeral
+// Rule bars that fee outright; the casket-handling-fee rule flags it, and
+// protective-casket-pitched flags the sealer pitch. Checked before the
+// synonym pass. Rental and ceremonial caskets, and protective or sealer
+// caskets themselves, carry none of these words and keep their match.
+const CASKET_NOUN = /\b(?:caskets?|coffins?)\b/;
+const OUTSIDE_PURCHASE =
+  /\boutside\b|\bthird[- ]party\b|\belsewhere\b|\bnot (?:purchased|bought)\b/;
+
+function isCasketAddOn(n: string): boolean {
+  if (!CASKET_NOUN.test(n)) return false;
+  if (/\bhandling\b/.test(n)) return true;
+  if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
+  return OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n);
+}
 
 // Header separators the Claude extractor uses to glue a non-priced section
 // header onto the following item's name: " — " / " – " / " - " (a dash with

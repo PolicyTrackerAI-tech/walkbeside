@@ -67,6 +67,7 @@
     "vault-required-by-law-claim",
     "basic-services-fee-high",
     "service-charge-bundled",
-    "no-gpl-attestation"
+    "no-gpl-attestation",
+    "casket-handling-fee"
   ]
 }

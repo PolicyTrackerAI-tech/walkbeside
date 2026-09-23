@@ -60,13 +60,13 @@
     },
     {
       "match": "Protective sealer",
-      "matchedItemId": "casket-metal",
+      "matchedItemId": null,
       "cents": 99500,
       "name": "Protective sealer casket upgrade"
     },
     {
       "match": "Outside casket handling",
-      "matchedItemId": "casket-metal",
+      "matchedItemId": null,
       "cents": 62500,
       "name": "Outside casket handling fee (casket bought elsewhere)"
     },
@@ -113,7 +113,8 @@
     "predatory-line-items",
     "third-party-merchandise-rights",
     "dressing-casketing-billed-on-top-of-prep",
-    "basic-services-fee-high"
+    "basic-services-fee-high",
+    "casket-handling-fee"
   ],
   "mustNotFlagRuleIds": [
     "casket-required-for-direct-cremation",
