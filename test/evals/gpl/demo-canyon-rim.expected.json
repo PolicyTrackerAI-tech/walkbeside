@@ -60,13 +60,13 @@
     },
     {
       "match": "Protective sealer",
-      "matchedItemId": "casket-metal",
+      "matchedItemId": null,
       "cents": 79500,
       "name": "Protective sealer casket upgrade"
     },
     {
       "match": "Outside casket handling",
-      "matchedItemId": "service-facility",
+      "matchedItemId": null,
       "cents": 49500,
       "name": "Outside casket handling fee (caskets not purchased from Canyon Rim Memorial Chapel)"
     },
@@ -112,7 +112,8 @@
     "protective-casket-pitched",
     "predatory-line-items",
     "third-party-merchandise-rights",
-    "dressing-casketing-billed-on-top-of-prep"
+    "dressing-casketing-billed-on-top-of-prep",
+    "outside-merchandise-handling-fee"
   ],
   "mustNotFlagRuleIds": [
     "casket-required-for-direct-cremation",

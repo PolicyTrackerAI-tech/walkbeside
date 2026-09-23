@@ -98,6 +98,23 @@ describe("matchLineItem (name → benchmarked item)", () => {
     expect(matchLineItem("Non-declinable basic services")?.id).toBe("basic-services");
   });
 
+  it("never benchmarks a casket add-on as a casket", () => {
+    // An outside-merchandise fee is a Funeral Rule violation, not a casket;
+    // the Canyon Rim wording used to land on "chapel" → service-facility.
+    expect(matchLineItem("Outside casket handling fee (casket bought elsewhere)")).toBeUndefined();
+    expect(
+      matchLineItem("Outside casket handling fee (caskets not purchased from Canyon Rim Memorial Chapel)"),
+    ).toBeUndefined();
+    expect(matchLineItem("Handling fee for urn provided by the family")).toBeUndefined();
+    expect(matchLineItem("Protective sealer casket upgrade")).toBeUndefined();
+    expect(matchLineItem("Gasket add-on for casket")).toBeUndefined();
+  });
+
+  it("a sealed casket sold as a casket is still a casket", () => {
+    expect(matchLineItem("Sealer casket, 18-gauge steel")?.id).toBe("casket-metal");
+    expect(matchLineItem('Casket — "Homestead" solid oak')?.id).toBe("casket-metal");
+  });
+
   it("a package line that mentions basic services keeps its package match", () => {
     expect(
       matchLineItem("Direct cremation (includes basic services of funeral director and staff)")?.id,

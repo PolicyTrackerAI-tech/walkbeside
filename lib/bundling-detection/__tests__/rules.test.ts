@@ -247,3 +247,39 @@ describe("FTC engine — expansion rules (2026-06-26)", () => {
     });
   });
 });
+
+describe("outside-merchandise-handling-fee", () => {
+  it("flags a priced fee for a casket bought elsewhere as a violation", () => {
+    const item = { name: "Outside casket handling fee (casket bought elsewhere)", cents: 62500 };
+    const d = fire("Outside casket handling fee (casket bought elsewhere) $625", [item]);
+    expect(sev(d, "outside-merchandise-handling-fee")).toBe("violation");
+  });
+
+  it("catches the urn and 'not purchased from' wordings too", () => {
+    for (const name of [
+      "Handling fee for urn provided by the family",
+      "Outside casket handling fee (caskets not purchased from Example Chapel)",
+      "Third-party casket acceptance charge",
+    ]) {
+      const d = fire(`${name} $295`, [{ name, cents: 29500 }]);
+      expect(ids(d), name).toContain("outside-merchandise-handling-fee");
+    }
+  });
+
+  it("stays silent on a $0 line, disclosure text, and ordinary caskets", () => {
+    const zero = "Outside casket handling fee (casket bought elsewhere)";
+    expect(ids(fire(`${zero} $0`, [{ name: zero, cents: 0 }]))).not.toContain(
+      "outside-merchandise-handling-fee",
+    );
+    expect(
+      ids(fire("We accept caskets purchased elsewhere at no charge.\nMetal casket $2,400", [
+        { name: "Metal casket", cents: 240000 },
+      ])),
+    ).not.toContain("outside-merchandise-handling-fee");
+    expect(
+      ids(fire("Protective sealer casket upgrade $995", [
+        { name: "Protective sealer casket upgrade", cents: 99500 },
+      ])),
+    ).not.toContain("outside-merchandise-handling-fee");
+  });
+});

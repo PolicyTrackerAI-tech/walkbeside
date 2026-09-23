@@ -1,4 +1,5 @@
 import { LINE_ITEMS, type LineItem } from "@/lib/pricing-data";
+import { isOutsideMerchandiseFee } from "@/lib/outside-merchandise";
 
 /**
  * A single line item as extracted from a funeral home's General Price List,
@@ -325,6 +326,7 @@ export function naiveExtract(text: string): {
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
+  if (isOutsideMerchandiseFee(n) || SEALER_UPGRADE.test(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
@@ -342,6 +344,16 @@ export function matchLineItem(name: string): LineItem | undefined {
   const alias = WORDING_ALIASES.find(([re]) => re.test(n));
   return alias ? LINE_ITEMS.find((it) => it.id === alias[1]) : undefined;
 }
+
+// Casket add-ons that say "casket" but are not a casket. The bare "casket"
+// synonym used to benchmark them against a casket's price range, so a $995
+// sealer upcharge read "good". They stay unbenchmarked (face value). The rules
+// engine flags them instead: the outside-merchandise fee as a Funeral Rule
+// violation, the sealer as the protective-casket upsell. A sealed casket sold
+// as a casket ("Sealer casket, 18-gauge steel") is still a casket; only an
+// upgrade/add-on line is excluded.
+const SEALER_UPGRADE =
+  /\b(?:seal(?:er|ing)?|gasket(?:ed)?|protective)\b.*\b(?:upgrade|add-?on|upcharge|option)\b|\b(?:upgrade|add-?on|upcharge)\b.*\b(?:seal(?:er|ing)?|gasket(?:ed)?|protective)\b/;
 
 // Standard GPL wordings the synonym pass can't reach. The FTC Funeral Rule's
 // own label for the non-declinable fee is "Basic services of funeral

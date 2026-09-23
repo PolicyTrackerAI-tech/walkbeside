@@ -22,6 +22,7 @@
  */
 
 import { detectDocScope } from "./doc-scope";
+import { isOutsideMerchandiseFee } from "@/lib/outside-merchandise";
 
 export type Severity = "violation" | "suspicious" | "info";
 
@@ -208,6 +209,30 @@ export const RULES: Rule[] = [
         evidence: casket.name,
         whatToSay:
           "I'm choosing direct cremation. Please remove the casket from this quote and replace it with the alternative container required by the FTC Funeral Rule.",
+      };
+    },
+  },
+  {
+    id: "outside-merchandise-handling-fee",
+    detect(ctx) {
+      // A priced line only: a $0 line, or disclosure text such as "we accept
+      // caskets purchased elsewhere at no charge", is compliant and stays
+      // silent.
+      const item = findItem(
+        ctx,
+        (i) => i.cents > 0 && isOutsideMerchandiseFee(i.name),
+      );
+      if (!item) return null;
+      return {
+        ruleId: "outside-merchandise-handling-fee",
+        severity: "violation",
+        title: "A fee for using a casket or urn bought elsewhere",
+        description:
+          "The FTC Funeral Rule lets you buy a casket, urn, or other merchandise from any outside seller, and a funeral home may not charge you a fee for handling or accepting it. This line charges exactly that kind of fee.",
+        ftcReference: "16 CFR §453.4(b)(1)(ii)",
+        evidence: item.name,
+        whatToSay:
+          "This is a fee for handling a casket bought elsewhere. The FTC Funeral Rule doesn't allow a funeral home to charge it. Please remove it from our price list and our statement.",
       };
     },
   },
