@@ -9,6 +9,7 @@
  *   - analysisInputHash  (lib/analysis-hash.ts)
  *   - redactContact      (lib/redact.ts)
  *   - extractionConfidence (lib/extraction-confidence.ts)
+ *   - MAX_LIST_AGE_MONTHS / listAgeMonths (lib/price-list-age.ts)
  * and the LINE_ITEMS id list is read from lib/pricing-data.ts itself.
  */
 

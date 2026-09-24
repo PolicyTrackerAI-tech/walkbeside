@@ -17,7 +17,8 @@
  *     skipped, so re-running the folder writes nothing new.
  *   - A price list printed more than MAX_LIST_AGE_MONTHS before it was
  *     retrieved is held back (not loaded) until the file records, in
- *     stillCurrent, how the home confirmed it is still current.
+ *     stillCurrent, how the home confirmed it is still current (the same
+ *     rule /admin/ingest-gpl applies: lib/price-list-age.ts).
  *   - Nothing here contacts anyone. Benchmarks still publish only through
  *     the n≥5 promotion step on /admin/benchmarks (guardrail #4).
  *

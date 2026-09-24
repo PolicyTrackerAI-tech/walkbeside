@@ -4,6 +4,11 @@ import { join } from "node:path";
 import { analysisInputHash as tsHash } from "@/lib/analysis-hash";
 import { redactContact as tsRedact } from "@/lib/redact";
 import { extractionConfidence as tsConfidence } from "@/lib/extraction-confidence";
+import {
+  MAX_LIST_AGE_MONTHS as TS_MAX_AGE,
+  listAgeMonths as tsListAgeMonths,
+  staleListReason as tsStaleReason,
+} from "@/lib/price-list-age";
 import { LINE_ITEMS } from "@/lib/pricing-data";
 import { matchLineItem } from "@/lib/negotiation/price-list-parse";
 import {
@@ -54,6 +59,22 @@ describe("gpl-batch mirrors the app exactly", () => {
 
   it("lineItemIds reads exactly the LINE_ITEMS ids", () => {
     expect(lineItemIds()).toEqual(new Set(LINE_ITEMS.map((l) => l.id)));
+  });
+
+  it("the price-list age rule (lib/price-list-age.ts)", () => {
+    expect(MAX_LIST_AGE_MONTHS).toBe(TS_MAX_AGE);
+    const pairs: Array<[string, string]> = [
+      ["2026-02-01", "2026-09-24"],
+      ["2024-07-15", "2026-09-24"],
+      ["2024-09-24", "2026-09-24"],
+      ["2024-09-25", "2026-09-24"],
+      ["2019-01-01", "2026-09-24"],
+    ];
+    for (const [effectiveDate, retrievedAt] of pairs) {
+      const rec = { ...base, effectiveDate, retrievedAt };
+      expect(listAgeMonths(rec)).toBe(tsListAgeMonths(effectiveDate, retrievedAt));
+      expect(heldReason(rec) === null).toBe(tsStaleReason(effectiveDate, retrievedAt) === null);
+    }
   });
 
   it("homeNamePattern escapes like the save route", () => {

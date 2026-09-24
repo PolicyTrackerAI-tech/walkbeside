@@ -129,7 +129,9 @@ and set its tracker row from `held_stale` to `reviewed`. If they send a
 newer list instead, review that one.
 
 The one-at-a-time alternative, `/admin/ingest-gpl`, writes exactly the same
-rows.
+rows and applies the same 24-month hold: it asks for the printed effective
+date, and for an older list, how the home confirmed it is still current
+(`lib/price-list-age.ts` holds the rule for both).
 
 ## The tracker
 

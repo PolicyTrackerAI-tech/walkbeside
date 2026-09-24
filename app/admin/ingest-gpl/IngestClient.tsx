@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { MAX_LIST_AGE_MONTHS } from "@/lib/price-list-age";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
 import { LINE_ITEMS } from "@/lib/pricing-data";
@@ -96,6 +97,8 @@ export function IngestClient() {
   const [zip, setZip] = useState("");
   const [homeName, setHomeName] = useState("");
   const [sourceUrl, setSourceUrl] = useState("");
+  const [effectiveDate, setEffectiveDate] = useState("");
+  const [stillCurrent, setStillCurrent] = useState("");
 
   const [photoBusy, setPhotoBusy] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -262,6 +265,10 @@ export function IngestClient() {
       setError("Enter the funeral home's name.");
       return;
     }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(effectiveDate)) {
+      setError("Enter the effective date printed inside the price list.");
+      return;
+    }
     const items = [];
     for (const [i, r] of rows.entries()) {
       const name = r.name.trim();
@@ -314,6 +321,8 @@ export function IngestClient() {
           zip,
           homeName: homeName.trim(),
           ...(sourceUrl.trim() ? { sourceUrl: sourceUrl.trim() } : {}),
+          effectiveDate,
+          ...(stillCurrent.trim() ? { stillCurrent: stillCurrent.trim() } : {}),
           ...(statedTotalCents != null ? { statedTotalCents } : {}),
           items,
         }),
@@ -344,6 +353,8 @@ export function IngestClient() {
     setText("");
     setHomeName("");
     setSourceUrl("");
+    setEffectiveDate("");
+    setStillCurrent("");
     setRows(null);
     setStatedTotalCents(null);
     setExtractionMethod(null);
@@ -638,6 +649,35 @@ export function IngestClient() {
                 placeholder="https://…"
                 value={sourceUrl}
                 onChange={(e) => setSourceUrl(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label
+                htmlFor="ingest-effective"
+                hint="the date printed inside the document"
+              >
+                Effective date
+              </Label>
+              <Input
+                id="ingest-effective"
+                type="date"
+                value={effectiveDate}
+                onChange={(e) => setEffectiveDate(e.target.value)}
+                required
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <Label
+                htmlFor="ingest-still-current"
+                hint={`only for a list more than ${MAX_LIST_AGE_MONTHS} months old`}
+              >
+                Confirmed still current? (how and when)
+              </Label>
+              <Input
+                id="ingest-still-current"
+                placeholder="e.g. Home confirmed by phone on 2026-10-02"
+                value={stillCurrent}
+                onChange={(e) => setStillCurrent(e.target.value)}
               />
             </div>
             <div className="sm:col-span-3 flex items-center gap-3">

@@ -123,12 +123,16 @@ const GPL_TEXT = [
   "Call us at (801) 555-0142 or office@example-home.com",
 ].join("\n");
 
+// A list printed a month ago: well inside the 24-month age limit.
+const RECENT = new Date(Date.now() - 30 * 86_400_000).toISOString().slice(0, 10);
+
 function validSave(extra: Record<string, unknown> = {}) {
   return {
     action: "save",
     text: GPL_TEXT,
     zip: "84101",
     homeName: "Example Fictional Home",
+    effectiveDate: RECENT,
     items: [
       { name: "Basic services fee", cents: 219500, matchedItemId: basic.id },
       { name: "Embalming", cents: 89500, matchedItemId: "embalming" },
@@ -350,6 +354,51 @@ describe("POST /api/admin/ingest-gpl — parse", () => {
     );
     const res = await post({ action: "parse", text: GPL_TEXT });
     expect((await res.json()).statedTotalCents).toBeNull();
+  });
+});
+
+describe("POST /api/admin/ingest-gpl — save: the printed date and the 24-month hold", () => {
+  it("rejects a save without the printed effective date", async () => {
+    const calls = scriptSvc([]);
+    const { effectiveDate: _omit, ...noDate } = validSave();
+    void _omit;
+    const res = await post(noDate);
+    expect(res.status).toBe(400);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("rejects an effective date in the future", async () => {
+    const calls = scriptSvc([]);
+    const res = await post(validSave({ effectiveDate: "2999-01-01" }));
+    expect(res.status).toBe(400);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("holds a list more than 24 months old and writes nothing", async () => {
+    const calls = scriptSvc([]);
+    const res = await post(validSave({ effectiveDate: "2019-01-01" }));
+    expect(res.status).toBe(422);
+    expect((await res.json()).error).toMatch(/^Held: printed 2019-01-01/);
+    expect(calls).toHaveLength(0);
+  });
+
+  it("saves an old list once the home's confirmation is recorded", async () => {
+    const calls = scriptSvc([{ data: { id: "analysis-old" }, error: null }]);
+    const res = await post(
+      validSave({
+        effectiveDate: "2019-01-01",
+        stillCurrent: "Home confirmed by phone on 2026-10-02",
+      }),
+    );
+    expect(res.status).toBe(200);
+    expect(calls[0].table).toBe("price_list_analyses");
+  });
+
+  it("rejects a confirmation that says nothing", async () => {
+    const calls = scriptSvc([]);
+    const res = await post(validSave({ effectiveDate: "2019-01-01", stillCurrent: "yes" }));
+    expect(res.status).toBe(400);
+    expect(calls).toHaveLength(0);
   });
 });
 
