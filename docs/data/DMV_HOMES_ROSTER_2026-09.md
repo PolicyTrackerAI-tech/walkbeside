@@ -11,6 +11,8 @@ this. The DC detail, with price-list links and conflicts, is in
 |---|---|---|
 | [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **112 homes**: 33 DC, 49 MD, 30 VA |
 | [`supabase/seed/gpl/dmv/john-t-rhines-2026.json`](../../supabase/seed/gpl/dmv/john-t-rhines-2026.json) | John T. Rhines Funeral Home (DC), GPL effective 2026-02-01, reviewed line by line | 34 lines, **15 benchmark observations** |
+| [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) | The scoreboard: one row per home, with its benchmark area, price-list status and vetting checkboxes | 112 rows: 1 reviewed, 12 with a list link, 60 with a site to check, 39 with no site known |
+| [`GPL_REQUEST_EMAIL.md`](GPL_REQUEST_EMAIL.md) | The founder-sent request (email, one follow-up, phone) for homes that don't post their list | |
 
 By area: DC 33 (of the ~38 the DC Attorney General counted) · Prince George's and Calvert 25 · Montgomery 16 · Loudoun,
 Prince William and Fauquier 11 · Fairfax 10 · Southern Maryland (Charles,
@@ -111,3 +113,14 @@ judgment call. The main ones:
 
 The one-at-a-time alternative, `/admin/ingest-gpl`, writes exactly the same
 rows.
+
+## The tracker
+
+[`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) is
+the working scoreboard. Open it in any spreadsheet. `gpl_status` moves
+`no_site_known` / `site_check` → `link_found` or `requested` → `reviewed`
+(or `none_available` after a "no"). `benchmark_area` is the label the
+benchmark pipeline groups by, so counting `reviewed` rows per area shows
+how close each area is to the n≥5 promotion bar. CI keeps the tracker in
+step with the roster (one row per home) and with the committed price lists
+(each one marked `reviewed` with its printed effective date).

@@ -54,3 +54,44 @@ describe("supabase/seed/dmv-homes.draft.csv", () => {
     expect(rows.filter((r) => !/UNVERIFIED/.test(r.notes)).map((r) => r.name)).toEqual([]);
   });
 });
+
+describe("supabase/seed/dmv-tracker.csv stays in step with the roster and the reviewed price lists", () => {
+  const read = (p: string) => parseCsv(readFileSync(join(process.cwd(), p), "utf8"));
+  const roster = read("supabase/seed/dmv-homes.draft.csv");
+  const tracker = read("supabase/seed/dmv-tracker.csv");
+  const key = (r: Record<string, string>) => `${r.name.toLowerCase()}|${r.zip}`;
+
+  it("has exactly one row per roster home", () => {
+    expect(tracker.map(key).sort()).toEqual(roster.map(key).sort());
+  });
+
+  it("uses only known statuses, and each row's area is its zip's benchmark label", async () => {
+    const { regionForZip } = await import("@/lib/zip-regions");
+    const statuses = new Set(["reviewed", "link_found", "site_check", "no_site_known", "requested", "none_available"]);
+    for (const r of tracker) {
+      expect(statuses.has(r.gpl_status), `${r.name}: ${r.gpl_status}`).toBe(true);
+      expect(r.benchmark_area, r.name).toBe(regionForZip(r.zip)?.metro);
+    }
+  });
+
+  it("every reviewed price list in supabase/seed/gpl is marked reviewed for its home", async () => {
+    const { readdirSync, statSync } = await import("node:fs");
+    const files: string[] = [];
+    const walk = (d: string) => {
+      for (const n of readdirSync(d)) {
+        const p = join(d, n);
+        if (statSync(p).isDirectory()) walk(p);
+        else if (n.endsWith(".json")) files.push(p);
+      }
+    };
+    walk(join(process.cwd(), "supabase/seed/gpl"));
+    const byKey = new Map(tracker.map((r) => [key(r), r]));
+    for (const f of files) {
+      const rec = JSON.parse(readFileSync(f, "utf8")) as { homeName: string; zip: string; effectiveDate: string };
+      const row = byKey.get(`${rec.homeName.toLowerCase()}|${rec.zip}`);
+      expect(row, `${rec.homeName} has no tracker row`).toBeDefined();
+      expect(row?.gpl_status).toBe("reviewed");
+      expect(row?.gpl_effective).toBe(rec.effectiveDate);
+    }
+  });
+});
