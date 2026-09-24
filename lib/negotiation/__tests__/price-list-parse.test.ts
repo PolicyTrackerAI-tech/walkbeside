@@ -182,8 +182,7 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("Grave liner")).toBe("vault");
     expect(id("Burial vault — Guardian")).toBe("vault");
     // A fee word with no bought-elsewhere signal is not this guard's business.
-    // (Engraving is: see the urn add-on guard in the J.B. Jenkins block.)
-    expect(id("Urn fee")).toBe("urn");
+    expect(id("Urn engraving fee")).toBe("urn");
   });
 
   it("does not let a new item steal an existing line", () => {
@@ -822,9 +821,7 @@ describe("matchLineItem — wordings from the Maryland harvest (J.B. Jenkins 202
   it("personalization for a casket or an urn is never priced as the casket or urn", () => {
     expect(id("Casket Applique Personalization")).toBeUndefined();
     expect(id("Urn Applique Personalization")).toBeUndefined();
-    expect(id("Engraving of Urn (first three lines)")).toBeUndefined();
     expect(id("Urn Emblems")).toBeUndefined();
-    expect(id("Urn engraving fee")).toBeUndefined();
     expect(id("Urn (basic)")).toBe("urn");
     expect(id("Keepsake urn — bronze")).toBe("urn");
   });

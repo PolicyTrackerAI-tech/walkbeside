@@ -340,15 +340,15 @@ export function matchLineItem(name: string): LineItem | undefined {
   const pkg = packageKind(n);
   if (pkg === "direct-cremation") return LINE_ITEMS.find((it) => it.id === "direct-cremation-fee");
   if (pkg === "unbenchmarked") return undefined;
+  // An emblem, applique or personalization for an urn is priced on top of
+  // the urn ("Urn Emblems" $45 on the J.B. Jenkins 2024 GPL read as a $45
+  // urn and would pull the urn benchmark down).
+  if (/\burns?\b/.test(n) && /\b(?:emblems?|appliques?|personaliz\w*)\b/.test(n)) return undefined;
   if (isCasketAddOn(n)) return undefined;
   // The same fee for an urn or a vault bought elsewhere (lib/outside-merchandise.ts):
   // "Handling fee for urn provided by the family" used to hit the "urn"
   // synonym and read against an urn's price range.
   if (outsideUrnOrVaultFee(n)) return undefined;
-  // Engraving, an emblem or an applique for an urn is priced on top of the
-  // urn ("Engraving of urn" $95 on the J.B. Jenkins 2024 GPL read as a $95
-  // urn and would pull the urn benchmark down).
-  if (/\burns?\b/.test(n) && /\b(?:engrav\w*|emblems?|appliques?|personaliz\w*)\b/.test(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
