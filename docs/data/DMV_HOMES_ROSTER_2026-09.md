@@ -121,6 +121,9 @@ the working scoreboard. Open it in any spreadsheet. `gpl_status` moves
 `no_site_known` / `site_check` → `link_found` or `requested` → `reviewed`
 (or `none_available` after a "no"). `benchmark_area` is the label the
 benchmark pipeline groups by, so counting `reviewed` rows per area shows
-how close each area is to the n≥5 promotion bar. CI keeps the tracker in
+how close each area is to the n≥5 promotion bar. Some areas can't get
+there alone (Arlington has three homes): see
+[`BENCHMARK_AREA_POOLING_DECISION.md`](BENCHMARK_AREA_POOLING_DECISION.md).
+CI keeps the tracker in
 step with the roster (one row per home) and with the committed price lists
 (each one marked `reviewed` with its printed effective date).

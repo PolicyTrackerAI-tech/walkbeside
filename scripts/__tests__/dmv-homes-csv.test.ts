@@ -65,12 +65,14 @@ describe("supabase/seed/dmv-tracker.csv stays in step with the roster and the re
     expect(tracker.map(key).sort()).toEqual(roster.map(key).sort());
   });
 
-  it("uses only known statuses, and each row's area is its zip's benchmark label", async () => {
-    const { regionForZip } = await import("@/lib/zip-regions");
+  it("uses only known statuses, and each row's area is its zip's benchmark area", async () => {
+    // The area the pipeline groups by: the zip-regions label, or its pool
+    // once pooling is on (docs/data/BENCHMARK_AREA_POOLING_DECISION.md).
+    const { benchmarkAreaForZip } = await import("@/lib/benchmark-areas");
     const statuses = new Set(["reviewed", "link_found", "site_check", "no_site_known", "requested", "none_available"]);
     for (const r of tracker) {
       expect(statuses.has(r.gpl_status), `${r.name}: ${r.gpl_status}`).toBe(true);
-      expect(r.benchmark_area, r.name).toBe(regionForZip(r.zip)?.metro);
+      expect(r.benchmark_area, r.name).toBe(benchmarkAreaForZip(r.zip));
     }
   });
 

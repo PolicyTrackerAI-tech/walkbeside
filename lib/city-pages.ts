@@ -10,7 +10,11 @@
  * funeral-home directory expands.
  */
 
-import { regionForZip } from "./zip-regions";
+import {
+  BENCHMARK_AREA_POOLS,
+  benchmarkAreaForZip,
+  type AreaPools,
+} from "./benchmark-areas";
 
 export interface CityEntry {
   /** URL slug, e.g. "atlanta" (no state suffix unless disambiguation needed). */
@@ -359,14 +363,18 @@ export function listCitySlugs(): string[] {
 }
 
 /**
- * City pages whose representative zip sits in the given zip-regions metro —
- * i.e. the public pages that render that metro's pricing. Used by the
+ * City pages whose representative zip sits in the given benchmark area (a
+ * zip-regions metro label, or a pool of them: lib/benchmark-areas.ts) —
+ * i.e. the public pages that render that area's pricing. Used by the
  * benchmark promote endpoint to revalidate exactly the city pages a
- * promotion changes (metro labels match exactly, same as
+ * promotion changes (labels match exactly, same as
  * lib/benchmarks-store.ts lookups).
  */
-export function citySlugsForMetro(metro: string): string[] {
-  return CITIES.filter((c) => regionForZip(c.zipExample)?.metro === metro).map(
-    (c) => c.slug,
-  );
+export function citySlugsForMetro(
+  metro: string,
+  pools: AreaPools = BENCHMARK_AREA_POOLS,
+): string[] {
+  return CITIES.filter(
+    (c) => benchmarkAreaForZip(c.zipExample, pools) === metro,
+  ).map((c) => c.slug);
 }

@@ -32,7 +32,7 @@
  */
 
 import { LINE_ITEMS, regionMultiplier } from "./pricing-data";
-import { regionForZip } from "./zip-regions";
+import { BENCHMARK_AREA_POOLS, benchmarkAreaForZip, type AreaPools } from "./benchmark-areas";
 import { SMALL_SAMPLE_THRESHOLD } from "./partner-report";
 
 /** The slice of a stored analysis this pipeline needs. */
@@ -93,7 +93,10 @@ export interface OutreachQuoteRecord {
 export interface GroupStats {
   itemId: string;
   itemName: string;
-  /** "national" or a metro label from zip-regions. */
+  /**
+   * "national" or a benchmark area: a zip-regions metro label, or the name of
+   * a pool of them (lib/benchmark-areas.ts).
+   */
   region: string;
   n: number;
   /** Observed per-item prices in NATIONAL-normalized cents (per-unit items raw per-each). */
@@ -145,6 +148,7 @@ interface Bucket {
 function collectObservations(
   analyses: AnalysisRecord[],
   outreach: OutreachQuoteRecord[],
+  pools: AreaPools,
 ): Map<string, Bucket> {
   // observation buckets: `${itemId}|${region}` -> normalized cents[]
   const buckets = new Map<string, Bucket>();
@@ -159,7 +163,7 @@ function collectObservations(
 
   for (const rec of analyses) {
     const zip = (rec.zip ?? "").trim();
-    const metro = zip ? regionForZip(zip)?.metro : undefined;
+    const metro = zip ? benchmarkAreaForZip(zip, pools) : undefined;
     for (const item of rec.items ?? []) {
       if (!item.matchedItemId || item.isRange || !item.cents || item.cents <= 0)
         continue;
@@ -195,7 +199,7 @@ function collectObservations(
 
   for (const rec of outreach) {
     const zip = (rec.zip ?? "").trim();
-    const metro = zip ? regionForZip(zip)?.metro : undefined;
+    const metro = zip ? benchmarkAreaForZip(zip, pools) : undefined;
     for (const item of rec.items ?? []) {
       if (!item.lineItemId || !item.cents || item.cents <= 0) continue;
       const def = LINE_ITEMS.find((l) => l.id === item.lineItemId);
@@ -284,8 +288,11 @@ function summarize(
   );
 }
 
-export function aggregateBenchmarks(records: AnalysisRecord[]): GroupStats[] {
-  return summarize(collectObservations(records, []), false);
+export function aggregateBenchmarks(
+  records: AnalysisRecord[],
+  pools: AreaPools = BENCHMARK_AREA_POOLS,
+): GroupStats[] {
+  return summarize(collectObservations(records, [], pools), false);
 }
 
 /**
@@ -296,8 +303,9 @@ export function aggregateBenchmarks(records: AnalysisRecord[]): GroupStats[] {
 export function aggregateAllBenchmarks(
   analyses: AnalysisRecord[],
   outreach: OutreachQuoteRecord[],
+  pools: AreaPools = BENCHMARK_AREA_POOLS,
 ): GroupStats[] {
-  return summarize(collectObservations(analyses, outreach), true);
+  return summarize(collectObservations(analyses, outreach, pools), true);
 }
 
 /**

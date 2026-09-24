@@ -173,6 +173,11 @@ first emails, setup checklist)._
 - **Legal.** The counsel redline for every wording change, and the DC
   CPPA claims re-audit, which narrowed five overbroad claims. Both are in
   the counsel packet.
-- **Data.** A draft DC roster: 21 homes, 6 direct price-list links, and
-  import-ready rows (`docs/data/DC_ROSTER_2026-09.md`).
+- **Data.** A 112-home DMV roster (33 DC, 49 MD, 30 VA) and the first
+  reviewed DC price list, loadable in two commands
+  (`docs/data/DMV_HOMES_ROSTER_2026-09.md`); a per-home tracker
+  (`supabase/seed/dmv-tracker.csv`); the founder's price-list request
+  email (`docs/data/GPL_REQUEST_EMAIL.md`); and a decision to make by
+  ~11/1 on pooling thin areas like Arlington, with the code built and off
+  (`docs/data/BENCHMARK_AREA_POOLING_DECISION.md`).
 - **Sales.** The week-one kit.

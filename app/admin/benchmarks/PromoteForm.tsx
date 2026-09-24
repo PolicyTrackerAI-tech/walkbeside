@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input, Label, Select, Textarea } from "@/components/ui/Field";
-import { ZIP_REGIONS } from "@/lib/zip-regions";
+import { benchmarkAreaLabels } from "@/lib/benchmark-areas";
 
-// benchmarksForZip matches metro scope_values against zip-regions labels
+// benchmarksForZip matches metro scope_values against benchmark-area labels
 // EXACTLY — a typo'd free-text label would publish a row no lookup ever hits
-// (a silent miss). The dropdown is built once from the same table the store
-// reads, so whatever the founder picks is a label lookups can actually match.
-const METRO_OPTIONS = Array.from(
-  new Set(Object.values(ZIP_REGIONS).map((r) => r.metro)),
-).sort((a, b) => a.localeCompare(b));
+// (a silent miss). The dropdown is built once from the same mapping the store
+// reads (zip-regions labels, with any active pools applied), so whatever the
+// founder picks is a label lookups can actually match.
+const METRO_OPTIONS = benchmarkAreaLabels();
 
 /**
  * Inline promote-to-data-tier form for one sufficient metro group on
