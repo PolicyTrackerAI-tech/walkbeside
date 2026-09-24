@@ -55,6 +55,18 @@ first.
 | 20 | Rollins Funeral Home, Inc. | ⚠ listings conflict: 4339 Hunt Pl NE (20019) or 5732 Georgia Ave NW (Snead's address) | (202) 399-2388 | ☎ | Confirm it still operates, and where. |
 | 21 | J.B. Jenkins Funeral Home, Inc. | ⚠ BBB lists 716 Kennedy St NW (Johnson & Jenkins' address); the site now says Hyattsville, MD | (202) 882-8800 | 📄 jbjenkinsfuneralhome.com/services/pricing-and-policies | Probably the same firm as #18, now in Maryland. If so, it moves to the Prince George's list. |
 
+**Added 2026-09-24 (second pass), all in the import file:** Capitol
+Mortuary Inc. (1425 Maryland Ave NE), Kendal Wade Funeral Home and
+Cremations (814 Upshur St NW, the same address as Hackett's; confirm whether
+it succeeded Hackett's), Dunn & Sons Funeral Service (5635 Eads St NE), and
+Whitney's Life Centers (1515 Kenilworth Ave NE). Also added, but **found
+only in directory listings** (confirm with DLCP; some may be closed):
+Blount (4804 Georgia Ave NW), Young (719 Kennedy St NW), Universal Mortuary
+(411 Kennedy St NW), Harrison & Son (3449 14th St NW), Echelon Avant Garde
+(3457 14th St NW), Watson's (3435 14th St NW), Columbia Heights
+(3605 14th St NW), Tri-State (912 3rd St NW), Hall Brothers
+(621 Florida Ave NW), and B.K. Henry (420 H St NE). DC total: 33 of ~38.
+
 **Probably closed or not a DC establishment (confirm with DLCP, then drop):**
 
 - **Frazier Funeral Home**, 389 Rhode Island Ave NW. Founded 1917. Howard

@@ -9,19 +9,21 @@ this. The DC detail, with price-list links and conflicts, is in
 
 | File | What | Count |
 |---|---|---|
-| [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **100 homes**: 21 DC, 49 MD, 30 VA |
+| [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **112 homes**: 33 DC, 49 MD, 30 VA |
 | [`supabase/seed/gpl/dmv/john-t-rhines-2026.json`](../../supabase/seed/gpl/dmv/john-t-rhines-2026.json) | John T. Rhines Funeral Home (DC), GPL effective 2026-02-01, reviewed line by line | 34 lines, **15 benchmark observations** |
 
-By area: Prince George's and Calvert 25 · DC 21 · Montgomery 16 · Loudoun,
+By area: DC 33 (of the ~38 the DC Attorney General counted) · Prince George's and Calvert 25 · Montgomery 16 · Loudoun,
 Prince William and Fauquier 11 · Fairfax 10 · Southern Maryland (Charles,
 St. Mary's) 8 · Alexandria 6 · Arlington 3. Chains are marked in each row's
-notes (13 SCI / Dignity Memorial, 2 Carriage Services).
+notes (13 SCI / Dignity Memorial, 2 Carriage Services). Ten DC rows
+were found only in directory listings and say so; confirm those with DLCP
+first, since some may be closed or may share a building with another home.
 
 **What this is not.** Every home row is a **web-search lead**, not a
 verified record. This environment could not open the homes' own sites, so
 no address, phone or website has been checked at the source. Emails are
 blank on purpose: a home without an email imports but can never be
-contacted until you add a confirmed one in `/admin/vetting`. 16 rows carry a
+contacted until you add a confirmed one in `/admin/vetting`. 27 rows carry a
 specific "confirm" flag in their notes (shared addresses, conflicting
 listings, or a second location).
 
