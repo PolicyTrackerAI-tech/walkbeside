@@ -542,7 +542,7 @@ export function Analyzer({
             </h1>
             <p className="text-ink-soft">
               {aheadMode
-                ? "Upload a photo of a General Price List, or type the line items in. Any funeral home must give you its price list when you ask — that’s a federal FTC rule, and asking now, before anything is urgent, is exactly how you compare homes on your terms."
+                ? "Upload a photo of a General Price List, or type the line items in. Any funeral home must give you its price list when you ask in person, and must tell you its prices over the phone — that’s a federal FTC rule, and asking now, before anything is urgent, is exactly how you compare homes on your terms."
                 : "Upload a photo of the General Price List they handed you, or type the line items in. We’ll match each one to fair-market ranges for your region and flag likely FTC Funeral Rule problems — the most common violations and upsells."}
             </p>
             {aheadMode ? (

@@ -68,7 +68,7 @@ export const CITIES: CityEntry[] = [
     zipPrefix: "200",
     zipExample: "20001",
     blurb:
-      "Washington-area funeral costs run above the national average, reflecting the regional cost of living.",
+      "Our Washington-area ranges are modeled above the national average, reflecting the regional cost of living.",
   },
   // Southeast
   {

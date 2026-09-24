@@ -80,8 +80,8 @@ function HowFairRangesWork() {
           <strong className="text-ink">
             Grounded in the FTC Funeral Rule.
           </strong>{" "}
-          Every funeral home must provide an itemized General Price List on
-          request. Those real GPLs are what move a metro from Modeled ranges
+          Every funeral home must hand an itemized General Price List to anyone
+          who asks in person. Those real GPLs are what move a metro from Modeled ranges
           to Verified ones; until an item crosses that bar, it stays on the
           national baseline. How every range is built:{" "}
           <Link href="/methodology" className="text-primary-deep underline">

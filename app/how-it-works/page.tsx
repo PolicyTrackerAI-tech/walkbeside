@@ -38,7 +38,7 @@ function buildSteps(signedIn: boolean): { n: number; title: string; body: React.
     n: 1,
     title: "We find vetted funeral homes near you.",
     body:
-      "You tell us your area and how far you'd travel; we line up the nearby homes we've personally vetted — only vetted homes are ever contacted. Nothing goes out until you've given written authorization, and you see every home on the list, by name, on your case page.",
+      "You tell us your area and how far you'd travel; we line up the nearby homes we've personally vetted — only vetted homes are ever contacted. Vetting means we've checked that each is a licensed, operating funeral home with a current email, not a broker or directory listing; it isn't a rating or a recommendation. Nothing goes out until you've given written authorization, and you see every home on the list, by name, on your case page.",
   },
   {
     n: 2,
