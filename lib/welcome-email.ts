@@ -67,6 +67,16 @@ const SOURCE_CONTENT: Record<string, SourceInfo> = {
   },
 };
 
+/**
+ * The `source` a signup row stores: a known capture surface, or "other".
+ * The column is free text from an anonymous request, and (email, source) is
+ * the table's unique key, so an unbounded source let one address be signed
+ * up, and welcomed, without limit (audit A1-07).
+ */
+export function signupSource(raw: string): string {
+  return Object.hasOwn(SOURCE_CONTENT, raw) ? raw : "other";
+}
+
 const FALLBACK: SourceInfo = {
   title: "Your Honest Funeral guide",
   path: "/guides",

@@ -23,13 +23,12 @@ export interface AttachmentSummary {
 }
 
 /** The payload as stored: identical, except attachment bytes are removed. */
-export function withoutAttachmentBytes<T extends { Attachments?: unknown }>(
-  payload: T,
-): T {
-  if (!Array.isArray(payload.Attachments)) return payload;
+export function withoutAttachmentBytes<T extends object>(payload: T): T {
+  const attachments = (payload as { Attachments?: unknown }).Attachments;
+  if (!Array.isArray(attachments)) return payload;
   return {
     ...payload,
-    Attachments: payload.Attachments.map((a) => {
+    Attachments: attachments.map((a) => {
       if (typeof a !== "object" || a === null) return a;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars -- dropping the bytes is the point
       const { Content, ...rest } = a as InboundAttachment;
@@ -39,11 +38,10 @@ export function withoutAttachmentBytes<T extends { Attachments?: unknown }>(
 }
 
 /** Name, type and size of each attachment, for the founder alert. */
-export function summarizeAttachments(payload: {
-  Attachments?: unknown;
-}): AttachmentSummary[] {
-  if (!Array.isArray(payload.Attachments)) return [];
-  return payload.Attachments.filter(
+export function summarizeAttachments(payload: object): AttachmentSummary[] {
+  const attachments = (payload as { Attachments?: unknown }).Attachments;
+  if (!Array.isArray(attachments)) return [];
+  return attachments.filter(
     (a): a is InboundAttachment => typeof a === "object" && a !== null,
   ).map((a) => ({
     name: typeof a.Name === "string" ? a.Name.slice(0, 200) : "(unnamed)",

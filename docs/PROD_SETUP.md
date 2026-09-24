@@ -156,6 +156,12 @@ secret must be present at build (Vercel env vars cover build + runtime) —
 setting or rotating it requires a redeploy, and pages rendered under an old
 value degrade to the default brand card (never an error) until rebuilt.
 
+### Optional (sign-up abuse signal)
+`IP_HASH_SECRET` — any long random string. Keys the one-way hash of the
+client IP stored with an email sign-up (`planning_signups.ip_hash`, audit
+A8-07). Unset means no IP hash is stored at all; a plain unkeyed hash is
+never stored. Rotating it only changes future hashes.
+
 ### Optional (reply pipeline — can wait past v1)
 `POSTMARK_INBOUND_USER`, `POSTMARK_INBOUND_SECRET` (funeral-home reply relay),
 `OUTREACH_POSTAL_ADDRESS` (overrides the CAN-SPAM footer address).
