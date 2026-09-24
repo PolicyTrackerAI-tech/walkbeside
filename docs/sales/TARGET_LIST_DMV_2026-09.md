@@ -91,8 +91,26 @@ already imports._
    section.
 3. **Integrity screen (never pitch):** for every Tier 1 name, search DOJ
    (justice.gov, D. Md. / E.D. Va. / D.D.C. U.S. Attorney releases) and the
-   OIG exclusion list for FCA settlements or exclusions. **This screen has
-   not been run for the DMV names above.** The Utah list's "Summit Hospice"
-   rule applies: a recent FCA settlement means skip.
+   OIG exclusion list for FCA settlements or exclusions. The Utah list's
+   "Summit Hospice" rule applies: a recent FCA settlement means skip.
+
+   **First pass, 2026-09-24 (web search of justice.gov and oig.hhs.gov
+   releases; the LEIE exclusion database itself was not reachable):**
+
+   | Name | FCA settlement or DOJ action found |
+   |---|---|
+   | Montgomery Hospice & Prince George's Hospice | None |
+   | JSSA Hospice | None |
+   | Hospice of the Chesapeake | None |
+   | Holy Cross Home Care and Hospice | None for the hospice (a 2001 DOJ release about seven hospitals is unrelated to hospice and 25 years old) |
+   | Goodwin Hospice | None |
+   | Capital Caring Health (Tier 3) | None |
+   | VITAS (Tier 3 chain) | **Yes**: DOJ's False Claims Act suit against Chemed/VITAS, the largest for-profit hospice chain, which serves Virginia and DC |
+   | Kindred at Home / Gentiva (not on the list) | **Yes**: $19.4M settlement over ineligible hospice patients |
+
+   No Tier 1 name trips the skip rule. **Still to do before outreach:**
+   search each Tier 1 name in the OIG LEIE (oig.hhs.gov/exclusions, which
+   was not reachable here). A web search can miss a release, so treat
+   "None" as "none found."
 4. **Conflicts:** give the lead law firm this list before its scoping call
    (see `docs/COUNSEL_SHORTLIST_DMV_2026-09.md`).
