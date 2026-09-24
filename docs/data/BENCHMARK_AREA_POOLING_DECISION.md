@@ -15,7 +15,7 @@ zip. Several DC-metro labels are too small to get there reliably:
 | Area (zip3) | Homes on the roster | At half of them sharing a list |
 |---|---|---|
 | Washington DC (200–205) | 34 | 17 |
-| Prince George's County (207) | 28 | 14 |
+| Prince George's County (207) | 27 | 13 |
 | Northern VA (Loudoun/Manassas/Reston) (201) | 15 | 7 |
 | Southern Maryland (206) | 15 | 7 |
 | Bethesda/Rockville (208) | 14 | 7 |

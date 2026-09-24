@@ -9,14 +9,14 @@ this. The DC detail, with price-list links and conflicts, is in
 
 | File | What | Count |
 |---|---|---|
-| [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **134 homes**: 34 DC, 62 MD, 38 VA |
+| [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **133 homes**: 34 DC, 61 MD, 38 VA |
 | [`supabase/seed/gpl/dmv/john-t-rhines-2026.json`](../../supabase/seed/gpl/dmv/john-t-rhines-2026.json) | John T. Rhines Funeral Home (DC), GPL effective 2026-02-01, reviewed line by line | 34 lines, **15 benchmark observations** |
 | [`stewart-2024.json`](../../supabase/seed/gpl/dmv/stewart-2024.json), [`jb-jenkins-2024.json`](../../supabase/seed/gpl/dmv/jb-jenkins-2024.json) | Stewart Funeral Home (DC, effective 2024-07-15) and J.B. Jenkins (MD, 2024-08-08), reviewed but **held**: each is more than 24 months old, so it loads only once the home confirms it is still current (below) | 13 and 17 benchmark observations |
-| [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) | The scoreboard: one row per home, with its benchmark area, price-list status and vetting checkboxes | 134 rows: 1 reviewed, 2 reviewed but held, 15 with a list link, 79 with a site to check, 37 with no site known |
+| [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) | The scoreboard: one row per home, with its benchmark area, price-list status and vetting checkboxes | 133 rows: 1 reviewed, 2 reviewed but held, 15 with a list link, 79 with a site to check, 36 with no site known |
 | [`GPL_REQUEST_EMAIL.md`](GPL_REQUEST_EMAIL.md) | The founder-sent request (email, one follow-up, phone) for homes that don't post their list | |
 
 By benchmark area: Washington DC 34 (of the ~38 the DC Attorney General
-counted) · Prince George's County 28 · Northern VA (Loudoun/Manassas/Reston)
+counted) · Prince George's County 27 · Northern VA (Loudoun/Manassas/Reston)
 15 · Southern Maryland 15 · Bethesda/Rockville 14 · Alexandria 8 · Fairfax
 County 6 · McLean/Vienna/Woodbridge 6 · Silver Spring/Takoma Park 5 ·
 Arlington 3. Chains are marked in each row's notes (14 SCI / Dignity
@@ -28,7 +28,7 @@ first, since some may be closed or may share a building with another home.
 verified record. This environment could not open the homes' own sites, so
 no address, phone or website has been checked at the source. Emails are
 blank on purpose: a home without an email imports but can never be
-contacted until you add a confirmed one in `/admin/vetting`. 52 rows carry a
+contacted until you add a confirmed one in `/admin/vetting`. 40 rows carry a
 specific thing to confirm in their notes, beyond the standard license and
 email check: shared addresses, conflicting listings, directory-only finds,
 and cremation providers that must hold their own establishment license
@@ -148,3 +148,8 @@ CI keeps the tracker in
 step with the roster (one row per home) and with the committed price lists
 (each one marked `reviewed`, or `held_stale` when the loader holds it,
 with its printed effective date).
+
+**Removed 2026-09-24:** Gary L. Kaufman Funeral Home at Meadowridge. The
+roster had it at Donaldson's Laurel address; it is at Meadowridge Memorial
+Park in Elkridge (21075), outside the DC-metro market. CI now requires every
+row that shares a street address with another to say so in its notes.

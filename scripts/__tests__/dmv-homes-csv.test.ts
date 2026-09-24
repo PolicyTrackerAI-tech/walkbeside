@@ -53,6 +53,32 @@ describe("supabase/seed/dmv-homes.draft.csv", () => {
   it("every row says it is an unverified lead", () => {
     expect(rows.filter((r) => !/UNVERIFIED/.test(r.notes)).map((r) => r.name)).toEqual([]);
   });
+
+  it("every row that shares a street address with another says so in its notes", () => {
+    // Two names at one address are often one licensed establishment (a
+    // rebrand, a cremation brand, a successor). Vetting must see it on both
+    // rows, never on just one.
+    const addressKey = (r: Record<string, string>) =>
+      `${r.address
+        .toLowerCase()
+        .replace(/\bstreet\b/g, "st")
+        .replace(/\broad\b/g, "rd")
+        .replace(/\bavenue\b/g, "ave")
+        .replace(/[^a-z0-9 ]/g, "")
+        .replace(/\s+(?:ste|suite)\s*\S+$/, "")
+        .trim()}|${r.zip}`;
+    const byAddress = new Map<string, Array<Record<string, string>>>();
+    for (const r of rows.filter((r) => r.address)) {
+      byAddress.set(addressKey(r), [...(byAddress.get(addressKey(r)) ?? []), r]);
+    }
+    const said = /same (?:street )?address|same building|lists the same|address shared|give the same address/i;
+    const silent = [...byAddress.values()]
+      .filter((group) => group.length > 1)
+      .flat()
+      .filter((r) => !said.test(r.notes))
+      .map((r) => r.name);
+    expect(silent).toEqual([]);
+  });
 });
 
 describe("supabase/seed/dmv-tracker.csv stays in step with the roster and the reviewed price lists", () => {
