@@ -279,3 +279,84 @@ describe("FTC engine — expansion rules (2026-06-26)", () => {
     });
   });
 });
+
+describe("urn-vault-handling-fee", () => {
+  it("flags a priced fee for an urn or vault bought elsewhere as a violation, on that line", () => {
+    for (const [name, what] of [
+      ["Handling fee for urn provided by the family", "an urn"],
+      ["Outside urn handling fee (urn purchased elsewhere)", "an urn"],
+      ["Third-party urn acceptance charge", "an urn"],
+      ["Outside vault handling fee (vault purchased elsewhere)", "a burial vault"],
+      ["Outer burial container provided by family — handling charge", "a burial vault"],
+      ["Grave liner not purchased from us — surcharge", "a burial vault"],
+    ] as const) {
+      const d = fire(`${name} $295`, [{ name, cents: 29500 }]);
+      const hit = d.find((x) => x.ruleId === "urn-vault-handling-fee");
+      expect(hit?.severity, name).toBe("violation");
+      expect(hit?.evidence, name).toBe(name);
+      expect(hit?.title, name).toBe(`A fee for using ${what} bought elsewhere`);
+    }
+  });
+
+  it("stays silent on real services, pass-throughs, waived fees, and plain merchandise", () => {
+    for (const [name, cents] of [
+      ["Urn handling fee", 9500], // no bought-elsewhere signal: could be mailing
+      ["Vault handling", 25000], // no bought-elsewhere signal: could be setting
+      ["Shipping of cremated remains in family-provided urn — fee", 9500],
+      ["Vault installation fee (vault purchased elsewhere)", 45000],
+      ["Cemetery charge for outside vault (cash advance)", 30000],
+      ["No fee for urns purchased elsewhere", 0],
+      ["Outside urn handling fee waived", 0],
+      ["Outside urns accepted without charge", 50000],
+      ["Urn (basic)", 15000],
+      ["Burial vault — Guardian", 239500],
+    ] as const) {
+      const d = fire(`${name} $${cents / 100}`, [{ name, cents }]);
+      expect(ids(d), name).not.toContain("urn-vault-handling-fee");
+    }
+  });
+
+  it("leaves a line casket-handling-fee flags to it (one card per line)", () => {
+    const name = "Handling fee for caskets or urns purchased elsewhere";
+    const d = fire(`${name} $495`, [{ name, cents: 49500 }]);
+    expect(ids(d)).toContain("casket-handling-fee");
+    expect(ids(d)).not.toContain("urn-vault-handling-fee");
+  });
+
+  it("a mixed casket-and-urn line gets exactly one violation card, never zero", () => {
+    // Review finding: this line used to fall between the two rules. The casket
+    // rule now recognizes "customer-provided", so it takes the line alone.
+    const name = "Acceptance charge for customer-provided casket and urn";
+    const d = fire(`${name} $495`, [{ name, cents: 49500 }]);
+    expect(sev(d, "casket-handling-fee")).toBe("violation");
+    expect(ids(d)).not.toContain("urn-vault-handling-fee");
+  });
+});
+
+describe("casket-handling-fee — wider bought-elsewhere phrasings", () => {
+  it("flags customer-, purchaser-, and family-provided casket fees", () => {
+    for (const name of [
+      "Acceptance charge for customer-provided casket",
+      "Fee for casket provided by the purchaser",
+      "Customer-supplied casket handling",
+      "Purchaser-provided casket surcharge",
+      "Casket furnished by the family — acceptance fee",
+    ]) {
+      const d = fire(`${name} $295`, [{ name, cents: 29500 }]);
+      expect(sev(d, "casket-handling-fee"), name).toBe("violation");
+    }
+  });
+
+  it("never flags another service's fee that mentions the family's casket", () => {
+    // Graveside was a live false violation on main before this change.
+    for (const name of [
+      "Graveside service fee (casket provided by family)",
+      "Immediate burial with casket provided by purchaser (includes basic services fee)",
+      "Viewing fee — family-provided casket",
+      "Casket provided by family",
+    ]) {
+      const d = fire(`${name} $295`, [{ name, cents: 29500 }]);
+      expect(ids(d), name).not.toContain("casket-handling-fee");
+    }
+  });
+});

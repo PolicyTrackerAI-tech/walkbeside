@@ -154,6 +154,35 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("Death certificates (handling)")).toBe("death-cert");
   });
 
+  it("never prices a fee for a customer- or purchaser-provided casket as a casket", () => {
+    expect(id("Acceptance charge for customer-provided casket")).toBeUndefined();
+    expect(id("Fee for casket provided by the purchaser")).toBeUndefined();
+    expect(id("Purchaser-provided casket surcharge")).toBeUndefined();
+    expect(id("Casket furnished by the family — acceptance fee")).toBeUndefined();
+    // …while another service's fee keeps its own benchmark, and a plain
+    // "provided by family" casket line (no fee) is still a casket.
+    expect(id("Graveside service fee (casket provided by family)")).toBe("graveside");
+    expect(id("Casket provided by family")).toBe("casket-metal");
+  });
+
+  it("never prices a fee for an urn or vault bought elsewhere as the urn or vault", () => {
+    // The urn lines hit the "urn" synonym before and read against an urn's
+    // range; the urn-vault-handling-fee rule surfaces them instead.
+    expect(id("Handling fee for urn provided by the family")).toBeUndefined();
+    expect(id("Outside urn handling fee (urn purchased elsewhere)")).toBeUndefined();
+    expect(id("Outside burial vault handling fee")).toBeUndefined();
+    expect(id("Third-party grave liner charge")).toBeUndefined();
+  });
+
+  it("the urn/vault guard leaves real urns, vaults, and legitimate services alone", () => {
+    expect(id("Urn (basic)")).toBe("urn");
+    expect(id("Keepsake urn — bronze")).toBe("urn");
+    expect(id("Grave liner")).toBe("vault");
+    expect(id("Burial vault — Guardian")).toBe("vault");
+    // A fee word with no bought-elsewhere signal is not this guard's business.
+    expect(id("Urn engraving fee")).toBe("urn");
+  });
+
   it("does not let a new item steal an existing line", () => {
     expect(id("Transfer of remains")).toBe("transfer");
     expect(id("Cremation container")).toBe("cremation-container");

@@ -1,4 +1,5 @@
 import { LINE_ITEMS, type LineItem } from "@/lib/pricing-data";
+import { outsideCasketFee, outsideUrnOrVaultFee } from "@/lib/outside-merchandise";
 
 /**
  * A single line item as extracted from a funeral home's General Price List,
@@ -326,7 +327,8 @@ export function naiveExtract(text: string): {
  * A direct-cremation package line is matched as the package, and a burial
  * package or a cremation package with services is never benchmarked (see
  * packageKind); nor is a casket add-on such as a handling fee or an upgrade
- * (see isCasketAddOn).
+ * (see isCasketAddOn), nor a fee for an urn or vault bought elsewhere (see
+ * outsideUrnOrVaultFee).
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
@@ -334,6 +336,10 @@ export function matchLineItem(name: string): LineItem | undefined {
   if (pkg === "direct-cremation") return LINE_ITEMS.find((it) => it.id === "direct-cremation-fee");
   if (pkg === "unbenchmarked") return undefined;
   if (isCasketAddOn(n)) return undefined;
+  // The same fee for an urn or a vault bought elsewhere (lib/outside-merchandise.ts):
+  // "Handling fee for urn provided by the family" used to hit the "urn"
+  // synonym and read against an urn's price range.
+  if (outsideUrnOrVaultFee(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
@@ -383,7 +389,11 @@ function isCasketAddOn(n: string): boolean {
   if (!CASKET_NOUN.test(n)) return false;
   if (/\bhandling\b/.test(n)) return true;
   if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
-  return OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n);
+  if (OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n)) return true;
+  // "Acceptance charge for customer-provided casket", "Fee for casket
+  // provided by the purchaser": the wider bought-elsewhere phrasings
+  // (lib/outside-merchandise.ts), which used to fall through to casket-metal.
+  return outsideCasketFee(n);
 }
 
 // The FTC Funeral Rule makes every GPL price its direct cremations and
