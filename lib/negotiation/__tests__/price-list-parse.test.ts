@@ -730,3 +730,49 @@ describe("verdict never contradicts the displayed fair range (regression)", () =
     expect(classifyAgainst(hi, lo, hi, predatory)).toBe("fair");
   });
 });
+
+describe("matchLineItem — wordings from the DC harvest (John T. Rhines 2026 GPL)", () => {
+  const id = (s: string) => matchLineItem(s)?.id;
+
+  it("'Prof. Services of Funeral Director, Staff, and Overhead' is the basic services fee", () => {
+    expect(id("Prof. Services of Funeral Director, Staff, and Overhead")).toBe("basic-services");
+    expect(id("Professional services of the funeral director and staff")).toBe("basic-services");
+  });
+
+  it("a line that names embalming only to rule it out is not embalming", () => {
+    expect(id("Washing and Disinfecting Remains (no embalming)")).toBeUndefined();
+    expect(id("Shelter of remains without embalming")).toBe("refrigeration-shelter");
+    expect(id("Refrigeration of Un-embalmed Remains")).toBe("refrigeration-shelter");
+    expect(id("Embalming")).toBe("embalming");
+  });
+
+  it("cosmetics with dressing or hairstyling is body preparation; dressing and casketing alone, or hair coloring, is not", () => {
+    expect(id("Cosmetics, Dressing, and Hairstyling")).toBe("body-prep");
+    expect(id("Dressing and cosmetics")).toBe("body-prep");
+    expect(id("Dressing and casketing")).toBeUndefined();
+    expect(id("Coloring of Hair (additional to hairstyling)")).toBeUndefined();
+  });
+
+  it("a committal service is the graveside service", () => {
+    expect(id("Funeral Director for Committal Service")).toBe("graveside");
+  });
+
+  it("a certified death certificate priced per copy is the death-certificate benchmark; filing one is not", () => {
+    expect(id("Certified Death Certificate, District of Columbia (per copy)")).toBe("death-cert");
+    expect(id("Certified copies of death certificate")).toBe("death-cert");
+    expect(id("Filing of death certificate")).toBeUndefined();
+  });
+
+  it("casket hardware is never priced as a casket", () => {
+    expect(id("Casket Panel Inserts")).toBeUndefined();
+    expect(id("Casket corners")).toBeUndefined();
+    expect(id("Casket engraving")).toBeUndefined();
+    expect(id("Casket - 18 gauge steel")).toBe("casket-metal");
+  });
+
+  it("an immediate-burial package joined with a slash is a package, not a graveside fee", () => {
+    expect(id("Immediate Burial/Graveside Service (casket not included)")).toBeUndefined();
+    expect(id("Direct cremation/alternative container")).toBe("direct-cremation-fee");
+    expect(id("Graveside service")).toBe("graveside");
+  });
+});

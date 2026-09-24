@@ -340,6 +340,11 @@ export function matchLineItem(name: string): LineItem | undefined {
   // "Handling fee for urn provided by the family" used to hit the "urn"
   // synonym and read against an urn's price range.
   if (outsideUrnOrVaultFee(n)) return undefined;
+  // "Washing and disinfecting remains (no embalming)" named embalming only
+  // to rule it out, and was judged against embalming's range. Drop the
+  // negated mention before the synonym pass ("Refrigeration of un-embalmed
+  // remains" still reads as refrigeration).
+  const m = n.replace(NEGATED_EMBALMING, " ");
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
@@ -348,13 +353,13 @@ export function matchLineItem(name: string): LineItem | undefined {
       .filter(Boolean);
     return synonyms.some((key) => {
       const re = new RegExp(`\\b${key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`);
-      if (re.test(n)) return true;
+      if (re.test(m)) return true;
       const words = key.split(/\s+/);
-      return words.length > 1 && words.every((w) => n.includes(w));
+      return words.length > 1 && words.every((w) => m.includes(w));
     });
   });
   if (direct) return direct;
-  const alias = WORDING_ALIASES.find(([re]) => re.test(n));
+  const alias = WORDING_ALIASES.find(([re]) => re.test(m));
   return alias ? LINE_ITEMS.find((it) => it.id === alias[1]) : undefined;
 }
 
@@ -366,10 +371,25 @@ export function matchLineItem(name: string): LineItem | undefined {
 // the synonym pass, so a package line that mentions basic services ("Direct
 // cremation, includes basic services of funeral director…") keeps its
 // package match.
+//
+// Added from the DC harvest (John T. Rhines, 2026): "Prof. Services of
+// Funeral Director, Staff, and Overhead" is the same non-declinable fee;
+// "Cosmetics, Dressing, and Hairstyling" is the FTC "other preparation"
+// line (but "Dressing and casketing" alone stays unbenchmarked: the
+// dressing-casketing-billed-on-top-of-prep rule treats it as an add-on); "Funeral Director for Committal Service" is the graveside service;
+// and a singular certified death certificate priced per copy is the
+// death-certificate benchmark. Each is narrow on purpose: "Coloring of hair"
+// alone is an add-on, not body preparation, and "filing of death
+// certificate" inside a package description is not a per-copy price.
 const WORDING_ALIASES: ReadonlyArray<readonly [RegExp, string]> = [
-  [/\bbasic services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
+  [/\b(?:basic|professional|prof\.?)\s+services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
   [/\bnon-?declinable basic services\b/, "basic-services"],
+  [/\bcosmet\w*\b.*\b(?:dressing|hair\s?styling)\b|\bdressing\b.*\bcosmet\w*/, "body-prep"],
+  [/\bcommittal service\b/, "graveside"],
+  [/\bcertified (?:copies of )?death certificates?\b|\bdeath certificates?\b.*\b(?:each|per copy|copies)\b/, "death-cert"],
 ];
+
+const NEGATED_EMBALMING = /\(?\b(?:no|without|non|un)[\s-]?embalm\w*\)?/g;
 
 // Lines that name a casket but price something else: a fee for handling one
 // bought elsewhere, or an upgrade/add-on charged on top of one. The synonym
@@ -389,6 +409,9 @@ function isCasketAddOn(n: string): boolean {
   if (!CASKET_NOUN.test(n)) return false;
   if (/\bhandling\b/.test(n)) return true;
   if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
+  // Hardware sold for a casket, not the casket ("Casket Panel Inserts" $200
+  // on the Rhines 2026 GPL read as a $200 casket).
+  if (/\b(?:panels?|inserts?|corners?|engrav\w*)\b/.test(n)) return true;
   if (OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n)) return true;
   // "Acceptance charge for customer-provided casket", "Fee for casket
   // provided by the purchaser": the wider bought-elsewhere phrasings
@@ -425,7 +448,7 @@ function isCasketAddOn(n: string): boolean {
 const PACKAGE_LEAD =
   /^[^a-z0-9]*(?:[a-z0-9]{1,2}[.)]\s*)?(?:an?\s+)?(?:direct|immediate)\s+(cremation|burial)s?\b(.*)$/;
 const PACKAGE_VARIANT =
-  /^\s*(?:[.:]?\s*$|[(,]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
+  /^\s*(?:[.:]?\s*$|[(,/]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
 const PURCHASER_PROVIDES =
   /\b(?:provided|supplied|furnished)\s+by\s+(?:the\s+)?(?:purchaser|consumer|customer|client|buyer|family)\b|\b(?:purchaser|consumer|customer|client|buyer|family)\s+(?:provides|supplies|furnishes)\b/;
 const WITH_SERVICE =
