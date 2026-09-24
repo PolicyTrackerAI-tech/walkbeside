@@ -44,6 +44,30 @@ already imports._
 | **Holy Cross Home Care and Hospice** | Silver Spring; Montgomery, PG, Howard | Health-system owned (Holy Cross Health / Trinity Health), CHAP; the first Medicare-certified hospice in Montgomery County | Hospice administrator (ask) | holycrosshealth.org (hospice services) | **MD only: clean** | Catholic system with Catholic funeral customs. System procurement is slower, so treat as late Tier 1 / Tier 2. |
 | **Goodwin Hospice** | Northern Virginia (10 regions); part of Goodwin Living (senior living, Alexandria / Falls Church) | Nonprofit, CHAP, NPHI member | **Beth Klint, Executive Director**; Nana Sarpong, Administrator | goodwinhospice.org | **VA: education + at-need only until counsel** | Senior-living parent gives a built-in family population. NPHI member (a door to the network). Pitch now, pilot after the Virginia answer, or pilot with pre-death outreach off. |
 
+## 2b. Tier 2 (added 2026-09-24, same caveats: verify on the call)
+
+| Hospice | Base / footprint | Ownership | Contact (verify) | Legal lane | Angle |
+|---|---|---|---|---|---|
+| **Hospice of St. Mary's** | Leonardtown; St. Mary's County (Southern Maryland); six-bed Hospice House; founded 1981 by community volunteers | Nonprofit (EIN 52-2153926), a MedStar St. Mary's Hospital affiliate | (301) 994-3023; Kara Rawlings is the listed contact (title unknown) | MD clean | A small rural program where a free price-help benefit for families is easy to explain. Procurement may run through MedStar. |
+| **Gilchrist Hospice, in collaboration with Inova** | Northern Virginia; a joint venture announced Aug 2025, patient care from early 2026 | Nonprofit (Gilchrist, part of GBMC HealthCare) with the Inova health system | inova.org/our-services/hospice; gilchristcares.org/inova | **VA: education + at-need only** until counsel's preneed answer | A new program choosing its bereavement offering now. (Gilchrist's Baltimore base is outside the market; this JV is inside it.) |
+
+**Not separate buyers (don't double-count):** Calvert Hospice and Hospice
+of Charles County are now Hospice of the Chesapeake affiliates (reach them
+through Chesapeake, Tier 1). The Washington Home & Community Hospices
+transferred its hospice care to Capital Caring in 2019 and is now a
+private foundation for older adults in DC: a possible **funder** of a DC
+bereavement benefit, not a buyer. Joseph's House (Adams Morgan) is a
+residential hospice for unhoused people with HIV or cancer that bills no
+insurance: mission-aligned, not a payer.
+
+**Sizing, honestly.** The DMV core market is concentrated: Tier 1 and
+Tier 2 hold about seven plausible pilot buyers, and most other hospices
+are chains. The 11/13 bar of **30+ outreaches** (the execution plan's
+scoreboard) therefore has to count second and third contacts inside each
+target (bereavement lead, social-work director, CFO), the channels in §4
+(NPHI, the Maryland network, the national alliance), and chain local
+leaders. Plan on about three contacts per target, not thirty targets.
+
 ## 3. Tier 3: enterprise and chains (park; reference only)
 
 - **Capital Caring Health**: the largest nonprofit hospice in the
@@ -56,10 +80,14 @@ already imports._
   alumna, which is useful context and a possible later intro.
 - **Chains:** VITAS (Virginia and DC), Amedisys, Heartland (Fairfax), Ennoble
   Care (for-profit), and Caregivers Home Health & Hospice (Northern Virginia
-  for-profit, local). Chains are an enterprise play, not a pilot.
-- **Outside the DMV service market** (`lib/service-markets.ts`): Gilchrist
-  (Baltimore), Frederick Health Hospice (Frederick, zip3 217), Hospice of
-  the Panhandle (WV).
+  for-profit, local). Also Compassus (Chantilly office), Affinity Care
+  (a multi-state operator with a DC agency), and PathWell (a four-state
+  home health and hospice roll-up serving Loudoun and Fairfax). Chains are
+  an enterprise play, not a pilot.
+- **Outside the DMV service market** (`lib/service-markets.ts`): Gilchrist's
+  Baltimore base (its Inova joint venture in Northern Virginia is Tier 2),
+  Frederick Health Hospice (Frederick, zip3 217), Hospice of the Panhandle
+  (WV).
 
 ## 4. Channels (relationships, not deals)
 
