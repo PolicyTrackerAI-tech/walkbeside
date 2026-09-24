@@ -63,7 +63,9 @@ export function stripCodeFence(s: string): string {
  */
 function cleanName(s: string): string {
   return s
+    .replace(/\s*…[….\s]*/gu, " ") //               "…" leader runs anywhere ("Viewing…… (1 hour) ……")
     .replace(/[\s.:_–—]*[.:_–—][\s.:_–—]*$/u, "") // trailing dot/colon/underscore/en–em-dash leaders
+    .replace(/\s*\$\s*$/, "") //                     a stray "$" left by a spaced price ("… $ 425.00")
     .replace(/\s+-+\s*$/, "") //                     trailing ASCII hyphen only when whitespace-led
     .replace(/^(?:between|from|starting at|priced from|as low as)\s+/i, "") // leading range/floor lead-in
     .replace(/\s+(?:between|from|starting at|priced from|as low as)$/i, "") // trailing ("Caskets starting at")
@@ -76,7 +78,7 @@ function cleanName(s: string): string {
 // a bare integer ("Established 1962*") is left alone and stays skippable.
 const MONEY = String.raw`(?:\$[\d,]+(?:\.\d{2})?|\d{1,3}(?:,\d{3})+(?:\.\d{2})?|\d+\.\d{2})`;
 const reTrailingMarker = new RegExp(
-  `(${MONEY})\\s*(?:[*+†★✦¹²³⁰⁴⁵⁶⁷⁸⁹]|\\((?:\\d{1,2}|[a-z])\\)|(?:and|&)\\s*up|or more)\\s*$`,
+  `(${MONEY})\\s*(?:[*+†★✦¹²³⁰⁴⁵⁶⁷⁸⁹]|\\((?:\\d{1,2}|[a-z])\\)|(?:and|&)\\s*up|or more|\\.)\\s*$`,
   "iu",
 );
 
@@ -93,16 +95,18 @@ function stripTrailingMarker(line: string): string {
   return line.replace(reTrailingMarker, "$1");
 }
 
-const SEP = String.raw`[\s.:_–—]+`; // pre-price separator: spaces/leaders, but NOT an ASCII hyphen
+const SEP = String.raw`[\s.:_–—…]+`; // pre-price separator: spaces/leaders (incl. "…"), but NOT an ASCII hyphen
 const NUM = String.raw`[\d,]+(?:\.\d{2})?`;
 const reRange = new RegExp(
   `^(.+?)${SEP}(\\$?)(${NUM})\\s*[-–—]\\s*(\\$?)(${NUM})\\s*$`,
 );
+// DC price lists print "Caskets……$995.00 to $ 35,000.00": leaders before the
+// first bound and a space after a "$" (Stewart, 2024).
 const reWordRange = new RegExp(
-  `^(.+?)\\s+\\$(${NUM})\\s+(?:to|and)\\s+\\$(${NUM})\\s*$`,
+  `^(.+?)${SEP}\\$\\s?(${NUM})\\s+(?:to|and)\\s+\\$\\s?(${NUM})\\s*$`,
   "i",
 );
-const reSingle = new RegExp(`^(.+?)${SEP}(\\$?)(${NUM})\\s*$`);
+const reSingle = new RegExp(`^(.+?)${SEP}(\\$?)\\s?(${NUM})\\s*$`);
 // Single price carrying a trailing unit — "$25 each", "$25/copy", "$150 per
 // hour". $ is REQUIRED so a bare "25 miles"/"3 nights" can't become a price.
 const reUnit = new RegExp(
@@ -218,9 +222,10 @@ export function naiveExtract(text: string): {
     const dollars = numOf(token);
     if (!Number.isFinite(dollars)) return false;
     // Bare integer with no $, comma, or cents is almost always a year, address,
-    // suite, or count — not a price. Skip rather than fabricate an item.
+    // suite, zip or count — not a price. Skip rather than fabricate an item.
+    // (Any length: "Washington, D.C. 20019" read as a $20,019 line.)
     const bareInteger =
-      !hadDollar && !/\.\d{2}$/.test(token) && !token.includes(",") && /^\d{1,4}$/.test(token);
+      !hadDollar && !/\.\d{2}$/.test(token) && !token.includes(",") && /^\d+$/.test(token);
     if (bareInteger) return false;
     const name = cleanName(rawName);
     if (!name || !/[a-z]/i.test(name)) return false; // e.g. "2 @"

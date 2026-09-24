@@ -849,3 +849,61 @@ describe("matchLineItem — wordings from the Maryland harvest (J.B. Jenkins 202
     expect(id("Rental casket (hardwood)")).toBe("rental-casket");
   });
 });
+
+describe("naiveExtract — DC price-list formatting (Stewart 2024 GPL)", () => {
+  const only = (text: string) => naiveExtract(text).items;
+
+  it("reads a price after '…' leaders and a spaced '$', and cleans the name", () => {
+    expect(only("Basic Services of Funeral Director and Staff and Overhead…………………. $ 2,075.00")).toEqual([
+      { name: "Basic Services of Funeral Director and Staff and Overhead", cents: 207500 },
+    ]);
+    expect(only("Use of Facilities and Staff for Viewing…… (1 hour) ……………………. $ 225.00")).toEqual([
+      { name: "Use of Facilities and Staff for Viewing (1 hour)", cents: 22500 },
+    ]);
+    expect(only("Transfer of Remains to Funeral Home (within 25-mile radius) ……………$   425.00")).toEqual([
+      { name: "Transfer of Remains to Funeral Home (within 25-mile radius)", cents: 42500 },
+    ]);
+  });
+
+  it("reads '$995.00 to $ 35,000.00' after leaders as a range, not a $35,000 price", () => {
+    expect(only("Caskets………………………………………………………$995.00 to $ 35,000.00")).toEqual([
+      { name: "Caskets", cents_low: 99500, cents_high: 3500000 },
+    ]);
+  });
+
+  it("keeps a price followed by a period", () => {
+    expect(only("Forwarding of Remains to Another Funeral Home…………….…………$ 2,150.00.")).toEqual([
+      { name: "Forwarding of Remains to Another Funeral Home", cents: 215000 },
+    ]);
+  });
+
+  it("never reads a zip (or any bare number) as a price", () => {
+    expect(only("Washington, D.C. 20019")).toEqual([]);
+    expect(only("Suite 100000")).toEqual([]);
+    expect(only("Casket $12500")).toEqual([{ name: "Casket", cents: 1250000 }]);
+    // A spaced "$" still marks a price, so a bare amount after it is kept.
+    expect(only("Casket $ 12500")).toEqual([{ name: "Casket", cents: 1250000 }]);
+  });
+
+  it("recovers every single-price observation from the real Stewart list", async () => {
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const rec = JSON.parse(
+      readFileSync(join(process.cwd(), "supabase/seed/gpl/dmv/stewart-2024.json"), "utf8"),
+    ) as { text: string; items: Array<{ name: string; cents: number; matchedItemId?: string; isRange?: boolean }> };
+    const got = only(rec.text);
+    const pointsById = new Map<string, number[]>();
+    for (const it of got) {
+      const id = matchLineItem(it.name)?.id;
+      if (id && it.cents != null) pointsById.set(id, [...(pointsById.get(id) ?? []), it.cents]);
+    }
+    // The document prints direct cremation as a range ($2,316.50 to
+    // $2,416.50); the reviewer's DC price is a judgment, not a printed point.
+    const expected = rec.items.filter(
+      (i) => i.matchedItemId && !i.isRange && i.matchedItemId !== "direct-cremation-fee",
+    );
+    for (const i of expected) expect(pointsById.get(i.matchedItemId!), i.name).toContain(i.cents);
+    // Nothing structural becomes a price (the DC zip once read as $20,019).
+    expect(got.filter((it) => it.cents != null && it.cents >= 1_000_000)).toEqual([]);
+  });
+});
