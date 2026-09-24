@@ -88,6 +88,31 @@ describe("benchmarksForZip", () => {
     ]);
   });
 
+  it("looks metro rows up by the zip's benchmark area when its label is pooled", async () => {
+    // Pooling is off by default (BENCHMARK_AREA_POOLS is empty); switch the
+    // proposed DC-metro pools on for this case only.
+    vi.doMock("@/lib/benchmark-areas", async (importOriginal) => {
+      const actual = await importOriginal<typeof import("@/lib/benchmark-areas")>();
+      return {
+        ...actual,
+        benchmarkAreaForZip: (zip: string) =>
+          actual.benchmarkAreaForZip(zip, actual.PROPOSED_DMV_POOLS),
+      };
+    });
+    try {
+      const { store, calls } = await load([
+        { data: [row({ scope: "metro", scope_value: "Northern Virginia" })] },
+      ]);
+      const map = await store.benchmarksForZip("22201");
+      // Arlington's own label is not queried: a pooled range is published
+      // and looked up under the pool's name only.
+      expect(calls[0].filters.scope_value).toEqual(["222", "Northern Virginia", "VA"]);
+      expect(map.get("basic-services")?.scope).toBe("metro");
+    } finally {
+      vi.doUnmock("@/lib/benchmark-areas");
+    }
+  });
+
   it("picks the narrowest scope per line item (zip3 > metro > state)", async () => {
     const { store } = await load([
       {

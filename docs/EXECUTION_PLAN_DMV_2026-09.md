@@ -52,7 +52,10 @@ Either way, write the decision into this section.
 
 ## 3. Week-by-week
 
-**Week of Sep 21 (now)**
+**Week of Sep 21 (now)** · _Send-ready text for every item below:
+[`sales/WEEK_ONE_KIT_DMV_2026-09.md`](sales/WEEK_ONE_KIT_DMV_2026-09.md)
+(gate-decision text, Tier 1 integrity screen results, three personalized
+first emails, setup checklist)._
 - [F] Write the §1 gate decision.
 - [F] Send the counsel email to the lead-firm candidates in parallel:
   [`COUNSEL_SHORTLIST_DMV_2026-09.md`](COUNSEL_SHORTLIST_DMV_2026-09.md).
@@ -158,3 +161,23 @@ Either way, write the decision into this section.
 - **Sales:** DMV target list, DC demo price list (verified), localized
   sequence.
 - **Data:** the DMV price-list worklist.
+
+**Added 2026-09-24:**
+
+- **Virginia pre-death gate, in code.** Before a death, a Virginia
+  family's case contacts no home, and no family's case contacts a Virginia
+  home (`lib/negotiation/pre-death-gate.ts`, tripwire-tested).
+- **Pre-launch fixes.** A funeral home's reply with a PDF now lands (A8-06).
+  The anonymous email endpoints are hardened (A1-07), the sign-up IP hash
+  is keyed (A8-07), and expired sharing links are purged daily (A8-05).
+- **Legal.** The counsel redline for every wording change, and the DC
+  CPPA claims re-audit, which narrowed five overbroad claims. Both are in
+  the counsel packet.
+- **Data.** A 133-home DMV roster (34 DC, 61 MD, 38 VA) and the first
+  reviewed DC price list, loadable in two commands
+  (`docs/data/DMV_HOMES_ROSTER_2026-09.md`); a per-home tracker
+  (`supabase/seed/dmv-tracker.csv`); the founder's price-list request
+  email (`docs/data/GPL_REQUEST_EMAIL.md`); and a decision to make by
+  ~11/1 on pooling thin areas like Arlington, with the code built and off
+  (`docs/data/BENCHMARK_AREA_POOLING_DECISION.md`).
+- **Sales.** The week-one kit.

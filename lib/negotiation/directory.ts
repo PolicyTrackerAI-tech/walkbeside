@@ -19,6 +19,10 @@
  * artifact of import order that would hand the same homes every family's
  * request (guardrail #3: never steer).
  *
+ * `preDeath` applies the Virginia pre-death gate (./pre-death-gate.ts):
+ * homes in a held state drop out before the cap, so the family's other
+ * nearby homes fill those slots.
+ *
  * Callers MUST handle the empty-array case explicitly; never assume a
  * non-empty result. (A live family flow that silently substituted a
  * fake home would tell a grieving family we're contacting funeral homes while
@@ -36,13 +40,15 @@ import { createClient } from "@/lib/supabase/server";
 import { FEATURES } from "@/lib/env";
 import { serviceAreaZip3s } from "@/lib/service-markets";
 import { isEmailDenylisted } from "./denylist";
+import { homeHeldPreDeath } from "./pre-death-gate";
 import type { FuneralHome } from "./sample-homes";
 
 export async function findHomesFromDirectory(
   zip: string,
   n = 4,
-  random: () => number = Math.random,
+  opts: { preDeath?: boolean; random?: () => number } = {},
 ): Promise<FuneralHome[]> {
+  const random = opts.random ?? Math.random;
   if (!FEATURES.supabase()) return [];
 
   const supabase = await createClient();
@@ -51,7 +57,7 @@ export async function findHomesFromDirectory(
 
   const { data, error } = await supabase
     .from("funeral_homes")
-    .select("name, email, zip")
+    .select("name, email, zip, state")
     .eq("active", true)
     .eq("vetted", true)
     .not("email", "is", null);
@@ -62,12 +68,13 @@ export async function findHomesFromDirectory(
   // can't take a slot a contactable home in the same market should have had
   // (and an all-blocked area returns [] → the honest no_homes_available path).
   const withEmail = data.filter(
-    (h): h is { name: string; email: string; zip: string } =>
+    (h): h is { name: string; email: string; zip: string; state: string | null } =>
       typeof h.email === "string" &&
       h.email.length > 0 &&
       !isEmailDenylisted(h.email) &&
       typeof h.zip === "string" &&
-      area.has(h.zip.slice(0, 3)),
+      area.has(h.zip.slice(0, 3)) &&
+      !(opts.preDeath && homeHeldPreDeath(h)),
   );
   const exact = withEmail.filter((h) => h.zip === zip);
   const prefix = withEmail.filter((h) => h.zip.startsWith(zip3) && h.zip !== zip);

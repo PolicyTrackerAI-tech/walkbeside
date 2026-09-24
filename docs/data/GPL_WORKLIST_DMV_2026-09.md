@@ -60,7 +60,7 @@ means a migration plus a pipeline change), not a default.
    | John T. Rhines Funeral Home | https://www.johntrhinesfuneralhome.com/release-forms (price list + release forms) |
    | Stewart Funeral Home | https://www.stewartfuneralhome.com/our-services/general-price-list |
 
-2. **Build the DC roster.** Start from the DC Attorney General's 2017
+2. **Build the DC roster.** _Started 2026-09-24: 21 likely-operating DC homes with addresses, phones, sites, and five more direct price-list links (incl. Rhines' 2026 list) are in [`DC_ROSTER_2026-09.md`](DC_ROSTER_2026-09.md), with import-ready rows in `supabase/seed/dmv-homes.draft.csv` (100 DMV homes, [`DMV_HOMES_ROSTER_2026-09.md`](DMV_HOMES_ROSTER_2026-09.md)). All unverified web-search leads; DLCP closes the gap to ~38._ Start from the DC Attorney General's 2017
    survey (https://oag.dc.gov/sites/default/files/2018-02/Funeral-Home-Price-List.pdf).
    Use it as a **roster and historical baseline only**: its prices are 2017
    aggregates, never current benchmarks. Reconcile against DLCP license

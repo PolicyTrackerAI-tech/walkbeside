@@ -16,6 +16,7 @@ interface Row {
   name: string;
   email: string | null;
   zip: string;
+  state?: string | null;
 }
 
 /**
@@ -158,12 +159,50 @@ describe("findHomesFromDirectory", () => {
     createClientMock.mockResolvedValue(fakeClient({ data: rows, error: null }).client as never);
     // random() → 0 rotates the tier; a constant-first RNG would always pick
     // "A Home" first if the tier were not shuffled.
-    const first = await findHomesFromDirectory("20011", 3, () => 0);
-    const second = await findHomesFromDirectory("20011", 3, () => 0.999);
+    const first = await findHomesFromDirectory("20011", 3, { random: () => 0 });
+    const second = await findHomesFromDirectory("20011", 3, { random: () => 0.999 });
     expect(first).toHaveLength(3);
     expect(second).toHaveLength(3);
     expect(first.map((h) => h.name)).not.toEqual(second.map((h) => h.name));
     for (const h of [...first, ...second]) expect(rows.map((r) => r.name)).toContain(h.name);
+  });
+
+  it("pre-death: Virginia homes drop out BEFORE the cap, so DC/MD homes fill the slots (Virginia pre-death gate)", async () => {
+    supabaseMock.mockReturnValue(true);
+    createClientMock.mockResolvedValue(
+      fakeClient({
+        data: [
+          { name: "Arlington Home", email: "arl@h.com", zip: "22201", state: "VA" },
+          { name: "Reston Home", email: "res@h.com", zip: "20190", state: "VA" },
+          { name: "DC Home", email: "dc@h.com", zip: "20011", state: "DC" },
+          { name: "Bethesda Home", email: "bet@h.com", zip: "20814", state: "MD" },
+        ],
+        error: null,
+      }).client as never,
+    );
+    const held = (await findHomesFromDirectory("20011", 2, { preDeath: true })).map((h) => h.name);
+    expect(new Set(held)).toEqual(new Set(["DC Home", "Bethesda Home"]));
+
+    // After a death the same family reaches Virginia homes as before.
+    const atNeed = (await findHomesFromDirectory("20011", 9)).map((h) => h.name);
+    expect(atNeed).toContain("Arlington Home");
+    expect(atNeed).toContain("Reston Home");
+  });
+
+  it("pre-death: a Virginia zip holds the home even when its recorded state says otherwise", async () => {
+    supabaseMock.mockReturnValue(true);
+    createClientMock.mockResolvedValue(
+      fakeClient({
+        data: [
+          { name: "Mislabeled Arlington", email: "arl@h.com", zip: "22201", state: "DC" },
+          { name: "Unlabeled Alexandria", email: "alx@h.com", zip: "22314", state: null },
+          { name: "DC Home", email: "dc@h.com", zip: "20011", state: "DC" },
+        ],
+        error: null,
+      }).client as never,
+    );
+    const homes = (await findHomesFromDirectory("20011", 9, { preDeath: true })).map((h) => h.name);
+    expect(homes).toEqual(["DC Home"]);
   });
 
   it("filters out rows with no email even if returned by the query", async () => {

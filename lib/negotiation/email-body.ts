@@ -39,7 +39,7 @@ export function buildOutreachEmail(input: OutreachEmailInput): OutreachEmail {
 
 I'm writing from Honest Funeral Co. on behalf of ${familyLabel}. They've engaged us as their consumer advocate to gather price information from funeral homes in your area before they choose where to make arrangements.
 
-Could you reply with your current General Price List and any service-specific quote you can share? A PDF works fine. The family is planning arrangements ${timing}.
+Could you reply with your current General Price List and any service-specific quote you can share? Please put the prices in the body of your reply; attachments don't reach the family yet. The family is planning arrangements ${timing}.
 
 They'll review what comes back. If your firm is selected, we'll reach out to help schedule the in-person arrangement meeting — the family attends and signs directly with you.
 

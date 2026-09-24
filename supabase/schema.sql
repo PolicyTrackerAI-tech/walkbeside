@@ -191,6 +191,7 @@ create policy "planning_signups_insert_anon" on public.planning_signups
   for insert to anon, authenticated with check (true);
 
 -- ---------------------------------------------------------------------------
--- Storage bucket for uploaded price lists (create manually in Dashboard or via this hint)
+-- No storage bucket. Nothing stores uploaded files: price-list photos and
+-- PDFs are read in memory and never kept (/privacy). The "price-lists"
+-- bucket earlier setups created is unused and can be deleted (audit A8-08).
 -- ---------------------------------------------------------------------------
--- In Supabase: Storage → New bucket → name "price-lists", private.

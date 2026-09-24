@@ -12,6 +12,11 @@ import {
 } from "@/lib/negotiation/email-body";
 import { isEmailDenylisted } from "@/lib/negotiation/denylist";
 import { sendOutreachForNegotiation } from "@/lib/negotiation/send";
+import {
+  familyHeldPreDeath,
+  isPreDeath,
+  PRE_DEATH_HOLD_STATUS,
+} from "@/lib/negotiation/pre-death-gate";
 import { readLimitedJson } from "@/lib/http-guards";
 import { normalizeReferralCode } from "@/lib/referral-codes";
 
@@ -164,7 +169,22 @@ export async function POST(req: Request) {
   const authorizationId = `WB-${neg.id.slice(0, 8).toUpperCase()}`;
   const familyLabel = buildFamilyLabel(ctx.senderFirstName, ctx.senderLastName);
 
-  const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles));
+  // The Virginia pre-death gate (lib/negotiation/pre-death-gate.ts): before a
+  // death, a Virginia family's case contacts no home at all, and no family's
+  // case contacts a Virginia home. The row stays, like no_homes_available,
+  // and the status page tells the family why and what still works.
+  const preDeath = isPreDeath(ctx);
+  if (familyHeldPreDeath(ctx.zip, preDeath)) {
+    await supabase
+      .from("negotiations")
+      .update({ status: PRE_DEATH_HOLD_STATUS })
+      .eq("id", neg.id);
+    return NextResponse.json({ id: neg.id, preDeathHold: true });
+  }
+
+  const homes = await findHomesFromDirectory(ctx.zip, homesForRadius(ctx.radiusMiles), {
+    preDeath,
+  });
 
   // Build the outreach rows (stored as `pending`). Honest Funeral is FREE to
   // families (Operating Plan guardrail #2) — there is no payment step. The

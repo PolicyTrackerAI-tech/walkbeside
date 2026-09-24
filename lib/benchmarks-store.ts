@@ -3,6 +3,7 @@ import { cache } from "react";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { regionForZip } from "@/lib/zip-regions";
+import { benchmarkAreaForZip } from "@/lib/benchmark-areas";
 import type { PriceDataSource } from "@/lib/pricing-data";
 import { SMALL_SAMPLE_THRESHOLD } from "@/lib/partner-report";
 import { LINE_ITEMS } from "@/lib/pricing-data";
@@ -74,7 +75,10 @@ export const benchmarksForZip = cache(
     // commas/slashes/parens.
     const scopeValues: Record<RegionalBenchmark["scope"], string | null> = {
       zip3,
-      metro: region?.metro ?? null,
+      // The zip's benchmark area: its metro label, or the pool that label
+      // belongs to (lib/benchmark-areas.ts), matching what the pipeline
+      // groups and the promote route publishes.
+      metro: benchmarkAreaForZip(zip) ?? null,
       state: region?.state ?? null,
     };
 
