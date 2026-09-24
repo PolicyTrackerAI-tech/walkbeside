@@ -17,7 +17,7 @@ export default function PrivacyPage() {
       <section className="flex-1">
         <article className="max-w-2xl mx-auto px-5 py-10 space-y-6 text-ink-soft">
           <h1 className="font-serif text-3xl text-ink">Privacy Policy</h1>
-          <p className="text-sm text-ink-muted">Last updated: August 2026</p>
+          <p className="text-sm text-ink-muted">Last updated: September 2026</p>
 
           <p>
             This policy describes how Honest Funeral Co. collects, uses, and
@@ -275,7 +275,7 @@ export default function PrivacyPage() {
             outside your account and are not removed by an account deletion:
             aggregated, de-identified price benchmarks (which no longer identify
             you), and any anonymous family-sharing links you created (which expire
-            on their own). We may keep certain records longer where the law
+            on their own and are deleted within a day of expiring). We may keep certain records longer where the law
             requires it. Copies held by the services that send our email and text
             messages, and routine encrypted backups, age out over time.
           </p>

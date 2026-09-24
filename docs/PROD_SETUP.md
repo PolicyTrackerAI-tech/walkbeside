@@ -21,7 +21,9 @@ agreement) see **GO_TO_MARKET.md Phase 0** — `LAUNCH_CHECKLIST.md` is retired.
 3. **Confirm RLS.** Table Editor → each table shows "RLS enabled." (The bootstrap
    enables it on all of them; spot-check `profiles`, `negotiations`,
    `funeral_homes`.)
-4. **Storage bucket.** Storage → New bucket → name **`price-lists`**, **Private**.
+4. **No storage bucket.** Nothing stores uploaded files (price-list photos and
+   PDFs are read in memory and never kept). If an earlier setup created a
+   `price-lists` bucket, it is unused and can be deleted (audit A8-08).
 5. **Magic-link auth.** Authentication → Providers → Email → enable, with
    **Magic Link** on. Then Authentication → **Email Templates**: in BOTH the
    **Magic Link** and **Confirm signup** templates, make sure the one-time
