@@ -29,7 +29,13 @@
    [`../sales/PILOT_AGREEMENT.md`](../sales/PILOT_AGREEMENT.md).
 4. Business setup: [`DMV_OPERATING_REGISTRATIONS_DRAFT.md`](DMV_OPERATING_REGISTRATIONS_DRAFT.md)
    and [`ENTITY_PLAN_DRAFT.md`](ENTITY_PLAN_DRAFT.md).
-5. Live-product artifacts: `lib/negotiation/email-body.ts` (**the most
+5. **The redline and the claims file (added 2026-09-24):**
+   [`COUNSEL_REDLINE_DMV_2026-09.md`](COUNSEL_REDLINE_DMV_2026-09.md) (every
+   wording change in the product-change list: current text vs proposed,
+   marked Approve / Revise / Reject) and
+   [`DC_CLAIMS_REAUDIT_2026-09.md`](DC_CLAIMS_REAUDIT_2026-09.md) (every
+   public claim held to the CPPA standard, with its substantiation).
+6. Live-product artifacts: `lib/negotiation/email-body.ts` (**the most
    important single file**: the outreach and selection emails), `/terms`,
    `/privacy`, `/our-role`, `/for-funeral-homes`, `/how-it-works`, and the
    negotiate wizard.
