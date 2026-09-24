@@ -173,7 +173,7 @@ first emails, setup checklist)._
 - **Legal.** The counsel redline for every wording change, and the DC
   CPPA claims re-audit, which narrowed five overbroad claims. Both are in
   the counsel packet.
-- **Data.** A 112-home DMV roster (33 DC, 49 MD, 30 VA) and the first
+- **Data.** A 134-home DMV roster (34 DC, 62 MD, 38 VA) and the first
   reviewed DC price list, loadable in two commands
   (`docs/data/DMV_HOMES_ROSTER_2026-09.md`); a per-home tracker
   (`supabase/seed/dmv-tracker.csv`); the founder's price-list request

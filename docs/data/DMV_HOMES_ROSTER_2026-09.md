@@ -9,15 +9,17 @@ this. The DC detail, with price-list links and conflicts, is in
 
 | File | What | Count |
 |---|---|---|
-| [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **112 homes**: 33 DC, 49 MD, 30 VA |
+| [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **134 homes**: 34 DC, 62 MD, 38 VA |
 | [`supabase/seed/gpl/dmv/john-t-rhines-2026.json`](../../supabase/seed/gpl/dmv/john-t-rhines-2026.json) | John T. Rhines Funeral Home (DC), GPL effective 2026-02-01, reviewed line by line | 34 lines, **15 benchmark observations** |
-| [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) | The scoreboard: one row per home, with its benchmark area, price-list status and vetting checkboxes | 112 rows: 1 reviewed, 12 with a list link, 60 with a site to check, 39 with no site known |
+| [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) | The scoreboard: one row per home, with its benchmark area, price-list status and vetting checkboxes | 134 rows: 1 reviewed, 16 with a list link, 79 with a site to check, 38 with no site known |
 | [`GPL_REQUEST_EMAIL.md`](GPL_REQUEST_EMAIL.md) | The founder-sent request (email, one follow-up, phone) for homes that don't post their list | |
 
-By area: DC 33 (of the ~38 the DC Attorney General counted) · Prince George's and Calvert 25 · Montgomery 16 · Loudoun,
-Prince William and Fauquier 11 · Fairfax 10 · Southern Maryland (Charles,
-St. Mary's) 8 · Alexandria 6 · Arlington 3. Chains are marked in each row's
-notes (13 SCI / Dignity Memorial, 2 Carriage Services). Ten DC rows
+By benchmark area: Washington DC 34 (of the ~38 the DC Attorney General
+counted) · Prince George's County 28 · Northern VA (Loudoun/Manassas/Reston)
+15 · Southern Maryland 15 · Bethesda/Rockville 14 · Alexandria 8 · Fairfax
+County 6 · McLean/Vienna/Woodbridge 6 · Silver Spring/Takoma Park 5 ·
+Arlington 3. Chains are marked in each row's notes (14 SCI / Dignity
+Memorial, 2 Carriage Services, one of them unconfirmed). Ten DC rows
 were found only in directory listings and say so; confirm those with DLCP
 first, since some may be closed or may share a building with another home.
 
@@ -25,9 +27,11 @@ first, since some may be closed or may share a building with another home.
 verified record. This environment could not open the homes' own sites, so
 no address, phone or website has been checked at the source. Emails are
 blank on purpose: a home without an email imports but can never be
-contacted until you add a confirmed one in `/admin/vetting`. 27 rows carry a
-specific "confirm" flag in their notes (shared addresses, conflicting
-listings, or a second location).
+contacted until you add a confirmed one in `/admin/vetting`. 52 rows carry a
+specific thing to confirm in their notes, beyond the standard license and
+email check: shared addresses, conflicting listings, directory-only finds,
+and cremation providers that must hold their own establishment license
+(brokers are never imported).
 
 ## Load it (two commands, about five minutes)
 

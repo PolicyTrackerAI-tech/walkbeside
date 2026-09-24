@@ -21,8 +21,8 @@ Simple Tribute Funeral & Cremation Center,MD,20852,Bethesda/Rockville,,no_site_k
 Snowden Funeral Home,MD,20850,Bethesda/Rockville,,site_check,https://snowdencares.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Thibadeau Mortuary Service P.A.,MD,20877,Bethesda/Rockville,,site_check,https://interfaithfunerals.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Advent Funeral & Cremation Services (Falls Church),VA,22046,Fairfax County,,no_site_known,,,,,,,,,Request by email/phone.
-Everly Funeral Home,VA,22030,Fairfax County,Carriage Services,site_check,https://everlyfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request."
-Fairfax Memorial Funeral Home,VA,22032,Fairfax County,,link_found,https://www.fairfaxmemorialfuneralhome.com/funeral/general-price-list,,,,,,,,Posted page; a 2022 PDF also exists (stale).
+Everly Funeral Home,VA,22030,Fairfax County,Carriage Services (unconfirmed),site_check,https://everlyfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request. Confirm the owner first (see the roster note)."
+Fairfax Memorial Funeral Home,VA,22032,Fairfax County,,link_found,https://www.fairfaxmemorialfuneralhome.com/Content/Media/FairfaxMemorialFuneralHome/FMGPL81522.pdf,,,,,,,,"Price-list link found; the file name suggests August 2022, so ask for the current one if the printed date is old."
 Murphy Funeral Homes (Falls Church),VA,22046,Fairfax County,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
 National Funeral Home & Memorial Park,VA,22042,Fairfax County,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
 Demaine Funeral Home (Springfield),VA,22151,McLean/Vienna/Woodbridge,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
@@ -34,7 +34,7 @@ Adams-Green Funeral Home,VA,20170,Northern VA (Loudoun/Manassas/Reston),,site_ch
 Ames Funeral Home Inc.,VA,20110,Northern VA (Loudoun/Manassas/Reston),,site_check,https://amesfh.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Baker-Post Funeral Home & Cremation Center,VA,20110,Northern VA (Loudoun/Manassas/Reston),,link_found,https://www.bakerpostfh.com/funeral-pricing,,,,,,,,Pricing page.
 Colonial Funeral Home of Leesburg,VA,20176,Northern VA (Loudoun/Manassas/Reston),,site_check,https://colonialfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request."
-Cremation & Memorial Center,VA,20151,Northern VA (Loudoun/Manassas/Reston),,no_site_known,,,,,,,,,Request by email/phone.
+Cremation Society of Virginia (Chantilly),VA,20151,Northern VA (Loudoun/Manassas/Reston),,site_check,https://www.virginiacremate.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Demaine Life Celebration Center of Loudoun County,VA,20166,Northern VA (Loudoun/Manassas/Reston),SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
 Hall Funeral Home Inc.,VA,20132,Northern VA (Loudoun/Manassas/Reston),,site_check,https://hallfh.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Loudoun Funeral Chapel & Crematory,VA,20175,Northern VA (Loudoun/Manassas/Reston),,site_check,https://loudounfuneralchapel.com/,,,,,,,,"Site known; look for a posted list, else send the request."
@@ -65,7 +65,7 @@ Pridgen Funeral Service,MD,20706,Prince George's County,,no_site_known,,,,,,,,,R
 Ralph Williams II Funeral Service P.A.,MD,20748,Prince George's County,,site_check,https://ralphwilliamsfuneralservice.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Rausch Funeral Home (Owings),MD,20736,Prince George's County,,site_check,https://rauschfuneralhomes.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Strickland Funeral Services,MD,20748,Prince George's County,,no_site_known,,,,,,,,,Request by email/phone.
-Wiseman Funeral Home & Chapel P.A.,MD,20735,Prince George's County,,site_check,https://wisemanfuneralhome.net/,,,,,,,,"Site known; look for a posted list, else send the request."
+Wiseman Funeral Home & Chapel P.A.,MD,20746,Prince George's County,,link_found,https://www.wisemanfuneralhome.net/gpl,,,,,,,,"Price-list link found; open it, record the printed effective date, then review."
 Francis J. Collins Funeral Home,MD,20901,Silver Spring/Takoma Park,,link_found,https://www.collinsfuneralhome.com/service-options/service-pricing,,,,,,,,Service-pricing page.
 Hines-Rinaldi Funeral Home,MD,20904,Silver Spring/Takoma Park,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
 Philip D. Rinaldi Funeral Service,MD,20910,Silver Spring/Takoma Park,,site_check,https://rinaldifuneralservice.com/,,,,,,,,"Site known; look for a posted list, else send the request."
@@ -111,3 +111,25 @@ W.H. Bacon Funeral Home Inc.,DC,20010,Washington DC,,no_site_known,,,,,,,,,Reque
 Watson's Funeral Home,DC,20010,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
 "Whitney's Life Centers Funeral Home, Mortuary and Cremations",DC,20019,Washington DC,,site_check,https://whitneyswlc.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Young Funeral Service,DC,20011,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
+Going Home Cremation & Funeral Care by Value Choice P.A. (Rockville),MD,20852,Bethesda/Rockville,,site_check,https://goinghomecares.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Potomac Valley Cremation Center,MD,20874,Bethesda/Rockville,,site_check,https://germantown.potomaccremation.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Funeraria Unida P.A.,MD,20902,Silver Spring/Takoma Park,,link_found,https://irp.cdn-website.com/0d5face9/files/uploaded/FU_GPL_(1).pdf,,,,,,,,"Price-list link found; open it, record the printed effective date, then review."
+Sewell Funeral Home,MD,20678,Southern Maryland,,site_check,https://sewellfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Rausch Funeral Home (Port Republic),MD,20676,Southern Maryland,,site_check,https://rauschfuneralhomes.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Briscoe-Tonic Funeral Home (Mechanicsville),MD,20659,Southern Maryland,,site_check,https://briscoe-tonicfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Brinsfield Funeral Home (Charlotte Hall),MD,20622,Southern Maryland,,site_check,https://brinsfieldfuneral.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Adams Funeral Home P.A.,MD,20608,Southern Maryland,,site_check,https://adamsfuneralhomemd.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Williams Funeral Home P.A.,MD,20640,Southern Maryland,,site_check,https://williamsfuneralhomepa.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Thornton Funeral Home P.A.,MD,20640,Southern Maryland,,site_check,https://thorntonfuneralhomepa.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Freeman Funeral Services P.A.,MD,20735,Prince George's County,,site_check,https://freemanfuneralservicespa.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Donaldson Funeral Home P.A. (Laurel),MD,20707,Prince George's County,,site_check,https://donaldsonlaurel.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Robert E. Evans Funeral Home,MD,20715,Prince George's County,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
+Genesis Cremation & Funeral Services,DC,20011,Washington DC,,site_check,https://genesiscremationandfuneral.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Funeral Choices of Chantilly,VA,20151,Northern VA (Loudoun/Manassas/Reston),,site_check,https://funeralchoices.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Lay To Rest Cremation & Funeral Home,VA,22150,McLean/Vienna/Woodbridge,,site_check,https://laytorestfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Direct Cremation Services of Virginia,VA,20151,Northern VA (Loudoun/Manassas/Reston),,site_check,https://directcremationservicesofvirginia.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Northern Virginia Burial & Cremation Society,VA,22314,Alexandria,,link_found,https://irp-cdn.multiscreensite.com/ed8b9e00/files/uploaded/NVCS%20GPL%202021.pdf,,,,,,,,"Price-list link found; open it, record the printed effective date, then review."
+Reese Funeral Professionals,VA,22314,Alexandria,,site_check,https://reesefuneralprofessionals.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Olde Towne Funeral Home of Manassas,VA,20110,Northern VA (Loudoun/Manassas/Reston),,link_found,https://manassasfuneralhome.com/wp-content/uploads/2022/10/General-Pricelist.pdf,,,,,,,,"Price-list link found; open it, record the printed effective date, then review."
+Joynes Funeral Home Inc.,VA,20186,Northern VA (Loudoun/Manassas/Reston),,site_check,https://joynesfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request."
+Alfirdaus Jinnazah Services LLC,VA,22079,Fairfax County,,site_check,https://alfirdausjinnaza.com/,,,,,,,,"Site known; look for a posted list, else send the request."

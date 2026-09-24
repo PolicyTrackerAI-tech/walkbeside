@@ -65,7 +65,9 @@ Blount (4804 Georgia Ave NW), Young (719 Kennedy St NW), Universal Mortuary
 (411 Kennedy St NW), Harrison & Son (3449 14th St NW), Echelon Avant Garde
 (3457 14th St NW), Watson's (3435 14th St NW), Columbia Heights
 (3605 14th St NW), Tri-State (912 3rd St NW), Hall Brothers
-(621 Florida Ave NW), and B.K. Henry (420 H St NE). DC total: 33 of ~38.
+(621 Florida Ave NW), and B.K. Henry (420 H St NE). Third pass: Genesis
+Cremation & Funeral Services (5732 Georgia Ave NW, Snead's address; confirm
+whether it operates from Snead's establishment). DC total: 34 of ~38.
 
 **Probably closed or not a DC establishment (confirm with DLCP, then drop):**
 

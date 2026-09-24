@@ -10,68 +10,73 @@ code is built and **off**: nothing changes until you turn it on._
 Local price ranges publish per **benchmark area**, and only once an area has
 at least five price-list observations for an item (guardrail #4). Today an
 area is a zip-regions label, which follows the first three digits of the
-zip. Several DC-metro labels are too small to ever get there:
+zip. Several DC-metro labels are too small to get there reliably:
 
 | Area (zip3) | Homes on the roster | At half of them sharing a list |
 |---|---|---|
-| Washington DC (200–205) | 33 | 16 |
-| Prince George's County (207) | 25 | 12 |
-| Bethesda/Rockville (208) | 12 | 6 |
-| Northern VA (Loudoun/Manassas/Reston) (201) | 11 | 5 |
-| Southern Maryland (206) | 8 | 4 |
-| Alexandria (223) | 6 | 3 |
-| Fairfax County (220) | 5 | 2 |
-| McLean/Vienna/Woodbridge (221) | 5 | 2 |
-| Silver Spring/Takoma Park (209) | 4 | 2 |
+| Washington DC (200–205) | 34 | 17 |
+| Prince George's County (207) | 28 | 14 |
+| Northern VA (Loudoun/Manassas/Reston) (201) | 15 | 7 |
+| Southern Maryland (206) | 15 | 7 |
+| Bethesda/Rockville (208) | 14 | 7 |
+| Alexandria (223) | 8 | 4 |
+| Fairfax County (220) | 6 | 3 |
+| McLean/Vienna/Woodbridge (221) | 6 | 3 |
+| Silver Spring/Takoma Park (209) | 5 | 2 |
 | **Arlington (222)** | **3** | **1** |
 
-Counts come from [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv).
-"Half" is a planning scenario, not a forecast. The FTC Funeral Rule
-requires a price list to show the price of each core item a home offers
-(basic services, embalming, transfer, direct cremation, immediate burial),
-so a home that shares its list usually counts toward all of them at once.
+Counts come from [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv)
+as of 2026-09-24. "Half" is a planning scenario, not a forecast. The FTC
+Funeral Rule requires a price list to show the price of each core item a
+home offers (basic services, embalming, transfer, direct cremation,
+immediate burial), so a home that shares its list usually counts toward
+all of them at once.
 
-Arlington can't reach five even if every home shares. Silver Spring can't
-either. Alexandria, Fairfax and McLean need nearly every home.
+Arlington can't reach five even if every home shares. Silver Spring needs
+every one of its five. Alexandria, Fairfax and McLean need most of theirs.
 
 ## The options
 
 **A. No pooling (today's default).** Every zip3 label stands alone. DC,
-Prince George's and probably Bethesda/Rockville and Loudoun/Manassas
-publish. Arlington, Silver Spring, Alexandria, Fairfax and McLean likely
-never do, so a family in Arlington sees modeled prices only.
+Prince George's, and probably Bethesda/Rockville, Loudoun/Manassas and
+Southern Maryland publish. Arlington, Silver Spring, Alexandria, Fairfax
+and McLean likely never do, so a family in Arlington sees modeled prices
+only.
 
 **B. Two pools (recommended).**
 
-| Pool | Combines | Homes |
-|---|---|---|
-| **Montgomery County, MD** | Bethesda/Rockville + Silver Spring/Takoma Park | 16 |
-| **Northern Virginia** | Arlington + Alexandria + Fairfax County + McLean/Vienna/Woodbridge + Northern VA (Loudoun/Manassas/Reston) | 30 |
+| Pool | Combines | Homes | At half |
+|---|---|---|---|
+| **Montgomery County, MD** | Bethesda/Rockville + Silver Spring/Takoma Park | 19 | 9 |
+| **Northern Virginia** | Arlington + Alexandria + Fairfax County + McLean/Vienna/Woodbridge + Northern VA (Loudoun/Manassas/Reston) | 38 | 19 |
 
 DC, Prince George's and Southern Maryland stay as they are.
 
 **C. Three pools.** Montgomery as in B, but Virginia splits into an inner
-pool (Arlington, Alexandria, Fairfax, McLean: 19 homes) and
-Loudoun/Manassas on its own (11). This is closer to real price levels if
-the outer suburbs run cheaper, but the inner pool is marginal again at half
-yield (9), and Loudoun/Manassas sits right at 5.
+pool (Arlington, Alexandria, Fairfax, McLean: 23 homes, 11 at half) and
+Loudoun/Manassas on its own (15 homes, 7 at half). This is closer to real
+price levels if the outer suburbs run cheaper. Both halves clear five at
+half yield, but with less margin, so they publish later than one pool
+would.
 
 ## Recommendation: B, with a check that can move it to C
 
 - Both pools are names families already use. "Montgomery County" is one
   county split across two zip3s. "Northern Virginia" is how the region
   describes itself.
-- Both pools publish at realistic yield (8 and 15), so the Virginia and
-  Montgomery launch pages get real local ranges by the 11/13 and 12/15
-  checkpoints instead of staying modeled.
+- Both pools clear five with room to spare (9 and 19 at half yield), so the
+  Montgomery and Virginia launch pages get real local ranges by the 11/13
+  and 12/15 checkpoints instead of staying modeled.
 - **The check.** Once Northern Virginia has five or more lists, compare
   the Loudoun/Manassas median for basic services and direct cremation with
   the rest of the pool. If either differs by more than 15% (the pipeline's
   own drift tolerance, `DRIFT_TOLERANCE`), switch to C before promoting.
+  With 15 Loudoun/Manassas homes on the roster, C is a real fallback.
 
-**Leave Southern Maryland alone for now.** Pooling it with Prince George's
-would blend rural Charles and St. Mary's prices into a suburban range.
-Revisit at the 11/13 Maryland checkpoint if it's still under five.
+**Leave Southern Maryland alone.** With 15 homes it can reach five on its
+own, and pooling it with Prince George's would blend rural Charles,
+St. Mary's and Calvert prices into a suburban range. Revisit at the 11/13
+Maryland checkpoint only if it's still under five.
 
 ## Why this is consistent with guardrail #4
 
