@@ -7,11 +7,14 @@ import { extractionConfidence as tsConfidence } from "@/lib/extraction-confidenc
 import { LINE_ITEMS } from "@/lib/pricing-data";
 import { matchLineItem } from "@/lib/negotiation/price-list-parse";
 import {
+  MAX_LIST_AGE_MONTHS,
   analysisInputHash,
   analysisRow,
   extractionConfidence,
+  heldReason,
   homeNamePattern,
   lineItemIds,
+  listAgeMonths,
   redactContact,
   validateRecord,
   type GplRecord,
@@ -108,6 +111,32 @@ describe("validateRecord", () => {
       ids,
     );
     expect(errs.join("\n")).toMatch(/already mapped/);
+  });
+});
+
+describe("old price lists are held back until the home confirms them", () => {
+  const at = (effectiveDate: string, retrievedAt = "2026-09-24") => ({ ...base, effectiveDate, retrievedAt });
+
+  it("counts whole months from the printed date to retrieval", () => {
+    expect(listAgeMonths(at("2026-02-01"))).toBe(7);
+    expect(listAgeMonths(at("2024-07-15"))).toBe(26);
+    expect(listAgeMonths(at("2024-09-24"))).toBe(24);
+    expect(listAgeMonths(at("2024-09-25"))).toBe(23);
+  });
+
+  it(`holds a list printed more than ${MAX_LIST_AGE_MONTHS} months before retrieval, and only that`, () => {
+    expect(heldReason(at("2024-09-24"))).toBeNull();
+    expect(heldReason(at("2024-08-23"))).toMatch(/25 months/);
+    expect(heldReason(at("2024-07-15"))).toMatch(/stillCurrent/);
+  });
+
+  it("releases a held list once stillCurrent records how the home confirmed it", () => {
+    expect(heldReason({ ...at("2024-07-15"), stillCurrent: "Home confirmed by phone on 2026-10-02" })).toBeNull();
+  });
+
+  it("rejects a printed date after retrieval, and a stillCurrent that says nothing", () => {
+    expect(validateRecord(at("2026-10-01"), ids).join("\n")).toMatch(/after retrievedAt/);
+    expect(validateRecord({ ...at("2024-07-15"), stillCurrent: "yes" }, ids).join("\n")).toMatch(/stillCurrent/);
   });
 });
 

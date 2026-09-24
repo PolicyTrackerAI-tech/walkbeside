@@ -70,6 +70,21 @@ keep, so for a DC home with a site add one line, kept gentle:
 Whatever a home says about its prices on the phone is **not** a price list.
 Only record a list you actually receive.
 
+## Confirming an older posted list
+
+Some homes post a list that is more than two years old (Stewart's is dated
+July 15, 2024; J.B. Jenkins' August 8, 2024). They are reviewed and waiting
+in `supabase/seed/gpl/dmv/`, held until the home confirms them. One line
+does it:
+
+> Hello, I'm [Your name] from Honest Funeral. The General Price List on your
+> website is dated [date]. Is that still your current list, or is there a
+> newer one? Thank you.
+
+A "yes" releases the file (add `stillCurrent`, see
+[`DMV_HOMES_ROSTER_2026-09.md`](DMV_HOMES_ROSTER_2026-09.md)); a newer
+list replaces it.
+
 ## When a list comes back
 
 1. Save the file. Note its **printed effective date** and the

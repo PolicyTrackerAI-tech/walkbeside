@@ -1,0 +1,427 @@
+{
+  "homeName": "J.B. Jenkins Funeral Home Inc.",
+  "zip": "20785",
+  "sourceUrl": "https://fh-content.s3.amazonaws.com/release/Content/Media/JBJenkinsFuneralHomeInc/General%20Price%20List%202024.pdf",
+  "provenance": "posted",
+  "effectiveDate": "2024-08-08",
+  "retrievedAt": "2026-09-24",
+  "reviewNotes": [
+    "Hosted in the home's own media folder on its website vendor's storage, so provenance is posted. The printed date, August 8, 2024, is 25 months before retrieval, so the loader holds it until the home confirms it is still current.",
+    "The PDF is a 16-page scan with no text layer; the text field is a transcription of the itemized lines on pages 1 and 5-12, read page by page.",
+    "Visitation, funeral ceremony and graveside service are priced per hour ($250); each is recorded as that benchmark's observation with the unit in its name.",
+    "Direct cremation: the Direct Cremation Package with the minimum alternative container ($2,700) is the observation. It includes an urn and one certified death certificate, and excludes the medical examiner's cremation approval stamp.",
+    "Death certificates: the Maryland first-copy price ($25) is the observation for this Maryland home; DC and Virginia copies are for deaths there.",
+    "Holding remains after a 7-day grace period ($35 per day) is the per-day shelter fee.",
+    "Private-viewing add-ons, security, limousine overtime, per-card acknowledgement cards, the mock casket and the single doeskin casket are kept off their benchmarks. Packages, youth services and immediate burial have no benchmark. Caskets, urns, vaults, flowers, programs and the cremation fee are ranges and never enter the benchmark feed.",
+    "This review found eight matcher gaps on real Maryland wording, fixed in lib/negotiation/price-list-parse.ts: the direct-cremation package read as a cremation container, the basic service fee and funeral ceremony matched nothing, wood caskets read as metal, and urn or casket personalization read as the urn or casket."
+  ],
+  "text": "J.B. JENKINS FUNERAL HOME, INC. GENERAL PRICE LIST\nTwo Maryland locations: 7474 Landover Rd., Landover, Md. 20785, (301) 322-2300; J.B. Jenkins Worship Center at Kettering, 1 Kettering Dr., Upper Marlboro, MD 20774.\nThese prices are effective as of August 8, 2024 and are subject to change without notice.\n[Transcribed from the scanned document (no text layer), pages 1 and 5-12: the itemized lines. Packages on pages 2-4 and the casket selection room list on page 14 are not itemized here.]\n\nProfessional/Basic Service Fee (Non-declinable) .... $3,000.00\nEmbalming Fee .... $850.00\nCremation Fee .... $550.00 to $1,125.00\nWashing and Disinfecting .... $175.00\nHair Dressing .... $75.00\nDressing and Casketing .... $175.00\nExtensive Restoration (per hour) .... $275.00\nExtensive Hair Dressing .... $200.00\nVisitation (per hour) .... $250.00\nFuneral Ceremony (per hour) .... $250.00\nMemorial Service (2 hours) .... $500.00\nGraveside Funeral Service (per hour) .... $250.00\nSunday Service Fee .... $500.00\nExtended Private Viewing to an hour .... $175.00\nIdentification prior to Private Viewing .... $175.00\nAdditional Private Viewing (per hour) .... $175.00\nCeremony Bathing and Dressing .... $300.00\nSecurity for Services (1-hour visitation and 1-hour funeral or memorial service) .... $500.00\nExtended Security Services (per hour) .... $300.00\nHearse .... $550.00\nLimousine (includes four hours) .... $625.00\nFlower Vehicle .... $350.00\nClergy Car .... $350.00\nTransfer of remains/Removal to Funeral Home .... $425.00\nAirport transfer or airport pick-up .... $425.00\nRepeat trip for removal or airport .... $425.00\nLimousine Overtime (per hour) .... $150.00\nAdditional Mileage Fee (plus $3.00 per mile after 35 miles) .... $185.00\nBox of Acknowledgement Cards (25 cards) .... $20.00\nCasket Panel .... $350.00\nCaskets .... $1,110.00 to $6,015.00\nCustom Acknowledgement Cards (each) .... $1.90\nMock Casket Use (Remembrance Casket Only) .... $500.00\nCasket Applique Personalization .... $75.00 to $250.00\nUrns .... $150.00 to $4,836.00\nUrn Applique Personalization .... $45.00 to $150.00\nEngraving of Urn (first three lines) .... $95.00\nUrn Engraving additional lines (each line) .... $10.00\nUrn Emblems .... $45.00\nFlowers .... $85.00 to $900.00\nMen's Oversized Suit .... $350.00\nMen's Standard Suit .... $250.00\nPrograms (each) .... $2.50 to $20.00\nStandard Register Book .... $30.00\nVideo Slide Show .... $155.00\nAdditional Video Slide Show Copy .... $15.00\nWomen's 1X-3X Shroud .... $350.00\nWomen's Standard Shroud .... $225.00\nOuter Burial Containers (concrete liner to Wilbert bronze vault) .... $1,250.00 to $4,925.00\nOuter Burial Containers purchased for burials arriving 3pm or later .... $250.00\nWeekend Delivery Fee for Outer Burial Containers .... $250.00\nCemetery Set-up (equipment and tent) .... $525.00\nAir tray .... $175.00\nOversized Air tray .... $375.00\nCombo Unit .... $275.00\nOversized Combo Unit .... $475.00\nZiegler Case .... $1,195.00\nHolding Remains in facility after 7 days (per day) .... $35.00\nClergy/Officiant .... $175.00\nMusician .... $250.00 to $700.00\nMaryland Certified Copies (first copy) .... $25.00\nMaryland Certified Copies (each additional) .... $20.00\nDistrict of Columbia Certified Copies (each copy) .... $18.00\nVirginia Certified Copies (each copy) .... $12.00\nFiling death certificate for another funeral home .... $150.00\nDirect Cremation Package (minimum alternative container) .... $2,700.00\nDirect Cremation, with a Minimum or Upgraded Alternative Container provided by the Funeral Home .... $2,700.00 to $4,505.00\nDirect Cremation, Alternative Cremation container provided by the family .... $2,550.00\nCremation with Memorial Service .... $4,000.00\nMemorial Service ONLY (families who are not cremation clients) .... $2,200.00\nCremation approval stamp fee for District of Columbia .... $75.00\nCremation approval stamp fee for Virginia .... $100.00\nTransportation fee for Virginia cremation stamp approval .... $425.00\nWitness of Cremation .... $350.00\nOversize Fee for Cremations .... $475.00 to $575.00\nMinimum Cardboard Cremation Container .... $150.00\nRental Casket Insert .... $150.00\nExterior Cardboard Fiberboard .... $600.00\n24\" Doeskin Casket (cloth-covered wood casket) .... $1,110.00\nImmediate Burial (casket additional) .... $3,975.00\nImmediate Burial, with Standard size 24\" Doeskin Casket .... $5,085.00\nImmediate Burial, with 28\" Doeskin Casket .... $5,335.00\nForwarding Remains to another Funeral Home .... $5,025.00\nReceiving of Remains from another Funeral Home .... $3,975.00\nInfant & Toddler Cremation (infant up to 5 years old) .... $100.00\nYouth Funeral Service (infant up to 4 years) .... $1,308.00",
+  "items": [
+    {
+      "name": "Professional/Basic Service Fee (Non-declinable)",
+      "cents": 300000,
+      "matchedItemId": "basic-services"
+    },
+    {
+      "name": "Embalming Fee",
+      "cents": 85000,
+      "matchedItemId": "embalming"
+    },
+    {
+      "name": "Cremation Fee",
+      "cents": 55000,
+      "isRange": true,
+      "centsLow": 55000,
+      "centsHigh": 112500
+    },
+    {
+      "name": "Washing and Disinfecting",
+      "cents": 17500
+    },
+    {
+      "name": "Hair Dressing",
+      "cents": 7500
+    },
+    {
+      "name": "Dressing and Casketing",
+      "cents": 17500
+    },
+    {
+      "name": "Extensive Restoration (per hour)",
+      "cents": 27500
+    },
+    {
+      "name": "Extensive Hair Dressing",
+      "cents": 20000
+    },
+    {
+      "name": "Visitation (per hour)",
+      "cents": 25000,
+      "matchedItemId": "viewing"
+    },
+    {
+      "name": "Funeral Ceremony (per hour)",
+      "cents": 25000,
+      "matchedItemId": "service-facility"
+    },
+    {
+      "name": "Memorial Service (2 hours)",
+      "cents": 50000
+    },
+    {
+      "name": "Graveside Funeral Service (per hour)",
+      "cents": 25000,
+      "matchedItemId": "graveside"
+    },
+    {
+      "name": "Sunday Service Fee",
+      "cents": 50000
+    },
+    {
+      "name": "Extended Private Viewing to an hour",
+      "cents": 17500,
+      "matcherOverride": "A private-viewing extension, not visitation; the Visitation line carries the benchmark."
+    },
+    {
+      "name": "Identification prior to Private Viewing",
+      "cents": 17500,
+      "matcherOverride": "An identification viewing, not visitation."
+    },
+    {
+      "name": "Additional Private Viewing (per hour)",
+      "cents": 17500,
+      "matcherOverride": "A private-viewing add-on, not visitation."
+    },
+    {
+      "name": "Ceremony Bathing and Dressing",
+      "cents": 30000
+    },
+    {
+      "name": "Security for Services (1-hour visitation and 1-hour funeral or memorial service)",
+      "cents": 50000,
+      "matcherOverride": "Security staffing, not the visitation itself."
+    },
+    {
+      "name": "Extended Security Services (per hour)",
+      "cents": 30000
+    },
+    {
+      "name": "Hearse",
+      "cents": 55000,
+      "matchedItemId": "hearse"
+    },
+    {
+      "name": "Limousine (includes four hours)",
+      "cents": 62500,
+      "matchedItemId": "limo"
+    },
+    {
+      "name": "Flower Vehicle",
+      "cents": 35000
+    },
+    {
+      "name": "Clergy Car",
+      "cents": 35000
+    },
+    {
+      "name": "Transfer of remains/Removal to Funeral Home",
+      "cents": 42500,
+      "matchedItemId": "transfer"
+    },
+    {
+      "name": "Airport transfer or airport pick-up",
+      "cents": 42500
+    },
+    {
+      "name": "Repeat trip for removal or airport",
+      "cents": 42500
+    },
+    {
+      "name": "Limousine Overtime (per hour)",
+      "cents": 15000,
+      "matcherOverride": "An hourly overtime charge, not the limousine; the Limousine line carries the benchmark."
+    },
+    {
+      "name": "Additional Mileage Fee (plus $3.00 per mile after 35 miles)",
+      "cents": 18500
+    },
+    {
+      "name": "Box of Acknowledgement Cards (25 cards)",
+      "cents": 2000,
+      "matchedItemId": "acknowledgement-cards"
+    },
+    {
+      "name": "Casket Panel",
+      "cents": 35000
+    },
+    {
+      "name": "Caskets",
+      "cents": 111000,
+      "isRange": true,
+      "centsLow": 111000,
+      "centsHigh": 601500
+    },
+    {
+      "name": "Custom Acknowledgement Cards (each)",
+      "cents": 190,
+      "matcherOverride": "Priced per card; the box line carries the benchmark."
+    },
+    {
+      "name": "Mock Casket Use (Remembrance Casket Only)",
+      "cents": 50000,
+      "matcherOverride": "Use of a display casket, not a casket purchase."
+    },
+    {
+      "name": "Casket Applique Personalization",
+      "cents": 7500,
+      "isRange": true,
+      "centsLow": 7500,
+      "centsHigh": 25000
+    },
+    {
+      "name": "Urns",
+      "cents": 15000,
+      "isRange": true,
+      "centsLow": 15000,
+      "centsHigh": 483600
+    },
+    {
+      "name": "Urn Applique Personalization",
+      "cents": 4500,
+      "isRange": true,
+      "centsLow": 4500,
+      "centsHigh": 15000
+    },
+    {
+      "name": "Engraving of Urn (first three lines)",
+      "cents": 9500
+    },
+    {
+      "name": "Urn Engraving additional lines (each line)",
+      "cents": 1000
+    },
+    {
+      "name": "Urn Emblems",
+      "cents": 4500
+    },
+    {
+      "name": "Flowers",
+      "cents": 8500,
+      "isRange": true,
+      "centsLow": 8500,
+      "centsHigh": 90000
+    },
+    {
+      "name": "Men's Oversized Suit",
+      "cents": 35000
+    },
+    {
+      "name": "Men's Standard Suit",
+      "cents": 25000
+    },
+    {
+      "name": "Programs (each)",
+      "cents": 250,
+      "isRange": true,
+      "centsLow": 250,
+      "centsHigh": 2000
+    },
+    {
+      "name": "Standard Register Book",
+      "cents": 3000,
+      "matchedItemId": "register-book"
+    },
+    {
+      "name": "Video Slide Show",
+      "cents": 15500
+    },
+    {
+      "name": "Additional Video Slide Show Copy",
+      "cents": 1500
+    },
+    {
+      "name": "Women's 1X-3X Shroud",
+      "cents": 35000
+    },
+    {
+      "name": "Women's Standard Shroud",
+      "cents": 22500
+    },
+    {
+      "name": "Outer Burial Containers (concrete liner to Wilbert bronze vault)",
+      "cents": 125000,
+      "isRange": true,
+      "centsLow": 125000,
+      "centsHigh": 492500
+    },
+    {
+      "name": "Outer Burial Containers purchased for burials arriving 3pm or later",
+      "cents": 25000
+    },
+    {
+      "name": "Weekend Delivery Fee for Outer Burial Containers",
+      "cents": 25000
+    },
+    {
+      "name": "Cemetery Set-up (equipment and tent)",
+      "cents": 52500
+    },
+    {
+      "name": "Air tray",
+      "cents": 17500
+    },
+    {
+      "name": "Oversized Air tray",
+      "cents": 37500
+    },
+    {
+      "name": "Combo Unit",
+      "cents": 27500
+    },
+    {
+      "name": "Oversized Combo Unit",
+      "cents": 47500
+    },
+    {
+      "name": "Ziegler Case",
+      "cents": 119500
+    },
+    {
+      "name": "Holding Remains in facility after 7 days (per day)",
+      "cents": 3500,
+      "matchedItemId": "refrigeration-shelter"
+    },
+    {
+      "name": "Clergy/Officiant",
+      "cents": 17500
+    },
+    {
+      "name": "Musician",
+      "cents": 25000,
+      "isRange": true,
+      "centsLow": 25000,
+      "centsHigh": 70000
+    },
+    {
+      "name": "Maryland Certified Copies (first copy)",
+      "cents": 2500,
+      "matchedItemId": "death-cert"
+    },
+    {
+      "name": "Maryland Certified Copies (each additional)",
+      "cents": 2000,
+      "matcherOverride": "One death-certificate observation per home: the first-copy line carries it."
+    },
+    {
+      "name": "District of Columbia Certified Copies (each copy)",
+      "cents": 1800,
+      "matcherOverride": "For deaths in DC; this Maryland home's observation is the Maryland copy."
+    },
+    {
+      "name": "Virginia Certified Copies (each copy)",
+      "cents": 1200,
+      "matcherOverride": "For deaths in Virginia; this Maryland home's observation is the Maryland copy."
+    },
+    {
+      "name": "Filing death certificate for another funeral home",
+      "cents": 15000
+    },
+    {
+      "name": "Direct Cremation Package (minimum alternative container)",
+      "cents": 270000,
+      "matchedItemId": "direct-cremation-fee"
+    },
+    {
+      "name": "Direct Cremation, with a Minimum or Upgraded Alternative Container provided by the Funeral Home",
+      "cents": 270000,
+      "isRange": true,
+      "centsLow": 270000,
+      "centsHigh": 450500
+    },
+    {
+      "name": "Direct Cremation, Alternative Cremation container provided by the family",
+      "cents": 255000,
+      "matcherOverride": "One direct-cremation observation per home: the minimum-alternative-container package carries it."
+    },
+    {
+      "name": "Cremation with Memorial Service",
+      "cents": 400000
+    },
+    {
+      "name": "Memorial Service ONLY (families who are not cremation clients)",
+      "cents": 220000
+    },
+    {
+      "name": "Cremation approval stamp fee for District of Columbia",
+      "cents": 7500
+    },
+    {
+      "name": "Cremation approval stamp fee for Virginia",
+      "cents": 10000
+    },
+    {
+      "name": "Transportation fee for Virginia cremation stamp approval",
+      "cents": 42500
+    },
+    {
+      "name": "Witness of Cremation",
+      "cents": 35000,
+      "matchedItemId": "witness-cremation-fee"
+    },
+    {
+      "name": "Oversize Fee for Cremations",
+      "cents": 47500,
+      "isRange": true,
+      "centsLow": 47500,
+      "centsHigh": 57500
+    },
+    {
+      "name": "Minimum Cardboard Cremation Container",
+      "cents": 15000,
+      "matchedItemId": "cremation-container"
+    },
+    {
+      "name": "Rental Casket Insert",
+      "cents": 15000
+    },
+    {
+      "name": "Exterior Cardboard Fiberboard",
+      "cents": 60000
+    },
+    {
+      "name": "24\" Doeskin Casket (cloth-covered wood casket)",
+      "cents": 111000,
+      "matcherOverride": "A single casket on the alternative-containers page; caskets enter the benchmarks only from a casket price list reviewed as a whole."
+    },
+    {
+      "name": "Immediate Burial (casket additional)",
+      "cents": 397500
+    },
+    {
+      "name": "Immediate Burial, with Standard size 24\" Doeskin Casket",
+      "cents": 508500
+    },
+    {
+      "name": "Immediate Burial, with 28\" Doeskin Casket",
+      "cents": 533500
+    },
+    {
+      "name": "Forwarding Remains to another Funeral Home",
+      "cents": 502500,
+      "matchedItemId": "forwarding-remains"
+    },
+    {
+      "name": "Receiving of Remains from another Funeral Home",
+      "cents": 397500,
+      "matchedItemId": "receiving-remains"
+    },
+    {
+      "name": "Infant & Toddler Cremation (infant up to 5 years old)",
+      "cents": 10000
+    },
+    {
+      "name": "Youth Funeral Service (infant up to 4 years)",
+      "cents": 130800
+    }
+  ]
+}

@@ -74,8 +74,32 @@ export const PROVENANCE = ["posted", "fca_hosted", "requested", "family_consente
  *   matcherOverride?: string }} Item
  * @typedef {{ homeName: string, zip: string, sourceUrl?: string, provenance: string,
  *   effectiveDate: string, retrievedAt: string, statedTotalCents?: number | null,
+ *   stillCurrent?: string, reviewNotes?: string[],
  *   text: string, items: Item[] }} GplRecord
  */
+
+/**
+ * A price list printed more than this many months before it was retrieved
+ * is held back from loading: an old list would pull the local ranges down.
+ * It loads once someone confirms with the home that it is still the current
+ * list and records how in `stillCurrent`.
+ */
+export const MAX_LIST_AGE_MONTHS = 24;
+
+/** Whole months from the printed effective date to retrieval. @param {GplRecord} r */
+export function listAgeMonths(r) {
+  const [ey, em, ed] = r.effectiveDate.split("-").map(Number);
+  const [ry, rm, rd] = r.retrievedAt.split("-").map(Number);
+  return (ry - ey) * 12 + (rm - em) - (rd < ed ? 1 : 0);
+}
+
+/** Why a valid record is held back from loading, or null. @param {GplRecord} r */
+export function heldReason(r) {
+  if (r.stillCurrent) return null;
+  const age = listAgeMonths(r);
+  if (age <= MAX_LIST_AGE_MONTHS) return null;
+  return `printed ${r.effectiveDate}, ${age} months before it was retrieved (the limit is ${MAX_LIST_AGE_MONTHS}). Confirm with the home that it is still their current list, then add "stillCurrent": "<how and when you confirmed>".`;
+}
 
 const MAX_CENTS = 100_000_000;
 const isInt = (/** @type {unknown} */ v) => typeof v === "number" && Number.isInteger(v);
@@ -101,6 +125,10 @@ export function validateRecord(r, ids) {
   if (!PROVENANCE.includes(r.provenance)) errs.push(`provenance must be one of ${PROVENANCE.join(", ")}`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.effectiveDate ?? "")) errs.push("effectiveDate must be YYYY-MM-DD (the date printed inside the document)");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(r.retrievedAt ?? "")) errs.push("retrievedAt must be YYYY-MM-DD");
+  else if (/^\d{4}-\d{2}-\d{2}$/.test(r.effectiveDate ?? "") && r.effectiveDate > r.retrievedAt)
+    errs.push("effectiveDate is after retrievedAt");
+  if (r.stillCurrent !== undefined && (typeof r.stillCurrent !== "string" || r.stillCurrent.trim().length < 10))
+    errs.push("stillCurrent must say how and when the home confirmed the list is current");
   if (typeof r.text !== "string" || r.text.length < 20 || r.text.length > 20000) errs.push("text must be 20-20000 characters");
   if (!Array.isArray(r.items) || r.items.length < 1 || r.items.length > 200) errs.push("items must have 1-200 entries");
   const seen = new Set();

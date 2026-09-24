@@ -15,6 +15,9 @@
  *     it would write.
  *   - Idempotent: a document already saved (same user + input_hash) is
  *     skipped, so re-running the folder writes nothing new.
+ *   - A price list printed more than MAX_LIST_AGE_MONTHS before it was
+ *     retrieved is held back (not loaded) until the file records, in
+ *     stillCurrent, how the home confirmed it is still current.
  *   - Nothing here contacts anyone. Benchmarks still publish only through
  *     the n≥5 promotion step on /admin/benchmarks (guardrail #4).
  *
@@ -32,6 +35,7 @@ import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import {
   analysisRow,
+  heldReason,
   homeNamePattern,
   lineItemIds,
   validateRecord,
@@ -57,6 +61,7 @@ if (!files.length) die(`No .json files in ${target}`);
 const ids = lineItemIds();
 const records = [];
 let invalid = 0;
+let heldCount = 0;
 for (const f of files) {
   let rec;
   try {
@@ -72,11 +77,18 @@ for (const f of files) {
     invalid++;
     continue;
   }
+  const held = heldReason(rec);
+  if (held) {
+    console.log(`⏸ held: ${rec.homeName} (${rec.zip}): ${held}`);
+    heldCount++;
+    continue;
+  }
   const matched = rec.items.filter((i) => i.matchedItemId && !i.isRange).length;
   console.log(`✓ ${rec.homeName} (${rec.zip}) · effective ${rec.effectiveDate} · ${rec.provenance} · ${rec.items.length} items, ${matched} benchmark-matched`);
   records.push({ file: f, rec });
 }
 if (invalid) die(`${invalid} file(s) invalid. Nothing written.`);
+if (heldCount) console.log(`\n${heldCount} price list(s) held back as too old to load; the rest continue.`);
 
 const { NEXT_PUBLIC_SUPABASE_URL: URL_, SUPABASE_SERVICE_ROLE_KEY: KEY, ADMIN_EMAILS } = process.env;
 if (!URL_ || !KEY) {

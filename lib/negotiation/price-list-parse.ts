@@ -345,6 +345,10 @@ export function matchLineItem(name: string): LineItem | undefined {
   // "Handling fee for urn provided by the family" used to hit the "urn"
   // synonym and read against an urn's price range.
   if (outsideUrnOrVaultFee(n)) return undefined;
+  // Engraving, an emblem or an applique for an urn is priced on top of the
+  // urn ("Engraving of urn" $95 on the J.B. Jenkins 2024 GPL read as a $95
+  // urn and would pull the urn benchmark down).
+  if (/\burns?\b/.test(n) && /\b(?:engrav\w*|emblems?|appliques?|personaliz\w*)\b/.test(n)) return undefined;
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
@@ -358,6 +362,11 @@ export function matchLineItem(name: string): LineItem | undefined {
       return words.length > 1 && words.every((w) => m.includes(w));
     });
   });
+  // Both casket items reduce to the bare synonym "casket", so every casket
+  // matched the metal one first, and a wood casket was judged against the
+  // 18-gauge steel range. A casket named as wood (and not as metal) is wood.
+  if (direct?.id === "casket-metal" && WOOD_CASKET.test(m) && !METAL_CASKET.test(m))
+    return LINE_ITEMS.find((it) => it.id === "casket-wood");
   if (direct) return direct;
   const alias = WORDING_ALIASES.find(([re]) => re.test(m));
   return alias ? LINE_ITEMS.find((it) => it.id === alias[1]) : undefined;
@@ -381,13 +390,32 @@ export function matchLineItem(name: string): LineItem | undefined {
 // death-certificate benchmark. Each is narrow on purpose: "Coloring of hair"
 // alone is an add-on, not body preparation, and "filing of death
 // certificate" inside a package description is not a per-copy price.
+//
+// From the DC fh-content harvest (Stewart, 2024; Tri-State): a "Daily
+// storage fee" for the remains is the per-day shelter fee. Storage of
+// cremains is not.
+//
+// From the Maryland harvest (J.B. Jenkins, 2024): "Holding remains in
+// facility after 7 days" is the same per-day fee after a grace period;
+// "Professional/Basic Service Fee" (singular, slashed) is the basic services
+// fee; "Funeral Ceremony" is the use of staff for the ceremony, unless the
+// line is a cremation or burial package; and "Maryland Certified Copies"
+// under a death-certificates header are death certificates.
 const WORDING_ALIASES: ReadonlyArray<readonly [RegExp, string]> = [
   [/\b(?:basic|professional|prof\.?)\s+services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
   [/\bnon-?declinable basic services\b/, "basic-services"],
   [/\bcosmet\w*\b.*\b(?:dressing|hair\s?styling)\b|\bdressing\b.*\bcosmet\w*/, "body-prep"],
   [/\bcommittal service\b/, "graveside"],
   [/\bcertified (?:copies of )?death certificates?\b|\bdeath certificates?\b.*\b(?:each|per copy|copies)\b/, "death-cert"],
+  [/^(?!.*\b(?:cremains|cremated|ashes)\b).*\b(?:storage (?:fee|charge|of (?:the )?(?:remains|body|deceased))|holding (?:of )?(?:the )?remains)\b/, "refrigeration-shelter"],
+  [/\b(?:basic|professional)(?:\s*\/\s*(?:basic|professional))?\s+services?\s+(?:fee|charge)\b/, "basic-services"],
+  [/^(?!.*\b(?:cremation|burial|package|caskets?)\b).*\bfuneral ceremony\b/, "service-facility"],
+  [/\bcertified copies\b/, "death-cert"],
 ];
+
+const WOOD_CASKET =
+  /\b(?:wood(?:en)?|hardwood|oak|poplar|cherry|mahogany|maple|pine|walnut|birch|ash|elm|cedar|veneer)\b/;
+const METAL_CASKET = /\b(?:steel|metal|copper|bronze|stainless|\d+[- ]?(?:ga|gauge)|gauge)\b/;
 
 const NEGATED_EMBALMING = /\(?\b(?:no|without|non|un)[\s-]?embalm\w*\)?/g;
 
@@ -409,7 +437,7 @@ function isCasketAddOn(n: string): boolean {
   if (!CASKET_NOUN.test(n)) return false;
   // Hardware sold for a casket, not the casket ("Casket Panel Inserts" $200
   // on the Rhines 2026 GPL read as a $200 casket).
-  if (/\b(?:panels?|inserts?|corners?|engrav\w*)\b/.test(n)) return true;
+  if (/\b(?:panels?|inserts?|corners?|engrav\w*|appliques?|personaliz\w*)\b/.test(n)) return true;
   if (/\bhandling\b/.test(n)) return true;
   if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
   if (OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n)) return true;
@@ -447,8 +475,12 @@ function isCasketAddOn(n: string): boolean {
 // cost of casket").
 const PACKAGE_LEAD =
   /^[^a-z0-9]*(?:[a-z0-9]{1,2}[.)]\s*)?(?:an?\s+)?(?:direct|immediate)\s+(cremation|burial)s?\b(.*)$/;
+// "Direct Cremation Package (minimum alternative container)" (J.B. Jenkins,
+// 2024) names the package before its variant; without the optional noun it
+// fell through to the synonym pass and was judged as a $2,700 cremation
+// container.
 const PACKAGE_VARIANT =
-  /^\s*(?:[.:]?\s*$|[(,/]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
+  /^\s*(?:(?:package|option|plan)s?\b\s*)?(?:[.:]?\s*$|[(,/]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
 const PURCHASER_PROVIDES =
   /\b(?:provided|supplied|furnished)\s+by\s+(?:the\s+)?(?:purchaser|consumer|customer|client|buyer|family)\b|\b(?:purchaser|consumer|customer|client|buyer|family)\s+(?:provides|supplies|furnishes)\b/;
 const WITH_SERVICE =

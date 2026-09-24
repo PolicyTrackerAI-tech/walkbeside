@@ -11,7 +11,8 @@ this. The DC detail, with price-list links and conflicts, is in
 |---|---|---|
 | [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) | Funeral homes across the DC-metro service market (`lib/service-markets.ts`), in the importer's format | **134 homes**: 34 DC, 62 MD, 38 VA |
 | [`supabase/seed/gpl/dmv/john-t-rhines-2026.json`](../../supabase/seed/gpl/dmv/john-t-rhines-2026.json) | John T. Rhines Funeral Home (DC), GPL effective 2026-02-01, reviewed line by line | 34 lines, **15 benchmark observations** |
-| [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) | The scoreboard: one row per home, with its benchmark area, price-list status and vetting checkboxes | 134 rows: 1 reviewed, 16 with a list link, 79 with a site to check, 38 with no site known |
+| [`stewart-2024.json`](../../supabase/seed/gpl/dmv/stewart-2024.json), [`jb-jenkins-2024.json`](../../supabase/seed/gpl/dmv/jb-jenkins-2024.json) | Stewart Funeral Home (DC, effective 2024-07-15) and J.B. Jenkins (MD, 2024-08-08), reviewed but **held**: each is more than 24 months old, so it loads only once the home confirms it is still current (below) | 13 and 17 benchmark observations |
+| [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) | The scoreboard: one row per home, with its benchmark area, price-list status and vetting checkboxes | 134 rows: 1 reviewed, 2 reviewed but held, 15 with a list link, 79 with a site to check, 37 with no site known |
 | [`GPL_REQUEST_EMAIL.md`](GPL_REQUEST_EMAIL.md) | The founder-sent request (email, one follow-up, phone) for homes that don't post their list | |
 
 By benchmark area: Washington DC 34 (of the ~38 the DC Attorney General
@@ -19,7 +20,7 @@ counted) · Prince George's County 28 · Northern VA (Loudoun/Manassas/Reston)
 15 · Southern Maryland 15 · Bethesda/Rockville 14 · Alexandria 8 · Fairfax
 County 6 · McLean/Vienna/Woodbridge 6 · Silver Spring/Takoma Park 5 ·
 Arlington 3. Chains are marked in each row's notes (14 SCI / Dignity
-Memorial, 2 Carriage Services, one of them unconfirmed). Ten DC rows
+Memorial, 2 Carriage Services, one of them unconfirmed). Nine DC rows
 were found only in directory listings and say so; confirm those with DLCP
 first, since some may be closed or may share a building with another home.
 
@@ -100,7 +101,10 @@ judgment call. The main ones:
 - **The reviewed mapping must agree with the product's own matcher**
   (`scripts/__tests__/gpl-batch.test.ts`), except where a reviewer overrides
   it in writing (`matcherOverride`). This review turned up seven matcher
-  bugs on real DC wording, now fixed in `lib/negotiation/price-list-parse.ts`.
+  bugs on real DC wording, and the Stewart and J.B. Jenkins reviews nine
+  more (among them, a direct-cremation package read as a $2,700 cremation
+  container, and every wood casket read as metal). All are fixed in
+  `lib/negotiation/price-list-parse.ts`.
 
 ## Adding more price lists
 
@@ -115,6 +119,15 @@ judgment call. The main ones:
    in writing.
 4. `npm run ingest:gpl -- supabase/seed/gpl/dmv --apply`.
 
+**Old lists are held.** A list whose printed date is more than 24 months
+before you retrieved it would pull the local ranges down, so the loader
+skips it (`⏸ held`) and says why. To release one, confirm with the home
+that it is still their current list (a posted list they still link, or a
+call or email), then add to its file, for example:
+`"stillCurrent": "Home confirmed by phone on 2026-10-02 that the July 2024 list is current"`,
+and set its tracker row from `held_stale` to `reviewed`. If they send a
+newer list instead, review that one.
+
 The one-at-a-time alternative, `/admin/ingest-gpl`, writes exactly the same
 rows.
 
@@ -123,11 +136,13 @@ rows.
 [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) is
 the working scoreboard. Open it in any spreadsheet. `gpl_status` moves
 `no_site_known` / `site_check` → `link_found` or `requested` → `reviewed`
-(or `none_available` after a "no"). `benchmark_area` is the label the
+(or `held_stale` for a reviewed list waiting on the home's confirmation,
+or `none_available` after a "no"). `benchmark_area` is the label the
 benchmark pipeline groups by, so counting `reviewed` rows per area shows
 how close each area is to the n≥5 promotion bar. Some areas can't get
 there alone (Arlington has three homes): see
 [`BENCHMARK_AREA_POOLING_DECISION.md`](BENCHMARK_AREA_POOLING_DECISION.md).
 CI keeps the tracker in
 step with the roster (one row per home) and with the committed price lists
-(each one marked `reviewed` with its printed effective date).
+(each one marked `reviewed`, or `held_stale` when the loader holds it,
+with its printed effective date).

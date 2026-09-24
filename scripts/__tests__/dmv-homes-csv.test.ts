@@ -69,14 +69,15 @@ describe("supabase/seed/dmv-tracker.csv stays in step with the roster and the re
     // The area the pipeline groups by: the zip-regions label, or its pool
     // once pooling is on (docs/data/BENCHMARK_AREA_POOLING_DECISION.md).
     const { benchmarkAreaForZip } = await import("@/lib/benchmark-areas");
-    const statuses = new Set(["reviewed", "link_found", "site_check", "no_site_known", "requested", "none_available"]);
+    const statuses = new Set(["reviewed", "held_stale", "link_found", "site_check", "no_site_known", "requested", "none_available"]);
     for (const r of tracker) {
       expect(statuses.has(r.gpl_status), `${r.name}: ${r.gpl_status}`).toBe(true);
       expect(r.benchmark_area, r.name).toBe(benchmarkAreaForZip(r.zip));
     }
   });
 
-  it("every reviewed price list in supabase/seed/gpl is marked reviewed for its home", async () => {
+  it("every reviewed price list in supabase/seed/gpl is marked reviewed (or held_stale, when the loader holds it) for its home", async () => {
+    const { heldReason } = await import("../lib/gpl-batch.mjs");
     const { readdirSync, statSync } = await import("node:fs");
     const files: string[] = [];
     const walk = (d: string) => {
@@ -89,10 +90,10 @@ describe("supabase/seed/dmv-tracker.csv stays in step with the roster and the re
     walk(join(process.cwd(), "supabase/seed/gpl"));
     const byKey = new Map(tracker.map((r) => [key(r), r]));
     for (const f of files) {
-      const rec = JSON.parse(readFileSync(f, "utf8")) as { homeName: string; zip: string; effectiveDate: string };
+      const rec = JSON.parse(readFileSync(f, "utf8"));
       const row = byKey.get(`${rec.homeName.toLowerCase()}|${rec.zip}`);
       expect(row, `${rec.homeName} has no tracker row`).toBeDefined();
-      expect(row?.gpl_status).toBe("reviewed");
+      expect(row?.gpl_status, rec.homeName).toBe(heldReason(rec) ? "held_stale" : "reviewed");
       expect(row?.gpl_effective).toBe(rec.effectiveDate);
     }
   });

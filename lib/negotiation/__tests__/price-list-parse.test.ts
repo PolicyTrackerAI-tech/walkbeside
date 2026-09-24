@@ -147,7 +147,9 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("Rental casket")).toBe("rental-casket");
     expect(id("Ceremonial casket")).toBe("rental-casket");
     expect(id("Rental casket fee")).toBe("rental-casket");
-    expect(id("Casket — \"Homestead\" solid oak")).toBe("casket-metal");
+    // (An oak casket is a wood casket; it read as metal until the J.B.
+    // Jenkins 2024 review.)
+    expect(id("Casket — \"Homestead\" solid oak")).toBe("casket-wood");
     expect(id("Protective casket — 18 gauge steel")).toBe("casket-metal");
     expect(id("Sealer casket")).toBe("casket-metal");
     // "handling" without a casket is not the guard's business.
@@ -180,7 +182,8 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("Grave liner")).toBe("vault");
     expect(id("Burial vault — Guardian")).toBe("vault");
     // A fee word with no bought-elsewhere signal is not this guard's business.
-    expect(id("Urn engraving fee")).toBe("urn");
+    // (Engraving is: see the urn add-on guard in the J.B. Jenkins block.)
+    expect(id("Urn fee")).toBe("urn");
   });
 
   it("does not let a new item steal an existing line", () => {
@@ -770,9 +773,69 @@ describe("matchLineItem — wordings from the DC harvest (John T. Rhines 2026 GP
     expect(id("Casket - 18 gauge steel")).toBe("casket-metal");
   });
 
+  it("a storage fee for the remains is the per-day shelter fee; storing cremains is not", () => {
+    expect(id("Daily Storage Fee (every 24 hours)")).toBe("refrigeration-shelter");
+    expect(id("Storage of remains (per day)")).toBe("refrigeration-shelter");
+    expect(id("Cremains storage fee (after 30 days)")).toBeUndefined();
+    expect(id("Storage fee for cremated remains")).toBeUndefined();
+  });
+
   it("an immediate-burial package joined with a slash is a package, not a graveside fee", () => {
     expect(id("Immediate Burial/Graveside Service (casket not included)")).toBeUndefined();
     expect(id("Direct cremation/alternative container")).toBe("direct-cremation-fee");
     expect(id("Graveside service")).toBe("graveside");
+  });
+});
+
+describe("matchLineItem — wordings from the Maryland harvest (J.B. Jenkins 2024 GPL)", () => {
+  const id = (s: string) => matchLineItem(s)?.id;
+
+  it("a direct-cremation package named before its variant is the direct-cremation package, not a container", () => {
+    expect(id("Direct Cremation Package (minimum alternative container)")).toBe("direct-cremation-fee");
+    expect(id("Direct Cremation Package")).toBe("direct-cremation-fee");
+    expect(id("Direct cremation package with memorial service")).toBeUndefined();
+    expect(id("Immediate Burial Package")).toBeUndefined();
+    expect(id("Minimum Cardboard Cremation Container")).toBe("cremation-container");
+  });
+
+  it("'Professional/Basic Service Fee' is the basic services fee", () => {
+    expect(id("Professional/Basic Service Fee (Non-declinable)")).toBe("basic-services");
+    expect(id("Basic service fee")).toBe("basic-services");
+    expect(id("Professional service charge")).toBe("basic-services");
+  });
+
+  it("a funeral ceremony line is the ceremony fee, unless it is a cremation or burial package", () => {
+    expect(id("Funeral Ceremony (per hour)")).toBe("service-facility");
+    expect(id("Cremation with funeral ceremony")).toBeUndefined();
+    expect(id("Funeral ceremony package")).toBeUndefined();
+  });
+
+  it("holding remains per day is the shelter fee", () => {
+    expect(id("Holding Remains in facility after 7 days (per day)")).toBe("refrigeration-shelter");
+  });
+
+  it("certified copies are death certificates", () => {
+    expect(id("Maryland Certified Copies (first copy)")).toBe("death-cert");
+    expect(id("District of Columbia Certified Copies (each copy)")).toBe("death-cert");
+  });
+
+  it("personalization for a casket or an urn is never priced as the casket or urn", () => {
+    expect(id("Casket Applique Personalization")).toBeUndefined();
+    expect(id("Urn Applique Personalization")).toBeUndefined();
+    expect(id("Engraving of Urn (first three lines)")).toBeUndefined();
+    expect(id("Urn Emblems")).toBeUndefined();
+    expect(id("Urn engraving fee")).toBeUndefined();
+    expect(id("Urn (basic)")).toBe("urn");
+    expect(id("Keepsake urn — bronze")).toBe("urn");
+  });
+
+  it("a wood casket is judged as wood, a metal casket as metal", () => {
+    expect(id("24\" Doeskin Casket (cloth-covered wood casket)")).toBe("casket-wood");
+    expect(id("Wood casket")).toBe("casket-wood");
+    expect(id("Casket - solid poplar")).toBe("casket-wood");
+    expect(id("Casket - 18 gauge steel")).toBe("casket-metal");
+    expect(id("Stainless steel casket with oak interior trim")).toBe("casket-metal");
+    expect(id("Casket")).toBe("casket-metal");
+    expect(id("Rental casket (hardwood)")).toBe("rental-casket");
   });
 });

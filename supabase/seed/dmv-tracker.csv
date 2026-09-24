@@ -22,7 +22,7 @@ Snowden Funeral Home,MD,20850,Bethesda/Rockville,,site_check,https://snowdencare
 Thibadeau Mortuary Service P.A.,MD,20877,Bethesda/Rockville,,site_check,https://interfaithfunerals.com/,,,,,,,,"Site known; look for a posted list, else send the request."
 Advent Funeral & Cremation Services (Falls Church),VA,22046,Fairfax County,,no_site_known,,,,,,,,,Request by email/phone.
 Everly Funeral Home,VA,22030,Fairfax County,Carriage Services (unconfirmed),site_check,https://everlyfuneralhome.com/,,,,,,,,"Site known; look for a posted list, else send the request. Confirm the owner first (see the roster note)."
-Fairfax Memorial Funeral Home,VA,22032,Fairfax County,,link_found,https://www.fairfaxmemorialfuneralhome.com/funeral/general-price-list,,,,,,,,Posted page; a 2022 PDF also exists (stale).
+Fairfax Memorial Funeral Home,VA,22032,Fairfax County,,link_found,https://www.fairfaxmemorialfuneralhome.com/funeral/general-price-list,,,,,,,,"Posted page; the PDF found (FMGPL81522) is effective 2022-08-15, so check the page for a newer one."
 Murphy Funeral Homes (Falls Church),VA,22046,Fairfax County,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
 National Funeral Home & Memorial Park,VA,22042,Fairfax County,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
 Demaine Funeral Home (Springfield),VA,22151,McLean/Vienna/Woodbridge,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
@@ -50,7 +50,7 @@ Fort Lincoln Funeral Home & Cemetery,MD,20722,Prince George's County,SCI / Digni
 Gary L. Kaufman Funeral Home at Meadowridge,MD,20707,Prince George's County,,no_site_known,,,,,,,,,Request by email/phone.
 Gasch's Funeral Home P.A.,MD,20781,Prince George's County,,link_found,https://www.gaschs.com/resources/general-prices,,,,,,,,General-prices page.
 Hodges-Edwards Funeral Home,MD,20746,Prince George's County,,site_check,https://hefuneralh.com/,,,,,,,,"Site known; look for a posted list, else send the request."
-J.B. Jenkins Funeral Home Inc.,MD,20785,Prince George's County,,link_found,https://www.jbjenkinsfuneralhome.com/services/pricing-and-policies,,,,,,,,Pricing-and-policies page.
+J.B. Jenkins Funeral Home Inc.,MD,20785,Prince George's County,,held_stale,https://fh-content.s3.amazonaws.com/release/Content/Media/JBJenkinsFuneralHomeInc/General%20Price%20List%202024.pdf,2024-08-08,posted,,,,,,"Reviewed (supabase/seed/gpl/dmv/jb-jenkins-2024.json, transcribed from a 16-page scan) but held: printed 25 months before retrieval. Confirm with the home it is still current, then add stillCurrent."
 J.K. Johnson Funeral Home,MD,20748,Prince George's County,,no_site_known,,,,,,,,,Request by email/phone.
 Joseph Gawler's Sons (Clinton),MD,20735,Prince George's County,SCI / Dignity Memorial,site_check,,,,,,,,,Dignity Memorial location page carries a GPL download.
 Kalas Funeral Home & Crematory (National Harbor),MD,20745,Prince George's County,,site_check,https://kalasfuneralhomes.com/,,,,,,,,"Site known; look for a posted list, else send the request."
@@ -103,9 +103,9 @@ R.N. Horton's Funeral Home,DC,20011,Washington DC,,no_site_known,,,,,,,,,Request
 Robinson Funeral Home,DC,20001,Washington DC,,link_found,https://www.robinsonfuneralhomedc.com/general-price-list,,,,,,,,Posted page (DC).
 Ronald Taylor II Funeral Home,DC,20002,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
 Snead Funeral Home and Cremation Service,DC,20011,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
-Stewart Funeral Home,DC,20019,Washington DC,,link_found,https://www.stewartfuneralhome.com/our-services/general-price-list,,,,,,,,"Posted page; an older PDF (GPL 8-25-20) also exists, so use the current one."
+Stewart Funeral Home,DC,20019,Washington DC,,held_stale,https://fh-content.s3.amazonaws.com/release/Content/Media/StewartFuneralHome/General%20Price%20List%202024%20-%20Revised%207-11-24.pdf,2024-07-15,posted,,,,,,"Reviewed (supabase/seed/gpl/dmv/stewart-2024.json) but held: printed 26 months before retrieval. Confirm with the home it is still current, then add stillCurrent."
 Torchinsky Hebrew Funeral Home,DC,20012,Washington DC,,site_check,https://www.torchinsky.com/,,,,,,,,A directory says its GPL is posted on the site.
-Tri-State Funeral Service,DC,20001,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
+Tri-State Funeral Service,DC,20019,Washington DC,,link_found,https://www.tri-statefuneralservices.com/Content/Media/Tri-StateFuneralServiceInc/General%20Price%20List.pdf,2019-01-01,posted,,,,,,"Posted list says prices are good 01/01/2019 to 01/01/2020, so ask for the current one."
 Universal Mortuary Service,DC,20011,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
 W.H. Bacon Funeral Home Inc.,DC,20010,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
 Watson's Funeral Home,DC,20010,Washington DC,,no_site_known,,,,,,,,,Request by email/phone.
