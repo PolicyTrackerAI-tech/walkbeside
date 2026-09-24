@@ -135,6 +135,11 @@ date, and for an older list, how the home confirmed it is still current
 
 ## The tracker
 
+**`npm run dmv:scoreboard`** prints where each area stands against the n≥5
+publish gate, and the next homes to work: DC first (the 10/16 deadline),
+then the cheapest action first (confirm a held list, open a posted one,
+check a site, then call).
+
 [`supabase/seed/dmv-tracker.csv`](../../supabase/seed/dmv-tracker.csv) is
 the working scoreboard. Open it in any spreadsheet. `gpl_status` moves
 `no_site_known` / `site_check` → `link_found` or `requested` → `reviewed`

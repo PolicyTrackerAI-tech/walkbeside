@@ -210,7 +210,7 @@ export function PromoteForm({
             rows={2}
             value={sourcesNote}
             onChange={(e) => setSourcesNote(e.target.value)}
-            placeholder="e.g. 6 GPLs collected 2026-07, Salt Lake City homes' published price lists"
+            placeholder="e.g. 6 GPLs collected 2026-10, DC homes' posted price lists"
             required
           />
           <p className="text-xs text-ink-muted mt-1">
