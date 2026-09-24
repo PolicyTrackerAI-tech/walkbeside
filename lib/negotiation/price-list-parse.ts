@@ -33,7 +33,10 @@ export function extractQty(name: string): { name: string; qty?: number } {
     // Optional surrounding parens are consumed so no orphan "( )" is left in the
     // name. qty is only USED downstream when the matched item is perUnit, so this
     // is inert for non-per-day items even if a stray "N day(s)" appears in a name.
-    /\(?\s*\b(\d{1,3})\s*(?:days?|nights?)\b\s*\)?/i,
+    // A grace period is not a count: "Holding remains after 7 days (per day)"
+    // (J.B. Jenkins, 2024) and "first 3 days free" price ONE day, and read as
+    // a 7- or 3-day total they divided the daily rate down to look cheap.
+    /\(?\s*\b(?<!\b(?:after|first|within|beyond|over|than|up to)\s+)(\d{1,3})\s*(?:days?|nights?)\b(?!\s+(?:free|grace|no charge))\s*\)?/i,
   ];
   for (const re of patterns) {
     const m = re.exec(name);

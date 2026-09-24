@@ -445,6 +445,19 @@ describe("extractQty", () => {
     const { items } = naiveExtract("Refrigeration (5 days) $425");
     expect(items[0]).toEqual({ name: "Refrigeration", cents: 42500, qty: 5 });
   });
+
+  it("never reads a grace period as a day count", () => {
+    expect(extractQty("Holding Remains in facility after 7 days (per day)")).toEqual({
+      name: "Holding Remains in facility after 7 days (per day)",
+    });
+    expect(extractQty("Shelter of remains, first 3 days free, per day").qty).toBeUndefined();
+    expect(extractQty("Storage fee applied after 5 days at $25 a day").qty).toBeUndefined();
+    expect(extractQty("Refrigeration beyond 3 days").qty).toBeUndefined();
+    expect(extractQty("Refrigeration 3 days free").qty).toBeUndefined();
+    // ...while a real multi-day total still divides to a daily rate.
+    expect(extractQty("Refrigeration (5 days)").qty).toBe(5);
+    expect(extractQty("Sheltering of remains 3 nights").qty).toBe(3);
+  });
 });
 
 // OCR-robustness pass: real GPL formats that used to be hard misses (the price
