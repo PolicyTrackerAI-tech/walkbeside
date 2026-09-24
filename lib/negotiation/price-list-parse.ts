@@ -332,6 +332,11 @@ export function naiveExtract(text: string): {
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
+  // "Washing and disinfecting remains (no embalming)" named embalming only
+  // to rule it out, and was judged against embalming's range. Drop the
+  // negated mention before the synonym pass ("Refrigeration of un-embalmed
+  // remains" still reads as refrigeration).
+  const m = n.replace(NEGATED_EMBALMING, " ");
   const pkg = packageKind(n);
   if (pkg === "direct-cremation") return LINE_ITEMS.find((it) => it.id === "direct-cremation-fee");
   if (pkg === "unbenchmarked") return undefined;
@@ -340,11 +345,6 @@ export function matchLineItem(name: string): LineItem | undefined {
   // "Handling fee for urn provided by the family" used to hit the "urn"
   // synonym and read against an urn's price range.
   if (outsideUrnOrVaultFee(n)) return undefined;
-  // "Washing and disinfecting remains (no embalming)" named embalming only
-  // to rule it out, and was judged against embalming's range. Drop the
-  // negated mention before the synonym pass ("Refrigeration of un-embalmed
-  // remains" still reads as refrigeration).
-  const m = n.replace(NEGATED_EMBALMING, " ");
   const direct = LINE_ITEMS.find((it) => {
     const synonyms = it.name
       .toLowerCase()
@@ -407,11 +407,11 @@ const OUTSIDE_PURCHASE =
 
 function isCasketAddOn(n: string): boolean {
   if (!CASKET_NOUN.test(n)) return false;
-  if (/\bhandling\b/.test(n)) return true;
-  if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
   // Hardware sold for a casket, not the casket ("Casket Panel Inserts" $200
   // on the Rhines 2026 GPL read as a $200 casket).
   if (/\b(?:panels?|inserts?|corners?|engrav\w*)\b/.test(n)) return true;
+  if (/\bhandling\b/.test(n)) return true;
+  if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
   if (OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n)) return true;
   // "Acceptance charge for customer-provided casket", "Fee for casket
   // provided by the purchaser": the wider bought-elsewhere phrasings
