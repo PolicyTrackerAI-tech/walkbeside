@@ -45,6 +45,7 @@ export function stageForNegotiationStatus(status: string): CaseStage {
       return "results";
     case "contacting":
     case "no_homes_available":
+    case "pre_death_hold":
       return "contacting";
     case "preparing":
     default:
