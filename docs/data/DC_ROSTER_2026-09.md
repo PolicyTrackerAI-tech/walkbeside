@@ -21,7 +21,7 @@ link is a lead to confirm, not a fact._
    Directors; see the worklist). The DC Attorney General counted **38
    establishments** in 2017. This roster finds **21 likely operating**, so
    the DLCP list closes the gap.
-5. Import-ready rows: [`supabase/seed/dc-homes.draft.csv`](../../supabase/seed/dc-homes.draft.csv).
+5. Import-ready rows: now part of the DMV-wide file [`supabase/seed/dmv-homes.draft.csv`](../../supabase/seed/dmv-homes.draft.csv) (see [`DMV_HOMES_ROSTER_2026-09.md`](DMV_HOMES_ROSTER_2026-09.md)).
    Emails are blank on purpose (a home without an email imports but can
    never be contacted until you add a confirmed one in `/admin/vetting`).
 
