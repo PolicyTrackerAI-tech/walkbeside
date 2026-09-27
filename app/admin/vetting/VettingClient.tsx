@@ -29,6 +29,10 @@ type Action = "approve" | "reject" | "reset" | "save";
 
 const REVIEWER_KEY = "hf_vetting_reviewer"; // pre-rename "wb_" (Walk Beside) prefix retired in A9
 
+// The directory is well past 1,000 homes; rendering every card (each with its
+// own inputs) at once makes the page crawl, so cards are shown in chunks.
+const RENDER_CHUNK = 100;
+
 function statusOf(h: VettingHome): Status {
   if (!h.vetted) return "pending";
   return h.active ? "approved" : "rejected";
@@ -62,6 +66,21 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
   const [stateFilter, setStateFilter] = React.useState<string>("all");
   const [query, setQuery] = React.useState("");
   const [reviewer, setReviewer] = React.useState("");
+  const [shownCount, setShownCount] = React.useState(RENDER_CHUNK);
+
+  // A filter change starts the list over at the first chunk.
+  function changeStatus(v: StatusFilter) {
+    setStatusFilter(v);
+    setShownCount(RENDER_CHUNK);
+  }
+  function changeState(v: string) {
+    setStateFilter(v);
+    setShownCount(RENDER_CHUNK);
+  }
+  function changeQuery(v: string) {
+    setQuery(v);
+    setShownCount(RENDER_CHUNK);
+  }
 
   // Load the reviewer name once from localStorage (admin convenience).
   React.useEffect(() => {
@@ -112,7 +131,7 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
         if (statusOf(h) !== statusFilter) return false;
       }
       if (q) {
-        const hay = [h.name, h.city, h.email, h.address]
+        const hay = [h.name, h.city, h.zip, h.email, h.address]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
@@ -121,6 +140,9 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
       return true;
     });
   }, [homes, statusFilter, stateFilter, query]);
+
+  const shown = visible.slice(0, shownCount);
+  const remaining = visible.length - shown.length;
 
   function edited(id: string) {
     return edits[id];
@@ -203,9 +225,7 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
             <Select
               id="f-status"
               value={statusFilter}
-              onChange={(e) =>
-                setStatusFilter(e.target.value as StatusFilter)
-              }
+              onChange={(e) => changeStatus(e.target.value as StatusFilter)}
             >
               <option value="pending">Pending review</option>
               <option value="approved">Approved</option>
@@ -219,7 +239,7 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
             <Select
               id="f-state"
               value={stateFilter}
-              onChange={(e) => setStateFilter(e.target.value)}
+              onChange={(e) => changeState(e.target.value)}
             >
               <option value="all">All states</option>
               {states.map((s) => (
@@ -233,9 +253,9 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
             <Label htmlFor="f-q">Search</Label>
             <Input
               id="f-q"
-              placeholder="name, city, email…"
+              placeholder="name, city, ZIP, email…"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => changeQuery(e.target.value)}
             />
           </div>
           <div>
@@ -251,7 +271,9 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
           </div>
         </div>
         <p className="text-xs text-ink-muted mt-3">
-          Showing {visible.length} of {counts.total}. Approving makes a home
+          {visible.length} of {counts.total} match
+          {remaining > 0 ? ` (showing the first ${shown.length})` : ""}.
+          Approving makes a home
           eligible for outreach (once the OUTREACH_LIVE switch is on).
           Rejecting keeps it on record but excluded.
         </p>
@@ -269,7 +291,7 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
         </Card>
       ) : (
         <ul className="space-y-3">
-          {visible.map((h) => {
+          {shown.map((h) => {
             const s = statusOf(h);
             const isSaving = !!saving[h.id];
             const dirty = isDirty(h);
@@ -388,6 +410,20 @@ export function VettingClient({ initial }: { initial: VettingHome[] }) {
             );
           })}
         </ul>
+      )}
+
+      {remaining > 0 && (
+        <div className="flex flex-wrap items-center gap-3">
+          <Button
+            variant="secondary"
+            onClick={() => setShownCount((c) => c + RENDER_CHUNK)}
+          >
+            Show {Math.min(RENDER_CHUNK, remaining)} more
+          </Button>
+          <span className="text-xs text-ink-muted">
+            {remaining} more match these filters
+          </span>
+        </div>
       )}
     </div>
   );

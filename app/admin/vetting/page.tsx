@@ -4,15 +4,13 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { CardEyebrow } from "@/components/ui/Card";
 import { PUBLIC, requireServer } from "@/lib/env";
 import { requireAdminPage } from "@/lib/admin-auth";
-import { VettingClient, type VettingHome } from "./VettingClient";
+import { VettingClient } from "./VettingClient";
+import { loadVettingHomes } from "./load-homes";
 
 export const metadata: Metadata = {
   title: "Funeral home vetting — admin",
   robots: { index: false, follow: false },
 };
-
-const SELECT_COLS =
-  "id, name, email, phone, address, city, state, zip, google_rating, google_review_count, notes, active, vetted, vetted_at, vetted_by";
 
 export default async function AdminVettingPage() {
   await requireAdminPage("/admin/vetting");
@@ -22,15 +20,8 @@ export default async function AdminVettingPage() {
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
 
-  const { data, error } = await admin
-    .from("funeral_homes")
-    .select(SELECT_COLS)
-    .order("state", { ascending: true })
-    .order("city", { ascending: true })
-    .order("name", { ascending: true })
-    .limit(5000);
-
-  const homes: VettingHome[] = (data as VettingHome[] | null) ?? [];
+  // Pages past Supabase's 1,000-row response cap (see load-homes.ts).
+  const { homes, error } = await loadVettingHomes(admin);
 
   return (
     <main className="flex-1 flex flex-col bg-bg">
@@ -53,7 +44,7 @@ export default async function AdminVettingPage() {
 
           {error ? (
             <div className="rounded-xl border border-bad/30 bg-bad/10 text-bad text-sm px-4 py-3">
-              Could not load the directory: {error.message}
+              Could not load the directory: {error}
             </div>
           ) : (
             <VettingClient initial={homes} />
