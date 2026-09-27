@@ -2,6 +2,10 @@ import "server-only";
 import { cache } from "react";
 import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { PUBLIC, requireServer } from "@/lib/env";
+import { fetchAllPages } from "@/lib/supabase/fetch-all-pages";
+
+// Re-exported so existing imports (and the pagination tests) keep working.
+export { fetchAllPages };
 
 /**
  * Server-only reads + pure aggregates over the CMS hospice directory
@@ -42,25 +46,6 @@ function serviceClient() {
     PUBLIC.supabaseUrl,
     requireServer("SUPABASE_SERVICE_ROLE_KEY"),
   );
-}
-
-/**
- * Drain a paginated read: keep fetching fixed-size pages until a short page
- * arrives. Pure over the injected fetcher so the chunking is unit-testable.
- * Any page-level failure (fetcher returns null) fails the whole read — a
- * partial state list rendered as complete would be a lie.
- */
-export async function fetchAllPages<T>(
-  fetchPage: (offset: number) => Promise<T[] | null>,
-  pageSize: number = PAGE_SIZE,
-): Promise<T[] | null> {
-  const all: T[] = [];
-  for (let offset = 0; ; offset += pageSize) {
-    const page = await fetchPage(offset);
-    if (page === null) return null;
-    all.push(...page);
-    if (page.length < pageSize) return all;
-  }
 }
 
 /**
