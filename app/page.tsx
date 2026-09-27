@@ -15,7 +15,7 @@ const ORG_SCHEMA = {
   name: "Honest Funeral",
   url: "https://honestfuneral.co",
   description:
-    "The neutral price truth for the American funeral. Snap a photo of any funeral price list and see the overcharges, the FTC-rule violations, and exactly how much you're above fair. Free to families — we take no money from funeral homes or insurers, ever.",
+    "The neutral price truth for the American funeral. Snap a photo of any funeral price list and see likely overcharges, likely FTC-rule problems, and how far above our fair range each price sits. Free to families — we take no money from funeral homes or insurers, ever.",
   foundingLocation: "United States",
   knowsAbout: [
     "funeral pricing",
@@ -31,7 +31,7 @@ const ORG_SCHEMA = {
 export const metadata: Metadata = {
   title: "Honest Funeral — is this funeral price fair?",
   description:
-    "Snap a photo of any funeral price list and see the overcharges and FTC-rule violations in seconds. Free, neutral funeral-price help — we're paid by no one with a stake in your bill: no funeral home, no insurer, ever.",
+    "Snap a photo of any funeral price list and see likely overcharges and FTC-rule problems in seconds. Free, neutral funeral-price help — we're paid by no one with a stake in your bill: no funeral home, no insurer, ever.",
   alternates: { canonical: "/" },
 };
 

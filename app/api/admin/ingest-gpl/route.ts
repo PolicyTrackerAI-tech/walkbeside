@@ -22,6 +22,7 @@ import { extractionConfidence } from "@/lib/extraction-confidence";
 import { redactContact } from "@/lib/redact";
 import { readLimitedJson } from "@/lib/http-guards";
 import { analysisInputHash } from "@/lib/analysis-hash";
+import { staleListReason } from "@/lib/price-list-age";
 
 /**
  * Founder GPL ingest — the write path behind /admin/ingest-gpl (D2).
@@ -69,6 +70,11 @@ const SaveBody = z.object({
   zip: z.string().regex(/^\d{5}$/),
   homeName: z.string().trim().min(2).max(160),
   sourceUrl: z.string().url().max(500).optional(),
+  // The effective date printed inside the document (worklist rule 3), and,
+  // for a list more than MAX_LIST_AGE_MONTHS old, how the home confirmed it
+  // is still current (lib/price-list-age.ts; same rule as the batch loader).
+  effectiveDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  stillCurrent: z.string().trim().min(10).max(300).optional(),
   // The parse step's document-stated total, passed back so confidence can
   // cross-check it against the reviewed item sum. The model emits one ONLY
   // when the document prints a total line (prompt contract, 2026-07-16) —
@@ -207,6 +213,20 @@ async function handleSave(body: z.infer<typeof SaveBody>) {
   const user = await getUser();
   if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
+  // An old list would pull the local ranges down: hold it until the home
+  // confirms it is current. Nothing is written for a held list.
+  const today = new Date().toISOString().slice(0, 10);
+  if (body.effectiveDate > today) {
+    return NextResponse.json(
+      { error: "the effective date is in the future; use the date printed inside the document" },
+      { status: 400 },
+    );
+  }
+  const held = staleListReason(body.effectiveDate, today, body.stillCurrent);
+  if (held) {
+    return NextResponse.json({ error: `Held: ${held}` }, { status: 422 });
   }
 
   // Server-side sanitation: a matchedItemId must be a real LINE_ITEMS id

@@ -21,7 +21,9 @@ agreement) see **GO_TO_MARKET.md Phase 0** — `LAUNCH_CHECKLIST.md` is retired.
 3. **Confirm RLS.** Table Editor → each table shows "RLS enabled." (The bootstrap
    enables it on all of them; spot-check `profiles`, `negotiations`,
    `funeral_homes`.)
-4. **Storage bucket.** Storage → New bucket → name **`price-lists`**, **Private**.
+4. **No storage bucket.** Nothing stores uploaded files (price-list photos and
+   PDFs are read in memory and never kept). If an earlier setup created a
+   `price-lists` bucket, it is unused and can be deleted (audit A8-08).
 5. **Magic-link auth.** Authentication → Providers → Email → enable, with
    **Magic Link** on. Then Authentication → **Email Templates**: in BOTH the
    **Magic Link** and **Confirm signup** templates, make sure the one-time
@@ -155,6 +157,12 @@ accepted. Signatures are baked into page metadata at build time, so the
 secret must be present at build (Vercel env vars cover build + runtime) —
 setting or rotating it requires a redeploy, and pages rendered under an old
 value degrade to the default brand card (never an error) until rebuilt.
+
+### Optional (sign-up abuse signal)
+`IP_HASH_SECRET` — any long random string. Keys the one-way hash of the
+client IP stored with an email sign-up (`planning_signups.ip_hash`, audit
+A8-07). Unset means no IP hash is stored at all; a plain unkeyed hash is
+never stored. Rotating it only changes future hashes.
 
 ### Optional (reply pipeline — can wait past v1)
 `POSTMARK_INBOUND_USER`, `POSTMARK_INBOUND_SECRET` (funeral-home reply relay),

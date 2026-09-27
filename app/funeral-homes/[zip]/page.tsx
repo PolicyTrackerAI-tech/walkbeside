@@ -15,6 +15,7 @@ import {
   PRICING_LAST_UPDATED,
 } from "@/lib/pricing-data";
 import { tierForZip, benchmarksForZip } from "@/lib/benchmarks-store";
+import { benchmarkAreaForZip } from "@/lib/benchmark-areas";
 import { DataTierBadge } from "@/components/DataTierBadge";
 import {
   totalsForService,
@@ -79,6 +80,17 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
     (it) => !it.perUnit && overrides.has(it.id),
   ).length;
   const region = regionForZip(zip);
+  // A pooled benchmark area (lib/benchmark-areas.ts) publishes one range for
+  // several metro labels; say so, so a pooled range never reads as this
+  // metro's own.
+  const area = benchmarkAreaForZip(zip);
+  const pooledArea =
+    region &&
+    area &&
+    area !== region.metro &&
+    [...overrides.values()].some((o) => o.scope === "metro")
+      ? area
+      : null;
 
   return (
     <main className="flex-1 flex flex-col">
@@ -114,6 +126,8 @@ export default async function FuneralHomesByZipPage({ params }: PageProps) {
                 ? "Where we hold real local price-list data, the line-item table below uses it; everything else is a modeled estimate from national benchmarks adjusted by a regional cost index"
                 : DATA_SOURCE_LABEL.modeled}
               .
+              {pooledArea &&
+                ` Our local price-list data here covers the wider ${pooledArea} area.`}
             </p>
           </div>
 

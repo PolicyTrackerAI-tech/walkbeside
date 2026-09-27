@@ -13,10 +13,13 @@ the call (the demo checklist step). Paste into `/analyzer` (Beat 2) or the
 coordinator quote check at `/partner/r/[token]/check` (Beat 2b), with a DC zip
 (20001).
 
-**Verified result (2026-09-23, local build, zip 20001, fallback extraction,
-not Claude):** quoted **$23,685** against a fair estimate of **≈$10,594**, so
-**≈$13,091 flagged as potential overcharge**. 11 line items land in the
-predatory range. Eight checks fire, led by one likely FTC violation: the
+**Verified result (2026-09-24, local build, zip 20001, fallback extraction,
+not Claude):** quoted **$23,685** against a fair estimate of **≈$11,434**, so
+**≈$12,251 flagged as potential overcharge**. 10 line items land in the
+predatory range. (Down from $13,091 and 11 on 2026-09-23: the $5,995 solid
+oak casket was being judged against the 18-gauge *metal* casket range. It
+is now judged as wood, where it reads "high" but not predatory. Every wood
+casket had the same bug.) Eight checks fire, led by one likely FTC violation: the
 outside casket handling fee, flagged on its own row and first in the
 family's "what we'd do" list. The other seven: basic services fee above
 market, the protective-sealer pitch, embalming-authorization disclosure,
@@ -80,8 +83,8 @@ the result reads as an honest mixed report, not a hit piece — the analyzer
 under-claims by design ("suspicious" not "violation" when unprovable), and
 that restraint is itself a selling point with a compliance-minded ED.
 
-**Total effect (verified locally 2026-09-23; re-run in production before the
-first demo):** quoted $23,685 against a fair estimate of ≈$10,594. That is a
+**Total effect (verified locally 2026-09-24; re-run in production before the
+first demo):** quoted $23,685 against a fair estimate of ≈$11,434. That is a
 visceral, defensible gap, and the analyzer's deliberate under-claiming
 ("suspicious," not "violation," when unprovable) does the credibility work in
 front of a compliance-minded ED.

@@ -93,9 +93,11 @@ these rules are what make us admissible. Full analysis + citations:
   **Virginia licenses "the business of preneed funeral planning" for any
   person** (Va. Code §54.1-2805: "making of arrangements prior to death").
   Keep pre-death home outreach off when the family or any recipient home is
-  in Virginia until counsel clears it, and never convey a family's price
-  acceptance or broker the arrangement meeting. Full analysis:
-  `docs/legal/DMV_LEGAL_OVERVIEW.md`.
+  in Virginia until counsel clears it (enforced in code:
+  `lib/negotiation/pre-death-gate.ts`, wired into the intake and re-run
+  routes and tripwire-tested; counsel clearing = removing "VA" there), and
+  never convey a family's price acceptance or broker the arrangement meeting.
+  Full analysis: `docs/legal/DMV_LEGAL_OVERVIEW.md`.
 - **Delivered post-admission only.** The benefit must never appear in a
   hospice's pre-admission marketing or be usable to induce hospice selection —
   that is the Anti-Kickback danger vector (the funeral itself isn't federally

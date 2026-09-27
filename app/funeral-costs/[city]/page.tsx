@@ -10,6 +10,7 @@ import { ogImage } from "@/lib/og";
 import { ArticleSchema } from "@/components/seo/ArticleSchema";
 import { getCity, listCitySlugs, CITIES } from "@/lib/city-pages";
 import { regionForZip } from "@/lib/zip-regions";
+import { benchmarkAreaForZip } from "@/lib/benchmark-areas";
 import { SERVICE_TOTALS, SERVICE_LABELS, LINE_ITEMS, fmtUSD } from "@/lib/pricing-data";
 import { DataTierBadge } from "@/components/DataTierBadge";
 import { listStateSlugs } from "@/lib/probate-by-state";
@@ -86,6 +87,12 @@ export default async function CityFuneralCostsPage({
   const region = regionForZip(city.zipExample);
   const multiplier = region?.multiplier ?? 1.0;
   const metroLabel = region?.metro ?? city.name;
+  // A pooled benchmark area (lib/benchmark-areas.ts) publishes one range for
+  // several metro labels; say so, so a pooled range never reads as this
+  // metro's own.
+  const area = benchmarkAreaForZip(city.zipExample);
+  const pooledArea =
+    region && area && area !== region.metro ? area : null;
   const hasStateGuide =
     city.stateSlug && listStateSlugs().includes(city.stateSlug);
 
@@ -209,6 +216,8 @@ export default async function CityFuneralCostsPage({
                 The whole-service table above stays modeled; for the specific
                 items below, the range comes from real local data, and the
                 badge on each row shows where it comes from.
+                {pooledArea &&
+                  ` These ranges cover the wider ${pooledArea} area.`}
               </p>
               <div className="mt-4 overflow-x-auto -mx-2 px-2">
                 <table className="w-full text-sm">

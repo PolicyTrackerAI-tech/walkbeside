@@ -147,7 +147,9 @@ describe("matchLineItem — Wave 1 expansion items (2026-06-26)", () => {
     expect(id("Rental casket")).toBe("rental-casket");
     expect(id("Ceremonial casket")).toBe("rental-casket");
     expect(id("Rental casket fee")).toBe("rental-casket");
-    expect(id("Casket — \"Homestead\" solid oak")).toBe("casket-metal");
+    // (An oak casket is a wood casket; it read as metal until the J.B.
+    // Jenkins 2024 review.)
+    expect(id("Casket — \"Homestead\" solid oak")).toBe("casket-wood");
     expect(id("Protective casket — 18 gauge steel")).toBe("casket-metal");
     expect(id("Sealer casket")).toBe("casket-metal");
     // "handling" without a casket is not the guard's business.
@@ -443,6 +445,19 @@ describe("extractQty", () => {
     const { items } = naiveExtract("Refrigeration (5 days) $425");
     expect(items[0]).toEqual({ name: "Refrigeration", cents: 42500, qty: 5 });
   });
+
+  it("never reads a grace period as a day count", () => {
+    expect(extractQty("Holding Remains in facility after 7 days (per day)")).toEqual({
+      name: "Holding Remains in facility after 7 days (per day)",
+    });
+    expect(extractQty("Shelter of remains, first 3 days free, per day").qty).toBeUndefined();
+    expect(extractQty("Storage fee applied after 5 days at $25 a day").qty).toBeUndefined();
+    expect(extractQty("Refrigeration beyond 3 days").qty).toBeUndefined();
+    expect(extractQty("Refrigeration 3 days free").qty).toBeUndefined();
+    // ...while a real multi-day total still divides to a daily rate.
+    expect(extractQty("Refrigeration (5 days)").qty).toBe(5);
+    expect(extractQty("Sheltering of remains 3 nights").qty).toBe(3);
+  });
 });
 
 // OCR-robustness pass: real GPL formats that used to be hard misses (the price
@@ -728,5 +743,167 @@ describe("verdict never contradicts the displayed fair range (regression)", () =
     );
     const predatory = Math.round(embalming!.predatoryAt * regionMultiplier(zip));
     expect(classifyAgainst(hi, lo, hi, predatory)).toBe("fair");
+  });
+});
+
+describe("matchLineItem — wordings from the DC harvest (John T. Rhines 2026 GPL)", () => {
+  const id = (s: string) => matchLineItem(s)?.id;
+
+  it("'Prof. Services of Funeral Director, Staff, and Overhead' is the basic services fee", () => {
+    expect(id("Prof. Services of Funeral Director, Staff, and Overhead")).toBe("basic-services");
+    expect(id("Professional services of the funeral director and staff")).toBe("basic-services");
+  });
+
+  it("a line that names embalming only to rule it out is not embalming", () => {
+    expect(id("Washing and Disinfecting Remains (no embalming)")).toBeUndefined();
+    expect(id("Shelter of remains without embalming")).toBe("refrigeration-shelter");
+    expect(id("Refrigeration of Un-embalmed Remains")).toBe("refrigeration-shelter");
+    expect(id("Embalming")).toBe("embalming");
+  });
+
+  it("cosmetics with dressing or hairstyling is body preparation; dressing and casketing alone, or hair coloring, is not", () => {
+    expect(id("Cosmetics, Dressing, and Hairstyling")).toBe("body-prep");
+    expect(id("Dressing and cosmetics")).toBe("body-prep");
+    expect(id("Dressing and casketing")).toBeUndefined();
+    expect(id("Coloring of Hair (additional to hairstyling)")).toBeUndefined();
+  });
+
+  it("a committal service is the graveside service", () => {
+    expect(id("Funeral Director for Committal Service")).toBe("graveside");
+  });
+
+  it("a certified death certificate priced per copy is the death-certificate benchmark; filing one is not", () => {
+    expect(id("Certified Death Certificate, District of Columbia (per copy)")).toBe("death-cert");
+    expect(id("Certified copies of death certificate")).toBe("death-cert");
+    expect(id("Filing of death certificate")).toBeUndefined();
+  });
+
+  it("casket hardware is never priced as a casket", () => {
+    expect(id("Casket Panel Inserts")).toBeUndefined();
+    expect(id("Casket corners")).toBeUndefined();
+    expect(id("Casket engraving")).toBeUndefined();
+    expect(id("Casket - 18 gauge steel")).toBe("casket-metal");
+  });
+
+  it("a storage fee for the remains is the per-day shelter fee; storing cremains is not", () => {
+    expect(id("Daily Storage Fee (every 24 hours)")).toBe("refrigeration-shelter");
+    expect(id("Storage of remains (per day)")).toBe("refrigeration-shelter");
+    expect(id("Cremains storage fee (after 30 days)")).toBeUndefined();
+    expect(id("Storage fee for cremated remains")).toBeUndefined();
+  });
+
+  it("an immediate-burial package joined with a slash is a package, not a graveside fee", () => {
+    expect(id("Immediate Burial/Graveside Service (casket not included)")).toBeUndefined();
+    expect(id("Direct cremation/alternative container")).toBe("direct-cremation-fee");
+    expect(id("Graveside service")).toBe("graveside");
+  });
+});
+
+describe("matchLineItem — wordings from the Maryland harvest (J.B. Jenkins 2024 GPL)", () => {
+  const id = (s: string) => matchLineItem(s)?.id;
+
+  it("a direct-cremation package named before its variant is the direct-cremation package, not a container", () => {
+    expect(id("Direct Cremation Package (minimum alternative container)")).toBe("direct-cremation-fee");
+    expect(id("Direct Cremation Package")).toBe("direct-cremation-fee");
+    expect(id("Direct cremation package with memorial service")).toBeUndefined();
+    expect(id("Immediate Burial Package")).toBeUndefined();
+    expect(id("Minimum Cardboard Cremation Container")).toBe("cremation-container");
+  });
+
+  it("'Professional/Basic Service Fee' is the basic services fee", () => {
+    expect(id("Professional/Basic Service Fee (Non-declinable)")).toBe("basic-services");
+    expect(id("Basic service fee")).toBe("basic-services");
+    expect(id("Professional service charge")).toBe("basic-services");
+  });
+
+  it("a funeral ceremony line is the ceremony fee, unless it is a cremation or burial package", () => {
+    expect(id("Funeral Ceremony (per hour)")).toBe("service-facility");
+    expect(id("Cremation with funeral ceremony")).toBeUndefined();
+    expect(id("Funeral ceremony package")).toBeUndefined();
+  });
+
+  it("holding remains per day is the shelter fee", () => {
+    expect(id("Holding Remains in facility after 7 days (per day)")).toBe("refrigeration-shelter");
+  });
+
+  it("certified copies are death certificates", () => {
+    expect(id("Maryland Certified Copies (first copy)")).toBe("death-cert");
+    expect(id("District of Columbia Certified Copies (each copy)")).toBe("death-cert");
+  });
+
+  it("personalization for a casket or an urn is never priced as the casket or urn", () => {
+    expect(id("Casket Applique Personalization")).toBeUndefined();
+    expect(id("Urn Applique Personalization")).toBeUndefined();
+    expect(id("Urn Emblems")).toBeUndefined();
+    expect(id("Urn (basic)")).toBe("urn");
+    expect(id("Keepsake urn — bronze")).toBe("urn");
+  });
+
+  it("a wood casket is judged as wood, a metal casket as metal", () => {
+    expect(id("24\" Doeskin Casket (cloth-covered wood casket)")).toBe("casket-wood");
+    expect(id("Wood casket")).toBe("casket-wood");
+    expect(id("Casket - solid poplar")).toBe("casket-wood");
+    expect(id("Casket - 18 gauge steel")).toBe("casket-metal");
+    expect(id("Stainless steel casket with oak interior trim")).toBe("casket-metal");
+    expect(id("Casket")).toBe("casket-metal");
+    expect(id("Rental casket (hardwood)")).toBe("rental-casket");
+  });
+});
+
+describe("naiveExtract — DC price-list formatting (Stewart 2024 GPL)", () => {
+  const only = (text: string) => naiveExtract(text).items;
+
+  it("reads a price after '…' leaders and a spaced '$', and cleans the name", () => {
+    expect(only("Basic Services of Funeral Director and Staff and Overhead…………………. $ 2,075.00")).toEqual([
+      { name: "Basic Services of Funeral Director and Staff and Overhead", cents: 207500 },
+    ]);
+    expect(only("Use of Facilities and Staff for Viewing…… (1 hour) ……………………. $ 225.00")).toEqual([
+      { name: "Use of Facilities and Staff for Viewing (1 hour)", cents: 22500 },
+    ]);
+    expect(only("Transfer of Remains to Funeral Home (within 25-mile radius) ……………$   425.00")).toEqual([
+      { name: "Transfer of Remains to Funeral Home (within 25-mile radius)", cents: 42500 },
+    ]);
+  });
+
+  it("reads '$995.00 to $ 35,000.00' after leaders as a range, not a $35,000 price", () => {
+    expect(only("Caskets………………………………………………………$995.00 to $ 35,000.00")).toEqual([
+      { name: "Caskets", cents_low: 99500, cents_high: 3500000 },
+    ]);
+  });
+
+  it("keeps a price followed by a period", () => {
+    expect(only("Forwarding of Remains to Another Funeral Home…………….…………$ 2,150.00.")).toEqual([
+      { name: "Forwarding of Remains to Another Funeral Home", cents: 215000 },
+    ]);
+  });
+
+  it("never reads a zip (or any bare number) as a price", () => {
+    expect(only("Washington, D.C. 20019")).toEqual([]);
+    expect(only("Suite 100000")).toEqual([]);
+    expect(only("Casket $12500")).toEqual([{ name: "Casket", cents: 1250000 }]);
+    // A spaced "$" still marks a price, so a bare amount after it is kept.
+    expect(only("Casket $ 12500")).toEqual([{ name: "Casket", cents: 1250000 }]);
+  });
+
+  it("recovers every single-price observation from the real Stewart list", async () => {
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const rec = JSON.parse(
+      readFileSync(join(process.cwd(), "supabase/seed/gpl/dmv/stewart-2024.json"), "utf8"),
+    ) as { text: string; items: Array<{ name: string; cents: number; matchedItemId?: string; isRange?: boolean }> };
+    const got = only(rec.text);
+    const pointsById = new Map<string, number[]>();
+    for (const it of got) {
+      const id = matchLineItem(it.name)?.id;
+      if (id && it.cents != null) pointsById.set(id, [...(pointsById.get(id) ?? []), it.cents]);
+    }
+    // The document prints direct cremation as a range ($2,316.50 to
+    // $2,416.50); the reviewer's DC price is a judgment, not a printed point.
+    const expected = rec.items.filter(
+      (i) => i.matchedItemId && !i.isRange && i.matchedItemId !== "direct-cremation-fee",
+    );
+    for (const i of expected) expect(pointsById.get(i.matchedItemId!), i.name).toContain(i.cents);
+    // Nothing structural becomes a price (the DC zip once read as $20,019).
+    expect(got.filter((it) => it.cents != null && it.cents >= 1_000_000)).toEqual([]);
   });
 });

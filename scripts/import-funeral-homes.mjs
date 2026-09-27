@@ -12,7 +12,9 @@
  *     requires vetted=true). So importing is safe even with OUTREACH_LIVE on.
  *   - Idempotent + dedup-safe: existing rows are matched by email, then by
  *     (name + zip), and UPDATED in place rather than duplicated. Re-running the
- *     same CSV makes no new rows.
+ *     same CSV makes no new rows. An update only fills in what the file knows:
+ *     a blank cell never overwrites (an email added in vetting survives), and
+ *     `active` is never re-set (a bounced home stays off).
  *   - --dry-run validates + reports without writing anything.
  *
  * Usage:
@@ -34,6 +36,7 @@
 
 import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
+import { homeUpdatePatch } from "./lib/home-update-patch.mjs";
 
 // ---------------------------------------------------------------------------
 // Args + env
@@ -415,8 +418,9 @@ async function main() {
   }
 
   for (const { id, row } of toUpdate) {
-    // Never touch vetted/vetted_at/vetted_by; refresh updated_at.
-    const patch = { ...row, updated_at: new Date().toISOString() };
+    // Only what the file knows: blanks never overwrite, `active` is never
+    // re-set (scripts/lib/home-update-patch.mjs).
+    const patch = homeUpdatePatch(row);
     const { error } = await admin
       .from("funeral_homes")
       .update(patch)

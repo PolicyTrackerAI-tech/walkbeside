@@ -20,7 +20,8 @@
  * Regions upgrade to "verified"/"community" via regional_benchmarks
  * override rows, founder-promoted at n≥5 on /admin/benchmarks and read
  * by lib/benchmarks-store.ts (metro-scoped rows match on the exact
- * metro labels below).
+ * metro labels below, or on the name of a pool of them:
+ * lib/benchmark-areas.ts).
  *
  * Range: 0.75 (rural Mississippi / Appalachian KY) to 1.50 (Manhattan,
  * SF, Honolulu).

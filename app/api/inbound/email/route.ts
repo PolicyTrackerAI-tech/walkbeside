@@ -6,6 +6,11 @@ import { notifyFamilyOfReply } from "@/lib/negotiation/notify-family-of-reply";
 import { claudeAvailable } from "@/lib/claude";
 import { parseInboundQuote } from "@/lib/negotiation/parse-reply";
 import { readLimitedJson } from "@/lib/http-guards";
+import { sendAlert } from "@/lib/observability";
+import {
+  summarizeAttachments,
+  withoutAttachmentBytes,
+} from "@/lib/negotiation/inbound-attachments";
 
 export const runtime = "nodejs";
 
@@ -35,7 +40,16 @@ interface PostmarkInbound {
   TextBody?: string;
   HtmlBody?: string;
   Date?: string;
+  Attachments?: unknown;
 }
+
+// A8-06: the old 100KB cap 413-rejected any reply carrying a real PDF, so a
+// home that attached its price list was silently lost. Postmark sends the
+// attachment bytes inline (base64), so the cap has to hold a typical price
+// list. 4,400KB sits just under Vercel's 4.5MB request-body ceiling; a
+// larger payload is refused by the platform before this code runs either
+// way. The stored copy drops the bytes (withoutAttachmentBytes).
+const INBOUND_MAX_KB = 4400;
 
 export async function POST(req: Request) {
   const authHeader = req.headers.get("authorization") ?? "";
@@ -53,7 +67,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const limited = await readLimitedJson<PostmarkInbound>(req, 100);
+  const limited = await readLimitedJson<PostmarkInbound>(req, INBOUND_MAX_KB);
   if (!limited.ok)
     return NextResponse.json({ error: limited.error }, { status: limited.status });
   const payload = limited.data;
@@ -115,7 +129,7 @@ export async function POST(req: Request) {
     subject: payload.Subject ?? null,
     body_text: payload.TextBody ?? null,
     body_html: payload.HtmlBody ?? null,
-    raw_payload: payload as unknown as Record<string, unknown>,
+    raw_payload: withoutAttachmentBytes(payload) as unknown as Record<string, unknown>,
     inbound_provider: "postmark",
     inbound_message_id: inboundMessageId || null,
   };
@@ -139,6 +153,18 @@ export async function POST(req: Request) {
   console.info(
     `[inbound] stored msg neg=${negotiationId} outreach=${outreachId ?? "unmatched"}`,
   );
+
+  // Attachments are never shown to the family or parsed, so a home that sent
+  // its price list only as a file would otherwise go unseen. Tell the founder,
+  // who follows up by hand (every pilot case is run by hand).
+  const attachments = summarizeAttachments(payload);
+  if (attachments.length > 0) {
+    await sendAlert("warn", "A funeral home reply carried an attachment the family can't see", {
+      negotiationId,
+      outreachId,
+      attachments: attachments.map((a) => ({ ...a })),
+    });
+  }
 
   // Best-effort AI parse of the reply into a PROPOSED quote (Day 4, P7).
   // Strictly time-bounded (parseInboundQuote caps the call at 15s, no

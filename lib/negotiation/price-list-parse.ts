@@ -33,7 +33,10 @@ export function extractQty(name: string): { name: string; qty?: number } {
     // Optional surrounding parens are consumed so no orphan "( )" is left in the
     // name. qty is only USED downstream when the matched item is perUnit, so this
     // is inert for non-per-day items even if a stray "N day(s)" appears in a name.
-    /\(?\s*\b(\d{1,3})\s*(?:days?|nights?)\b\s*\)?/i,
+    // A grace period is not a count: "Holding remains after 7 days (per day)"
+    // (J.B. Jenkins, 2024) and "first 3 days free" price ONE day, and read as
+    // a 7- or 3-day total they divided the daily rate down to look cheap.
+    /\(?\s*\b(?<!\b(?:after|first|within|beyond|over|than|up to)\s+)(\d{1,3})\s*(?:days?|nights?)\b(?!\s+(?:free|grace|no charge))\s*\)?/i,
   ];
   for (const re of patterns) {
     const m = re.exec(name);
@@ -60,7 +63,9 @@ export function stripCodeFence(s: string): string {
  */
 function cleanName(s: string): string {
   return s
+    .replace(/\s*…[….\s]*/gu, " ") //               "…" leader runs anywhere ("Viewing…… (1 hour) ……")
     .replace(/[\s.:_–—]*[.:_–—][\s.:_–—]*$/u, "") // trailing dot/colon/underscore/en–em-dash leaders
+    .replace(/\s*\$\s*$/, "") //                     a stray "$" left by a spaced price ("… $ 425.00")
     .replace(/\s+-+\s*$/, "") //                     trailing ASCII hyphen only when whitespace-led
     .replace(/^(?:between|from|starting at|priced from|as low as)\s+/i, "") // leading range/floor lead-in
     .replace(/\s+(?:between|from|starting at|priced from|as low as)$/i, "") // trailing ("Caskets starting at")
@@ -73,7 +78,7 @@ function cleanName(s: string): string {
 // a bare integer ("Established 1962*") is left alone and stays skippable.
 const MONEY = String.raw`(?:\$[\d,]+(?:\.\d{2})?|\d{1,3}(?:,\d{3})+(?:\.\d{2})?|\d+\.\d{2})`;
 const reTrailingMarker = new RegExp(
-  `(${MONEY})\\s*(?:[*+†★✦¹²³⁰⁴⁵⁶⁷⁸⁹]|\\((?:\\d{1,2}|[a-z])\\)|(?:and|&)\\s*up|or more)\\s*$`,
+  `(${MONEY})\\s*(?:[*+†★✦¹²³⁰⁴⁵⁶⁷⁸⁹]|\\((?:\\d{1,2}|[a-z])\\)|(?:and|&)\\s*up|or more|\\.)\\s*$`,
   "iu",
 );
 
@@ -90,16 +95,18 @@ function stripTrailingMarker(line: string): string {
   return line.replace(reTrailingMarker, "$1");
 }
 
-const SEP = String.raw`[\s.:_–—]+`; // pre-price separator: spaces/leaders, but NOT an ASCII hyphen
+const SEP = String.raw`[\s.:_–—…]+`; // pre-price separator: spaces/leaders (incl. "…"), but NOT an ASCII hyphen
 const NUM = String.raw`[\d,]+(?:\.\d{2})?`;
 const reRange = new RegExp(
   `^(.+?)${SEP}(\\$?)(${NUM})\\s*[-–—]\\s*(\\$?)(${NUM})\\s*$`,
 );
+// DC price lists print "Caskets……$995.00 to $ 35,000.00": leaders before the
+// first bound and a space after a "$" (Stewart, 2024).
 const reWordRange = new RegExp(
-  `^(.+?)\\s+\\$(${NUM})\\s+(?:to|and)\\s+\\$(${NUM})\\s*$`,
+  `^(.+?)${SEP}\\$\\s?(${NUM})\\s+(?:to|and)\\s+\\$\\s?(${NUM})\\s*$`,
   "i",
 );
-const reSingle = new RegExp(`^(.+?)${SEP}(\\$?)(${NUM})\\s*$`);
+const reSingle = new RegExp(`^(.+?)${SEP}(\\$?)\\s?(${NUM})\\s*$`);
 // Single price carrying a trailing unit — "$25 each", "$25/copy", "$150 per
 // hour". $ is REQUIRED so a bare "25 miles"/"3 nights" can't become a price.
 const reUnit = new RegExp(
@@ -215,9 +222,10 @@ export function naiveExtract(text: string): {
     const dollars = numOf(token);
     if (!Number.isFinite(dollars)) return false;
     // Bare integer with no $, comma, or cents is almost always a year, address,
-    // suite, or count — not a price. Skip rather than fabricate an item.
+    // suite, zip or count — not a price. Skip rather than fabricate an item.
+    // (Any length: "Washington, D.C. 20019" read as a $20,019 line.)
     const bareInteger =
-      !hadDollar && !/\.\d{2}$/.test(token) && !token.includes(",") && /^\d{1,4}$/.test(token);
+      !hadDollar && !/\.\d{2}$/.test(token) && !token.includes(",") && /^\d+$/.test(token);
     if (bareInteger) return false;
     const name = cleanName(rawName);
     if (!name || !/[a-z]/i.test(name)) return false; // e.g. "2 @"
@@ -332,9 +340,18 @@ export function naiveExtract(text: string): {
  */
 export function matchLineItem(name: string): LineItem | undefined {
   const n = name.toLowerCase();
+  // "Washing and disinfecting remains (no embalming)" named embalming only
+  // to rule it out, and was judged against embalming's range. Drop the
+  // negated mention before the synonym pass ("Refrigeration of un-embalmed
+  // remains" still reads as refrigeration).
+  const m = n.replace(NEGATED_EMBALMING, " ");
   const pkg = packageKind(n);
   if (pkg === "direct-cremation") return LINE_ITEMS.find((it) => it.id === "direct-cremation-fee");
   if (pkg === "unbenchmarked") return undefined;
+  // An emblem, applique or personalization for an urn is priced on top of
+  // the urn ("Urn Emblems" $45 on the J.B. Jenkins 2024 GPL read as a $45
+  // urn and would pull the urn benchmark down).
+  if (/\burns?\b/.test(n) && /\b(?:emblems?|appliques?|personaliz\w*)\b/.test(n)) return undefined;
   if (isCasketAddOn(n)) return undefined;
   // The same fee for an urn or a vault bought elsewhere (lib/outside-merchandise.ts):
   // "Handling fee for urn provided by the family" used to hit the "urn"
@@ -348,13 +365,18 @@ export function matchLineItem(name: string): LineItem | undefined {
       .filter(Boolean);
     return synonyms.some((key) => {
       const re = new RegExp(`\\b${key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`);
-      if (re.test(n)) return true;
+      if (re.test(m)) return true;
       const words = key.split(/\s+/);
-      return words.length > 1 && words.every((w) => n.includes(w));
+      return words.length > 1 && words.every((w) => m.includes(w));
     });
   });
+  // Both casket items reduce to the bare synonym "casket", so every casket
+  // matched the metal one first, and a wood casket was judged against the
+  // 18-gauge steel range. A casket named as wood (and not as metal) is wood.
+  if (direct?.id === "casket-metal" && WOOD_CASKET.test(m) && !METAL_CASKET.test(m))
+    return LINE_ITEMS.find((it) => it.id === "casket-wood");
   if (direct) return direct;
-  const alias = WORDING_ALIASES.find(([re]) => re.test(n));
+  const alias = WORDING_ALIASES.find(([re]) => re.test(m));
   return alias ? LINE_ITEMS.find((it) => it.id === alias[1]) : undefined;
 }
 
@@ -366,10 +388,44 @@ export function matchLineItem(name: string): LineItem | undefined {
 // the synonym pass, so a package line that mentions basic services ("Direct
 // cremation, includes basic services of funeral director…") keeps its
 // package match.
+//
+// Added from the DC harvest (John T. Rhines, 2026): "Prof. Services of
+// Funeral Director, Staff, and Overhead" is the same non-declinable fee;
+// "Cosmetics, Dressing, and Hairstyling" is the FTC "other preparation"
+// line (but "Dressing and casketing" alone stays unbenchmarked: the
+// dressing-casketing-billed-on-top-of-prep rule treats it as an add-on); "Funeral Director for Committal Service" is the graveside service;
+// and a singular certified death certificate priced per copy is the
+// death-certificate benchmark. Each is narrow on purpose: "Coloring of hair"
+// alone is an add-on, not body preparation, and "filing of death
+// certificate" inside a package description is not a per-copy price.
+//
+// From the DC fh-content harvest (Stewart, 2024; Tri-State): a "Daily
+// storage fee" for the remains is the per-day shelter fee. Storage of
+// cremains is not.
+//
+// From the Maryland harvest (J.B. Jenkins, 2024): "Holding remains in
+// facility after 7 days" is the same per-day fee after a grace period;
+// "Professional/Basic Service Fee" (singular, slashed) is the basic services
+// fee; "Funeral Ceremony" is the use of staff for the ceremony, unless the
+// line is a cremation or burial package; and "Maryland Certified Copies"
+// under a death-certificates header are death certificates.
 const WORDING_ALIASES: ReadonlyArray<readonly [RegExp, string]> = [
-  [/\bbasic services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
+  [/\b(?:basic|professional|prof\.?)\s+services of (?:the )?(?:funeral director|staff)\b/, "basic-services"],
   [/\bnon-?declinable basic services\b/, "basic-services"],
+  [/\bcosmet\w*\b.*\b(?:dressing|hair\s?styling)\b|\bdressing\b.*\bcosmet\w*/, "body-prep"],
+  [/\bcommittal service\b/, "graveside"],
+  [/\bcertified (?:copies of )?death certificates?\b|\bdeath certificates?\b.*\b(?:each|per copy|copies)\b/, "death-cert"],
+  [/^(?!.*\b(?:cremains|cremated|ashes)\b).*\b(?:storage (?:fee|charge|of (?:the )?(?:remains|body|deceased))|holding (?:of )?(?:the )?remains)\b/, "refrigeration-shelter"],
+  [/\b(?:basic|professional)(?:\s*\/\s*(?:basic|professional))?\s+services?\s+(?:fee|charge)\b/, "basic-services"],
+  [/^(?!.*\b(?:cremation|burial|package|caskets?)\b).*\bfuneral ceremony\b/, "service-facility"],
+  [/\bcertified copies\b/, "death-cert"],
 ];
+
+const WOOD_CASKET =
+  /\b(?:wood(?:en)?|hardwood|oak|poplar|cherry|mahogany|maple|pine|walnut|birch|ash|elm|cedar|veneer)\b/;
+const METAL_CASKET = /\b(?:steel|metal|copper|bronze|stainless|\d+[- ]?(?:ga|gauge)|gauge)\b/;
+
+const NEGATED_EMBALMING = /\(?\b(?:no|without|non|un)[\s-]?embalm\w*\)?/g;
 
 // Lines that name a casket but price something else: a fee for handling one
 // bought elsewhere, or an upgrade/add-on charged on top of one. The synonym
@@ -387,6 +443,9 @@ const OUTSIDE_PURCHASE =
 
 function isCasketAddOn(n: string): boolean {
   if (!CASKET_NOUN.test(n)) return false;
+  // Hardware sold for a casket, not the casket ("Casket Panel Inserts" $200
+  // on the Rhines 2026 GPL read as a $200 casket).
+  if (/\b(?:panels?|inserts?|corners?|engrav\w*|appliques?|personaliz\w*)\b/.test(n)) return true;
   if (/\bhandling\b/.test(n)) return true;
   if (/\b(?:upgrade|add-?on)\b/.test(n)) return true;
   if (OUTSIDE_PURCHASE.test(n) && /\b(?:fee|charge|surcharge)\b/.test(n)) return true;
@@ -424,8 +483,12 @@ function isCasketAddOn(n: string): boolean {
 // cost of casket").
 const PACKAGE_LEAD =
   /^[^a-z0-9]*(?:[a-z0-9]{1,2}[.)]\s*)?(?:an?\s+)?(?:direct|immediate)\s+(cremation|burial)s?\b(.*)$/;
+// "Direct Cremation Package (minimum alternative container)" (J.B. Jenkins,
+// 2024) names the package before its variant; without the optional noun it
+// fell through to the synonym pass and was judged as a $2,700 cremation
+// container.
 const PACKAGE_VARIANT =
-  /^\s*(?:[.:]?\s*$|[(,]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
+  /^\s*(?:(?:package|option|plan)s?\b\s*)?(?:[.:]?\s*$|[(,/]|(?:[—–:-]\s*)?(?:(?:with|without|where|using|including|includes?)\b|w\/))/;
 const PURCHASER_PROVIDES =
   /\b(?:provided|supplied|furnished)\s+by\s+(?:the\s+)?(?:purchaser|consumer|customer|client|buyer|family)\b|\b(?:purchaser|consumer|customer|client|buyer|family)\s+(?:provides|supplies|furnishes)\b/;
 const WITH_SERVICE =

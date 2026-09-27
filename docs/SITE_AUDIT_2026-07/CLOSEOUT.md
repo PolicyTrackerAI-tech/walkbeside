@@ -62,7 +62,7 @@ laws.
 6. FOUNDER: prod dress rehearsal per `docs/PILOT_ONBOARDING_RUNBOOK.md`
    (+ Stripe test walk §7); counsel packet send; **selling calendar — the
    audited product is no longer the bottleneck; conversations are.**
-7. A8-06 inbound-attachment cap vs "PDF is fine" copy — before OUTREACH_LIVE.
+7. ~~A8-06 inbound-attachment cap vs "PDF is fine" copy — before OUTREACH_LIVE.~~ (shipped 2026-09-24, post-closeout — see LEDGER).
 8. A2-P1 PARK: go-live copy revisit (CTA descriptions) when the flag flips.
 
 **REACH:**

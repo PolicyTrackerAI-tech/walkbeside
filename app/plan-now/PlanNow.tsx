@@ -299,7 +299,7 @@ export function PlanNow({ partner }: { partner?: string }) {
                         above it deserves a &ldquo;why?&rdquo; The same service
                         can cost 2&ndash;3&times; more across town, and prices
                         are negotiable. Any funeral home must give you its
-                        price list if you ask &mdash; and when you have one in
+                        price list if you ask in person &mdash; and when you have one in
                         hand, our free{" "}
                         <Link href="/analyzer?mode=ahead" className="text-primary-deep underline">
                           checker

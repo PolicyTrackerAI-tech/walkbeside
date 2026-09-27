@@ -75,7 +75,8 @@ export default function ForFuneralHomesPage() {
               <li>
                 <strong className="text-ink">You reply with your
                 General Price List</strong> and any service-specific quote.
-                A PDF attachment is fine. Reply directly to the thread &mdash;
+                Please put the prices in the body of your reply; attachments
+                don&rsquo;t reach the family yet. Reply directly to the thread &mdash;
                 replies route to us via{" "}
                 <code className="bg-surface-soft px-1.5 py-0.5 rounded text-sm">
                   advocate+&hellip;@reply.honestfuneral.co

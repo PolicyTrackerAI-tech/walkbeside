@@ -87,12 +87,20 @@ first DMV home outreach. They are **not** implemented in this pass, on
 purpose: counsel should pick the authorization and agency language first,
 and implementing ahead of that means re-implementing.
 
+**Exception, shipped 2026-09-24: #4, the pre-death gate.** It only removes
+outreach, so it needs no language choice, and CLAUDE.md already made it
+law. It lives in `lib/negotiation/pre-death-gate.ts`: a Virginia family's
+case before a death is held (`pre_death_hold`, with an honest status page),
+Virginia homes drop out of every other family's pre-death case, and the
+admin re-run route applies the same check. Counsel's answer on the
+Virginia preneed question decides whether "VA" comes off the list.
+
 | # | Change | Files | From |
 |---|---|---|---|
 | 1 | Selection message in the family's voice; **no price acceptance**; quote attached "for reference, nothing agreed until you sign directly" | `lib/negotiation/email-body.ts` (`buildSelectionEmail`), `lib/negotiation/notify-chosen-home.ts` | VA-1, MD-1 |
 | 2 | **End the scheduling relay**: the family gets the home's contact details and a suggested message | selection email; `app/negotiate/start/Wizard.tsx` (~l.669); `app/how-it-works/page.tsx` (~l.82) | VA-2, MD-1 |
 | 3 | Outreach becomes a **price-information request only**: drop "If your firm is selected, we'll reach out to help schedule…" and "planning arrangements {timing}" | `buildOutreachEmail`; `app/admin/outreach-preview/PreviewForm.tsx` hint | VA-3 |
-| 4 | **Pre-death gate**: no home outreach while the person is living (no date of death, or timing "planning-ahead") when the family **or** any recipient home is in Virginia; education layer only | `app/api/negotiate/start/route.ts`, wizard; needs home state from `funeral_homes.state` | VA-4 |
+| 4 | ✅ **Shipped 2026-09-24.** **Pre-death gate**: no home outreach while the person is living (no date of death, or timing "planning-ahead") when the family **or** any recipient home is in Virginia; education layer only | `app/api/negotiate/start/route.ts`, wizard; needs home state from `funeral_homes.state` | VA-4 |
 | 5 | Authorization text says it covers a **price-information request only**, never disposition decisions; the platform is never a representative or designee | outreach body "Authorization reference"; `/terms` | MD-3, VA-7 |
 | 6 | Footer adds "We are not seeking to contract for funeral services"; `/for-funeral-homes` answers the Virginia GD 65-4 question | outreach footer; `app/for-funeral-homes` | VA-6 |
 | 7 | Copy audit: we advise on **prices and rights**, never "arrangements"; no service description that sounds like the licensed practice | wizard, `/how-it-works`, `/our-role`, emails | MD-2, DC-3 |

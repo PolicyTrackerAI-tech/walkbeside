@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { readLimitedJson } from "@/lib/http-guards";
+import { readLimitedJson, validateOrigin } from "@/lib/http-guards";
 import { rateLimit } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/email";
 import {
@@ -22,9 +22,13 @@ const Body = z.object({
  * The client filters the on-device data down to ONE person's assigned items
  * before calling; the rest of the family's plan never reaches us, and
  * nothing is stored here — format, send, forget. Anonymous by design (the
- * tools are account-free), so rate-limited tightly by IP.
+ * tools are account-free), so rate-limited tightly by IP, and per recipient
+ * so one address can't be flooded from many IPs (audit A1-07). Both limits
+ * are per server instance (lib/rate-limit.ts).
  */
 export async function POST(req: Request) {
+  if (!validateOrigin(req))
+    return NextResponse.json({ error: "forbidden" }, { status: 403 });
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const rl = rateLimit(`family-digest:${ip}`, { limit: 5, windowMs: 60 * 60_000 });
   if (!rl.ok)
@@ -36,6 +40,13 @@ export async function POST(req: Request) {
   const parsed = Body.safeParse(limited.data);
   if (!parsed.success)
     return NextResponse.json({ error: "invalid_request" }, { status: 400 });
+  const to = parsed.data.email.trim().toLowerCase();
+  const perRecipient = rateLimit(`family-digest-to:${to}`, {
+    limit: 3,
+    windowMs: 24 * 60 * 60_000,
+  });
+  if (!perRecipient.ok)
+    return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   if (!validDigestItems(parsed.data.items))
     return NextResponse.json(
       { error: `invalid_items_max_${MAX_DIGEST_ITEMS}` },

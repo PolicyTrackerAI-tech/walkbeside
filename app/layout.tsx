@@ -31,20 +31,20 @@ export const metadata: Metadata = {
     template: `%s — ${BRAND.name}`,
   },
   description:
-    "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
+    "Is your funeral quote fair? Snap a photo of the price list to see likely overcharges and FTC-rule problems in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
   openGraph: {
     type: "website",
     siteName: BRAND.name,
     title: SITE_TITLE,
     description:
-      "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
+      "Is your funeral quote fair? Snap a photo of the price list to see likely overcharges and FTC-rule problems in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
     url: "https://honestfuneral.co",
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_TITLE,
     description:
-      "Is your funeral quote fair? Snap a photo of the price list to see overcharges and FTC-rule violations in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
+      "Is your funeral quote fair? Snap a photo of the price list to see likely overcharges and FTC-rule problems in seconds. Free for families and neutral by design — no money from funeral homes or insurers.",
   },
   robots: { index: true, follow: true },
   // Google Search Console ownership verification. Set GOOGLE_SITE_VERIFICATION

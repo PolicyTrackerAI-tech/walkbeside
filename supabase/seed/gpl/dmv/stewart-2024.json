@@ -1,0 +1,163 @@
+{
+  "homeName": "Stewart Funeral Home",
+  "zip": "20019",
+  "sourceUrl": "https://fh-content.s3.amazonaws.com/release/Content/Media/StewartFuneralHome/General%20Price%20List%202024%20-%20Revised%207-11-24.pdf",
+  "provenance": "posted",
+  "effectiveDate": "2024-07-15",
+  "retrievedAt": "2026-09-24",
+  "reviewNotes": [
+    "Hosted in the home's own media folder on its website vendor's storage (stewartfuneralhome.com serves its older GPL 8-25-20 from the same folder), so provenance is posted. The printed date, July 15, 2024, is 26 months before retrieval, so the loader holds it until the home confirms it is still current.",
+    "Direct cremation: the document gives $2,316.50 to $2,416.50 and explains the $100 as the cremation approval needed when death occurs in DC or Virginia. For this DC home the observation is the DC price, $2,416.50, with the fiberboard (alternative) container, matching the FTC-comparable line used for Rhines. The purchaser-container and wood-box variants stay as ranges so the home counts once.",
+    "Embalming: the under-300-lbs. line is the observation; embalming here includes dressing, cosmetizing and casketing, so there is no separate body-preparation line.",
+    "Viewing is priced per hour ($225 for 1 hour); recorded as the viewing observation with the unit in its name.",
+    "Daily Storage Fee (every 24 hours) is the per-day shelter-of-remains fee. The matcher learned this wording in the same change (lib/negotiation/price-list-parse.ts).",
+    "Second-day hearse, limousine overtime and infant cremation are kept off their benchmarks. Immediate burial has no benchmark. Caskets, containers and urns are ranges and never enter the benchmark feed."
+  ],
+  "text": "General Price List\nThe goods and services shown below are those we can provide to our customers. You may choose\nonly the items you desire. However, any funeral arrangements you select will include a cha rge\nfor our basic services and overhead. If legal or other requirements mean you must buy any items\nyou did not specifically ask for, we will explain the reason in writing in the statement we provide\ndescribing the funeral goods and services you selected. The list below does not include the price\nof certain items that may be added to the statement of goods and services as cash advance items\nif you choose, for example death certificates, newspaper notice, flowers,  programs or cemetery\ncharges.\n\nProfessional Services\n\nBasic Services of Funeral Director and Staff and Overhead…………………. $ 2,075.00\n\n Our services include conducting the arrangements conference;\nplanning the funeral; consulting with family and clergy; securing\na death certificate signed by the decedent’s physician;  shelter of\nremains; preparing and filing of necessary notices; obtaining\nnecessary authorizations and permits; and coordinating with the\ncemetery, crematory, or other third parties . In addition, this fee\nincludes a proportionate share of our basic overhead costs.\n\n This fee for our basic services and overhead will be added to the\ntotal cost of the funeral arrangements you select . (This fee is\nalready included in our charges for direct cremations, immediate\nburials, and forwarding remains.)\n\nEmbalming…………………………………………... cases under 300 lbs. $ 1,715.00\n …………………………………….... cases over 301 lbs. $ 2,025.00\n\n Except in certain special cases, embalming is not required by law .\nEmbalming may be necessary, however, if you select certain funeral\narrangements, such as a funeral with viewing . If you do not want\nembalming, you usually have the right to choose an arrangement\nthat does not require you to pay for it, such as direct cremation or\nimmediate burial . This fee includes dressing, cosmetizing and\ncasketing.\n\nOther Preparations of the Remains…………………………………….……$   150.00\n(per hour) additional restorative art procedures that may occur from\na traumatic death or disease and decedents who are more than 350\npounds.\n\nTransfer of Remains to Funeral Home (within 25-mile radius) ……………$   425.00\n Beyond this radius or outside city limits we charge\n $2.25 per mile\n\nFacilities\n\nUse of Facilities and Staff for Viewing…… (1 hour) ……………………. $ 225.00\n\nUse of Facilities and Staff for Funeral Ceremony at the Funeral Home…. $ 600.00\n\nDaily Storage Fee………….…every 24 hours ………………….…………$ 100.00\n\nAutomotive Equipment\n\nHearse……………………………………………………………………. $ 525.00\n2nd Day Hearse Use………………………………………………………. $ 445.00\n\nLimousine……………7 passenger $550.00\nLimousine Overtime (Limousine use after 4 hours) …………. …. $ 100.00 per hour\n\nService Car (Sedan) ………………………………………………………$325.00\n\nMerchandise\n\nCaskets………………………………………………………$995.00 to $ 35,000.00\n A complete price list will be provided at the funeral home.\n\nOuter Burial Containers…………………………………….$ 1,275.00 to $ 4,500.00\n A complete price list will be provided at the funeral home.\n\nUrns………………………………………………….…………$ 75.00 to $ 6,700.00\nComplete pricing information will be provided at the funeral home.\n\nAcknowledgement Cards (25 per box) $20.00                          Register Book $45.00\n\nOther Services\n\nForwarding of Remains to Another Funeral Home…………….…………$ 2,150.00.\n Our charge includes basic services of funeral director and staff; a\nproportionate share of overhead cost; removal of remains;\nembalming or other preparation of remains, if relevant; and local\ntransportation.\n\nReceiving Remains from Another Funeral Home……………………. …. $ 1,595.00\n Our charge includes basic services of funeral director and staff; a\nproportionate share of overhead cost; care of remains; transportation\nof remains to funeral home and cemetery or crematory (no viewing\nor funeral service at funeral home or church).\n\nDirect Cremation…………………………………...…...……$2,316.50 to $ 2,416.50\n Our charge for a direct cremation (without ceremony) includes basic\nservices of funeral director and staff; a proportionate share of\noverhead cost; removal of remains; cremation container (fiberboard\ncontainer); transportation to crematory; necessary authorizations;\nand cremation if relevant.\n\nDirect Cremation for an Infant younger than 12 months...………….………. $600.00\n (Includes the same services provided for direct cremation of an\nadult.)\n\n If you want to arrange a direct cremation, you can use an alternative\ncontainer. Alternative containers encase the body and can be made\nof materials like fiberboard or composition materials  (with or\nwithout an outside covering) . The containers we provide are a\nfiberboard container or an unfinished wood box.\n\n       A. Direct cremation with container provided by the\n                                purchaser………………………………. $1,800.00 to $1,900.00\n\n        B.  Direct cremation with an unfinished wood\n              box……………………………………...$2,233.00 to $2,333.00.\n\n**There is a difference of $ 100.00 in the range of service for adult\ncremation. This cost is cremation approval that is needed when a decedent\npasses in Virginia or the District of Columbia.\n\nCremains Disposal Fee…………………………………………….…………$275.00\n\nImmediate Burial\n\n Our charge for an immediate burial (without ceremony) includes\nbasic services of funeral director and staff; a proportionate share of\noverhead cost; removal and local transportation to cemetery.\n\n A.  Immediate burial with casket provided by purchaser. $2,020.00\n B.  Immediate burial with alternative container ……….... $2,603.00\n C.  Immediate burial with cloth covered wood casket….... $3,074.70\n\nThank you for your consideration.\nWe sincerely hope to serve you.\n\nFamily Owned and Operated\n\nStewart Funeral Home,\nInc.\n4001 Benning Road, N.E.\nWashington, D.C. 20019\nPhone: (202)399-3600\nFax: (202)398-4246\nwww.StewartFuneralHome.com\n\nGeneral Price List\nEffective date July 15, 2024",
+  "items": [
+    {
+      "name": "Basic Services of Funeral Director and Staff and Overhead",
+      "cents": 207500,
+      "matchedItemId": "basic-services"
+    },
+    {
+      "name": "Embalming (cases under 300 lbs.)",
+      "cents": 171500,
+      "matchedItemId": "embalming"
+    },
+    {
+      "name": "Embalming (cases over 301 lbs.)",
+      "cents": 202500,
+      "matcherOverride": "One embalming observation per home: the standard (under 300 lbs.) line carries it."
+    },
+    {
+      "name": "Other Preparations of the Remains (restorative art, per hour)",
+      "cents": 15000
+    },
+    {
+      "name": "Transfer of Remains to Funeral Home (within 25-mile radius)",
+      "cents": 42500,
+      "matchedItemId": "transfer"
+    },
+    {
+      "name": "Use of Facilities and Staff for Viewing (1 hour)",
+      "cents": 22500,
+      "matchedItemId": "viewing"
+    },
+    {
+      "name": "Use of Facilities and Staff for Funeral Ceremony at the Funeral Home",
+      "cents": 60000,
+      "matchedItemId": "service-facility"
+    },
+    {
+      "name": "Daily Storage Fee (every 24 hours)",
+      "cents": 10000,
+      "matchedItemId": "refrigeration-shelter"
+    },
+    {
+      "name": "Hearse",
+      "cents": 52500,
+      "matchedItemId": "hearse"
+    },
+    {
+      "name": "2nd Day Hearse Use",
+      "cents": 44500,
+      "matcherOverride": "A second-day charge, not the hearse; the Hearse line carries the benchmark."
+    },
+    {
+      "name": "Limousine (7 passenger)",
+      "cents": 55000,
+      "matchedItemId": "limo"
+    },
+    {
+      "name": "Limousine Overtime (after 4 hours, per hour)",
+      "cents": 10000,
+      "matcherOverride": "An hourly overtime charge, not the limousine; the Limousine line carries the benchmark."
+    },
+    {
+      "name": "Service Car (Sedan)",
+      "cents": 32500
+    },
+    {
+      "name": "Caskets",
+      "cents": 99500,
+      "isRange": true,
+      "centsLow": 99500,
+      "centsHigh": 3500000
+    },
+    {
+      "name": "Outer Burial Containers",
+      "cents": 127500,
+      "isRange": true,
+      "centsLow": 127500,
+      "centsHigh": 450000
+    },
+    {
+      "name": "Urns",
+      "cents": 7500,
+      "isRange": true,
+      "centsLow": 7500,
+      "centsHigh": 670000
+    },
+    {
+      "name": "Acknowledgement Cards (25 per box)",
+      "cents": 2000,
+      "matchedItemId": "acknowledgement-cards"
+    },
+    {
+      "name": "Register Book",
+      "cents": 4500,
+      "matchedItemId": "register-book"
+    },
+    {
+      "name": "Forwarding of Remains to Another Funeral Home",
+      "cents": 215000,
+      "matchedItemId": "forwarding-remains"
+    },
+    {
+      "name": "Receiving Remains from Another Funeral Home",
+      "cents": 159500,
+      "matchedItemId": "receiving-remains"
+    },
+    {
+      "name": "Direct Cremation (fiberboard container; death in DC or Virginia)",
+      "cents": 241650,
+      "matchedItemId": "direct-cremation-fee"
+    },
+    {
+      "name": "Direct Cremation for an Infant younger than 12 months",
+      "cents": 60000,
+      "matcherOverride": "An infant cremation is not the adult direct-cremation benchmark."
+    },
+    {
+      "name": "Direct cremation with container provided by the purchaser",
+      "cents": 180000,
+      "isRange": true,
+      "centsLow": 180000,
+      "centsHigh": 190000
+    },
+    {
+      "name": "Direct cremation with an unfinished wood box",
+      "cents": 223300,
+      "isRange": true,
+      "centsLow": 223300,
+      "centsHigh": 233300
+    },
+    {
+      "name": "Cremains Disposal Fee",
+      "cents": 27500
+    },
+    {
+      "name": "Immediate burial with casket provided by purchaser",
+      "cents": 202000
+    },
+    {
+      "name": "Immediate burial with alternative container",
+      "cents": 260300
+    },
+    {
+      "name": "Immediate burial with cloth covered wood casket",
+      "cents": 307470
+    }
+  ]
+}

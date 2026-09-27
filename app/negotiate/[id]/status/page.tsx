@@ -107,10 +107,12 @@ export default function NegotiationStatusPage({
     // eslint-disable-next-line react-hooks/set-state-in-effect -- fetches from a remote API (not derivable during render) and polls it; the initial call plus the scheduled re-fetches are the same external sync, not a render-time computation.
     refresh();
     // Terminal states. no_homes_available won't change without a founder
-    // adding vetted homes to this ZIP, and closed/cancelled cases never
-    // change again — polling would just hammer the API for no reason.
+    // adding vetted homes to this ZIP, pre_death_hold (the Virginia
+    // pre-death gate) never sends from this case, and closed/cancelled cases
+    // never change again — polling would just hammer the API for no reason.
     if (
       neg?.status === "no_homes_available" ||
+      neg?.status === "pre_death_hold" ||
       neg?.status === "closed" ||
       neg?.status === "cancelled"
     ) {
@@ -163,6 +165,10 @@ export default function NegotiationStatusPage({
 
   const someReplied = outreach.some((o) => o.quote_cents != null);
   const noHomesAvailable = neg.status === "no_homes_available";
+  // lib/negotiation/pre-death-gate.ts: a Virginia family's case before a
+  // death contacts no home, so there is no outreach to show.
+  const preDeathHold = neg.status === "pre_death_hold";
+  const noOutreach = noHomesAvailable || preDeathHold;
   // The one condition under which this page may say "we're contacting
   // funeral homes": an email really left. Prepared/dry-run rows never count.
   const sentAny = anyOutreachSent(outreach);
@@ -203,21 +209,32 @@ export default function NegotiationStatusPage({
           <CaseStepper stage="contacting" />
           <div>
             <CardEyebrow>
-              {noHomesAvailable
+              {preDeathHold
+                ? "Planning ahead"
+                : noHomesAvailable
                 ? "No coverage yet"
                 : sentAny
                   ? "Negotiation in progress"
                   : "Outreach prepared"}
             </CardEyebrow>
             <h1 className="font-serif text-3xl text-ink">
-              {noHomesAvailable
+              {preDeathHold
+                ? <>While your loved one is living, we don&rsquo;t contact funeral homes for a Virginia family.</>
+                : noHomesAvailable
                 ? <>We don&rsquo;t have vetted funeral homes in your area yet.</>
                 : sentAny
                   ? <>We&rsquo;re contacting funeral homes for you.</>
                   : <>Your outreach is prepared.</>}
             </h1>
             <p className="text-ink-soft mt-2">
-              {noHomesAvailable ? (
+              {preDeathHold ? (
+                <>Virginia has its own rules for arranging a funeral before a death, so we don&rsquo;t reach out to homes on your behalf until after a passing. Everything else here works for you today: the{" "}
+                <a href="/prices" className="underline hover:text-ink">price guides</a>, and the{" "}
+                <a href="/analyzer" className="underline hover:text-ink">quote checker</a>{" "}
+                for any price list a home gives you. You can also ask any home for its itemized prices yourself &mdash; that&rsquo;s your right under the FTC Funeral Rule. If your loved one has already died,{" "}
+                <a href="/negotiate/start" className="underline hover:text-ink">start a new request</a>{" "}
+                and include the date they passed.</>
+              ) : noHomesAvailable ? (
                 <>We don&rsquo;t want to contact a home we haven&rsquo;t personally verified. Reply to any email from us and we&rsquo;ll help you directly, or check back as we add coverage in your region. The price guides and the{" "}
                 <a href="/analyzer" className="underline hover:text-ink">quote checker</a>{" "}
                 work everywhere, whichever home you talk to.</>
@@ -270,7 +287,7 @@ export default function NegotiationStatusPage({
             </div>
           )}
 
-          {!noHomesAvailable && (
+          {!noOutreach && (
             <div>
               <h2 className="font-serif text-xl text-ink mb-3">Outreach</h2>
               <ul className="space-y-3">
@@ -330,7 +347,7 @@ export default function NegotiationStatusPage({
               finish things on their own (with or without quotes here) were
               previously never asked how it went — only the choose-a-home →
               closed path was. Optional, never gating; the case stays open. */}
-          {!noHomesAvailable && neg.status !== "closed" && (
+          {!noOutreach && neg.status !== "closed" && (
             <details
               id="outcome"
               open={outcomeOpen}
