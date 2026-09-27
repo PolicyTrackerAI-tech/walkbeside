@@ -46,3 +46,11 @@ next-env.d.ts
 # Real funeral-home data — curated contact list stays out of git.
 # (The .template.csv and .example.csv are committed; the working file isn't.)
 /supabase/seed/utah-homes.csv
+
+# DMV research output (Cowork runs): raw rosters, price-list files and
+# logs stay out of git; reviewed data is committed separately.
+/supabase/seed/dmv-*.csv
+/supabase/seed/dmv-research-state-*.tar.gz
+/supabase/seed/gpl-lines.csv
+/supabase/seed/gpls/
+/supabase/seed/RESEARCH_LOG.md
